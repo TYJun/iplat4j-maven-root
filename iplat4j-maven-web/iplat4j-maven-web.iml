@@ -317,7 +317,9 @@
     <orderEntry type="library" name="Maven: cglib:cglib:3.1" level="project" />
     <orderEntry type="library" name="Maven: org.ehcache:ehcache:3.4.0" level="project" />
     <orderEntry type="module" module-name="iplat4j-maven-xq" />
-    <orderEntry type="module" module-name="iplat4j-maven-vi" />
-    <orderEntry type="module" module-name="iplat4j-maven-security" />
+    <orderEntry type="module" module-name="iplat4j-maven-si" />
+    <orderEntry type="module" module-name="iplat4j-maven-mp-rm" />
+    <orderEntry type="module" module-name="iplat4j-maven-mp" />
+    <orderEntry type="library" name="Maven: com.bonawise.iplat4j:iplat4j-maven-vi:${iplat4j-maven-vi-version}" level="project" />
   </component>
 </module>

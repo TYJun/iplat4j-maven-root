@@ -22,7 +22,7 @@ import java.util.Map;
  * @ClassName: ServiceRMXQ02
  * @Package com.baosight.wilp.rm.xq.service
  * @date: 2022年09月09日 17:13
- *
+ * <p>
  * 1.页面加载
  * 2.页面数据查询
  * 3.批量审批通过
@@ -32,10 +32,11 @@ public class ServiceRMXQ04 extends ServiceBase {
 
     /**
      * 页面加载
-     * @Title: initLoad
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: initLoad
      **/
     @Override
     public EiInfo initLoad(EiInfo inInfo) {
@@ -44,17 +45,18 @@ public class ServiceRMXQ04 extends ServiceBase {
 
     /**
      * 页面数据查询
-     * @Title: query
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: query
      **/
     @Override
     public EiInfo query(EiInfo inInfo) {
         //添加科室查询条件
         Map<String, Object> deptMap = BaseDockingUtils.getDeptByworkNo(UserSession.getLoginName());
-        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptName",deptMap.get("deptName"));
-        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptNum",deptMap.get("deptNum"));
+        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptName", deptMap.get("deptName"));
+        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptNum", deptMap.get("deptNum"));
         //添加状态查询条件: 待审批
         inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "statusCode", RmConstant.REQUIRE_STATUS_UN_APPROVAL);
         return super.query(inInfo, "RMLJ01.query", new RmRequirePlan());
@@ -62,26 +64,28 @@ public class ServiceRMXQ04 extends ServiceBase {
 
     /**
      * 查询需求计划明细
-     * @Title: queryDetail
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: queryDetail
      **/
     public EiInfo queryDetail(EiInfo inInfo) {
-        return super.query(inInfo, "RMLJ01.queryDetail", new RmRequirePlanDetail(), false, null,null,"detail", "detail");
+        return super.query(inInfo, "RMLJ01.queryDetail", new RmRequirePlanDetail(), false, null, null, "detail", "detail");
     }
 
     /**
      * 批量审批通过
-     * @Title: batchPass
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: batchPass
      **/
     public EiInfo batchPass(EiInfo inInfo) {
         //参数处理
         List<String> ids = RmUtils.toList(inInfo.get("ids"), String.class);
-        if(CollectionUtils.isEmpty(ids)) {
+        if (CollectionUtils.isEmpty(ids)) {
             return ValidatorUtils.errorInfo("参数不能为空");
         }
         //遍历，审批
@@ -95,15 +99,16 @@ public class ServiceRMXQ04 extends ServiceBase {
 
     /**
      * 批量审批驳回
-     * @Title: batchReject
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: batchReject
      **/
     public EiInfo batchReject(EiInfo inInfo) {
         //参数处理
         List<String> ids = RmUtils.toList(inInfo.get("ids"), String.class);
-        if(CollectionUtils.isEmpty(ids)) {
+        if (CollectionUtils.isEmpty(ids)) {
             return ValidatorUtils.errorInfo("参数不能为空");
         }
         //遍历，审批

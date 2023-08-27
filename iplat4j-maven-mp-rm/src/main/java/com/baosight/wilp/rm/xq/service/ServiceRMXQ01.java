@@ -25,7 +25,7 @@ import java.util.Map;
  * @ClassName: ServiceRMXQ01
  * @Package com.baosight.wilp.rm.xq.service
  * @date: 2022年09月09日 17:13
- *
+ * <p>
  * 1.页面加载
  * 2.页面数据查询
  * 3.删除需求计划
@@ -39,31 +39,33 @@ public class ServiceRMXQ01 extends ServiceBase {
 
     /**
      * 页面加载
-     * @Title: initLoad
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: initLoad
      **/
     @Override
     public EiInfo initLoad(EiInfo inInfo) {
         //添加科室查询条件
         Map<String, Object> deptMap = BaseDockingUtils.getDeptByworkNo(UserSession.getLoginName());
-        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptNum",deptMap.get("deptNum"));
-        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptName",deptMap.get("deptName"));
-        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "recCreatorName",UserSession.getLoginCName());
+        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptNum", deptMap.get("deptNum"));
+        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptName", deptMap.get("deptName"));
+        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "recCreatorName", UserSession.getLoginCName());
         inInfo.addBlock(RmConstant.RESULT_BLOCK).set(EiConstant.limitStr, 20);
         return query(inInfo);
     }
 
     /**
      * 页面数据查询(年度需求计划)
-     * @Title: query
+     *
      * @param inInfo inInfo
-     *    planNo: 需求计划单号
-     *    planTime: 年度
-     *    statusCode: 状态
+     *               planNo: 需求计划单号
+     *               planTime: 年度
+     *               statusCode: 状态
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: query
      **/
     @Override
     public EiInfo query(EiInfo inInfo) {
@@ -75,20 +77,21 @@ public class ServiceRMXQ01 extends ServiceBase {
 
     /**
      * 删除需求计划
-     * @Title: delete
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: delete
      **/
     @Override
     public EiInfo delete(EiInfo inInfo) {
         String id = inInfo.getString("id");
         //参数校验
-        if(StringUtils.isBlank(id)) {
+        if (StringUtils.isBlank(id)) {
             return ValidatorUtils.errorInfo("参数不能为空");
         }
         RmRequirePlan plan = requirePlanService.queryRequirePlan(id);
-        if(plan == null || !plan.getStatusCode().equals(RmConstant.REQUIRE_STATUS_NEW)) {
+        if (plan == null || !plan.getStatusCode().equals(RmConstant.REQUIRE_STATUS_NEW)) {
             return ValidatorUtils.errorInfo("需求计划已被删除或无法删除");
         }
         //删除
@@ -99,26 +102,27 @@ public class ServiceRMXQ01 extends ServiceBase {
 
     /**
      * 需求计划提交
-     * @Title: submit
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: submit
      **/
     public EiInfo submit(EiInfo inInfo) {
         String id = inInfo.getString("id");
         //参数校验
-        if(StringUtils.isBlank(id)) {
+        if (StringUtils.isBlank(id)) {
             return ValidatorUtils.errorInfo("参数不能为空");
         }
         RmRequirePlan plan = requirePlanService.queryRequirePlan(id);
-        if(plan == null || !(plan.getStatusCode().equals(RmConstant.REQUIRE_STATUS_NEW)
+        if (plan == null || !(plan.getStatusCode().equals(RmConstant.REQUIRE_STATUS_NEW)
                 || plan.getStatusCode().equals(RmConstant.REQUIRE_STATUS_REJECT))) {
             return ValidatorUtils.errorInfo("需求计划不存在或已提交");
         }
         //提交
         requirePlanService.updateRequirePlan(RmRequirePlan.getStatusInstant(id, RmConstant.REQUIRE_STATUS_UN_APPROVAL));
         //判断是否需要审批，否,自动审批
-        if(RmConfigConstant.REQUIRE_APPROVAL_NO.equals(RmConfigCache.getConfigRadioValue(plan.getDataGroupCode(),
+        if (RmConfigConstant.REQUIRE_APPROVAL_NO.equals(RmConfigCache.getConfigRadioValue(plan.getDataGroupCode(),
                 RmConfigConstant.REQUIRE_APPROVAL))) {
             RmUtils.invoke("RMXQ0401", "pass", Arrays.asList("planId"), id);
         }
@@ -127,19 +131,20 @@ public class ServiceRMXQ01 extends ServiceBase {
 
     /**
      * 需求计划撤回
-     * @Title: withdraw
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: withdraw
      **/
     public EiInfo withdraw(EiInfo inInfo) {
         String id = inInfo.getString("id");
         //参数校验
-        if(StringUtils.isBlank(id)) {
+        if (StringUtils.isBlank(id)) {
             return ValidatorUtils.errorInfo("参数不能为空");
         }
         RmRequirePlan plan = requirePlanService.queryRequirePlan(id);
-        if(plan == null || !validateWithdrawStatus(plan.getStatusCode(), plan.getDataGroupCode())) {
+        if (plan == null || !validateWithdrawStatus(plan.getStatusCode(), plan.getDataGroupCode())) {
             return ValidatorUtils.errorInfo("需求计划不存在或无法撤回");
         }
         //撤回
@@ -149,14 +154,15 @@ public class ServiceRMXQ01 extends ServiceBase {
 
     /**
      * 校验需求单是否可以撤回
-     * @Title: validateWithdrawStatus
-     * @param statusCode statusCode
+     *
+     * @param statusCode    statusCode
      * @param dataGroupCode dataGroupCode
      * @return boolean
      * @throws
+     * @Title: validateWithdrawStatus
      **/
     private boolean validateWithdrawStatus(String statusCode, String dataGroupCode) {
-        if(RmConfigConstant.REQUIRE_APPROVAL_NO.equals(RmConfigCache.getConfigRadioValue(dataGroupCode,
+        if (RmConfigConstant.REQUIRE_APPROVAL_NO.equals(RmConfigCache.getConfigRadioValue(dataGroupCode,
                 RmConfigConstant.REQUIRE_APPROVAL))) {
             //需求计划无需审批
             return RmConstant.REQUIRE_STATUS_PASS.equals(statusCode);

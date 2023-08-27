@@ -11,7 +11,12 @@ import javax.validation.groups.Default;
  * @date: 2022年09月02日 9:50
  */
 public class ValidationGroups {
-    public interface Add extends Default {}
-    public interface Update extends Default {}
-    public interface Customize<String> extends Default {}
+    public interface Add extends Default {
+    }
+
+    public interface Update extends Default {
+    }
+
+    public interface Customize<String> extends Default {
+    }
 }

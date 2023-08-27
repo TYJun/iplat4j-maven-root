@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="VIDJ01">
+    <select id="queryViVistingInfo" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.vi.common.domain.ViVistingInfo">
+        select
+        id,
+        visiting_dept_id AS "visitingDeptId",
+        visiting_dept_name AS "visitingDeptName",
+        DATE_FORMAT(visting_begin_date,'%Y-%m-%d %H:%i:%s') AS "vistingBeginDate",
+        visting_end_date AS "vistingEndDate",
+        interviewer_work_no AS "interviewerWorkNo",
+        nterviewer_name AS "nterviewerName",
+        nterviewer_phone AS "nterviewerPhone",
+        create_time AS "createTime",
+        creator_type AS "creatorType",
+        creator_identity AS "creatorIdentity",
+        creat_ip AS "creatIp",
+        auditor_identity AS "auditorIdentity",
+        auditor_step AS "auditorStep",
+        auditor_memo AS "auditorMemo",
+        bat_no AS "batNo"
+        from
+        vi_visiting_info
+        where 1=1
+        <isEqual prepend="and" property="queryType" compareValue="APP">
+            app_localStorage is not null
+        </isEqual>
+        <isEqual prepend="and" property="superMan" compareValue="superMan">
+            visiting_dept_id IN ('100301','100302')
+        </isEqual>
+        <isNotEmpty prepend="and" property="auditorStep">
+            auditor_step in (#auditorStep#)
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="visitingId">
+            id = #visitingId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="visitApp">
+            app_localStorage = #visitApp#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="vistingBeginDate">
+            visting_begin_date = #vistingBeginDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="nterviewerName">
+            nterviewer_name = #nterviewerName#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="deptNum">
+            visiting_dept_id = #deptNum#
+        </isNotEmpty>
+        GROUP BY id DESC
+    </select>
+
+    <select id="countViVistingInfo" resultClass="int">
+        SELECT COUNT(*) from vi_visiting_info
+        where 1=1
+        <isEqual prepend="and" property="queryType" compareValue="APP">
+            app_localStorage is not null
+        </isEqual>
+        <isEqual prepend="and" property="superMan" compareValue="superMan">
+            visiting_dept_id IN ('100301','100302')
+        </isEqual>
+        <isNotEmpty prepend="and" property="auditorStep">
+            auditor_step in (#auditorStep#)
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="visitingId">
+            id = #visitingId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="visitApp">
+            app_localStorage = #visitApp#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="vistingBeginDate">
+            visting_begin_date = #vistingBeginDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="nterviewerName">
+            nterviewer_name = #nterviewerName#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="deptNum">
+            visiting_dept_id = #deptNum#
+        </isNotEmpty>
+    </select>
+
+    <select id="queryViVistingInfoDetail" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            vvid.id,
+            vaf.id AS "visitingId",
+            vvid.nterviewee_content AS "ntervieweeContent",
+            vvid.guest_name AS "guestName",
+            vvid.card_id AS "cardId",
+            vvid.guest_phone AS "guestPhone",
+            vvid.guest_email AS "guestEmail",
+            vvid.guest_org_name AS "guestOrgName",
+            vvid.vehicle_number AS "vehicleNumber",
+            vvid.vehicle_type_code AS "vehicleTypeCode",
+            vvid.bat_no AS "batNo",
+            vaf.file_name AS "fileName",
+            vaf.file_content AS "fileContent",
+            vaf.id AS "docId"
+        from
+            vi_visiting_info_detail vvid
+        left join vi_visiting_file vvf on vvid.id = vvf.visiting_id
+        left join vi_attach_file vaf on vvf.file_id = vaf.id
+        where
+            vvid.bat_no = #visitingId#
+    </select>
+
+    <select id="queryViAttachFile" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            vaf.id AS "fileId",
+            vaf.file_name AS "fileName",
+            vaf.file_desc AS "fileDesc",
+            vaf.mime_type AS "mimeType",
+            vaf.file_size AS "fileSize",
+            vaf.file_content AS "fileContent",
+            date_format(vaf.upload_time,'%Y-%m-%d %H:%i:%s') AS "uploadTime",
+            vaf.upload_ip AS "uploadIp"
+        from
+            vi_visiting_info vvi
+        left join
+            vi_attach_file vaf on vvi.bat_no = vaf.bat_no
+        where
+            vvi.bat_no = #visitingId#
+    </select>
+
+    <select id="queryNextBatNo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SHOW TABLE STATUS LIKE 'vi_visiting_info';
+    </select>
+
+    <insert id="insertViVistingInfo" parameterClass="java.util.HashMap">
+        insert into vi_visiting_info(
+            visiting_dept_id,visiting_dept_name,visting_begin_date,visting_end_date,interviewer_work_no,nterviewer_name,
+            nterviewer_phone,create_time,creator_type,creator_identity,creat_ip,auditor_step,bat_no,app_localStorage
+        )
+        values (
+                   #visitingDeptId#,#visitingDeptName#,#vistingBeginDate#,#vistingBeginDate#,#interviewerWorkNo#,#nterviewerName#,
+                   #nterviewerPhone#,#createTime#,#creatorType#,#creatorIdentity#,#creatIp#,#auditorStep#,#batNo#,#visitApp#
+               )
+    </insert>
+
+    <insert id="insertViVistingInfoDetail" parameterClass="java.util.HashMap">
+        insert into vi_visiting_info_detail(id,guest_name,card_id,guest_phone,guest_email,guest_org_name,vehicle_number,vehicle_type_code,
+        nterviewee_content,bat_no)
+        values
+        <iterate property="rows" conjunction=",">
+            (#rows[].visitId#,#rows[].guestName#,#rows[].cardId#,#rows[].guestPhone#,#rows[].guestEmail#,#rows[].guestOrgName#,#rows[].vehicleNumber#,#rows[].vehicleTypeCode#,
+            #rows[].ntervieweeContent#,#batNo#)
+        </iterate>
+    </insert>
+
+    <insert id="insertViAttachFile" parameterClass="java.util.List">
+        insert into vi_attach_file(id,file_name,file_desc,mime_type,file_size,file_content,upload_time,upload_ip,bat_no)
+        values
+        <iterate conjunction=",">
+            (#fileList[].docId#,#fileList[].fileName#,#fileList[].fileDesc#,#fileList[].mimeType#,#fileList[].fileSize#,
+            #fileList[].fileContent#,#fileList[].uploadTime#,#fileList[].uploadIp#,#fileList[].batNo#)
+        </iterate>
+    </insert>
+
+    <insert id="insertViVisitingFile" parameterClass="java.util.HashMap">
+        insert into vi_visiting_file(visiting_id,file_id)
+        values
+        <iterate conjunction="," property="fileList">
+            (#fileList[].visitId#,#fileList[].docId#)
+        </iterate>
+    </insert>
+
+    <insert id="insertViAuditlog" parameterClass="java.util.HashMap">
+        insert into vi_audit_log(visiting_id,audit_time,auditor_man,auditor_ip,auditor_client_type,`desc`,audit_flag)
+        values (#visitingId#,#auditTime#,#auditorMan#,#auditorIp#,#auditorClientType#,#desc#,#auditFlag#)
+    </insert>
+
+    <delete id="removePicByUid" parameterClass="java.lang.String">
+        delete from ${platSchema}.teudm02 where DOC_ID = #value#
+    </delete>
+
+    <update id="submit" parameterClass="java.util.HashMap">
+        update vi_visiting_info set auditor_step = #auditorStep#,auditor_memo = #auditorMemo#
+        where id = #id#
+    </update>
+
+    <select id="queryGuestPhone" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            guest_phone AS "guestPhone"
+        from
+            vi_visiting_info_detail
+        where
+            bat_no = #id#
+    </select>
+</sqlMap>

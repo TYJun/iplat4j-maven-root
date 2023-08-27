@@ -18,16 +18,19 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class SerialNoUtils {
 
-    /**锁对象**/
+    /**
+     * 锁对象
+     **/
     private static final Lock lock = new ReentrantLock();
 
     /**
      * 生成序列号
-     * @Title: generateNumberSerialNo
-     * @param name name : 序列号标识(名称)
+     *
+     * @param name   name : 序列号标识(名称)
      * @param prefix prefix : 前缀
      * @return java.lang.String
      * @throws
+     * @Title: generateNumberSerialNo
      **/
     public static String generateNumberSerialNo(String name, String prefix) {
         return generateNumberSerialNo(name, prefix, 12);
@@ -35,12 +38,13 @@ public class SerialNoUtils {
 
     /**
      * 生成序列号
-     * @Title: generateNumberSerialNo
-     * @param name name : 序列号标识(名称)
-     * @param prefix prefix : 前缀
+     *
+     * @param name         name : 序列号标识(名称)
+     * @param prefix       prefix : 前缀
      * @param suffixLength suffixLength : 后缀长度
      * @return java.lang.String
      * @throws
+     * @Title: generateNumberSerialNo
      **/
     public static String generateNumberSerialNo(String name, String prefix, int suffixLength) {
         return generateSerialNo(name, prefix, null, suffixLength);
@@ -48,11 +52,12 @@ public class SerialNoUtils {
 
     /**
      * 生成序列号
-     * @Title: generateSerialNo
-     * @param name name : 序列号标识(名称)
+     *
+     * @param name   name : 序列号标识(名称)
      * @param prefix prefix : 前缀
      * @return java.lang.String
      * @throws
+     * @Title: generateSerialNo
      **/
     public static String generateSerialNo(String name, String prefix) {
         return generateSerialNo(name, prefix, DateUtils.DATE8_PATTERN);
@@ -60,12 +65,13 @@ public class SerialNoUtils {
 
     /**
      * 生成序列号
-     * @Title: generateSerialNo
-     * @param name name : 序列号标识(名称)
-     * @param prefix prefix : 前缀
+     *
+     * @param name       name : 序列号标识(名称)
+     * @param prefix     prefix : 前缀
      * @param dateFormat dateFormat : 时间格式字符串
      * @return java.lang.String
      * @throws
+     * @Title: generateSerialNo
      **/
     public static String generateSerialNo(String name, String prefix, String dateFormat) {
         return generateSerialNo(name, prefix, dateFormat, 4);
@@ -74,17 +80,18 @@ public class SerialNoUtils {
     /**
      * 生成序列号
      * <p>
-     *     1.查询cu_model_number表中的序号
-     *     2.判断单号是否存在，不存在，构建一个初始工单号; 存在，更新单号
-     *     3.更新单号
+     * 1.查询cu_model_number表中的序号
+     * 2.判断单号是否存在，不存在，构建一个初始工单号; 存在，更新单号
+     * 3.更新单号
      * </p>
-     * @Title: generateSerialNo
-     * @param name name : 序列号标识(名称)
-     * @param prefix prefix : 前缀
-     * @param dateFormat dateFormat : 时间格式字符串
+     *
+     * @param name         name : 序列号标识(名称)
+     * @param prefix       prefix : 前缀
+     * @param dateFormat   dateFormat : 时间格式字符串
      * @param suffixLength suffixLength : 后缀长度
      * @return java.lang.String
      * @throws
+     * @Title: generateSerialNo
      **/
     public static String generateSerialNo(String name, String prefix, String dateFormat, int suffixLength) {
         String serialNo = "", op = "add";
@@ -113,38 +120,40 @@ public class SerialNoUtils {
 
     /**
      * 构建更新后缀
-     * @Title: buildSuffixByDate
-     * @param dateFormat dateFormat : 时间格式字符串
-     * @param dateStr dateStr : 时间字符串
+     *
+     * @param dateFormat   dateFormat : 时间格式字符串
+     * @param dateStr      dateStr : 时间字符串
      * @param lastSerialNo lastSerialNo : 之前最大序列号
      * @param prefixLength prefixLength : 前缀长度
      * @return java.lang.String
      * @throws
+     * @Title: buildSuffixByDate
      **/
     private static String buildSuffixByDate(String dateStr, String dateFormat, String lastSerialNo, int prefixLength) {
         String suffix = "";
         String suffixStr = "1" + lastSerialNo.substring((prefixLength + dateStr.length()));
-        if(StringUtils.isBlank(dateFormat)) {
+        if (StringUtils.isBlank(dateFormat)) {
             //没有时间
-            return String.valueOf(Long.valueOf(suffixStr)+1L).substring(1);
+            return String.valueOf(Long.valueOf(suffixStr) + 1L).substring(1);
         } else {
             String date = lastSerialNo.substring(prefixLength, prefixLength + dateFormat.length());
-            if(dateStr.equals(date)) {
+            if (dateStr.equals(date)) {
                 //有时间,且当前时间有生成过单号
-                return dateStr + String.valueOf(Long.parseLong(suffixStr)+1L).substring(1);
+                return dateStr + String.valueOf(Long.parseLong(suffixStr) + 1L).substring(1);
             } else {
                 //有时间,但当前时间没有生成过单号
-                return dateStr + buildSuffix(lastSerialNo.length()-prefixLength-dateFormat.length());
+                return dateStr + buildSuffix(lastSerialNo.length() - prefixLength - dateFormat.length());
             }
         }
     }
 
     /**
      * 生成指定长度的后缀
-     * @Title: buildSuffix
+     *
      * @param length length : 后缀长度
      * @return java.lang.String
      * @throws
+     * @Title: buildSuffix
      **/
     private static String buildSuffix(int length) {
         StringBuilder sb = new StringBuilder("1");

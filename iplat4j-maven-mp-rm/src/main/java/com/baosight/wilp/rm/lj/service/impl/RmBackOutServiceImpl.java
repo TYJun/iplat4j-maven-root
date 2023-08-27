@@ -19,7 +19,7 @@ import java.util.Map;
  * @ClassName: RmBackOutServiceImpl
  * @Package com.baosight.wilp.rm.lj.service.impl.impl
  * @date: 2022年08月31日 17:29
- *
+ * <p>
  * 1.获取指定的退库申请
  * 2.新增退库申请
  * 3.更新退库申请
@@ -33,15 +33,18 @@ import java.util.Map;
 @Service
 public class RmBackOutServiceImpl implements RmBackOutService {
 
-    /**注入dao**/
+    /**
+     * 注入dao
+     **/
     private Dao dao = (Dao) PlatApplicationContext.getBean("dao");
 
     /**
      * 获取指定的退库申请
-     * @Title: queryBackOut
+     *
      * @param id id : 退库申请ID
      * @return com.baosight.wilp.rm.lj.domain.RmBackOut
      * @throws
+     * @Title: queryBackOut
      **/
     @Override
     public RmBackOut queryBackOut(String id) {
@@ -53,10 +56,11 @@ public class RmBackOutServiceImpl implements RmBackOutService {
 
     /**
      * 新增退库申请
-     * @Title: insert
+     *
      * @param backOut backOut : 退库申请对象
      * @return void
      * @throws
+     * @Title: insert
      **/
     @Override
     public void insert(RmBackOut backOut) {
@@ -65,10 +69,11 @@ public class RmBackOutServiceImpl implements RmBackOutService {
 
     /**
      * 更新退库申请
-     * @Title: update
+     *
      * @param backOut backOut : 退库申请对象
      * @return int
      * @throws
+     * @Title: update
      **/
     @Override
     public int update(RmBackOut backOut) {
@@ -77,10 +82,11 @@ public class RmBackOutServiceImpl implements RmBackOutService {
 
     /**
      * 删除退库申请
-     * @Title: delete
+     *
      * @param id id : 退库申请ID
      * @return int
      * @throws
+     * @Title: delete
      **/
     @Override
     public int delete(String id) {
@@ -89,24 +95,26 @@ public class RmBackOutServiceImpl implements RmBackOutService {
 
     /**
      * 根据退库申请ID查询明细
-     * @Title: queryBackOutDetailList
+     *
      * @param backOutId backOutId : 退库申请ID
      * @return java.util.List<com.baosight.wilp.rm.lj.domain.RmBackOutDetail>
      * @throws
+     * @Title: queryBackOutDetailList
      **/
     @Override
     public List<RmBackOutDetail> queryBackOutDetailList(String backOutId) {
-        return dao.query("RMLJ03.queryDetail", new HashMap(2){{
+        return dao.query("RMLJ03.queryDetail", new HashMap(2) {{
             put("backOutId", backOutId);
         }});
     }
 
     /**
      * 批量新增退库申请明细
-     * @Title: insertDetail
+     *
      * @param list list : 退库申请明细对象集合
      * @return void
      * @throws
+     * @Title: insertDetail
      **/
     @Override
     public void insertDetail(List<RmBackOutDetail> list) {
@@ -115,10 +123,11 @@ public class RmBackOutServiceImpl implements RmBackOutService {
 
     /**
      * 更新退库申请明细
-     * @Title: updateDetail
+     *
      * @param detail detail : 退库申请明细对象
      * @return int
      * @throws
+     * @Title: updateDetail
      **/
     @Override
     public int updateDetail(RmBackOutDetail detail) {
@@ -127,10 +136,11 @@ public class RmBackOutServiceImpl implements RmBackOutService {
 
     /**
      * 删除退库申请明细
-     * @Title: deleteDetail
+     *
      * @param backOutId backOutId : 退库申请ID
      * @return int
      * @throws
+     * @Title: deleteDetail
      **/
     @Override
     public int deleteDetail(String backOutId) {
@@ -139,10 +149,11 @@ public class RmBackOutServiceImpl implements RmBackOutService {
 
     /**
      * 退库单是否已完成退库
-     * @Title: hasAllBackOut
+     *
      * @param id id
      * @return void
      * @throws
+     * @Title: hasAllBackOut
      **/
     @Override
     public boolean hasAllBackOut(String id) {
@@ -152,10 +163,11 @@ public class RmBackOutServiceImpl implements RmBackOutService {
 
     /**
      * 根据领用单号获取对应退库明细数量
-     * @Title: queryBackOutDetailListByClaimNo
+     *
      * @param claimNo claimNo : 领用单号
-     * @return java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     * @return java.util.List<java.util.Map < java.lang.String, java.lang.Object>>
      * @throws
+     * @Title: queryBackOutDetailListByClaimNo
      **/
     @Override
     public List<Map<String, Object>> queryBackOutDetailListByClaimNo(String claimNo) {

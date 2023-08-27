@@ -19,90 +19,143 @@ import java.util.Map;
 /**
  * 需求计划表实体
  * RmRequirePlan
+ *
  * @author fangjian
  */
 public class RmRequirePlan extends DaoEPBase {
 
     private static final long serialVersionUID = 1L;
 
-    /** 主键*/
+    /**
+     * 主键
+     */
     private String id;
 
-    /** 需求计划单号*/
-    @NotBlank(message="需求计划单号不能为空", groups = ValidationGroups.Update.class)
+    /**
+     * 需求计划单号
+     */
+    @NotBlank(message = "需求计划单号不能为空", groups = ValidationGroups.Update.class)
     private String planNo;
 
-    /** 需求计划时间(年份/年月/申请日期)*/
-    @NotBlank(message="需求计划时间不能为空")
+    /**
+     * 需求计划时间(年份/年月/申请日期)
+     */
+    @NotBlank(message = "需求计划时间不能为空")
     private String planTime;
 
-    /** 计划类型*/
+    /**
+     * 计划类型
+     */
     private String planType;
 
-    /** 计划类型名称*/
+    /**
+     * 计划类型名称
+     */
     private String planTypeName;
 
-    /** 年度计划物资总数*/
+    /**
+     * 年度计划物资总数
+     */
     private Double planNum = new Double(0.00);
 
-    /** 总金额*/
+    /**
+     * 总金额
+     */
     private BigDecimal planCost = new BigDecimal("0.00");
 
-    /** 状态编码*/
+    /**
+     * 状态编码
+     */
     private String statusCode;
 
-    /** 状态名称*/
+    /**
+     * 状态名称
+     */
     private String statusName;
 
-    /** 领用(申请)科室编码*/
+    /**
+     * 领用(申请)科室编码
+     */
     private String deptNum;
 
-    /** 领用(申请)科室编码*/
+    /**
+     * 领用(申请)科室编码
+     */
     private String deptName;
 
-    /** 科室负责人工号*/
+    /**
+     * 科室负责人工号
+     */
     private String deptPrincipal;
 
-    /** 科室负责人姓名*/
+    /**
+     * 科室负责人姓名
+     */
     private String deptPrincipalName;
 
-    /** 需求计划概述*/
-    private String planDesc="";
+    /**
+     * 需求计划概述
+     */
+    private String planDesc = "";
 
-    /** 备注/申请理由*/
-    private String remark="";
+    /**
+     * 备注/申请理由
+     */
+    private String remark = "";
 
-    /** 创建（申请）人*/
+    /**
+     * 创建（申请）人
+     */
     private String recCreator;
 
-    /** 创建（申请）人姓名*/
+    /**
+     * 创建（申请）人姓名
+     */
     private String recCreatorName;
 
-    /** 创建时间*/
-    private Date recCreateTime ;
+    /**
+     * 创建时间
+     */
+    private Date recCreateTime;
 
-    /** 创建时间*/
-    private String recCreateTimeStr ;
+    /**
+     * 创建时间
+     */
+    private String recCreateTimeStr;
 
-    /** 修改人*/
+    /**
+     * 修改人
+     */
     private String recRevisor;
 
-    /** 修改时间*/
-    private Date recReviseTime ;
+    /**
+     * 修改时间
+     */
+    private Date recReviseTime;
 
-    /** 账套*/
+    /**
+     * 账套
+     */
     private String dataGroupCode;
 
-    /** 归档标记*/
+    /**
+     * 归档标记
+     */
     private String archiveFlag;
 
-    /** 驳回原因*/
+    /**
+     * 驳回原因
+     */
     private String rejectReason;
 
-    /** 需求计划明细*/
+    /**
+     * 需求计划明细
+     */
     private List<RmRequirePlanDetail> planDetailList;
 
-    /**需求计划集合ID**/
+    /**
+     * 需求计划集合ID
+     **/
     private List<String> planIds;
 
     /**
@@ -223,6 +276,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the id - 主键
+     *
      * @return the id
      */
     public String getId() {
@@ -238,6 +292,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the planNo - 需求计划单号
+     *
      * @return the planNo
      */
     public String getPlanNo() {
@@ -253,6 +308,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the planTime - 需求计划时间(年份/年月/申请日期)
+     *
      * @return the planTime
      */
     public String getPlanTime() {
@@ -268,6 +324,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the planType - 计划类型
+     *
      * @return the planType
      */
     public String getPlanType() {
@@ -283,6 +340,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the planTypeName - 计划类型名称
+     *
      * @return the planTypeName
      */
     public String getPlanTypeName() {
@@ -298,6 +356,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the planNum - 年度计划物资总数
+     *
      * @return the planNum
      */
     public Double getPlanNum() {
@@ -313,6 +372,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the planCost - 总金额
+     *
      * @return the planCost
      */
     public BigDecimal getPlanCost() {
@@ -328,6 +388,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the statusCode - 状态编码
+     *
      * @return the statusCode
      */
     public String getStatusCode() {
@@ -343,6 +404,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the statusName - 状态名称
+     *
      * @return the statusName
      */
     public String getStatusName() {
@@ -358,6 +420,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the deptNum - 领用(申请)科室编码
+     *
      * @return the deptNum
      */
     public String getDeptNum() {
@@ -373,6 +436,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the deptName - 领用(申请)科室编码
+     *
      * @return the deptName
      */
     public String getDeptName() {
@@ -388,6 +452,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the deptPrincipal - 科室负责人工号
+     *
      * @return the deptPrincipal
      */
     public String getDeptPrincipal() {
@@ -403,6 +468,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the deptPrincipalName - 科室负责人姓名
+     *
      * @return the deptPrincipalName
      */
     public String getDeptPrincipalName() {
@@ -418,6 +484,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the planDesc - 需求计划概述
+     *
      * @return the planDesc
      */
     public String getPlanDesc() {
@@ -433,6 +500,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the remark - 备注/申请理由
+     *
      * @return the remark
      */
     public String getRemark() {
@@ -448,6 +516,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the recCreator - 创建（申请）人
+     *
      * @return the recCreator
      */
     public String getRecCreator() {
@@ -464,6 +533,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the recCreatorName - 创建（申请）人姓名
+     *
      * @return the recCreatorName
      */
     public String getRecCreatorName() {
@@ -479,6 +549,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the recCreateTime - 创建时间
+     *
      * @return the recCreateTime
      */
     public Date getRecCreateTime() {
@@ -490,13 +561,14 @@ public class RmRequirePlan extends DaoEPBase {
      */
     public void setRecCreateTime(Date recCreateTime) {
         this.recCreateTime = recCreateTime;
-        if(this.recCreateTime != null) {
+        if (this.recCreateTime != null) {
             setRecCreateTimeStr(DateUtils.toDateTimeStr19(this.recCreateTime));
         }
     }
 
     /**
      * get the recCreateTimeStr - 创建时间
+     *
      * @return the recCreateTimeStr
      */
     public String getRecCreateTimeStr() {
@@ -512,6 +584,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the recRevisor - 修改人
+     *
      * @return the recRevisor
      */
     public String getRecRevisor() {
@@ -528,6 +601,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the recReviseTime - 修改时间
+     *
      * @return the recReviseTime
      */
     public Date getRecReviseTime() {
@@ -543,6 +617,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the dataGroupCode - 账套
+     *
      * @return the dataGroupCode
      */
     public String getDataGroupCode() {
@@ -558,6 +633,7 @@ public class RmRequirePlan extends DaoEPBase {
 
     /**
      * get the archiveFlag - 归档标记
+     *
      * @return the archiveFlag
      */
     public String getArchiveFlag() {
@@ -632,30 +708,30 @@ public class RmRequirePlan extends DaoEPBase {
     @Override
     public Map toMap() {
         Map map = new HashMap(16);
-        map.put("id",StringUtils.toString(id, eiMetadata.getMeta("id")));
-        map.put("planNo",StringUtils.toString(planNo, eiMetadata.getMeta("planNo")));
-        map.put("planTime",StringUtils.toString(planTime, eiMetadata.getMeta("planTime")));
-        map.put("planType",StringUtils.toString(planType, eiMetadata.getMeta("planType")));
-        map.put("planTypeName",StringUtils.toString(planTypeName, eiMetadata.getMeta("planTypeName")));
-        map.put("planNum",StringUtils.toString(planNum, eiMetadata.getMeta("planNum")));
-        map.put("planCost",StringUtils.toString(planCost, eiMetadata.getMeta("planCost")));
-        map.put("statusCode",StringUtils.toString(statusCode, eiMetadata.getMeta("statusCode")));
-        map.put("statusName",StringUtils.toString(statusName, eiMetadata.getMeta("statusName")));
-        map.put("deptNum",StringUtils.toString(deptNum, eiMetadata.getMeta("deptNum")));
-        map.put("deptName",StringUtils.toString(deptName, eiMetadata.getMeta("deptName")));
-        map.put("deptPrincipal",StringUtils.toString(deptPrincipal, eiMetadata.getMeta("deptPrincipal")));
-        map.put("deptPrincipalName",StringUtils.toString(deptPrincipalName, eiMetadata.getMeta("deptPrincipalName")));
-        map.put("remark",StringUtils.toString(remark, eiMetadata.getMeta("remark")));
-        map.put("planDesc",StringUtils.toString(planDesc, eiMetadata.getMeta("planDesc")));
-        map.put("recCreator",StringUtils.toString(recCreator, eiMetadata.getMeta("recCreator")));
-        map.put("recCreatorName",StringUtils.toString(recCreatorName, eiMetadata.getMeta("recCreatorName")));
-        map.put("recCreateTime",StringUtils.toString(recCreateTime, eiMetadata.getMeta("recCreateTime")));
-        map.put("recCreateTimeStr",StringUtils.toString(recCreateTimeStr, eiMetadata.getMeta("recCreateTimeStr")));
-        map.put("recRevisor",StringUtils.toString(recRevisor, eiMetadata.getMeta("recRevisor")));
-        map.put("recReviseTime",StringUtils.toString(recReviseTime, eiMetadata.getMeta("recReviseTime")));
-        map.put("dataGroupCode",StringUtils.toString(dataGroupCode, eiMetadata.getMeta("dataGroupCode")));
-        map.put("archiveFlag",StringUtils.toString(archiveFlag, eiMetadata.getMeta("archiveFlag")));
-        map.put("rejectReason",StringUtils.toString(rejectReason, eiMetadata.getMeta("rejectReason")));
+        map.put("id", StringUtils.toString(id, eiMetadata.getMeta("id")));
+        map.put("planNo", StringUtils.toString(planNo, eiMetadata.getMeta("planNo")));
+        map.put("planTime", StringUtils.toString(planTime, eiMetadata.getMeta("planTime")));
+        map.put("planType", StringUtils.toString(planType, eiMetadata.getMeta("planType")));
+        map.put("planTypeName", StringUtils.toString(planTypeName, eiMetadata.getMeta("planTypeName")));
+        map.put("planNum", StringUtils.toString(planNum, eiMetadata.getMeta("planNum")));
+        map.put("planCost", StringUtils.toString(planCost, eiMetadata.getMeta("planCost")));
+        map.put("statusCode", StringUtils.toString(statusCode, eiMetadata.getMeta("statusCode")));
+        map.put("statusName", StringUtils.toString(statusName, eiMetadata.getMeta("statusName")));
+        map.put("deptNum", StringUtils.toString(deptNum, eiMetadata.getMeta("deptNum")));
+        map.put("deptName", StringUtils.toString(deptName, eiMetadata.getMeta("deptName")));
+        map.put("deptPrincipal", StringUtils.toString(deptPrincipal, eiMetadata.getMeta("deptPrincipal")));
+        map.put("deptPrincipalName", StringUtils.toString(deptPrincipalName, eiMetadata.getMeta("deptPrincipalName")));
+        map.put("remark", StringUtils.toString(remark, eiMetadata.getMeta("remark")));
+        map.put("planDesc", StringUtils.toString(planDesc, eiMetadata.getMeta("planDesc")));
+        map.put("recCreator", StringUtils.toString(recCreator, eiMetadata.getMeta("recCreator")));
+        map.put("recCreatorName", StringUtils.toString(recCreatorName, eiMetadata.getMeta("recCreatorName")));
+        map.put("recCreateTime", StringUtils.toString(recCreateTime, eiMetadata.getMeta("recCreateTime")));
+        map.put("recCreateTimeStr", StringUtils.toString(recCreateTimeStr, eiMetadata.getMeta("recCreateTimeStr")));
+        map.put("recRevisor", StringUtils.toString(recRevisor, eiMetadata.getMeta("recRevisor")));
+        map.put("recReviseTime", StringUtils.toString(recReviseTime, eiMetadata.getMeta("recReviseTime")));
+        map.put("dataGroupCode", StringUtils.toString(dataGroupCode, eiMetadata.getMeta("dataGroupCode")));
+        map.put("archiveFlag", StringUtils.toString(archiveFlag, eiMetadata.getMeta("archiveFlag")));
+        map.put("rejectReason", StringUtils.toString(rejectReason, eiMetadata.getMeta("rejectReason")));
         return map;
     }
 

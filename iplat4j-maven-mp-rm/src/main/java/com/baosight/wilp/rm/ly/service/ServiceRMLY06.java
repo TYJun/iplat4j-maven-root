@@ -20,10 +20,11 @@ public class ServiceRMLY06 extends ServiceBase {
 
     /**
      * 页面加载
-     * @Title: initLoad
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: initLoad
      **/
     @Override
     public EiInfo initLoad(EiInfo inInfo) {

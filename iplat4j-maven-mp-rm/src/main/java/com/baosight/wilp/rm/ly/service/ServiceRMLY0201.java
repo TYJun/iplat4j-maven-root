@@ -13,7 +13,7 @@ import com.baosight.wilp.rm.common.RmUtils;
  * @ClassName: ServiceRMLY0201
  * @Package com.baosight.wilp.rm.ly.service
  * @date: 2022年09月16日 16:37
- *
+ * <p>
  * 1.页面加载
  * 2.保存领用单
  */
@@ -21,10 +21,11 @@ public class ServiceRMLY0201 extends ServiceBase {
 
     /**
      * 页面加载
-     * @Title: initLoad
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: initLoad
      **/
     @Override
     public EiInfo initLoad(EiInfo inInfo) {
@@ -33,10 +34,11 @@ public class ServiceRMLY0201 extends ServiceBase {
 
     /**
      * 保存领用单
-     * @Title: save
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: save
      **/
     public EiInfo save(EiInfo inInfo) {
         inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "statusCode", RmConstant.CLAIM_STATUS_UN_OUT);

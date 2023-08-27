@@ -19,7 +19,7 @@ import java.util.Map;
  * @ClassName: ServiceRMLY04
  * @Package com.baosight.wilp.rm.ly.service
  * @date: 2023年02月02日 17:19
- *
+ * <p>
  * 1.页面加载
  * 2.页面查询
  */
@@ -27,10 +27,11 @@ public class ServiceRMLY04 extends ServiceBase {
 
     /**
      * 页面加载
-     * @Title: initLoad
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: initLoad
      **/
     @Override
     public EiInfo initLoad(EiInfo inInfo) {
@@ -41,19 +42,20 @@ public class ServiceRMLY04 extends ServiceBase {
 
     /**
      * 页面查询
-     * @Title: query
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: query
      **/
     @Override
     public EiInfo query(EiInfo inInfo) {
         //判断是否是仓库人员
-        if(RmUtils.containRole(UserSession.getLoginName(), "MPCK001", "MPCK002", "MPCK003")) {
-            inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "statusCodes", Arrays.asList("30","40","50","60","70","80","90"));
+        if (RmUtils.containRole(UserSession.getLoginName(), "MPCK001", "MPCK002", "MPCK003")) {
+            inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "statusCodes", Arrays.asList("30", "40", "50", "60", "70", "80", "90"));
         } else {
             Map<String, Object> deptMap = BaseDockingUtils.getDeptByworkNo(UserSession.getLoginName());
-            inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptName",deptMap.get("deptName"));
+            inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptName", deptMap.get("deptName"));
         }
         return super.query(inInfo, "RMLJ02.query", new RmClaim());
     }

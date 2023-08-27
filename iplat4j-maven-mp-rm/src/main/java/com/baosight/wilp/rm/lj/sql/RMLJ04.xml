@@ -3,70 +3,71 @@
 
 <sqlMap namespace="RMLJ04">
 
-	<select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.rm.lj.domain.RmApproval">
-		SELECT
-			id	as "id",  <!-- 主键 -->
-			relate_id	as "relateId",  <!-- 关联ID，年度/临时/月度/领用等表主键 -->
-			status	as "status",  <!-- 状态(0=失效,1=有效) -->
-			approval_result_code	as "approvalResultCode",  <!-- 审批结果编码 -->
-			approval_result_name	as "approvalResultName",  <!-- 审批结果名称 -->
-			reject_reason	as "rejectReason",  <!-- 驳回原因 -->
-			approver	as "approver",  <!-- 审批人工号 -->
-			approver_name	as "approverName",  <!-- 审批人姓名 -->
-			approval_time	as "approvalTime" <!-- 审批时间 -->
-		FROM rm_approval WHERE 1=1
-		<isNotEmpty prepend=" AND " property="id">
-			id = #id#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="relateId">
-			relate_id = #relateId#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="status">
-			status = #status#
-		</isNotEmpty>
-		<dynamic prepend="ORDER BY">
-         	<isNotEmpty property="orderBy">
-    		  	$orderBy$
-   		 	</isNotEmpty>
-   			<isEmpty property="orderBy">
-    		  	id asc
-			</isEmpty>
-  		</dynamic>
-	</select>
+    <select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.rm.lj.domain.RmApproval">
+        SELECT
+        id as "id",  <!-- 主键 -->
+        relate_id as "relateId",  <!-- 关联ID，年度/临时/月度/领用等表主键 -->
+        status as "status",  <!-- 状态(0=失效,1=有效) -->
+        approval_result_code as "approvalResultCode",  <!-- 审批结果编码 -->
+        approval_result_name as "approvalResultName",  <!-- 审批结果名称 -->
+        reject_reason as "rejectReason",  <!-- 驳回原因 -->
+        approver as "approver",  <!-- 审批人工号 -->
+        approver_name as "approverName",  <!-- 审批人姓名 -->
+        approval_time as "approvalTime" <!-- 审批时间 -->
+        FROM rm_approval WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="relateId">
+            relate_id = #relateId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="status">
+            status = #status#
+        </isNotEmpty>
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                id asc
+            </isEmpty>
+        </dynamic>
+    </select>
 
-	<select id="count" resultClass="int">
-		SELECT COUNT(*) FROM .rm_approval WHERE 1=1
-		<isNotEmpty prepend=" AND " property="id">
-			id = #id#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="relateId">
-			relate_id = #relateId#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="status">
-			status = #status#
-		</isNotEmpty>
-	</select>
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM .rm_approval WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="relateId">
+            relate_id = #relateId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="status">
+            status = #status#
+        </isNotEmpty>
+    </select>
 
-	<insert id="insert" parameterClass="com.baosight.wilp.rm.lj.domain.RmApproval">
-		INSERT INTO rm_approval (
-			id,  <!-- 主键 -->
-			relate_id,  <!-- 关联ID，年度/临时/月度/领用等表主键 -->
-			status,  <!-- 状态(0=失效,1=有效) -->
-			approval_result_code,  <!-- 审批结果编码 -->
-			approval_result_name,  <!-- 审批结果名称 -->
-			reject_reason,  <!-- 驳回原因 -->
-			approver,  <!-- 审批人工号 -->
-			approver_name,  <!-- 审批人姓名 -->
-			approval_time  <!-- 审批时间 -->
-		)
-	    VALUES (#id#, #relateId#, #status#, #approvalResultCode#, #approvalResultName#, #rejectReason#, #approver#, #approverName#, #approvalTime#) 
-	</insert>
+    <insert id="insert" parameterClass="com.baosight.wilp.rm.lj.domain.RmApproval">
+        INSERT INTO rm_approval (
+        id,  <!-- 主键 -->
+        relate_id,  <!-- 关联ID，年度/临时/月度/领用等表主键 -->
+        status,  <!-- 状态(0=失效,1=有效) -->
+        approval_result_code,  <!-- 审批结果编码 -->
+        approval_result_name,  <!-- 审批结果名称 -->
+        reject_reason,  <!-- 驳回原因 -->
+        approver,  <!-- 审批人工号 -->
+        approver_name,  <!-- 审批人姓名 -->
+        approval_time  <!-- 审批时间 -->
+        )
+        VALUES (#id#, #relateId#, #status#, #approvalResultCode#, #approvalResultName#, #rejectReason#, #approver#,
+        #approverName#, #approvalTime#)
+    </insert>
 
-	<update id="update" parameterClass="com.baosight.wilp.rm.lj.domain.RmApproval">
-		UPDATE rm_approval SET status = #status# WHERE relate_id = #relateId#
-		<isNotEmpty property="approvalResultCode" prepend=" AND ">
-			approval_result_code = #approvalResultCode#
-		</isNotEmpty>
-	</update>
-  
+    <update id="update" parameterClass="com.baosight.wilp.rm.lj.domain.RmApproval">
+        UPDATE rm_approval SET status = #status# WHERE relate_id = #relateId#
+        <isNotEmpty property="approvalResultCode" prepend=" AND ">
+            approval_result_code = #approvalResultCode#
+        </isNotEmpty>
+    </update>
+
 </sqlMap>

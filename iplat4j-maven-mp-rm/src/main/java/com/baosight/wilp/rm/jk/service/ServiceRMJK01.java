@@ -29,11 +29,11 @@ import java.util.stream.Collectors;
 /**
  * @author fangjian
  * @version V5.0.0
- * @Description: 物资领用对外接口(本地服务、微服务)
+ * @Description: 物资领用对外接口(本地服务 、 微服务)
  * @ClassName: ServiceRMJK01
  * @Package com.baosight.wilp.rm.jk
  * @date: 2022年09月07日 13:51
- *
+ * <p>
  * 1.获取需求计划明细集合
  * 2.需求计划汇总回调
  * 3.获取物资预约量
@@ -53,30 +53,31 @@ public class ServiceRMJK01 extends ServiceBase {
 
     /**
      * 获取需求计划明细
-     * @Title: queryPlanDetailList
+     *
      * @param inInfo inInfo
-     *       matTypeNums: 物资分类编码集合
-     *       detailIds: 需求计划明细id集合
+     *               matTypeNums: 物资分类编码集合
+     *               detailIds: 需求计划明细id集合
      * @return com.baosight.iplat4j.core.ei.EiInfo
-     *       planId:	需求计划ID
-     *       planNo:    需求计划单号
-     *       matNum:	物资编码
-     *       matName:	物资名称
-     *       matTypeId:	物资分类ID
-     *       matTypeName:	物资分类名称
-     *       matModel:	物资型号
-     *       matSpec:	物资规格
-     *       unit:	计量单位
-     *       price:	单价
-     *       num:	需求数量
+     * planId:	需求计划ID
+     * planNo:    需求计划单号
+     * matNum:	物资编码
+     * matName:	物资名称
+     * matTypeId:	物资分类ID
+     * matTypeName:	物资分类名称
+     * matModel:	物资型号
+     * matSpec:	物资规格
+     * unit:	计量单位
+     * price:	单价
+     * num:	需求数量
      * @throws
+     * @Title: queryPlanDetailList
      **/
     public EiInfo queryPlanDetailList(EiInfo inInfo) {
         //参数处理
         Map<String, Object> map = new HashMap<>(4);
         map.put("matTypeNums", RmUtils.toList(inInfo.get("matTypeNums"), String.class));
         List<String> detailIds = RmUtils.toList(inInfo.get("detailIds"), String.class);
-        if(CollectionUtils.isEmpty(detailIds)) {
+        if (CollectionUtils.isEmpty(detailIds)) {
             map.put("unCollect", "Y");
         } else {
             map.put("detailIds", detailIds);
@@ -90,16 +91,17 @@ public class ServiceRMJK01 extends ServiceBase {
 
     /**
      * 需求计划汇总回调
-     * @Title: updateRequirePlan
+     *
      * @param inInfo inInfo
-     *      planDetailList: 需求计划明细集合
+     *               planDetailList: 需求计划明细集合
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: updateRequirePlan
      **/
     public EiInfo requireCollectCallback(EiInfo inInfo) {
         //参数处理
         List<RmRequirePlanDetail> detailList = RmUtils.toList(inInfo.get("planDetailList"), RmRequirePlanDetail.class);
-        if(CollectionUtils.isEmpty(detailList)) {
+        if (CollectionUtils.isEmpty(detailList)) {
             return ValidatorUtils.errorInfo(inInfo, "参数不能为空");
         }
 
@@ -110,7 +112,7 @@ public class ServiceRMJK01 extends ServiceBase {
 
         //根据科室, 物资编码查询需求计划明细, 更新汇总标记
         HashMap<Object, Object> map = new HashMap<>();
-        map.put("deptNum" , deptNum);
+        map.put("deptNum", deptNum);
 
         for (RmRequirePlanDetail planDetail : detailList) {
             map.put("matNum", planDetail.getMatNum());
@@ -119,7 +121,7 @@ public class ServiceRMJK01 extends ServiceBase {
             planDetailList.forEach(detail -> {
                 requirePlanService.updateRequirePlanDetail(detail);
                 //id集合中没有，添加
-                if(!planIds.contains(detail.getPlanId())) {
+                if (!planIds.contains(detail.getPlanId())) {
                     planIds.add(detail.getPlanId());
                 }
             });
@@ -135,11 +137,12 @@ public class ServiceRMJK01 extends ServiceBase {
 
     /**
      * 获取物资预约量
-     * @Title: queryReserveNum
+     *
      * @param inInfo inInfo
-     *      matNumList: 物资编码集合
+     *               matNumList: 物资编码集合
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: queryReserveNum
      **/
     public EiInfo queryReserveNum(EiInfo inInfo) {
         List<String> matNumList = RmUtils.toList(inInfo.get("matNumList"), String.class);
@@ -151,45 +154,46 @@ public class ServiceRMJK01 extends ServiceBase {
     /**
      * 红冲出库数据回退
      * <p>
-     *     1.获取参数
-     *     2.参数校验
-     *     3.领用红冲处理
+     * 1.获取参数
+     * 2.参数校验
+     * 3.领用红冲处理
      * </p>
-     * @Title: outStockCallback
+     *
      * @param inInfo inInfo
-     *      originBillNo:	来源单据号
-     *      originBillType:	来源单据类型
-     *      originBillTypeName:	来源单据类型名称
-     *      list:	出库明细集合
-     *          matNum:	物资编码
-     *          matName:	物资名称
-     *          matModel:	物资型号
-     *          matSpec:	物资规格
-     *          unitName:	计量单位
-     *          outNum:	出库数量
-     *          outPrice:	出库单价
-     *          outAmount:	出库总价
+     *               originBillNo:	来源单据号
+     *               originBillType:	来源单据类型
+     *               originBillTypeName:	来源单据类型名称
+     *               list:	出库明细集合
+     *               matNum:	物资编码
+     *               matName:	物资名称
+     *               matModel:	物资型号
+     *               matSpec:	物资规格
+     *               unitName:	计量单位
+     *               outNum:	出库数量
+     *               outPrice:	出库单价
+     *               outAmount:	出库总价
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: outStockCallback
      **/
-    public EiInfo outStockCallback (EiInfo inInfo) throws Exception {
+    public EiInfo outStockCallback(EiInfo inInfo) throws Exception {
         /**1.获取参数**/
         String originBillNo = inInfo.getString("originBillNo");
         String originBillType = inInfo.getString("originBillType");
         List<Map> list = RmUtils.toList(inInfo.get("list"), Map.class);
         /**2.参数校验**/
-        if(StringUtils.isBlank(originBillNo)) {
+        if (StringUtils.isBlank(originBillNo)) {
             return ValidatorUtils.errorInfo(inInfo, "来源单据号参数不能为空");
         }
-        if(StringUtils.isBlank(originBillType)) {
+        if (StringUtils.isBlank(originBillType)) {
             return ValidatorUtils.errorInfo(inInfo, "来源单据类型参数不能为空");
         }
         list = list.stream().filter(map -> NumberUtils.toDouble(map.get("outNum"), 0D) > 0).collect(Collectors.toList());
-        if(CollectionUtils.isEmpty(list)) {
+        if (CollectionUtils.isEmpty(list)) {
             return ValidatorUtils.errorInfo(inInfo, "物资信息不能为空，或数量不能都为0");
         }
         /**3.领用红冲处理**/
-        if(ORIGINBILLTYPE_CLAIM.equals(originBillType)) {
+        if (ORIGINBILLTYPE_CLAIM.equals(originBillType)) {
             claimCallback(originBillNo, list);
         }
         return inInfo;
@@ -197,16 +201,19 @@ public class ServiceRMJK01 extends ServiceBase {
 
     /**
      * 领用红冲出库回调
-     * @Title: claimCallback
+     *
      * @param originBillNo originBillNo
-     * @param list list
+     * @param list         list
      * @return void
      * @throws
+     * @Title: claimCallback
      **/
     private void claimCallback(String originBillNo, List<Map> list) throws Exception {
         //获取领用单
         RmClaim claim = claimService.queryClaimByClaimNo(originBillNo);
-        if(claim == null){ return; }
+        if (claim == null) {
+            return;
+        }
 
         //获取领用明细
         List<RmClaimDetail> detailList = claimService.queryClaimDetailList(claim.getId());
@@ -216,11 +223,13 @@ public class ServiceRMJK01 extends ServiceBase {
         for (Map map : list) {
             //获取领用明细
             RmClaimDetail claimDetail = detailList.stream().filter(detail -> detail.getOutNum().equals(map.get("matNum"))).findFirst().orElse(null);
-            if(claimDetail == null) {continue; }
+            if (claimDetail == null) {
+                continue;
+            }
 
             //判断红冲出库数量是否大于领用数量
             Double outNum = NumberUtils.toDouble("outNum");
-            if(RmUtils.doubleSub(outNum, claimDetail.getNum()) > 0) {
+            if (RmUtils.doubleSub(outNum, claimDetail.getNum()) > 0) {
                 throw new Exception("红冲出库数量不能大于领用数量");
             }
 
@@ -240,37 +249,38 @@ public class ServiceRMJK01 extends ServiceBase {
     /**
      * 生成需求计划
      * <p>
-     *     1.获取参数
-     *     2.参数校验
-     *     3.完善需求需求计划和需求计划明细
-     *     4.保存需求需求计划和需求计划明细
+     * 1.获取参数
+     * 2.参数校验
+     * 3.完善需求需求计划和需求计划明细
+     * 4.保存需求需求计划和需求计划明细
      * </p>
-     * @Title: genRequirePlan
+     *
      * @param inInfo inInfo
-     *     planTime : 需求计划时间
-     *     planType : 01=年度、02=月度, 03=临时
-     *     deptNum : 领用(申请)科室编码
-     *     deptName : 领用(申请)科室名称
-     *     deptPrincipal : 科室负责人工号
-     *     deptPrincipalName : 科室负责人姓名
-     *     planDesc : 需求计划描述
-     *     remark : 备注/申请理由
-     *     recCreator : 创建（申请）人
-     *     recCreatorName : 创建（申请）人姓名
-     *     dataGroupCode : 账套
-     *     details : 需求计划明细集合
-     *         matNum : 物资编码
-     *         matName : 物资名称
-     *         matTypeId : 物资分类编码
-     *         matTypeName : 物资分类名称
-     *         matSpec : 物资规格
-     *         matModel : 物资型号
-     *         unit : 计量单位
-     *         unitName : 计量单位
-     *         price : 单价
-     *         num : 计划数量
+     *               planTime : 需求计划时间
+     *               planType : 01=年度、02=月度, 03=临时
+     *               deptNum : 领用(申请)科室编码
+     *               deptName : 领用(申请)科室名称
+     *               deptPrincipal : 科室负责人工号
+     *               deptPrincipalName : 科室负责人姓名
+     *               planDesc : 需求计划描述
+     *               remark : 备注/申请理由
+     *               recCreator : 创建（申请）人
+     *               recCreatorName : 创建（申请）人姓名
+     *               dataGroupCode : 账套
+     *               details : 需求计划明细集合
+     *               matNum : 物资编码
+     *               matName : 物资名称
+     *               matTypeId : 物资分类编码
+     *               matTypeName : 物资分类名称
+     *               matSpec : 物资规格
+     *               matModel : 物资型号
+     *               unit : 计量单位
+     *               unitName : 计量单位
+     *               price : 单价
+     *               num : 计划数量
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: genRequirePlan
      **/
     public EiInfo genRequirePlan(EiInfo inInfo) {
         /**1.获取参数**/
@@ -280,11 +290,11 @@ public class ServiceRMJK01 extends ServiceBase {
 
         /**2.参数校验**/
         EiInfo validateInfo = ValidatorUtils.validateEntity(plan);
-        if(validateInfo.getStatus() == -1) {
+        if (validateInfo.getStatus() == -1) {
             return validateInfo;
         }
         detailList = detailList.stream().filter(detail -> detail.getNum() != null && detail.getNum() > 0).collect(Collectors.toList());
-        if(CollectionUtils.isEmpty(detailList)) {
+        if (CollectionUtils.isEmpty(detailList)) {
             return ValidatorUtils.errorInfo("需求计划明细不能为空或需求数量全部为0");
         }
 
@@ -299,17 +309,18 @@ public class ServiceRMJK01 extends ServiceBase {
 
     /**
      * 完善需求需求计划和需求计划明细
-     * @Title: completeRequirePlan
-     * @param plan plan : 需求计划对象
+     *
+     * @param plan       plan : 需求计划对象
      * @param detailList detailList : 需求计划明细集合
      * @return void
      * @throws
+     * @Title: completeRequirePlan
      **/
     private void completeRequirePlan(RmRequirePlan plan, List<RmRequirePlanDetail> detailList) {
         //需求计划信息完善
         plan.setId(UUID.randomUUID().toString());
         //生成需求计划单号
-        if(RmConstant.PLAN_TYPE_YEAR.equals(plan.getPlanType())) {
+        if (RmConstant.PLAN_TYPE_YEAR.equals(plan.getPlanType())) {
             plan.setPlanNo(SerialNoUtils.generateSerialNo("rm_year_require", "RLY", "yyyy", 8));
         } else if (RmConstant.PLAN_TYPE_MONTH.equals(plan.getPlanType())) {
             plan.setPlanNo(SerialNoUtils.generateSerialNo("rm_month_require", "RLM", "yyyyMM", 6));
@@ -319,7 +330,7 @@ public class ServiceRMJK01 extends ServiceBase {
         plan.setPlanTypeName(CommonUtils.getDataCodeItemName("wilp.rm.require.planType", RmConstant.PLAN_TYPE_YEAR));
         plan.setStatusCode(RmConstant.REQUIRE_STATUS_NEW);
         plan.setStatusName(CommonUtils.getDataCodeItemName("wilp.rm.require.status", plan.getStatusCode()));
-        
+
         //需求计划明细信息完善
         for (RmRequirePlanDetail detail : detailList) {
             detail.setId(UUID.randomUUID().toString());
@@ -332,10 +343,11 @@ public class ServiceRMJK01 extends ServiceBase {
 
     /**
      * 更新科室常用物资的单价
-     * @Title: updateDeptMatPrice
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: updateDeptMatPrice
      **/
     public EiInfo updateDeptMatPrice(EiInfo inInfo) {
         List<String> matNumList = RmUtils.toList(inInfo.get("matNumList"), String.class);

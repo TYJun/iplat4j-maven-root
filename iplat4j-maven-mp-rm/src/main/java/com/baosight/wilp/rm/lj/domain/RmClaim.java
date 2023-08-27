@@ -17,85 +17,136 @@ import java.util.Map;
 /**
  * 物资领用实体
  * RmClaim
+ *
  * @author fangjian
  */
 public class RmClaim extends DaoEPBase {
 
     private static final long serialVersionUID = 1L;
 
-    /** 主键*/
+    /**
+     * 主键
+     */
     private String id;
 
-    /** 领用单号*/
+    /**
+     * 领用单号
+     */
     private String claimNo;
 
-    /** 状态编码*/
+    /**
+     * 状态编码
+     */
     private String statusCode;
 
-     /** 状态名称*/
+    /**
+     * 状态名称
+     */
     private String statusName;
 
-    /** 领用数量*/
+    /**
+     * 领用数量
+     */
     private Double claimNum = new Double(0.00);
 
-    /** 领用总金额*/
+    /**
+     * 领用总金额
+     */
     private BigDecimal claimTotalMoney = new BigDecimal("0.00");
 
-    /** 已出库数量*/
+    /**
+     * 已出库数量
+     */
     private Double outNum = new Double(0.00);
 
-    /** 领用(申请)科室编码*/
+    /**
+     * 领用(申请)科室编码
+     */
     private String deptNum;
 
-    /** 领用(申请)科室编码*/
+    /**
+     * 领用(申请)科室编码
+     */
     private String deptName;
 
-    /** 成本归集科室编码*/
+    /**
+     * 成本归集科室编码
+     */
     private String costDeptNum;
 
-    /** 成本归集科室名称*/
+    /**
+     * 成本归集科室名称
+     */
     private String costDeptName;
 
-    /** 领用申请人工号*/
+    /**
+     * 领用申请人工号
+     */
     private String applyUserNo;
 
-    /** 领用申请人姓名*/
+    /**
+     * 领用申请人姓名
+     */
     private String applyUserName;
 
-    /** 备注*/
-    private String remark="";
+    /**
+     * 备注
+     */
+    private String remark = "";
 
-    /** 创建（申请）人*/
+    /**
+     * 创建（申请）人
+     */
     private String recCreator;
 
-    /** 创建（申请）人姓名*/
+    /**
+     * 创建（申请）人姓名
+     */
     private String recCreatorName;
 
-    /** 创建时间*/
-    private Date recCreateTime ;
+    /**
+     * 创建时间
+     */
+    private Date recCreateTime;
 
-    /** 创建时间*/
-    private String recCreateTimeStr ;
+    /**
+     * 创建时间
+     */
+    private String recCreateTimeStr;
 
-    /** 修改人*/
+    /**
+     * 修改人
+     */
     private String recRevisor;
 
-     /** 修改时间*/
-    private Date recReviseTime ;
+    /**
+     * 修改时间
+     */
+    private Date recReviseTime;
 
-    /** 账套*/
+    /**
+     * 账套
+     */
     private String dataGroupCode;
 
-    /** 归档标记*/
+    /**
+     * 归档标记
+     */
     private String archiveFlag;
 
-    /**科室驳回原因**/
+    /**
+     * 科室驳回原因
+     **/
     private String rejectReason;
 
-    /**仓库驳回原因**/
+    /**
+     * 仓库驳回原因
+     **/
     private String stockRejectReason;
 
-    /**签收电子签名**/
+    /**
+     * 签收电子签名
+     **/
     private String signature;
 
     /***
@@ -210,14 +261,14 @@ public class RmClaim extends DaoEPBase {
         eiMetadata.addMeta(eiColumn);
     }
 
-  /****
+    /****
      * the constructor
      */
     public RmClaim() {
         initMetaData();
     }
 
-   /***
+    /***
      * get the id - 主键
      * @return the id
      */
@@ -225,14 +276,14 @@ public class RmClaim extends DaoEPBase {
         return this.id;
     }
 
-   /***
+    /***
      * set the id - 主键
      */
     public void setId(String id) {
         this.id = id;
     }
 
-   /***
+    /***
      * get the claimNo - 领用单号
      * @return the claimNo
      */
@@ -240,14 +291,14 @@ public class RmClaim extends DaoEPBase {
         return this.claimNo;
     }
 
-   /***
+    /***
      * set the claimNo - 领用单号
      */
     public void setClaimNo(String claimNo) {
         this.claimNo = claimNo;
     }
 
-   /***
+    /***
      * get the statusCode - 状态编码
      * @return the statusCode
      */
@@ -255,14 +306,14 @@ public class RmClaim extends DaoEPBase {
         return this.statusCode;
     }
 
-   /***
+    /***
      * set the statusCode - 状态编码
      */
     public void setStatusCode(String statusCode) {
         this.statusCode = statusCode;
     }
 
-   /***
+    /***
      * get the statusName - 状态名称
      * @return the statusName
      */
@@ -270,14 +321,14 @@ public class RmClaim extends DaoEPBase {
         return this.statusName;
     }
 
-   /***
+    /***
      * set the statusName - 状态名称
      */
     public void setStatusName(String statusName) {
         this.statusName = statusName;
     }
 
-   /***
+    /***
      * get the claimNum - 领用数量
      * @return the claimNum
      */
@@ -285,7 +336,7 @@ public class RmClaim extends DaoEPBase {
         return this.claimNum;
     }
 
-   /***
+    /***
      * set the claimNum - 领用数量
      */
     public void setClaimNum(Double claimNum) {
@@ -315,14 +366,14 @@ public class RmClaim extends DaoEPBase {
         return this.outNum;
     }
 
-   /***
+    /***
      * set the outNum - 已出库数量
      */
     public void setOutNum(Double outNum) {
         this.outNum = outNum;
     }
 
-   /***
+    /***
      * get the deptNum - 领用(申请)科室编码
      * @return the deptNum
      */
@@ -330,14 +381,14 @@ public class RmClaim extends DaoEPBase {
         return this.deptNum;
     }
 
-   /***
+    /***
      * set the deptNum - 领用(申请)科室编码
      */
     public void setDeptNum(String deptNum) {
         this.deptNum = deptNum;
     }
 
-   /***
+    /***
      * get the deptName - 领用(申请)科室编码
      * @return the deptName
      */
@@ -345,7 +396,7 @@ public class RmClaim extends DaoEPBase {
         return this.deptName;
     }
 
-   /***
+    /***
      * set the deptName - 领用(申请)科室编码
      */
     public void setDeptName(String deptName) {
@@ -400,7 +451,7 @@ public class RmClaim extends DaoEPBase {
         return this.recCreator;
     }
 
-   /***
+    /***
      * set the recCreator - 创建（申请）人
      */
     @Override
@@ -408,7 +459,7 @@ public class RmClaim extends DaoEPBase {
         this.recCreator = recCreator;
     }
 
-   /***
+    /***
      * get the recCreatorName - 创建（申请）人姓名
      * @return the recCreatorName
      */
@@ -416,14 +467,14 @@ public class RmClaim extends DaoEPBase {
         return this.recCreatorName;
     }
 
-   /***
+    /***
      * set the recCreatorName - 创建（申请）人姓名
      */
     public void setRecCreatorName(String recCreatorName) {
         this.recCreatorName = recCreatorName;
     }
 
-   /***
+    /***
      * get the recCreateTime - 创建时间
      * @return the recCreateTime
      */
@@ -436,13 +487,14 @@ public class RmClaim extends DaoEPBase {
      */
     public void setRecCreateTime(Date recCreateTime) {
         this.recCreateTime = recCreateTime;
-        if(this.recCreateTime != null) {
+        if (this.recCreateTime != null) {
             setRecCreateTimeStr(DateUtils.toDateTimeStr19(this.recCreateTime));
         }
     }
 
     /**
      * get the recCreateTimeStr - 创建时间
+     *
      * @return the recCreateTimeStr
      */
     public String getRecCreateTimeStr() {
@@ -456,7 +508,7 @@ public class RmClaim extends DaoEPBase {
         this.recCreateTimeStr = recCreateTimeStr;
     }
 
-   /***
+    /***
      * get the recRevisor - 修改人
      * @return the recRevisor
      */
@@ -464,7 +516,7 @@ public class RmClaim extends DaoEPBase {
         return this.recRevisor;
     }
 
-   /***
+    /***
      * set the recRevisor - 修改人
      */
     @Override
@@ -472,7 +524,7 @@ public class RmClaim extends DaoEPBase {
         this.recRevisor = recRevisor;
     }
 
-   /***
+    /***
      * get the recReviseTime - 修改时间
      * @return the recReviseTime
      */
@@ -480,14 +532,14 @@ public class RmClaim extends DaoEPBase {
         return this.recReviseTime;
     }
 
-   /***
+    /***
      * set the recReviseTime - 修改时间
      */
     public void setRecReviseTime(Date recReviseTime) {
         this.recReviseTime = recReviseTime;
     }
 
-   /***
+    /***
      * get the dataGroupCode - 账套
      * @return the dataGroupCode
      */
@@ -495,14 +547,14 @@ public class RmClaim extends DaoEPBase {
         return this.dataGroupCode;
     }
 
-   /***
+    /***
      * set the dataGroupCode - 账套
      */
     public void setDataGroupCode(String dataGroupCode) {
         this.dataGroupCode = dataGroupCode;
     }
 
-   /***
+    /***
      * get the archiveFlag - 归档标记
      * @return the archiveFlag
      */
@@ -510,7 +562,7 @@ public class RmClaim extends DaoEPBase {
         return this.archiveFlag;
     }
 
-   /***
+    /***
      * set the archiveFlag - 归档标记
      */
     @Override
@@ -572,47 +624,48 @@ public class RmClaim extends DaoEPBase {
         setSignature(RmUtils.toString(map.get("signature"), signature));
     }
 
-   /***
+    /***
      * set the value to Map
      */
     @Override
     public Map toMap() {
         Map map = new HashMap(16);
-        map.put("id",StringUtils.toString(id, eiMetadata.getMeta("id")));
-        map.put("claimNo",StringUtils.toString(claimNo, eiMetadata.getMeta("claimNo")));
-        map.put("statusCode",StringUtils.toString(statusCode, eiMetadata.getMeta("statusCode")));
-        map.put("statusName",StringUtils.toString(statusName, eiMetadata.getMeta("statusName")));
-        map.put("claimNum",StringUtils.toString(claimNum, eiMetadata.getMeta("claimNum")));
-        map.put("claimTotalMoney",StringUtils.toString(claimTotalMoney, eiMetadata.getMeta("claimTotalMoney")));
-        map.put("outNum",StringUtils.toString(outNum, eiMetadata.getMeta("outNum")));
-        map.put("deptNum",StringUtils.toString(deptNum, eiMetadata.getMeta("deptNum")));
-        map.put("deptName",StringUtils.toString(deptName, eiMetadata.getMeta("deptName")));
-        map.put("costDeptNum",StringUtils.toString(costDeptNum, eiMetadata.getMeta("costDeptNum")));
-        map.put("costDeptName",StringUtils.toString(costDeptName, eiMetadata.getMeta("costDeptName")));
-        map.put("applyUserNo",StringUtils.toString(applyUserNo, eiMetadata.getMeta("applyUserNo")));
-        map.put("applyUserName",StringUtils.toString(applyUserName, eiMetadata.getMeta("applyUserName")));
-        map.put("remark",StringUtils.toString(remark, eiMetadata.getMeta("remark")));
-        map.put("recCreator",StringUtils.toString(recCreator, eiMetadata.getMeta("recCreator")));
-        map.put("recCreatorName",StringUtils.toString(recCreatorName, eiMetadata.getMeta("recCreatorName")));
-        map.put("recCreateTime",StringUtils.toString(recCreateTime, eiMetadata.getMeta("recCreateTime")));
-        map.put("recCreateTimeStr",StringUtils.toString(recCreateTimeStr, eiMetadata.getMeta("recCreateTimeStr")));
-        map.put("recRevisor",StringUtils.toString(recRevisor, eiMetadata.getMeta("recRevisor")));
-        map.put("recReviseTime",StringUtils.toString(recReviseTime, eiMetadata.getMeta("recReviseTime")));
-        map.put("dataGroupCode",StringUtils.toString(dataGroupCode, eiMetadata.getMeta("dataGroupCode")));
-        map.put("archiveFlag",StringUtils.toString(archiveFlag, eiMetadata.getMeta("archiveFlag")));
-        map.put("rejectReason",StringUtils.toString(rejectReason, eiMetadata.getMeta("rejectReason")));
-        map.put("stockRejectReason",StringUtils.toString(stockRejectReason, eiMetadata.getMeta("stockRejectReason")));
-        map.put("signature",StringUtils.toString(signature, eiMetadata.getMeta("signature")));
+        map.put("id", StringUtils.toString(id, eiMetadata.getMeta("id")));
+        map.put("claimNo", StringUtils.toString(claimNo, eiMetadata.getMeta("claimNo")));
+        map.put("statusCode", StringUtils.toString(statusCode, eiMetadata.getMeta("statusCode")));
+        map.put("statusName", StringUtils.toString(statusName, eiMetadata.getMeta("statusName")));
+        map.put("claimNum", StringUtils.toString(claimNum, eiMetadata.getMeta("claimNum")));
+        map.put("claimTotalMoney", StringUtils.toString(claimTotalMoney, eiMetadata.getMeta("claimTotalMoney")));
+        map.put("outNum", StringUtils.toString(outNum, eiMetadata.getMeta("outNum")));
+        map.put("deptNum", StringUtils.toString(deptNum, eiMetadata.getMeta("deptNum")));
+        map.put("deptName", StringUtils.toString(deptName, eiMetadata.getMeta("deptName")));
+        map.put("costDeptNum", StringUtils.toString(costDeptNum, eiMetadata.getMeta("costDeptNum")));
+        map.put("costDeptName", StringUtils.toString(costDeptName, eiMetadata.getMeta("costDeptName")));
+        map.put("applyUserNo", StringUtils.toString(applyUserNo, eiMetadata.getMeta("applyUserNo")));
+        map.put("applyUserName", StringUtils.toString(applyUserName, eiMetadata.getMeta("applyUserName")));
+        map.put("remark", StringUtils.toString(remark, eiMetadata.getMeta("remark")));
+        map.put("recCreator", StringUtils.toString(recCreator, eiMetadata.getMeta("recCreator")));
+        map.put("recCreatorName", StringUtils.toString(recCreatorName, eiMetadata.getMeta("recCreatorName")));
+        map.put("recCreateTime", StringUtils.toString(recCreateTime, eiMetadata.getMeta("recCreateTime")));
+        map.put("recCreateTimeStr", StringUtils.toString(recCreateTimeStr, eiMetadata.getMeta("recCreateTimeStr")));
+        map.put("recRevisor", StringUtils.toString(recRevisor, eiMetadata.getMeta("recRevisor")));
+        map.put("recReviseTime", StringUtils.toString(recReviseTime, eiMetadata.getMeta("recReviseTime")));
+        map.put("dataGroupCode", StringUtils.toString(dataGroupCode, eiMetadata.getMeta("dataGroupCode")));
+        map.put("archiveFlag", StringUtils.toString(archiveFlag, eiMetadata.getMeta("archiveFlag")));
+        map.put("rejectReason", StringUtils.toString(rejectReason, eiMetadata.getMeta("rejectReason")));
+        map.put("stockRejectReason", StringUtils.toString(stockRejectReason, eiMetadata.getMeta("stockRejectReason")));
+        map.put("signature", StringUtils.toString(signature, eiMetadata.getMeta("signature")));
         return map;
     }
 
     /**
      * 构建领用单实体对象
-     * @Title: getStatusInstance
-     * @param id id
+     *
+     * @param id         id
      * @param statusCode statusCode
      * @return com.baosight.wilp.rm.lj.domain.RmClaim
      * @throws
+     * @Title: getStatusInstance
      **/
     public static RmClaim getStatusInstance(String id, String statusCode) {
         RmClaim claim = new RmClaim();

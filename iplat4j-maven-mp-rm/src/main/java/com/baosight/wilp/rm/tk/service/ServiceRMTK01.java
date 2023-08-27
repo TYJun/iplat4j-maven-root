@@ -23,7 +23,7 @@ import java.util.Map;
  * @ClassName: ServiceRMTK01
  * @Package com.baosight.wilp.rm.tk.service
  * @date: 2022年09月21日 14:55
- *
+ * <p>
  * 1.页面加载
  * 2.页面数据查询
  * 3.删除退库申请
@@ -37,18 +37,19 @@ public class ServiceRMTK01 extends ServiceBase {
 
     /**
      * 页面加载
-     * @Title: initLoad
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: initLoad
      **/
     @Override
     public EiInfo initLoad(EiInfo inInfo) {
         //添加科室查询条件
         Map<String, Object> deptMap = BaseDockingUtils.getDeptByworkNo(UserSession.getLoginName());
-        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptNum",deptMap.get("deptNum"));
-        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptName",deptMap.get("deptName"));
-        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "recCreatorName",UserSession.getLoginCName());
+        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptNum", deptMap.get("deptNum"));
+        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptName", deptMap.get("deptName"));
+        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "recCreatorName", UserSession.getLoginCName());
         RmUtils.initQueryTime(inInfo, "beginTime", "endTime");
         inInfo.addBlock(RmConstant.RESULT_BLOCK).set(EiConstant.limitStr, 20);
         return query(inInfo);
@@ -56,10 +57,11 @@ public class ServiceRMTK01 extends ServiceBase {
 
     /**
      * 页面数据查询
-     * @Title: query
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: query
      **/
     @Override
     public EiInfo query(EiInfo inInfo) {
@@ -68,10 +70,11 @@ public class ServiceRMTK01 extends ServiceBase {
 
     /**
      * 删除退库申请
-     * @Title: delete
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: delete
      **/
     @Override
     public EiInfo delete(EiInfo inInfo) {
@@ -81,7 +84,7 @@ public class ServiceRMTK01 extends ServiceBase {
         }
         //删除,如果删除成功,删除明细
         int delete = backOutService.delete(id);
-        if(delete > 0) {
+        if (delete > 0) {
             backOutService.deleteDetail(id);
         }
         return inInfo;
@@ -89,10 +92,11 @@ public class ServiceRMTK01 extends ServiceBase {
 
     /**
      * 提交退库申请
-     * @Title: submit
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: submit
      **/
     public EiInfo submit(EiInfo inInfo) {
         String id = inInfo.getString("id");
@@ -102,7 +106,7 @@ public class ServiceRMTK01 extends ServiceBase {
         }
         //校验是否可以提交
         RmBackOut back = backOutService.queryBackOut(id);
-        if(back == null || !RmConstant.BACK_OUT_STATUS_NEW.equals(back.getStatusCode())) {
+        if (back == null || !RmConstant.BACK_OUT_STATUS_NEW.equals(back.getStatusCode())) {
             return ValidatorUtils.errorInfo("退库申请不存在或已提交");
         }
         //提交, 根据配置判断是否需要审批
@@ -115,10 +119,11 @@ public class ServiceRMTK01 extends ServiceBase {
 
     /**
      * 需求计划撤回
-     * @Title: withdraw
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: withdraw
      **/
     public EiInfo withdraw(EiInfo inInfo) {
         String id = inInfo.getString("id");
@@ -131,7 +136,7 @@ public class ServiceRMTK01 extends ServiceBase {
         String configRadioValue = RmConfigCache.getConfigRadioValue(BaseDockingUtils.getUserGroupByWorkNo(UserSession.getLoginName()),
                 RmConfigCache.RM_CONFIG_BACK_APPROVAL);
         String backStatus = RmConstant.CONFIG_YES.equals(configRadioValue) ? RmConstant.BACK_OUT_STATUS_UN_APPROVAL : RmConstant.BACK_OUT_STATUS_UN_OUT;
-        if(back == null || !backStatus.equals(back.getStatusCode())) {
+        if (back == null || !backStatus.equals(back.getStatusCode())) {
             return ValidatorUtils.errorInfo("退库申请不存在或无法撤回");
         }
         //撤回

@@ -22,7 +22,7 @@ import java.util.*;
 
 /**
  * 宿舍费用管理页面service
- * 一、页面加载.
+ * 一、页面加载
  *
  * @Title: ServiceDMFY01.java
  * @ClassName: ServiceDMFY01

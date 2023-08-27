@@ -4,7 +4,6 @@ import com.baosight.iplat4j.core.ei.EiConstant;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.ioc.spring.PlatApplicationContext;
 import com.baosight.iplat4j.core.service.soa.XLocalManager;
-import com.baosight.wilp.app.domain.InitProperties;
 import com.baosight.wilp.ir.dl.service.ServiceIRDL01;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -89,7 +88,7 @@ public class AppLoginAspect {
                 }
 
                 // 添加App验证码校验
-                if("true".equalsIgnoreCase(appVerfyCode) && InitProperties.isCheckAppVerifyCode) {
+                if("true".equalsIgnoreCase(appVerfyCode)){
                     boolean verifyCodeFlag = checkVerifyCode(eiInfo);
                     if(!verifyCodeFlag){ // 验证码输入错误，从登录失败的次数 +1
                         EiInfo exInfo = new EiInfo();
@@ -97,11 +96,7 @@ public class AppLoginAspect {
                         exInfo.set(EiConstant.serviceName, "IRDL01");
                         exInfo.set(EiConstant.methodName, "loginFailureHandle");
                         XLocalManager.call(exInfo);
-                        if(loginFailureCount == limitCount - 1) {
-                            return errorRet("该账号已经锁定，请 " +limitMinutes + " 分钟之后再登录");
-                        } else {
-                            return errorRet("验证码不正确！");
-                        }
+                        return errorRet("验证码不正确！");
                     }
                 }
 
@@ -135,11 +130,6 @@ public class AppLoginAspect {
                         exInfo.set(EiConstant.serviceName, "IRDL01");
                         exInfo.set(EiConstant.methodName, "loginFailureHandle");
                         XLocalManager.call(exInfo);
-
-                        // 登录失败次数达到临界值
-                        if(loginFailureCount == limitCount - 1) {
-                            return errorRet("该账号已经锁定，请 " +limitMinutes + " 分钟之后再登录");
-                        }
                     }
                 } catch (Throwable e) {
                     EiInfo exInfo = new EiInfo();
@@ -147,11 +137,7 @@ public class AppLoginAspect {
                     exInfo.set(EiConstant.serviceName, "IRDL01");
                     exInfo.set(EiConstant.methodName, "loginFailureHandle");
                     XLocalManager.call(exInfo);
-                    if(loginFailureCount == limitCount - 1) {
-                        return errorRet("该账号已经锁定，请 " +limitMinutes + " 分钟之后再登录");
-                    } else {
-                        throw e;
-                    }
+                    throw e;
                 }
             } else {
                 return errorRet("传入参数不能为空！");
@@ -165,7 +151,7 @@ public class AppLoginAspect {
 
     private boolean checkVerifyCode(EiInfo eiInfo) {
         boolean ret = false;
-        String uuid = eiInfo.getString("deviceId");
+        String uuid = eiInfo.getString("uuid");
         String verifyCode = eiInfo.getString("verifyCode");
 
         if(null == uuid || uuid.length() == 0 || null == verifyCode || verifyCode.length() == 0){

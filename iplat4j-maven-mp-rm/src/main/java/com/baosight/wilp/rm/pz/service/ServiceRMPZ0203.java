@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * @ClassName: ServiceRMPZ0201
  * @Package com.baosight.wilp.rm.pz.service
  * @date: 2022年09月07日 10:10
- *
+ * <p>
  * 1.页面加载
  * 2.数据查询
  */
@@ -40,10 +40,11 @@ public class ServiceRMPZ0203 extends ServiceBase {
 
     /**
      * 页面加载
-     * @Title: initLoad
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: initLoad
      **/
     @Override
     public EiInfo initLoad(EiInfo inInfo) {
@@ -52,47 +53,48 @@ public class ServiceRMPZ0203 extends ServiceBase {
 
     /**
      * 数据查询
-     *      1.科室参数处理
-     *      2.查询,没有数据直接返回
-     *      3.判断是否是领用,是,获取库存量和预约量
-     *      4.处理库存量和预约量
-     * @Title: query
+     * 1.科室参数处理
+     * 2.查询,没有数据直接返回
+     * 3.判断是否是领用,是,获取库存量和预约量
+     * 4.处理库存量和预约量
+     *
      * @param inInfo inInfo
-     *      matTypeName: 物资分类名称
-     *      matName: 物资名称
-     *		matNum : 物资编码
-     *	    deptNum : 科室编码
-     *	    isClaim: 是否是领用
+     *               matTypeName: 物资分类名称
+     *               matName: 物资名称
+     *               matNum : 物资编码
+     *               deptNum : 科室编码
+     *               isClaim: 是否是领用
      * @return com.baosight.iplat4j.core.ei.EiInfo
-     *      id: 主键
-     *      deptNum: 科室编码
-     *      deptName: 科室名称
-     *      matNum: 物资编码
-     *      matName: 物资名称
-     *      matTypeId: 物资分类ID
-     *      matTypeName: 物资分类名称
-     *      matSpec: 物资规格
-     *      matModel: 物资型号
-     *      unit: 计量单位
-     *      price: 单价
-     *      stockNum: 库存量
-     *      reserveNum: 领用预约量
+     * id: 主键
+     * deptNum: 科室编码
+     * deptName: 科室名称
+     * matNum: 物资编码
+     * matName: 物资名称
+     * matTypeId: 物资分类ID
+     * matTypeName: 物资分类名称
+     * matSpec: 物资规格
+     * matModel: 物资型号
+     * unit: 计量单位
+     * price: 单价
+     * stockNum: 库存量
+     * reserveNum: 领用预约量
      * @throws
+     * @Title: query
      **/
     @Override
     public EiInfo query(EiInfo inInfo) {
         /**1.科室参数处理**/
-        if(StringUtils.isBlank(inInfo.getCellStr(RmConstant.QUERY_BLOCK, 0, "deptNum"))) {
+        if (StringUtils.isBlank(inInfo.getCellStr(RmConstant.QUERY_BLOCK, 0, "deptNum"))) {
             Map<String, Object> deptMap = BaseDockingUtils.getDeptByworkNo(UserSession.getLoginName());
             inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptNum", deptMap.get("deptNum"));
         }
         /**2.查询,没有数据直接返回**/
-        inInfo = super.query(inInfo, "RMPZ02.query", new RmDeptMatConfig(),false,null,null,COMMON_USE_BLOCK, COMMON_USE_BLOCK);
-        if(inInfo.getBlock(COMMON_USE_BLOCK).getRowCount() == 0) {
+        inInfo = super.query(inInfo, "RMPZ02.query", new RmDeptMatConfig(), false, null, null, COMMON_USE_BLOCK, COMMON_USE_BLOCK);
+        if (inInfo.getBlock(COMMON_USE_BLOCK).getRowCount() == 0) {
             return inInfo;
         }
         /**3.判断是否是领用,是,获取库存量和预约量**/
-        if(inInfo.getCell(RmConstant.QUERY_BLOCK, 0, "isClaim") != null) {
+        if (inInfo.getCell(RmConstant.QUERY_BLOCK, 0, "isClaim") != null) {
             List<Map> rows = inInfo.getBlock(COMMON_USE_BLOCK).getRows();
 
             /**4.处理库存量和预约量**/

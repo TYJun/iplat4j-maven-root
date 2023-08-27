@@ -328,12 +328,16 @@
           <element id="archive" name="iplat4j-maven-xq-5.0.2.jar">
             <element id="module-output" name="iplat4j-maven-xq" />
           </element>
-          <element id="archive" name="iplat4j-maven-vi-5.0.0.jar">
-            <element id="module-output" name="iplat4j-maven-vi" />
+          <element id="archive" name="iplat4j-maven-si-5.0.1.jar">
+            <element id="module-output" name="iplat4j-maven-si" />
           </element>
-          <element id="archive" name="iplat4j-maven-security-5.0.2.jar">
-            <element id="module-output" name="iplat4j-maven-security" />
+          <element id="archive" name="iplat4j-maven-mp-rm-5.0.0.jar">
+            <element id="module-output" name="iplat4j-maven-mp-rm" />
           </element>
+          <element id="archive" name="iplat4j-maven-mp-5.0.0.jar">
+            <element id="module-output" name="iplat4j-maven-mp" />
+          </element>
+          <element id="library" level="project" name="Maven: com.bonawise.iplat4j:iplat4j-maven-vi:${iplat4j-maven-vi-version}" />
         </element>
       </element>
       <element id="directory" name="META-INF">

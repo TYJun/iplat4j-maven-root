@@ -6,8 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.baosight.wilp.utils.ErrorTips;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,52 +36,40 @@ public class MobileServiceDispatcher {
     @PostMapping("/MobileAgentService")
     @CrossOrigin
     public Object handlePost(HttpServletRequest request, HttpServletResponse response) {
-
-		EiInfo outInfo = new EiInfo();
-		EiInfo inInfo = null;
-
-		String serviceName = request.getHeader("serviceName");
+    	
+    	EiInfo outInfo = null;
+        
+        String serviceName = request.getHeader("serviceName");
 		String methodName = request.getHeader("methodName");
-
-		if(org.apache.commons.lang3.StringUtils.isNotEmpty(serviceName) && StringUtils.isNotEmpty(methodName)){
-			String requestParams = request.getParameter("prames");
-
-			if(null != requestParams) {
-				HashMap<String, Object> requestParamsMap = JSON.parseObject(requestParams, HashMap.class);
-
-				inInfo = new EiInfo();
-				requestParamsMap.put(EiConstant.serviceName, serviceName);
-				requestParamsMap.put(EiConstant.methodName, methodName);
-
-				inInfo.setAttr(requestParamsMap);
-			} else { // 请求参数为空，只有serviceName和methodName
-				inInfo = new EiInfo();
+		
+		EiInfo inInfo = null;
+		
+		String prames = "";
+		
+		if(request.getParameter("prames") != null ) {
+			prames = request.getParameter("prames");
+			inInfo = EiInfo.parseJSONString(prames);
+		}else {
+			inInfo = new EiInfo();
+		}
+        
+        if ((StringUtils.isNotEmpty(serviceName)) && (StringUtils.isNotEmpty(methodName))) {
+			try {
+				
 				inInfo.set(EiConstant.serviceName, serviceName);
 				inInfo.set(EiConstant.methodName, methodName);
-			}
-
-			try {
 				outInfo = XLocalManager.call(inInfo);
-				if(outInfo.getStatus() != 1 && "login".equalsIgnoreCase(methodName)) { // 错误提示统一修改为 用户名或密码错误！
-					if(outInfo.getStatus() == -4) {
-						outInfo.setMsg(outInfo.getMsg());
-					} else {
-						outInfo.setMsg(ErrorTips.USERNAME_OR_PWD_ERROR_TIPS);
-					}
-
-				}
-			} catch (Exception ex) {
+			} catch (PlatException ex) {
 				outInfo.setStatus(EiConstant.STATUS_FAILURE);
-				// 不对外展示异常信息，防止敏感信息泄露，异常直接输出到log4j的日志中去
-				outInfo.setMsg("服务调用异常，具体原因请查看日志信息！");
+				outInfo.setMsg("服务" + serviceName + "-" + methodName + "调用失败:" + ex.getMessage() + ",错误原因:"
+						+ ex.getCause());
 				LOGGER.error(ex.getMessage(), ex);
 			}
-		} else {
-			outInfo.setStatus(EiConstant.STATUS_FAILURE);
-			outInfo.setMsg("传入参数中未指定服务serviceName或者methodName");
+		}else {
+			throw new PlatException("传入参数json中未指定服务号serviceId或服务serviceName、methodName");
 		}
-
-		return outInfo;
+       
+        return outInfo;
 
     }
 

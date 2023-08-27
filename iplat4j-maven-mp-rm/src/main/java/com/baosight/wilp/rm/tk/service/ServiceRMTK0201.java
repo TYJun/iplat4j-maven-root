@@ -21,7 +21,7 @@ import java.util.List;
  * @ClassName: ServiceRMTK0201
  * @Package com.baosight.wilp.rm.tk.service
  * @date: 2022年10月25日 9:47
- *
+ * <p>
  * 1.页面加载
  * 2.审批通过
  * 3.审批驳回
@@ -36,10 +36,11 @@ public class ServiceRMTK0201 extends ServiceBase {
 
     /**
      * 页面加载
-     * @Title: initLoad
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: initLoad
      **/
     @Override
     public EiInfo initLoad(EiInfo inInfo) {
@@ -54,10 +55,11 @@ public class ServiceRMTK0201 extends ServiceBase {
 
     /**
      * 审批通过
-     * @Title: pass
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: pass
      **/
     public EiInfo pass(EiInfo inInfo) {
         return approval(inInfo, RmConstant.BACK_OUT_STATUS_UN_OUT);
@@ -65,14 +67,15 @@ public class ServiceRMTK0201 extends ServiceBase {
 
     /**
      * 审批驳回
-     * @Title: reject
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: reject
      **/
     public EiInfo reject(EiInfo inInfo) {
         //参数校验
-        if(StringUtils.isBlank(inInfo.getString("rejectReason"))) {
+        if (StringUtils.isBlank(inInfo.getString("rejectReason"))) {
             return ValidatorUtils.errorInfo("驳回原因不能为空");
         }
         return approval(inInfo, RmConstant.BACK_OUT_STATUS_REJECT);
@@ -80,21 +83,22 @@ public class ServiceRMTK0201 extends ServiceBase {
 
     /**
      * 审批
-     * @Title: approval
-     * @param inInfo inInfo
+     *
+     * @param inInfo     inInfo
      * @param statusCode statusCode
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: approval
      **/
     private EiInfo approval(EiInfo inInfo, String statusCode) {
         String id = inInfo.getString("id");
         //参数校验
-        if(StringUtils.isBlank(id)) {
+        if (StringUtils.isBlank(id)) {
             return ValidatorUtils.errorInfo("参数不能为空");
         }
         //校验是否可以审批
         RmBackOut backOut = backOutService.queryBackOut(id);
-        if(backOut == null || !RmConstant.BACK_OUT_STATUS_UN_APPROVAL.equals(backOut.getStatusCode())) {
+        if (backOut == null || !RmConstant.BACK_OUT_STATUS_UN_APPROVAL.equals(backOut.getStatusCode())) {
             return ValidatorUtils.errorInfo("退库申请不存在或已审批");
         }
         //审批

@@ -1,4 +1,4 @@
-$(function() {
+$(function () {
 
 
     IPLATUI.EFSelect = {
@@ -11,22 +11,29 @@ $(function() {
     }
 
     //表格初始化处理
-    let formValidator = IPLAT.Validator({id: "inqu"}); let submitFlag = true;
+    let formValidator = IPLAT.Validator({id: "inqu"});
+    let submitFlag = true;
 
     IPLATUI.EFGrid = {
-        "result" : {
+        "result": {
             pageable: false,
             toolbarConfig: {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
-                add: false,cancel: false,save: false,'delete': false,
-                buttons:[{
-                    name: "SUBMIT",text: "出库确认",layout: "3",
+                add: false, cancel: false, save: false, 'delete': false,
+                buttons: [{
+                    name: "SUBMIT", text: "出库确认", layout: "3",
                     click: function () {
                         // 防止连续提交
                         $("#SUBMIT .k-grid-SUBMIT").attr("disabled", true);
-                        setTimeout(function () {$("#SUBMIT .k-grid-SUBMIT").attr("disabled", false);}, 5000);
-                        if(!submitFlag) { return; } submitFlag = false;
-                        outSure(formValidator); submitFlag = true;
+                        setTimeout(function () {
+                            $("#SUBMIT .k-grid-SUBMIT").attr("disabled", false);
+                        }, 5000);
+                        if (!submitFlag) {
+                            return;
+                        }
+                        submitFlag = false;
+                        outSure(formValidator);
+                        submitFlag = true;
                     }
                 }]
             },
@@ -37,7 +44,7 @@ $(function() {
                     let stockNum = e.sender.dataItems()[i].stockNum;
                     let num = e.sender.dataItems()[i].num;
                     let outNum = e.sender.dataItems()[i].outNum;
-                    if ((num>0 && num !=outNum && num-stockNum >0  )) {
+                    if ((num > 0 && num != outNum && num - stockNum > 0)) {
                         tr.style.background = "#FF6347"
                     }
                 });
@@ -70,18 +77,20 @@ $(function() {
  * @param formValidator
  */
 function outSure(formValidator) {
-    if(formValidator.validate()) {
+    if (formValidator.validate()) {
         let eiInfo = new EiInfo();
         eiInfo.setByNode("inqu");
 
         //let list = resultGrid.getDataItems();
         let list = resultGrid.getCheckedRows();
-        if(!list || list.length == 0) {
+        if (!list || list.length == 0) {
             IPLAT.NotificationUtil("请勾选需要出库的物资", "error");
             return;
         }
         //出库数量校验
-        if(!validateNum(list)) { return; }
+        if (!validateNum(list)) {
+            return;
+        }
         eiInfo.set("token", eiInfo.get("inqu_status-0-claimNo") + eiInfo.get("inqu_status-0-statusCode"))
         eiInfo.set("list", list);
 
@@ -93,11 +102,11 @@ function outSure(formValidator) {
                     return;
                 }
                 NotificationUtil("出库成功", "success");
-                if (window.parent['MatCKPopDataWindow'] != null){
+                if (window.parent['MatCKPopDataWindow'] != null) {
                     window.parent['MatCKPopDataWindow'].close();
                     window.parent.parent['detailPopDataWindow'].close();
                     window.parent.parent['resultGrid'].dataSource.page(1);
-                }else{
+                } else {
                     window.parent['detailPopDataWindow'].close();
                     window.parent['resultGrid'].dataSource.page(1);
                 }
@@ -116,7 +125,7 @@ function outSure(formValidator) {
  * @param list
  */
 function validateNum(list) {
-    for(let item of list) {
+    for (let item of list) {
         //领用数量
         let num = Number(item['num']);
         //库存数量
@@ -125,12 +134,12 @@ function validateNum(list) {
         let outNum = Number(item['outNum']);
         //本次出库数量
         let outAmount = Number(item['outAmount']) == NaN ? 0 : Number(item['outAmount']);
-        if(num - outNum - outAmount < 0) {
+        if (num - outNum - outAmount < 0) {
             NotificationUtil(`${item.matName}的物资本次出库数量超过剩余可出库数量`, "error");
             return false;
         }
 
-        if(stockNum - outAmount < 0) {
+        if (stockNum - outAmount < 0) {
             NotificationUtil(`${item.matName}的物资库存数量不足`, "error");
             return false;
         }

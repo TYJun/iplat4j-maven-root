@@ -130,16 +130,25 @@
             <groupId>com.bonawise.iplat4j</groupId>
             <artifactId>iplat4j-maven-xq</artifactId>
         </dependency>
-
-        <!-- 访客 -->
+        <!-- 备件库存管理 -->
         <dependency>
             <groupId>com.bonawise.iplat4j</groupId>
-            <artifactId>iplat4j-maven-vi</artifactId>
+            <artifactId>iplat4j-maven-si</artifactId>
+        </dependency>
+        <!-- 物资采购-物资领用 -->
+        <dependency>
+            <groupId>com.bonawise.iplat4j</groupId>
+            <artifactId>iplat4j-maven-mp-rm</artifactId>
+        </dependency>
+        <!-- 物资采购 -->
+        <dependency>
+            <groupId>com.bonawise.iplat4j</groupId>
+            <artifactId>iplat4j-maven-mp</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.bonawise.iplat4j</groupId>
-            <artifactId>iplat4j-maven-security</artifactId>
+            <artifactId>iplat4j-maven-vi</artifactId>
         </dependency>
 
     </dependencies>

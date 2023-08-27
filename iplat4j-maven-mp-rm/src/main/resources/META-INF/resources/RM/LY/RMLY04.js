@@ -1,7 +1,7 @@
-$(function() {
+$(function () {
     //表格初始化处理
     IPLATUI.EFGrid = new WilpGrid({
-       add: false, edit: false, del: false, detailUrl: "RMLY0101?inqu_status-0-id=#:id#"
+        add: false, edit: false, del: false, detailUrl: "RMLY0101?inqu_status-0-id=#:id#"
     }).buildGrid();
 
     $.extend(true, IPLATUI.Config, { //全局配置
@@ -17,12 +17,12 @@ $(function() {
     keydown("inqu", "QUERY");
 
     /**查询**/
-    $("#QUERY").on("click", function(e) {
+    $("#QUERY").on("click", function (e) {
         resultGrid.dataSource.page(1);
     });
 
     /**重置**/
-    $("#REQUERY").on("click", function(e) {
+    $("#REQUERY").on("click", function (e) {
         document.getElementById("inqu-trash").click();
         resetParam(__eiInfo, true, true)
         resultGrid.dataSource.page(1);

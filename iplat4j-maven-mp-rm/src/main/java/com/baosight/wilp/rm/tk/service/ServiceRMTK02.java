@@ -23,7 +23,7 @@ import java.util.List;
  * @ClassName: ServiceRMTK02
  * @Package com.baosight.wilp.rm.tk.service
  * @date: 2022年10月25日 9:23
- *
+ * <p>
  * 1.页面加载
  * 2.页面数据查询
  */
@@ -40,25 +40,28 @@ public class ServiceRMTK02 extends ServiceBase {
 
     /**
      * 页面加载
-     * @Title: initLoad
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: initLoad
      **/
     @Override
     public EiInfo initLoad(EiInfo inInfo) {
         RmUtils.initQueryTime(inInfo, "beginTime", "endTime");
         inInfo.addBlock(RmConstant.RESULT_BLOCK).set(EiConstant.limitStr, 50);
-        EiInfo info = query(inInfo); info.setRows("detail", new ArrayList());
+        EiInfo info = query(inInfo);
+        info.setRows("detail", new ArrayList());
         return info;
     }
 
     /**
      * 页面数据查询
-     * @Title: query
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: query
      **/
     @Override
     public EiInfo query(EiInfo inInfo) {
@@ -68,30 +71,32 @@ public class ServiceRMTK02 extends ServiceBase {
 
     /**
      * 查询退库明细
-     * @Title: queryDetail
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: queryDetail
      **/
     public EiInfo queryDetail(EiInfo inInfo) {
-        return super.query(inInfo, "RMLJ03.queryDetail", new RmBackOutDetail(),false, null, RmConstant.QUERY_BLOCK, "detail", "detail", null);
+        return super.query(inInfo, "RMLJ03.queryDetail", new RmBackOutDetail(), false, null, RmConstant.QUERY_BLOCK, "detail", "detail", null);
     }
 
     /**
      * 结束领用退库单
-     * @Title: over
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: over
      **/
     public EiInfo over(EiInfo inInfo) {
         //获取参数
         String id = inInfo.getString("id");
-        if(StringUtils.isBlank(id)) {
+        if (StringUtils.isBlank(id)) {
             return ValidatorUtils.errorInfo("参数不能为空");
         }
         //构建对象
-        backOutService.update(RmBackOut.getStatusInstance(id,RmConstant.BACK_OUT_STATUS_OVER));
+        backOutService.update(RmBackOut.getStatusInstance(id, RmConstant.BACK_OUT_STATUS_OVER));
         return inInfo;
     }
 }
