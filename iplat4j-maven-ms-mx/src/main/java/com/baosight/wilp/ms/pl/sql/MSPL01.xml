@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MSPL01">
+
+    <select id="query" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.ms.pl.domain.MSPL01">
+        SELECT
+        id "id", `type` "type", tag "tag", is_sync "isSync", name_ "name", description_ "description", true_value_label "trueValueLabel",
+        false_value_label "falseValueLabel", alarm_value "alarmValue", alarm_enable_status "alarmEnableStatus",
+        param_enable_status "paramEnableStatus",
+        dead_time "deadTime", enum_value_01 "enumValue01", enum_value_01_label "enumValue01Label", enum_value_01_grade
+        "enumValue01Grade", enum_value_02 "enumValue02",
+        enum_value_02_label "enumValue02Label", enum_value_02_grade "enumValue02Grade", enum_value_03 "enumValue03",
+        enum_value_03_label "enumValue03Label",
+        enum_value_03_grade "enumValue03Grade", enum_value_04 "enumValue04", enum_value_04_label "enumValue04Label",
+        enum_value_04_grade "enumValue04Grade",
+        enum_value_05 "enumValue05", enum_value_05_label "enumValue05Label", enum_value_05_grade "enumValue05Grade",
+        enum_value_06 "enumValue06", enum_value_06_label "enumValue06Label", enum_value_06_grade "enumValue06Grade",
+        data_format "dataFormat", tmsar01_id "tmsar01Id",
+        t_param_classify_id "tParamClassifyId", email_enable_status "emailEnableStatus", sms_enable_status
+        "smsEnableStatus", limit_time_value "limitTimeValue", limit_time_unit "limitTimeUnit",
+        limit_repeats "limitRepeats", limit_repeats_enable "limitRepeatsEnable", tmsdc01_id "tmsdc01Id", group_id
+        "groupId", (SELECT name_ FROM tmsar01 WHERE id = tmspl01.tmsar01_id) "tmsarName",
+        (SELECT name_ FROM tmsdc01 WHERE id = tmsdc01_id) "tmsdcName",unit "unit", is_write_log "isWriteLog",
+        unit_name "unitName",
+        dimension "dimension",
+        dimension_name "dimensionName"
+        FROM
+        `tmspl01`
+        where 1=1
+        <isNotEmpty prepend="and" property="value">
+            tag =
+            #value#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="parentId">
+            <isNotEqual property="parentId" compareValue="root">
+                t_param_classify_id = #parentId#
+            </isNotEqual>
+
+        </isNotEmpty>
+        <isNotEmpty property="relation" prepend="AND">
+            <isEqual property="relation" compareValue="11">
+                tmsdc01_id is not null
+            </isEqual>
+            <isEqual property="relation" compareValue="10">
+                tmsdc01_id is null
+            </isEqual>
+        </isNotEmpty>
+        <isNotEmpty property="relationm" prepend="AND">
+            <isEqual property="relationm" compareValue="11">
+                tmsar01_id is null
+            </isEqual>
+        </isNotEmpty>
+        <isNotEmpty property="paramEnableStatus" prepend="AND">
+            param_enable_status = #paramEnableStatus#
+        </isNotEmpty>
+        <isNotEmpty property="name" prepend="AND">
+            name_ like concat('%', #name#, '%')
+        </isNotEmpty>
+        <isNotEmpty property="tag" prepend="AND">
+            tag like concat('%', #tag#, '%')
+        </isNotEmpty>
+        <isNotEmpty property="isSync" prepend="AND">
+            is_sync = #isSync#
+        </isNotEmpty>
+        <isNotEmpty property="alarmEnableStatus" prepend="AND">
+            alarm_enable_status = #alarmEnableStatus#
+        </isNotEmpty>
+    </select>
+    <select id="queryById" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        SELECT
+        id "id", `type` "type", tag "tag", name_ "name", description_ "description", true_value_label "trueValueLabel",
+        false_value_label "falseValueLabel", alarm_value "alarmValue", alarm_enable_status "alarmEnableStatus",
+        param_enable_status "paramEnableStatus",
+        dead_time "deadTime", enum_value_01 "enumValue01", enum_value_01_label "enumValue01Label", enum_value_01_grade
+        "enumValue01Grade", enum_value_02 "enumValue02",
+        enum_value_02_label "enumValue02Label", enum_value_02_grade "enumValue02Grade", enum_value_03 "enumValue03",
+        enum_value_03_label "enumValue03Label",
+        enum_value_03_grade "enumValue03Grade", enum_value_04 "enumValue04", enum_value_04_label "enumValue04Label",
+        enum_value_04_grade "enumValue04Grade",
+        enum_value_05 "enumValue05", enum_value_05_label "enumValue05Label", enum_value_05_grade "enumValue05Grade",
+        enum_value_06 "enumValue06", enum_value_06_label "enumValue06Label", enum_value_06_grade "enumValue06Grade",
+        data_format "dataFormat", tmsar01_id "tmsar01Id",
+        t_param_classify_id "tParamClassifyId", email_enable_status "emailEnableStatus", sms_enable_status
+        "smsEnableStatus", limit_time_value "limitTimeValue", limit_time_unit "limitTimeUnit",
+        limit_repeats "limitRepeats", limit_repeats_enable "limitRepeatsEnable", tmsdc01_id "tmsdc01Id", group_id
+        "groupId",unit "unit",
+        unit_name "unitName", is_write_log "isWriteLog",
+        dimension "dimension",
+        dimension_name "dimensionName",
+        significant_bit "significantBit",
+        is_sync "isSync"
+        FROM
+        `tmspl01`
+        where 1=1
+        <isNotEmpty prepend="and" property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="code">
+            code = #code#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="description">
+            description = #description#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="tParamClassifyId">
+            t_param_classify_id = #tParamClassifyId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="tmsar01Id">
+            tmsar01_id = #tmsar01Id#
+        </isNotEmpty>
+    </select>
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM tmspl01 WHERE 1=1
+        <isNotEmpty prepend="and" property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="parentId">
+            <isNotEqual property="parentId" compareValue="root">
+                t_param_classify_id = #parentId#
+            </isNotEqual>
+        </isNotEmpty>
+        <isNotEmpty property="relation" prepend="AND">
+            <isEqual property="relation" compareValue="11">
+                tmsdc01_id is not null
+            </isEqual>
+            <isEqual property="relation" compareValue="10">
+                tmsdc01_id is null
+            </isEqual>
+        </isNotEmpty>
+        <isNotEmpty property="relationm" prepend="AND">
+            <isEqual property="relationm" compareValue="11">
+                tmsar01_id is null
+            </isEqual>
+        </isNotEmpty>
+        <isNotEmpty property="paramEnableStatus" prepend="AND">
+            param_enable_status = #paramEnableStatus#
+        </isNotEmpty>
+        <isNotEmpty property="alarmEnableStatus" prepend="AND">
+            alarm_enable_status = #alarmEnableStatus#
+        </isNotEmpty>
+        <isNotEmpty property="name" prepend="AND">
+            name_ like concat('%', #name#, '%')
+        </isNotEmpty>
+        <isNotEmpty property="tag" prepend="AND">
+            tag like concat('%', #tag#, '%')
+        </isNotEmpty>
+    </select>
+    <insert id="insert">
+        insert into tmspl01 (id, `type`, tag, is_sync, name_,
+                             description_, true_value_label, false_value_label,
+                             alarm_value, alarm_enable_status, param_enable_status,
+                             dead_time, enum_value_01, enum_value_01_label,
+                             enum_value_01_grade, enum_value_02, enum_value_02_label,
+                             enum_value_02_grade, enum_value_03, enum_value_03_label,
+                             enum_value_03_grade, enum_value_04, enum_value_04_label,
+                             enum_value_04_grade, enum_value_05, enum_value_05_label,
+                             enum_value_05_grade, enum_value_06, enum_value_06_label,
+                             enum_value_06_grade, data_format, tmsar01_id,
+                             t_param_classify_id, email_enable_status, sms_enable_status,
+                             limit_time_value, limit_time_unit, limit_repeats,
+                             limit_repeats_enable, tmsdc01_id, group_id, unit, unit_name,
+                             dimension, dimension_name, is_write_log,significant_bit)
+        values (#id#, #type#, #tag#, #isSync#, #name#, #description#, #trueValueLabel#, #falseValueLabel#,
+                #alarmValue#, #alarmEnableStatus#, #paramEnableStatus#, #deadTime#, #enumValue01#, #enumValue01Label#,
+                #enumValue01Grade#, #enumValue02#, #enumValue02Label#, #enumValue02Grade#, #enumValue03#,
+                #enumValue03Label#,
+                #enumValue03Grade#, #enumValue04#, #enumValue04Label#, #enumValue04Grade#, #enumValue05#,
+                #enumValue05Label#,
+                #enumValue05Grade#, #enumValue06#, #enumValue06Label#, #enumValue06Grade#,
+                #dataFormat#, #tmsar01Id#, #tParamClassifyId#, #emailEnableStatus#, #smsEnableStatus#,
+                #limitTimeValue#, #limitTimeUnit#, #limitRepeats#, #limitRepeatsEnable#, #tmsdc01Id#, #groupId#, #unit#,
+                #unitName#,
+                #dimension#, #dimensionName#, #isWriteLog#,#significant_bit#)
+    </insert>
+    <delete id="delete">
+        DELETE
+        FROM tmspl01
+        WHERE id =
+              #id#
+    </delete>
+    <update id="update">
+        update tmspl01
+        set `type`               = #type#,
+            tag                  = #tag#,
+            name_                = #name#,
+            description_         = #description#,
+            true_value_label     = #trueValueLabel#,
+            false_value_label    = #falseValueLabel#,
+            alarm_value          = #alarmValue#,
+            alarm_enable_status  = #alarmEnableStatus#,
+            param_enable_status  = #paramEnableStatus#,
+            dead_time            = #deadTime#,
+            enum_value_01        = #enumValue01#,
+            enum_value_01_label  = #enumValue01Label#,
+            enum_value_01_grade  = #enumValue01Grade#,
+            enum_value_02        = #enumValue02#,
+            enum_value_02_label  = #enumValue02Label#,
+            enum_value_02_grade  = #enumValue02Grade#,
+            enum_value_03        = #enumValue03#,
+            enum_value_03_label  = #enumValue03Label#,
+            enum_value_03_grade  = #enumValue03Grade#,
+            enum_value_04        = #enumValue04#,
+            enum_value_04_label  = #enumValue04Label#,
+            enum_value_04_grade  = #enumValue04Grade#,
+            enum_value_05        = #enumValue05#,
+            enum_value_05_label  = #enumValue05Label#,
+            enum_value_05_grade  = #enumValue05Grade#,
+            enum_value_06        = #enumValue06#,
+            enum_value_06_label  = #enumValue06Label#,
+            enum_value_06_grade  = #enumValue06Grade#,
+            data_format          = #dataFormat#,
+            tmsar01_id           = #tmsar01Id#,
+            t_param_classify_id  = #tParamClassifyId#,
+            email_enable_status  = #emailEnableStatus#,
+            sms_enable_status    = #smsEnableStatus#,
+            limit_time_value     = #limitTimeValue#,
+            limit_time_unit      = #limitTimeUnit#,
+            limit_repeats        = #limitRepeats#,
+            limit_repeats_enable = #limitRepeatsEnable#,
+            tmsdc01_id           = #tmsdc01Id#,
+            group_id             = #groupId#,
+            unit                 = #unit#,
+            unit_name            = #unitName#,
+            dimension            = #dimension#,
+            dimension_name       = #dimensionName#,
+            significant_bit     = #significant_bit#,
+            is_sync = #isSync#
+        where id = #id#
+    </update>
+    <update id="updateTmspl">
+        update tmspl01
+        set `type`              = #type#,
+            tag                 = #tag#,
+            name_               = #name#,
+            description_        = #description#,
+            true_value_label    = #trueValueLabel#,
+            false_value_label   = #falseValueLabel#,
+            alarm_value         = #alarmValue#,
+            alarm_enable_status = #alarmEnableStatus#,
+            param_enable_status = #paramEnableStatus#,
+            dead_time           = #deadTime#,
+            enum_value_01       = #enumValue01#,
+            enum_value_01_label = #enumValue01Label#,
+            enum_value_01_grade = #enumValue01Grade#,
+            enum_value_02       = #enumValue02#,
+            enum_value_02_label = #enumValue02Label#,
+            enum_value_02_grade = #enumValue02Grade#,
+            enum_value_03       = #enumValue03#,
+            enum_value_03_label = #enumValue03Label#,
+            enum_value_03_grade = #enumValue03Grade#,
+            enum_value_04       = #enumValue04#,
+            enum_value_04_label = #enumValue04Label#,
+            enum_value_04_grade = #enumValue04Grade#,
+            enum_value_05       = #enumValue05#,
+            enum_value_05_label = #enumValue05Label#,
+            enum_value_05_grade = #enumValue05Grade#,
+            enum_value_06       = #enumValue06#,
+            enum_value_06_label = #enumValue06Label#,
+            enum_value_06_grade = #enumValue06Grade#,
+            unit                = #unit#,
+            unit_name           = #unitName#,
+            dimension           = #dimension#,
+            dimension_name      = #dimensionName#,
+            is_write_log        = #isWriteLog#,
+            significant_bit     = #significant_bit#,
+            is_sync = #isSync#
+        where id = #id#
+    </update>
+    <update id="updateTmspl2">
+        update tmspl01
+        set param_enable_status = 1
+        where id = #id#
+    </update>
+    <update id="updateTmspl3">
+        update tmspl01
+        set param_enable_status = 0
+        where id = #id#
+    </update>
+    <update id="updateTmsar">
+        update tmspl01
+        set tmsar01_id = #tmsar01Id#
+        where id = #id#
+    </update>
+    <update id="updateParameClassifyId">
+        update tmspl01
+        set t_param_classify_id = #tParamClassifyId#
+        where id = #id#
+    </update>
+    <update id="remove">
+        update tmspl01
+        set
+        tmsar01_id=null
+        WHERE 1=1
+        <isNotEmpty prepend="AND" property="id">
+            id =
+            #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="Reid">
+            id =
+            #Reid#
+        </isNotEmpty>
+    </update>
+    <select id="select" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.ms.pl.domain.MSPL01">
+        SELECT
+        name_ "name",
+        dimension "dimension"
+        FROM `tmspl01`
+        where 1=1
+        <isNotEmpty prepend="and" property="value">
+            tag =
+            #value#
+        </isNotEmpty>
+    </select>
+    <select id="selectByTag" parameterClass="com.baosight.wilp.ms.pl.domain.MSPL01"
+            resultClass="com.baosight.wilp.ms.pl.domain.MSPL01">
+        SELECT
+        id "id",
+        name_ "name",
+        is_write_log "isWriteLog",
+        dead_time "deadTime",
+        alarm_enable_status "alarmEnableStatus",
+        `type` "type", alarm_value "alarmValue",
+        true_value_label "trueValueLabel",
+        false_value_label "falseValueLabel",
+        enum_value_01 "enumValue01", enum_value_01_label "enumValue01Label",
+        enum_value_02 "enumValue02", enum_value_02_label "enumValue02Label",
+        enum_value_03 "enumValue03", enum_value_03_label "enumValue03Label",
+        enum_value_04 "enumValue04", enum_value_04_label "enumValue04Label",
+        enum_value_05 "enumValue05", enum_value_05_label "enumValue05Label",
+        enum_value_06 "enumValue06", enum_value_06_label "enumValue06Label",
+        t_param_classify_id "tParamClassifyId"
+        FROM
+        `tmspl01` a
+        where 1=1
+        <isNotEmpty prepend="and" property="tag">
+            a.tag = #tag#
+        </isNotEmpty>
+    </select>
+
+    <select id="selectAllTag" resultClass="com.baosight.wilp.ms.pl.domain.MSPL01">
+        SELECT
+        id "id",
+        tag "tag",
+        name_ "name",
+        is_write_log "isWriteLog",
+        dead_time "deadTime",
+        alarm_enable_status "alarmEnableStatus",
+        `type` "type", alarm_value "alarmValue",
+        true_value_label "trueValueLabel",
+        false_value_label "falseValueLabel",
+        enum_value_01 "enumValue01", enum_value_01_label "enumValue01Label",
+        enum_value_02 "enumValue02", enum_value_02_label "enumValue02Label",
+        enum_value_03 "enumValue03", enum_value_03_label "enumValue03Label",
+        enum_value_04 "enumValue04", enum_value_04_label "enumValue04Label",
+        enum_value_05 "enumValue05", enum_value_05_label "enumValue05Label",
+        enum_value_06 "enumValue06", enum_value_06_label "enumValue06Label",
+        t_param_classify_id "tParamClassifyId"
+        FROM
+        `tmspl01` a
+    </select>
+
+    <select id="selectAll2" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        select tmsar01_id
+        from `tmspl01`
+        where id = #ides#
+    </select>
+
+    <select id="selectByParamClassifyId" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.ms.pl.domain.MSPL01">
+        SELECT
+            DISTINCT a.tag "tag", a.id "id", a.`type` "type", a.name_ "name", a.description_ "description", a.true_value_label "trueValueLabel",
+            a.false_value_label "falseValueLabel", a.alarm_value "alarmValue", a.alarm_enable_status "alarmEnableStatus",
+            a.param_enable_status "paramEnableStatus",
+            a.dead_time "deadTime", a.enum_value_01 "enumValue01", a.enum_value_01_label "enumValue01Label", a.enum_value_01_grade
+            "enumValue01Grade", a.enum_value_02 "enumValue02",
+            a.enum_value_02_label "enumValue02Label", a.enum_value_02_grade "enumValue02Grade", a.enum_value_03 "enumValue03",
+            a.enum_value_03_label "enumValue03Label",
+            a.enum_value_03_grade "enumValue03Grade", a.enum_value_04 "enumValue04", a.enum_value_04_label "enumValue04Label",
+            a.enum_value_04_grade "enumValue04Grade",
+            a.enum_value_05 "enumValue05", a.enum_value_05_label "enumValue05Label", a.enum_value_05_grade "enumValue05Grade",
+            a.enum_value_06 "enumValue06", a.enum_value_06_label "enumValue06Label", a.enum_value_06_grade "enumValue06Grade",
+            a.data_format "dataFormat", a.tmsar01_id "tmsar01Id",
+            a.t_param_classify_id "tParamClassifyId", a.email_enable_status "emailEnableStatus", a.sms_enable_status
+            "smsEnableStatus", a.limit_time_value "limitTimeValue", a.limit_time_unit "limitTimeUnit",
+            a.limit_repeats "limitRepeats", a.limit_repeats_enable "limitRepeatsEnable", a.tmsdc01_id "tmsdc01Id", a.group_id
+            "groupId",a.unit "unit",
+            a.unit_name "unitName", a.is_write_log "isWriteLog",
+            a.dimension "dimension",
+            a.dimension_name "dimensionName",
+            c.name_ "deviceName"
+        FROM
+            `tmspl01` a
+            LEFT JOIN t_alarm_log b ON b.tag = a.tag
+            LEFT JOIN tmsdc01 c ON c.id = a.tmsdc01_id
+        where 1=1
+        <isNotEmpty prepend="and" property="tParamClassifyId">
+            a.t_param_classify_id = CONCAT(#tParamClassifyId#, '')
+        </isNotEmpty>
+        <isEqual property="active" compareValue="1">
+            AND (SELECT count(*) FROM t_alarm_log f WHERE f.tag = a.tag AND f.end_time IS NULL) = 0
+        </isEqual>
+        <isEqual property="active" compareValue="2">
+            AND b.end_time IS NULL AND b.grade = '2'
+        </isEqual>
+        <isEqual property="active" compareValue="3">
+            AND b.end_time IS NULL AND b.grade = '1'
+        </isEqual>
+        ORDER BY a.tag ASC
+        LIMIT #offset#, #pageSize#
+    </select>
+    <!--根据参数查规则代码-->
+    <select id="select_ArCode" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select ar.code_ from tmspl01 pl left join tmsar01 ar on ar.id=#tmsar01_Id#;
+    </select>
+    <!--运转图数据查询-->
+    <select id="queryFlowchart" resultClass="com.baosight.wilp.ms.common.domain.FlowchartVO">
+        SELECT
+        a.tag "tag",
+        a.name_ "tagName",
+        a.description_ "tagDescription",
+        b.classify_name "tagClassify",
+        d.classify_name "tagArea",
+        CONCAT(e.lower,"~",e.upper) "alarmScope"
+        FROM
+        `tmspl01` a
+        LEFT JOIN `t_param_classify` b ON b.id = a.t_param_classify_id
+        LEFT JOIN tmsdc01 c ON c.id = a.tmsdc01_id
+        LEFT JOIN t_area_classify d ON d.id = c.t_area_classify_id
+        LEFT JOIN tmsar01 e ON e.id = a.tmsar01_id
+        WHERE a.is_sync = "1"
+        ORDER BY a.tag ASC
+    </select>
+    <!--运转图数据查询-子-->
+    <select id="queryFlowchartChild" parameterClass="com.baosight.wilp.ms.common.domain.FlowchartVO" resultClass="com.baosight.wilp.ms.common.domain.FlowchartVO">
+        SELECT
+            a.tag "tag",
+            a.value_ "alarmValue",
+            (CASE a.grade WHEN "1" THEN "一级报警" WHEN "2" THEN "二级报警" ELSE "" END ) "alarmGrade",
+            a.start_time "alarmTime"
+        FROM
+            `t_alarm_log` a
+        WHERE a.tag = #tag#
+        ORDER BY a.start_time DESC
+        LIMIT 0,1
+    </select>
+
+    <select id="queryLastFlowchartChild" resultClass="com.baosight.wilp.ms.common.domain.FlowchartVO">
+        select
+            b.tag,
+            b.value_ alarmValue,
+            ( CASE b.grade WHEN "1" THEN "一级报警" WHEN "2" THEN "二级报警" ELSE "" END ) alarmGrade,
+            b.start_time alarmTime
+        from
+            (
+                select
+                    tag,
+                    value_,
+                    grade,
+                    max(start_time) start_time
+                from
+                    t_alarm_log
+                group by tag
+            ) a
+                INNER JOIN
+            t_alarm_log b on a.tag = b.tag and a.start_time = b.start_time
+        group by tag
+    </select>
+
+    <select id="selectParam" resultClass="java.util.HashMap">
+        SELECT tag "value"
+        FROM tmspl01
+        WHERE 1=1
+    </select>
+
+    <select id="selectMessageConfig" resultClass="java.util.HashMap">
+        select
+            config_value value
+        from
+            message_config
+        where
+            config_name = 'sendFlag'
+    </select>
+
+    <select id="queryAlarmIsNull" resultClass="java.util.HashMap">
+        SELECT tag,start_time,end_time,grade,description_ FROM
+            (
+                SELECT * FROM
+                    `t_alarm_log`
+                ORDER BY start_time DESC
+                    LIMIT 999999
+            ) a
+        GROUP BY tag
+        HAVING end_time IS NULL
+    </select>
+
+</sqlMap>

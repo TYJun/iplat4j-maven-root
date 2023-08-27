@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!-- 菜品数量 -->
+<sqlMap namespace="SSBMCpsl01">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.ss.bm.domain.SSBMCpsl01">
+		SELECT 
+        a.id,
+        c.menu_name as menuName,
+        c.menu_price as menuPrice,
+        a.canteen_num as canteenNum,
+        b.canteen_name as canteenName,
+        d.meal_name as mealName,
+        c.menu_desc as menuDesc,
+        a.meal_date as mealDate,
+        a.num,
+        a.surplus,
+        a.price_after_discount AS priceAfterDiscount,
+        a.operate_code operateCode,
+        a.operate_name operateName
+        FROM sc_menu_sche a
+        LEFT JOIN sc_canteen_liaison_conf b ON a.canteen_num = b.canteen_num
+        LEFT JOIN sc_menu c ON a.menu_num = c.menu_num
+        LEFT JOIN sc_order_time d ON a.meal_num = d.meal_num
+        where 1=1
+        <isNotEmpty prepend="and" property="dataGroupCode">
+            b.datagroup_treecode like concat('%',#dataGroupCode#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="mealDate">
+            a.meal_date = #mealDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="canteenNum">
+            a.canteen_num = #canteenNum#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="mealName">
+            d.meal_num = #mealName#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="userId">
+            FIND_IN_SET(#userId#,b.liaison_id) > 0
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="operateCode">
+            a.operate_code = #operateCode#
+        </isNotEmpty>
+        <isNotEmpty property="beginDate">
+            <isNotEmpty prepend="and" property="endDate">
+                a.meal_date BETWEEN #beginDate# AND #endDate#
+            </isNotEmpty>
+        </isNotEmpty>
+        ORDER BY
+	    meal_date DESC,
+	    a.canteen_num ASC,
+	    a.meal_num ASC,
+	    c.menu_name ASC
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_menu_sche WHERE 1=1
+	</select>
+	
+    <update id="update">
+        UPDATE sc_menu_sche 
+        SET 
+           num = #num#,   <!-- 份量 -->  
+           surplus = #surplus#,   <!-- 剩余数量 -->
+           price_after_discount  = #priceAfterDiscount#   <!-- 折后价格 -->
+        WHERE   
+        id = #id#
+    </update>
+    
+    <update id="updateMenuSche" parameterClass="java.util.HashMap" >
+        UPDATE sc_menu_sche 
+        SET 
+           surplus = $surplus$   <!-- 剩余数量 -->  
+        WHERE   
+        id = #id#
+    </update>
+    
+    <update id="updateMenuScheSurplus" parameterClass="java.util.HashMap" >
+        UPDATE sc_menu_sche 
+        SET 
+           surplus = surplus + #num#   <!-- 剩余数量 -->  
+        WHERE  canteen_num = #canteenNum# 
+           and meal_num = #mealNum# 
+           and meal_date = #mealDate# 
+           and menu_num = #menuNum#
+    </update>
+
+
+    <select id="queryNum" resultClass="com.baosight.wilp.ss.bm.domain.SSBMCpsl01">
+        SELECT
+        num AS num
+        FROM sc_menu_sche
+        where 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+    </select>
+  
+</sqlMap>

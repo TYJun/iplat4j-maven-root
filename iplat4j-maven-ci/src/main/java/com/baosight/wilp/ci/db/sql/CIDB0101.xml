@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="CIDB0101">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.ci.db.domain.CiTransDetail">
+		SELECT
+				REC_CREATOR	as "recCreator",  <!-- 记录创建责任者 -->
+				REC_CREATE_TIME	as "recCreateTime",  <!-- 记录创建时间 -->
+				REC_REVISOR	as "recRevisor",  <!-- 记录修改责任者 -->
+				REC_REVISE_TIME	as "recReviseTime",  <!-- 记录修改时间 -->
+				ARCHIVE_FLAG	as "archiveFlag",  <!-- 归档标记 -->
+				ID	as "id",  <!-- 主键 -->
+				TRANS_BILL_DETAIL_NO	as "transBillDetailNo",  <!-- 调拨单明细号 -->
+				TRANS_BILL_NO	as "transBillNo",  <!-- 调拨单号 -->
+				MAT_NUM	as "matNum",  <!-- 物资编码 -->
+				MAT_NAME	as "matName",  <!-- 物资名称 -->
+				MAT_MODEL	as "matModel",  <!-- 物资型号 -->
+				MAT_SPEC	as "matSpec",  <!-- 物资规格 -->
+				UNIT	as "unit",  <!-- 计量单位编码 -->
+				UNIT_NAME	as "unitName",  <!-- 计量单位名称 -->
+				TRANS_NUM	as "transNum",  <!-- 调拨数量 -->
+				price	as "price" <!-- 单价 -->
+		FROM ci_trans_detail WHERE 1=1
+		<isNotEmpty prepend=" AND " property="transBillDetailNo">
+			TRANS_BILL_DETAIL_NO = #transBillDetailNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="transBillNo">
+			TRANS_BILL_NO = #transBillNo#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+	        <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		</isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  TRANS_BILL_DETAIL_NO asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<insert id="insert" parameterClass="com.baosight.wilp.ci.db.domain.CiTransDetail">
+		INSERT INTO ci_trans_detail (REC_CREATOR,  <!-- 记录创建责任者 -->
+										REC_CREATE_TIME,  <!-- 记录创建时间 -->
+										REC_REVISOR,  <!-- 记录修改责任者 -->
+										REC_REVISE_TIME,  <!-- 记录修改时间 -->
+										ARCHIVE_FLAG,  <!-- 归档标记 -->
+										ID,  <!-- 主键 -->
+										TRANS_BILL_DETAIL_NO,  <!-- 调拨单明细号 -->
+										TRANS_BILL_NO,  <!-- 调拨单号 -->
+										MAT_NUM,  <!-- 物资编码 -->
+										MAT_NAME,  <!-- 物资名称 -->
+										MAT_MODEL,  <!-- 物资型号 -->
+										MAT_SPEC,  <!-- 物资规格 -->
+										UNIT,  <!-- 计量单位编码 -->
+										UNIT_NAME,  <!-- 计量单位名称 -->
+										TRANS_NUM,  <!-- 调拨数量 -->
+										price  <!-- 单价 -->
+										)		 
+	    VALUES (#recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #archiveFlag#, #id#, #transBillDetailNo#, #transBillNo#, #matNum#, #matName#, #matModel#, #matSpec#, #unit#, #unitName#, #transNum#, #price#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM ci_trans_detail WHERE 
+			ID = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE ci_trans_detail 
+		SET 
+		REC_CREATOR	= #recCreator#,   <!-- 记录创建责任者 -->  
+					REC_CREATE_TIME	= #recCreateTime#,   <!-- 记录创建时间 -->  
+					REC_REVISOR	= #recRevisor#,   <!-- 记录修改责任者 -->  
+					REC_REVISE_TIME	= #recReviseTime#,   <!-- 记录修改时间 -->  
+					ARCHIVE_FLAG	= #archiveFlag#,   <!-- 归档标记 -->  
+								TRANS_BILL_DETAIL_NO	= #transBillDetailNo#,   <!-- 调拨单明细号 -->  
+					TRANS_BILL_NO	= #transBillNo#,   <!-- 调拨单号 -->  
+					MAT_NUM	= #matNum#,   <!-- 物资编码 -->  
+					MAT_NAME	= #matName#,   <!-- 物资名称 -->  
+					MAT_MODEL	= #matModel#,   <!-- 物资型号 -->  
+					MAT_SPEC	= #matSpec#,   <!-- 物资规格 -->  
+					UNIT	= #unit#,   <!-- 计量单位编码 -->  
+					UNIT_NAME	= #unitName#,   <!-- 计量单位名称 -->  
+					TRANS_NUM	= #transNum#,   <!-- 调拨数量 -->  
+					price	= #price#  <!-- 单价 -->  
+			WHERE 	
+			ID = #id#
+	</update>
+  
+</sqlMap>

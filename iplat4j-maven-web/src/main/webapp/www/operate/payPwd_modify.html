@@ -1,0 +1,357 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="../reference/mui/css/mui.css">
+  <link rel="stylesheet" href="../css/common.css"/>
+  <link href="../css/mui.picker.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/colorGreen.css">
+  <link rel="stylesheet" href="../css/colorBlue.css">
+</head>
+<STYLE TYPE="text/css">
+    body{
+      background: #eee;
+    }
+
+      .area {
+        margin: 20px auto 0px auto;
+      }
+      
+      .mui-input-group {
+        margin-top: 10px;
+      }
+      
+      .mui-input-group:first-child {
+        margin-top: 20px;
+      }
+      
+      .mui-input-group label {
+        width: 22%;
+      }
+      
+      .mui-input-row label~input,
+      .mui-input-row label~select,
+      .mui-input-row label~textarea {
+        width: 78%;
+      }
+      
+      .mui-checkbox input[type=checkbox],
+      .mui-radio input[type=radio] {
+        top: 6px;
+      }
+      
+      .mui-content-padded {
+        margin-top: 25px;
+      }
+      
+      .mui-btn {
+        padding: 10px;
+      }
+      
+      .link-area {
+        display: block;
+        margin-top: 25px;
+        text-align: center;
+      }
+      
+      .spliter {
+        color: #bbb;
+        padding: 0px 8px;
+      }
+      
+      .oauth-area {
+        position: absolute;
+        bottom: 20px;
+        left: 0px;
+        text-align: center;
+        width: 100%;
+        padding: 0px;
+        margin: 0px;
+      }
+      
+      .oauth-area .oauth-btn {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        background-size: 30px 30px;
+        background-position: center center;
+        background-repeat: no-repeat;
+        margin: 0px 20px;
+        /*-webkit-filter: grayscale(100%); */
+        border: solid 1px #ddd;
+        border-radius: 25px;
+      }
+      
+      .oauth-area .oauth-btn:active {
+        border: solid 1px #aaa;
+      }
+      
+      .oauth-area .oauth-btn.disabled {
+        background-color: #ddd;
+      }
+
+      .mui-input-row label~input{
+        width:70%;
+      }
+
+      .mui-input-group label {
+          width: 30%;
+      }
+      .mui-content-padded {
+        margin: 25px 0;
+        width: 48%;
+        float: left;
+      }
+      .mui-content-padded:last-child {
+        float: right;
+      }
+      #reset {
+        background: #fff;
+      }
+      .mui-content-padded .mui-btn {
+        letter-spacing: 1px;
+      }
+      .checkID {
+        display: block;
+        text-align: center;
+        color: red;
+        visibility: hidden;
+      }
+    
+</STYLE>
+<body>
+    <header class="mui-bar mui-bar-nav">
+      <h1 class="mui-title">修改支付密码</h1>
+      <button class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left" id="back">
+      <span class="mui-icon mui-icon-left-nav"></span>
+    </button>
+    </header>
+
+    <p id="progress" class="mui-progressbar mui-progressbar-in" data-progress="20" style="display:none;"><span></span></p>
+
+    <div id="warn" class="warn" hidden>
+      <small></small>
+    </div>
+
+    <div class="mui-content">
+      <!-- 修改支付密码 -->
+      <form class="mui-input-group submitForm">
+        <div class="mui-input-row">
+          <label>原密码</label>
+          <input id='oldpassword' type="password" class="mui-input-clear mui-input" placeholder="初始密码默认身份证后6位">
+        </div>
+        <div class="mui-input-row">
+          <label>新密码</label>
+          <input id='newPassword' type="password" class="mui-input-clear mui-input" placeholder="请输入新密码">
+        </div>
+        <div class="mui-input-row">
+          <label>密码确认</label>
+          <input id='againPassword' type="password" class="mui-input-clear mui-input" placeholder="请再次确认密码">
+        </div>
+      </form>
+      <div style="margin: 10px;" class="submitDiv">
+        <div class="mui-content-padded">
+          <button id='reset' class="mui-btn mui-btn-block  mui-btn-outlined fontColor">重置</button>
+        </div>
+        <div class="mui-content-padded">
+          <button id='submit' class="mui-btn mui-btn-block mui-btn-primary">提交</button>
+        </div>
+      </div>
+
+      <!-- 重置支付密码 -->
+      <form class="mui-input-group resetForm" style="display: none;">
+        <div class="mui-input-row">
+          <label>工号</label>
+          <input id='workNumber' type="text" class="mui-input" readonly>
+        </div>
+        <div class="mui-input-row">
+          <label>身份证号</label>
+          <input id='info' type="text" class="mui-input-clear mui-input" placeholder="请输入身份证号">
+        </div>
+      </form>
+      <!-- <div class="checkID">请输入长度为18位的身份证号！</div> -->
+      <div style="margin: 10px;display: none;" class="resetDiv">
+        <div class="mui-content-padded" style="width: 100%">
+          <button id='resetSure' class="mui-btn mui-btn-block mui-btn-primary">重置</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script type="text/javascript" src="../js/color.js"></script>
+<script src="../reference/mui/js/mui.js" type="text/javascript"></script>
+<script src="../reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<!-- <script src="../cordova.js" type="text/javascript"></script> -->
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var progress = mui('#progress');
+    $('#workNumber').val(workNo);
+    $("#submit").click(function() {
+      var oldpassword = $('#oldpassword').val();
+      var newPassword = $('#newPassword').val();
+      var againPassword = $('#againPassword').val();
+
+      if (oldpassword == "") {
+        $('#warn small').html("原密码不能为空");
+        $("#warn").fadeIn(500);
+        setTimeout(function() {
+          $("#warn").fadeOut(500);
+        }, 3000);
+        return false;
+      }
+      if (newPassword == "") {
+        $('#warn small').html("新密码不能为空");
+        $("#warn").fadeIn(500);
+        setTimeout(function() {
+          $("#warn").fadeOut(500);
+        }, 3000);
+        return false;
+      }
+      if (newPassword != againPassword) {
+        $('#warn small').html("两次新密码必须相同");
+        $("#warn").fadeIn(500);
+        setTimeout(function() {
+          $("#warn").fadeOut(500);
+        }, 3000);
+        return false;
+      }
+      $("#progress").css("display", "");
+      mui(progress).progressbar().setProgress(30);
+      $.ajax({
+        url: baseUrl + 'cardmeal',
+        type: 'post',
+        headers:{
+          className : 'CardWorkConsumeService',
+          methodName : 'updatePayPassWord'
+        },
+        data: {
+          workNo: workNo,
+          oldPassWord: oldpassword,
+          newPassWord: newPassword,
+          confirmPassWord: againPassword
+        },
+        success: function(data) {
+          //var data = JSON.parse(data);
+          console.log(data);
+          if(data.success){
+            mui(progress).progressbar().setProgress(100);
+            setTimeout("goBack()",1000);
+          } else {
+            $("#progress").css("display", "none");
+            $('#warn small').html(data.respMsg);
+            $("#warn").fadeIn(500);
+            setTimeout(function() {
+              $("#warn").fadeOut(500);
+            }, 3000);
+          }
+        }
+      });
+
+    });
+
+    $('#back').click(function(){
+      location.href = "paychoose.html";
+    })
+
+    // 重置
+    $('#reset').click(function(){
+      $('.resetForm').show();
+      $('.submitDiv').hide();
+      $('.submitForm').hide();
+      $('.resetDiv').show();
+      $('.mui-title').text('重置密码');
+    })
+
+    $('#resetSure').click(function(){
+      if ($('#info').val() == '') {
+        $('#warn small').html('身份证号不能为空');
+        $("#warn").fadeIn(500);
+        setTimeout(function() {
+          $("#warn").fadeOut(500);
+        }, 3000);
+        return 
+      }
+
+      if ($('#info').val().length != 18) {
+        $('#warn small').html('请输入长度为18位的身份证号！');
+        $("#warn").fadeIn(500);
+        setTimeout(function() {
+          $("#warn").fadeOut(500);
+        }, 3000);
+        $('#info').val('');
+        return
+      }
+      $.ajax({
+        url: baseUrl + 'cardmeal',
+        type: 'post',
+        headers:{
+          className : 'CardWorkConsumeService',
+          methodName : 'initPayPassWord'
+        },
+        data: {
+          workNo: workNo,
+          idNo: $('#info').val()
+        },
+        success: function(data){
+          //var data = JSON.parse(data);
+          console.log(data);
+          if(data.success){
+            $('#warn small').html(data.respMsg);
+            $("#warn").fadeIn(500);
+            setTimeout(function() {
+              $("#warn").fadeOut(500);
+            }, 3000);
+            setTimeout("location.href='paychoose.html';",3000);
+          }else {
+            $('#warn small').html(data.respMsg);
+            $("#warn").fadeIn(500);
+            setTimeout(function() {
+              $("#warn").fadeOut(500);
+            }, 3000);
+            $('#info').val('');
+          }
+        }
+      })
+    })
+
+    // 监听输入框值的变化
+    // $("#info").bind("input propertychange",function(event){
+    //   if($(this).val() == ''){
+    //     $('.checkID').css('visibility','hidden');
+    //   } 
+    // });
+
+
+    /**
+     * mui清除按钮事件(ps:自定义的，不加此方法页面会报错，如果不需要，方法体为空就行)
+     */
+    function clearFunc() {
+
+    }
+
+    /**
+     * mui返回方法(ps:自定义的,不加会报错,不需要的话方法体定义为空)
+     * [goBack description]
+     * @return {[type]} [description]
+     */
+    function goBack() {
+      location.href = "paychoose.html";
+    }
+
+     /**
+     * 系统返回键监听
+     */
+    document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady() {
+      document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+    function onBackKeyDown() {
+      location.href = 'paychoose.html'
+    }
+</script>
+</html>

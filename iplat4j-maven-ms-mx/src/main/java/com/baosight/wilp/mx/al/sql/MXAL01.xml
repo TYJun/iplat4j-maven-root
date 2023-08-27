@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MXAL01">
+    <select id="select" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.mx.al.domain.MXAL01">
+        SELECT
+        t.id ,
+        t.area_name ,
+        t.device_name ,
+        t.item ,
+        t.value_ ,
+        t.end_value,
+        t.grade,
+        t.description_,
+        t.start_time,
+        t.end_time,
+        t.process_start_user,
+        t.process_end_user,
+        t.process_start_time,
+        t.process_end_time,
+        t.process_value
+        FROM t_alarm_log t
+        where
+        1=1
+        <isNotEmpty prepend="and" property="parentId">
+            t.t_area_classify_id = #parentId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="device_name">
+            t.device_name like
+            concat('%',#device_name#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="item">
+            t.item like
+            concat('%',#item#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="grade">
+            t.grade=#grade#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="start_time">
+            t.start_time &gt;= concat(#start_time#, ' 00:00:00')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="end_time">
+            t.start_time &lt;= concat(#end_time#, ' 23:59:59')
+        </isNotEmpty>
+        <isEqual property="process_start_time" compareValue="1">
+            and t.start_time is not null
+        </isEqual>
+        <isEqual property="process_start_time" compareValue="">
+        </isEqual>
+        <isEqual property="process_start_time" compareValue="2">
+            and t.start_time is null
+        </isEqual>
+        <isEqual property="process_end_time" compareValue="1">
+            and t.process_end_time is null
+        </isEqual>
+        <isEqual property="process_end_time" compareValue="2">
+            and t.process_end_time is not null
+        </isEqual>
+        <isEqual property="process_end_time" compareValue="">
+        </isEqual>
+        <isEqual property="status" compareValue="1">
+            and t.process_start_time in (select max(process_start_time) from t_alarm_log)
+        </isEqual>
+            order by start_time desc
+    </select>
+
+    <insert id="insert">
+        INSERT INTO t_alarm_log (id, t_area_classify_id, area_name, device_name, value_, grade, item, start_time, tag, description_)
+        VALUES (#id#, #t_area_classify_id#, #area_name#, #device_name#, #value_#, #grade#, #item#, #date#, #tag#, #description_#)
+    </insert>
+
+    <select id="selectByTag" parameterClass="com.baosight.wilp.mx.al.domain.MXAL01"
+            resultClass="com.baosight.wilp.mx.al.domain.MXAL01">
+        SELECT
+        t.id ,
+        t.area_name ,
+        t.device_name ,
+        t.item,
+        t.tag,
+        t.value_ ,
+        t.end_value,
+        t.grade,
+        t.description_,
+        t.start_time,
+        t.end_time,
+        t.process_start_user,
+        t.process_end_user,
+        t.process_start_time,
+        t.process_end_time
+        FROM t_alarm_log t
+        WHERE
+        1=1
+        <isNotEmpty prepend="and" property="tag">
+            t.tag = #tag#
+        </isNotEmpty>
+        <isEmpty prepend="and" property="process_start_time">
+            t.end_time IS NULL
+        </isEmpty>
+        ORDER BY t.start_time DESC
+    </select>
+
+    <update id="updateEndTime">
+        UPDATE t_alarm_log
+        SET
+        grade = #grade#,  <!-- 告警等级 -->
+        end_time = #date#   <!-- 告警结束时间 -->
+        WHERE
+        id = #id#
+    </update>
+
+    <update id="recovery">
+        UPDATE t_alarm_log
+        SET
+        grade = #grade#,  <!-- 告警等级 -->
+        end_time = #date#   <!-- 告警恢复时间 -->
+        WHERE
+        id = #id#
+    </update>
+
+    <select id="selectTree" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        SELECT
+        t.id ,
+        t.area_name ,
+        t.device_name ,
+        t.item ,
+        t.value_ ,
+        t.end_value,
+        t.grade,
+        t.description_,
+        t.start_time,
+        t.end_time,
+        t.process_start_user,
+        t.process_end_user,
+        t.process_start_time,
+        t.process_end_time
+        FROM t_alarm_log t
+        LEFT JOIN
+        ( SELECT user_group_id FROM t_area_classify
+        ) e ON e.user_group_id = t.t_area_classify_id
+        where
+        1=1
+        <isNotEmpty prepend="and" property="parentId">
+            t.t_area_classify_id = #parentId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="device_name">
+            t.device_name like
+            concat('%',#device_name#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="item">
+            t.item like
+            concat('%',#item#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="grade">
+            t.grade=#grade#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="start_time">
+            t.start_time &gt;= #start_time#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="end_time">
+            t.end_time &lt;= #end_time#
+        </isNotEmpty>
+        <isEqual property="process_start_time" compareValue="1">
+            and t.start_time is not null
+        </isEqual>
+        <isEqual property="process_start_time" compareValue="">
+        </isEqual>
+        <isEqual property="process_start_time" compareValue="2">
+            and t.start_time is null
+        </isEqual>
+        <isEqual property="process_end_time" compareValue="1">
+            and t.process_end_time is null
+        </isEqual>
+        <isEqual property="process_end_time" compareValue="2">
+            and t.process_end_time is not null
+        </isEqual>
+        <isEqual property="process_end_time" compareValue="">
+        </isEqual>
+        <isEqual property="status" compareValue="1">
+            and t.process_start_time in (select max(process_start_time) from t_alarm_log)
+        </isEqual>
+        <isEqual property="status" compareValue="2">
+            order by start_time ASC
+        </isEqual>
+        <isEqual property="status" compareValue="">
+
+        </isEqual>
+    </select>
+
+    <select id="selectAll" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.mx.al.domain.MXAL01">
+        SELECT t.id,
+               t.area_name,
+               t.device_name,
+               t.item,
+               t.tag,
+               t.value_,
+               t.end_value,
+               t.grade,
+               t.description_,
+               t.start_time,
+               t.end_time,
+               t.process_start_user,
+               t.process_end_user,
+               t.process_start_time,
+               t.process_end_time,
+               c.lower,
+               c.lower_lower,
+               c.upper,
+               c.upper_upper
+        FROM t_alarm_log t
+             LEFT JOIN tmspl01 b ON b.tag = t.tag
+             LEFT JOIN tmsar01 c ON c.id = b.tmsar01_id
+        WHERE 1 = 1 and t.start_time between date_sub(now(), interval 12 hour) and now()
+        ORDER BY t.start_time DESC
+        LIMIT #offset#, #pageSize#
+    </select>
+
+    <select id="count" parameterClass="java.util.HashMap" resultClass="int">
+        SELECT COUNT(*) FROM t_alarm_log t
+        WHERE 1=1
+        <isEmpty prepend="and" property="grade">
+            t.end_time IS NOT NULL
+        </isEmpty>
+        <isNotEmpty prepend="and" property="grade">
+            t.end_time IS NULL AND t.grade = #grade#
+        </isNotEmpty>
+    </select>
+
+    <update id="selectIsCheck" parameterClass="java.util.HashMap">
+        UPDATE  t_alarm_log SET is_check = '1',
+            process_start_time =now(),
+            process_start_user = #loginName#
+        WHERE id=#Ids#
+    </update>
+
+    <update id="selectIsCheck2" parameterClass="java.util.HashMap">
+        UPDATE  t_alarm_log SET is_check = '2',
+            process_end_time =now(),
+            end_time=now(),
+            process_end_user = #loginName#,
+            process_value = #processValue#
+        WHERE id=#Ids#
+    </update>
+
+    <select id="queryAlarmTag" resultClass="HashMap">
+        select tag, `grade`, description_ description from t_alarm_log where end_time is null
+    </select>
+
+</sqlMap>

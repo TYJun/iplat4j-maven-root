@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="PM0401">
+
+	<!-- ==============================================项目进程开始======================================================= -->
+	<!-- 查询项目进程List -->
+  	<select id="queryCedList" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+			ID	as id,  <!-- 项目进程主键 -->
+			PROJECT_PK	as projectPk,  <!-- 项目主键 -->
+			PROCESS_ARRANGE	as processArrange,  <!-- 进程安排 -->
+			EXPENSE	as expense,  <!-- 费用 -->
+			START_TIME	as startTime,  <!-- 开始时间 -->
+			END_TIME	as endTime,  <!-- 结束时间 -->
+			ARRANGE_NOTE	as arrangeNote,  <!-- 备注 -->
+			FINISH_FLAG	as finishFlag,  <!-- 完成标记 -->
+			SCHEDULE	as schedule,  <!-- 进度 -->
+			ARCHIVE_FLAG	as archiveFlag,  <!-- 归档标记 -->
+			REC_CREATOR	as recCreator,  <!-- 记录创建责任者 -->
+			REC_CREATE_TIME	as recCreateTime,  <!-- 记录创建时间 -->
+			REC_REVISOR	as recRevisor,  <!-- 记录修改责任者 -->
+			REC_REVISE_TIME	as recReviseTime,  <!-- 记录修改时间 -->
+			DATAGROUP_CODE	as dataGroupCode  <!-- 账套 -->
+		FROM pm_ced WHERE PROJECT_PK = #id#
+		<dynamic prepend="ORDER BY">
+        	<isNotEmpty property="orderBy">
+    			$orderBy$
+   			</isNotEmpty>
+   			<isEmpty property="orderBy">
+    		  	REC_CREATE_TIME asc
+			</isEmpty>
+  		</dynamic>
+			
+	</select>
+  
+  	<!-- 查询项目进程Count -->
+  	<select id="queryCedCount" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT * FROM pm_ced WHERE PROJECT_PK = #id#
+	</select>
+	
+	<!-- 删除项目进程 -->
+  	<delete id="deleteCed" parameterClass="java.lang.String">
+		delete from pm_ced where PROJECT_PK = #value#
+	</delete>
+	
+	<!-- 保存项目进程 -->
+  	<insert id="insertCed" parameterClass="com.baosight.wilp.pm.domain.TpmCed">
+		INSERT INTO pm_ced (ID,  <!-- 项目进程主键 -->
+							PROJECT_PK,  <!-- 项目主键 -->
+							PROCESS_ARRANGE,  <!-- 进程安排 -->
+							EXPENSE,  <!-- 费用 -->
+							START_TIME,  <!-- 开始时间 -->
+							END_TIME,  <!-- 结束时间 -->
+							ARRANGE_NOTE,  <!-- 备注 -->
+							FINISH_FLAG,  <!-- 完成标记 -->
+							SCHEDULE,  <!-- 进度 -->
+							ARCHIVE_FLAG,  <!-- 归档标记 -->
+							REC_CREATOR,  <!-- 记录创建责任者 -->
+							REC_CREATE_TIME,  <!-- 记录创建时间 -->
+							REC_REVISOR,  <!-- 记录修改责任者 -->
+							REC_REVISE_TIME,  <!-- 记录修改时间 -->
+							DATAGROUP_CODE  <!-- 账套 -->
+							)		 
+	    VALUES (#id#, #projectPk#, #processArrange#, #expense#, #startTime#, #endTime#, #arrangeNote#, #finishFlag#, #schedule#, #archiveFlag#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#) 
+	</insert>
+  	<!-- ==============================================项目进程结束======================================================= -->
+  	
+  	
+  	<!-- ==============================================项目资料开始======================================================= -->
+  	<!-- 查询项目资料List -->
+  	<select id="queryZiliaoList" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+			ID	as id,  <!-- 主键 -->
+			PROJECT_PK	as projectPk,  <!-- 项目主键 -->
+			DATA_CODE	as dataCode,  <!-- 资料编码 -->
+			DATA_NAME	as dataName,  <!-- 资料名称 -->
+			ARCHIVE_FLAG	as archiveFlag,  <!-- 归档标记 -->
+			REC_CREATOR	as recCreator,  <!-- 记录创建责任者 -->
+			REC_CREATE_TIME	as recCreateTime,  <!-- 记录创建时间 -->
+			REC_REVISOR	as recRevisor,  <!-- 记录修改责任者 -->
+			REC_REVISE_TIME	as recReviseTime, <!-- 记录修改时间 -->
+			DATAGROUP_CODE	as dataGroupCode  <!-- 账套 -->
+		FROM pm_ziliao WHERE PROJECT_PK = #id#
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  REC_CREATE_TIME asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+  
+  	<!-- 查询项目资料Count -->
+  	<select id="queryZiliaoCount" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT * FROM pm_ziliao WHERE PROJECT_PK = #id#
+	</select>
+  
+  	<!-- 删除项目资料 -->
+  	<delete id="deleteZiliao" parameterClass="java.lang.String">
+		delete from pm_ziliao where PROJECT_PK = #value#
+	</delete>
+	
+	<!-- 保存项目资料 -->
+  	<insert id="insertZiliao" parameterClass="com.baosight.wilp.pm.domain.TpmZiliao">
+		INSERT INTO pm_ziliao (ID,  <!-- 主键 -->
+								PROJECT_PK,  <!-- 项目主键 -->
+								DATA_CODE,  <!-- 资料编码 -->
+								DATA_NAME,  <!-- 资料名称 -->
+								ARCHIVE_FLAG,  <!-- 归档标记 -->
+								REC_CREATOR,  <!-- 记录创建责任者 -->
+								REC_CREATE_TIME,  <!-- 记录创建时间 -->
+								REC_REVISOR,  <!-- 记录修改责任者 -->
+								REC_REVISE_TIME,  <!-- 记录修改时间 -->
+								DATAGROUP_CODE  <!-- 账套 -->
+								)		 
+	    VALUES (#id#, #projectPk#, #dataCode#, #dataName#, #archiveFlag#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#,#dataGroupCode#) 
+	</insert>
+  	<!-- ==============================================项目资料结束======================================================= -->
+  	
+  	
+  	<!-- ==============================================项目验收人员开始======================================================= -->
+  	<!-- 查询项目验收人员信息List -->
+  	<select id="queryAcceptStaffList" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+			ID	as id,  <!-- 项目验收人员主键 -->
+			PROJECT_PK	as projectPk,  <!-- 项目主键 -->
+			TEST_STAFF_ID	as testStaffId,  <!-- 验收人员工号 -->
+			DEPT_NUM	as deptNum,  <!-- 科室编码 -->
+			DEPT_NAME	as deptName,  <!-- 科室名称 -->
+			TEST_STAFF_NAME	as testStaffName,  <!-- 参与人员姓名 -->
+			CONTACTTEL	as contacttel,  <!-- 联系电话 -->
+			REMARK	as remark,  <!-- 备注 -->
+			ARCHIVE_FLAG	as archiveFlag,  <!-- 归档标记 -->
+			REC_CREATOR	as recCreator,  <!-- 记录创建责任者 -->
+			REC_CREATE_TIME	as recCreateTime,  <!-- 记录创建时间 -->
+			REC_REVISOR	as recRevisor,  <!-- 记录修改责任者 -->
+			REC_REVISE_TIME	as recReviseTime, <!-- 记录修改时间 -->
+			DATAGROUP_CODE	as dataGroupCode  <!-- 账套 -->
+		FROM pm_accept_staff WHERE PROJECT_PK = #id#
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  REC_CREATE_TIME asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+  
+  	<!-- 查询项目验收人员信息Count -->
+  	<select id="queryAcceptStaffCount" resultClass="int">
+		SELECT * FROM pm_accept_staff WHERE PROJECT_PK = #id#
+	</select>
+  
+  	<!-- 删除项目验收人员信息 -->
+  	<delete id="deleteAcceptStaff" parameterClass="java.lang.String">
+		delete from pm_accept_staff where PROJECT_PK = #value#
+	</delete>
+	
+	<!-- 保存项目验收人员信息 -->
+  	<insert id="insertAcceptStaff" parameterClass="com.baosight.wilp.pm.domain.TpmAcceptStaff">
+		INSERT INTO pm_accept_staff (ID,  <!-- 项目验收人员主键 -->
+									PROJECT_PK,  <!-- 项目主键 -->
+									TEST_STAFF_ID,  <!-- 验收人员工号 -->
+									DEPT_NUM,  <!-- 科室编码 -->
+									DEPT_NAME,  <!-- 科室名称 -->
+									TEST_STAFF_NAME,  <!-- 参与人员姓名 -->
+									CONTACTTEL,  <!-- 联系电话 -->
+									REMARK,  <!-- 备注 -->
+									ARCHIVE_FLAG,  <!-- 归档标记 -->
+									REC_CREATOR,  <!-- 记录创建责任者 -->
+									REC_CREATE_TIME,  <!-- 记录创建时间 -->
+									REC_REVISOR,  <!-- 记录修改责任者 -->
+									REC_REVISE_TIME,  <!-- 记录修改时间 -->
+									DATAGROUP_CODE  <!-- 账套 -->
+									)		 
+	    VALUES (#id#, #projectPk#, #testStaffId#, #deptNum#, #deptName#, #testStaffName#, #contacttel#, #remark#, #archiveFlag#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#) 
+	</insert>
+  	<!-- ==============================================项目验收人员结束======================================================= -->
+</sqlMap>

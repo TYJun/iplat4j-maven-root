@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ACGM0101">
+
+	<insert id="insert" parameterClass="java.util.HashMap">
+    	INSERT INTO $projectSchema$.ac_material_class (
+				<isNotNull  property="matClassCode">
+					mat_class_code,  <!-- 物资分类编码 -->
+				</isNotNull>
+				<isNotNull  property="matClassName">
+					mat_class_name,  <!-- 物资分类名称 -->
+				</isNotNull>
+				<isNotNull  property="parentId">
+					parent_id,  <!-- 父ID -->
+				</isNotNull>
+				<isNotNull  property="status">
+					status,  <!-- status -->
+				</isNotNull>
+				<isNotNull  property="recCreator">
+					rec_creator,  <!-- 创建人 -->
+				</isNotNull>
+				<isNotNull  property="recCreateTime">
+					rec_create_time,  <!-- 创建时间 -->
+				</isNotNull>
+				<isNotNull  property="recRevisor">
+					rec_revisor,  <!-- 修改人 -->
+				</isNotNull>
+				<isNotNull  property="recReviseTime">
+					rec_revise_time,  <!-- 修改时间 -->
+				</isNotNull>
+					id  <!-- 主键 -->
+			)VALUES ( 
+				<isNotNull  property="matClassCode">
+			    	#matClassCode#, 
+			    </isNotNull>
+				<isNotNull  property="matClassName">
+			    	#matClassName#, 
+			    </isNotNull>
+			    <isNotNull  property="parentId">
+					#parentId#,   
+				</isNotNull>
+				<isNotNull  property="status">
+					#status#,   
+				</isNotNull>
+				<isNotNull  property="recCreator">
+			    	#recCreator#, 
+			    </isNotNull>
+				<isNotNull  property="recCreateTime">
+			    	#recCreateTime#, 
+			    </isNotNull>
+				<isNotNull  property="recRevisor">
+			    	#recRevisor#, 
+			    </isNotNull>
+				<isNotNull  property="recReviseTime">
+			    	#recReviseTime#, 
+			    </isNotNull>
+			    	#id#
+		    ) 
+	</insert>
+	
+    <select id="queryLastMatClassCode" parameterClass="java.util.HashMap" 
+		resultClass="java.util.HashMap">
+		SELECT mat_class_code as "matClassCode"
+		FROM $projectSchema$.ac_material_class
+		where mat_class_code like 'MC%' 
+		AND LENGTH(mat_class_code) = 7
+		ORDER BY rec_create_time DESC, mat_class_code DESC
+		LIMIT 1
+	</select>
+	
+</sqlMap>

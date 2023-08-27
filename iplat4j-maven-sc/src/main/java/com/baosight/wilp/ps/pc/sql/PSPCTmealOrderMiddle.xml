@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PSPCTmealOrderMiddle">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ps.pc.domain.PSPCTmealOrderMiddle">
+		SELECT
+		id as "id",  <!-- 主键 -->
+		bill_id as "billId",  <!-- 订单id -->
+		bill_no as "billNo",  <!-- 订单编号 -->
+		pay_no as "payNo",
+		status_code as "statusCode",  <!-- 订单状态 -->
+		pay_status as "payStatus",  <!-- 支付状态 -->
+		module_code as "moduleCode",  <!-- 模块编号 -->
+		rec_create_time as "recCreateTime",  <!-- 下单时间 -->
+		need_date as "needDate",  <!-- 需要时间 -->
+		meal_num as "mealNum",  <!-- 餐次编码 -->
+		canteen_num as "canteenNum",  <!-- 食堂编号 -->
+		canteen_name as "canteenName",  <!-- 食堂名称 -->
+		open_id as "openId",  <!-- openid -->
+		memo as "memo",  <!-- 备注 -->
+		user_name as "userName",  <!-- 用户 -->
+		counter as "counter",  <!-- 计数器 -->
+		param1 as "param1",  <!-- 备用字段1 -->
+		param2 as "param2" <!-- 备用字段2 -->
+		FROM sc_order_middle WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="billId">
+			bill_id = #billId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="billNo">
+			bill_no = #billNo#
+		</isNotEmpty>
+		order by bill_no desc
+
+	</select>
+
+	<select id="queryByBillId" parameterClass="String"
+		resultClass="com.baosight.wilp.ps.pc.domain.PSPCTmealOrderMiddle">
+		SELECT
+		id as "id",  <!-- 主键 -->
+		bill_id as "billId",  <!-- 订单id -->
+		bill_no as "billNo",  <!-- 订单编号 -->
+		pay_no as "payNo",
+		status_code as "statusCode",  <!-- 订单状态 -->
+		pay_status as "payStatus",  <!-- 支付状态 -->
+		module_code as "moduleCode",  <!-- 模块编号 -->
+		rec_create_time as "recCreateTime",  <!-- 下单时间 -->
+		need_date as "needDate",  <!-- 需要时间 -->
+		meal_num as "mealNum",  <!-- 餐次编码 -->
+		canteen_num as "canteenNum",  <!-- 食堂编号 -->
+		canteen_name as "canteenName",  <!-- 食堂名称 -->
+		open_id as "openId",  <!-- openid -->
+		memo as "memo",  <!-- 备注 -->
+		user_name as "userName",  <!-- 用户 -->
+		counter as "counter",  <!-- 计数器 -->
+		param1 as "param1",  <!-- 备用字段1 -->
+		param2 as "param2" <!-- 备用字段2 -->
+		FROM sc_order_middle 
+		WHERE 1=1
+		and 
+		bill_id = #billId# or pay_no = #billId#
+
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_order_middle WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+	<!-- <isNotEmpty prepend=" AND " property="id"> id = #id# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="billId"> bill_id = #billId# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="billNo"> bill_no = #billNo# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="statusCode"> status_code = #statusCode# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="payStatus"> pay_status 
+		= #payStatus# </isNotEmpty> <isNotEmpty prepend=" AND " property="moduleCode"> 
+		module_code = #moduleCode# </isNotEmpty> <isNotEmpty prepend=" AND " property="recCreateTime"> 
+		rec_create_time = #recCreateTime# </isNotEmpty> <isNotEmpty prepend=" AND 
+		" property="needDate"> need_date = #needDate# </isNotEmpty> <isNotEmpty prepend=" 
+		AND " property="mealNum"> meal_num = #mealNum# </isNotEmpty> <isNotEmpty 
+		prepend=" AND " property="canteenNum"> canteen_num = #canteenNum# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="canteenName"> canteen_name = #canteenName# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="openId"> open_id = #openId# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="memo"> memo = #memo# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="userName"> user_name 
+		= #userName# </isNotEmpty> <isNotEmpty prepend=" AND " property="counter"> 
+		counter = #counter# </isNotEmpty> <isNotEmpty prepend=" AND " property="param1"> 
+		param1 = #param1# </isNotEmpty> <isNotEmpty prepend=" AND " property="param2"> 
+		param2 = #param2# </isNotEmpty> -->
+
+	<select id="queryOrderQueueInfo" parameterClass="java.util.HashMap"
+			resultClass="HashMap">
+		SELECT
+		middle.id	as "id",  <!-- 主键 -->
+		middle.rec_create_time	as "recCreateTime",  <!-- 下单时间 -->
+		bill.rec_creator	as "recCreator",  <!-- 创建人 -->
+		middle.bill_id	as "billId",  <!-- 订单id -->
+		middle.bill_no	as "billNo",  <!-- 订单编号 -->
+		bill.status_code	as "statusCode",  <!-- 订单状态 -->
+		bill.rec_revise_time as "reviseTime",
+		bill.pay_type	as "payType",  <!-- 支付类型 -->
+		middle.pay_status	as "payStatus",  <!-- 支付状态 -->
+		bill.pay_no	as "payNo",  <!-- 统一支付编码 -->
+		middle.module_code	as "moduleCode",  <!-- 模块编号 -->
+		bill.archive_flag	as "archiveFlag",  <!-- 设备标识 -->
+		middle.need_date	as "needDate",  <!-- 需要时间 -->
+		middle.meal_num	as "mealNum",  <!-- 餐次编码 -->
+		middle.canteen_num	as "canteenNum",  <!-- 食堂编号 -->
+		middle.canteen_name	as "canteenName",  <!-- 食堂名称 -->
+		bill.current_dealer	as "currentDealer",  <!-- 当前处理人 -->
+		middle.open_id	as "openId",  <!-- openid -->
+		middle.memo	as "memo",  <!-- 备注 -->
+		middle.user_name	as "userName",  <!-- 用户 -->
+		middle.counter	as "counter",  <!-- 计数器 -->
+		middle.param1	as "param1",  <!-- 备用字段1 -->
+		middle.param2	as "param2" <!-- 备用字段2 -->
+		FROM sc_order_middle middle
+		left join sc_order_bill_patient bill on middle.bill_id = bill.id
+		WHERE 1=1
+		and (bill.pay_type = '0101' or bill.pay_type = '0201' or bill.pay_type = '0301' or bill.pay_type = '03')
+		<isNotEmpty prepend=" AND " property="id">
+			middle.bill_id = #billId#
+		</isNotEmpty>
+
+	</select>
+
+	<select id="countMiddle" resultClass="String">
+		SELECT id FROM sc_order_middle
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sc_order_middle (id,  <!-- 主键 -->
+		bill_id,  <!-- 订单id -->
+		bill_no,  <!-- 订单编号 -->
+		status_code,  <!-- 订单状态 -->
+		pay_status,  <!-- 支付状态 -->
+		pay_no,
+		module_code,  <!-- 模块编号 -->
+		rec_create_time,  <!-- 下单时间 -->
+		need_date,  <!-- 需要时间 -->
+		meal_num,  <!-- 餐次编码 -->
+		canteen_num,  <!-- 食堂编号 -->
+		canteen_name,  <!-- 食堂名称 -->
+		open_id,  <!-- openid -->
+		memo,  <!-- 备注 -->
+		user_name,  <!-- 用户 -->
+		counter,  <!-- 计数器 -->
+		param1,  <!-- 备用字段1 -->
+		param2  <!-- 备用字段2 -->
+		)
+		VALUES (#id#, #billId#, #billNo#, #statusCode#, #payStatus#,#payNo#,
+		#moduleCode#,
+		#recCreateTime#, #needDate#, #mealNum#, #canteenNum#,
+		#canteenName#,
+		#openId#, #memo#, #userName#, #counter#, #param1#,
+		#param2#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM sc_order_middle
+		WHERE
+			id = #id#
+	</delete>
+
+	<delete id="deleteByBillId">
+		DELETE FROM sc_order_middle WHERE
+			bill_id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_order_middle
+		SET
+		bill_id = #billId#,   <!-- 订单id -->
+		bill_no = #billNo#,   <!-- 订单编号 -->
+		pay_no = #payNo#,
+		status_code = #statusCode#,   <!-- 订单状态 -->
+		pay_status = #payStatus#,   <!-- 支付状态 -->
+		module_code = #moduleCode#,   <!-- 模块编号 -->
+		rec_create_time = #recCreateTime#,   <!-- 下单时间 -->
+		need_date = #needDate#,   <!-- 需要时间 -->
+		meal_num = #mealNum#,   <!-- 餐次编码 -->
+		canteen_num = #canteenNum#,   <!-- 食堂编号 -->
+		canteen_name = #canteenName#,   <!-- 食堂名称 -->
+		open_id = #openId#,   <!-- openid -->
+		memo = #memo#,   <!-- 备注 -->
+		user_name = #userName#,   <!-- 用户 -->
+		counter = #counter#,   <!-- 计数器 -->
+		param1 = #param1#,   <!-- 备用字段1 -->
+		param2 = #param2#  <!-- 备用字段2 -->
+		WHERE
+		id = #id#
+	</update>
+
+	<update id="updatePayStatus" parameterClass="java.util.Map">
+		UPDATE sc_order_middle
+		SET
+		pay_status = #payStatus#,   <!-- 支付状态 -->
+		module_code = #moduleCode#   <!-- 模块编号 -->
+		WHERE
+		pay_no = #payNo#
+	</update>
+
+</sqlMap>

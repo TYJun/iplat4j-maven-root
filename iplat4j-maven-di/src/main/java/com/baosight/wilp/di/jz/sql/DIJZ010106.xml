@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DIJZ010106">
+	
+	<select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.di.jz.domain.DiCard">
+			SELECT
+				cardID	as "cardid",  
+				cardCode	as "cardcode",  
+				cardName	as "cardname" 
+			FROM di_card WHERE status = 1
+				<isNotEmpty prepend="and" property="cardname">
+					cardName like concat('%',#cardname#,'%')
+				</isNotEmpty>
+	</select>
+	
+	<select id="getProjectInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+				SELECT
+					itemID	as "itemid",  
+					itemID_xmID	as "itemidXmid",  <!-- 巡检项目ID -->
+					cardID	as "cardid",  
+					jitemName	as "content",  
+					itemDesc	as "itemdesc",  
+					referenceValue	as "referencevalue",  
+					sortNo	as "sortno",  
+					actualValueUnit	as "actualvalueunit" <!-- 巡检实际值单位 -->
+				FROM 
+					di_card_relation 
+				WHERE 1=1
+				<isNotEmpty prepend="and" property="id">
+				 cardID = #id#
+				</isNotEmpty>
+	</select>
+	
+</sqlMap>

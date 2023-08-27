@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DIJZ0101">
+
+	<!-- 查询设备包中设备 -->
+	<select id="queryDevice"  parameterClass="String" resultClass="com.baosight.wilp.di.jz.domain.DiDevicePacket"> 
+	SELECT
+		di.id as id,
+		di.packet_id as packetId,
+		di.device_id AS deviceId,
+		di.machine_code as machineCode,
+		di.machine_name as machineName,
+		di.models as models,
+		di.fixed_place as fixedPlace
+	FROM
+		di_device_packet_relation di
+	WHERE
+		packet_id = #value#
+	</select>
+	
+	
+	
+	<select id="queryDept" parameterClass="java.util.HashMap" resultClass="java.util.HashMap"> 
+		select 
+			id,
+			dept_num deptNum,
+			dept_name deptName
+		from 
+			tbmbd01 
+		where 
+			1 = 1
+		<isNotEmpty prepend="and" property="deptName">
+			dept_Name like concat('%',#deptName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="deptNum">
+			dept_Num like concat('%',#deptNum#,'%')
+		</isNotEmpty>
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+	
+	<select id="countDept" parameterClass="java.util.HashMap" resultClass="int">
+		select 
+			id
+		from
+			tbmbd01 
+		where
+			1 = 1
+		<isNotEmpty prepend="and" property="deptName">
+			dept_Name like concat('%',#deptName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="deptNum">
+			dept_Num like concat('%',#deptNum#,'%')
+		</isNotEmpty>
+	</select>
+	
+	<select id="queryMan" parameterClass="java.util.HashMap" resultClass="java.util.HashMap"> 
+		select 
+			t2.id,
+			t2.id as manId,
+			t2.work_no workNo,
+			t2.name,
+			t1.dept_name deptName,
+			t1.id deptId
+		from 
+			tbmbd02 t2
+		left join
+			tbmbd01 t1 on t1.dept_num = t2.dept_num
+		where 
+			1 = 1
+		<isNotEmpty prepend="and" property="deptName">
+			t1.dept_name like concat('%',#deptName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="workNo">
+			t2.work_no like concat('%',#workNo#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="name">
+			t2.name like concat('%',#name#,'%')
+		</isNotEmpty>
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+	
+	<select id="countMan" parameterClass="java.util.HashMap" resultClass="int">
+		select 
+			t2.id
+		from 
+			tbmbd02 t2
+		left join
+			tbmbd01 t1 on t1.dept_num = t2.dept_num
+		where 
+			1 = 1
+		<isNotEmpty prepend="and" property="deptName">
+			t1.dept_name like concat('%',#deptName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="workNo">
+			t2.work_no like concat('%',#workNo#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="name">
+			t2.name like concat('%',#name#,'%')
+		</isNotEmpty>
+	</select>
+	
+	<select id="queryMachine" parameterClass="java.util.HashMap" resultClass="java.util.HashMap"> 
+		<!--  不加特种设备时查设备,下面是加上特种设备查询 -->
+		<!-- select 
+			de.id,
+			de.id as machineId,
+			de.machine_code machineCode,
+			de.machine_name machineName,
+			de.models,
+			de.spot_code spotCode,
+			fixed_place fixedPlace
+		from 
+			df_devicemachine de
+		where 
+			1 = 1
+		<isNotEmpty prepend="and" property="machineName">
+			machine_name like concat('%',#machineName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="machineCode">
+			machine_code like concat('%',#machineCode#,'%')
+		</isNotEmpty>
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty> -->
+		select 
+			c.id,
+			c.id as machineId,
+			c.machine_code machineCode,
+			c.machine_name machineName,
+			c.models,
+			c.fixed_place fixedPlace 
+		from (
+		SELECT
+			a.id,
+		    a.machine_type_id,
+			a.machine_code,
+			a.machine_name,
+			a.models,
+			a.fixed_place
+		FROM
+		df_devicemachine a UNION all
+		SELECT
+			b.id,
+			b.machine_type_id,
+			b.machine_code,
+			b.machine_name,
+			b.models,
+			b.fixed_place
+		FROM
+		df_special_device b) c where 1 = 1
+			<isNotEmpty prepend="and" property="machineName">
+				c.machine_name like concat('%',#machineName#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="machineCode">
+				c.machine_code like concat('%',#machineCode#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="machineTypeId">
+				c.machine_type_id = #machineTypeId#
+			</isNotEmpty>
+			<isNotEmpty property="offset">
+				limit #offset#,#limit#
+			</isNotEmpty>
+	</select>
+	
+	<select id="countMachine" parameterClass="java.util.HashMap" resultClass="int">
+		<!-- select 
+			id
+		from 
+			df_devicemachine
+		where 
+			1 = 1
+		<isNotEmpty prepend="and" property="machineName">
+			machine_name like concat('%',#machineName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="machineCode">
+			machine_code like concat('%',#machineCode#,'%')
+		</isNotEmpty> -->
+		select 
+			c.id
+		from (
+		SELECT
+		    a.id,
+			a.machine_type_id,
+			a.machine_code,
+			a.machine_name
+		FROM
+		df_devicemachine a UNION all
+		SELECT
+		    b.id,
+			b.machine_type_id,
+			b.machine_code,
+			b.machine_name
+		FROM
+		df_special_device b) c
+		where 
+			1 = 1
+		<isNotEmpty prepend="and" property="machineName">
+			c.machine_name like concat('%',#machineName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="machineCode">
+			c.machine_code like concat('%',#machineCode#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="machineTypeId">
+			c.machine_type_id = #machineTypeId#
+		</isNotEmpty>
+	</select>
+  
+</sqlMap>

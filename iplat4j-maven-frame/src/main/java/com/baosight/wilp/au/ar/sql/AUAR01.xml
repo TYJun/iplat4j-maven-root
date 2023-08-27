@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+	
+<sqlMap namespace="AUAR01">
+
+	<select id="queryResource" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			SELECT id,
+				resource_ename AS resourceEname,
+				resource_name AS resourceName,
+				type,
+				status,
+				rec_creator AS recCreator,
+				rec_create_time AS recCreateTime,
+				rec_revisor,
+				rec_revise_time 
+			FROM $projectSchema$.ac_resource
+			WHERE status='1'
+		
+			<isNotEmpty prepend=" AND " property="resourceEname">
+				resource_ename = #resourceEname#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="resourceName">
+				resource_name like concat('%', #resourceName#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="type">
+				type = #type#
+			</isNotEmpty>
+			
+			ORDER BY rec_create_time desc
+			
+	</select>
+
+	<select id="queryResourceCount" parameterClass="java.util.HashMap"  resultClass="int">
+		SELECT count(*)
+		FROM 
+			(
+			SELECT id,
+				resource_ename AS resourceEname,
+				resource_name AS resourceName,
+				type,
+				status,
+				rec_creator AS recCreator,
+				rec_create_time AS recCreateTime,
+				rec_revisor,
+				rec_revise_time 
+			FROM $projectSchema$.ac_resource
+			WHERE status='1'
+			<isNotEmpty prepend=" AND " property="resourceEname">
+				resource_ename = #resourceEname#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="resourceName">
+				resource_name like concat('%', #resourceName#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="type">
+				type = #type#
+			</isNotEmpty>
+			) t
+		WHERE 1=1
+	</select>
+	
+	<select id="queryCount" parameterClass="java.util.HashMap"  resultClass="int">
+		SELECT COUNT(*) FROM $projectSchema$.ac_rr 
+		WHERE resource_id IN
+		<iterate conjunction="," open="(" close=")" property="list">
+			#list[]#
+		</iterate>
+	</select>
+	
+	<delete id="delete" parameterClass="java.util.HashMap" >
+		DELETE FROM $projectSchema$.ac_resource 
+		WHERE id IN
+		<iterate conjunction="," open="(" close=")" property="list">
+			#list[]#
+		</iterate>
+	</delete>
+	
+</sqlMap>

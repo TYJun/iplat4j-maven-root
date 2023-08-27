@@ -1,0 +1,1907 @@
+<!doctype html>
+<html class="no-js">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta name="HandheldFriendly" content="true" />
+		<meta name="MobileOptimized" content="320" />
+		<meta name="format-detection" content="telephone=no">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" href="../../reference/bootstrap-3.3.5/css/bootstrap.css" />
+		<link rel="stylesheet" href="../../reference/mui/css/mui.css" />
+		<link rel="stylesheet" href="../../reference/mui/css/mui.min.css" />
+		<link rel="stylesheet" href="../../css/common.css">
+		<link rel="stylesheet" href="../../css/detail.css">
+		<link rel="stylesheet" href="../../reference/assets/css/common.css" type="text/css" charset="utf-8" />
+	</head>
+	<style>
+		.warns {
+			width: 100%;
+			background: #000000;
+			opacity: 0.3;
+		}
+		
+		.warn {
+			width: 100%;
+			font-size: 19px;
+		}
+		
+		/* #topHeader {
+			background: #0090BB;
+		} */
+		
+		.aboveDiv,
+		.aboveAccept {
+			position: absolute;
+			z-index: 4999;
+			left: 10%;
+			top: 24%;
+			width: 80%;
+			background: #FFFFFF;
+			border-radius: 12px;
+		}
+		
+		.aboveDivss,
+		.aboveDivWarn {
+			position: absolute;
+			z-index: 4999;
+			left: 10%;
+			top: 27%;
+			height: 210px;
+			width: 80%;
+			background: #FFFFFF;
+			border-radius: 12px;
+		}
+		
+		.aboveDivWarn li {
+			width: 100%;
+			height: 95px;
+			line-height: 95px;
+			text-align: center;
+			margin-left: -8%;
+			border-bottom: 1px solid #E0E0E0;
+			font-size: 23px;
+		}
+		
+		.aboveDivss li {
+			width: 100%;
+			height: 70px;
+			line-height: 70px;
+			text-align: center;
+			margin-left: -8%;
+			border-bottom: 1px solid #E0E0E0;
+			font-size: 23px;
+		}
+		
+		.aboveDiv li,
+		.aboveAccept li {
+			width: 100%;
+			height: 80px;
+			line-height: 80px;
+			text-align: center;
+			margin-left: -8%;
+			/*border-bottom: 1px solid #E0E0E0;*/
+			font-size: 23px;
+		}
+		
+		#spanLi span {
+			display: inline-block;
+			width: 50%;
+		}
+		
+		.new-row-tcj {
+			height: 60px;
+			line-height: 60px;
+			display: flex;
+			justify-content: space-between;
+			font-size: 14px;
+		}
+		
+		.printDetail {
+			height: 32px;
+			width: 25%;
+			background: #2aabd2;
+			text-align: center;
+			line-height: 32px;
+			border-radius: 10px;
+			margin-top: 14px;
+			color: #fff;
+			box-shadow: 0 0 7px #2aabd2;
+		}
+		
+		.apply-bottom {
+			border-bottom: 1px solid #eee;
+		}
+		
+		.apply-bottom:last-child {
+			border-bottom: 0;
+		}
+		
+		.apply-content1 {
+			text-align: left;
+			height: 35px;
+			/*line-height: 47px;*/
+			/*font-weight: lighter;*/
+			color: #333;
+			padding-top: 12PX;
+		}
+		
+		.apply-content2 {
+			text-align: left;
+			height: 35px;
+			/*font-weight: lighter;*/
+			color: #333;
+			font-size: 12px;
+		}
+		
+		.warn {
+			color: #FFFFFF;
+			background: rgba(0, 0, 0, 0.6);
+			filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#7F000000, endcolorstr=#7F000000);
+			border-radius: 5px;
+			padding: 5px;
+			min-height: 30px;
+			position: fixed;
+			text-align: center;
+			left: 10%;
+			top: 55px;
+			z-index: 3000;
+			width: 80%;
+		}
+		
+		.wuzi-list-title {
+			background: #fff;
+			display: flex;
+			height: 40px;
+			line-height: 40px;
+			border-bottom: 1px solid #ddd;
+		}
+		
+		.shugang {
+			display: inline-block;
+			width: 5px;
+			height: 20px;
+			background: #2AABD2;
+			margin: 10px 18px;
+			border-radius: 15px;
+		}
+		
+		.shugang-text {
+			color: #444;
+			font-weight: bold;
+			font-size: 16px;
+		}
+		
+		.mui-bar-nav~.mui-content .mui-pull-top-pocket {
+			top: -6px;
+		}
+		
+		.loading1 {
+			position: fixed;
+			z-index: 999;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+		}
+		
+		.loading2 {
+			margin: 0 auto;
+			margin-top: 250px;
+			text-align: center;
+			line-height: 100px;
+		}
+	</style>
+
+	<body>
+		<div id="warn" class="warn" hidden>
+			<small></small>
+		</div>
+		<div id="loading" class="loading1" hidden>
+			<div class="loading2">
+				<span class="mui-spinner" style="width:80px;height:80px;"></span>
+			</div>
+		</div>
+		<div id="offCanvasWrapper" class="mui-off-canvas-wrap">
+			<!--侧滑菜单部分-->
+			<aside id="offCanvasSide" class="mui-off-canvas-left">
+				<div id="offCanvasSideScroll" class="mui-scroll-wrapper">
+					<div class="mui-scroll" style="height: 100%;">
+						<div id="listUl" class="listUl">
+
+						</div>
+						<div id="title" class="title" style="color:#0090BB;padding: 5px 20px;padding-left:0;padding-top:20px;position:fixed;z-index:3000;top:-16px;background:#333333;width:100%;height:45px;text-align: center;font-size: 22px;">检查项目</div>
+						<button id="offCanvasHide" type="button" class="mui-btn mui-btn-danger mui-btn-block content" style="padding: 5px 20px;position:fixed;z-index:3000;bottom:-10px;width:100%;height:45px;text-align: center;">关闭列表</button>
+
+					</div>
+				</div>
+				<p id="pTexts" style="text-align: center;margin-top: 70%;border-top:none;" hidden>加载中，请稍后...</p>
+				<span class="mui-spinner mui-spinners" style="height: 50px;width: 50px;margin-left: 40%;color:#FFFFFF;" hidden></span>
+			</aside>
+			<!--主界面部分-->
+
+			<div id="contentMain" class="mui-inner-wrap">
+				<header id="topHeader" class="mui-bar mui-bar-nav">
+					<h1 class="mui-title">任务列表</h1>
+					<button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+			        <span class="mui-icon mui-icon-left-nav"></span>
+			        返回
+			      </button>
+					<div id="peopeleQrcode" style="width: 140px;text-align:right;float:right;color: #FFFFFF;">
+						<span class="mui-icon mui-icon-contact"><span id="name" style="margin-left: 4px;"></span></span>
+					</div>
+				</header>
+
+				<div id="myModalsss" class="child-window" style="display: none;"></div>
+
+				<nav class="mui-bar mui-bar-tab" id="navPei" style="background-color:#fff;border-top:1px solid #B6B6B6;">
+					<!-- <a class="mui-tab-item" href="#">
+						<span class="mui-icon mui-icon-arrowthinleft" style="height:25px;width:25px;margin-top: -7px;"></span>
+						<span class="mui-tab-label" style="font-size: 17px;">回退</span>
+					</a> -->
+					<a class="mui-tab-item" href="#">
+						<span class="mui-icon mui-icon-checkmarkempty" style="height:25px;width:25px;margin-top: -7px;"></span>
+						<span class="mui-tab-label" style="font-size: 17px;">接单</span>
+					</a>
+					<!-- <a class="mui-tab-item" href="#">
+						<span class="mui-icon mui-icon-refreshempty" style="height:25px;width:25px;margin-top: -7px;"></span>
+						<span class="mui-tab-label" style="font-size: 17px;">转派</span>
+					</a> -->
+					<a class="mui-tab-item" href="#">
+						<span class="mui-icon mui-icon-undo" style="height:25px;width:25px;margin-top: -7px;"></span>
+						<span class="mui-tab-label" style="font-size: 17px;">完工</span>
+					</a>
+					<a class="mui-tab-item" href="#">
+						<span class="mui-icon mui-icon-refresh" style="height:25px;width:25px;margin-top: -7px;"></span>
+						<span class="mui-tab-label" style="font-size: 17px;">刷新</span>
+					</a>
+				</nav>
+				<div id="offCanvasContentScroll" class="mui-content mui-scroll-wrapper">
+					<div id="mui-scroll">
+						<!--菜单导航-->
+						<div id="slider">
+							<div id="sliderSegmentedControl" style="position: fixed;z-index:4000;top:44px;width:100%;border-bottom:1px solid #F1F1F1;">
+								<div class="row">
+									<div id="peijian" name="0" class="col-xs-6 col-sm-6 col-md-6 col-lg-6 center" style="border-bottom: 2px solid #007AFF;color:#007AFF;">
+										陪检
+									</div>
+									<div id="yunsongs" name="1" class="col-xs-6 col-sm-6 col-md-6 col-lg-6 center">
+										运送
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="overflow-y:auto;margin-top: 94px;padding-top: 0px;padding-bottom:100px">
+							<div class="mui-scroll">
+								<ul id="followCheck" class="mui-table-view mui-table-view-chevron" style="background-color:#eee;margin-top: -10px;">
+
+								</ul>
+							</div>
+						</div>
+						<!--<div id="followCheck" class="mui-table-view mui-table-view-chevron" style="background: #F0F0F0;">
+
+						</div>
+						<div id='loadMore' name="0" class='alert' role='alert' style='background-color:#F5F5F5;height:5rem;line-height:2rem;text-align:center;margin-bottom: 60px;border-bottom: 2px solid #E6E6E6;'>
+							加载更多
+						</div>-->
+					</div>
+					<p id="pText" style="text-align: center;padding-top: 43%;border-top:none;" hidden>加载中，请稍后...</p>
+					<span class="mui-spinner" style="height: 50px;width: 50px;margin-left: 42%;" hidden></span>
+
+				</div>
+				<div class="mui-off-canvas-backdrop"></div>
+			</div>
+
+			<div id="myModal" class="child-window" style="display: none;"></div>
+
+			<div id="qrcodeParent" style="width:250px;height:400px;" hidden>
+				<div style="text-align: center;color:black;margin-bottom: 20px;">
+					<img src="../../img/img.jpg" style="border-radius: 25px;;height:50px;width:50px;vertical-align: middle;">
+					<span id="qrcodeName" style="font-size:20px;margin-top: 25px;color:#FFFFFF;"></span>
+				</div>
+				<div id="qrcode"></div>
+				<p style="text-align: center;margin-top: 13px;color:#FFFFFF;">扫描上方二维码，进行人员转派</p>
+			</div>
+
+			<div class="aboveDiv" style="display: none;">
+				<ul id="aboveDiv">
+					<!--<li id="departmentBack" class="items" name="0">自回科室</li>
+				<li id="sendTo" class="items" name="1" style="border-bottom: none;">送达</li>-->
+				</ul>
+			</div>
+
+			<div class="aboveAccept" style="display: none;">
+				<ul id="aboveAccept">
+					<!--<li id="departmentBack" class="items" name="0">自回科室</li>
+				<li id="sendTo" class="items" name="1" style="border-bottom: none;">送达</li>-->
+				</ul>
+			</div>
+
+			<div class="aboveDivWarn" style="display: none;">
+				<ul>
+					<li class="items" style="height: 50px;line-height: 50px;font-weight: bold;">提示</li>
+					<li class="items" style="padding-left: 12px;">确认自回科室吗？</li>
+					<li class="items" id="spanLi" style="height: 65px;line-height: 65px;border-bottom: none;">
+						<span id="0">是</span><span id="1">否</span>
+					</li>
+				</ul>
+			</div>
+
+			<!--<div class="aboveDivss" style="display: none;">
+			<ul id="aboveDivss">
+				<li id="signture" class="items" name="0" style="font-weight: bold;">签名</li>
+				<li id="scan" class="items" name="1" style="font-weight: bold;">扫码</li>
+				<li class="items" name="7" id="cancel">取消</li>
+			</ul>
+		</div>-->
+		</div>
+
+		<!-- 模态框（Modal） -->
+		<div id="signature" style="margin-top:-25px;margin-bottom:60px;display: none;">
+		</div>
+		<!-- 模态框（Modal） -->
+		<div id="signatureSelf" style="margin-top:-25px;margin-bottom:60px;display: none;">
+		</div>
+		<div class="modal fade" id="myModalsssssss" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content" style="top: 116px;">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+		           &times;
+		      </button>
+						<h4 class="modal-title" id="myModalLabel">
+		        	签字人下方签名
+		      </h4>
+					</div>
+					<div class="modal-body js-signature" id="js-signature" style='height:18rem;' data-width="320" data-height="175">
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" onclick="clearCanvas()">
+		                    清除
+		        </button>
+						<button type="button" class="btn btn-info" data-dismiss="modal" onclick="saveSignature()">
+		                   确认
+		        </button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="modalSelf" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content" style="top: 116px;">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+		           &times;
+		      </button>
+						<h4 class="modal-title" id="myModalLabel">
+		        	签字人下方签名
+		      </h4>
+					</div>
+					<div class="modal-body js-signature" id="js-signatureSelf" style='height:18rem;' data-width="320" data-height="175">
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" onclick="clearCanvasSelf()">
+		                    清除
+		        </button>
+						<button type="button" class="btn btn-info" data-dismiss="modal" onclick="saveSignatureSelf()">
+		                   确认
+		        </button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+	<script src="../../reference/bootstrap-3.3.5/js/bootstrap.min.js" type="text/javascript"></script>
+	<script src="../../reference/mui/js/mui.js" type="text/javascript"></script>
+	<script src="../../js/jquery.qrcode.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../../js/common.js"></script>
+	<script type="text/javascript" src="../../cordova.js"></script>
+	<script src="../../js/jq-signature.js"></script>
+	<script type="text/javascript">
+		var baseUrl = localStorage.getItem('url');
+		var workNo = localStorage.getItem('workNo');
+		var worKname = localStorage.getItem('name');
+		var worKnamess = localStorage.getItem('name');
+		var workNoss = localStorage.getItem('workNo');
+		var deptCode = localStorage.getItem('deptCode');
+		var deptName = localStorage.getItem('deptName');
+		var deptCodess, deptAcceptCode = '';
+		var back_type, back_signature, back_signature_accept = '',
+			back_time = '',
+			service_score = '';
+
+		var page = 1;
+		var rows = 4;
+		var taskType = 'PJ';
+		var ids, patient_name, timer = null,
+			textName;
+		var buttonString = [];
+		$('.mui-spinner').show();
+		$('#pText').show(); //加载显示的按钮
+		init()
+
+		function init() {
+    $.ajax({
+        url: baseUrl + 'accompany',
+        type: 'post',
+		data:{
+            workNo,
+            // datagroupCode,
+		},
+        headers:{
+        	"methodName":"queryAccompanyNoByUser",
+        	"className":"AppAccompany"
+        },
+        success: function(data) {
+			// debugger
+            var list = data.map.obj;
+            var html = '';
+            var array = new Array();
+            console.log(data);
+            console.log(list);
+            if(list){
+                
+            if (list.length < rows) {
+                $('#loadMore').text('暂无更多数据');
+            } else {
+                $('#loadMore').text('加载更多');
+            }
+            for (var i = 0; i < list.length; i++) {
+								var id = list[i].id;
+                var status_code = list[i].statusCode;
+                billNo = list[i].accompanyNo;
+                var bedNo = list[i].bedNo;
+                // var from_address = list[i].from_address;
+                var carriageAddressName = list[i].carriageAddressName;
+                var carriageClassName =  list[i].carriageClassName;
+                // var rec_create_time = list[i].recCreateTime;
+                var statusName = list[i].statusName;
+                // var execute_user_name = list[i].recCreatorNo;
+                // var has_doctor = list[i].has_doctor;
+                // var transport_means_class_name = list[i].transport_means_class_name;
+                // var urgent = list[i].urgent;
+                // var viewDeptName = list[i].viewDeptName;
+                var recCreatorNo = list[i].recCreatorNo;
+                // var patient_bed = list[i].patient_bed;
+                var recCreateTime = list[i].recCreateTime; //创建时间
+								var billDesc = list[i].recCreateTime; //创建时间
+								var patient_name = list[i].recCreatorNo;
+								var accompanyProject =list[i].accompanyProject
+								var recCreateNo =list[i].recCreateNo
+                // var urgent = list[i].urgent; //是否加急
+                // var index = i + 1;
+                html += sendTaskList(id,status_code,billNo,bedNo,carriageAddressName,carriageClassName,statusName,recCreatorNo,recCreateTime,patient_name,billDesc,accompanyProject,recCreateNo)
+            }
+						$('#followCheck').html(html);
+					$('.mui-spinner').hide();
+					$('#pText').hide();
+        }else{
+            $('#loadMore').text('暂无更多数据');
+        }
+            $('#name').text(localStorage.getItem('name'));
+            $('#toAll').html(html);
+            $('#pText').hide();
+            $('.mui-spinner').hide();
+        },
+        complete: function(XMLHttpRequest, status) {
+            if (status == 'timeout') {
+                $('#pText').hide();
+                $('.mui-spinner').hide();
+                $("#loading").hide();
+                $('#warn small').html('连接超时，请检查您的网络是否通畅！');
+                $('#warn').show();
+                setTimeout("$('#warn').hide()", 3000);
+            } else if (status == 'warn') {
+                $('#pText').hide();
+                $('.mui-spinner').hide();
+                $("#loading").hide();
+                $('#warn small').html('连接失败，服务运行异常！');
+                $('#warn').show();
+                setTimeout("$('#warn').hide()", 3000);
+            }
+        }
+    })
+}
+
+//陪检
+function sendTaskList(id,status_code,billNo,bedNo,carriageAddressName,carriageClassName,statusName,recCreatorNo,recCreateTime,patient_name,billDesc,accompanyProject,recCreateNo) {
+    // debugger
+	var html = "";
+    html += "<div id='div-child' class='panel panel-danger' style='margin-bottom:10px;border:1px solid #DEDEDE;'>";
+    html += "<div style='margin-bottom:10px;border:none;'>";
+    html += "<div id='panel-heading' class='row' style='background:#FFF;border:none;font-size:21px;padding-top:15px;border-bottom:none;'>";
+    html += "<div id='rowss1' taskIds='" + id + "' carriageClass='" + carriageClassName + "' carriageTime='" + recCreateTime + "'  class='col-xs-6 col-sm-6 col-md-6 col-lg-6' style='padding-top:4px;'>";
+    html += "<span class='detail' style='color:#007AFF;'>" + bedNo + "</span></div>";
+    html += "<div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 right'>";
+	// 完成
+    if (status_code == '04') {
+        html += "<span style='display:inline-block;padding-top:4px;padding-right:8px;color:#0090BB;'>" + statusName + "</span>";
+    } else {
+        html += "<span style='display:inline-block;padding-top:4px;padding-right:8px;color:#F5A224;'>" + statusName + "</span>";
+    }
+    html += "<div id='checkedDivs' name='0' status_code='" + status_code + "' class='" + id + "' billNo='" + billNo + "' style='width:125px;height:75px;background:transparent;position:absolute;z-index:3000;top:0;right:0;'></div>";
+    html += "<div id='checkedDivsg' style='display:inline-block;border:1px solid #DEDEDE;border-radius:3px;width:25px;height:25px;float:right;'></div>";
+    html += "</div></div>";
+    html += "<div class='panel-bodys' taskIds='" + id + "' carriageClass='" + carriageClassName + "'  carriageTime='" + recCreateTime + "'    style='border-bottom:none;border-top:none;'>";
+    html += "<div class='row' style='margin-top:-4px;padding-top:16px;font-size:21px;padding-bottom:2px;'>";
+
+    // if (urgent != "") {
+    //     html += "<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='font-size:20px;color:#e4134b;'>" + from_dept_name + "</div>";
+    // } else {
+        html += "<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='font-size:20px;color:#007AFF;'>" + accompanyProject + "</div>";
+    // }
+
+    html += "</div></div></div>";
+
+    //******************
+    html += "<div  style='border-bottom:none;border-top:none;'>";
+    html += "<div class='row' style='margin-top:-4px;padding-top:8px;font-size:21px;  padding-bottom: 3px;line-height: 25px;'>";
+    if (billDesc != "") {
+
+        html += "<span class='col-xs-8 col-sm-8 col-md-8 col-lg-8 font-grey'>" + billDesc + "</span>";
+    } else {
+        html += "<span class='col-xs-8 col-sm-8 col-md-8 col-lg-8 font-grey'></span>";
+    }
+    if (patient_name != "") {
+        html += "<span class='col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey'>" + recCreateNo + "</span>";
+    } else {
+        html += "<span class='col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey'></span>";
+    }
+    html += "</div></div></div>";
+    //***********
+
+    return html;
+}
+
+// ===========================================================================================================
+		// loadButton();
+
+		// function loadButton() {
+		// 	$("#loading").show();
+		// 	$.ajax({
+		// 		url: baseUrl + 'app_carriageAppController.do?queryCarriageItemFinishTypes',
+		// 		type: 'post',
+		// 		data: {},
+		// 		success: function(data) {
+		// 			$("#loading").hide();
+		// 			console.log(data)
+		// 			if(data.respCode == 200) {
+		// 				buttonString = data.obj[0].PJ;
+		// 				console.log(buttonString)
+		// 				ajaxDatas();
+		// 			} else {
+		// 				showMsg(data.respMsg);
+		// 			}
+		// 		}
+		// 	})
+
+		// }
+
+		// function ajaxDatas() {
+		// 	$.ajax({
+		// 		url: baseUrl + 'app_carriageAppController.do?queryCurrentTaskListAndItem',
+		// 		type: 'post',
+		// 		data: {
+		// 			currentUser: workNo,
+		// 			taskType: taskType,
+		// 			page: page,
+		// 			rows: rows
+		// 		},
+		// 		success: function(data) {
+		// 			var list = data.obj;
+		// 			var html = '';
+		// 			var array = new Array();
+		// 			console.log(list);
+		// 			//					if(list.length < rows) {
+		// 			//						$('#loadMore').text('暂无更多数据');
+		// 			//					} else {
+		// 			//						$('#loadMore').text('加载更多');
+		// 			//					}
+		// 			for(var i = 0; i < list.length; i++) {
+		// 				var status_code = list[i].status_code;
+		// 				var billNo = list[i].billNo;
+		// 				var createCateView = list[i].createCateView;
+		// 				var from_address = list[i].from_address;
+		// 				var from_dept_name = list[i].from_dept_name;
+		// 				var id = list[i].id;
+		// 				var status_code = list[i].status_code;
+		// 				var status_name = list[i].status_name;
+		// 				var execute_user_name = list[i].execute_user_name;
+		// 				var has_doctor = list[i].has_doctor;
+		// 				var transport_means_class_name = list[i].transport_means_class_name;
+		// 				var urgent = list[i].urgent;
+		// 				var viewDeptName = list[i].viewDeptName;
+		// 				var patient_name = list[i].patient_name; //病人姓名
+		// 				var patient_bed = list[i].patient_bed;
+		// 				var billDesc = list[i].billDesc; //备注
+		// 				var urgent = list[i].urgent;
+		// 				var hideInfo = list[i].itemInfo.Y;
+		// 				var showInfo = list[i].itemInfo.N;
+		// 				//console.log("备注" + billDesc);
+		// 				//console.log("姓名：" + patient_name)
+		// 				//						
+		// 				//						console.log(showInfo)
+		// 				var index = i + 1;
+		// 				html += taskList(urgent, billDesc, index, viewDeptName, createCateView, status_code, billNo, from_address, from_dept_name, id, status_code, status_name, patient_name, execute_user_name, transport_means_class_name, patient_bed, showInfo, hideInfo);
+		// 			}
+		// 			$('#name').text(worKname);
+		// 			$('#followCheck').html(html);
+		// 			$('.mui-spinner').hide();
+		// 			$('#pText').hide();
+		// 		},
+		// 		complete: function(XMLHttpRequest, status) {　
+		// 			if(status == 'timeout') {
+		// 				$('#pText').hide();
+		// 				$('.mui-spinner').hide();
+		// 				/*$('#message').hide();*/
+		// 				$("#loading").hide();
+		// 				$('#warn small').html('连接超时，请检查您的网络是否通畅！');
+		// 				$('#warn').show();
+		// 				setTimeout("$('#warn').hide()", 3000);　　　
+		// 			} else if(status == 'warn') {
+		// 				$('#pText').hide();
+		// 				$('.mui-spinner').hide();
+		// 				/*$('#message').hide();*/
+		// 				$("#loading").hide();
+		// 				$('#warn small').html('连接失败，服务运行异常！');
+		// 				$('#warn').show();
+		// 				setTimeout("$('#warn').hide()", 3000);　
+		// 			}　
+		// 		}
+		// 	})
+		// }
+
+		//选中需扫码的单据
+		mui('#followCheck').on('tap', 'div#checkedDiv', function() {
+			var nameValue = $(this).attr('name');
+			if(nameValue == '0') {
+				$(this).parent().find('div#checkedDivBlew').html('<span class="glyphicon glyphicon-ok" style="color:#007AFF;"></span>');
+				$(this).attr('name', '1');
+				$(this).parent().parent().parent().parent().find('div.panel-bodys');
+			} else {
+				$(this).parent().find('div#checkedDivBlew').html('');
+				$(this).attr('name', '0');
+				$(this).parent().parent().parent().parent().find('div.panel-bodys');
+			}
+		})
+
+		//按钮点击事件////陪检
+		var judgeCao = '';
+		mui("#navPei").on('tap', '.mui-tab-item', function() {
+			var classS = this.getElementsByTagName("span")[1];
+			var values = $(classS).text();
+			if(values == '转派') {
+				var kk = '0';
+				if(taskType == 'PJ') {
+					$('#followCheck div#div-child').each(function(index, element) {
+						var status_code = $(this).find('div#checkedDiv').attr('status_code');
+						var codeNameSure = $(this).find('div#checkedDiv').attr('name');
+						var id = $(this).find('div#checkedDiv').attr('class');
+						if(codeNameSure == '1') {
+							kk = '1';
+						}
+					})
+					if(kk == '0') {
+						$('#warn small').html('请选择需要转派的单据 !');
+						$('#warn').fadeIn(500);
+						setTimeout("$('#warn').fadeOut(500)", 3000);
+						return;
+					}
+					qrcodeCordova();
+				}
+			} else if(values == '完工') {
+				var kk = '0',
+					statuArray = new Array();
+				judgeCao = 'over';
+
+				$('#followCheck div#div-child').each(function(index, element) {
+					var status_code = $(this).find('div#checkedDiv').attr('status_code');
+					var codeNameSure = $(this).find('div#checkedDiv').attr('name');
+					var id = $(this).find('div#checkedDiv').attr('class');
+					if(codeNameSure == '1') {
+						kk = '1';
+						statuArray.push(status_code);
+					}
+				})
+
+				if(kk == '0') {
+					$('#warn small').html('请选择需要完工的单据 !');
+					$('#warn').fadeIn(500);
+					setTimeout("$('#warn').fadeOut(500)", 3000);
+					return;
+				}
+
+				//console.log(statuArray);
+				if(statuArray.indexOf('03') != -1 || statuArray.indexOf('02') != -1) {
+					$('#warn small').html('请选择待完工的单据完工!');
+					$('#warn').fadeIn(500);
+					setTimeout("$('#warn').fadeOut(500)", 3000);
+					return;
+				}
+
+				//完工是否直接完工
+				var btnArray = ['取消', '确认'];
+				mui.confirm('请确认已完成的具体项目', '提醒', btnArray, function(e) {
+					if(e.index == 1) {
+						judgeData();
+					}
+				})
+
+			} else if(values == '受理') {
+				judgeCao = 'accept';
+				var opCode = 'accept',
+					arrayAccept = '';
+				var kk = '0';
+				$('#followCheck div#div-child').each(function(index, element) {
+					var status_code = $(this).find('div#checkedDiv').attr('status_code');
+					var codeNameSure = $(this).find('div#checkedDiv').attr('name');
+					var id = $(this).find('div#checkedDiv').attr('class') + ',';
+					if(codeNameSure == '1' && status_code == '02') {
+						arrayAccept += id;
+						kk = '1';
+					}
+				})
+
+				if(kk == '0') {
+					$('#warn small').html('请选择需要受理的单据，或检查单据是否可受理！');
+					$("#warn").fadeIn(500);
+					setTimeout("$('#warn').fadeOut(500)", 3000);
+					return;　
+				}
+				judgeAccept(opCode, arrayAccept);
+				/*Accepted(opCode,arrayAccept);*/
+			} else if(values == '回退') {
+				var opCode = 'reback';
+				var arrayAccept = '',
+					kk = '0';
+				$('#followCheck div#div-child').each(function(index, element) {
+					var status_code = $(this).find('div#checkedDiv').attr('status_code');
+					var codeNameSure = $(this).find('div#checkedDiv').attr('name');
+					var id = $(this).find('div#checkedDiv').attr('class') + ',';
+					if(codeNameSure == '1') {
+						arrayAccept += id;
+						kk = '1';
+					}
+				})
+				if(kk == '0') {
+					$('#warn small').html('请选择需要回退的单据!');
+					$("#warn").fadeIn(500);
+					setTimeout("$('#warn').fadeOut(500)", 3000);
+					return;　
+				}
+				Accepted(opCode, arrayAccept);
+			} else if(values == '刷新') {
+				location.reload();
+			}
+		})
+
+		//判断是否显示
+		function judgeData() {
+			var arrayValue = new Array(),
+				arrayComplete = new Array(),
+				numComplete = 0;
+			$.ajax({
+				url: baseUrl + 'app_carriageAppController.do?queryBackTypes',
+				type: "post",
+				headers:{
+					"methodName":"finishBillNo",
+					"className":"AppCarriage"
+				},
+				success: function(data) {
+					if(data.respCode == 200 || data.respCode == '200') {
+						var billNo = data.map.obj[0].billNo
+            location.href = "pic.html?billId="+billNo +"className=AppAccompany";
+					// 	var list = data.obj;
+					// 	var html = '';
+
+					// 	for(var i = 0; i < list.length; i++) {
+					// 		var paramValue1 = list[i].paramValue1;
+					// 		var typecode = list[i].typecode;
+					// 		var typename = list[i].typename;
+					// 		arrayValue.push(paramValue1);
+					// 		arrayComplete.push({ 'paramValue1s': paramValue1, 'typecodes': typecode });
+
+					// 		if(paramValue1 == 'Y') {
+					// 			numComplete += 1;
+					// 			html += '<li class="items" typecode="' + typecode + '">' + typename + '</li>';
+					// 		}
+					// 	}
+
+					// 	//判断可配置项
+					// 	if(arrayValue.indexOf('Y') == -1) {
+					// 		back_type = '03';
+					// 		funJudge();
+					// 		return;
+					// 	}
+
+					// 	if(numComplete == 1) {
+					// 		for(var j = 0; j < arrayComplete.length; j++) {
+					// 			var paramValue1Judge = arrayComplete[j].paramValue1s;
+					// 			var typecodesJudge = arrayComplete[j].typecodes;
+					// 			if(paramValue1Judge == 'Y') {
+					// 				if(typecodesJudge == '01' || typecodesJudge == 01) {
+					// 					back_type = '01';
+					// 					qrcodeCordovasss();
+					// 				} else if(typecodesJudge == '02' || typecodesJudge == 02) {
+					// 					$('#myModalsssssss').modal('show');
+					// 					back_type = '02';
+					// 				} else if(typecodesJudge == '03' || typecodesJudge == 03) {
+					// 					$('.aboveDivWarn').css('display', 'block');
+					// 					back_type = '03';
+					// 					mui('#spanLi').on('tap', 'span', function() {
+					// 						var idTexe = this.getAttribute('id');
+					// 						if(idTexe == '0') {
+					// 							var arrayAccepts = '';
+					// 							back_signature = '';
+					// 							workNoss = localStorage.getItem('workNo');
+					// 							worKnamess = localStorage.getItem('name');
+					// 							$('#followCheck div#div-child').each(function(index, element) {
+					// 								var status_code = $(this).find('div#checkedDiv').attr('status_code');
+					// 								var codeNameSure = $(this).find('div#checkedDiv').attr('name');
+					// 								var id = $(this).find('div#checkedDiv').attr('class') + ',';
+					// 								if(codeNameSure == '1') {
+					// 									arrayAccepts += id;
+					// 								}
+					// 							})
+					// 							backDepartment(arrayAccepts);
+					// 						} else {
+					// 							$('.aboveDivWarn').css('display', 'none');
+					// 						}
+					// 					})
+					// 				}
+					// 			}
+					// 		}
+					// 		return;
+					// 	}
+
+					// 	$('#aboveDiv').html(html);
+					// 	$('.aboveDiv').css('display', 'block');
+					// 	$('#myModal').css('display', 'block');
+					}
+				},
+				complete: function(XMLHttpRequest, status) {　
+					if(status == 'timeout') {
+						$("#loading").hide();
+						$('#warn small').html('连接超时，请检查您的网络是否通畅！');
+						$('#warn').show();
+						setTimeout("$('#warn').hide()", 3000);　　　
+					} else if(status == 'warn') {
+						$("#loading").hide();
+						$('#warn small').html('连接失败，服务运行异常！');
+						$('#warn').show();
+						setTimeout("$('#warn').hide()", 3000);　
+					}　
+				}
+			});
+		}
+
+		function funJudge() {
+			var arrayAccepts = '';
+			back_signature = '';
+			workNoss = localStorage.getItem('workNo');
+			worKnamess = localStorage.getItem('name');
+			$('#followCheck div#div-child').each(function(index, element) {
+				var status_code = $(this).find('div#checkedDiv').attr('status_code');
+				var codeNameSure = $(this).find('div#checkedDiv').attr('name');
+				var id = $(this).find('div#checkedDiv').attr('class') + ',';
+				if(codeNameSure == '1') {
+					arrayAccepts += id;
+				}
+			})
+			backDepartment(arrayAccepts);
+		}
+
+		function qrcodeCordova() {
+			cordova.plugins.barcodeScanner.scan(
+				function(result) {
+					if(result.text != "") {
+						scaned(result.text);
+					}
+				},
+				function(error) {
+					$('#warn small').html('转派失败，请重试！');
+					$("#warn").fadeIn(500);
+					setTimeout("$('#warn').fadeOut(500)", 3000);
+				}
+			)
+		}
+
+		function qrcodeAccept() {
+			cordova.plugins.barcodeScanner.scan(
+				function(result) {
+					if(result.text != "") {
+						scaneAccept(result.text);
+					}
+				},
+				function(error) {
+					$('#warn small').html('自回科室失败，请重试！');
+					$("#warn").fadeIn(500);
+					setTimeout("$('#warn').fadeOut(500)", 3000);
+				}
+			)
+		}
+
+		function qrcodeCordovasss() {
+			cordova.plugins.barcodeScanner.scan(
+				function(result) {
+					if(result.text != "") {
+						scanedsss(result.text);
+					}
+				},
+				function(error) {
+					$('#warn small').html('自回科室失败，请重试！');
+					$("#warn").fadeIn(500);
+					setTimeout("$('#warn').fadeOut(500)", 3000);
+				}
+			)
+		}
+
+		function judgeAccept(opCode, arrayAccept) {
+			//清空签名区域
+			var arrayAcceptssss = new Array(),
+				arrays = new Array(),
+				num = 0;
+			$.ajax({
+				url: baseUrl + 'app_carriageAppController.do?queryConfimTypes',
+				type: "post",
+				success: function(data) {
+					if(data.respCode == 200 || data.respCode == '200') {
+						var list = data.obj;
+						var html = '';
+
+						for(var i = 0; i < list.length; i++) {
+							var paramValue1s = list[i].paramValue1;
+							var typecodes = list[i].typecode;
+							var typenames = list[i].typename;
+							arrayAcceptssss.push(paramValue1s);
+							arrays.push({ 'paramValue1s': paramValue1s, 'typecodes': typecodes });
+
+							if(paramValue1s == 'Y') {
+								num += 1;
+								html += '<li class="items" typecode="' + typecodes + '">' + typenames + '</li>';
+							}
+						}
+
+						//判断可配置项
+						if(arrayAcceptssss.indexOf('Y') == -1) {
+							Accepted(opCode, arrayAccept);
+							return;
+						}
+
+						if(num == 1) {
+							for(var j = 0; j < arrays.length; j++) {
+								var paramValue1Judge = arrays[j].paramValue1s;
+								var typecodesJudge = arrays[j].typecodes;
+								if(paramValue1Judge == 'Y') {
+									if(typecodesJudge == '01' || typecodesJudge == 01) {
+										qrcodeAccept();
+									} else if(typecodesJudge == '02' || typecodesJudge == 02) {
+										$('#myModalsssssss').modal('show');
+									} else if(typecodesJudge == '03' || typecodesJudge == 03) {
+										Accepted(opCode, arrayAccept);
+									}
+								}
+							}
+							return;
+						}
+
+						$('#aboveAccept').html(html);
+						$('.aboveAccept').css('display', 'block');
+						$('#myModal').css('display', 'block');
+					}
+				},
+				complete: function(XMLHttpRequest, status) {　
+					if(status == 'timeout') {
+						$("#loading").hide();
+						$('#warn small').html('连接超时，请检查您的网络是否通畅！');
+						$('#warn').show();
+						setTimeout("$('#warn').hide()", 3000);　　　
+					} else if(status == 'warn') {
+						$("#loading").hide();
+						$('#warn small').html('连接失败，服务运行异常！');
+						$('#warn').show();
+						setTimeout("$('#warn').hide()", 3000);　
+					}　
+				}
+			});
+		}
+
+		function Accepted(opCode, arrayAccept) {
+			//console.log(arrayAccept);
+			$.ajax({
+				url: baseUrl + 'app_carriageAppController.do?billToAcceptOrReback',
+				type: 'post',
+				data: {
+					opCode: opCode,
+					taskID: arrayAccept,
+					currentUser: workNo,
+					currentUserName: worKname,
+					scanCode: deptAcceptCode,
+					signatures: back_signature_accept
+				},
+				success: function(data) {
+					if(data.respCode == 200 || data.respCode == '200') {
+						if(taskType == 'PJ') {
+							location.reload();
+						}
+					} else {
+						$('#warn small').html(data.respMsg);
+						$("#warn").fadeIn(500);
+						setTimeout("$('#warn').fadeOut(500)", 3000);
+						return;
+					}
+				},
+				complete: function(XMLHttpRequest, status) {　
+					if(status == 'timeout') {
+						$("#loading").hide();
+						$('#warn small').html('连接超时，请检查您的网络是否通畅！');
+						$('#warn').show();
+						setTimeout("$('#warn').hide()", 3000);　　　
+					} else if(status == 'warn') {
+						$("#loading").hide();
+						$('#warn small').html('连接失败，服务运行异常！');
+						$('#warn').show();
+						setTimeout("$('#warn').hide()", 3000);　
+					}　
+				}
+			})
+		}
+
+		//扫码及扫码
+		function departmentScan(arrayAccepts, nameScan) {
+			$.ajax({
+				url: baseUrl + 'app_carriageAppController.do?backToDepartmentByScan',
+				type: 'post',
+				data: {
+					taskID: arrayAccepts,
+					currentUser: workNo,
+					currentUserName: worKname,
+					back_type: back_type,
+					back_time: back_time,
+					back_confirm_man_account: workNoss,
+					back_confirm_man_name: nameScan,
+					back_signature: back_signature,
+					service_score: service_score,
+					deptCode: deptCodess
+				},
+				success: function(data) {
+					//console.log(data);
+					if(data.respCode == 200 || data.respCode == '200') {
+						judgeEve(arrayAccepts);
+					} else {
+						$('#warn small').html(data.respMsg);
+						$("#warn").fadeIn(500);
+						setTimeout("$('#warn').fadeOut(500)", 3000);
+						return;
+					}
+				},
+				complete: function(XMLHttpRequest, status) {　
+					if(status == 'timeout') {
+						$("#loading").hide();
+						$('#warn small').html('连接超时，请检查您的网络是否通畅！');
+						$('#warn').show();
+						setTimeout("$('#warn').hide()", 3000);　　　
+					} else if(status == 'warn') {
+						$("#loading").hide();
+						$('#warn small').html('连接失败，服务运行异常！');
+						$('#warn').show();
+						setTimeout("$('#warn').hide()", 3000);　
+					}　
+				}
+			})
+		}
+
+		function judgeEve(arrayAccepts) {
+			$.ajax({
+				url: baseUrl + 'app_carriageAppController.do?queryEvalTypes',
+				type: 'post',
+				data: {
+					taskID: arrayAccepts,
+					currentUser: workNo,
+					currentUserName: worKname,
+					back_type: back_type,
+					back_time: back_time,
+					back_confirm_man_account: workNoss,
+					back_confirm_man_name: worKnamess,
+					back_signature: back_signature,
+					service_score: service_score,
+					deptCode: deptCodess
+				},
+				success: function(data) {
+					var listdata = data.obj;
+					if(data.respCode == 200 || data.respCode == '200') {
+						var arraryData = {
+							'taskID': arrayAccepts,
+							'currentUser': workNo,
+							'currentUserName': worKname,
+							'taskType': 'PJ'
+						}
+						var jsonArray = JSON.stringify(arraryData);
+
+						for(var i = 0; i < listdata.length; i++) {
+							var typecode = listdata[i].typecode;
+							var paramValue1 = listdata[i].paramValue1;
+							if(typecode == '01') {
+								if(paramValue1 == 'Y') {
+									location.href = "evalStar.html?" + encodeURIComponent(jsonArray);
+								} else {
+									location.reload();
+								}
+							}
+						}
+					}
+				},
+				complete: function(XMLHttpRequest, status) {　
+					if(status == 'timeout') {
+						$("#loading").hide();
+						$('#warn small').html('连接超时，请检查您的网络是否通畅！');
+						$('#warn').show();
+						setTimeout("$('#warn').hide()", 3000);　　　
+					} else if(status == 'warn') {
+						$("#loading").hide();
+						$('#warn small').html('连接失败，服务运行异常！');
+						$('#warn').show();
+						setTimeout("$('#warn').hide()", 3000);　
+					}　
+				}
+			})
+		}
+		//自回科室
+		function backDepartment(arrayAccepts) {
+			$.ajax({
+				url: baseUrl + 'app_carriageAppController.do?backToDepartment',
+				type: 'post',
+				data: {
+					taskID: arrayAccepts,
+					currentUser: workNo,
+					currentUserName: worKname,
+					back_type: back_type,
+					back_time: back_time,
+					back_confirm_man_account: workNoss,
+					back_confirm_man_name: worKnamess,
+					back_signature: back_signature,
+					service_score: service_score,
+					deptCode: deptCode
+				},
+				success: function(data) {
+					//console.log(data);
+					if(data.respCode == 200 || data.respCode == '200') {
+						if(taskType == 'PJ') {
+							location.reload();
+						}
+					} else {
+						$('#warn small').html(data.respMsg);
+						$("#warn").fadeIn(500);
+						setTimeout("$('#warn').fadeOut(500)", 3000);
+						return;
+					}
+				},
+				complete: function(XMLHttpRequest, status) {　
+					if(status == 'timeout') {
+						$("#loading").hide();
+						$('#warn small').html('连接超时，请检查您的网络是否通畅！');
+						$('#warn').show();
+						setTimeout("$('#warn').hide()", 3000);　　　
+					} else if(status == 'warn') {
+						$("#loading").hide();
+						$('#warn small').html('连接失败，服务运行异常！');
+						$('#warn').show();
+						setTimeout("$('#warn').hide()", 3000);　
+					}　
+				}
+			})
+		}
+
+		function scaned(r) {
+			var codeName = decodeURIComponent(r);
+			var index = codeName.indexOf(',');
+			var indexFina = codeName.indexOf('.');
+			var workNos = codeName.substring(0, index);
+			var worKname = codeName.substring(index + 1, indexFina);
+
+			if(codeName.indexOf(',') == -1 || codeName.indexOf('.') == -1) {
+				$('#warn').fadeIn(500);
+				$('#warn small').html('请扫描接收人信息 ！');
+				setTimeout("$('#warn').fadeOut(500);", 2500);
+				return;
+			}
+
+			if(taskType == 'PJ') {
+				var zhaunArray = new Array();
+				$('#followCheck div#div-child').each(function(index, element) {
+					var codeName = $(this).find('div#checkedDiv').attr('name');
+					var id = $(this).find('div#checkedDiv').attr('class') + ',';
+					var status_code = $(this).find('div#checkedDiv').attr('status_code');
+					if(codeName == '1') {
+						zhaunArray += id;
+					}
+				});
+				changeDan(zhaunArray, workNos, worKname);
+			}
+		}
+
+		//resultss
+		function scanedsss(resultss) {
+			var codeName = decodeURIComponent(resultss);
+			var index = codeName.indexOf(',');
+			var indexFina = codeName.indexOf('.');
+			var nameScan = codeName.substring(index + 1, indexFina);
+
+			workNoss = codeName.substring(0, index);
+			deptCodess = codeName.substring(indexFina + 1, codeName.length);
+
+			if(taskType == 'PJ') {
+				var arrayAccepts = new Array();
+				$('#followCheck div#div-child').each(function(index, element) {
+					var codeName = $(this).find('div#checkedDiv').attr('name');
+					var id = $(this).find('div#checkedDiv').attr('class') + ',';
+					var status_code = $(this).find('div#checkedDiv').attr('status_code');
+					if(codeName == '1') {
+						arrayAccepts += id;
+					}
+				});
+				departmentScan(arrayAccepts, nameScan);
+			}
+		}
+
+		//resultss
+		function scaneAccept(resultss) {
+			var codeName = decodeURIComponent(resultss);
+			var index = codeName.indexOf(',');
+			var indexFina = codeName.indexOf('.');
+			var nameScan = codeName.substring(index + 1, indexFina);
+
+			/*workNoss = codeName.substring(0,index);*/
+			deptAcceptCode = codeName.substring(indexFina + 1, codeName.length);
+
+			if(taskType == 'PJ') {
+				var arrayAccept = new Array(),
+					opCode = 'accept';
+				$('#followCheck div#div-child').each(function(index, element) {
+					var codeName = $(this).find('div#checkedDiv').attr('name');
+					var id = $(this).find('div#checkedDiv').attr('class') + ',';
+
+					if(codeName == '1') {
+						arrayAccept += id;
+					}
+				});
+
+				Accepted(opCode, arrayAccept);
+			}
+		}
+
+		function changeDan(zhaunArray, workNos, worKname) {
+			$.ajax({
+				url: baseUrl + 'app_carriageAppController.do?saveForBillToChange',
+				type: 'post',
+				data: {
+					taskID: zhaunArray,
+					currentUser: workNo,
+					currentUserName: worKname,
+					changeUser: workNos,
+					changeUserName: worKname
+				},
+				success: function(data) {
+					if(data.respCode == 200 || data.respCode == '200') {
+						location.reload();
+					} else {
+						$('#warn small').html(data.respMsg);
+						$('#warn').fadeIn(500);
+						setTimeout("$('#warn').fadeOut(500)", 3000);
+						return;
+					}
+				},
+				complete: function(XMLHttpRequest, status) {　
+					if(status == 'timeout') {
+						$("#loading").hide();
+						$('#warn small').html('连接超时，请检查您的网络是否通畅！');
+						$('#warn').fadeIn(500);
+						setTimeout("$('#warn').fadeOut(500)", 3000);　　　
+					} else if(status == 'warn') {
+						$("#loading").hide();
+						$('#warn small').html('连接失败，服务运行异常！');
+						$('#warn').fadeIn(500);
+						setTimeout("$('#warn').fadeOut(500)", 3000);　
+					}　
+				}
+			})
+		}
+
+		//加载更多
+		//		var loadMores = document.getElementById("loadMore");
+		//		loadMores.addEventListener('tap', function() {
+		//			if($('#loadMore').text().trim() == '加载更多') {
+		//				rows += 4;
+		//				ajaxDatas();
+		//				$('#loadMore').text('正在加载中...');
+		//			}
+		//		}, false);
+
+		var peopeleQrcodeDiv = document.getElementById("peopeleQrcode");
+		var contentMainss = document.getElementById("contentMain");
+		var qrcodeParents = document.getElementById("qrcodeParent");
+		var myModalsss = document.getElementById("myModalsss");
+
+		peopeleQrcodeDiv.addEventListener('tap', function() {
+			qrcodeParents.style.display = 'block';
+			myModalsss.style.display = 'block';
+			$('#contentMain').addClass('blur');
+			$('#qrcodeName').text(name);
+		}, false);
+
+		qrcodeParents.addEventListener('tap', function() {
+			$('#contentMain').removeClass('blur');
+			this.style.display = 'none';
+			myModalsss.style.display = 'none';
+		}, true);
+
+		//关闭菜单
+		document.getElementById('offCanvasHide').addEventListener('tap', function() {
+			offCanvasWrapper.offCanvas('close');
+		});
+
+		//禁用ios平台原生侧滑关闭页面
+		if(mui.os.plus && mui.os.ios) {
+			mui.plusReady(function() {
+				plus.webview.currentWebview().setStyle({
+					'popGesture': 'none'
+				});
+			});
+		}
+
+		var elem = document.querySelector('body');
+		elem.addEventListener("dragend", function() {
+			/* alert('加载中...');*/
+		});
+
+		//生成二维码
+		$(function() {
+			//更详细的配置
+			console.log(workNo, localStorage.getItem('name'), deptCode);
+			$('#qrcode').qrcode({
+				text: encodeURIComponent(workNo + ',' + localStorage.getItem('name') + '.' + deptCode),
+				width: 250,
+				height: 250,
+				background: "#FFFFFF",
+				foreground: "black"
+			});
+		})
+
+		//显示运送、陪检
+		mui('#sliderSegmentedControl').on('tap', 'div.center', function() {
+			var idText = this.getAttribute('name');
+			if(idText == '0') {
+				location.reload();
+			} else if(idText == '1') {
+				location.href = "yunsong.html";
+			}
+		})
+
+		//受理
+		mui('#aboveAccept').on('tap', 'li.items', function() {
+			var typecodeJudges = this.getAttribute('typecode');
+
+			if(typecodeJudges == '01') {
+
+				qrcodeAccept();
+
+			} else if(typecodeJudges == '02') {
+
+				$('#myModalsssssss').modal('show');
+
+			} else if(typecodeJudges == '03') {
+
+				var opCode = 'accept',
+					arrayAccept = '';
+				$('#followCheck div#div-child').each(function(index, element) {
+					var codeNameSure = $(this).find('div#checkedDiv').attr('name');
+					var id = $(this).find('div#checkedDiv').attr('class') + ',';
+					if(codeNameSure == '1') {
+						arrayAccept += id;
+					}
+				})
+
+				Accepted(opCode, arrayAccept);
+			}
+		})
+
+		mui('#aboveDiv').on('tap', 'li.items', function() {
+			var typecodeJudge = this.getAttribute('typecode');
+			back_type = typecodeJudge;
+			if(typecodeJudge == '01') {
+
+				qrcodeCordovasss();
+
+			} else if(typecodeJudge == '02') {
+				$('#myModalsssssss').modal('show');
+				/*$('#warn small').html('签名签收功能暂未开通！');
+    $('#warn').fadeIn(500);
+    setTimeout("$('#warn').fadeOut(500)", 3000);
+    return;*/
+
+			} else if(typecodeJudge == '03') {
+
+				$('.aboveDivWarn').css('display', 'block');
+				mui('#spanLi').on('tap', 'span', function() {
+					var idTexe = this.getAttribute('id');
+					if(idTexe == '0') {
+						var arrayAccepts = '';
+						back_signature = '';
+						workNoss = localStorage.getItem('workNo');
+						worKnamess = localStorage.getItem('name');
+						$('#followCheck div#div-child').each(function(index, element) {
+							var status_code = $(this).find('div#checkedDiv').attr('status_code');
+							var codeNameSure = $(this).find('div#checkedDiv').attr('name');
+							var id = $(this).find('div#checkedDiv').attr('class') + ',';
+							if(codeNameSure == '1') {
+								arrayAccepts += id;
+							}
+						})
+						backDepartment(arrayAccepts);
+
+					} else {
+						$('.aboveDivWarn').css('display', 'none');
+					}
+				})
+			}
+		})
+
+		//签名
+		$(document).on('ready', function() {
+			if($('.js-signature').length) {
+				$('.js-signature').jqSignature();
+			}
+		});
+
+		function clearCanvas() {
+			$('#js-signature').jqSignature('clearCanvas'); //$('#saveBtn').attr('disabled', true);
+			$("#signature").html("");
+		}
+
+		function saveSignature() {
+			$('#signature').empty();
+			var dataUrl = $('#js-signature').jqSignature('getDataURL');
+			/*console.log(dataUrl);*/
+			var img = $('<img>').attr('src', dataUrl);
+			$('#signature').html(img);
+
+			//获取图片
+			$("#signature img").each(function(index, element) {
+				if(judgeCao == 'over') {
+					back_signature = getBase64Image(element);
+				} else {
+					back_signature_accept = getBase64Image(element);
+				}
+			})
+
+			var arrayAccepts = '',
+				arrayAccept = '';
+
+			$('#followCheck div#div-child').each(function(index, element) {
+				var status_code = $(this).find('div#checkedDiv').attr('status_code');
+				var codeNameSure = $(this).find('div#checkedDiv').attr('name');
+				var id = $(this).find('div#checkedDiv').attr('class') + ',';
+				if(codeNameSure == '1') {
+					arrayAccepts += id;
+					arrayAccept += id;
+				}
+			})
+
+			if(judgeCao == 'over') {
+				AcceptSignature(arrayAccepts);
+			} else {
+				var opCode = 'accept';
+				Accepted(opCode, arrayAccept);
+			}
+			/*backDepartment(arrayAccepts);*/
+		}
+
+		$('.js-signature').eq(1).on('jq.signature.changed', function() {
+			$('#saveBtn').attr('disabled', false);
+		});
+
+		function AcceptSignature(arrayAccepts) {
+			$.ajax({
+				url: baseUrl + 'app_carriageAppController.do?saveSignatures',
+				type: 'post',
+				data: {
+					picStr: back_signature,
+					id: arrayAccepts,
+					workNo: workNo,
+					back_type: back_type
+				},
+				success: function(data) {
+					if(data.respCode == 200 || data.respCode == '200') {
+						judgeEve(arrayAccepts);
+					} else {
+						$('#warn small').html(data.respMsg);
+						$("#warn").fadeIn(500);
+						setTimeout("$('#warn').fadeOut(500)", 3000);
+						return;
+					}
+				},
+				complete: function(XMLHttpRequest, status) {　
+					if(status == 'timeout') {
+						$("#loading").hide();
+						$('#warn small').html('连接超时，请检查您的网络是否通畅！');
+						$('#warn').show();
+						setTimeout("$('#warn').hide()", 3000);　　　
+					} else if(status == 'warn') {
+						$("#loading").hide();
+						$('#warn small').html('连接失败，服务运行异常！');
+						$('#warn').show();
+						setTimeout("$('#warn').hide()", 3000);　
+					}　
+				}
+			})
+		}
+
+		//获取图片base64
+		function getBase64Image(img) {
+			var canvas = document.createElement("canvas");
+			var image = new Image();
+			image.src = img.src;
+			img.crossOrigin = "Anonymous";
+			var width;
+			var height;
+			width = 768;
+			height = image.height * 768 / image.width;
+			background = 'red';
+			canvas.width = width;
+			canvas.height = height;
+			canvas.background = "#FFFFFF";
+			var ctx = canvas.getContext("2d");
+			ctx.drawImage(image, 0, 0, width, height);
+			var dataURL = canvas.toDataURL("image/JPEG");
+			//data:image/jpeg;base64,
+			return dataURL.substring(23, dataURL.length);
+			// return dataURL.replace("data:image/png;base64,", "");
+		};
+
+		$('#myModal').click(function() {
+			$(this).css('display', 'none');
+			$('.aboveDiv').css('display', 'none');
+			$('.aboveDivss').css('display', 'none');
+			$('.aboveAccept').css('display', 'none');
+		})
+
+		$('#back').click(function() {
+			location.href = "../../menu.html";
+		})
+		/*
+		 *逗比实施要整改的页面 
+		 * */
+		//陪检
+		function taskList(urgent, billDesc, index, viewDeptName, createCateView, status_code, billNo, from_address, from_dept_name, id, status_code, status_name, patient_name, execute_user_name, transport_means_class_name, patient_bed, showInfo, hideInfo) {
+
+			var html = "";
+			html += "<div id='div-child' class='panel panel-danger' style='margin-bottom:10px;border:1px solid #DEDEDE;padding:0 5px;'>";
+			html += "<div style='margin-bottom:10px;border:none;'>";
+			html += "<div id='panel-heading' class='row' style='background:#FFF;border:none;font-size:17px;padding-top:15px;border-bottom:none;'>";
+			html += "<div id='rowss1' patient_name='" + patient_name + "' taskId='" + id + "' class='col-xs-6 col-sm-6 col-md-6 col-lg-6' style='padding-top:4px;'>";
+			if(urgent != "") {
+				html += "<span class='detail' style='color:#e4134b;'>" + from_address + "-" + patient_name + "</span></div>";
+			} else {
+				html += "<span class='detail' style='color:#007AFF;'>" + from_address + "-" + patient_name + "</span></div>";
+			}
+
+			html += "<div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 right'>";
+			if(status_code == '04') {
+				html += "<span style='display:inline-block;padding-top:4px;color:#0090BB;padding-right:8px;'>" + status_name + "</span>";
+			} else {
+				html += "<span style='display:inline-block;padding-top:4px;padding-right:8px;color:#F5A224;'>" + status_name + "</span>";
+			}
+			html += "<div id='checkedDiv' name='0' status_code='" + status_code + "' class='" + id + "' billNo='" + billNo + "' style='width:125px;height:75px;background:transparent;position:absolute;z-index:3000;top:0;right:0;'></div>";
+			html += "<div id='checkedDivBlew' style='display:inline-block;border-radius:3px;border:1px solid #DEDEDE;width:25px;height:25px;float:right;'></div>";
+			html += "</div></div>";
+
+			html += "<div class='panel-bodys' patient_name='" + patient_name + "' taskId='" + id + "' style='border-bottom:none;border-top:none;'>";
+			html += "<div class='row' style='padding-top:8px;font-size:17px;'>";
+			if(patient_bed != '') {
+				html += "<div class='col-xs-7 col-sm-7 col-md-7 col-lg-7 font-grey'>" + patient_bed + "-" + transport_means_class_name + "</div>";
+			} else {
+				html += "<div class='col-xs-7 col-sm-7 col-md-7 col-lg-7 font-grey'>" + transport_means_class_name + "</div>";
+			}
+
+			html += "<div class='col-xs-5 col-sm-5 col-md-5 col-lg-5 outPlace' style='text-align:right;font-size:17px;float:right;'>" + createCateView + "</div>";
+			html += "</div>";
+			html += "</div></div>";
+
+			//******************
+			html += "<div  style='height:40px;border-bottom:none;border-top:none;'>";
+			html += "<div class='row' style='font-size:17px;'>";
+			if(billDesc != "") {
+
+				html += "<span class='col-xs-12 col-sm-12 col-md-12 col-lg-12 font-grey'>备注:" + billDesc + "</span>";
+			} else {
+				html += "<span class='col-xs-12 col-sm-12 col-md-12 col-lg-12 font-grey'>备注:无</span>";
+			}
+			/*		if(patient_name != "") {
+						html += "<span class='col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey'>" + patient_name + "</span>";
+					} else {
+						html += "<span class='col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey'></span>";
+					}*/
+			html += "</div></div>";
+			//待完成内容
+
+			if(showInfo.length > 0) {
+				html += '<div class="wuzi-list-title showTitle">';
+				html += '<span class="shugang"></span>';
+				html += '<span class="shugang-text">待完成项目</span>';
+				html += '</div>';
+				html += "<div  class='showContent' >";
+				for(var a = 0; a < showInfo.length; a++) {
+					var jsonSelf = {
+						"taskId": id,
+						"id": showInfo[a].id,
+					}
+					var jsonString = JSON.stringify(jsonSelf)
+					html += '<div class="mui-row ">';
+					html += '<div class="mui-col-sm-1 mui-col-xs-1" style="line-height: 45px;">' + (a + 1) + '.</div>';
+					html += '<div class="mui-col-sm-6 mui-col-xs-6">';
+					html += '<div class="apply-content1">' + showInfo[a].dected_class_name + '</div>';
+					html += '<div class="apply-content2" >检查地点&nbsp;&nbsp;' + showInfo[a].to_address_content + '</div>';
+					html += '</div>';
+					html += '<div class="mui-col-sm-5 mui-col-xs-5">';
+					html += '<div class="apply-content1" style="text-align: center;">' + showInfo[a].dected_time + '</div>';
+					html += '<div class="apply-content2">';
+					html += '	</div>';
+					html += '</div>';
+					html += '</div>';
+
+					html += '<div class="mui-row  new-row-tcj apply-bottom">';
+					//				html += '<div id=\'' + jsonString + '\' class="quxiao ">回退</div>';
+					if(buttonString[0].typeStatus == "Y")
+						html += '<div id=\'' + jsonString + '\'  class="printDetail signSelf">签名确认</div>';
+					if(buttonString[1].typeStatus == "Y")
+						html += '<div id=\'' + jsonString + '\'  class="printDetail  scanSelf">扫码确认</div>';
+					if(buttonString[2].typeStatus == "Y")
+						html += '<div id=\'' + jsonString + '\'  class="printDetail finishSelf">直接确认</div>';
+
+					html += '</div>';
+				}
+
+				html += "</div>";
+			}
+			//完成内容
+
+			if(hideInfo.length > 0) {
+
+				html += '<div class="wuzi-list-title  hideTitle">';
+				html += '<span class="shugang"></span>';
+				html += '<span class="shugang-text">已完成项目</span>';
+				html += '</div>';
+				html += "<div  class='hideContent' style='display:none;' >";
+				for(var a = 0; a < hideInfo.length; a++) {
+					var jsonSelf1 = {
+						"taskId": id,
+						"id": hideInfo[a].id,
+					}
+					var jsonString1 = JSON.stringify(jsonSelf1)
+					html += '<div class="mui-row ">';
+					html += '<div class="mui-col-sm-1 mui-col-xs-1" style="line-height: 45px;">' + (a + 1) + '.</div>';
+					html += '<div class="mui-col-sm-6 mui-col-xs-6">';
+					html += '<div class="apply-content1">' + hideInfo[a].dected_class_name + '</div>';
+					html += '<div class="apply-content2" >检查地点&nbsp;&nbsp;' + hideInfo[a].to_address_content + '</div>';
+					html += '</div>';
+					html += '<div class="mui-col-sm-5 mui-col-xs-5">';
+					html += '<div class="apply-content1" style="text-align: center;">' + hideInfo[a].dected_time + '</div>';
+					html += '<div class="apply-content2">';
+					html += '	</div>';
+					html += '</div>';
+					html += '</div>';
+					html += '<div class="mui-row  new-row-tcj apply-bottom">';
+					html += '<div id=\'' + jsonString1 + '\'  class="printDetail cancelSelf">取消</div>';
+					html += '</div>';
+				}
+
+				html += "</div>";
+			}
+			html += "</div>";
+			//***********
+
+			return html;
+		}
+
+		//完成和待完成搞得显示和隐藏
+
+		mui('body').on('tap', '.showTitle', function() {
+			$(this).parent().find(".showContent").slideToggle();
+		});
+		mui('body').on('tap', '.hideTitle', function() {
+			$(this).parent().find(".hideContent").slideToggle();
+		});
+		//已完成的取消
+
+		mui('body').on('tap', '.cancelSelf', function() {
+			var idss = JSON.parse(this.id).id;
+			var taskId = JSON.parse(this.id).taskId;
+			var opCode = 'cancel';
+			var scanOrSIgn = "",
+				deptNum = "",
+				picStr = "";
+			funSureCancel(idss, opCode, taskId, scanOrSIgn, deptNum, picStr);
+		})
+		//为完成的完工
+
+		mui('body').on('tap', '.finishSelf', function() {
+			var idss = JSON.parse(this.id).id;
+			var taskId = JSON.parse(this.id).taskId;
+			var opCode = 'finish';
+			var scanOrSIgn = "",
+				deptNum = "",
+				picStr = "";
+			funSureCancel(idss, opCode, taskId, scanOrSIgn, deptNum, picStr);
+		})
+		//子单据扫码
+		mui('body').on('tap', '.scanSelf', function() {
+			var idss = JSON.parse(this.id).id;
+			var taskId = JSON.parse(this.id).taskId;
+			var scanOrSIgn = 'scan';
+			var opCode = "finish",
+				deptNum = "",
+				picStr = "";
+
+			cordova.plugins.barcodeScanner.scan(
+				function(result) {
+					if(result.text != "") {
+						deptNum = result.text;
+						funSureCancel(idss, opCode, taskId, scanOrSIgn, deptNum, picStr);
+					}
+
+				},
+				function(error) {
+					$('#warn small').html('获取二维码失败');
+					$("#warn").fadeIn(500);
+					setTimeout("$('#warn').fadeOut(500)", 3000);
+				}
+			)
+
+		})
+		//子单据签名
+
+		var idssSign = "",
+			taskIdSign = "",
+			scanOrSIgnSign = "";
+		var opCodeSign = "",
+			deptNumSign = "",
+			picStrSign = "";
+		var buttonClick = false;
+		mui('body').on('tap', '.signSelf', function() {
+			idssSign = JSON.parse(this.id).id;
+			taskIdSign = JSON.parse(this.id).taskId;
+			scanOrSIgnSign = 'sign';
+			opCodeSign = "finish";
+			deptNumSign = "";
+			picStrSign = "";
+			$('#modalSelf').modal('show');
+		});
+
+		function clearCanvasSelf() {
+			$('#js-signatureSelf').jqSignature('clearCanvas');
+			$("#signatureSelf").html("");
+			//$('#saveBtn').attr('disabled', true);
+			buttonClick = false;
+		}
+		$('#js-signatureSelf').on('jq.signature.changed', function() {
+			buttonClick = true;
+			console.log(buttonClick)
+			//			$('.sureSign').attr('disabled', false);
+		});
+
+		function saveSignatureSelf() {
+			if(buttonClick) {
+				$('#signatureSelf').empty();
+				var dataUrl = $('#js-signatureSelf').jqSignature('getDataURL');
+				//			console.log(dataUrl);
+				var img = $('<img>').attr('src', dataUrl);
+				$('#signatureSelf').html(img);
+
+				//获取图片
+				$("#signatureSelf img").each(function(index, element) {
+					picStrSign = getBase64Image(element);
+				})
+				//			console.log(picStrSign)
+			} else {
+				$('#warn small').html("请签名！");
+				$('#warn').fadeIn(500);
+				setTimeout("$('#warn').fadeOut(500)", 2500);
+				return;
+			}
+
+			funSureCancel(idssSign, opCodeSign, taskIdSign, scanOrSIgnSign, deptNumSign, picStrSign);
+
+		}
+
+		function funSureCancel(idss, opCode, ids, scanOrSIgn, deptNum, picStr) {
+			$.ajax({
+				url: baseUrl + 'app_carriageAppController.do?saveForBillToFinishOrCancel',
+				type: 'post',
+				data: {
+					taskID: ids,
+					taskItemID: idss,
+					opCode: opCode,
+					currentUser: workNo,
+					currentUserName: worKname,
+					completeType: 'APP',
+					scanOrSIgn: scanOrSIgn,
+					deptNum: deptNum,
+					picStr: picStr
+				},
+				success: function(data) {
+					if(data.respCode == '200' || data.respCode == 200) {
+						$('#warn small').html(data.respMsg);
+						$('#warn').fadeIn(500);
+						setTimeout("$('#warn').fadeOut(500)", 2500);
+						location.reload();
+					} else {
+						$('#warn small').html(data.respMsg);
+						$('#warn').fadeIn(500);
+						setTimeout("$('#warn').fadeOut(500)", 3000);
+						return;　
+					}
+				},
+				complete: function(XMLHttpRequest, status) {　
+					if(status == 'timeout') {
+						$("#loading").hide();
+						$('#warn small').html('连接超时，请检查您的网络是否通畅！');
+						$('#warn').fadeIn(500);
+						setTimeout("$('#warn').fadeOut(500)", 3000);　　　
+					} else if(status == 'warn') {
+						$("#loading").hide();
+						$('#warn small').html('连接失败，服务运行异常！');
+						$('#warn').fadeIn(500);
+						setTimeout("$('#warn').fadeOut(500)", 3000);　
+					}　
+				}
+			})
+		}
+		/**
+		 * 下滑刷新
+		 * @return {[type]} [description]
+		 */
+		function pulldownRefresh() {
+			setTimeout(function() {
+				// rows = 4;
+				// loadButton();
+				mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+			}, 1500);
+		}
+
+		/**
+		 * 上滑加载更多
+		 * @return {[type]} [description]
+		 */
+		function pullupRefresh() {
+			// rows += 4;
+			// loadButton();
+			setTimeout(function() {
+				//关闭加载框
+				mui('#pullrefresh').pullRefresh().endPullupToRefresh();
+			}, 1500);
+		}
+
+		mui.init({
+			pullRefresh: {
+				container: '#pullrefresh',
+				down: {
+					callback: pulldownRefresh,
+					contentrefresh: "正在刷新",
+				},
+				up: {
+					contentrefresh: "加载中，请稍后",
+					contentnomore: '暂无更多数据',
+					callback: pullupRefresh
+				}
+			}
+		});
+	</script>
+
+</html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>报表</title>
+  <link rel="stylesheet" href="../../../reference/mui/css/mui.css" />
+  <link rel="stylesheet" href="../../../reference/vant/css/index.css" />
+  <link rel="stylesheet" href="../../../reference/mui/css/mui.picker.css" />
+</head>
+<style>
+  body {
+    background-color: #fff;
+    margin: auto;
+    padding: auto;
+  }
+
+  [v-cloak] {
+    display: none;
+  }
+
+  /* 遮罩 */
+  .mui-backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 998;
+    background-color: rgba(238, 238, 238, 0.3);
+  }
+
+  .historylist .list_card>li {
+    overflow: hidden;
+    box-shadow: 1px 1px 5px 0 #BBBBBB;
+  }
+
+  /* 头部区域 */
+  .top {
+    position: relative;
+    width: 100%;
+    height: 44px;
+    background-color: #61adff;
+    text-align: center;
+  }
+
+  #top-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    background-color: #61adff;
+  }
+
+  #icon-left-back {
+    float: left;
+    position: relative;
+    margin-right: 107px;
+    width: 28px;
+    height: 100%;
+    line-height: 44px;
+    color: #fff;
+    margin-left: 12px;
+    font-weight: 400;
+    font-size: 30px;
+  }
+
+  #title {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 60%;
+    line-height: 44px;
+    font-size: 17px;
+    font-weight: 500;
+    color: #fff;
+
+  }
+
+  #add {
+    float: right;
+    position: relative;
+    line-height: 44px;
+    color: #fff;
+    margin-right: 26px;
+    font-weight: 500;
+    font-size: 17px;
+  }
+
+  /* 查询区域 */
+  .search_area>span {
+    font-size: 18px;
+    font-weight: 500;
+    color: black;
+    position: relative;
+    left: 12px;
+    top: 8px;
+  }
+
+  .search {
+    display: inline-block;
+    width: 175px;
+    height: 38px;
+    background-color: pink;
+    overflow: hidden;
+    position: relative;
+    top: 20px;
+    left: 15px;
+    border: none;
+  }
+
+  .search input {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    line-height: 38px;
+    border: #BBBBBB 1px solid;
+    padding: 0 10px;
+  }
+
+  .search_btn {
+    width: 270px;
+    height: 40px;
+    border-radius: 7px;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    -ms-border-radius: 7px;
+    -o-border-radius: 7px;
+    background-color: #61adff;
+    color: #fff;
+    font-size: 16px;
+    letter-spacing: 20px;
+    margin: 5px auto;
+  }
+
+  /* 选择表格 */
+  .select_table {
+    width: 95%;
+    margin: 5px auto;
+    /* border-radius: 10px; */
+  }
+
+  .select_table thead tr,
+  .select_table tbody tr {
+    width: 100%;
+    height: 50px;
+    background-color: pink;
+  }
+
+
+  .select_table thead tr {
+    background-color: #61adff;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .select_table tbody tr:nth-child(n + 1) {
+    background-color: #FDFEFD;
+    color: black;
+  }
+
+  .select_table tbody tr:nth-child(2n) {
+    background-color: #EAEAEA;
+    color: black;
+  }
+
+  .select_table tbody tr {
+    font-size: 14px;
+    font-weight: 400;
+    color: black;
+    line-height: 50px;
+    text-align: center;
+  }
+</style>
+
+<body>
+  <div id="app" v-cloak>
+    <!-- 选择开始日期弹出层 -->
+    <van-popup position="bottom" :style="{ height: '50%' }" v-model="start_date_show" lazy-render="true">
+      <div class="popup-box">
+        <van-datetime-picker @confirm="start_date_confirm" @cancel="start_date_cancel" v-model="currentDate" type="date"
+          title="选择年月日" :min-date="minDate" :max-date="maxDate" />
+      </div>
+    </van-popup>
+    <!-- 选择结束日期弹出层 -->
+    <van-popup position="bottom" :style="{ height: '50%' }" v-model="end_date_show" lazy-render="true">
+      <div class="popup-box">
+        <van-datetime-picker @confirm="end_date_confirm" @cancel="end_date_cancel" v-model="currentDate" type="date"
+          title="选择年月日" :min-date="minDate" :max-date="maxDate" />
+      </div>
+    </van-popup>
+    <!-- 遮罩 -->
+    <div class="mui-backdrop" id="zzc" style="display: none"></div>
+    <!-- 顶部区域 -->
+    <header>
+      <div class="top">
+        <div id="top-bar">
+          <span id="icon-left-back" class="mui-icon mui-icon-arrowleft" @click="back"></span>
+          <h1 id="title">报表</h1>
+        </div>
+      </div>
+    </header>
+
+    <!-- 查询区域 -->
+    <div class="search_area" style="display: flex;flex-direction: column;">
+      <van-field v-model="choose_start_date" @click="start_date_show_popup()" label="开始时间" placeholder="请选择开始时间"
+        clickable readonly />
+      </van-field>
+      <van-field v-model="choose_end_date" @click="end_date_show_popup()" label="结束时间" placeholder="请选择结束时间" clickable
+        readonly />
+      </van-field>
+      <van-button class="search_btn" @click="search">查询</van-button>
+    </div>
+
+    <!-- 表格区域 -->
+    <div class="mui-scroll-wrapper" style="top: 250px;">
+      <div class="mui-scroll">
+        <table class="select_table">
+          <thead>
+            <tr>
+              <th>姓名</th>
+              <th>接单量</th>
+              <th>完工量</th>
+              <th>完工率</th>
+              <th>计划耗时</th>
+              <th>运送耗时</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item,index) in report_list" :key="index">
+              <td style="width: 45px;">{{item.userName}}</td>
+              <td>{{item.countNum}}</td>
+              <td>{{item.totalExecuteName}}</td>
+              <td>{{((item.totalExecuteName / item.countNum) * 100).toFixed(2) || 0 }}%</td>
+              <td>{{item.sumTimes}}</td>
+              <td>{{item.sumTime}}</td>
+            </tr>
+            <tr style="color: #e70000;">
+              <td>合计</td>
+              <td>{{total_accept_num}}</td>
+              <td>{{total_finish_num}}</td>
+              <td>{{total_finish_percent || 0}}%</td>
+              <td>{{total_reality_time}}</td>
+              <td>{{total_plan_time}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="../../../reference/js/jquery-2.1.4.js"></script>
+<script src="../../../reference/mui/js/mui.js"></script>
+<script src="../../../reference/mui/js/mui.picker.js"></script>
+<script src="../../../js/vue.js"></script>
+<script src="../../../reference/vant/js/vant.min.js"></script>
+<script>
+  var baseUrl = localStorage.getItem("url");
+
+  var app = new Vue({
+    el: "#app",
+    data: function () {
+      _this = this;
+      return {
+        report_list: [],
+        choose_start_date: "", //开始时间
+        choose_end_date: "", //结束时间
+        start_date_show: false,
+        end_date_show: false,
+        total_accept_num: 0, //总接单量
+        total_finish_num: 0, //总完工量
+        total_finish_percent: 0, //总完工率
+        total_plan_time: 0,
+        total_reality_time: 0,
+        minDate: new Date(2020, 0, 1),
+        maxDate: new Date(2025, 10, 1),
+        currentDate: new Date(),
+      };
+    },
+    methods: {
+      //点击查询按钮
+      search() {
+        if (this.choose_start_date > this.choose_end_date) {
+          mui.toast("开始时间不能大于结束时间")
+          return
+        }
+        $.ajax({
+          url: baseUrl + 'carriage',
+          type: 'post',
+          data: {
+            workNo: localStorage.getItem("workNo"),
+            executeTimeS: this.choose_start_date,
+            executeTimeE: this.choose_end_date
+          },
+          headers: {
+            methodName: "carriageWork",
+            className: "AppCarriage"
+          },
+          success: function (data) {
+            if (data.respCode == "200") {
+              app.report_list = data.map.obj
+              app.total_accept_num = 0
+              app.total_finish_num = 0
+              app.total_finish_percent = 0
+              app.total_plan_time = 0
+              app.total_reality_time = 0
+              app.report_list.forEach(item => {
+                app.total_accept_num += item.countNum
+                app.total_finish_num += item.totalExecuteName
+                app.total_plan_time += Number(item.sumTime)
+                app.total_reality_time += Number(item.sumTimes)
+              });
+              app.total_finish_percent = ((app.total_finish_num / app.total_accept_num) * 100).toFixed(2)
+            } else {
+              mui.toast(data.respMsg)
+              app.report_list = []
+              app.total_accept_num = 0
+              app.total_finish_num = 0
+              app.total_plan_time = 0
+              app.total_reality_time = 0
+              app.total_finish_percent = 0
+            }
+          }
+        })
+      },
+      //选择开始时间展示弹出层
+      start_date_show_popup() {
+        this.start_date_show = true;
+      },
+      // 选择开始时间 取消按钮
+      start_date_cancel() {
+        this.start_date_show = false;
+      },
+      //选择开始时间 确定按钮
+      start_date_confirm(value) {
+        this.start_date_show = false;
+        this.choose_start_date = this.date_format(value, 10)
+      },
+      //选择结束时间展示弹出层
+      end_date_show_popup() {
+        this.end_date_show = true;
+      },
+      // 选择结束时间 取消按钮
+      end_date_cancel() {
+        this.end_date_show = false;
+      },
+      //选择结束时间 确定按钮
+      end_date_confirm(value) {
+        this.end_date_show = false;
+        this.choose_end_date = this.date_format(value, 10)
+      },
+      //时间格式化
+      date_format(time, length) {
+        /**
+        * @description: 时间戳/中国标准时间转为y-m-d h:m:s(由第二个参数决定)
+        * @param {Date | Number} time	时间戳或中国标准时间
+        * @param {Number} length 如：10代表转换为YYYY-MM-DD
+        * @return {Date}	返回日期格式
+        */
+        let date;
+        // 传入的是时间戳
+        if (typeof time === "number" && !isNaN(time)) {
+          let timeLength = time.toString().length;
+          // 10位时间戳
+          if (timeLength === 10) {
+            date = new Date(time * 1000 + 8 * 3600 * 1000);
+          } else if (timeLength === 13) {
+            // 13位时间戳
+            date = new Date(time + 8 * 3600 * 1000);
+          } else {
+            console.log("请传入10位或13位的时间戳！");
+            return;
+          }
+        } else {
+          // 传入的是中国标准时间
+          date = new Date(Date.parse(time) + 8 * 3600 * 1000);
+        }
+        // 校验传入的时间格式
+        if (!date.toJSON()) {
+          console.log("传入的时间格式不正确！");
+          return;
+        }
+        return date.toJSON().substr(0, length).replace("T", " ").replace(/-/g, "-");
+      },
+      back() {
+        location.href = "../reportMenu.html"
+      }
+    },
+    created() {
+      this.search()
+    },
+  });
+
+  mui('.mui-scroll-wrapper').scroll({
+    deceleration: 0.0005, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+    indicators: false,
+  });
+</script>
+
+</html>

@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="PSPCTmealPatientCard">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ps.pc.domain.PSPCTmealPatientCard">
+		SELECT
+        id as "id",
+        create_time as "createTime",
+        creator as "creator",
+        revise_time as "reviseTime",
+        resvisor as "resvisor",
+        patient_num as "patientNum",  <!-- 住院号 -->
+        patient_code as "patientCode",
+        patient_name as "patientName",  <!-- 病人姓名 -->
+        patient_tel as "patientTel",  <!-- 病人电话 -->
+        hospital_time as "hospitalTime",  <!-- 入院时间 -->
+        building_num as "buildingNum",  <!-- 楼号 -->
+        building as "building",  <!-- 楼 -->
+        floor_num as "floorNum",  <!-- 层号 -->
+        floor as "floor",  <!-- 层 -->
+        ward_code as "wardCode",  <!-- 病区编码 -->
+        ward_name as "wardName",  <!-- 病区名称 -->
+        dept_num as "deptNum",  <!-- 科室编码 -->
+        dpet_name as "dpetName",  <!-- 科室名称 -->
+        bed_no as "bedNo",  <!-- 床号 -->
+        data_group_code as "dataGroupCode",
+        data_group_code_tree as "dataGroupCodeTree",
+        register_type as "registerType",
+        yizhu as "yizhu",  <!-- 医嘱信息 -->
+        active_status as "activeStatus",  <!-- 卡片激活状态 -->
+        iden_no as "idenNo",  <!-- 身份证号 -->
+        hospital_no as "hospitalNo",  <!-- 院区编号 -->
+        hospital_name as "hospitalName" <!-- 院区名称 -->
+        FROM sc_patient_card WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                id asc
+            </isEmpty>
+        </dynamic>
+	</select>
+<!-- 模糊查询 -->
+	<select id="queryPatientInfo" parameterClass="String"
+		resultClass="com.baosight.wilp.ps.pc.domain.PSPCTmealPatientCard">
+		select
+		ta.id,
+		ta.create_time createTime,
+		ta.creator,
+		ta.patient_num patientNum,
+		ta.patient_name patientName,
+		ta.patient_tel patientTel,
+		ta.hospital_time hospitalTime,
+		if(length(ta.`building`)<![CDATA[<]]>1,qc.`building_name`,ta.`building`)
+		building,
+		if(length(ta.`building_num`)<![CDATA[<]]>1,qc.`building_name`,ta.`building_num`)
+		buildingNum,
+		if(length(ta.`floor_num`)<![CDATA[<]]>1,qc.`floor_name`,ta.`floor_num`)
+		floorNum,
+		if(length(ta.`floor`)<![CDATA[<]]>1,qc.`floor_name`,ta.`floor`)
+		floor,
+		ta.dept_num deptNum,
+		ta.dpet_name dpetName,
+		ta.ward_code wardCode,
+		ta.ward_name wardName,
+		ta.bed_no bedNo,
+		ta.data_group_code dataGroupCode,
+		CONCAT(ta.building,',',ta.floor,',',ta.dpet_name) address,
+		ta.yizhu yiZhu,
+		ta.hospital_no hospitalNo,
+		ta.hospital_name hospitalName
+		from
+		sc_patient_card ta
+		LEFT JOIN `sc_qrcode_address` qc on ta.`dept_num` = qc.`dept_code`
+		where 1=1
+		and ta.patient_num like concat('%',#patientNum#,'%') or ta.ward_code like concat('%',#patientNum#,'%')
+	</select>
+	
+	<!-- 精密查询 -->
+	<select id="queryPatientInfoPrecise" parameterClass="String"
+		resultClass="com.baosight.wilp.ps.pc.domain.PSPCTmealPatientCard">
+		select
+		ta.id,
+		ta.create_time createTime,
+		ta.creator,
+		ta.patient_num patientNum,
+		ta.patient_name patientName,
+		ta.patient_tel patientTel,
+		ta.hospital_time hospitalTime,
+		if(length(ta.`building`)<![CDATA[<]]>1,qc.`building_name`,ta.`building`)
+		building,
+		if(length(ta.`building_num`)<![CDATA[<]]>1,qc.`building_name`,ta.`building_num`)
+		buildingNum,
+		if(length(ta.`floor_num`)<![CDATA[<]]>1,qc.`floor_name`,ta.`floor_num`)
+		floorNum,
+		if(length(ta.`floor`)<![CDATA[<]]>1,qc.`floor_name`,ta.`floor`)
+		floor,
+		ta.dept_num deptNum,
+		ta.dpet_name dpetName,
+		ta.ward_code wardCode,
+		ta.ward_name wardName,
+		ta.bed_no bedNo,
+		ta.data_group_code dataGroupCode,
+		CONCAT(ta.building,',',ta.floor,',',ta.dpet_name) address,
+		ta.yizhu yiZhu,
+		ta.iden_no idenNo,
+		ta.hospital_no hospitalNo,
+		ta.hospital_name hospitalName
+		from
+		sc_patient_card ta
+		LEFT JOIN `sc_qrcode_address` qc on ta.`dept_num` = qc.`dept_code`
+		where 1=1
+		and ta.patient_num = #patientNum# 
+	</select>
+	
+
+    <select id="queryPatientInfoByTel" parameterClass="HasHMap" 
+    resultClass="com.baosight.wilp.ps.pc.domain.PSPCTmealPatientCard">
+        select
+            id,
+            create_time createTime,
+            creator,
+            patient_num patientNum,
+            patient_name patientName,
+            patient_tel patientTel,
+            hospital_time hospitalTime,
+            building_num buildingNum,
+            building,
+            floor_num floorNum,
+            floor,
+            dept_num deptNum,
+            dpet_name dpetName,
+            bed_no bedNo,
+            CONCAT(building,',',floor,'，',dpet_name) address
+        from 
+            sc_patient_card
+        where 
+            patient_tel like CONCAT('%',#patientTel#,'%')
+        and data_group_code = #dataGroupCode#
+    </select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM
+		sc_patient_card_1 WHERE 1=1
+	</select>
+
+    <select id="queryCardId" resultClass="String" parameterClass="String">
+        SELECT distinct(card_business_code) FROM ae_patient_card_consume_record_info 
+            WHERE consume_bill_id = (SELECT id FROM sc_order_bill_patient WHERE bill_no = #value#) 
+    </select>
+    
+    <insert id="insert">
+        INSERT INTO sc_patient_card (
+        id,
+        create_time,
+        creator,
+        patient_num,  <!-- 住院号 -->
+        patient_code,
+        patient_name,  <!-- 病人姓名 -->
+        patient_tel,  <!-- 病人电话 -->
+        hospital_time,  <!-- 入院时间 -->
+        building_num,  <!-- 楼号 -->
+        building,  <!-- 楼 -->
+        floor_num,  <!-- 层号 -->
+        floor,  <!-- 层 -->
+        ward_code,  <!-- 病区编码 -->
+        ward_name,  <!-- 病区名称 -->
+        dept_num,  <!-- 科室编码 -->
+        dpet_name,  <!-- 科室名称 -->
+        bed_no,  <!-- 床号 -->
+        data_group_code,
+        data_group_code_tree,
+        register_type,
+        yizhu,  <!-- 医嘱信息 -->
+        active_status,  <!-- 卡片激活状态 -->
+        iden_no,  <!-- 身份证号 -->
+        hospital_no,  <!-- 院区编号 -->
+        hospital_name  <!-- 院区名称 -->
+        )
+        VALUES (#id#, #createTime#, #creator#, #reviseTime#, #resvisor#,
+        #patientNum#, #patientCode#, #patientName#, #patientTel#,
+        #hospitalTime#, #buildingNum#, #building#, #floorNum#, #floor#,
+        #wardCode#, #wardName#, #deptNum#, #dpetName#, #bedNo#,
+        #dataGroupCode#, #dataGroupCodeTree#, #registerType#, #yizhu#,
+        #activeStatus#, #idenNo#, #hospitalNo#, #hospitalName#)
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM sc_patient_card WHERE
+        id = #id#
+    </delete>
+
+    <!-- 更新联系电话 -->
+    <update id="updatePhoneNo">
+        UPDATE sc_patient_card
+        SET
+        patient_tel = #patientTel#
+        WHERE
+        patient_num = #patientNum# 
+    </update>
+
+    <update id="update">
+        UPDATE sc_patient_card
+        SET
+        revise_time = #reviseTime#,
+        resvisor = #resvisor#,
+        patient_name = #patientName#,   <!-- 病人姓名 -->
+        patient_tel = #patientTel#,   <!-- 病人电话 -->
+        building_num = #buildingNum#,   <!-- 楼号 -->
+        building = #building#,   <!-- 楼 -->
+        floor_num = #floorNum#,   <!-- 层号 -->
+        floor = #floor#,   <!-- 层 -->
+        ward_code = #wardCode#,   <!-- 病区编码 -->
+        ward_name = #wardName#,   <!-- 病区名称 -->
+        bed_no = #bedNo#,   <!-- 床号 -->
+        data_group_code = #dataGroupCode#,
+        hospital_no = #hospitalNo#,   <!-- 院区编号 -->
+        hospital_name = #hospitalName#  <!-- 院区名称 -->
+        WHERE
+        id = #id#
+    </update>
+   <!-- patient_code = #patientCode#,
+    data_group_code_tree = #dataGroupCodeTree#,
+    dept_num = #deptNum#,
+    dpet_name = #dpetName#,
+    create_time = #createTime#,
+    creator = #creator#,
+    patient_num = #patientNum#,   &lt;!&ndash; 住院号 &ndash;&gt;
+    hospital_time = #hospitalTime#,   &lt;!&ndash; 入院时间 &ndash;&gt;
+    yizhu = #yizhu#,   &lt;!&ndash; 医嘱信息 &ndash;&gt;
+    active_status = #activeStatus#,   &lt;!&ndash; 卡片激活状态 &ndash;&gt;
+    iden_no = #idenNo#,   &lt;!&ndash; 身份证号 &ndash;&gt;
+    register_type = #registerType#,-->
+        <select id="queryPatientInfoToCard" parameterClass="String"
+		resultClass="com.baosight.wilp.ps.pc.domain.PSPCTmealPatientCard">
+    	select
+   		    id,
+    		create_time createTime,
+    		creator,
+    		patient_num patientNum,
+    		patient_name patientName,
+    		patient_tel patientTel,
+    		hospital_time hospitalTime,
+    		building_num buildingNum,
+    		building,
+    		floor_num floorNum,
+    		floor,
+    		dept_num deptNum,
+    		dpet_name dpetName,
+    		bed_no bedNo,
+    		data_group_code dataGroupCode
+   			<!-- CONCAT(building,',',floor,'，',dpet_name) address -->
+  		from 
+  			sc_patient_card
+    	where 
+    		patient_num = #patientNum#			
+    		
+    </select>
+
+    <insert id="insertOpenId">
+        INSERT INTO sc_patient_wechat (
+            id, name, phone, open_id, Inpatient_num, rec_time
+        )
+        VALUES (uuid(),#name#,#phone#,#openId#,#cardNum#,now())
+    </insert>
+
+    <select id="queryOpenId" parameterClass="String" resultClass="java.util.HashMap">
+        select
+        name,
+        phone,
+        open_id,
+        Inpatient_num as cardNum
+        from
+            sc_patient_wechat
+        where
+        open_id = #openId#
+        GROUP BY open_id
+    </select>
+
+</sqlMap>

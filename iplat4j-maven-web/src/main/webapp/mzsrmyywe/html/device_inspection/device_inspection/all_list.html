@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="reference/mui/css/mui.css" />
+    <link rel="stylesheet" href="reference/mui/css/iconfont.css" />
+    <link rel="stylesheet" href="reference/css/common.css" />
+</head>
+<style type="text/css">
+    body {
+        background: #eee;
+    }
+    
+    .task {
+        width: 100%;
+        min-height: 100px;
+        background: #fff;
+        box-shadow: 2px 2px 2px #dcdcdc;
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    
+    .btn-div {
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        border-top: 1px solid #d4d4d4;
+    }
+    
+    .btn-device {
+        width: 33.33%;
+        border-right: 1px solid #d4d4d4;
+        text-align: center;
+        display: inline-block;
+        float: left;
+        color: #1676af;
+    }
+    
+    .btn-close {
+        width: 33.33%;
+        border-right: 1px solid #d4d4d4;
+        text-align: center;
+        display: inline-block;
+        float: left;
+        color: #1676af;
+    }
+    
+    .btn-operate {
+        width: 33.33%;
+        text-align: center;
+        display: inline-block;
+        float: left;
+        color: #1676af;
+    }
+    
+    .mui-row {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 15px;
+        padding-right: 15px;
+        color: #e87c26;
+    }
+    
+    .mui-row span {
+        color: #000;
+    }
+    
+    .btn-info>span {
+        color: #1676af;
+    }
+    
+    .loading1 {
+        position: fixed;
+        z-index: 999;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+    
+    .loading2 {
+        margin: 0 auto;
+        margin-top: 250px;
+        text-align: center;
+        line-height: 100px;
+    }
+</style>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">全部任务列表</h1>
+        <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+      返回
+    </button>
+        <button class="mui-btn mui-btn-blue mui-btn-link mui-pull-right complete">
+      完工
+    </button>
+    </header>
+
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div id="loading" class="loading1" hidden>
+        <div class="loading2">
+            <span class="mui-spinner" style="width:80px;height:80px;"></span>
+        </div>
+    </div>
+
+    <div class="mui-content" style="margin-bottom:60px;">
+        <!-- <div class="task">
+          <div class="mui-row">
+            <div class="mui-col mui-col-xs-12">任务编号：<span>XJ1293123</span></div>
+            <div class="mui-col mui-col-xs-12">截止时间：<span>XJ1293123</span></div>
+            <div class="mui-col mui-col-xs-12">设备编码：<span>SB0001</span></div>
+            <div class="mui-col mui-col-xs-12">任务名称：<span>撒框架地理空间啊说</span></div>
+            <div class="mui-col mui-col-xs-12">任务地址：<span>萨卡拉到了卡就算了</span></div>
+            <div class="mui-col mui-col-xs-12">作业描述：<span>无</span></div>
+          </div>
+          <div class="btn-div">
+            <div class="btn-device">设备档案</div>
+            <div class="btn-info">查看详情</div>
+            <div class="btn-operate">实绩维护</div>
+          </div>
+        </div> -->
+    </div>
+
+    <nav class="mui-bar mui-bar-tab" style="background:#fff;">
+        <div id="machine" class="mui-tab-item machine-task">
+            <span class="mui-icon iconfont icon-iconscan" style="font-size:20px;"></span>
+            <span class="mui-tab-label">扫描设备</span>
+        </div>
+        <a class="mui-tab-item current-task">
+            <span class="mui-icon mui-icon-refreshempty"></span>
+            <span class="mui-tab-label">刷新列表</span>
+        </a>
+    </nav>
+    <div id="popover" class="mui-popover">
+        <ul class="mui-table-view">
+            <li class="mui-table-view-cell" value="NFC">扫描NFC</li>
+            <li class="mui-table-view-cell" value="CODE">扫描二维码</li>
+        </ul>
+    </div>
+    <div id="popover1" class="mui-popover">
+        <ul class="mui-table-view">
+            <li class="mui-table-view-cell" value="NFC">扫描NFC</li>
+            <li class="mui-table-view-cell" value="CODE">扫描二维码</li>
+        </ul>
+    </div>
+    <!-- <button id='test'>测试</button> -->
+</body>
+<script src="reference/mui/js/mui.js" type="text/javascript"></script>
+<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="reference/js/common.js" type="text/javascript"></script>
+<script src="../../cordova.js" type="text/javascript"></script>
+<!-- <script src="./reference/js/vconsole.min.js"></script> -->
+<script type="text/javascript">
+    // var vConsole = new VConsole();
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var myDate = new Date();
+    var codeType = localStorage.getItem('codeType');
+    var scanType = localStorage.getItem('scanType');
+    var year = myDate.getFullYear(); //获取完整的年份(4位,1970-????)
+    var month =
+        myDate.getMonth() + 1 < 10 ?
+        "0" + (myDate.getMonth() + 1) :
+        myDate.getMonth() + 1; //获取当前月份(0-11,0代表1月)
+    var day = myDate.getDate() < 10 ? "0" + myDate.getDate() : myDate.getDate(); //获取当前日(1-31)
+    var hours =
+        myDate.getHours() < 10 ? "0" + myDate.getHours() : myDate.getHours(); //获取当前小时数(0-23)
+    var minute =
+        myDate.getMinutes() < 10 ?
+        "0" + myDate.getMinutes() :
+        myDate.getMinutes(); //获取当前分钟数(0-59)
+    var second =
+        myDate.getSeconds() < 10 ?
+        "0" + myDate.getSeconds() :
+        myDate.getSeconds(); //获取当前秒数(0-59)
+    var currentTime =
+        year +
+        "-" +
+        month +
+        "-" +
+        day +
+        " " +
+        hours +
+        ":" +
+        minute +
+        ":" +
+        second;
+    // console.log(currentTime);
+
+    document.addEventListener("deviceready", onDeviceReady, false);
+    // $('#test').click(function() {
+    //     var ID = $(this).attr('id')
+    //     console.log(ID)
+    //         //传入toggle参数，用户也无需关心当前是显示还是隐藏状态，mui会自动识别处理；
+    //     mui('.mui-popover').popover('toggle', document.getElementById(ID));
+    // })
+
+    function onDeviceReady() {
+        var db = window.sqlitePlugin.openDatabase({
+            name: "one-stop.db",
+            location: "default"
+        });
+        db.transaction(
+            function(tx) {
+                //获取详情
+                tx.executeSql(
+                    "SELECT * FROM device_task_list ORDER BY operate_time DESC", [],
+                    function(tx, resultSet) {
+                        //   alert("tx:" + JSON.stringify(tx));
+                        // alert("resultSet.rows:" + JSON.stringify(resultSet.rows.item(0)));
+                        var num = resultSet.rows.length;
+                        //   alert("num:" + num);
+                        var html = "";
+                        for (var i = 0; i < num; i++) {
+                            // console.log("resultSet.rows.item(i):", resultSet.rows.item(i));
+
+                            // alert("resultSet.rows.item(i):" + JSON.stringify(resultSet.rows.item(i)));
+                            // var currentTime = new Date();
+                            var startTime = resultSet.rows.item(i).begin_time;
+                            var finishTime = resultSet.rows.item(i).limit_time;
+                            // var finishTime = new Date(resultSet.rows.item(i).end_time);
+                            // console.log(startTime);
+                            // console.log(finishTime);
+                            // console.log(
+                            //   (currentTime >= startTime && currentTime <= finishTime) ||
+                            //     finishTime == null
+                            // );
+
+                            if (
+                                (currentTime >= startTime && currentTime <= finishTime) ||
+                                finishTime == null
+                            ) {
+                                // alert("截止时间：" + resultSet.rows.item(i).limit_time);
+                                html += createTask(
+                                    resultSet.rows.item(i).task_id,
+                                    resultSet.rows.item(i).task_code,
+                                    resultSet.rows.item(i).task_name,
+                                    resultSet.rows.item(i).machine_id,
+                                    resultSet.rows.item(i).machine_code,
+                                    resultSet.rows.item(i).fixed_code,
+                                    resultSet.rows.item(i).fixed_id,
+                                    resultSet.rows.item(i).fixed_name,
+                                    resultSet.rows.item(i).task_desc,
+                                    resultSet.rows.item(i).begin_time,
+                                    resultSet.rows.item(i).limit_time,
+                                    resultSet.rows.item(i).need_scan,
+                                    resultSet.rows.item(i).operate_time,
+                                    resultSet.rows.item(i).task_status
+                                );
+                            }
+                        }
+                        $(".mui-content").html(html);
+                    },
+                    function(e) {
+                        showMsg("获取数据失败：" + e.message);
+                    }
+                );
+            },
+            function(e) {
+                showMsg(e.message);
+                db.close(successcb, errorcb);
+            },
+            function() {
+                db.close(successcb, errorcb);
+            }
+        );
+
+        //物理返回键
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    //调试代码
+    // var html = '';
+    // html += createTask("1","2","3","4","5","6","7","8","9","0","11","Y");
+    // html += createTask("1","2","3","4","5","6","7","8","9","0","11","Y");
+    // $(".mui-content").html(html);
+    //调试代码
+
+    function createTask(
+        task_id,
+        task_code,
+        task_name,
+        machine_id,
+        machine_code,
+        fixed_code,
+        fixed_id,
+        fixed_name,
+        task_desc,
+        begin_time,
+        limit_time,
+        need_scan,
+        operate_time,
+        task_status
+    ) {
+        var operateId =
+            task_id + "@" + machine_id + "@" + need_scan + "@" + fixed_id;
+        // var operateId = task_id;
+        var html = "";
+        if (operate_time != null && operate_time != "" && task_status != "Y")
+            html += '<div class="task" style="background:#fbf2d4;">';
+        else if (task_status == "Y")
+            html +=
+            '<div class="task" style="background:#e6e6e6;box-shadow:0px 0px 0px;">';
+        else html += '<div class="task">';
+        html += '<div class="mui-row">';
+        html +=
+            '<div class="mui-col mui-col-xs-12 btn-info">任务编号：<span id="' +
+            task_id +
+            '">' +
+            task_code +
+            " (查看详情)</span></div>";
+        // html += '<div class="mui-col mui-col-xs-12">开始时间：<span>'+begin_time+'</span></div>';
+        var limitTimeValue = limit_time == null ? "--" : limit_time;
+        html +=
+            '<div class="mui-col mui-col-xs-12">截止时间：<span>' +
+            limitTimeValue +
+            "</span></div>";
+        html +=
+            '<div class="mui-col mui-col-xs-12">设备编码：<span>' +
+            machine_code +
+            "</span></div>";
+        html +=
+            '<div class="mui-col mui-col-xs-12">任务名称：<span>' +
+            task_name +
+            "</span></div>";
+        if (fixed_name == null) {
+            fixed_name = "";
+        }
+        html +=
+            '<div class="mui-col mui-col-xs-12">任务地址：<span>' +
+            fixed_name +
+            "</span></div>";
+        html +=
+            '<div class="mui-col mui-col-xs-12">作业描述：<span>' +
+            task_desc +
+            "</span></div>";
+        html += "</div>";
+        if (task_status != "Y") {
+            html += '<div class="btn-div">';
+            html +=
+                '<div id="' + machine_id + '" class="btn-device">设备档案</div>';
+            html += '<div id="' + task_id + '" class="btn-close">关闭任务</div>';
+            html +=
+                '<div id="' + operateId + '" class="btn-operate">实绩维护</div>';
+            html += "</div>";
+        }
+        html += "</div>";
+        return html;
+    }
+
+    //设备档案
+    mui(".mui-content").on("tap", "div.btn-device", function() {
+        location.href = "device_info.html?" + this.id;
+    });
+
+    //查看详情
+    mui(".mui-content").on("tap", "div.btn-info span", function() {
+
+        location.href = "off_line_info.html?" + this.id;
+    });
+
+    //关闭任务
+    mui(".mui-content").on("tap", "div.btn-close", function() {
+        var closeId = this.id;
+        var btnArray = ["否", "是"];
+        mui.confirm(
+            "关闭任务后将不可操作，确认关闭该任务？",
+            "关闭确认",
+            btnArray,
+            function(e) {
+                if (e.index == 1) {
+                    closeTask(closeId);
+                }
+            }
+        );
+    });
+
+    function closeTask(closeId) {
+        var db = window.sqlitePlugin.openDatabase({
+            name: "one-stop.db",
+            location: "default"
+        });
+        db.transaction(
+            function(tx) {
+                //获取详情
+                tx.executeSql(
+                    "UPDATE device_task_list SET task_status='Y' WHERE task_id=?", [closeId]
+                );
+            },
+            function(e) {
+                showMsg(e.message);
+                db.close(successcb, errorcb);
+            },
+            function() {
+                db.close(function() {
+                    showMsg("成功关闭任务");
+                    setTimeout("location.reload()", 1500);
+                }, errorcb);
+            }
+        );
+    }
+
+    //实绩维护
+    mui(".mui-content").on("tap", "div.btn-operate", function() {
+        var task_id = this.id;
+        var task_id = this.id.split("@")[0];
+        var machine_id = this.id.split("@")[1];
+        var need_scan = this.id.split("@")[2];
+        var fixed_id = this.id.split("@")[3];
+        var changeCode = '';
+        var exChangeCode = '';
+        // if (need_scan == "1") {
+        var sheBeiId = $(this).attr('id');
+        if (codeType == '01') {
+            changeCode = fixed_id;
+        } else if (codeType == '02') {
+            changeCode = machine_id;
+        } else if (codeType == '00') {
+            changeCode = fixed_id;
+            exChangeCode = machine_id;
+        }
+        if (scanType == 'NFC') {
+            NFC(task_id, changeCode, exChangeCode)
+        } else if (scanType == 'CODE') {
+            CODE(task_id, changeCode, exChangeCode)
+        } else {
+            mui('#popover').popover('toggle', document.getElementById(sheBeiId));
+            $('#popover ul li').click(function() {
+                var chooseScanType = $(this).attr('value');
+                if (chooseScanType == 'NFC') {
+                    NFC(task_id, changeCode, exChangeCode)
+                } else if (chooseScanType == 'CODE') {
+                    CODE(task_id, changeCode, exChangeCode)
+                }
+            })
+        }
+        // }else {
+        //   location.href = "task_execute.html?" + task_id;
+        // }
+    });
+
+    function NFC(task_id, changeCode, exChangeCode) {
+        showMsg("请扫描NFC芯片 ！");
+        cordova.exec(
+            function(data) {
+                var result = data.data.substring(0, 32);
+                // alert(result);
+                //alert(machine_id);
+                if (result == changeCode || result == exChangeCode) {
+                    closeNFC();
+                    if (result != '') {
+                        location.href = "task_execute.html?" + task_id;
+                    }
+                } else {
+                    showMsg("设备与任务不符");
+                    closeNFC();
+                }
+            },
+            function(err) {},
+            "NFCReader",
+            "startRead", []
+        );
+    }
+
+    function CODE(task_id, changeCode, exChangeCode) {
+        showMsg("请扫描二维码 ！");
+        cordova.plugins.barcodeScanner.scan(
+            function(result) {
+                var result = result.text;
+                // alert(result)
+                if (result == changeCode || result == exChangeCode) {
+                    if (result != '') {
+                        location.href = "task_execute.html?" + task_id;
+                    }
+                } else {
+                    showMsg("设备与任务不符");
+                }
+            },
+            function(error) {
+                mui.toast("扫描失败！");
+            }
+        );
+    }
+
+    //当前任务
+    mui("body").on("tap", "a.current-task", function() {
+        location.reload();
+    });
+
+    //扫描设备
+    $("#machine").click(function() {
+        if (scanType == 'NFC') {
+            NFC1()
+        } else if (scanType == 'CODE') {
+            CODE1()
+        } else {
+            mui('#popover1').popover('toggle', document.getElementById("machine"));
+            $('#popover1 ul li').click(function() {
+                var chooseScanType = $(this).attr('value');
+                if (chooseScanType == 'NFC') {
+                    NFC1();
+                } else if (chooseScanType == 'CODE') {
+                    CODE1();
+                }
+            });
+        }
+    });
+
+    function NFC1() {
+        showMsg("请扫描NFC芯片 ！");
+        cordova.exec(
+            function(data) {
+                var result = data.data.substring(0, 32);
+                if (result != "") {
+                    closeNFC();
+                    location.href = "scan_list.html?" + result;
+                }
+            },
+            function(err) {},
+            "NFCReader",
+            "startRead", []
+        );
+    }
+
+    function CODE1() {
+        showMsg("请扫描二维码 ！");
+        cordova.plugins.barcodeScanner.scan(
+            function(result) {
+                var result = result.text;
+                // alert(result)
+                if (result != "") {
+                    location.href = "scan_list.html?" + result;
+                }
+            },
+            function(error) {
+                mui.toast("扫描失败！");
+            }
+        );
+    }
+    //  关闭NFC扫描
+    function closeNFC() {
+        cordova.exec(
+            function(data) {
+                //				alert("关闭扫描")
+            },
+            function(err) {},
+            "NFCReader",
+            "stopRead", []
+        );
+    }
+    //完工
+    mui("body").on("tap", "button.complete", function() {
+        var btnArray = ["否", "是"];
+        mui.confirm(
+            "完工会上传已经操作过的任务，请确定网络正常，完工后的任务不能再修改，是否确定提交",
+            "完工确认",
+            btnArray,
+            function(e) {
+                if (e.index == 1) {
+                    $("#loading").show();
+                    getData();
+                }
+            }
+        );
+    });
+
+    function getData() {
+        var dataList = new Array();
+        var file_list = [];
+        var db = window.sqlitePlugin.openDatabase({
+            name: "one-stop.db",
+            location: "default"
+        });
+        db.transaction(
+            function(tx) {
+                //获取详情
+                tx.executeSql(
+                    "SELECT * FROM device_task_list t1,device_task_detail t2 WHERE t1.task_id=t2.task_id and (t1.operate_time is not null or task_status = 'Y')", [],
+                    function(tx, resultSet) {
+                        var num = resultSet.rows.length;
+                        var shortTaskId = "";
+                        var json = {};
+                        for (var i = 0; i < num; i++) {
+                            if (shortTaskId == resultSet.rows.item(i).task_id) {
+                                var itemJson = {
+                                    itemID: resultSet.rows.item(i).item_id,
+                                    successFlag: resultSet.rows.item(i).status,
+                                    writeValue: resultSet.rows.item(i).item_record,
+                                    errorContent: resultSet.rows.item(i).abnormal_desc
+                                };
+                                json.taskItem.push(itemJson);
+                                console.log(
+                                    "json.taskItem if：",
+                                    JSON.stringify(json.taskItem)
+                                );
+                            } else {
+                                if (shortTaskId != "") dataList.push(json);
+
+                                shortTaskId = resultSet.rows.item(i).task_id;
+                                json = {
+                                    taskID: resultSet.rows.item(i).task_id,
+                                    taskCode: resultSet.rows.item(i).task_code,
+                                    closeFlag: resultSet.rows.item(i).task_status,
+                                    taskItem: []
+                                };
+                                var itemJson = {
+                                    itemID: resultSet.rows.item(i).item_id,
+                                    successFlag: resultSet.rows.item(i).status,
+                                    writeValue: resultSet.rows.item(i).item_record,
+                                    errorContent: resultSet.rows.item(i).abnormal_desc
+                                };
+                                json.taskItem.push(itemJson);
+                                // console.log(
+                                //   "json.taskItem else：",
+                                //   JSON.stringify(json.taskItem)
+                                // );
+                            }
+                        }
+                        if (num != 0) dataList.push(json);
+                    },
+                    function(e) {
+                        $("#loading").hide();
+                        showMsg("获取数据失败：" + e.message);
+                    }
+                );
+
+                tx.executeSql(
+                    "SELECT * FROM device_file", [],
+                    function(tx, resultSet) {
+                        var num = resultSet.rows.length;
+                        for (var k = 0; k < num; k++) {
+                            var fileJson = {
+                                task_id: resultSet.rows.item(k).task_id,
+                                item_id: resultSet.rows.item(k).item_id,
+                                file_path: resultSet.rows.item(k).file_path
+                            };
+                            file_list.push(fileJson);
+                        }
+                    },
+                    function(e) {
+                        $("#loading").hide();
+                        showMsg("获取数据失败：" + e.message);
+                    }
+                );
+            },
+            function(e) {
+                $("#loading").hide();
+                showMsg(e.message);
+                db.close(successcb, errorcb);
+            },
+            function() {
+                db.close(function() {
+                    doCheck(dataList, file_list);
+                    // doCheck(dataList);
+                }, errorcb);
+            }
+        );
+    }
+
+    var file_num = 0,
+        uploaded_num = 0;
+
+    // function doCheck(dataList) {
+    function doCheck(dataList, file_list) {
+        if (dataList.length == 0 || dataList == null) {
+            $("#loading").hide();
+            showMsg("没有需要被提交的单据");
+            return;
+        }
+        file_num = file_list.length;
+        if (file_num == 0) {
+            doSubmit(dataList);
+        } else {
+            for (var i = 0; i < file_list.length; i++) {
+                uploadImagesBase64(
+                    file_list[i].task_id,
+                    file_list[i].item_id,
+                    file_list[i].file_path,
+                    dataList
+                );
+            }
+        }
+    }
+
+    function uploadImagesBase64(task_id, item_id, file_path, dataList) {
+        var params = {};
+        params.taskID = task_id;
+        params.itemID = item_id;
+        params.workNo = workNo;
+        params.base64Pic = file_path;
+        $.ajax({
+            type: "post",
+            url: baseUrl + "MobileAgentService",
+            headers: {
+                serviceName: "DIJZApp",
+                methodName: "getPic"
+            },
+            data: {
+                prames: JSON.stringify(params)
+            },
+            success: function(data) {
+                uploaded_num++;
+                if (uploaded_num == file_num) doSubmit(dataList);
+            },
+            error: function(err) {
+                // alert('err');
+                // alert(err)
+                uploaded_num++;
+                if (uploaded_num == file_num) doSubmit(dataList);
+            }
+        });
+    }
+    // function uploadImages(task_id, item_id, file_path, dataList) {
+    //   var uri = encodeURI(
+    //     baseUrl + "app_InspectionController.do?processInspectionPicUpload"
+    //   );
+    //   var options = new FileUploadOptions();
+    //   options.fileKey = "file";
+    //   options.fileName = file_path.substr(file_path.lastIndexOf("/") + 1);
+    //   options.mimeType = "text/plain";
+
+    //   var params = {};
+    //   params.taskID = task_id;
+    //   params.itemID = item_id;
+    //   params.workNo = workNo;
+    //   params.tMimeType = file_path.substr(file_path.lastIndexOf(".") + 1);
+    //   options.params = params;
+
+    //   var headers = {
+    //     headerParam: "headerValue"
+    //   };
+    //   options.headers = headers;
+    //   var ft = new FileTransfer();
+    //   ft.upload(
+    //     file_path,
+    //     uri,
+    //     function(r) {
+    //       uploaded_num++;
+    //       if (uploaded_num == file_num) doSubmit(dataList);
+
+    //       // alert("成功");
+    //       // alert("Code = " + r.responseCode);
+    //       // alert("Response = " + r.response);
+    //       // alert("Sent = " + r.bytesSent);
+    //     },
+    //     function(error) {
+    //       uploaded_num++;
+    //       if (uploaded_num == file_num) doSubmit(dataList);
+
+    //       // alert("失败");
+    //       // alert("An error has occurred: Code = " + error.code);
+    //       // alert("upload error source " + error.source);
+    //       // alert("upload error target " + error.target);
+    //     },
+    //     options
+    //   );
+    // }
+
+    function doSubmit(dataList) {
+        // alert("doSubmit:" + JSON.stringify(dataList));
+        var prame = {
+            userID: workNo,
+            // userID: "YS012",
+            json: JSON.stringify(dataList)
+        };
+        prame = JSON.stringify(prame);
+        $.ajax({
+            url: baseUrl + "MobileAgentService",
+            type: "post",
+            headers: {
+                methodName: "commitXJ",
+                serviceName: "DIJZApp"
+            },
+            data: {
+                prames: prame
+            },
+            success: function(data) {
+                // var data = eval("(" + data + ")");
+                var errorList = data.attr.json;
+                // alert("不能被删除的：" + JSON.stringify(errorList));
+                var deleteList = new Array();
+                for (var i = 0; i < dataList.length; i++) {
+                    if ($.inArray(dataList[i].taskCode, errorList) < 0) {
+                        deleteList.push(dataList[i].taskCode);
+                    }
+                }
+                deleteLocalTask(deleteList);
+            }
+        });
+    }
+
+    function deleteLocalTask(deleteList) {
+        // alert("需要被删除的：" + JSON.stringify(deleteList));
+        var db = window.sqlitePlugin.openDatabase({
+            name: "one-stop.db",
+            location: "default"
+        });
+        db.transaction(
+            function(tx) {
+                for (var i = 0; i < deleteList.length; i++) {
+                    tx.executeSql("DELETE FROM device_task_list WHERE task_code=?", [
+                        deleteList[i]
+                    ]);
+                }
+                tx.executeSql("DELETE FROM device_file", []);
+            },
+            function(e) {
+                showMsg(e.message);
+                db.close(successcb, errorcb);
+            },
+            function() {
+                db.close(function() {
+                    $("#loading").hide();
+                    showMsg("操作成功");
+                    setTimeout("location.reload()", 1000);
+                }, errorcb);
+            }
+        );
+    }
+
+    function successcb() {}
+
+    function errorcb() {
+        showMsg("数据库关闭失败");
+    }
+
+    mui("body").on("tap", "#back", function() {
+        location.href = "main.html";
+    });
+    // var setTime = '';
+
+    function onBackKeyDown() {
+        // if (new Date() - setTime > 2000) {
+        // setTime = new Date();
+        // alert(setTime)
+        history.back();
+        // }
+    }
+</script>
+
+</html>

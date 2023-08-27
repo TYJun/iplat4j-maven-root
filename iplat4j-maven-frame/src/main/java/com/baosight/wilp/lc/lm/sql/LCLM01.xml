@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+		
+<sqlMap namespace="LCLM01">
+
+	<select id="queryLog" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			select id,
+				   `module`,
+				   `class` as "className",
+				   `method`,
+				   `parameter`,
+				   `status`,
+				   (CASE `status`
+			       WHEN '1' THEN '成功'
+			       WHEN '0' THEN '失败'
+			       END) AS 'statusText',
+				   call_time AS "callTime",
+				   `errors`
+			from $projectSchema$.lc_log 
+			WHERE 1=1
+		<isNotEmpty prepend=" AND " property="module">
+			`module` like concat('%', #module#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="className">
+			SUBSTRING_INDEX(`class`,'.',-1) = #className#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="method">
+				`method` like concat('%', #method#, '%')
+			</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="callTimeS">
+				call_time &gt; #callTimeS#
+			</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="callTimeE">
+				call_time &lt; #callTimeE#
+			</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+				<isNotEmpty property="orderBy">
+					$orderBy$
+				</isNotEmpty>
+				<isEmpty property="orderBy">
+					call_time desc
+				</isEmpty>
+			</dynamic>
+	</select>
+
+	<select id="queryLogCount" resultClass="int" parameterClass="java.util.HashMap">
+			SELECT COUNT(1)
+			from $projectSchema$.lc_log
+			WHERE 1=1
+			<isNotEmpty prepend=" AND " property="module">
+				`module` like concat('%', #module#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="className">
+				SUBSTRING_INDEX(`class`,'.',-1) = #className#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="method">
+				`method` like concat('%', #method#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="callTimeS">
+				call_time &gt; #callTimeS#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="callTimeE">
+				call_time &lt; #callTimeE#
+			</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+				<isNotEmpty property="orderBy">
+					$orderBy$
+				</isNotEmpty>
+				<isEmpty property="orderBy">
+					call_time desc
+				</isEmpty>
+			</dynamic>
+	</select>
+	
+	<delete id="delete" parameterClass="java.util.HashMap" >
+		DELETE FROM $projectSchema$.lc_log   
+		WHERE  TO_DAYS(NOW()) - TO_DAYS(call_time) &gt; 30
+	</delete>
+	
+</sqlMap>

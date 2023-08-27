@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-06-15 10:52:25
+   		Version :  6.0.731.201809200158
+		tableName :sc_typegroup 
+		 ID  VARCHAR   NOT NULL   primarykey, 
+		 typegroupcode  VARCHAR, 
+		 typegroupname  VARCHAR, 
+		 moduleId  VARCHAR
+	-->
+<sqlMap namespace="SSBMDD01">
+
+
+	<select id="queryMealType" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.ss.bm.domain.SSBMDD01">
+		SELECT id AS id,
+		       typename as "typename",
+			typecode as "typecode",
+			paramDesc1 as "paramDesc1",
+			paramValue1 as "paramValue1",
+		    paramDesc2 as "paramDesc2",
+			paramValue2 as "paramValue2",
+			paramDesc3 as "paramDesc3",
+			paramValue3 as "paramValue3"
+				FROM sc_type WHERE typegroupid = #id#
+		ORDER BY sortNo
+
+	</select>
+	
+	<insert id="insert" parameterClass="java.util.HashMap">
+		INSERT INTO sc_type (
+			ID,
+			typename,
+			typecode,
+			paramDesc1,
+			paramValue1,
+		    paramDesc2,
+			paramValue2,
+			paramDesc3,
+			paramValue3,
+			typegroupid)
+			VALUES
+			(#id#,#typename#,#typecode#,#paramdesc1#,#paramvalue1#,#paramdesc2#, #paramvalue2#, #paramdesc3#, #paramvalue3#,#groupid#)
+	</insert>
+
+
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.ss.bm.domain.SSBMDD01">
+		SELECT
+				ID	as "id",  
+				typegroupcode	as "typegroupcode",  
+				typegroupname	as "typegroupname",  
+				moduleId	as "moduleid" 
+		FROM sc_typegroup WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="typegroupname">
+			(typegroupname like '%$typegroupname$%'  or typegroupcode like '%$typegroupname$%'    )
+		</isNotEmpty>
+		
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  ID asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+<!-- 	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_typegroup WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+	</select> -->
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="typegroupcode">
+			typegroupcode = #typegroupcode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="typegroupname">
+			typegroupname = #typegroupname#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="moduleid">
+			moduleId = #moduleid#
+		</isNotEmpty>
+	-->
+
+	<insert id="insertMealTypeGroup">
+		INSERT INTO sc_typegroup (ID,
+										typegroupcode,
+										typegroupname,
+										moduleId
+										)		 
+	    VALUES (#id#, #typegroupcode#, #typegroupname#, #moduleid#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM sc_typegroup WHERE 
+			ID = #id#
+	</delete>
+	
+	<delete id="deleteMealTypeByTypeGroupId">
+		DELETE FROM sc_type WHERE 
+			typegroupid = #id#
+	</delete>
+	
+	<delete id="deleteMealType">
+		DELETE FROM sc_type WHERE 
+			ID = #id#
+	</delete>
+
+	<update id="updateMealTypeGroup">
+		UPDATE sc_typegroup 
+		SET 
+					typegroupcode	= #typegroupcode#,   
+					typegroupname	= #typegroupname#,   
+					moduleId	= #moduleid#  
+			WHERE 	
+			ID = #id#
+	</update>
+	
+	
+		<update id="update">
+		UPDATE sc_type 
+		SET 
+		typecode = #typecode#,   
+		typename = #typename#,   
+		typepid	= #typepid#,   
+		<!--typegroupid	= #typegroupid#,-->   
+		paramDesc1	= #paramdesc1#,   
+		paramValue1	= #paramvalue1#,   
+		paramDesc2	= #paramdesc2#,   
+		paramValue2	= #paramvalue2#,   
+		paramDesc3	= #paramdesc3#,   
+		paramValue3	= #paramvalue3#,
+		sortNo = #sortno#  
+		WHERE
+		ID = #id#
+	</update>
+  
+</sqlMap>

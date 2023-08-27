@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="FAZN01">
+    <select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+            t1.`id` deptId,
+            t1.dept_name AS "identifyDeptName",
+            t1.parent_id parentId,
+            CASE
+                t1.parent_id
+            WHEN "root" THEN
+                "根节点" ELSE t2.dept_name
+            END AS "functionDeptName",
+            GROUP_CONCAT(t3.goods_classify_name SEPARATOR ';') AS "goodsClassifyName"
+        FROM
+            fa_function_dept t1
+            LEFT JOIN fa_function_dept t2 ON t1.parent_id = t2.id
+            LEFT JOIN fa_function_goods t3 ON t1.id = t3.function_id
+        WHERE
+            1 = 1
+            <isNotEmpty prepend="AND" property="deptId">
+                t1.parent_id = #deptId#
+            </isNotEmpty>
+            <isNotEmpty prepend="AND" property="identifyDeptName">
+                t1.dept_name LIKE concat('%',#identifyDeptName#,'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="AND" property="functionDeptName">
+                t2.dept_name LIKE concat('%',#functionDeptName#,'%')
+            </isNotEmpty>
+        group by t1.`id`
+        order by t1.dept_num
+    </select>
+
+    <select id="queryFaDeptTree" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            `id`,
+            dept_num deptNum,
+            dept_name deptName,
+            parent_id parentId
+        from
+            fa_function_dept
+        <dynamic prepend="where">
+            <isNotEmpty prepend="and" property="parentEname">
+                parent_id = #parentEname#
+            </isNotEmpty>
+        </dynamic>
+        order by dept_num
+    </select>
+
+    <!-- 删除固定资产类别信息 -->
+    <delete id="delete" parameterClass="java.util.List">
+        delete from fa_function_dept where id in
+        <iterate open="(" close=")" conjunction=",">
+            #[]#
+        </iterate>
+    </delete>
+
+    <!-- 递归子节点 -->
+    <select id="recursionChildern" parameterClass="java.lang.String" resultClass="java.lang.String">
+        SELECT
+            id
+        FROM
+            `fa_function_dept`
+        where
+            parent_id = #value#
+    </select>
+
+    <insert id="saveDeptInfo" parameterClass="java.util.HashMap">
+        INSERT INTO fa_function_dept
+        (id,dept_num,dept_name,parent_id)
+        VALUES
+        (UUID(),#deptNum#,#deptName#,#parentId#)
+    </insert>
+
+    <select id="queryTwoDeptInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+            t1.`id` deptId,
+            t1.dept_name AS "identifyDeptName",
+            t1.dept_num AS "identifyDeptNum",
+            t1.parent_id parentId,
+            CASE
+                t1.parent_id
+                WHEN "root" THEN
+                    "根节点" ELSE t2.dept_name
+                END AS "functionDeptName",
+            t2.dept_num AS "functionDeptNum"
+        FROM
+            fa_function_dept t1
+                LEFT JOIN fa_function_dept t2 ON t1.parent_id = t2.id
+        WHERE
+            1 = 1
+        <isNotEmpty prepend="AND" property="parentId">
+            t1.id = #parentId#
+        </isNotEmpty>
+    </select>
+</sqlMap>

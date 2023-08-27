@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="container" style="width: 300px; height: 300px; margin: 0 auto"></div>
+
+    <script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+    <script src="reference/bootstrap-3.3.5/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="reference/js/common.js" type="text/javascript"></script>
+    <script src="../js/echarts.min.js"></script>
+    <script>
+        var myChart = echarts.init(document.getElementById('container'));
+
+        var index = 0;
+        var colorList = ['#0093ff', '#0093ff', '#0093ff', '#0093ff'];
+        var option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                show: false
+            },
+            grid: {
+                left: 100
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'value',
+
+                splitLine: {
+                    show: false
+                },
+                axisLabel: {
+                    show: false
+                },
+                axisTick: {
+                    show: false
+                },
+                axisLine: {
+                    show: false
+                }
+
+            },
+            yAxis: {
+                type: 'category',
+                inverse: true,
+                axisLine: {
+                    show: false
+                },
+                axisTick: {
+                    show: false
+                },
+                axisPointer: {
+                    label: {
+                        show: true,
+                        margin: 30
+                    }
+                },
+                data: ['杭州市', '宁波市', '温州市', '湖州市', '嘉兴市', '绍兴市', '金华市', '衢州市', '舟山市', '台州市', '丽水市'],
+                axisLabel: {
+                    margin: 100,
+                    fontSize: 14,
+                    align: 'left',
+                    color: '#333',
+                    rich: {
+                        a1: {
+                            color: '#fff',
+                            backgroundColor: colorList[0],
+                            width: 30,
+                            height: 30,
+                            align: 'center',
+                            borderRadius: 2
+                        },
+                        a2: {
+                            color: '#fff',
+                            backgroundColor: colorList[1],
+                            width: 30,
+                            height: 30,
+                            align: 'center',
+                            borderRadius: 2
+                        },
+                        a3: {
+                            color: '#fff',
+                            backgroundColor: colorList[2],
+                            width: 30,
+                            height: 30,
+                            align: 'center',
+                            borderRadius: 2
+                        },
+                        b: {
+                            color: '#fff',
+                            backgroundColor: colorList[3],
+                            width: 30,
+                            height: 30,
+                            align: 'center',
+                            borderRadius: 2
+                        }
+                    },
+                    formatter: function(params) {
+                        if (index == 11) {
+                            index = 0;
+                        }
+                        index++;
+                        if (index - 1 < 3) {
+                            return [
+                                '{a' + index + '|' + index + '}' + '  ' + params
+                            ].join('\n')
+                        } else {
+                            return [
+                                '{b|' + index + '}' + '  ' + params
+                            ].join('\n')
+                        }
+                    }
+                }
+            },
+            series: [{
+                    z: 2,
+                    name: 'value',
+                    type: 'bar',
+                    data: [3.66, 2.86, 1.82, 1.8, 1.53, 1.47, 1.3, 1.25, 1.1, 1.02, 1].map((item, i) => {
+                        itemStyle = {
+                            color: i > 3 ? colorList[3] : colorList[i]
+                        }
+                        return {
+                            value: item,
+                            itemStyle: itemStyle
+                        };
+                    }),
+                    label: {
+                        show: true,
+                        position: 'right',
+                        color: '#333333',
+                        fontSize: 14,
+                        offset: [10, 0]
+                    }
+                }
+
+            ]
+        };
+        myChart.setOption(option);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SQBZ03">
+	
+	
+	
+	<!-- 删除项目标注 -->
+	<delete id="deleteProjectInstance" parameterClass="String">
+		DELETE FROM sq_register_instance WHERE ID = #value#
+	</delete>
+	
+	
+	
+	<!-- 更新分项信息 -->
+	<update id="updateProjectInstance" parameterClass="java.util.HashMap">
+		UPDATE sq_register_instance
+		SET 
+		instance_name  = #instanceName#,
+		<!-- instance_remark = #instanceRemark#, -->
+		point  = #point#,
+		modifier = #modifier#,
+		modift_time  = #modiftTime#,
+		point_type = #pType#,
+		order_number  = #orderNumber#
+		WHERE
+			ID  = #id#
+	</update>
+	
+
+
+	<!-- 保存分项信息 -->
+	<insert id="insertProjectInstance" parameterClass="java.util.HashMap">
+		INSERT INTO sq_register_instance ( `ID`, `project_id`, `project_code`, `instance_code`, `instance_name`, `instance_remark`, `point`, `creator`, `create_time`, `point_type`, `order_number` )
+	VALUES
+	( #id#, #projectId#, #projectCode#, #instanceCode#, #instanceName#, #instanceRemark#, #point#, #creator#, #createTime#, #pType#, #orderNumber# );
+	</insert>
+	
+
+
+
+	<select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.sq.bz.domain.SQBZ03">
+			SELECT
+				ID AS "id",
+				project_id AS "projectId",
+				project_code AS "projectCode",
+				instance_code AS "instanceCode",
+				instance_name AS "instanceName",
+				instance_remark AS "instanceRemark",
+				point AS "point",
+				creator AS "creator",
+				create_time AS "createTime",
+				modifier AS "modifier",
+				modift_time AS "modiftTime",
+			CASE
+				WHEN point_type = '0' THEN
+				'打分' 
+				WHEN point_type = '1' THEN
+				'判断' 
+				END "pointType",
+				order_number AS "orderNumber" 
+			FROM
+				sq_register_instance
+			WHERE
+			1 =1
+		<isNotEmpty prepend=" AND " property="id">
+			project_id = #id#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  order_number asc
+			</isEmpty>
+  		</dynamic>
+		<isNotEmpty property="offset">
+	  		<isNotEmpty property="limit">
+				limit #offset#,#limit#
+			</isNotEmpty>
+		</isNotEmpty>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sq_register_instance WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+	</select>
+	
+	
+	<!-- 查询当天生成的编码数量 -->
+	<select id="projectInstanceCodeCount" parameterClass="String" resultClass="int">
+		select count(1) from sq_register_instance where instance_code like concat(#value#,'%')
+	</select>
+	
+	
+  
+</sqlMap>

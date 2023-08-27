@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HRDP02">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+				id	as "id",  <!-- 主键ID -->
+				bill_id	as "billNo",  <!-- 人员调派申请单ID -->
+				man_id	as "manId",  <!-- 人员信息表ID -->
+				phone	as "phone",  <!-- 人员信息表phone -->
+				status_code	as "statusCode",  <!-- 状态 -->
+				name	as "realName",  <!-- 人员名称 -->
+				work_no	as "workNo" <!-- 人员工号 -->
+		FROM .hr_job_change_man WHERE 1=1
+		<isNotEmpty prepend=" AND " property="billNo">
+			bill_id = #billNo#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .hr_job_change_man WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+
+	<insert id="insert">
+		INSERT INTO .hr_job_change_man (id,  <!-- 主键ID -->
+										bill_id,  <!-- 人员调派申请单ID -->
+										man_id,  <!-- 人员信息表ID -->
+										phone,  <!-- 人员信息表phone -->
+										status_code,  <!-- 状态 -->
+										name,  <!-- 人员名称 -->
+										work_no  <!-- 人员工号 -->
+										)		 
+	    VALUES (#id#, #billNo#, #manId#, #phone#, #statusCode#, #realName#, #workNo#)
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM .hr_job_change_man WHERE
+			bill_id = #billNo#
+	</delete>
+
+	<update id="update">
+		UPDATE .hr_job_change_man 
+		SET 
+					bill_id	= #billId#,   <!-- 人员调派申请单ID -->
+					man_id	= #manId#,   <!-- 人员信息表ID -->  
+					phone	= #phone#,   <!-- 人员信息表phone -->  
+					status_code	= #statusCode#,   <!-- 状态 -->  
+					name	= #name#,   <!-- 人员名称 -->  
+					work_no	= #workNo#  <!-- 人员工号 -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

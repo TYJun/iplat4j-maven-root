@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.css" />
+    <link rel="stylesheet" href="../reference/css/iconfont.css" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="../reference/css/colorGreen.css" />
+    <link rel="stylesheet" href="../reference/css/loading.css" />
+    <link rel="stylesheet" href="../reference/css/clothCommon.css" />
+  </head>
+  <style>
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+
+    .scan {
+      width: 200px;
+      height: 60px;
+      background-color: #30c37c;
+      padding-top: 18px;
+      font-size: 23px;
+      padding-left: 23px;
+      color: #e9f4ed;
+    }
+
+    img {
+      position: relative;
+      top: 50px;
+      left: 160px;
+    }
+
+    .input {
+      width: 200px;
+      height: 60px;
+      background-color: #30c37c;
+      padding-top: 18px;
+      font-size: 23px;
+      padding-left: 23px;
+      color: #e9f4ed;
+    }
+  </style>
+
+  <body>
+    <header class="mui-bar mui-bar-nav backColor">
+      <h1 class="mui-title">报废</h1>
+      <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+      </button>
+    </header>
+    <ul class="container">
+      <li id="scan">
+        <img src="../../../img/扫码.png" alt="" />
+        <div class="scan">芯片到达年限</div>
+      </li>
+      <li id="input">
+        <img src="../../../img/扫码.png" alt="" />
+        <div class="input">报废布草</div>
+      </li>
+    </ul>
+  </body>
+
+  <script type="text/javascript" src="../reference/mui/js/mui.min.js"></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/jquery-2.1.4.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/mui.picker.min.js"
+  ></script>
+  <script type="text/javascript" src="../reference/mui/js/baseInfo.js"></script>
+  <!-- <script type="text/javascript" src="../../../cordova.js"></script> -->
+  <script type="text/javascript">
+    /**
+     * @author cmy
+     */
+    //localStorage.setItem("url", "http://yapi.bonawise.com/mock/132/");
+    localStorage.setItem("dataGroupCode", "BONA");
+    var baseUrl = localStorage.getItem("url");
+
+    mui("body").on("tap", "#scan", function() {
+      location.href = "scrapXp.html";
+    });
+
+    mui("body").on("tap", "#input", function() {
+      location.href = "scrapCloth.html";
+    });
+
+    /**
+     * @desc   点击返回按钮
+     * @author huoke
+     */
+    mui("body").on("tap", "#back", function() {
+      location.href = "../clothing_menu.html";
+    });
+
+    /**
+     * @desc   手机系统返回键
+     * @author huoke
+     */
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+      document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+      location.href = "../clothing_menu.html";
+    }
+  </script>
+</html>

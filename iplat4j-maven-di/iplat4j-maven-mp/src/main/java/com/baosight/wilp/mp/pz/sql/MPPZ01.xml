@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MPPZ01">
+
+	<select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.mp.pz.domain.MpMatTypeConfig">
+		SELECT
+			id	as "id",  <!-- 主键 -->
+			dept_num	as "deptNum",  <!-- 科室编码 -->
+			dept_name	as "deptName",  <!-- 科室名称 -->
+			mat_type_id	as "matTypeId",  <!-- 物资分类ID -->
+			mat_type_num	as "matTypeNum",  <!-- 物资分类ID -->
+			mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+			remark	as "remark",  <!-- 备注 -->
+			rec_creator	as "recCreator",  <!-- 创建（申请）人 -->
+			rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+			rec_revisor	as "recRevisor",  <!-- 修改人 -->
+			rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+			data_group_code	as "dataGroupCode",  <!-- 账套 -->
+			archive_flag	as "archiveFlag" <!-- 归档标记 -->
+		FROM mp_mat_type_config WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			dept_num = #deptNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name like concat('%', #deptName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeId">
+			mat_type_id = #matTypeId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeName">
+			mat_type_name like concat('%', #matTypeName#, '%')
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			 <isNotEmpty property="orderBy">
+				  $orderBy$
+			 </isNotEmpty>
+			<isEmpty property="orderBy">
+				dept_num asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM mp_mat_type_config WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			dept_num = #deptNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name like concat('%', #deptName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeId">
+			mat_type_id = #matTypeId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeName">
+			mat_type_name like concat('%', #matTypeName#, '%')
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert" parameterClass="com.baosight.wilp.mp.pz.domain.MpMatTypeConfig">
+		INSERT INTO mp_mat_type_config (
+			id,  <!-- 主键 -->
+			dept_num,  <!-- 科室编码 -->
+			dept_name,  <!-- 科室名称 -->
+			mat_type_id,  <!-- 物资分类ID -->
+			mat_type_num,  <!-- 物资分类编码 -->
+			mat_type_name,  <!-- 物资分类名称 -->
+			remark,  <!-- 备注 -->
+			rec_creator,  <!-- 创建（申请）人 -->
+			rec_create_time,  <!-- 创建时间 -->
+			rec_revisor,  <!-- 修改人 -->
+			rec_revise_time,  <!-- 修改时间 -->
+			data_group_code,  <!-- 账套 -->
+			archive_flag  <!-- 归档标记 -->
+		)
+	    VALUES (#id#, #deptNum#, #deptName#, #matTypeId#, #matTypeNum#, #matTypeName#, #remark#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#, #archiveFlag#)
+	</insert>
+  
+	<delete id="delete" parameterClass="string">
+		DELETE FROM mp_mat_type_config WHERE id = #id#
+	</delete>
+
+	<update id="update" parameterClass="com.baosight.wilp.mp.pz.domain.MpMatTypeConfig">
+		UPDATE mp_mat_type_config
+		SET 
+			dept_num	= #deptNum#,   <!-- 科室编码 -->
+			dept_name	= #deptName#,   <!-- 科室名称 -->
+			mat_type_id	= #matTypeId#,   <!-- 物资分类ID -->
+			mat_type_num	= #matTypeNum#,   <!-- 物资分类编码 -->
+			mat_type_name	= #matTypeName#,   <!-- 物资分类名称 -->
+			remark	= #remark#,   <!-- 备注 -->
+			rec_revisor	= #recRevisor#,   <!-- 修改人 -->
+			rec_revise_time	= #recReviseTime#   <!-- 修改时间 -->
+		WHERE id = #id#
+	</update>
+
+	<select id="getConfigDept" resultClass="java.util.HashMap">
+		SELECT
+			DISTINCT dept_num AS "deptNum",
+					 dept_name AS "deptName"
+		FROM
+			`mp_mat_type_config`
+	</select>
+</sqlMap>

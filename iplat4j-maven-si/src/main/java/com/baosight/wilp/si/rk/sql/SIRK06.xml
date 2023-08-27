@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SIRK06">
+    <select id="query" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        SELECT
+        sd.REC_CREATOR	as "recCreator",  <!-- 记录创建责任者 -->
+        sd.REC_CREATE_TIME	as "recCreateTime",  <!-- 记录创建时间 -->
+        sd.ENTER_BILL_DETAIL_NO	as "enterBillDetailNo",  <!-- 入库单号 -->
+        sd.ENTER_BILL_NO	as "enterBillNo",  <!-- 入库单号 -->
+        sd.ENTER_TYPE	as "enterType",  <!-- 入库类别 -->
+        sd.enter_type_name	as "enterTypeName",  <!-- 入库类型名称 -->
+        sd.mat_type_num as "matTypeNum", <!-- 物资分类编码 -->
+        sd.mat_type_name as "matTypeName", <!-- 物资分类名称 -->
+        sd.MAT_NUM	as "matNum",  <!-- 物资编码 -->
+        sd.MAT_NAME	as "matName",  <!-- 物资名称 -->
+        sd.MAT_MODEL	as "matModel",  <!-- 物资型号 -->
+        sd.MAT_SPEC	as "matSpec",  <!-- 物资规格 -->
+        sd.UNIT	as "unit",  <!-- 计量单位编码 -->
+        sd.UNIT_NAME	as "unitName",  <!-- 计量单位名称 -->
+        sd.enter_num	as "enterNum",  <!-- 入库数量 -->
+        sd.ENTER_PRICE	as "enterPrice",  <!-- 入库单价 -->
+        sd.ENTER_AMOUNT	as "enterAmount",  <!-- 入库总价 -->
+        sd.ENTER_DATE	as "enterDate",  <!-- 入库日期 -->
+        sd.ENTER_TIME	as "enterTime",  <!-- 入库时间 -->
+        sd.surp_num	as "surpNum",  <!-- 供应商编码 -->
+        sd.surp_name	as "surpName",  <!-- 供应商名称 -->
+        sd.ware_house_no as "wareHouseNo",
+        sd.ware_house_name as "wareHouseName"
+        FROM si_receipt sd
+        WHERE 1=1
+        and sd.enter_num != 0.00
+        <isNotEmpty prepend=" AND " property="id">
+            sd.ID = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="supplierName">
+            sd.surp_name = #supplierName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="wareHouseName">
+            sd.ware_house_name = #wareHouseName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="matTypeName">
+            sd.mat_type_name = #matTypeName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="beginTime">
+            date_format(sd.rec_create_time,'%Y-%m-%d') >= #beginTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="endTime">
+            date_format(sd.rec_create_time,'%Y-%m-%d') <![CDATA[<=]]> #endTime#
+        </isNotEmpty>
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                sd.ENTER_BILL_DETAIL_NO asc
+            </isEmpty>
+        </dynamic>
+    </select>
+
+    <select id="count"  parameterClass="java.util.HashMap"
+            resultClass="int">
+        SELECT count(*)
+        FROM si_receipt sd
+        WHERE 1=1
+        and sd.enter_num != 0.00
+        <isNotEmpty prepend=" AND " property="id">
+            sd.ID = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="supplierName">
+            sd.surp_name = #supplierName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="wareHouseName">
+            sd.ware_house_name = #wareHouseName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="matTypeName">
+            sd.mat_type_name = #matTypeName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="beginTime">
+            date_format(sd.rec_create_time,'%Y-%m-%d') >= #beginTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="endTime">
+            date_format(sd.rec_create_time,'%Y-%m-%d') <![CDATA[<=]]> #endTime#
+        </isNotEmpty>
+    </select>
+
+<!--根据选择的供应商查询物资分类-->
+    <select id="queryMatTypeBySupplier" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.si.rk.domain.SiEnterDetail">
+        select mat_type_num matTypeNum,mat_type_name matTypeName
+        from si_enter_detail
+        where 1=1
+        <isNotEmpty prepend="and" property="supplierName">
+            surp_name = #supplierName#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="matTypeName">
+            mat_type_name like concat ('%',#matTypeName#,'%')
+        </isNotEmpty>
+        group by mat_type_name
+    </select>
+</sqlMap>

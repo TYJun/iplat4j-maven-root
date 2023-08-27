@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MXSC01">
+    <select id="queryTree" resultClass="java.util.HashMap">
+        SELECT
+        id as "label",
+        monitor_name as "text",
+        parent_id as "pId",
+        url,
+        "" as
+        "leaf"
+        FROM ms_monitor
+        <dynamic prepend="WHERE">
+            <isNotEmpty prepend="and" property="node">
+                parent_id = #node#
+            </isNotEmpty>
+        </dynamic>
+        order by
+        monitor_code +0 desc
+    </select>
+</sqlMap>

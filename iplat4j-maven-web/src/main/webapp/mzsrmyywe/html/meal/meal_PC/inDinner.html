@@ -1,0 +1,1253 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.css">
+    <link rel="stylesheet" href="../reference/mui/css/iconfont.css">
+    <link rel="stylesheet" href="../reference/css/common.css" />
+</head>
+<style type="text/css">
+    body {
+        background: #eee;
+    }
+    
+    .baseInfo {
+        margin-bottom: 20px;
+        background-color: #fff;
+    }
+    
+    .baseInfo .mui-table-view li {
+        height: 40px;
+    }
+    
+    .baseInfo .mui-table-view:after {
+        height: 0;
+    }
+    
+    .baseInfo .mui-table-view a {
+        width: 110%;
+        height: 40px;
+        float: left;
+        padding-left: 20px;
+    }
+    
+    .baseInfo .mui-table-view input {
+        display: inline-block;
+        float: right;
+        width: 60%;
+        text-align: right;
+        outline: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        height: 22px;
+    }
+    
+    .baseInfo .mui-table-view span {
+        float: right;
+        color: #5bc0de;
+        padding-left: 10px;
+        padding-right: 6px;
+    }
+    
+    input::-webkit-input-placeholder {
+        color: #8D9299;
+        font-size: 12px;
+        text-align: right;
+    }
+    
+    #address {
+        width: 80%;
+    }
+    
+    #address::-webkit-input-placeholder {
+        color: #FC7934;
+    }
+    
+    .mui-table-view a.pay {
+        color: #5bc0de !important;
+        font-weight: bold;
+    }
+    
+    .menuIn {
+        height: 30px;
+        line-height: 30px;
+        padding: 0 4px;
+        font-weight: bold;
+        color: #EF8915;
+        border-bottom: 1px solid #d7d7d7;
+    }
+    /*菜品列表*/
+    
+    #mealList {
+        margin-top: 10px;
+        color: #626262;
+        font-size: 16px;
+    }
+    
+    #mealList .mui-row {
+        padding-right: 12px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    
+    #mealList .mui-row .right {
+        color: #fd0b0b;
+        font-size: 16px;
+    }
+    /*底部*/
+    
+    .bottom {
+        position: fixed;
+        z-index: 5;
+        bottom: 0;
+        width: 100%;
+        height: 50px;
+        border-top: 1px solid #ddd;
+        background: #FFFFFF;
+    }
+    /*支付方式*/
+    
+    .mask {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        bottom: 0;
+        background-color: #000;
+        opacity: 0.5;
+        /*display: none;*/
+        z-index: 10;
+    }
+    
+    .payDetail {
+        position: fixed;
+        width: 100%;
+        height: 300px;
+        bottom: 0;
+        background-color: #fff;
+        z-index: 11;
+        display: none;
+    }
+    
+    .payDetail .title {
+        height: 40px;
+        line-height: 40px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #209c60;
+        text-align: center;
+    }
+    
+    .payDetail .title span {
+        color: #787878;
+        transform: rotate(45deg);
+        font-size: 25px;
+        float: right;
+        padding-right: 12px;
+        padding-top: 15px;
+    }
+    
+    .payDetail img {
+        width: 25px;
+        height: 25px;
+        vertical-align: middle;
+        margin-right: 10px;
+    }
+    
+    .payDetail .mui-input-group .mui-input-row {
+        height: 50px;
+        line-height: 50px;
+    }
+    /*点击变蓝色高亮*/
+    
+    .payDetail .mui-input-row.mui-active {
+        background-color: #0062CC;
+    }
+    /*弹出框*/
+    
+    .send {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 2200;
+        background: rgba(0, 0, 0, 0.5);
+        filter: progid: DXImageTransform.Microsoft.gradient(startcolorstr=#7F000000, endcolorstr=#7F000000);
+    }
+    
+    ul,
+    li {
+        padding: 0;
+        margin: 0;
+    }
+    
+    ul li {
+        list-style: none;
+    }
+    
+    #sendChild {
+        position: absolute;
+        left: 10%;
+        top: 20%;
+        width: 80%;
+        background: #fff;
+        height: 60%;
+        border-radius: 3px;
+    }
+    
+    #sendChild h4 {
+        height: 24px;
+        line-height: 24px;
+        font-size: 17px;
+        text-align: center;
+        color: #2f3031ee;
+    }
+    
+    #sendChild .overflow {
+        height: 85%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    
+    #ulList li {
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        color: #337ab7;
+    }
+    
+    .delete {
+        color: #787878;
+        transform: rotate(45deg);
+        font-size: 20px;
+        float: right;
+        padding-right: 12px;
+        padding-top: 8px;
+    }
+    
+    .mui-table-view-cell>a:not(.mui-btn).mui-active {
+        background-color: #fff !important;
+        /*border: 1px solid #2aabd2;*/
+    }
+    
+    .baseInfo .mui-table-view a {
+        font-size: 17px;
+    }
+    
+    input::-webkit-input-placeholder {
+        font-size: 15px;
+    }
+    
+    .baseInfo {
+        font-size: 17px;
+    }
+    
+    #pay::-webkit-input-placeholder {
+        font-weight: normal;
+    }
+    
+    .mui-table-view-cell.mui-active {
+        background: #fff;
+    }
+    
+    .tab {
+        display: flex;
+        justify-content: space-around;
+        height: 58px;
+        align-items: center;
+    }
+    
+    .tab span {
+        width: 40%;
+        text-align: center;
+        border-radius: 8px;
+        line-height: 38px;
+        color: #fff;
+        letter-spacing: 2px;
+        background: #c2c2c2;
+    }
+    
+    .tab span.choosed {
+        background: #e3bf7a;
+    }
+</style>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">到店自取</h1>
+        <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+            <span class="mui-icon mui-icon-left-nav"></span>
+        </button>
+    </header>
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+    <div id="loading" class="loading1" hidden>
+        <div class="loading2">
+            <span class="mui-spinner" style="width:80px;height:80px;"></span>
+        </div>
+    </div>
+    <div id="upload" class="transparent" hidden>
+        <div id="waiting" class="loader loading-position">
+            <div class="loader-inner line-spin-fade-loader">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        <div style="color:#fff;position:relative;width:100%;text-align:center;top:40%;">正在提交，请稍候...</div>
+        <div id="succeed" class="result-window" hidden>
+            <span class="glyphicon glyphicon-ok-circle" style="font-size:40px;color:#25F706;"></span>
+            <span style="color:#25F706;">提交成功</span>
+        </div>
+        <div id="failed" class="result-window" hidden>
+            <span class="glyphicon glyphicon-remove-circle" style="font-size:40px;color:#FF7C7C;"></span>
+            <span style="color:#FF7C7C;">提交失败了</span>
+        </div>
+    </div>
+    <div class="mui-content" style="margin-bottom: 50px">
+
+        <!-- lxy修改 -->
+        <div class="tab">
+<!--            <span id="outFood">外卖配送</span> -->
+            <span id="inDinner" class="choosed">到店自取</span>
+        </div>
+
+        <div class="baseInfo boxInfo">
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                    <a style="width: 102%">订餐人<input type="text" id='patientName' placeholder="请输入姓名"></a>
+                </li>
+                <li class="mui-table-view-cell">
+                    <a style="width: 102%">手机号码<input type="text" id='patientTelNumber' placeholder="请输入手机号"></a>
+                </li>
+                <li class="mui-table-view-cell">
+<!--                    <a>自取地点<span class="mui-icon mui-icon-forward"></span><input type="text" id='building' placeholder="请选择自取地点" readonly></a>-->
+                    <a>自取地点<span class="mui-icon mui-icon-forward"></span><input type="text" value="职工食堂" readonly></a>
+                </li>
+                <li class="mui-table-view-cell">
+                    <a>自取时间<span class="mui-icon mui-icon-forward"></span><input type="text" id="time" placeholder="请选择自取时间" readonly></a>
+                </li>
+            </ul>
+        </div>
+        <div class="baseInfo">
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                    <a class="pay">支付方式
+                        <span class="mui-icon mui-icon-forward pay-icon"></span>
+                        <input type="text" id='pay' readonly placeholder="请选择支付方式">
+                    </a>
+                </li>
+                <li class="mui-table-view-cell">
+                    <a style="width: 102%">备注<input type="text" id="desc" placeholder="请输入个人需求(非必填)"></a>
+                </li>
+            </ul>
+        </div>
+        <div class="baseInfo" style="padding: 0 8px;">
+            <div class="menuIn">
+                菜品信息
+            </div>
+            <!-- <hr> -->
+            <div id="mealList">
+            </div>
+        </div>
+    </div>
+    <div class="mask" hidden></div>
+    <div class="payDetail">
+        <div class="title">请选择支付方式<span class="mui-icon iconfont icon-jia1 delete-icon"></span></div>
+        <form class="mui-input-group">
+        </form>
+    </div>
+    <nav class="mui-row bottom">
+        <div class="mui-col-xs-8 mui-col-sm-8 mui-col-md-8 mui-col-lg-8" style="font-size:15px;height:50px;line-height:50px;background:#fff;padding: 0 15px;letter-spacing: 1px">
+            共需付￥<span id="totalPrice" style="color:#f20808;font-size:20px;">20</span>
+        </div>
+        <div id="submit" class="mui-col-xs-4 mui-col-sm-4 mui-col-md-4 mui-col-lg-4" style="text-align:center;font-size:18px;color:#FFFFFF;height:50px;background:#14b072;line-height:50px;">
+            确认下单
+        </div>
+    </nav>
+    <!-- 弹出框 -->
+    <div id="win-two" class="send" hidden>
+        <div id="sendChild">
+            <h4>配送时间<span class="mui-icon iconfont icon-jia1 delete"></span></h4>
+            <hr>
+            <div class="overflow">
+                <ul id="ulList">
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script src="../reference/mui/js/mui.js" type="text/javascript"></script>
+<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../reference/js/common.js" type="text/javascript"></script>
+<script src="../reference/js/math.js" type="text/javascript"></script>
+<script src="../../../cordova.js" type="text/javascript"></script>
+<script type="text/javascript">
+    localStorage.removeItem("typePay");
+
+    var baseUrl = localStorage.getItem("url");
+    var url = location.search;
+    var jsonbak = url.substring(1, url.length);
+    var json = decodeURIComponent(jsonbak);
+    json = JSON.parse(json);
+    console.log(json)
+    var flag = json.mealNum;
+    var buildConfig = JSON.parse(localStorage.getItem("buildConfig"));
+    console.log(buildConfig)
+
+    var canteenName = localStorage.getItem("canteenName");
+    console.log("食堂名称", canteenName);
+
+    var workNo = localStorage.getItem('workNo');
+    var dataGroupCode = localStorage.getItem("dataGroupCode");
+    var canteenTimesInfo = JSON.parse(localStorage.getItem("canteenTimesInfo"));
+    console.log('canteenTimesInfo');
+    console.log(canteenTimesInfo);
+    var isApproved = "Y";
+    var mealList = "",
+        totalPrice = json.totalPrice,
+        mealNum = json.mealNum,
+        needDate = json.needDate,
+        canteenNum = json.canteenNum,
+        payType = "",
+        building = "",
+        sendTime = "";
+
+        //init();
+    function init() {
+			$.ajax({
+				//url: baseUrl + 'app_basicInfoController.do?queryCardWorkInfo',
+				url: baseUrl + 'cardmeal',
+                type: 'post',
+                headers:{
+                    className : 'CardWorkConsumeService',
+                    methodName : 'queryWorkInfo'
+                },
+				data: {
+					JSNHID: "UEzTab3BHgDYrE+W7sFECMtYMbF4FNsXM/Wo6WkDWNs="
+				},
+				success: function(data) {
+					// var data = eval("(" + data + ")");
+					console.log(data);
+					if(data.success ) {
+						if(!data.obj || !data.obj[0].cardBalance ){
+							return;
+						}
+                        workNo = data.obj[0].cardUserCode;
+                        localStorage.setItem('workNo',workNo)
+                        console.log('===',workNo);
+                        var name = data.obj[0].cardUserName;
+                        localStorage.setItem('name',name)
+                        console.log('===',name);
+                        var telPhone = data.obj[0].cardUserPhone;
+                        localStorage.setItem('telPhone',telPhone)
+                        console.log('===',telPhone);
+						$("#Kye").text(Number(data.obj[0].cardBalance/100).toFixed(2));
+						//loadViews();
+					} else {
+						$("#warn small").html(data.respMsg);
+						$("#warn").fadeIn(500);
+						setTimeout('$("#warn").fadeOut(500)', 3000);
+					}
+				}
+			});
+		}
+    $("#totalPrice").html(totalPrice);
+    var moveGetDate = [];
+    // 带出电话信息
+    $('#patientTelNumber').val(localStorage.getItem("telPhone"));
+    $(function() {
+        //loadCardType()//待完成
+    });
+    // 早中晚对应的配送时间
+    var BsendTime, LsendTime, DsendTime;
+    var BadvanceTime, LadvanceTime, DadvanceTime;
+    for (var i = 0; i < canteenTimesInfo.length; i++) {
+        if (canteenTimesInfo[i].mealNum == '001') {
+            BsendTime = canteenTimesInfo[i].sendTime;
+            BsendTime = BsendTime.split(',');
+            BadvanceTime = canteenTimesInfo[i].advanceTime;
+        }
+        if (canteenTimesInfo[i].mealNum == '002') {
+            LsendTime = canteenTimesInfo[i].sendTime;
+            LsendTime = LsendTime.split(',');
+            LadvanceTime = canteenTimesInfo[i].advanceTime;
+        }
+        if (canteenTimesInfo[i].mealNum == '003') {
+            DsendTime = canteenTimesInfo[i].sendTime;
+            DsendTime = DsendTime.split(',');
+            DadvanceTime = canteenTimesInfo[i].advanceTime;
+        }
+    }
+    console.log('早中晚配送时间');
+    console.log(BsendTime);
+    console.log(LsendTime);
+    console.log(DsendTime);
+    // 早中晚提前预定时间
+    console.log('早中晚提前时间');
+    console.log(BadvanceTime);
+    console.log(LadvanceTime);
+    console.log(DadvanceTime);
+    // 获取当前时间
+    var date = new Date(),
+        year = date.getFullYear(),
+        month = date.getMonth() + 1,
+        day = date.getDate(),
+        now = year + "-" + month + "-" + day,
+        nowHour = parseInt(date.getHours()), //现在小时
+        nowMinutes = parseInt(date.getMinutes()); //现在分钟
+    var orderFinish, orderFinishH, orderFinishM;
+
+    if (flag == '001') {
+        if (nowMinutes + BadvanceTime >= 60) {
+            orderFinishH = nowHour + 1;
+            orderFinishM = nowMinutes + BadvanceTime - 60;
+        } else {
+            orderFinishH = nowHour;
+            orderFinishM = nowMinutes + BadvanceTime;
+        }
+        orderFinish = orderFinishH + ":" + orderFinishM;
+    }
+    if (flag == '002') {
+        if (nowMinutes + LadvanceTime >= 60) {
+            orderFinishH = nowHour + 1;
+            orderFinishM = nowMinutes + LadvanceTime - 60;
+        } else {
+            orderFinishH = nowHour;
+            orderFinishM = nowMinutes + LadvanceTime;
+        }
+        orderFinish = orderFinishH + ":" + orderFinishM;
+    }
+    if (flag == '003') {
+        if (nowMinutes + DadvanceTime >= 60) {
+            orderFinishH = nowHour + 1;
+            orderFinishM = nowMinutes + DadvanceTime - 60;
+        } else {
+            orderFinishH = nowHour;
+            orderFinishM = nowMinutes + DadvanceTime;
+        }
+        orderFinish = orderFinishH + ":" + orderFinishM;
+    }
+    // 用于跟配送时间比较，超出的配送时间不显示
+    console.log('当前时间+提前时间与配送时间比较')
+    console.log(orderFinish)
+    orderFinish = dateChange(now + ' ' + orderFinish + ':00');
+    console.log(orderFinish)
+    
+    function dateChange(dataCh) {
+        return (new Date(Date.parse(dataCh.replace(/-/g, "/")))).getTime();
+    }
+
+    var list = [];
+    console.log("flag", flag);
+    //加载自取时间
+    loadSendTime();
+
+    function loadSendTime() {
+        var ul = "";
+        if (flag == '001') {
+            for (var i = 0; i < BsendTime.length; i++) {
+                if (json.needDate == date_YMD()) {
+                    if (orderFinish <= dateChange(now + ' ' + BsendTime[i].split(':')[0] + ':' + BsendTime[i].split(':')[1] + ':00')) {
+                        list.push(BsendTime[i]);
+                    }else{
+                    	mui.toast('超出订餐时间');
+                    	return false;
+                    }
+                } else {
+                    list.push(BsendTime[i]);
+                }
+            }
+        }
+        if (flag == '002') {
+            for (var i = 0; i < LsendTime.length; i++) {
+                if (json.needDate == date_YMD()) {
+                    if (orderFinish <= dateChange(now + ' ' + LsendTime[i].split(':')[0] + ':' + LsendTime[i].split(':')[1] + ':00')) {
+                        list.push(LsendTime[i]);
+                    }else{
+                        mui.toast('超出订餐时间');
+                        return false;
+                    }
+                } else {
+                    list.push(LsendTime[i]);
+                }
+            }
+        }
+        if (flag == '003') {
+            for (var i = 0; i < DsendTime.length; i++) {
+                if (json.needDate == date_YMD()) {
+                    if (orderFinish <= dateChange(now + ' ' + DsendTime[i].split(':')[0] + ':' + DsendTime[i].split(':')[1] + ':00')) {
+                        list.push(DsendTime[i]);
+                    }else{
+                        mui.toast('超出订餐时间');
+                        return false;
+                    }
+                } else {
+                    list.push(DsendTime[i]);
+                }
+            }
+        }
+        console.log("配送时间");
+        console.log(list);
+        for (var i = 0; i < list.length; i++) {
+            ul += ulList(i, list[i], i);
+        }
+
+        $("#ulList").html(ul);
+        $("#time").val(list[0]);
+        sendTime = list[0];
+        $("#ulList li").click(function() {
+            sendTime = '';
+            sendTime = $(this).text();
+            console.log("自取时间", sendTime);
+            $("#time").val(sendTime);
+            $("#win-two").fadeToggle(300);
+        });
+        return true;
+    }
+
+    // 加载卡片类型
+    function loadCardType() {
+        //一卡通待完成
+        $.ajax({
+            url: baseUrl + 'app_basicInfoController.do?queryCardInfo',
+            type: 'post',
+            data: {
+                workNo: workNo
+            },
+            async: false,
+            success: function(data) {
+                var data = JSON.parse(data);
+                console.log(data);
+                cardTypeName = data.obj.cardTypeName;
+                loadDiscount();
+            }
+        })
+    }
+    
+    // 获取折扣比例
+    function loadDiscount() {
+        $.ajax({
+            url: baseUrl + 'app_baseBasicInfoController.do?getTypecodeAndTypeNameByTypeGroupCodeMeal',
+            type: 'post',
+            data: {
+                typeGroupCode: billDiscount
+            },
+            async: false,
+            success: function(data) {
+                var data = JSON.parse(data);
+                var list = JSON.parse(data.jsonStr).obj;
+                console.log("获取折扣")
+                console.log(list);
+                for (var i = 0; i < list.length; i++) {
+                    if (typeCode == list[i].typecode) {
+                        if (cardTypeName == "职工卡" && list[i].paramValue2 != null && list[i].paramValue2 != '') {
+                            paramValue = list[i].paramValue2;
+                        } else if (cardTypeName == "学生卡" && list[i].paramValue1 != null && list[i].paramValue1 != '') {
+                            paramValue = list[i].paramValue1;
+                        } else {
+                            paramValue = "1"
+                        }
+                    }
+                }
+                totalPrice = json.totalPrice * paramValue;
+                $("#totalPrice").html(totalPrice.toFixed(2));
+            }
+        })
+    }
+
+    loadSubsidyPrice();
+    //加载是否使用补贴
+    function loadSubsidyPrice() {
+        $.ajax({
+            url: baseUrl + 'workmeal',
+            type: 'post',
+            headers:{
+                className : 'AppWorkBaseInfoService',
+                methodName : 'querySubsidy'
+            },
+            data: {
+                workNo: localStorage.getItem('workNo'),
+                mealNum:json.mealNum,
+                needDate: needDate //D今日Y明日
+            },
+            async: false,
+            success: function(data) {
+                // alert(JSON.stringify(data))
+                console.log("获取人员是否使用优惠券")
+                // alert(data.obj[0].discountAmount)
+                subsidyCount = data.obj[0];
+                localStorage.setItem("subsidyCount", subsidyCount);
+            }
+        })
+    }
+
+    loadBtPrice();
+    //加载餐费
+    function loadBtPrice() {
+        $.ajax({
+            url: baseUrl + 'workmeal',
+            type: 'post',
+            headers:{
+                className : 'AppWorkBaseInfoService',
+                methodName : 'queryDetailByBillNoYh'
+            },
+            data: {
+                workNo: localStorage.getItem('workNo'),
+                mealNum:json.mealNum
+            },
+            async: false,
+            success: function(data) {
+                // alert(JSON.stringify(data))
+                console.log("获取人员折扣")
+                // alert(data.obj[0].discountAmount)
+                discountAmount = data.obj[0].discountAmount;
+                if(subsidyCount == 0){
+                    localStorage.setItem("discountAmount", discountAmount);
+                    $('#discountAmount').val(discountAmount);
+                    totalPrice = parseFloat(totalPrice) - parseFloat(discountAmount);
+                }
+                totalPrice = parseFloat(totalPrice);
+                localStorage.setItem("discountAmount", "无");
+                $('#discountAmount').val(discountAmount);
+                var htm = "￥"+totalPrice.toFixed(2);
+                $("#totalPrice").html(htm);
+            }
+        })
+    }
+
+
+    // 加载支付方式
+    var payTypeSelf = localStorage.removeItem("payTypeSelf");
+    loadPayType();
+
+    function loadPayType() {
+        $.ajax({
+            //url: baseUrl + 'app_basicInfoController.do?queryMealPayType',
+            url: baseUrl + 'meal',
+            type: 'post',
+            headers:{
+                className : 'AppBaseInfoService',
+                methodName : 'queryMealPayType'
+            },
+            data: {
+                canteenType: "zgst",
+                orally: "APP"
+            },
+            success: function(data) {
+                //var data = eval("(" + data + ")");
+                console.log("支付方式");
+                console.log(data);
+                var list = data.obj;
+                var taskList = "";
+                var pay_type_num = "";
+                var imgUrl = "";
+                for (var i = 0; i < list.length; i++) {
+                    pay_type_num = list[i].pay_type_num;
+                    //一卡通支付         0301
+                    //微信支付          0201
+                    //支付宝扫码在线支付 0103
+                    //支付宝扫码线下支付 0102
+                    //支付宝线上支付       0101
+                    //餐券支付          0001
+                    //现金支付          0000
+                    if (pay_type_num == "0101")
+                        imgUrl = "../img/alipay.png";
+                    else if (pay_type_num == "0102")
+                        imgUrl = "../img/cashpay.png";
+                    else if (pay_type_num == "0103")
+                        imgUrl = "../img/cashpay.png";
+                    else if (pay_type_num == "0001")
+                        imgUrl = "../img/canquan.png";
+                    else if (pay_type_num == "0000")
+                        imgUrl = "../img/xianjin.png";
+                    else if (pay_type_num == "0401")
+                        imgUrl = "../img/xuni.png";
+                    else if (pay_type_num == "0201")
+                        imgUrl = "../img/wxpay.png";
+					else if (pay_type_num == "0501")
+                        imgUrl = "../img/abc.png";
+                    taskList += showPayType(list[i].pay_type_name, pay_type_num, i, imgUrl, payTypeSelf);
+
+                }
+                $(".payDetail form").html(taskList);
+                // 支付方式默认选中第一个
+                $('.mui-input-group div').eq(0).find('input').attr('checked', 'true');
+                payTypeSelf = $('.mui-input-group div').eq(0).find('input').val();
+                $('#pay').val($('.mui-input-group div').eq(0).find('label').text());
+                $('#pay').attr('dataname', payTypeSelf);
+
+                $('.mui-input-group input[type="radio"]').click(function() {
+                    payTypeSelf = $('input[type="radio"]:checked').val();
+                    if (payTypeSelf != '' || payTypeSelf != null || payTypeSelf != 'null' || payTypeSelf != 'undefined') {
+                        $('.payDetail').hide();
+                        $('.mask').hide();
+                        $('#pay').val($(this).prev('label').text());
+                        $('#pay').attr('dataname', payTypeSelf);
+                    }
+                })
+            }
+        })
+    }
+
+    function showPayType(pay_type_name, pay_type_num, i, imgUrl, payTypeSelf) {
+        var html = "";
+        if (pay_type_num == '0401' || pay_type_num == '0101' || pay_type_num == '0201'|| pay_type_num == '0501') {
+            html += '<div class="mui-input-row mui-radio">';
+            if (pay_type_name == '线上刷卡支付') {
+                html += '<label><img src="' + imgUrl + '" class="payImg">职工卡支付</label>';
+            } else {
+                html += '<label><img src="' + imgUrl + '" class="payImg">' + pay_type_name + '</label>';
+            }
+            if (payTypeSelf == pay_type_num) {
+                html += '<input type="radio" name="payRadio" id="payRadio" checked value="' + pay_type_num + '">';
+            } else {
+                html += '<input type="radio" name="payRadio" id="payRadio" value="' + pay_type_num + '">';
+            }
+            html += '</div>';
+        }
+        return html;
+    }
+
+
+    // 加载菜品
+    var array = new Array();
+    array = json.mealInfo;
+    console.log('加载菜品')
+    console.log(array);
+    for (var i = 0; i < array.length; i++) {
+        mealList += createHtml(array[i].id, array[i].menuName, array[i].menuNumber, array[i].menuPrice);
+    }
+    $("#mealList").html(mealList);
+
+    function createHtml(id, name, num, price) {
+        var html = "";
+        html += '<div id="' + id + '" class="mui-row">';
+        html += '<div class="mui-col-xs-8 mui-col-sm-8 mui-col-md-8 mui-col-lg-8">' + name + '</div>';
+        html += '<div class="mui-col-xs-2 mui-col-sm-2 mui-col-md-2 mui-col-lg-2">×' + num + '</div>';
+        html += '<div class="mui-col-xs-2 mui-col-sm-2 mui-col-md-2 mui-col-lg-2 right">￥' + price + '</div>';
+        html += '</div>';
+        return html;
+    }
+
+    loadUserInfo();
+
+    //加载用户地址
+    function loadUserInfo() {
+        var name = localStorage.getItem("name");
+        $('#patientName').val(name);
+        $('#loading').show();
+        building = ''; //地点
+        $.ajax({
+            //url: baseUrl + "app_baseBasicInfoController.do?queryUser",
+            url: baseUrl + 'workmeal',
+            type: 'post',
+            headers:{
+
+
+              className : 'AppWorkBaseInfoService',
+                methodName : 'queryUser'
+ },
+            async: false,
+            data: {
+                userCode: workNo,
+                canteenNum: json.canteenNum,
+                dataGroupCode: dataGroupCode
+            },
+            success: function(data) {
+                $("#loading").hide();
+                console.log('加载人员信息');
+                console.log(data);
+                if (data.success) {
+                    if (data.obj == null || data.obj.length == 0) {
+                        return;
+                    }
+                    var list = data.obj[0];
+                    //var userName = list.userName; //用户姓名
+                   // var tel = list.userTelNumber; //手机号
+                    building = list.building; //地点
+                    //$('#patientName').val(userName);
+                    //$('#patientTelNumber').val(tel);
+                    $('#building').val(list.buildingName);
+                    $("#building").attr('dataName', building);
+                    // $('#floor').val(floor);
+                    // $('#dept').val(deptName);
+                    // $('#dept').attr('deptNum', deptNum);
+                    // $('#room').val(room);
+                } else {
+                    mui.toast("未查询到历史地点，请选择！");
+                }
+            }
+        })
+    }
+    //加载自取地点，building表示自取地点
+    // function loadBuilding() {
+    //     var id, name, code, ul = "";
+    //     for (var i = 0; i < buildConfig.length; i++) {
+    //         id = buildConfig[i].typeCode;
+    //         name = buildConfig[i].typeName;
+    //         ul += ulList(id, name, code);
+    //     }
+    //     $("#ulList").html(ul);
+    //     $("#ulList li").click(function() {
+    //         building = $(this).attr('id');
+    //         $("#building").val($(this).text());
+    //         $("#building").attr('dataName', building);
+    //         $("#win-two").fadeToggle(300);
+    //     });
+    // }
+
+
+    function ulList(mealTime, sendTimeS, code) {
+        var html = "<li id='" + mealTime + "' dataCode='" + code + "'>" + sendTimeS + "</li>";
+        return html;
+    }
+
+
+    mui('body').on('tap', '.boxInfo ul li a', function() {
+        var Text = $(this).text();
+        if (Text == '手机号码') {
+            $(this).children('#patientTelNumber').focus();
+        }
+        $('.send h4').html(Text + '<span class="mui-icon iconfont icon-jia1 delete"></span>');
+        if (Text == '自取地点') {
+            loadBuilding();
+            // $("#floor").val('');
+            // floor = "";
+            $("#dept").val('');
+            // deptNum = "";
+            // deptName = "";
+            // $("#room").val('');
+            // room = "";
+            $('#address').val('');
+            $("#win-two").fadeToggle(300);
+        }
+        if (Text == '自取时间') {
+            list = [];
+            if(loadSendTime()){
+	            $("#win-two").fadeToggle(300);
+            }
+        }
+
+    })
+
+    //确认下单按钮
+    $("#submit").unbind('click').click(function() {
+        $("#submit").css('pointer-events', 'none');
+
+        var address = "";
+        if (building == "") {
+            address = $('#address').val();
+        } else {
+            address += $("#building").val();
+            // address += $("#floor").val();
+            // address += $("#dept").val();
+            // address += $('#room').val();
+        }
+        console.log(address);
+
+        var billDetail = [];
+        var billObj = {};
+        if (array.length > 0) {
+            array.forEach((item) => {
+                billObj = {
+               		scheId: item.id,
+                    menuName: item.menuName,
+                    menuNum: item.menuNum,
+                    menuNumber: item.num,
+                    menuPrice: item.menuPrice
+                }
+                billDetail.push(billObj);
+            })
+        }
+
+        console.log("菜品的数组信息", billDetail);
+        if(subsidyCount == 1){
+            alert("您已经点过餐或存在未付款的订单，请勿重新下单！");
+            return location.href = "../meal_order.html";
+        }
+
+        var jsonbak = {
+            "openId": workNo, //订餐人工号
+            "archiveFlag": "APP",
+            "userName": $("#patientName").val().replace(/[ ]/g, ""), //用户名
+            "canteenNum": canteenNum, //食堂编码
+            "canteenName": canteenName, //食堂名称
+            "reqSendTime": sendTime, //自取时间
+            "billTotalPrice": totalPrice, //总价
+            "userTelNumber": $('#patientTelNumber').val().replace(/[ ]/g, ""), //手机号
+            "building": $("#building").attr('dataName'), //楼
+            "buildingName": $("#building").val(), //楼
+            "mealNum": mealNum, //餐次
+            "needDate": needDate, //D今日Y明日
+            "userCode": workNo, //工号
+            "deptNum": localStorage.getItem("deptCode"), //科室编号
+            "deptName": localStorage.getItem("deptName"), //科室名称
+            "billRemark": $("#desc").val(), //备注
+            "payType": $('#pay').attr('dataname'), //支付方式(货到付款)
+            "billDetail": billDetail //选择菜品
+            //"billDiscount": paramValue, //折扣比例
+            // "address": $("#building").val() //自取地点
+            
+        }
+
+
+        if (!checkData(jsonbak)) {
+            $("#submit").css('pointer-events', 'auto');
+            $("#upload").hide();
+            return;
+        }
+        // var json = JSON.stringify(billDetail);
+
+        $.ajax({
+            url: baseUrl + 'workmeal',
+            type: 'post',
+            headers:{
+                className : 'AppWorkOrderService',
+                methodName : 'saveWork'
+            },
+            data: { 
+            	json : JSON.stringify(jsonbak),
+            	billType : 'ZQ'
+            },
+            success: function(data) {
+                // $("#submit").css('pointer-events', 'auto');
+                //var data = JSON.parse(data);
+                console.log(data)
+                if (data.respCode == '200') {
+                    var MSG = data.respMsg;
+                    localStorage.setItem("payTypeSelf", $('#pay').attr('dataname'));
+                    localStorage.setItem("buildingName",$("#building").attr('dataName'));
+                    // 到店自取
+                    localStorage.setItem("typePay", "inDinner");
+                    location.href = "./meal_repay.html?" + MSG;
+
+                } else {
+                    $("#upload").hide();
+                    $("#warn small").html(data.respMsg + '请重新订餐');
+                    $('#warn').fadeIn(500);
+                    // 如果接口出错，还是可以重复点击
+                    // $('#submit').css('background','#adadad');
+                    $("#submit").css('pointer-events', 'auto');
+                }
+            }
+        });
+    });
+
+    //数据校验
+
+    function checkData(data) {
+        checkedMeal();
+
+        if (isApproved == "N") {
+            $("#warn small").html("菜品数据存在异常，不能下单！");
+            $("#warn").fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return;
+        }
+
+        if (data.userName == null || data.userName == "") {
+            $("#warn small").html("请填写用户姓名");
+            $('#warn').fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return false;
+        }
+
+        if (data.userTelNumber == null || data.userTelNumber == "") {
+            $("#warn small").html("请输入手机号");
+            $('#warn').fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return false;
+        }
+
+        if (data.userTelNumber.length != 11 || isNaN(data.userTelNumber)) {
+            $("#warn small").html("请输入正确的手机号");
+            $('#warn').fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return false;
+        }
+
+        var phone = data.userTelNumber;
+        var telReg = !!phone.match(/^1[345789]\d{9}$/);
+        // var telReg = !!phone.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/);
+        if (telReg == false) {
+            $("#warn small").html("手机号格式不正确");
+            $('#warn').fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return false;
+        }
+
+        if (data.building == "" && data.address == "") {
+            $("#warn small").html("请选择楼号");
+            $('#warn').fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return false;
+        }
+
+        if (data.address == "") {
+            $("#warn small").html("请选择楼层");
+            $('#warn').fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return false;
+        }
+
+        // if (data.deptName == "" && data.address == "") {
+        //     $("#warn small").html("请选择科室");
+        //     $('#warn').fadeIn(500);
+        //     setTimeout("$('#warn').fadeOut(500)", 3000);
+        //     return false;
+        // }
+
+        // if(data.bedNo == "" && data.address == "") {
+        //  $("#warn small").html("请选择房号");
+        //  $('#warn').fadeIn(500);
+        //  setTimeout("$('#warn').fadeOut(500)", 3000);
+        //  return false;
+        // }
+
+        if ((data.building == "") && data.address == "") {
+            $("#warn small").html("请填写送餐地址");
+            $('#warn').fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return false;
+        }
+
+        // checkTime(data.reqSendTime);
+        if (data.reqSendTime == "") {
+            $("#warn small").html("请选择配送时间");
+            $('#warn').fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return false;
+        }
+
+        if (data.billRemark.length > 100) {
+            $("#warn small").html("输入的备注信息过多,请修改!");
+            $('#warn').fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return false;
+        }
+        if (data.payType == undefined || data.payType == "undefined") {
+            $("#warn small").html("请选择支付方式!");
+            $('#warn').fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return false;
+        }
+
+        // if(data.reqSendTime != "") {
+        //  checkTime(data.reqSendTime);
+        // }
+        return true;
+    }
+
+    function checkedMeal() {
+        var price = 0;
+        for (var i = 0; i < array.length; i++) {
+            if (array[i].menuNumber <= 0) {
+                isApproved = "N";
+            }
+            var s1 = parseFloat(accMul(array[i].menuPrice, array[i].menuNumber)).toFixed(2);
+            price = parseFloat(accAdd(s1, price)).toFixed(2);
+        }
+        //console.log(price);
+        if(subsidyCount != 0)
+        {
+            if (price != parseFloat(totalPrice).toFixed(2)) {
+                isApproved = "N";
+            }
+        }
+    }
+
+    // function checkTime(reqSendTime) {
+    //     console.log('配送');
+    //     console.log(list); //7:00,8:00
+    //     console.log(orderFinish)
+    //     console.log(dateChange(now + ' ' + reqSendTime + ':00'))
+    //     if (json.needDate == date_YMD()) {
+    //         var checkFlag = 'N';
+    //         var listTime = [];
+    //         for (var i = 0; i < list.length; i++) {
+    //             if (orderFinish > dateChange(now + ' ' + list[i] + ':00')) {
+    //                 listTime.push(list[i]);
+    //             } else {
+    //                 checkFlag = 'Y';
+    //             }
+    //         }
+    //         if (listTime.length == list.length) {
+    //             $("#win-two").hide();
+    //             $('#warn small').html('已超出配送时间,请重新点餐');
+    //             $('#warn').fadeIn(500);
+    //             setTimeout("$('#warn').fadeOut(500)", 1000);
+    //             return false;
+    //         }
+    //
+    //         if (checkFlag == 'Y') {
+    //             if (orderFinish > dateChange(now + ' ' + reqSendTime + ':00')) {
+    //                 $('#time').val('');
+    //                 sendTime = $('#time').val();
+    //                 mui.toast("超出当前配送时间，请选择其他配送时间");
+    //                 return false;
+    //             } else {
+    //                 return true
+    //             }
+    //         }
+    //
+    //     } else {
+    //         return true
+    //     }
+    //
+    // }
+
+
+    mui('body').on('tap', '#pay,.pay-icon', function() {
+        $('.mask').show();
+        $('.payDetail').fadeIn(500);
+
+    })
+
+    mui('body').on('tap', '.delete-icon,.mask', function() {
+        $('.mask').hide();
+        $('.payDetail').hide();
+    })
+    mui('body').on('tap', '.delete', function() {
+        $('.send').hide();
+    })
+    mui('body').on('tap', '#back', function() {
+        location.href = "./mealList.html?" + json.canteenNum;
+    })
+
+
+    // APP系统键回退
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        /**
+         * 系统返回键监听
+         */
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+    //返回
+    function onBackKeyDown() {
+        location.href = "./mealList.html?" + json.canteenNum;
+    }
+
+    // 外卖配送
+    $('#outFood').click(function() {
+        location.href = './mealConfirme.html?' + jsonbak;
+    })
+</script>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PSPCTmealOrderBillDetail">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ps.pc.domain.PSPCTmealOrderBillDetail">
+		SELECT
+		id as "id",
+		REC_CREATOR as "recCreator",  <!-- 记录创建责任者 -->
+		REC_REVISE_TIME as "recReviseTime",  <!-- 记录修改时间 -->
+		REC_REVISOR as "recRevisor",  <!-- 记录修改责任者 -->
+		REC_CREATE_TIME as "recCreateTime",  <!-- 记录创建时间 -->
+		ARCHIVE_FLAG as "archiveFlag",  <!-- 归档标记 -->
+		bill_no as "billNo",
+		bill_detail_no as "billDetailNo",
+		menu_num as "menuNum",
+		menu_number as "menuNumber",
+		menu_price as "menuPrice",
+		menu_total_price as "menuTotalPrice",
+		done as "done",  <!-- 是否已评价(Y/N) -->
+		eval_level as "evalLevel",  <!-- 评价等级(0-10) -->
+		eval_content as "evalContent",  <!-- 评价内容 -->
+		sche_id as "scheId" <!-- paiban -->
+		FROM sc_order_bill_detail WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="menuNum">
+			menu_num = #menuNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="done">
+			t.done = #done#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				id asc
+			</isEmpty>
+		</dynamic>
+
+	</select>
+
+   <!-- 菜品评价查询 -->
+    <select id="getEvalContent" parameterClass="java.util.HashMap" 
+        resultClass="com.baosight.wilp.ps.pc.domain.PSPCTmealOrderBillDetail">
+        SELECT 
+            t.eval_level AS evalLevel,
+            t.eval_content AS evalContent,
+			( SELECT AVG( eval_level )
+			  FROM `sc_order_bill_detail`
+			  WHERE 1 = 1
+				AND menu_num = #menuNum#
+				AND eval_level > 0
+			) evalAvg,
+            t.REC_REVISOR AS recRevisor,
+            t.REC_REVISE_TIME AS recReviseTime ,
+            t.menu_num AS menuNum
+        FROM 
+            sc_order_bill_detail t 
+        WHERE 
+            t.menu_num = #menuNum#
+		  AND eval_level > 0
+        ORDER BY
+            t.REC_REVISE_TIME DESC
+        LIMIT #starts# , #ends#
+    </select>
+
+    <!-- 根据订单号查询订单信息 -->
+    <select id="queryBillDetailByBillNo" parameterClass="String" 
+        resultClass="com.baosight.wilp.ps.pc.domain.PSPCTmealOrderBillDetail">
+        SELECT
+            t1.id as id,
+            t1.bill_detail_no billDetailNo,
+            t2.menu_name as menuName,
+            t2.menu_num as menuNum,
+            t2.menu_pic_url as menuPicUrl,
+            t1.menu_number as menuNumber,
+            t1.menu_total_price as menuTotalPrice,
+            t2.menu_price as menuPrice,
+            t1.done
+        FROM
+            sc_order_bill_detail AS t1,
+            sc_menu AS t2
+        WHERE
+            t1.menu_num = t2.menu_num
+        AND t1.bill_no = #value#
+    </select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_order_bill_detail WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+
+	<insert id="insert">
+		INSERT INTO sc_order_bill_detail (id,
+		REC_CREATOR,  <!-- 记录创建责任者 -->
+		REC_REVISE_TIME,  <!-- 记录修改时间 -->
+		REC_REVISOR,  <!-- 记录修改责任者 -->
+		REC_CREATE_TIME,  <!-- 记录创建时间 -->
+		ARCHIVE_FLAG,  <!-- 归档标记 -->
+		bill_no,
+		bill_detail_no,
+		menu_num,
+		menu_number,
+		menu_price,
+		menu_total_price,
+		done,  <!-- 是否已评价(Y/N) -->
+		eval_level,  <!-- 评价等级(0-10) -->
+		eval_content,  <!-- 评价内容 -->
+		sche_id  <!-- paiban -->
+		)
+		VALUES (#id#, #recCreator#, #recReviseTime#, #recRevisor#, #recCreateTime#,
+		#archiveFlag#, #billNo#, #billDetailNo#, #menuNum#, #menuNumber#,
+		#menuPrice#, #menuTotalPrice#, #done#, #evalLevel#, #evalContent#,
+		#scheId#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM sc_order_bill_detail WHERE
+		id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_order_bill_detail
+		SET
+		REC_CREATOR = #recCreator#,   <!-- 记录创建责任者 -->
+		REC_REVISE_TIME = #recReviseTime#,   <!-- 记录修改时间 -->
+		REC_REVISOR = #recRevisor#,   <!-- 记录修改责任者 -->
+		REC_CREATE_TIME = #recCreateTime#,   <!-- 记录创建时间 -->
+		ARCHIVE_FLAG = #archiveFlag#,   <!-- 归档标记 -->
+		bill_no = #billNo#,
+		bill_detail_no = #billDetailNo#,
+		menu_num = #menuNum#,
+		menu_number = #menuNumber#,
+		menu_price = #menuPrice#,
+		menu_total_price = #menuTotalPrice#,
+		done = #done#,   <!-- 是否已评价(Y/N) -->
+		eval_level = #evalLevel#,   <!-- 评价等级(0-10) -->
+		eval_content = #evalContent#,   <!-- 评价内容 -->
+		sche_id = #scheId#  <!-- paiban -->
+		WHERE
+		id = #id#
+	</update>
+
+</sqlMap>

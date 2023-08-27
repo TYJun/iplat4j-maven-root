@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-09-15 16:07:04
+   		Version :  6.0.731.201809200158
+		tableName :.im_object_spot 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 spot_code  VARCHAR, 
+		 spot_name  VARCHAR, 
+		 obj_name  VARCHAR, 
+		 obj_remark  VARCHAR, 
+		 create_man  VARCHAR, 
+		 create_time  VARCHAR, 
+		 modify_man  VARCHAR, 
+		 modify_time  VARCHAR, 
+		 data_group_code  VARCHAR
+	-->
+<sqlMap namespace="IMDX01">
+
+
+	<!-- 查询地点表详细信息 -->
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.im.dx.domain.ImObjectSpot">
+		SELECT
+				id	as "id",  <!-- 主键 -->
+				spot_id     as "spotId",	<!-- 地点id -->
+				spot_code	as "spotCode",  <!-- 地点编码 -->
+				spot_name	as "spotName",  <!-- 地点名称 -->
+				obj_name	as "objName",  <!-- 巡检对象 -->
+				obj_remark	as "objRemark",  <!-- 巡检对象备注 -->
+				create_man	as "createMan",  <!-- 创建人 -->
+				create_time	as "createTime",  <!-- 创建时间 -->
+				modify_man	as "modifyMan",  <!-- 修改人 -->
+				modify_time	as "modifyTime",  <!-- 修改时间 -->
+				data_group_code	as "dataGroupCode" <!-- 账套 -->
+		FROM im_object_spot WHERE 1=1
+		<isNotEmpty prepend=" AND " property="objName">
+			obj_name LIKE CONCAT ("%",#objName#,"%")
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spotName">
+			spot_name LIKE CONCAT ("%",#spotName#,"%")
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spotCode">
+			spot_code LIKE CONCAT ("%",#spotCode#,"%")
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+		GROUP BY id
+		<dynamic prepend="ORDER BY">
+         	<isNotEmpty property="orderBy">
+    			  $orderBy$
+   		 	</isNotEmpty>
+   			<isEmpty property="orderBy">
+    		  	create_time DESC
+			</isEmpty>
+  		</dynamic>
+	</select>
+	
+	
+	<!-- 查询地点表行数 -->
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM im_object_spot WHERE 1=1
+			<isNotEmpty prepend=" AND " property="objName">
+			obj_name LIKE CONCAT ("%",#objName#,"%")
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spotName">
+			spot_name LIKE CONCAT ("%",#spotName#,"%")
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spotCode">
+			spot_code LIKE CONCAT ("%",#spotCode#,"%")
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spotCode">
+			spot_code = #spotCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spotName">
+			spot_name = #spotName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="objName">
+			obj_name = #objName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="objRemark">
+			obj_remark = #objRemark#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="createMan">
+			create_man = #createMan#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="createTime">
+			create_time = #createTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="modifyMan">
+			modify_man = #modifyMan#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="modifyTime">
+			modify_time = #modifyTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert" parameterClass="java.util.HashMap">
+		INSERT INTO im_object_spot (id,  <!-- 主键 -->
+										spot_id,  <!-- 地点id -->
+										spot_code,  <!-- 地点编码 -->
+										spot_name,  <!-- 地点名称 -->
+										obj_name,  <!-- 巡检对象 -->
+										obj_remark,  <!-- 巡检对象备注 -->
+										create_man,  <!-- 创建人 -->
+										create_time,  <!-- 创建时间 -->
+										data_group_code  <!-- 账套 -->
+										)		 
+	    VALUES (#id#, #spotId#, #spotCode#, #spotName#, #objName#, #objRemark#, #createMan#, #createTime#, #dataGroupCode#) 
+	</insert>
+  
+	<delete id="delete" parameterClass="String">
+		DELETE FROM im_object_spot WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update" parameterClass="java.util.HashMap">
+		UPDATE im_object_spot 
+		SET 		
+					spot_id     = #spotId#, <!-- 地点id -->
+					spot_code	= #spotCode#,    <!-- 地点编码 -->  
+					spot_name	= #spotName#,    <!-- 地点名称 -->  
+					obj_name	= #objName#,     <!-- 巡检对象 -->  
+					obj_remark	= #objRemark#,   <!-- 巡检对象备注 -->  
+					modify_man	= #modifyMan#,   <!-- 修改人 -->  
+					modify_time	= #modifyTime#   <!-- 修改时间 -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

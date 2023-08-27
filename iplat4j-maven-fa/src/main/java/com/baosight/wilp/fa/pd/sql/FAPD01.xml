@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="FAPD01">
+    <select id="countFaInventoryInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            count(*)
+        from fa_inventory
+        <dynamic prepend="where">
+            <isEqual prepend="and" property="checkStatus" compareValue="checked">
+                status_code IN ('00')
+            </isEqual>
+            <isEqual prepend="and" property="checkStatus" compareValue="unChecked">
+                status_code NOT IN ('00')
+            </isEqual>
+            <isNotEmpty prepend="and" property="faInventoryId">
+                id = #faInventoryId#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="inventoryNo">
+                inventory_no like concat ('%',trim(#inventoryNo#),'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="singleSystenDateS">
+                single_systen_date >= #singleSystenDateS#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="singleSystenDateE">
+                #singleSystenDateE# >= single_systen_date
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="inventoryDeptName">
+                inventory_dept_name like concat ('%',trim(#inventoryDeptName#),'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="inventorySpotName">
+                inventory_spot_name like concat ('%',trim(#inventorySpotName#),'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="remark">
+                remark like concat ('%',trim(#remark#),'%')
+            </isNotEmpty>
+        </dynamic>
+    </select>
+
+    <select id="queryFaInventoryInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            id faInventoryId,
+            inventory_no inventoryNo,
+            inventory_dept_num inventoryDeptNum,
+            inventory_dept_name inventoryDeptName,
+            build,
+            floor,
+            inventory_spot_num inventorySpotNum,
+            inventory_spot_name inventorySpotName,
+            DATE_FORMAT( single_systen_date, '%Y-%m-%d %H:%i:%S' ) as "singleSystenDate",
+            single_system_name singleSystemName,
+            check_men_name checkMenName,
+            DATE_FORMAT( check_date, '%Y-%m-%d %H:%i:%S' ) as "checkDate",
+            archive_flag archiveFlag,
+            CASE status_code
+            WHEN "00" THEN "已完结"
+            WHEN "0" THEN "待盘点"
+            WHEN "1" THEN "盘点中"
+            WHEN "99" THEN "已盘点"
+            END AS "statusCode",
+            remark,
+            before_inven_num AS "beforeInvenNum",
+            after_inven_num AS "afterInvenNum"
+        from fa_inventory
+        <dynamic prepend="where">
+            <isEqual prepend="and" property="checkStatus" compareValue="checked">
+                status_code IN ('00')
+            </isEqual>
+            <isEqual prepend="and" property="checkStatus" compareValue="unChecked">
+                status_code NOT IN ('00')
+            </isEqual>
+            <isNotEmpty prepend="and" property="faInventoryId">
+                id = #faInventoryId#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="inventoryNo">
+                inventory_no like concat ('%',trim(#inventoryNo#),'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="singleSystenDateS">
+                DATE_FORMAT( single_systen_date, '%Y-%m-%d' ) >= #singleSystenDateS#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="singleSystenDateE">
+                #singleSystenDateE# >= DATE_FORMAT( single_systen_date, '%Y-%m-%d' )
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="inventoryDeptName">
+                inventory_dept_name like concat ('%',trim(#inventoryDeptName#),'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="inventorySpotName">
+                inventory_spot_name like concat ('%',trim(#inventorySpotName#),'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="remark">
+                remark like concat ('%',trim(#remark#),'%')
+            </isNotEmpty>
+        </dynamic>
+        order by inventory_no DESC
+    </select>
+
+    <insert id="saveFaInventoryInfo" parameterClass="java.util.HashMap">
+        insert into fa_inventory(id,rec_creator,rec_create_name,rec_create_time,data_group_code,archive_flag,
+        inventory_no,inventory_dept_num,inventory_dept_name,build,floor,inventory_spot_num,inventory_spot_name,single_systen_date,
+        single_system_men,single_system_name,remark,status_code)
+        values (#faInventoryId#,#recCreator#,#recCreateName#,#recCreateTime#,#dataGroupCode#,#archiveFlag#,
+        #inventoryNo#,#inventoryDeptNum#,#inventoryDeptName#,#newBuild#,#newFloor#,#newGoodsLocationNum#,#newGoodsLocation#,#singleSystenDate#,
+        #singleSystemMen#,#singleSystemName#,#remark#,#statusCode#)
+    </insert>
+
+    <insert id="saveFaInventoryDetailInfo" parameterClass="java.util.HashMap">
+        insert into fa_inventory_detail(id,sub_no,inventory_id,inventory_no,dept_num,dept_name,goods_id,goods_num,goods_name,
+        spot_num,spot_name,deal_flag)
+        select
+            uuid(),#subNo#,#faInventoryId#,#inventoryNo#,#inventoryDeptNum#,#inventoryDeptName#,info.id,info.goods_num,info.goods_name,
+            #newGoodsLocationNum#,#newGoodsLocation#,#dealFlag#
+        from fa_info info
+        where info.status_code in("020","030","050") and info.dept_num = #inventoryDeptNum# and info.install_location_num = #newGoodsLocationNum#
+    </insert>
+
+    <update id="updateFaInventoryBeforeInvenNum" parameterClass="java.util.HashMap">
+        UPDATE fa_inventory SET before_inven_num = (SELECT COUNT(*) FROM fa_inventory_detail WHERE inventory_id = #faInventoryId#) WHERE id = #faInventoryId#
+    </update>
+
+    <update id="updateFaInventoryAfterInvenNum" parameterClass="java.util.HashMap">
+        UPDATE fa_inventory SET after_inven_num = (SELECT COUNT(*) FROM fa_inventory_detail_final WHERE inventory_no = #faInventoryNo# AND inventory_flag = '0') WHERE inventory_no = #faInventoryNo#
+    </update>
+
+    <update id="updateFaInventoryInfo" parameterClass="java.util.HashMap">
+        update fa_inventory set inventory_dept_num = #inventoryDeptNum#,inventory_dept_name = #inventoryDeptName#,
+            inventory_spot_name = #newGoodsLocation#,inventory_spot_num = #newGoodsLocationNum#,build = #newBuild#,floor = #newFloor#,
+            rec_revisor = #recRevisor#,rec_revise_name = #recReviseName#,rec_revise_time = #recReviseTime#,
+            archive_flag = CONVERT(#archiveFlag#, SIGNED) + 1,remark = #remark#
+        where id = #faInventoryId# and archive_flag = #archiveFlag#
+    </update>
+
+    <select id="queryMaxCode" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+        select inventory_no typeCode from fa_inventory where inventory_no like concat ("%",#value#,"%")
+        order by inventory_no desc
+    </select>
+
+    <select id="queryMaxSubNo" parameterClass="java.lang.String">
+        select sub_no typeCode from fa_inventory_detail where sub_no like concat ("%",#value#,"%")
+        order by sub_no desc
+    </select>
+
+    <delete id="removeFaInventoryInfo" parameterClass="java.util.HashMap">
+        delete from fa_inventory where id IN
+        <iterate property="faInventoryId" open="(" close=")" conjunction=",">
+            #faInventoryId[]#
+        </iterate>
+    </delete>
+
+    <delete id="removeFaInventoryDetailInfo" parameterClass="java.util.HashMap">
+        delete from fa_inventory_detail where inventory_id = #faInventoryId#
+    </delete>
+
+
+    <delete id="removeFaInventoryDetailInfoList" parameterClass="java.util.HashMap">
+        delete from fa_inventory_detail where inventory_id IN
+        <iterate property="faInventoryId" open="(" close=")" conjunction=",">
+            #faInventoryId[]#
+        </iterate>
+    </delete>
+
+    <update id="confirmFaInventoryInfo" parameterClass="java.util.HashMap">
+        update fa_inventory set status_code = "00",check_men = #checkMen#,check_date = #checkDate#,
+        check_men_name = #checkMenName#
+        WHERE inventory_no IN
+        <iterate open="(" close=")" conjunction="," property="faInventoryNo">
+            #faInventoryNo[]#
+        </iterate>
+    </update>
+
+    <insert id="insertFaInventoryInfoFinal" parameterClass="java.util.HashMap">
+        INSERT INTO fa_inventory_detail_final(id,inventory_id,inventory_no,goods_id,goods_num,goods_name,model,spec,inventory_flag,inventory_remark,deal_flag)
+        SELECT id,inventory_id,inventory_no,goods_id,goods_num,goods_name,model,spec,inventory_flag,inventory_remark,deal_flag
+        FROM fa_inventory_detail
+        WHERE inventory_no IN (
+        <iterate property="faInventoryNo" conjunction=",">
+            #faInventoryNo[]#
+        </iterate>
+        )
+    </insert>
+
+    <select id="queryInventoryDetailFinalTabInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            fidf.id faInventoryDetailId,
+            fidf.goods_num goodsNum,
+            fidf.goods_name goodsName,
+            fi.inventory_spot_name spotName,
+            fidf.inventory_flag AS "inventoryFlag",
+            case fidf.inventory_flag
+            when "1" then "盘盈"
+            when "0" then "正常"
+            when "-1" then "盘亏"
+            end dealFlag,
+            fidf.inventory_remark AS "inventoryRemark"
+        from fa_inventory_detail_final fidf
+        LEFT JOIN fa_inventory fi ON fi.inventory_no = fidf.inventory_no
+        <dynamic prepend="where">
+            <isNotEmpty property="faInventoryId">
+                fidf.inventory_no = #inventoryNo#
+            </isNotEmpty>
+        </dynamic>
+        order by fidf.inventory_flag,fidf.goods_num
+    </select>
+
+    <select id="queryInventoryDetailTabInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            id faInventoryDetailId,
+            goods_num goodsNum,
+            goods_name goodsName,
+            spot_name spotName,
+            inventory_flag AS "inventoryFlag",
+            inventory_remark AS "inventoryRemark",
+            case inventory_flag
+            when "1" then "盘盈"
+            when "0" then "正常"
+            when "-1" then "盘亏"
+            end dealFlag
+            from fa_inventory_detail
+        <dynamic prepend="where">
+            <isNotEmpty property="faInventoryId">
+                inventory_id = #faInventoryId#
+            </isNotEmpty>
+        </dynamic>
+        GROUP BY goods_num
+        order by inventory_flag desc,goods_num
+    </select>
+
+    <select id="queryInventory" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select id faInventoryId from fa_inventory where inventory_dept_num = #inventoryDeptNum#
+        and inventory_spot_num = #inventorySpotNum# and status_code = 0
+    </select>
+
+    <select id="queryInventoryList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select inventory_dept_num inventoryDeptNum,inventory_spot_num inventorySpotNum from fa_inventory where status_code = 0
+    </select>
+
+    <select id="queryExWife" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT use_dept_num inventoryDeptNum,goods_location_num inventorySpotNum FROM fa_transfer_detail WHERE transfer_id = #faTransferId#
+    </select>
+
+    <update id="updateFaInfo" parameterClass="java.util.HashMap">
+        update fa_info faInfo left join
+        (
+            select
+                fdf.goods_id AS "goodsId",
+                fi.inventory_dept_num AS "deptNum",
+                fi.inventory_dept_name AS "deptName",
+                fi.inventory_spot_num AS "spotNum",
+                fi.inventory_spot_name AS "spotName",
+                fi.build,
+                fi.floor
+            from fa_inventory_detail_final fdf
+            left join fa_inventory fi on fdf.inventory_no = fi.inventory_no
+            where fdf.inventory_no = #faInventoryNo#
+        ) a on a.goodsId = faInfo.id
+        set faInfo.dept_num = a.deptNum,
+            faInfo.dept_name = a.deptName,
+            faInfo.install_location_num = a.spotNum,
+            faInfo.install_location = a.spotName,
+            faInfo.build = a.build,
+            faInfo.floor = a.floor
+    </update>
+</sqlMap>

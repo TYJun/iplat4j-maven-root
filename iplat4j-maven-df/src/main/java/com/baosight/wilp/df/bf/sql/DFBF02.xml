@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFBF02">
+
+	<!-- 根据地点id查询设备地点表 -->
+<!--	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">-->
+<!--		select-->
+<!--			spot_id spotId,-->
+<!--			device_count deviceCount-->
+<!--		from-->
+<!--			df_machine_spot-->
+<!--		where 1=1-->
+<!--		<isNotEmpty prepend="and" property="spotId">-->
+<!--			spot_id = #spotId#-->
+<!--		</isNotEmpty>-->
+<!--		group by spot_id-->
+<!--	</select>-->
+	
+	<update id="update" parameterClass="java.util.HashMap">
+		UPDATE
+			df_scrap
+		SET
+			machine_name = #machineName#,
+			fixed_place = #fixedPlace#,
+			scrap_way = #scrapWay#,
+			scrap_date = #scrapDate#,
+			scrap_reason = #scrapReason#,
+			rec_creator = #recCreator#,
+			rec_create_time = #recCreateTime#,
+			rec_revisor = #recRevisor#,
+			rec_revise_time = #recReviseTime#
+		WHERE
+			id = #id#
+	</update>
+
+	<!-- 更新设备地点表 -->
+<!--	<update id="updateMachineSpot" parameterClass="java.util.HashMap">-->
+<!--		UPDATE-->
+<!--			df_machine_spot-->
+<!--		SET-->
+<!--			device_count = #deviceCount#-->
+<!--		WHERE-->
+<!--			spot_id = #spotId#-->
+<!--	</update>-->
+
+	<!-- 插入设备地点表 -->
+<!--	<insert id="insertMachineSpot" parameterClass="java.util.HashMap">-->
+<!--		insert into-->
+<!--			df_machine_spot-->
+<!--		(-->
+<!--			id,-->
+<!--			spot_id,-->
+<!--			spot_code,-->
+<!--			spot_name,-->
+<!--			building,-->
+<!--			floor,-->
+<!--			device_count,-->
+<!--			rec_creator,-->
+<!--			rec_create_time,-->
+<!--			data_group_code-->
+<!--		)-->
+<!--		values-->
+<!--		(-->
+<!--			#id#,-->
+<!--			#spotId#,-->
+<!--			#spotCode#,-->
+<!--			#spotName#,-->
+<!--			#building#,-->
+<!--			#floor#,-->
+<!--			#deviceCount#,-->
+<!--			#recRevisor#,-->
+<!--			#recReviseTime#,-->
+<!--			#datagroupCode#-->
+<!--		)-->
+<!--	</insert>-->
+
+</sqlMap>

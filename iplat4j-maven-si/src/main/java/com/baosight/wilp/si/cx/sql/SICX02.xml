@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="SICX02">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.si.cx.domain.SiReportConfig">
+		SELECT
+			id	as "id",  <!-- 主键 -->
+		    report_name  as "reportName", <!-- 报表名称 -->
+			report_url as "reportUrl", <!-- 报表路劲 -->
+			data_group_code as "dataGroupCode" <!-- 账套 -->
+		FROM si_report_config WHERE 1=1
+		<isNotEmpty prepend=" AND " property="reportName">  <!-- 主键 -->
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="reportName">  <!-- 报表名称 -->
+			report_name like concat('%', #reportName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  id asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM si_report_config WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">  <!-- 主键 -->
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+	</select>
+
+	<select id="queryReportTree" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			id AS "label",
+			report_url AS "url",
+			report_name  AS "text",
+			'root' AS "pId",
+			true AS leaf
+		from si_report_config where 1=1
+		<isNotEqual prepend=" AND " property="node" compareValue="root"> id= #contId# </isNotEqual>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert" parameterClass="java.util.HashMap">
+		INSERT INTO si_report_config (
+			report_name, <!-- 报表名称 -->
+			report_url, <!-- 报表路劲 -->
+			data_group_code <!-- 账套 -->
+		)
+	    VALUES (#reportName#, #reportUrl#, #dataGroupCode#)
+	</insert>
+
+	<delete id="delete" parameterClass="java.util.HashMap">
+		delete from si_report_config where id = #id#
+	</delete>
+  
+	<update id="update" parameterClass="java.util.HashMap">
+		UPDATE si_report_config
+		<dynamic prepend="set">
+			<isNotEmpty prepend="," property="reportName">
+				report_name	= #reportName#   <!-- 报表名称 -->
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="recReviseTime">
+				report_url	= #reportUrl#   <!-- 报表路劲 -->
+			</isNotEmpty>
+		</dynamic>
+		WHERE id = #id#
+	</update>
+</sqlMap>

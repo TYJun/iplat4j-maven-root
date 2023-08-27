@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-03-26 18:23:25
+   		Version :  6.0.731.201809200158
+		tableName :iplat_v5demo_business.oi_project 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 accompany_project_no  VARCHAR, 
+		 accompany_project  VARCHAR, 
+		 accompany_address  VARCHAR
+	-->
+<sqlMap namespace="accompanyProject">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.common.pj.domain.AccompanyProject">
+		SELECT
+				id	as "id",  
+				accompany_project_no	as "accompanyProjectNo",  <!-- 陪检项目编号 -->
+				accompany_project	as "accompanyProject",  <!-- 陪检项目 -->
+				accompany_address	as "accompanyAddress" <!-- 陪检地址 -->
+		FROM iplat_v5demo_business.oi_project WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM iplat_v5demo_business.oi_project WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="accompanyProjectNo">
+			accompany_project_no = #accompanyProjectNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="accompanyProject">
+			accompany_project = #accompanyProject#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="accompanyAddress">
+			accompany_address = #accompanyAddress#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO iplat_v5demo_business.oi_project (id,
+										accompany_project_no,  <!-- 陪检项目编号 -->
+										accompany_project,  <!-- 陪检项目 -->
+										accompany_address  <!-- 陪检地址 -->
+										)		 
+	    VALUES (#id#, #accompanyProjectNo#, #accompanyProject#, #accompanyAddress#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM iplat_v5demo_business.oi_project WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE iplat_v5demo_business.oi_project 
+		SET 
+					accompany_project_no	= #accompanyProjectNo#,   <!-- 陪检项目编号 -->  
+					accompany_project	= #accompanyProject#,   <!-- 陪检项目 -->  
+					accompany_address	= #accompanyAddress#  <!-- 陪检地址 -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

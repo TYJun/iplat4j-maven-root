@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SQBZ0101">
+	<insert id="insertStandard" parameterClass="java.util.HashMap">
+		insert into sq_register_standard(
+			id,
+			standard_code,
+			standard_name,
+			assess_type_code,
+			assess_type_name,
+			remark
+		) values (
+			#standardId#,
+		    #standardCode#,
+		    #standardName#,
+		    #sqType#,
+		    #sqTypeName#,
+		    #remark#
+		)
+	</insert>
+
+	<insert id="insertProjectItems" parameterClass="java.util.HashMap">
+		insert into sq_register_project(
+			id,
+			standard_id,
+			project_name,
+			project_remark,
+			order_no
+		) values (
+			#projectId#,
+			#standardId#,
+			#projectName#,
+			#projectRemark#,
+			#orderNo#
+		)
+	</insert>
+
+	<select id="queryInstanceByStandardId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			id standardId,
+			standard_name standardName,
+			assess_type_code assessTypeCode,
+			assess_type_name assessTypeName,
+			remark
+		from
+			sq_register_standard
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="standardId">
+				id = #standardId#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="queryProjectByStandardId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			id projectId,
+			standard_id standardId,
+			project_name projectName,
+			project_remark projectRemark,
+		    order_no orderNo
+		from
+			sq_register_project
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="standardId">
+				standard_id = #standardId#
+			</isNotEmpty>
+		</dynamic>
+		order by
+			order_no
+	</select>
+
+	<select id="queryInstanceByProjectId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			id instanceId,
+			project_id projectId,
+			instance_name instanceName,
+			point_name pointName,
+			point_type pointType,
+			point,
+		    order_no orderNo
+		from
+			sq_register_instance
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="projectId">
+				project_id = #projectId#
+			</isNotEmpty>
+		</dynamic>
+		order by
+			order_no
+	</select>
+
+	<update id="updateStandard" parameterClass="java.util.HashMap">
+		update sq_register_standard
+		set
+		standard_name = #standardName#,
+		assess_type_code = #sqType#,
+		assess_type_name = #sqTypeName#,
+		remark = #remark#
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="standardId">
+				id = #standardId#
+			</isNotEmpty>
+		</dynamic>
+	</update>
+
+	<delete id="deleteProjectItems" parameterClass="java.util.HashMap">
+		delete from sq_register_project where standard_id = #standardId#
+	</delete>
+
+	<delete id="deleteProject" parameterClass="java.util.HashMap">
+		delete from sq_register_project where id = #projectId#
+	</delete>
+</sqlMap>

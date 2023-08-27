@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="PM0201">
+	
+	<!-- ================================================项目材料开始================================================== -->
+	<!-- 查询项目材料List -->
+	<select id="queryStuffList" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+			ID	as id,  <!-- 材料主键 -->
+			PROJECT_PK	as projectPk,  <!-- 项目主键 -->
+			MAT_TYPE_NUM	as matTypeNum,  <!-- 材料分类编号 -->
+			MAT_TYPE_NAME	as matTypeName,  <!-- 材料类型名称 -->
+			MAT_NUM	as matNum,  <!-- 材料编号 -->
+			MAT_NAME	as matName,  <!-- 材料名称 -->
+			SPEC	as spec,  <!-- 规格 -->
+			UNIT_NUM	as unitNum,  <!-- 单位 -->
+			UNIT_NAME	as unitName,  <!-- 单位名称 -->
+			PRICE	as price,  <!-- 价格 -->
+			NUM	as num,  <!-- 数量 -->
+			TOTAL_PRICE	as totalPrice,  <!-- 总价 -->
+			FASHION	as fashion,  <!-- 方式 -->
+			SUP_TYPE	as supType,  <!-- 供应方 -->
+			BRAND	as brand,  <!-- 品牌 -->
+			REMARK	as remark,  <!-- 备注 -->
+			DATAGROUP_CODE	as dataGroupCode,  <!-- 账套 -->
+			ARCHIVE_FLAG	as archiveFlag,  <!-- 归档标记 -->
+			REC_CREATOR	as recCreator,  <!-- 记录创建人 -->
+			REC_CREATE_TIME	as recCreateTime,  <!-- 记录创建时间 -->
+			REC_REVISOR	as recRevisor,  <!-- 记录修改人 -->
+			REC_REVISE_TIME	as recReviseTime <!-- 记录修改时间 -->
+		FROM pm_stuff WHERE PROJECT_PK = #id# and SUP_TYPE = #supType# 
+		<dynamic prepend="ORDER BY">
+	        <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		</isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  REC_CREATE_TIME asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+	
+	<!-- 查询项目材料Count -->
+	<select id="queryStuffCount" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT * FROM pm_stuff WHERE PROJECT_PK = #id# and SUP_TYPE = #supType# 
+	</select>
+	
+	<!-- 删除项目材料 -->
+	<delete id="deleteStuff" parameterClass="java.util.HashMap">
+		delete from pm_stuff where PROJECT_PK = #id# and SUP_TYPE = #supType#
+	</delete>
+	
+	<!-- 保存项目材料 -->
+	<insert id="insertStuff" parameterClass="com.baosight.wilp.pm.domain.TpmStuff">
+		INSERT INTO pm_stuff (ID,  <!-- 材料主键 -->
+								PROJECT_PK,  <!-- 项目主键 -->
+								MAT_TYPE_NUM,  <!-- 材料分类编号 -->
+								MAT_TYPE_NAME,  <!-- 材料类型名称 -->
+								MAT_NUM,  <!-- 材料编号 -->
+								MAT_NAME,  <!-- 材料名称 -->
+								SPEC,  <!-- 规格 -->
+								UNIT_NUM,  <!-- 单位 -->
+								UNIT_NAME,  <!-- 单位名称 -->
+								PRICE,  <!-- 价格 -->
+								NUM,  <!-- 数量 -->
+								TOTAL_PRICE,  <!-- 总价 -->
+								SUP_TYPE,  <!-- 供应方 -->
+								FASHION,  <!-- 方式 -->
+								REMARK,  <!-- 备注 -->
+								DATAGROUP_CODE,  <!-- 账套 -->
+								BRAND,  <!-- 品牌 -->
+								ARCHIVE_FLAG,  <!-- 归档标记 -->
+								REC_CREATOR,  <!-- 记录创建人 -->
+								REC_CREATE_TIME,  <!-- 记录创建时间 -->
+								REC_REVISOR,  <!-- 记录修改人 -->
+								REC_REVISE_TIME  <!-- 记录修改时间 -->
+								)		 
+	    VALUES (#id#, #projectPk#, #matTypeNum#, #matTypeName#, #matNum#, #matName#, #spec#, #unitNum#, #unitName#, #price#, #num#, #totalPrice#, #supType#, #fashion#, #remark#, #dataGroupCode#, #brand#, #archiveFlag#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#) 
+	</insert>
+	<!-- ================================================项目材料结束================================================== -->
+	
+	<!-- 查询项目的执行人 -->
+	<select id="querySendStaff" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		select PROJECT_PK projectPk, GROUP_CONCAT(EXEC_STAFF_ID) workNos from pm_staff group by PROJECT_PK
+	</select>
+	
+</sqlMap>

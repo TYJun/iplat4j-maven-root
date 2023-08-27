@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" type="text/css" href="https://gw.alipayobjects.com/as/g/antui/antui/10.1.10/dpl/antui.css">
+    <link rel="stylesheet" type="text/css" href="https://gw.alipayobjects.com/as/g/antui/antui/10.1.10/dpl/widget/loading.css">
+    <link rel="stylesheet" type="text/css" href="https://gw.alipayobjects.com/as/g/antui/antui/10.1.10/dpl/util/pricefont.css">
+    <link rel="stylesheet" type="text/css" href="./css/example.css">
+    <link rel="stylesheet" type="text/css" href="./css/weui.css">
+    <link rel="stylesheet" type="text/css" href="./css/iconfont.css">
+    <title>配送信息</title>
+</head>
+<style type="text/css">
+    * {
+        box-sizing: border-box;
+    }
+    
+    .dish-name {
+        font-size: 15px;
+        color: #303133;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .btn-div {
+        width: 100%;
+        padding: 15px;
+    }
+    
+    .btn-confirm {
+        width: 100%;
+        height: 47px;
+        background: #09bb07;
+        border: 1px solid #09bb07;
+        border-radius: 2px;
+        color: #fff;
+    }
+    
+    .white-div {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 999;
+        background: #fff;
+    }
+    
+    .dishes-div {
+        width: 100%;
+        min-height: 100px;
+        background: #fff;
+        position: relative;
+        padding: 10px 15px;
+    }
+    
+    .dishes-div:before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        height: 1px;
+        border-top: 1px solid #ddd;
+        color: #D9D9D9;
+        -webkit-transform-origin: 0 0;
+        transform-origin: 0 0;
+        -webkit-transform: scaleY(0.5);
+        transform: scaleY(0.5);
+    }
+    
+    .dishes-div:after {
+        content: " ";
+        position: absolute;
+        left: 0;
+        bottom: -1px;
+        right: 0;
+        height: 1px;
+        border-bottom: 1px solid #ddd;
+        color: #D9D9D9;
+        -webkit-transform-origin: 0 0;
+        transform-origin: 0 0;
+        -webkit-transform: scaleY(0.5);
+        transform: scaleY(0.5);
+    }
+    
+    .package-name {
+        width: 100%;
+        padding-bottom: 10px;
+        font-size: 15px;
+        font-weight: bold;
+        color: #606266;
+    }
+    
+    .btn-minus {
+        width: 25px;
+        height: 25px;
+        background: url("./img/meal/minus.png") no-repeat scroll center center transparent;
+        background-size: 25px 25px;
+    }
+    
+    .btn-plus {
+        width: 25px;
+        height: 25px;
+        background: url("./img/meal/plus-weixin.png") no-repeat scroll center center transparent;
+        background-size: 25px 25px;
+    }
+    
+    .dish-num {
+        width: 40px;
+        height: 25px;
+        line-height: 25px;
+        text-align: center;
+        color: #ff5722;
+        font-size: 14px;
+    }
+    
+    .dishes {
+        width: 100%;
+    }
+    
+    .dish {
+        font-size: 13px;
+        color: #909399;
+        margin-right: 5px;
+    }
+</style>
+
+<body>
+    <div id="app">
+        <!-- 页面过渡div -->
+        <div v-if="whiteShow" class="white-div"></div>
+        <div id="toastMsg" style="display: none;">
+            <div class="weui-mask_transparent"></div>
+            <div class="weui-toast">
+                <i class="weui-icon-cancel weui-icon_toast" style="font-size: 35px;"></i>
+                <p class="weui-toast__content">{{toastMsg}}</p>
+            </div>
+        </div>
+        <div id="loadingToast" v-if="loadShow">
+            <div class="weui-mask_transparent"></div>
+            <div class="weui-toast">
+                <i class="weui-loading weui-icon_toast"></i>
+                <p class="weui-toast__content">正在加载</p>
+            </div>
+        </div>
+        <div class="weui-cells__title">住院信息</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">手机号</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" pattern="[0-9]*" v-model="phoneNo" placeholder="请输入手机号" value="" />
+                </div>
+            </div>
+            <!-- <div class="weui-cell">
+					<div class="weui-cell__hd"><label class="weui-label">住院号</label></div>
+					<div class="weui-cell__bd">
+						<input class="weui-input" type="text" v-model="AD" placeholder="请输入住院号" />
+					</div>
+				</div> -->
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">姓名</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" v-model="userName" type="text" placeholder="请输入姓名" />
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">楼号</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" @click="showBuildingPicker" v-model="showBuilding" placeholder="请选择楼号" value="" readonly="readonly" />
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">楼层</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" @click="showFloorPicker" v-model="showFloor.floorName" placeholder="请选择楼层" value="" readonly="readonly" />
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">病区</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" @click="showBingquPicker" v-model="showBingqu.deptName" placeholder="请选择病区" value="" readonly="readonly" />
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">床号</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" v-model="bedNo" placeholder="请输入床号" value="" />
+                </div>
+            </div>
+
+        </div>
+        <div class="am-list am-list-form">
+            <div class="am-list-header">送餐信息</div>
+            <div class="am-list-body">
+                <div class="am-list-item am-input-autoclear">
+                    <div class="am-list-label">送餐时间</div>
+                    <div class="am-list-control">
+                        <select v-model="thisTime">
+								<option value="" disabled="disabled">请选择送餐时间</option>
+								<option v-for="item in sendTime" v-if="item.mealTime == mealTimeCode" v-bind:value="item.sendTime">{{item.sendTime}}</option>
+							</select>
+                    </div>
+                    <div class="am-list-arrow" aria-hidden="true"><span class="am-icon arrow horizontal"></span></div>
+                </div>
+                <div class="am-list-item am-input-autoclear">
+                    <div class="am-list-label">备注</div>
+                    <div class="am-list-control">
+                        <input v-model="desc" type="text" placeholder="备注（非必填）" value="">
+                    </div>
+                    <div class="am-list-clear"><i class="am-icon-clear am-icon"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="am-list am-list-form">
+            <div class="am-list-header">菜品信息 （ {{mealDate}} / {{mealTimeName}} ）</div>
+            <div class="am-list-body">
+                <div class="dishes-div">
+                    <div class="package-name am-flexbox">
+                        <div class="am-flexbox-item">{{packageName}}</div>
+                        <div class="am-ft-center" style="width: 90px;display: flex;">
+                            <div @click="packageNum -= 1" v-if="packageNum>1" class="btn-minus"></div>
+                            <div v-else style="width: 25px;"></div>
+                            <div class="dish-num">{{packageNum}} 份</div>
+                            <div @click="packageNum += 1" class="btn-plus"></div>
+                        </div>
+                    </div>
+                    <div class="dishes">
+                        <span v-for="item in dishes" class="dish">{{item.menuName}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="btn-div">
+            <button @click="submit" type="button" class="btn-confirm">下单 （ 共 <span class="am-ft-14 am-ft-price">
+                    {{totalPrice}}
+                </span> 元 ）
+            </button>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.min.js"></script>
+<script type="text/javascript" src="https://gw.alipayobjects.com/as/g/antui/antui/10.1.10/antui.js"></script>
+<script src="./js/vue.min.js"></script>
+<script src="./js/jquery-2.1.4.min.js"></script>
+<script src="./js/zepto.min.js"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+<script type="text/javascript" src="./js/big.min.js"></script>
+<script type="text/javascript">
+    new Vue({
+        el: '#app',
+        data: {
+            whiteShow: true,
+            loadShow: false,
+            dialogShow: false,
+            dicengShow: false,
+            toastMsg: "",
+            baseUrl: '',
+            userId: '',
+            canteenCode: '',
+            canteenName: '',
+            dataGroupCode: '',
+            dishes: [],
+            mealDate: '',
+            mealDates: [],
+            mealTimeCode: '',
+            mealTimeName: '',
+            thisTime: '',
+            sendTime: [],
+            buildings: [],
+            floors: [],
+            lesions: [],
+            showBingqu: {
+                "deptName": "",
+                "deptNum": ""
+            },
+            phoneNo: '',
+            AD: '',
+            userName: '',
+            bedNo: '',
+            desc: '',
+            packageId: '',
+            packageName: '',
+            packagePrice: '0.00',
+            packageNum: 1,
+            showBuilding: "",
+            showFloor: {
+                "floorName": "",
+                "floor": ""
+            },
+            toastMsg: "",
+            buildingSelf: [],
+            floorSelf: [],
+            bingquSelf: [],
+            /**
+             * 规则字段
+             * nowTime: 当前时间戳
+             * ruleTime1: 今日上午10:00的时间戳，用于限定今日午餐
+             * ruleTime2: 今日下午4:00的时间戳，用于限定今日晚餐
+             * ruleTime3: 今日下午3:30的时间戳，用于限定点明日餐
+             * @type {Object}
+             */
+            rules: {
+                nowTime: '',
+                ruleTime1: '',
+                ruleTime2: '',
+                ruleTime3: ''
+            }
+        },
+        watch: {
+            "showBuilding": function() {
+                var _this = this;
+                //					if(type != 'init') {
+                //						_this.floorSelf = [];
+                //						_this.showFloor = '';
+                //						_this.bingquSelf = [];
+                //						_this.showBingqu = "";
+                //					}
+                $.ajax({
+                    url: _this.baseUrl + 'app_buildingInfoController.do?getFloorByCanteenNum',
+                    type: 'post',
+                    data: {
+                        canteenNum: _this.canteenCode,
+                        building: _this.showBuilding,
+                        dataGroupCode: _this.dataGroupCode
+                    },
+                    success: function(data) {
+                        var resp = JSON.parse(data);
+                        if (resp.success) {
+                            for (var i = 0; i < resp.obj.length; i++) {
+                                var aa = {
+                                    label: "",
+                                    value: ""
+                                }
+                                aa.label = resp.obj[i].floorName
+                                aa.value = resp.obj[i].floorName
+                                _this.floorSelf.push(aa);
+                            }
+                        } else {
+                            _this.showMsg("获取楼层信息失败")
+                        }
+                    }
+                });
+
+            },
+            "showFloor.floorName": function() {
+                var _this = this
+                $.ajax({
+                    url: _this.baseUrl + 'app_buildingInfoController.do?getDept',
+                    type: 'post',
+                    data: {
+                        building: _this.showBuilding,
+                        floor: _this.showFloor.floor,
+                        dataGroupCode: _this.dataGroupCode
+                    },
+                    success: function(data) {
+                        var resp = JSON.parse(data);
+                        if (resp.success) {
+                            for (var i = 0; i < resp.obj.length; i++) {
+                                var aa = {
+                                    label: "",
+                                    value: ""
+                                }
+                                aa.label = resp.obj[i].deptName
+                                aa.value = resp.obj[i].deptNum
+                                _this.bingquSelf.push(aa);
+                            }
+
+                        } else {
+
+                            _this.showMsg("获取病区信息失败")
+                        }
+                    }
+                });
+            }
+        },
+        methods: {
+            showBuildingPicker: function() {
+                var _this = this
+                weui.picker(_this.buildingSelf, {
+                    onChange: function(result) {
+                        console.log(result);
+                    },
+                    onConfirm: function(result) {
+                        //							console.log(result);
+                        _this.showBuilding = result[0]
+                    }
+                });
+
+            },
+            showFloorPicker: function() {
+                var _this = this
+                if (_this.showBuilding == "") {
+                    _this.showMsg("选择楼号！");
+                    return;
+                }
+                weui.picker(_this.floorSelf, {
+                    onChange: function(result) {
+                        console.log(result);
+                    },
+                    onConfirm: function(result) {
+                        console.log(result);
+                        for (var i = 0; i < _this.floorSelf.length; i++) {
+
+                            if (_this.floorSelf[i].value == result[0]) {
+                                _this.showFloor.floorName = _this.floorSelf[i].label
+                                _this.showFloor.floor = _this.floorSelf[i].value
+                            }
+                        }
+                    }
+                });
+
+            },
+            showBingquPicker: function() {
+                var _this = this
+                if (_this.showBuilding == "") {
+                    _this.showMsg("选择楼号！");
+                    return;
+                }
+                if (_this.showFloor == "") {
+                    _this.showMsg("选择楼层！");
+                    return;
+                }
+                weui.picker(_this.bingquSelf, {
+                    onChange: function(result) {
+                        console.log(result);
+                    },
+                    onConfirm: function(result) {
+                        for (var i = 0; i < _this.bingquSelf.length; i++) {
+
+                            console.log(_this.bingquSelf[i])
+                            if (_this.bingquSelf[i].value == result[0]) {
+                                _this.showBingqu.deptName = _this.bingquSelf[i].label
+                                _this.showBingqu.deptNum = _this.bingquSelf[i].value
+                            }
+                        }
+                    }
+                });
+
+            },
+            showMsg: function(msg) {
+                var _this = this
+                _this.toastMsg = msg
+                var $toast = $("#toastMsg")
+                if ($toast.css('display') != 'none') return;
+                $toast.fadeIn(100);
+                setTimeout(function() {
+                    $toast.fadeOut(100);
+                }, 2000);
+
+            },
+            init: function() {
+                var _this = this;
+                _this.baseUrl = localStorage.getItem("baseUrl");
+                _this.userId = localStorage.getItem("userId");
+                _this.dataGroupCode = localStorage.getItem("dataGroupCode");;
+                _this.canteenCode = localStorage.getItem("canteenCode");
+                _this.canteenName = localStorage.getItem("canteenName");
+                _this.sendTime = JSON.parse(localStorage.getItem("sendTime"));
+                _this.buildings = JSON.parse(localStorage.getItem("building"));
+
+                var params = JSON.parse(localStorage.getItem("params"));
+                _this.dishes = params.dishes;
+                _this.mealDate = params.mealDate;
+                _this.mealDates = localStorage.getItem("mealDate").split(',');
+                _this.mealTimeCode = params.mealTimeCode;
+                _this.mealTimeName = params.mealTimeName;
+                var package = JSON.parse(localStorage.getItem("package"));
+                _this.packageId = package.package_id;
+                _this.packageName = package.package_name;
+                _this.packagePrice = package.package_price;
+
+                for (var i = 0; i < _this.buildings.length; i++) {
+                    var aa = {
+                        label: "",
+                        value: ""
+                    }
+                    aa.label = _this.buildings[i].buildingName
+                    aa.value = _this.buildings[i].building
+                    _this.buildingSelf.push(aa);
+                }
+                /**
+                 * 这里是测试时间
+                 */
+                // _this.rules.nowTime = _this.timestampFormat("2018-03-05 15:31:00");
+
+                /**
+                 * 这里处理一些规则时间
+                 * @type {[type]}
+                 */
+                //今日午餐
+                var ruleTime1 = _this.mealDates[0] + ' 10:00:00';
+                _this.rules.ruleTime1 = _this.timestampFormat(ruleTime1);
+                //今日晚餐
+                var ruleTime2 = _this.mealDates[0] + ' 16:00:00';
+                _this.rules.ruleTime2 = _this.timestampFormat(ruleTime2);
+                //明日餐
+                var ruleTime3 = _this.mealDates[0] + ' 15:30:00';
+                _this.rules.ruleTime3 = _this.timestampFormat(ruleTime3);
+
+                _this.loadUserInfo();
+                // alert(JSON.stringify(result));
+            },
+            //将时间字符串转换为时间戳
+            timestampFormat: function(time) {
+                return (new Date(Date.parse(time.replace(/-/g, "/")))).getTime();
+            },
+            loadUserInfo: function() {
+                var _this = this;
+                $.ajax({
+                    url: _this.baseUrl + 'app_patientBillInfoController.do?getPatiAddrInfoNew',
+                    type: 'post',
+                    data: {
+                        deviceId: _this.userId,
+                        canteenNum: _this.canteenCode
+                    },
+                    success: function(data) {
+                        var resp = JSON.parse(data);
+                        if (resp.success) {
+                            _this.phoneNo = resp.obj[0].userTelNumber;
+                            _this.AD = resp.obj[0].paintNo;
+                            _this.userName = resp.obj[0].userName;
+                            _this.showBuilding = resp.obj[0].building;
+                            if (resp.obj[0].floor.charAt(resp.obj[0].floor.length - 1) == "楼") {
+                                _this.showFloor = {
+                                    "floorName": resp.obj[0].floor,
+                                    "floor": resp.obj[0].floor
+                                };
+                            } else {
+                                _this.showFloor = {
+                                    "floorName": resp.obj[0].floor + "楼",
+                                    "floor": resp.obj[0].floor
+                                };
+                            }
+
+                            _this.bedNo = resp.obj[0].bedNo;
+                            _this.showBingqu = {
+                                    "deptNum": resp.obj[0].deptNum,
+                                    "deptName": resp.obj[0].deptName,
+                                    "room": null
+                                }
+                                //								_this.floorChange('init');
+                        }
+                    }
+                });
+            },
+            getNowTime: function() {
+
+                var now = new Date();
+                var year = now.getFullYear(); //年  
+                var month = now.getMonth() + 1; //月  
+                var day = now.getDate(); //日  
+                var hh = now.getHours(); //时  
+                var mm = now.getMinutes(); //分  
+                var ss = now.getSeconds(); //秒
+                var clock = year + "-";
+                if (month < 10)
+                    clock += "0";
+                clock += month + "-";
+                if (day < 10)
+                    clock += "0";
+                clock += day + " ";
+                if (hh < 10)
+                    clock += "0";
+                clock += hh + ":";
+                if (mm < 10) clock += '0';
+                clock += mm + ":";
+                if (ss < 10) clock += '0';
+                clock += ss;
+                return (clock);
+
+            },
+
+            filterRules: function() {
+                var _this = this;
+                _this.rules.nowTime = _this.timestampFormat(_this.getNowTime());
+
+                if (_this.mealDate == _this.mealDates[0]) {
+                    //超过16:00的情况
+                    if (_this.rules.nowTime > _this.rules.ruleTime2) {
+
+                        _this.showMsg("已超出今日及明日订餐时间限制")
+                        return;
+                    }
+                    //超过10:00并小于16:00的情况
+                    if (_this.rules.nowTime > _this.rules.ruleTime1 && _this.mealTimeCode != '003') {
+
+                        _this.showMsg("已超出今日午餐时间限制")
+                        return;
+                    }
+                } else if (_this.mealDate == _this.mealDates[1]) {
+                    if (_this.rules.nowTime > _this.rules.ruleTime3) {
+
+                        _this.showMsg("已超出明日订餐时间限制")
+                        return;
+                    }
+                }
+                _this.save();
+                //					_this.phoneValidate();
+            },
+            phoneValidate: function() {
+                var _this = this;
+                var _this = this;
+                $.ajax({
+                    url: 'http://wx.yyhq365.cn/smp_wx/invoke',
+                    type: 'post',
+                    data: {
+                        method: 'isPassByPhone',
+                        phone: _this.phoneNo
+                    },
+                    success: function(data) {
+                        var resp = JSON.parse(data);
+                        if (resp.respCode == "200") {
+                            _this.save();
+                        } else {
+                            localStorage.setItem("phoneNo", _this.phoneNo);
+                            location.href = "phoneValidate.html";
+                        }
+
+                    }
+                });
+            },
+            submit: function() {
+                var _this = this;
+                if (!(/^1[34578]\d{9}$/.test(_this.phoneNo))) {
+
+                    _this.showMsg("手机号格式不正确")
+
+                    return;
+                }
+                if (_this.userId == "") {
+
+                    _this.showMsg("未能获取微信授权信息")
+
+                    return;
+                }
+                if (_this.userName == "") {
+                    _this.showMsg("用户姓名不能为空")
+                    return;
+                }
+                if (_this.showBuilding == "") {
+
+                    _this.showMsg("请选择楼号")
+                    return;
+                }
+                if (_this.showFloor.floorName == "") {
+
+                    _this.showMsg("请选择楼层")
+                    return;
+                }
+                if (_this.showBingqu.deptName == "" || _this.showBingqu.deptNum == "") {
+
+                    _this.showMsg("请选择病区")
+                    return;
+                }
+                if (_this.bedNo == "") {
+
+                    _this.showMsg("请填写床号")
+                    return;
+                }
+                if (_this.thisTime == "") {
+
+                    _this.showMsg("请选择送餐时间")
+                    return;
+                }
+                this.filterRules();
+            },
+            save: function() {
+                var _this = this;
+                var address = this.showBuilding + this.showFloor.floorName + this.showBingqu.deptName + this.bedNo;
+                var json = {
+                    "userId": this.userId,
+                    "userType": "comboPatientMeal",
+                    "hospitalNo": this.AD,
+                    "userName": this.userName,
+                    "phoneNo": this.phoneNo,
+                    "building": this.showBuilding,
+                    "floor": this.showFloor.floor,
+                    "deptNum": this.showBingqu.deptNum,
+                    "deptName": this.showBingqu.deptName,
+                    "bedNo": this.bedNo,
+                    "address": address,
+                    "totalPrice": this.totalPrice,
+                    "reqSendTime": this.thisTime,
+                    "payType": "0201",
+                    "desc": this.desc,
+                    "canteenCode": this.canteenCode,
+                    "canteenName": this.canteenName,
+                    "canteenTypeNum": "bhst",
+                    "mealTime": this.mealTimeCode,
+                    "mealDate": this.mealDate,
+                    "packageId": this.packageId,
+                    "packageName": this.packageName,
+                    "packageNum": this.packageNum,
+                    "packagePrice": this.packagePrice,
+                    "dishes": this.dishes,
+                    "dataGroupCode": this.dataGroupCode
+                }
+                $.ajax({
+                    url: _this.baseUrl + 'app_patientBillInfoController.do?savePatientComboByScan',
+                    type: 'post',
+                    data: {
+                        json: JSON.stringify(json)
+                    },
+                    success: function(data) {
+                        var resp = JSON.parse(data);
+                        if (resp.success) {
+                            localStorage.setItem("billNo", resp.msg)
+
+                            location.href = "comboPay.html";
+
+                        } else {
+
+                            _this.showMsg(resp.msg)
+                        }
+                    }
+                });
+            }
+        },
+        computed: {
+            totalPrice: function() {
+                var _this = this;
+                var price = new Big(_this.packagePrice)
+                return Number(price.times(_this.packageNum));
+            }
+        },
+        //页面初始化完成生命钩子
+        mounted: function() {
+            this.$nextTick(function() {
+                this.init()
+                this.whiteShow = false
+            })
+        }
+    })
+</script>
+
+</html>

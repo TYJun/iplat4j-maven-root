@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CMJD02">
+    <select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            id scheduleId,
+            schedule_auto_no scheduleAutoNo,
+            schedule_name scheduleName,
+            schedule_remark scheduleRemark,
+            node_auto_nos nodeAutoNo,
+            node_names nodeName,
+            node_remarks nodeRemark,
+            rec_creator_no recCreatorNo,
+            rec_creator recCreator,
+            DATE_FORMAT(rec_create_time,'%Y-%m-%d') recCreateTime,
+            rec_revisor_no recRevisorNo,
+            rec_revisor recRevisor,
+            DATE_FORMAT(rec_revise_time,'%Y-%m-%d') recReviseTime
+        from
+            cm_schedule
+        where
+            1 = 1
+        <isNotEmpty prepend="and" property="scheduleId">
+            id = #scheduleId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="scheduleAutoNo">
+            schedule_auto_no like concat('%',#scheduleAutoNo#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="scheduleName">
+            schedule_name like concat('%',#scheduleName#,'%')
+        </isNotEmpty>
+        order by
+            rec_revise_time DESC,
+            rec_create_time DESC
+    </select>
+
+    <insert id="insert" parameterClass="java.util.HashMap">
+        insert into cm_schedule(
+            id,
+            schedule_auto_no,
+            schedule_name,
+            schedule_remark,
+            node_auto_nos,
+            node_names,
+            node_remarks,
+            rec_creator_no,
+            rec_creator,
+            rec_create_time
+        )
+        values (
+            #id#,
+            #scheduleAuto#,
+            #scheduleName#,
+            #scheduleRemark#,
+            #nodeAutoNo#,
+            #nodeName#,
+            #nodeRemark#,
+            #recCreatorNo#,
+            #recCreator#,
+            #recCreateTime#
+        )
+    </insert>
+
+    <update id="update" parameterClass="java.util.HashMap">
+        update cm_schedule set
+            schedule_name = #scheduleName#,
+            schedule_remark = #scheduleRemark#,
+            node_auto_nos = #nodeAutoNo#,
+            node_names = #nodeName#,
+            node_remarks = #nodeRemark#,
+            rec_revisor_no = #recRevisorNo#,
+            rec_revisor = #recRevisor#,
+            rec_revise_time = #recReviseTime#
+        where
+            id = #scheduleId#
+    </update>
+
+    <delete id="delete" parameterClass="java.util.HashMap">
+        delete from cm_schedule where id = #scheduleId#
+    </delete>
+</sqlMap>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MSAR01">
+
+    <select id="query" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.ms.ar.domain.MSAR01">
+        SELECT
+        id,
+        code_ "code",
+        description_ "description",
+        unit "unit",
+        unit_name "unitName",
+        dimension "dimension",
+        dimension_name "dimensionName",
+        `lower` "lower",
+        lower_lower "lowerLower",
+        `upper` "upper",
+        upper_upper "upperUpper",
+        create_by "createBy",
+        create_date "createDate",
+        update_by "updateBy",
+        update_date "updateDate",
+        remarks "remarks",
+        group_id "groupId",
+        (
+        SELECT
+        COUNT(tmsar01_id)
+        FROM
+        tmspl01
+        WHERE
+        tmsar01_id = tmsar01.id
+        ) AS "tmsCount"
+        FROM
+        `tmsar01`
+        where 1=1
+        <isNotEmpty prepend="and" property="id">
+            id =
+            #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="code">
+            code_ = #code#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="description">
+            description_ like concat('%', #description#, '%')
+        </isNotEmpty>
+        <isNotEmpty property="name" prepend="AND">
+            id IN
+            (SELECT tmsar01_id FROM tmspl01 WHERE name_ like concat('%', #name#, '%'))
+        </isNotEmpty>
+        <isNotEmpty property="tag" prepend="AND">
+            id IN
+            (SELECT tmsar01_id FROM tmspl01 WHERE tag like concat('%', #tag#, '%'))
+        </isNotEmpty>
+    </select>
+    <select id="queryById" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        SELECT
+        id,
+        code_ "code",
+        description_ "description",
+        unit "unit",
+        unit_name "unitName",
+        dimension "dimension",
+        dimension_name "dimensionName",
+        `lower` "lower",
+        lower_lower "lowerLower",
+        `upper` "upper",
+        upper_upper "upperUpper",
+        create_by "createBy",
+        create_date "createDate",
+        update_by "updateBy",
+        update_date "updateDate",
+        remarks "remarks",
+        group_id "groupId"
+        FROM
+        `tmsar01`
+        where 1=1
+        <isNotEmpty prepend="and" property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="code">
+            code = #code#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="description">
+            description = #description#
+        </isNotEmpty>
+    </select>
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM tmsar01 WHERE 1=1
+        <isNotEmpty prepend="and" property="id">
+            id =
+            #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="code">
+            code_ = #code#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="description">
+            description_ like concat('%', #description#, '%')
+        </isNotEmpty>
+    </select>
+    <insert id="insert">
+        insert into tmsar01 (id, code_, description_, unit, unit_name,
+                             dimension, dimension_name, `lower`, lower_lower,
+                             `upper`, upper_upper, create_by,
+                             create_date, update_by, update_date,
+                             remarks, group_id)
+        values (#id#, #code#, #description#, #unit#, #unitName#,
+                #dimension#, #dimensionName#, #lower#, #lowerLower#,
+                #upper#, #upperUpper#, #createBy#,
+                #createDate#, #updateBy#, #updateDate#,
+                #remarks#, #groupId#)
+    </insert>
+    <delete id="delete">
+        DELETE
+        FROM tmsar01
+        WHERE id =
+              #id#
+    </delete>
+    <update id="update2">
+        UPDATE tmspl01
+        SET tmsar01_id=null
+        WHERE tmsar01_id = #id#
+    </update>
+    <update id="update">
+        UPDATE tmsar01
+        SET code_          = #code#,
+            description_   = #description#,
+            unit           = #unit#,
+            unit_name      = #unitName#,
+            dimension      = #dimension#,
+            dimension_name = #dimensionName#,
+            `lower`        =#lower#,
+            lower_lower    = #lowerLower#,
+            `upper`        = #upper#,
+            upper_upper    =#upperUpper#,
+            create_by      = #createBy#,
+            create_date    =#createDate#,
+            update_by      = #updateBy#,
+            update_date    =#updateDate#,
+            remarks        = #remarks#,
+            group_id       = #groupId#
+        WHERE id = #id#
+    </update>
+</sqlMap>

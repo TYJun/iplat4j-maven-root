@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+
+<sqlMap namespace="SQZH02">
+	<!-- 查询sql -->
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+		    a.id sqManageScoreId,
+			a.batch_no batchNo,
+		    b.name workName,
+		    a.project_name projectName,
+            c.dept_name deptName,
+		    a.item_name itemName,
+			a.item_score score,
+			a.item_point point,
+			CONCAT(ROUND(a.item_score/a.item_point*100,1),'%') percent,
+		    if(a.item_score != a.item_point,if(a.advice = 'null','无',a.advice),'无意见') advice
+		from
+		    sq_item a
+		left join bona_frame_mzsrmyy.ac_personnel b on b.work_no = a.work_no
+		left join bona_frame_mzsrmyy.ac_department c on c.id = b.dept_id
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="batchNo">
+				a.batch_no = #batchNo#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="workName">
+				b.name like '%$workName$%'
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="projectName">
+				a.project_name like '%$projectName$%'
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="deptName">
+				c.dept_name like '%$deptName$%'
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="advice">
+				if(a.item_score != a.item_point,a.advice,'无意见') != #advice#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="percent">
+				CONCAT(ROUND(a.item_score/a.item_point*100,1),'%') != #percent#
+			</isNotEmpty>
+		</dynamic>
+        group by a.item_name
+	</select>
+
+	<select id="count" resultClass="int">
+		select
+		COUNT(*)
+		from
+		sq_item a
+		left join bona_frame_mzsrmyy.ac_personnel b on b.work_no = a.work_no
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="batchNo">
+				a.batch_no = #batchNo#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="workName">
+				b.name like '%$workName$%'
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+</sqlMap>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CMDJ01c">
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			REC_CREATOR	as "recCreator",  
+			REC_CREATE_TIME	as "recCreateTime",  
+			REC_REVSIOR	as "recRevsior",  
+			REC_REVISE_TIME	as "recReviseTime",  
+			ARCHIVE_FLAG as "archiveFlag",  <!-- 归档标记 -->
+			ID as "id",  <!-- 主键 -->
+			CONT_NO	as "contNo",  <!-- 合同号 -->
+			SUB_NO as "subNo",  
+			CONT_COST_NUM as "contCostNum",  <!-- 合同费用编码 -->
+			CONT_COST_NAME as "contCostName",  <!-- 合同费用名称 -->
+			COST_AMOUNT	as "costAmount",  <!-- 费用总计 -->
+			PAY_TIME as "payTime",  <!-- 合同付款时间 -->
+			REMARK as "remark" <!-- 备注 -->
+		FROM
+			cm_contract_bill_cost
+		WHERE
+			CONT_NO = #id#	
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+    			$orderBy$
+   		 	</isNotEmpty>
+	   		<isEmpty property="orderBy">	
+	    		  ID asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM cm_contract_bill_cost WHERE CONT_NO=#id#
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cm_contract_bill_cost
+			(
+				REC_CREATOR,
+				REC_CREATE_TIME,
+				REC_REVSIOR,
+				REC_REVISE_TIME,
+				ARCHIVE_FLAG,  <!-- 归档标记 -->
+				ID,  <!-- 主键 -->
+				CONT_NO,  <!-- 合同号 -->
+				SUB_NO,
+				CONT_COST_NUM,  <!-- 合同费用编码 -->
+				CONT_COST_NAME,  <!-- 合同费用名称 -->
+				COST_AMOUNT,  <!-- 费用总计 -->
+				PAY_TIME,  <!-- 合同付款时间 -->
+				REMARK  <!-- 备注 -->
+			)		 
+	    VALUES
+	    	(
+	    		#recCreator#,
+	    		#recCreateTime#,
+	    		#recRevsior#,
+	    		#recReviseTime#,
+	    		#archiveFlag#,
+	    		#id#,
+	    		#contNo#,
+	    		#subNo#,
+	    		#contCostNum#,
+	    		#contCostName#,
+	    		#costAmount#,
+	    		#payTime#,
+	    		#remark#
+	    	) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM cm_contract_bill_cost WHERE CONT_NO=#id#
+	</delete>
+
+	<update id="update">
+		UPDATE
+			cm_contract_bill_cost 
+		SET
+			REC_CREATOR	= #recCreator#,   
+			REC_CREATE_TIME	= #recCreateTime#,   
+			REC_REVSIOR	= #recRevsior#,   
+			REC_REVISE_TIME	= #recReviseTime#,   
+			ARCHIVE_FLAG = #archiveFlag#,   <!-- 归档标记 -->  
+			CONT_NO	= #contNo#,   <!-- 合同号 -->  
+			SUB_NO = #subNo#,   
+			CONT_COST_NUM = #contCostNum#,   <!-- 合同费用编码 -->  
+			CONT_COST_NAME = #contCostName#,   <!-- 合同费用名称 -->  
+			COST_AMOUNT	= #costAmount#,   <!-- 费用总计 -->  
+			PAY_TIME = #payTime#,   <!-- 合同付款时间 -->  
+			REMARK = #remark#  <!-- 备注 -->  
+		WHERE 	
+			ID = #id#
+	</update>
+
+	<select id="queryCost" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			payment_content remark,
+			payment_tax_exclude_amount paymentTaxExcludeAmount,
+			payment_time paymentTime,
+			case payment_status
+				when "1" then "申请付款"
+				when "2" then "付款完成" end
+			paymentStatus
+		FROM
+			cm_payment
+		WHERE
+			cont_pk = #id#
+		ORDER BY
+			payment_time DESC
+	</select>
+
+	<select id="countCost" resultClass="int">
+		SELECT
+			COUNT(*)
+		FROM
+			cm_payment
+		WHERE
+			cont_pk = #id#
+	</select>
+</sqlMap>

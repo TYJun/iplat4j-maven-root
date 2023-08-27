@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="SICK0105">
+
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			mat_type_num as "matTypeNum", <!-- 物资分类编码 -->
+			mat_type_name as "matTypeName", <!-- 物资分类名称 -->
+			mat_num	as "matNum",  <!-- 物资编码 -->
+			mat_name	as "matName",  <!-- 物资名称 -->
+			mat_model	as "matModel",  <!-- 物资型号 -->
+			mat_spec	as "matSpec",  <!-- 物资规格 -->
+			unit	as "unit",  <!-- 计量单位编码 -->
+			unit_name	as "unitName",  <!-- 计量单位名称 -->
+			out_price	as "price"  <!-- 出库单价 -->
+		from si_out_detail where 1=1
+		<isNotEmpty prepend=" AND " property="matNum"> <!-- 物资编码 -->
+			mat_num like concat('%', #matNum#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matName"> <!-- 物资名称 -->
+			mat_name like concat('%', #matName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeName"> <!-- 物资分类名称 -->
+			mat_type_name like concat('%', #matTypeName#, '%')
+		</isNotEmpty>
+		group by mat_num
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				MAT_NUM asc
+			</isEmpty>
+		</dynamic>
+	</select>
+  
+</sqlMap>

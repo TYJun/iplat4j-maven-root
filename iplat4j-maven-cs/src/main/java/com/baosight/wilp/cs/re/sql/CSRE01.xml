@@ -1,0 +1,1271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!-- table information Generate time : 2021-11-22 13:49:35 Version : 6.0.731.201809200158 
+        Generate time : 2021-11-23 14:44:48
+        Version :  6.0.731.201809200158
+        tableName :.cs_gd 
+         id  VARCHAR   NOT NULL   primarykey, 
+         task_no  VARCHAR, 
+         status_code  VARCHAR, 
+         req_staff_id  VARCHAR, 
+         req_staff_name  VARCHAR, 
+         req_tel_num  VARCHAR, 
+         req_dept_num  VARCHAR, 
+         req_dept_name  VARCHAR, 
+         req_spot_num  VARCHAR, 
+         req_spot_name  VARCHAR, 
+         building  VARCHAR, 
+         floor  VARCHAR, 
+         comments  VARCHAR, 
+         rec_creator  VARCHAR, 
+         rec_create_name  VARCHAR, 
+         rec_create_time  VARCHAR, 
+         rec_revisor  VARCHAR, 
+         rec_revise_name  VARCHAR, 
+         rec_revise_time  VARCHAR, 
+         confirm_user_no  VARCHAR, 
+         confirm_user_name  VARCHAR, 
+         confirm_time  VARCHAR, 
+         finish_user_no  VARCHAR, 
+         finish_user_name  VARCHAR, 
+         finish_time  VARCHAR, 
+         eval_grade  VARCHAR, 
+         eval_opinion  VARCHAR, 
+         eval_user_no  VARCHAR, 
+         eval_user_name  VARCHAR, 
+         eval_time  VARCHAR, 
+         print_flag  VARCHAR, 
+         archive_flag  VARCHAR, 
+         datagroup_code  VARCHAR
+    -->
+<sqlMap namespace="CSRE01">
+
+    <!-- sql 内容包含：
+    查询工单任务列表 queryTaskList
+    查询工单任务列表数量 count
+    查询未完工工单任务列表 queryUnFinishTaskList
+    查询未完工工单任务列表数量 unFinishCount
+    查询工单下未完工的事项数量 unFinishItemCount
+    查询保洁的状态列表 queryStatusCodeList
+    查询保洁的状态列表数量 countStatusCodeList
+    获取当前工单状态 queryGDStatus
+    查询工单的详情 queryTaskInfo
+    查询未完工工单的详情 queryUnFinishTaskInfo
+    查询工单登记的保洁事项以及对应的保洁执行人 queryItemsRE
+    查询未完工子工单的保洁事项以及对应的保洁执行人 queryUnFinishItemsRE
+    工单打印数据查询 queryTaskForReport
+    获取指定人员的用户组/角色 getUserRole
+    工单登记时进行的记录插入 insertCSGD
+    更新保洁工单主表的相关信息 updateCSGD
+    更新打印工单状态 updateCSGDPrint
+    往保洁工单明细表插入保洁事项记录 insertCSGDMX
+    往保洁工单明细表中依据对应的保洁事项插入对应的执行人 insertCSGDZXR
+    更新保洁工单明细表 updateCSGDMX
+    根据保洁工单主表的ID 删除保洁工单明细表中的记录 deleteCSGDMX
+    根据保洁事项的ID 删除保洁工单明细表中的记录 deleteCSGDMXById
+    往工单流程表插入工单流程记录 insertCSGDLC
+    查询工单的状态码对应的状态含义 queryCodeName
+    查询存在的任务号 querySerialNo
+    将生成的工单号插入 insertSerialNo
+    更新存储的工单号 updateSerialNo
+    -->
+
+    <!-- 查询工单任务列表 -->
+    <select id="queryTaskList" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        SELECT a.* FROM (
+        SELECT
+        gd.id as "taskId",  <!-- 主键 -->
+        gd.task_no as "taskNo",  <!-- 工单号 -->
+        gd.status_code as "statusCode",  <!-- 工单状态 -->
+        cs_status_code.code_name as "codeName", <!-- 工单含义 -->
+        gd.req_staff_id as "reqStaffId",  <!-- 来电人工号 -->
+        gd.req_staff_name as "reqStaffName",  <!-- 来电人姓名 -->
+        gd.req_tel_num as "reqTelNum",  <!-- 来电电话 -->
+        gd.req_dept_num as "reqDeptNum",  <!-- 来电科室编码 -->
+        gd.req_dept_name as "reqDeptName",  <!-- 来电科室名 -->
+        gd.req_spot_num as "reqSpotNum",  <!-- 保洁地点编码 -->
+        gd.req_spot_name as "reqSpotName",  <!-- 保洁地点名 -->
+        gd.building as "building",  <!-- 楼 -->
+        gd.floor as "floor",  <!-- 层 -->
+        gd.comments as "comments",  <!-- 备注 -->
+        gd.rec_creator as "recCreator",  <!-- 创建人工号 -->
+        gd.rec_create_name as "recCreateName",  <!-- 创建人姓名 -->
+        gd.rec_create_time as "recCreateTime",  <!-- 创建时间 -->
+        gd.rec_revisor as "recRevisor",  <!-- 修改人工号 -->
+        gd.rec_revise_name as "recReviseName",  <!-- 修改人姓名 -->
+        gd.rec_revise_time as "recReviseTime",  <!-- 修改时间 -->
+        gd.confirm_user_no as "confirmUserNo",  <!-- 工单确认人工号 -->
+        gd.confirm_user_name as "confirmUserName",  <!-- 工单确认人姓名 -->
+        gd.confirm_time as "confirmTime",  <!-- 工单确认时间 -->
+        gd.finish_user_no as "finishUserNo",  <!-- 工单完工人工号 -->
+        gd.finish_user_name as "finishUserName",  <!-- 工单完工人姓名 -->
+        gd.finish_time as "finishTime",  <!-- 工单完工时间 -->
+        gd.eval_grade as "evalGrade", <!-- 评价等级 -->
+        gd.eval_opinion as "evalOpinion", <!-- 评价意见 -->
+        gd.eval_user_no as "evalUserNo", <!-- 评价人工号 -->
+        gd.eval_user_name as "evalUserName", <!-- 评价人名称 -->
+        gd.eval_time as "evalTime", <!-- 评价时间 -->
+        CASE gd.print_flag
+        WHEN 'Y' THEN '已打印'
+        WHEN 'N' THEN '未打印'
+        END  as "printFlag",  <!-- 打印标记 -->
+        gd.archive_flag as "archiveFlag",  <!-- 归档标记 -->
+        gd.datagroup_code as "datagroupCode", <!-- 账套 -->
+
+        GROUP_CONCAT(DISTINCT mx.item_type_code) as "itemTypeCode",<!-- 工单保洁事项分类编码 -->
+        GROUP_CONCAT(DISTINCT mx.item_type_name) as "itemTypeName",<!-- 工单保洁事项分类 -->
+        GROUP_CONCAT(DISTINCT mx.item_code) as "itemCode",<!-- 工单保洁事项编码 -->
+        GROUP_CONCAT(DISTINCT mx.item_name) as "itemName",<!-- 工单保洁事项 -->
+        GROUP_CONCAT(DISTINCT mx.service_dept_num) as "serDeptNum",<!-- 工单事项服务科室编码 -->
+        GROUP_CONCAT(DISTINCT mx.service_dept_name) as "serDeptName",<!-- 工单事项服务科室名称 -->
+
+        GROUP_CONCAT(mx.execute_user_no) as "executeUserNo",<!-- 保洁执行人工号 -->
+        GROUP_CONCAT(mx.execute_user_name) as "executeUserName"<!-- 保洁执行人姓名 -->
+
+        FROM cs_gd gd
+        left join cs_status_code on cs_status_code.code_num =
+        gd.status_code
+
+        left join cs_gd_mx mx on mx.task_id = gd.id
+
+        WHERE 1=1
+        <isNotEmpty prepend=" AND " property="taskNo"> <!-- 工单号 -->
+            gd.task_no = #taskNo#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCodes"> <!-- 一个/多个工单状态 -->
+            gd.status_code in
+            <iterate  property="statusCodes" conjunction="," open="(" close=")">
+                #statusCodes[]#
+            </iterate>
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="printFlag"> <!-- 打印状态 -->
+            gd.print_flag = #printFlag#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="reqStaffId"> <!-- 来电人工号 -->
+            gd.req_staff_id = #reqStaffId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="reqDeptNum">          <!-- 来电科室编码 -->
+            gd.req_dept_num = #reqDeptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="reqDeptName">         <!-- 来电科室名称 -->
+            gd.req_dept_name like concat('%', #reqDeptName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recCreateTimeS">      <!-- 工单创建时间>= -->
+            date_format(gd.rec_create_time,'%Y-%m-%d') <![CDATA[>=]]> #recCreateTimeS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recCreateTimeE">      <!-- 工单创建时间<= -->
+            date_format(gd.rec_create_time,'%Y-%m-%d') <![CDATA[<=]]> #recCreateTimeE#
+        </isNotEmpty>
+        <dynamic prepend=" AND ">                                    <!-- 权限过滤数据 -->
+            <isEqual prepend=" AND " property="role" compareValue="DDZX"> <!-- 调度中心 -->
+                1=1
+            </isEqual>
+            <isEqual prepend=" AND " property="role" compareValue="NORMAL"> <!-- 普通角色 -->
+                (gd.req_staff_id = #workNo# or gd.req_dept_num = #department#)
+            </isEqual>
+        </dynamic>
+        <isNotEmpty prepend=" AND " property="dataGroupCode">
+            gd.datagroup_code = #dataGroupCode#
+        </isNotEmpty>
+        GROUP BY mx.task_id
+        ORDER BY gd.task_no desc) a
+        WHERE 1 = 1
+        <dynamic prepend=" AND ">                                    <!-- 权限过滤数据 -->
+            <isEqual prepend=" AND " property="role" compareValue="BJBZRY"> <!-- 保洁班组 -->
+                a.serDeptNum like concat('%', #department#, '%')
+            </isEqual>
+            <isEqual prepend=" AND " property="role" compareValue="BJZXR"> <!-- 保洁执行人 -->
+                a.executeUserNo like concat('%', #workNo#, '%')
+            </isEqual>
+        </dynamic>
+    </select>
+
+
+    <!-- 查询工单任务列表数量 -->
+    <select id="count" resultClass="int">
+        SELECT count(*)
+        FROM (
+        SELECT a.* FROM (
+        SELECT
+        gd.id as "taskId",  <!-- 主键 -->
+        gd.task_no as "taskNo",  <!-- 工单号 -->
+        gd.status_code as "statusCode",  <!-- 工单状态 -->
+        cs_status_code.code_name as "codeName", <!-- 工单含义 -->
+        gd.req_staff_id as "reqStaffId",  <!-- 来电人工号 -->
+        gd.req_staff_name as "reqStaffName",  <!-- 来电人姓名 -->
+        gd.req_tel_num as "reqTelNum",  <!-- 来电电话 -->
+        gd.req_dept_num as "reqDeptNum",  <!-- 来电科室编码 -->
+        gd.req_dept_name as "reqDeptName",  <!-- 来电科室名 -->
+        gd.req_spot_num as "reqSpotNum",  <!-- 保洁地点编码 -->
+        gd.req_spot_name as "reqSpotName",  <!-- 保洁地点名 -->
+        gd.building as "building",  <!-- 楼 -->
+        gd.floor as "floor",  <!-- 层 -->
+        gd.comments as "comments",  <!-- 备注 -->
+        gd.rec_creator as "recCreator",  <!-- 创建人工号 -->
+        gd.rec_create_name as "recCreateName",  <!-- 创建人姓名 -->
+        gd.rec_create_time as "recCreateTime",  <!-- 创建时间 -->
+        gd.rec_revisor as "recRevisor",  <!-- 修改人工号 -->
+        gd.rec_revise_name as "recReviseName",  <!-- 修改人姓名 -->
+        gd.rec_revise_time as "recReviseTime",  <!-- 修改时间 -->
+        gd.confirm_user_no as "confirmUserNo",  <!-- 工单确认人工号 -->
+        gd.confirm_user_name as "confirmUserName",  <!-- 工单确认人姓名 -->
+        gd.confirm_time as "confirmTime",  <!-- 工单确认时间 -->
+        gd.finish_user_no as "finishUserNo",  <!-- 工单完工人工号 -->
+        gd.finish_user_name as "finishUserName",  <!-- 工单完工人姓名 -->
+        gd.finish_time as "finishTime",  <!-- 工单完工时间 -->
+        gd.eval_grade as "evalGrade", <!-- 评价等级 -->
+        gd.eval_opinion as "evalOpinion", <!-- 评价意见 -->
+        gd.eval_user_no as "evalUserNo", <!-- 评价人工号 -->
+        gd.eval_user_name as "evalUserName", <!-- 评价人名称 -->
+        gd.eval_time as "evalTime", <!-- 评价时间 -->
+        CASE gd.print_flag
+        WHEN 'Y' THEN '已打印'
+        WHEN 'N' THEN '未打印'
+        END  as "printFlag",  <!-- 打印标记 -->
+        gd.archive_flag as "archiveFlag",  <!-- 归档标记 -->
+        gd.datagroup_code as "datagroupCode", <!-- 账套 -->
+
+        GROUP_CONCAT(DISTINCT mx.item_type_code) as "itemTypeCode",<!-- 工单保洁事项分类编码 -->
+        GROUP_CONCAT(DISTINCT mx.item_type_name) as "itemTypeName",<!-- 工单保洁事项分类 -->
+        GROUP_CONCAT(DISTINCT mx.item_code) as "itemCode",<!-- 工单保洁事项编码 -->
+        GROUP_CONCAT(DISTINCT mx.item_name) as "itemName",<!-- 工单保洁事项 -->
+        GROUP_CONCAT(DISTINCT mx.service_dept_num) as "serDeptNum",<!-- 工单事项服务科室编码 -->
+        GROUP_CONCAT(DISTINCT mx.service_dept_name) as "serDeptName",<!-- 工单事项服务科室名称 -->
+
+        GROUP_CONCAT(mx.execute_user_no) as "executeUserNo",<!-- 保洁执行人工号 -->
+        GROUP_CONCAT(mx.execute_user_name) as "executeUserName"<!-- 保洁执行人姓名 -->
+
+        FROM cs_gd gd
+        left join cs_status_code on cs_status_code.code_num =
+        gd.status_code
+
+        left join cs_gd_mx mx on mx.task_id = gd.id
+
+        WHERE 1=1
+        <isNotEmpty prepend=" AND " property="taskNo"> <!-- 工单号 -->
+            gd.task_no = #taskNo#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCodes"> <!-- 一个/多个工单状态 -->
+            gd.status_code in
+            <iterate  property="statusCodes" conjunction="," open="(" close=")">
+                #statusCodes[]#
+            </iterate>
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="printFlag"> <!-- 打印状态 -->
+            gd.print_flag = #printFlag#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="reqStaffId"> <!-- 来电人工号 -->
+            gd.req_staff_id = #reqStaffId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="reqDeptNum">          <!-- 来电科室编码 -->
+            gd.req_dept_num = #reqDeptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="reqDeptName">         <!-- 来电科室名称 -->
+            gd.req_dept_name like concat('%', #reqDeptName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recCreateTimeS">      <!-- 工单创建时间>= -->
+            date_format(gd.rec_create_time,'%Y-%m-%d') <![CDATA[>=]]> #recCreateTimeS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recCreateTimeE">      <!-- 工单创建时间<= -->
+            date_format(gd.rec_create_time,'%Y-%m-%d') <![CDATA[<=]]> #recCreateTimeE#
+        </isNotEmpty>
+        <dynamic prepend=" AND ">                                    <!-- 权限过滤数据 -->
+            <isEqual prepend=" AND " property="role" compareValue="DDZX"> <!-- 调度中心 -->
+                1=1
+            </isEqual>
+            <isEqual prepend=" AND " property="role" compareValue="NORMAL"> <!-- 普通角色 -->
+                (gd.req_staff_id = #workNo# or gd.req_dept_num = #department#)
+            </isEqual>
+        </dynamic>
+        <isNotEmpty prepend=" AND " property="dataGroupCode">
+            gd.datagroup_code = #dataGroupCode#
+        </isNotEmpty>
+        GROUP BY mx.task_id
+        ORDER BY gd.task_no desc) a
+        WHERE 1 = 1
+        <dynamic prepend=" AND ">                                    <!-- 权限过滤数据 -->
+            <isEqual prepend=" AND " property="role" compareValue="BJBZRY"> <!-- 保洁班组 -->
+                a.serDeptNum like concat('%', #department#, '%')
+            </isEqual>
+            <isEqual prepend=" AND " property="role" compareValue="BJZXR"> <!-- 保洁执行人 -->
+                a.executeUserNo like concat('%', #workNo#, '%')
+            </isEqual>
+        </dynamic>
+        ) b
+    </select>
+
+    <!-- 查询未完工工单任务列表 -->
+    <select id="queryUnFinishTaskList" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        SELECT a.* FROM (
+        SELECT
+        gd.id as "taskId",  <!-- 主键 -->
+        gd.task_no as "taskNo",  <!-- 工单号 -->
+        mx.status_code as "statusCode",  <!-- 子事项工单状态 -->
+        CASE mx.status_code
+        WHEN "01" THEN "待确认"
+        WHEN "02" THEN "待完工"
+        WHEN "03" THEN "已完工"
+        WHEN "99" THEN "已撤销"
+        END as "codeName", <!-- 工单含义 -->
+        gd.req_staff_id as "reqStaffId",  <!-- 来电人工号 -->
+        gd.req_staff_name as "reqStaffName",  <!-- 来电人姓名 -->
+        gd.req_tel_num as "reqTelNum",  <!-- 来电电话 -->
+        gd.req_dept_num as "reqDeptNum",  <!-- 来电科室编码 -->
+        gd.req_dept_name as "reqDeptName",  <!-- 来电科室名 -->
+        gd.req_spot_num as "reqSpotNum",  <!-- 保洁地点编码 -->
+        gd.req_spot_name as "reqSpotName",  <!-- 保洁地点名 -->
+        gd.building as "building",  <!-- 楼 -->
+        gd.floor as "floor",  <!-- 层 -->
+        gd.comments as "comments",  <!-- 备注 -->
+        gd.rec_creator as "recCreator",  <!-- 创建人工号 -->
+        gd.rec_create_name as "recCreateName",  <!-- 创建人姓名 -->
+        gd.rec_create_time as "recCreateTime",  <!-- 创建时间 -->
+        gd.rec_revisor as "recRevisor",  <!-- 修改人工号 -->
+        gd.rec_revise_name as "recReviseName",  <!-- 修改人姓名 -->
+        gd.rec_revise_time as "recReviseTime",  <!-- 修改时间 -->
+        gd.confirm_user_no as "confirmUserNo",  <!-- 工单确认人工号 -->
+        gd.confirm_user_name as "confirmUserName",  <!-- 工单确认人姓名 -->
+        gd.confirm_time as "confirmTime",  <!-- 工单确认时间 -->
+        gd.finish_user_no as "finishUserNo",  <!-- 工单完工人工号 -->
+        gd.finish_user_name as "finishUserName",  <!-- 工单完工人姓名 -->
+        gd.finish_time as "finishTime",  <!-- 工单完工时间 -->
+        gd.eval_grade as "evalGrade", <!-- 评价等级 -->
+        gd.eval_opinion as "evalOpinion", <!-- 评价意见 -->
+        gd.eval_user_no as "evalUserNo", <!-- 评价人工号 -->
+        gd.eval_user_name as "evalUserName", <!-- 评价人名称 -->
+        gd.eval_time as "evalTime", <!-- 评价时间 -->
+        CASE gd.print_flag
+        WHEN 'Y' THEN '已打印'
+        WHEN 'N' THEN '未打印'
+        END  as "printFlag",  <!-- 打印标记 -->
+        gd.archive_flag as "archiveFlag",  <!-- 归档标记 -->
+        gd.datagroup_code as "datagroupCode", <!-- 账套 -->
+
+        mx.item_type_code as "itemTypeCode",<!-- 工单保洁事项分类编码 -->
+        mx.item_type_name as "itemTypeName",<!-- 工单保洁事项分类 -->
+        mx.item_code as "itemCode",<!-- 工单保洁事项编码 -->
+        mx.item_name as "itemName",<!-- 工单保洁事项 -->
+        mx.service_dept_num as "serDeptNum",<!-- 工单事项服务科室编码 -->
+        mx.service_dept_name as "serDeptName",<!-- 工单事项服务科室名称 -->
+
+        GROUP_CONCAT(mx.execute_user_no) as "executeUserNo",<!-- 保洁执行人工号 -->
+        GROUP_CONCAT(mx.execute_user_name) as "executeUserName"<!-- 保洁执行人姓名 -->
+
+        FROM cs_gd gd
+        left join cs_gd_mx mx on mx.task_id = gd.id
+
+        WHERE 1=1
+        <isNotEmpty prepend=" AND " property="taskNo"> <!-- 工单号 -->
+            gd.task_no = #taskNo#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCodes"> <!-- 一个/多个工单状态 -->
+            gd.status_code in
+            <iterate  property="statusCodes" conjunction="," open="(" close=")">
+                #statusCodes[]#
+            </iterate>
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="printFlag"> <!-- 打印状态 -->
+            gd.print_flag = #printFlag#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="reqStaffId"> <!-- 来电人工号 -->
+            gd.req_staff_id = #reqStaffId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="reqDeptNum">          <!-- 来电科室编码 -->
+            gd.req_dept_num = #reqDeptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="reqDeptName">         <!-- 来电科室名称 -->
+            gd.req_dept_name like concat('%', #reqDeptName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recCreateTimeS">      <!-- 工单创建时间>= -->
+            date_format(gd.rec_create_time,'%Y-%m-%d') <![CDATA[>=]]> #recCreateTimeS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recCreateTimeE">      <!-- 工单创建时间<= -->
+            date_format(gd.rec_create_time,'%Y-%m-%d') <![CDATA[<=]]> #recCreateTimeE#
+        </isNotEmpty>
+        <dynamic prepend=" AND ">                                    <!-- 权限过滤数据 -->
+            <isEqual prepend=" AND " property="role" compareValue="DDZX">
+                1=1
+            </isEqual>
+            <isEqual prepend=" AND " property="role" compareValue="NORMAL">
+                (gd.req_staff_id = #workNo# or gd.req_dept_num = #department#)
+            </isEqual>
+        </dynamic>
+        <isNotEmpty prepend=" AND " property="dataGroupCode">
+            gd.datagroup_code = #dataGroupCode#
+        </isNotEmpty>
+        GROUP BY gd.id,mx.item_code
+        ORDER BY gd.task_no desc , mx.status_code) a
+        WHERE 1 = 1
+        <dynamic prepend=" AND ">                                    <!-- 权限过滤数据 -->
+            <isEqual prepend=" AND " property="role" compareValue="BJBZRY"> <!-- 保洁班组 -->
+                a.serDeptNum like concat('%', #department#, '%')
+            </isEqual>
+            <isEqual prepend=" AND " property="role" compareValue="BJZXR"> <!-- 保洁执行人 -->
+                a.executeUserNo like concat('%', #workNo#, '%')
+            </isEqual>
+        </dynamic>
+    </select>
+
+    <!-- 查询未完工工单任务列表数量 -->
+    <select id="unFinishCount" resultClass="int">
+        select count(*) from (
+        SELECT a.* FROM (
+        SELECT
+        gd.id as "taskId",  <!-- 主键 -->
+        gd.task_no as "taskNo",  <!-- 工单号 -->
+        mx.status_code as "statusCode",  <!-- 子事项工单状态 -->
+        CASE mx.status_code
+        WHEN "01" THEN "待确认"
+        WHEN "02" THEN "待完工"
+        WHEN "03" THEN "已完工"
+        WHEN "99" THEN "已撤销"
+        END as "codeName", <!-- 工单含义 -->
+        gd.req_staff_id as "reqStaffId",  <!-- 来电人工号 -->
+        gd.req_staff_name as "reqStaffName",  <!-- 来电人姓名 -->
+        gd.req_tel_num as "reqTelNum",  <!-- 来电电话 -->
+        gd.req_dept_num as "reqDeptNum",  <!-- 来电科室编码 -->
+        gd.req_dept_name as "reqDeptName",  <!-- 来电科室名 -->
+        gd.req_spot_num as "reqSpotNum",  <!-- 保洁地点编码 -->
+        gd.req_spot_name as "reqSpotName",  <!-- 保洁地点名 -->
+        gd.building as "building",  <!-- 楼 -->
+        gd.floor as "floor",  <!-- 层 -->
+        gd.comments as "comments",  <!-- 备注 -->
+        gd.rec_creator as "recCreator",  <!-- 创建人工号 -->
+        gd.rec_create_name as "recCreateName",  <!-- 创建人姓名 -->
+        gd.rec_create_time as "recCreateTime",  <!-- 创建时间 -->
+        gd.rec_revisor as "recRevisor",  <!-- 修改人工号 -->
+        gd.rec_revise_name as "recReviseName",  <!-- 修改人姓名 -->
+        gd.rec_revise_time as "recReviseTime",  <!-- 修改时间 -->
+        gd.confirm_user_no as "confirmUserNo",  <!-- 工单确认人工号 -->
+        gd.confirm_user_name as "confirmUserName",  <!-- 工单确认人姓名 -->
+        gd.confirm_time as "confirmTime",  <!-- 工单确认时间 -->
+        gd.finish_user_no as "finishUserNo",  <!-- 工单完工人工号 -->
+        gd.finish_user_name as "finishUserName",  <!-- 工单完工人姓名 -->
+        gd.finish_time as "finishTime",  <!-- 工单完工时间 -->
+        gd.eval_grade as "evalGrade", <!-- 评价等级 -->
+        gd.eval_opinion as "evalOpinion", <!-- 评价意见 -->
+        gd.eval_user_no as "evalUserNo", <!-- 评价人工号 -->
+        gd.eval_user_name as "evalUserName", <!-- 评价人名称 -->
+        gd.eval_time as "evalTime", <!-- 评价时间 -->
+        CASE gd.print_flag
+        WHEN 'Y' THEN '已打印'
+        WHEN 'N' THEN '未打印'
+        END  as "printFlag",  <!-- 打印标记 -->
+        gd.archive_flag as "archiveFlag",  <!-- 归档标记 -->
+        gd.datagroup_code as "datagroupCode", <!-- 账套 -->
+
+        mx.item_type_code as "itemTypeCode",<!-- 工单保洁事项分类编码 -->
+        mx.item_type_name as "itemTypeName",<!-- 工单保洁事项分类 -->
+        mx.item_code as "itemCode",<!-- 工单保洁事项编码 -->
+        mx.item_name as "itemName",<!-- 工单保洁事项 -->
+        mx.service_dept_num as "serDeptNum",<!-- 工单事项服务科室编码 -->
+        mx.service_dept_name as "serDeptName",<!-- 工单事项服务科室名称 -->
+
+        GROUP_CONCAT(mx.execute_user_no) as "executeUserNo",<!-- 保洁执行人工号 -->
+        GROUP_CONCAT(mx.execute_user_name) as "executeUserName"<!-- 保洁执行人姓名 -->
+
+        FROM cs_gd gd
+        left join cs_gd_mx mx on mx.task_id = gd.id
+
+        WHERE 1=1
+        <isNotEmpty prepend=" AND " property="taskNo"> <!-- 工单号 -->
+            gd.task_no = #taskNo#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCodes"> <!-- 一个/多个工单状态 -->
+            gd.status_code in
+            <iterate  property="statusCodes" conjunction="," open="(" close=")">
+                #statusCodes[]#
+            </iterate>
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="printFlag"> <!-- 打印状态 -->
+            gd.print_flag = #printFlag#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="reqStaffId"> <!-- 来电人工号 -->
+            gd.req_staff_id = #reqStaffId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="reqDeptNum">          <!-- 来电科室编码 -->
+            gd.req_dept_num = #reqDeptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="reqDeptName">         <!-- 来电科室名称 -->
+            gd.req_dept_name like concat('%', #reqDeptName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recCreateTimeS">      <!-- 工单创建时间>= -->
+            date_format(gd.rec_create_time,'%Y-%m-%d') <![CDATA[>=]]> #recCreateTimeS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recCreateTimeE">      <!-- 工单创建时间<= -->
+            date_format(gd.rec_create_time,'%Y-%m-%d') <![CDATA[<=]]> #recCreateTimeE#
+        </isNotEmpty>
+        <dynamic prepend=" AND ">                                    <!-- 权限过滤数据 -->
+            <isEqual prepend=" AND " property="role" compareValue="DDZX">
+                1=1
+            </isEqual>
+            <isEqual prepend=" AND " property="role" compareValue="NORMAL">
+                (gd.req_staff_id = #workNo# or gd.req_dept_num = #department#)
+            </isEqual>
+        </dynamic>
+        <isNotEmpty prepend=" AND " property="dataGroupCode">
+            gd.datagroup_code = #dataGroupCode#
+        </isNotEmpty>
+        GROUP BY gd.id,mx.item_code
+        ORDER BY gd.task_no desc , mx.status_code) a
+        WHERE 1 = 1
+        <dynamic prepend=" AND ">                                    <!-- 权限过滤数据 -->
+            <isEqual prepend=" AND " property="role" compareValue="BJBZRY"> <!-- 保洁班组 -->
+                a.serDeptNum like concat('%', #department#, '%')
+            </isEqual>
+            <isEqual prepend=" AND " property="role" compareValue="BJZXR"> <!-- 保洁执行人 -->
+                a.executeUserNo like concat('%', #workNo#, '%')
+            </isEqual>
+        </dynamic>
+        ) as aaa
+    </select>
+
+    <!-- 查询工单下未完工的事项数量 -->
+    <select id="unFinishItemCount" resultClass="int">
+        SELECT COUNT(*) FROM
+            (SELECT
+                 gd.id AS "taskId",
+                 gd.task_no AS "taskNo",
+                 mx.status_code AS "statusCode",
+                 CASE mx.status_code
+                     WHEN "02" THEN "待完工"
+                     WHEN "03" THEN "已完工"
+                     END as "codeName",
+                 mx.item_type_code AS "itemTypeCode",
+                 mx.item_type_name AS "itemTypeName",
+                 mx.item_code AS "itemCode",
+                 mx.item_name AS "itemName",
+                 mx.item_comments AS "itemComments",
+                 mx.service_dept_num AS "serDeptNum",
+                 mx.service_dept_name AS "serDeptName",
+                 GROUP_CONCAT(mx.execute_user_no) AS "executeUserNo",
+                 GROUP_CONCAT(mx.execute_user_name) AS "executeUserName"
+             FROM
+                 cs_gd gd
+                     LEFT JOIN cs_gd_mx mx ON mx.task_id = gd.id
+             WHERE
+                 gd.id = #taskId# and mx.status_code = '02'
+             GROUP BY gd.id,mx.item_code) AS aaa
+    </select>
+
+    <!-- 查询保洁的状态列表 -->
+	<select id="queryStatusCodeList" parameterClass="java.util.HashMap"
+        resultClass="java.util.HashMap">
+        select 
+        id as 'id',
+        code_num as 'codeNum',
+        code_name as 'codeName'
+        from cs_status_code
+        order by code_num
+    </select>
+
+
+    <!-- 查询保洁的状态列表数量 -->
+    <select id="countStatusCodeList" resultClass="int">
+        select 
+        count(*)
+        from cs_status_code
+    </select>
+
+    <!-- 获取当前工单状态 -->
+    <select id="queryGDStatus" parameterClass="java.util.Map"
+            resultClass="String">
+        SELECT status_code as status
+        FROM `cs_gd`
+        where 1=1 and id = #taskId#
+    </select>
+
+
+    <!-- 查询工单的详情 -->
+	<select id="queryTaskInfo" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+        SELECT
+        gd.id as "taskId",  <!-- 主键 -->
+        gd.task_no as "taskNo",  <!-- 工单号 -->
+        gd.status_code as "statusCode",  <!-- 工单状态 -->
+        cs_status_code.code_name as "codeName", <!-- 工单含义 -->
+        gd.req_staff_id as "reqStaffId",  <!-- 来电人工号 -->
+        gd.req_staff_name as "reqStaffName",  <!-- 来电人姓名 -->
+        gd.req_tel_num as "reqTelNum",  <!-- 来电电话 -->
+        gd.req_dept_num as "reqDeptNum",  <!-- 来电科室编码 -->
+        gd.req_dept_name as "reqDeptName",  <!-- 来电科室名 -->
+        gd.req_spot_num as "reqSpotNum",  <!-- 保洁地点编码 -->
+        gd.req_spot_name as "reqSpotName",  <!-- 保洁地点名 -->
+        gd.building as "building",  <!-- 楼 -->
+        gd.floor as "floor",  <!-- 层 -->
+        gd.comments as "comments",  <!-- 备注 -->
+        gd.rec_creator as "recCreator",  <!-- 创建人工号 -->
+        gd.rec_create_name as "recCreateName",  <!-- 创建人姓名 -->
+        gd.rec_create_time as "recCreateTime",  <!-- 创建时间 -->
+        gd.rec_revisor as "recRevisor",  <!-- 修改人工号 -->
+        gd.rec_revise_name as "recReviseName",  <!-- 修改人姓名 -->
+        gd.rec_revise_time as "recReviseTime",  <!-- 修改时间 -->
+        gd.confirm_user_no as "confirmUserNo",  <!-- 工单确认人工号 -->
+        gd.confirm_user_name as "confirmUserName",  <!-- 工单确认人姓名 -->
+        gd.confirm_time as "confirmTime",  <!-- 工单确认时间 -->
+        gd.finish_user_no as "finishUserNo",  <!-- 工单完工人工号 -->
+        gd.finish_user_name as "finishUserName",  <!-- 工单完工人姓名 -->
+        gd.finish_time as "finishTime",  <!-- 工单完工时间 -->
+        gd.eval_grade as "evalGrade", <!-- 评价等级 -->
+        gd.eval_opinion as "evalOpinion", <!-- 评价意见 -->
+        gd.eval_user_no as "evalUserNo", <!-- 评价人工号 -->
+        gd.eval_user_name as "evalUserName", <!-- 评价人名称 -->
+        gd.eval_time as "evalTime", <!-- 评价时间 -->
+        gd.print_flag as "printFlag",  <!-- 打印标记 -->
+        gd.archive_flag as "archiveFlag",  <!-- 归档标记 -->
+        gd.datagroup_code as "datagroupCode", <!-- 账套 -->
+        
+        GROUP_CONCAT(DISTINCT mx.item_type_code) as "itemTypeCode",<!-- 工单保洁事项分类编码 -->
+        GROUP_CONCAT(DISTINCT mx.item_type_name) as "itemTypeName",<!-- 工单保洁事项分类 -->
+        GROUP_CONCAT(DISTINCT mx.item_code) as "itemCode",<!-- 工单保洁事项编码 -->
+        GROUP_CONCAT(DISTINCT mx.item_name) as "itemName",<!-- 工单保洁事项 -->
+        GROUP_CONCAT(DISTINCT mx.item_comments) as "itemComments",<!-- 工单保洁事项 -->
+        GROUP_CONCAT(DISTINCT mx.service_dept_num) as "serDeptNum",<!-- 工单事项服务科室编码 -->
+        GROUP_CONCAT(DISTINCT mx.service_dept_name) as "serDeptName",<!-- 工单事项服务科室名称 -->
+        GROUP_CONCAT(DISTINCT mx.execute_user_no) as "executeUserNo",<!-- 保洁执行人工号 -->
+        GROUP_CONCAT(DISTINCT mx.execute_user_name) as "executeUserName"<!-- 保洁执行人姓名 -->
+        
+        FROM cs_gd gd
+        left join cs_status_code on cs_status_code.code_num =
+        gd.status_code
+        
+        left join cs_gd_mx mx on mx.task_id = gd.id 
+
+        WHERE gd.id=#taskId#
+    </select>
+
+
+    <!-- 查询未完工工单的详情 -->
+    <select id="queryUnFinishTaskInfo" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+        SELECT
+        gd.id as "taskId",  <!-- 主键 -->
+        gd.task_no as "taskNo",  <!-- 工单号 -->
+        gd.status_code as "statusCode",  <!-- 工单状态 -->
+        cs_status_code.code_name as "codeName", <!-- 工单含义 -->
+        gd.req_staff_id as "reqStaffId",  <!-- 来电人工号 -->
+        gd.req_staff_name as "reqStaffName",  <!-- 来电人姓名 -->
+        gd.req_tel_num as "reqTelNum",  <!-- 来电电话 -->
+        gd.req_dept_num as "reqDeptNum",  <!-- 来电科室编码 -->
+        gd.req_dept_name as "reqDeptName",  <!-- 来电科室名 -->
+        gd.req_spot_num as "reqSpotNum",  <!-- 保洁地点编码 -->
+        gd.req_spot_name as "reqSpotName",  <!-- 保洁地点名 -->
+        gd.building as "building",  <!-- 楼 -->
+        gd.floor as "floor",  <!-- 层 -->
+        gd.comments as "comments",  <!-- 备注 -->
+        gd.rec_creator as "recCreator",  <!-- 创建人工号 -->
+        gd.rec_create_name as "recCreateName",  <!-- 创建人姓名 -->
+        gd.rec_create_time as "recCreateTime",  <!-- 创建时间 -->
+        gd.rec_revisor as "recRevisor",  <!-- 修改人工号 -->
+        gd.rec_revise_name as "recReviseName",  <!-- 修改人姓名 -->
+        gd.rec_revise_time as "recReviseTime",  <!-- 修改时间 -->
+        gd.confirm_user_no as "confirmUserNo",  <!-- 工单确认人工号 -->
+        gd.confirm_user_name as "confirmUserName",  <!-- 工单确认人姓名 -->
+        gd.confirm_time as "confirmTime",  <!-- 工单确认时间 -->
+        gd.finish_user_no as "finishUserNo",  <!-- 工单完工人工号 -->
+        gd.finish_user_name as "finishUserName",  <!-- 工单完工人姓名 -->
+        gd.finish_time as "finishTime",  <!-- 工单完工时间 -->
+        gd.eval_grade as "evalGrade", <!-- 评价等级 -->
+        gd.eval_opinion as "evalOpinion", <!-- 评价意见 -->
+        gd.eval_user_no as "evalUserNo", <!-- 评价人工号 -->
+        gd.eval_user_name as "evalUserName", <!-- 评价人名称 -->
+        gd.eval_time as "evalTime", <!-- 评价时间 -->
+        gd.print_flag as "printFlag",  <!-- 打印标记 -->
+        gd.archive_flag as "archiveFlag",  <!-- 归档标记 -->
+        gd.datagroup_code as "datagroupCode", <!-- 账套 -->
+
+        mx.item_type_code as "itemTypeCode",<!-- 工单保洁事项分类编码 -->
+        mx.item_type_name as "itemTypeName",<!-- 工单保洁事项分类 -->
+        mx.item_code as "itemCode",<!-- 工单保洁事项编码 -->
+        mx.item_name as "itemName",<!-- 工单保洁事项 -->
+        mx.item_comments as "itemComments",<!-- 工单保洁事项 -->
+        mx.service_dept_num as "serDeptNum",<!-- 工单事项服务科室编码 -->
+        mx.service_dept_name as "serDeptName",<!-- 工单事项服务科室名称 -->
+        GROUP_CONCAT(mx.execute_user_no) as "executeUserNo",<!-- 保洁执行人工号 -->
+        GROUP_CONCAT(mx.execute_user_name) as "executeUserName"<!-- 保洁执行人姓名 -->
+
+        FROM cs_gd gd
+        left join cs_status_code on cs_status_code.code_num =
+        gd.status_code
+
+        left join cs_gd_mx mx on mx.task_id = gd.id
+
+        WHERE gd.id = #taskId# and mx.item_code = #itemCode#
+
+    </select>
+
+
+    <!-- 查询工单登记的保洁事项以及对应的保洁执行人 -->
+    <select id="queryItemsRE" parameterClass="string" resultClass="java.util.HashMap" >
+	    SELECT
+	        id as itemId,
+		    item_type_code as typeCode,
+		    item_type_name as typeName,
+		    item_code as itemCode,
+		    item_name as itemName,
+		    item_comments as comments,
+		    service_dept_num as serviceDeptNum,
+		    service_dept_name as serviceDeptName,
+		    GROUP_CONCAT(execute_user_no) as executeUserNo, <!-- 保洁执行人工号 -->
+            GROUP_CONCAT(execute_user_name) as executeUserName    <!-- 保洁执行人姓名 -->
+	    from cs_gd_mx  where task_id = #taskId#
+	    GROUP BY item_code
+    </select>
+
+    <!-- 查询未完工子工单的保洁事项以及对应的保洁执行人 -->
+    <select id="queryUnFinishItemsRE" parameterClass="java.util.Map" resultClass="java.util.HashMap" >
+        SELECT
+        id as itemId,
+        item_type_code as typeCode,
+        item_type_name as typeName,
+        item_code as itemCode,
+        item_name as itemName,
+        item_comments as comments,
+        service_dept_num as serviceDeptNum,
+        service_dept_name as serviceDeptName,
+        GROUP_CONCAT(execute_user_no) as executeUserNo, <!-- 保洁执行人工号 -->
+        GROUP_CONCAT(execute_user_name) as executeUserName    <!-- 保洁执行人姓名 -->
+        from cs_gd_mx  where task_id = #taskId# and item_code = #itemCode#
+        GROUP BY item_code
+    </select>
+
+
+    <!-- 工单打印数据查询 -->
+    <select id="queryTaskForReport" parameterClass="string" resultClass="java.util.HashMap">
+        SELECT
+            task_no as 'taskNo',
+                CONCAT(CURRENT_DATE(),' ',CURRENT_TIME) as 'currentTime',
+                req_staff_id as 'reqStaffId',
+                req_staff_name as 'reqStaffName',
+                req_tel_num as 'reqTelNum',
+                req_dept_name as 'reqDeptName',
+                req_spot_name as 'reqSpotName',
+                comments as 'comments',
+                CASE eval_grade
+                    WHEN '1' THEN '很差'
+                    WHEN '2' THEN '差'
+                    WHEN '3' THEN '一般'
+                    WHEN '4' THEN '满意'
+                    WHEN '5' THEN '很满意'
+                    END as 'evalGrade',
+                IFNULL(eval_opinion,"") as 'evalOpinion'
+        from cs_gd
+        where task_no = #taskNo#
+    </select>
+
+
+	<!-- 获取指定人员的用户组/角色 -->
+	<select id="getUserRole" parameterClass="java.util.Map"
+		resultClass="java.util.HashMap">
+		select
+		ifnull(GROUP_CONCAT(xug.GROUP_ENAME),'') roles,
+		ifnull(GROUP_CONCAT(xug.GROUP_CNAME),'') roleNames
+		from
+		${platSchema}.xs_user_group xug
+		left join
+		${platSchema}.xs_user_group_member xugm on xug.ID =
+		xugm.PARENT_ID
+		left
+		join ${platSchema}.xs_user xu on xu.USER_ID = xugm.MEMBER_ID
+		left join
+		${platSchema}.txsog03 o3 on xug.ID = o3.USER_GROUP_ID
+		left join
+		${platSchema}.txsog01 o1 on o3.ORG_ID = o1.ORG_ID
+		where (o1.IS_DELETED
+		= '0' or o1.IS_DELETED is null) and xu.LOGIN_NAME =
+		#workNo#
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			(o1.ORG_ENAME =
+			#dataGroupCode# or o1.ORG_ENAME is null)
+		</isNotEmpty>
+	</select>
+
+	<!--  
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="taskNo">
+            task_no = #taskNo#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCode">
+            status_code = #statusCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="reqStaffId">
+            req_staff_id = #reqStaffId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="reqStaffName">
+            req_staff_name = #reqStaffName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="reqTelNum">
+            req_tel_num = #reqTelNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="reqDeptNum">
+            req_dept_num = #reqDeptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="reqDeptName">
+            req_dept_name = #reqDeptName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="reqSpotNum">
+            req_spot_num = #reqSpotNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="reqSpotName">
+            req_spot_name = #reqSpotName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="building">
+            building = #building#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="floor">
+            floor = #floor#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="comments">
+            comments = #comments#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recCreator">
+            rec_creator = #recCreator#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recCreateName">
+            rec_create_name = #recCreateName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recCreateTime">
+            rec_create_time = #recCreateTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recRevisor">
+            rec_revisor = #recRevisor#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recReviseName">
+            rec_revise_name = #recReviseName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recReviseTime">
+            rec_revise_time = #recReviseTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="confirmUserNo">
+            confirm_user_no = #confirmUserNo#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="confirmUserName">
+            confirm_user_name = #confirmUserName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="confirmTime">
+            confirm_time = #confirmTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="finishUserNo">
+            finish_user_no = #finishUserNo#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="finishUserName">
+            finish_user_name = #finishUserName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="finishTime">
+            finish_time = #finishTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="evalGrade">
+            eval_grade = #evalGrade#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="evalOpinion">
+            eval_opinion = #evalOpinion#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="evalUserNo">
+            eval_user_no = #evalUserNo#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="evalUserName">
+            eval_user_name = #evalUserName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="evalTime">
+            eval_time = #evalTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="printFlag">
+            print_flag = #printFlag#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="archiveFlag">
+            archive_flag = #archiveFlag#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="datagroupCode">
+            datagroup_code = #datagroupCode#
+        </isNotEmpty>
+    -->
+
+
+    <!-- 工单登记时进行的记录插入 -->
+	<insert id="insertCSGD" parameterClass="java.util.HashMap">
+		INSERT INTO cs_gd (
+		<isNotNull property="taskNo">
+			task_no,  <!-- 工单号 -->
+		</isNotNull>
+		<isNotNull property="reqStaffId">
+			req_staff_id,  <!-- 来电人工号 -->
+		</isNotNull>
+		<isNotNull property="reqStaffName">
+			req_staff_name,  <!-- 来电人 -->
+		</isNotNull>
+		<isNotNull property="statusCode">
+			status_code,  <!-- 状态代码 -->
+		</isNotNull>
+		<isNotNull property="reqTelNum">
+			req_tel_num,  <!-- 来电号码 -->
+		</isNotNull>
+		<isNotNull property="reqDeptNum">
+			req_dept_num,  <!-- 来电科室编码 -->
+		</isNotNull>
+		<isNotNull property="reqDeptName">
+			req_dept_name,  <!-- 来电科室 -->
+		</isNotNull>
+        <isNotNull property="building">
+            building,  <!-- 楼 -->
+        </isNotNull>
+        <isNotNull property="floor">
+            floor,  <!-- 层 -->
+        </isNotNull>
+		<isNotNull property="reqSpotNum">
+			req_spot_num,  <!-- 保洁地点编码 -->
+		</isNotNull>
+		<isNotNull property="reqSpotName">
+			req_spot_name,  <!-- 保洁地点 -->
+		</isNotNull>
+		<isNotNull property="comments">
+			comments,  <!-- 备注 -->
+		</isNotNull>
+		<isNotNull property="recCreator">
+			rec_creator,  <!-- 创建人工号 -->
+		</isNotNull>
+		<isNotNull property="recCreateName">
+            rec_create_name,  <!-- 创建人名称 -->
+        </isNotNull>
+		<isNotNull property="recCreateTime">
+			rec_create_time,  <!-- 创建时间 -->
+		</isNotNull>
+		<isNotNull property="dataGroupCode">
+			datagroup_code,  <!-- 账套 -->
+		</isNotNull>
+		id  <!-- 主键 -->
+		)VALUES (
+		      <isNotNull property="taskNo">
+            #taskNo#,  <!-- 工单号 -->
+        </isNotNull>
+        <isNotNull property="reqStaffId">
+            #reqStaffId#,  <!-- 来电人工号 -->
+        </isNotNull>
+        <isNotNull property="reqStaffName">
+            #reqStaffName#,  <!-- 来电人 -->
+        </isNotNull>
+        <isNotNull property="statusCode">
+            #statusCode#,  <!-- 状态代码 -->
+        </isNotNull>
+        <isNotNull property="reqTelNum">
+            #reqTelNum#,  <!-- 来电号码 -->
+        </isNotNull>
+        <isNotNull property="reqDeptNum">
+            #reqDeptNum#,  <!-- 来电科室编码 -->
+        </isNotNull>
+        <isNotNull property="reqDeptName">
+            #reqDeptName#,  <!-- 来电科室 -->
+        </isNotNull>
+        <isNotNull property="building">
+            #building#,  <!-- 楼 -->
+        </isNotNull>
+        <isNotNull property="floor">
+            #floor#,  <!-- 层 -->
+        </isNotNull>
+        <isNotNull property="reqSpotNum">
+            #reqSpotNum#,  <!-- 保洁地点编码 -->
+        </isNotNull>
+        <isNotNull property="reqSpotName">
+            #reqSpotName#,  <!-- 保洁地点 -->
+        </isNotNull>
+        <isNotNull property="comments">
+            #comments#,  <!-- 备注 -->
+        </isNotNull>
+        <isNotNull property="recCreator">
+            #recCreator#,  <!-- 创建人工号 -->
+        </isNotNull>
+        <isNotNull property="recCreateName">
+            #recCreateName#,  <!-- 创建人名称 -->
+        </isNotNull>
+        <isNotNull property="recCreateTime">
+            #recCreateTime#,  <!-- 创建时间 -->
+        </isNotNull>
+        <isNotNull property="dataGroupCode">
+            #dataGroupCode#,  <!-- 账套 -->
+        </isNotNull>
+        #id#  <!-- 主键 -->
+		)
+	</insert>
+
+
+    <!-- 更新保洁工单主表的相关信息 -->
+    <update id="updateCSGD" parameterClass="java.util.HashMap">
+        update cs_gd
+        set
+        <isNotNull property="statusCode">
+            status_code = #statusCode#, <!-- 状态码-->
+        </isNotNull>
+        <isNotNull property="reqStaffId">
+            req_staff_id = #reqStaffId#,  <!-- 来电人工号 -->
+        </isNotNull>
+        <isNotNull property="reqStaffName">
+            req_staff_name = #reqStaffName#,  <!-- 来电人 -->
+        </isNotNull>
+        <isNotNull property="reqTelNum">
+            req_tel_num = #reqTelNum#,  <!-- 来电电话 -->
+        </isNotNull>
+        <isNotNull property="reqDeptNum">
+            req_dept_num = #reqDeptNum#,    <!-- 来电科室编码 -->
+        </isNotNull>
+        <isNotNull property="reqDeptName">
+            req_dept_name = #reqDeptName#,  <!-- 来电科室名称 -->
+        </isNotNull>
+        <isNotNull property="building">
+            building = #building#,  <!-- 保洁地点楼 -->
+        </isNotNull>
+        <isNotNull property="floor">
+            floor = #floor#,    <!-- 保洁地点层 -->
+        </isNotNull>
+        <isNotNull property="reqSpotNum">
+            req_spot_num = #reqSpotNum#, <!--保洁地点编码 -->
+        </isNotNull>
+        <isNotNull property="reqSpotName">
+            req_spot_name = #reqSpotName#,  <!--保洁地点名称 -->
+        </isNotNull>
+        <isNotNull property="comments">
+            comments = #comments#,  <!-- 工单备注 -->
+        </isNotNull>
+        <isNotNull property="recRevisor">
+            rec_revisor = #recRevisor#,     <!-- 工单创建人工号 -->
+        </isNotNull>
+        <isNotNull property="recReviseName">
+            rec_revise_name = #recReviseName#,  <!-- 工单创建人 -->
+        </isNotNull>
+        <isNotNull property="recReviseTime">
+            rec_revise_time = #recReviseTime#,  <!-- 工单创建时间 -->
+        </isNotNull>
+        <isNotNull property="confirmUserNo">
+            confirm_user_no = #confirmUserNo#,  <!-- 工单确认人工号 -->
+        </isNotNull>
+        <isNotNull property="confirmUserName">
+            confirm_user_name = #confirmUserName#,  <!-- 工单确认人-->
+        </isNotNull>
+        <isNotNull property="confirmTime">
+            confirm_time = #confirmTime#,   <!-- 工单确认时间 -->
+        </isNotNull>
+        <isNotNull property="finishUserNo">
+            finish_user_no = #finishUserNo#,    <!-- 工单完工人工号 -->
+        </isNotNull>
+        <isNotNull property="finishUserName">
+            finish_user_name = #finishUserName#,    <!-- 工单完工人 -->
+        </isNotNull>
+        <isNotNull property="finishTime">
+            finish_time = #finishTime#, <!-- 工单完工时间-->
+        </isNotNull>
+        <isNotNull property="evalGrade">
+            eval_grade = #evalGrade#,   <!-- 工单评价等级 -->
+        </isNotNull>
+        <isNotNull property="evalOpinion">
+            eval_opinion = #evalOpinion#,   <!-- 工单评价建议 -->
+        </isNotNull>
+        <isNotNull property="evalUserNo">
+            eval_user_no = #evalUserNo#,    <!-- 工单评价人工号 -->
+        </isNotNull>
+        <isNotNull property="evalUserName">
+            eval_user_name = #evalUserName#,    <!-- 工单评价人 -->
+        </isNotNull>
+        <isNotNull property="evalTime">
+            eval_time = #evalTime#, <!-- 工单评价时间 -->
+        </isNotNull>
+        <isNotNull property="printFlag">
+            print_flag = #printFlag#,   <!-- 打印记录 -->
+        </isNotNull>
+        <isNotNull property="archiveFlag">
+            archive_flag = #archiveFlag#,   <!-- 归档记录 -->
+        </isNotNull>
+        <isNotNull property="dataGroupCode">
+            datagroup_code = #dataGroupCode#,   <!-- 账套 -->
+        </isNotNull>
+        id=#taskId# <!-- 工单主键 -->
+        where id=#taskId#
+    </update>
+
+
+    <!-- 更新打印工单状态 -->
+    <update id="updateCSGDPrint" parameterClass="java.util.List">
+    update cs_gd
+    set print_flag = 'Y'
+    where task_no in
+    <iterate conjunction="," open="(" close=")">
+        #taskNoAll[]#
+    </iterate>
+
+    </update>
+
+
+    <!-- 往保洁工单明细表插入保洁事项记录-->
+	<insert id="insertCSGDMX" parameterClass="java.util.List">
+        INSERT INTO .cs_gd_mx ( id,  <!-- 保洁工单明细主键（UUID） -->
+                                task_id,  <!-- 保洁工单主表主键 -->
+                                status_code,  <!-- 工单状态 -->
+                                item_type_code,  <!-- 保洁事项分类编码 -->
+                                item_type_name,  <!-- 保洁事项分类 -->
+                                item_code,  <!-- 保洁事项编码 -->
+                                item_name,  <!-- 保洁事项 -->
+                                item_comments,  <!-- 事项备注 -->
+                                service_dept_num,  <!-- 服务科室编码 -->
+                                service_dept_name  <!-- 服务科室名称 -->
+                                )        
+        VALUES 
+        <iterate conjunction=",">
+            (
+            #list[].id#,
+            #list[].taskId#,
+            #list[].statusCode#,
+            #list[].itemTypeCode#,
+            #list[].itemTypeName#,
+            #list[].itemCode#,
+            #list[].itemName#,
+            #list[].itemComments#,
+            #list[].serviceDeptNum#,
+            #list[].serviceDeptName#
+            )
+        </iterate>
+    </insert>
+
+
+    <!-- 往保洁工单明细表中依据对应的保洁事项插入对应的执行人 -->
+    <insert id="insertCSGDZXR" parameterClass="java.util.List">
+        INSERT INTO .cs_gd_mx (id,  <!-- 保洁工单明细主键（UUID） -->
+                                        task_id,  <!-- 保洁工单主表主键 -->
+                                        status_code,  <!-- 工单状态 -->
+                                        item_type_code,  <!-- 保洁事项分类编码 -->
+                                        item_type_name,  <!-- 保洁事项分类 -->
+                                        item_code,  <!-- 保洁事项编码 -->
+                                        item_name,  <!-- 保洁事项 -->
+                                        item_comments,  <!-- 事项备注 -->
+                                        service_dept_num,  <!-- 服务科室编码 -->
+                                        service_dept_name,  <!-- 服务科室名称 -->
+                                        execute_user_no, <!-- 执行人工号 -->
+                                        execute_user_name <!-- 执行人名称 -->
+                                )        
+        VALUES 
+        <iterate conjunction=",">
+            (
+            #list[].id#,
+            #list[].taskId#,
+            #list[].statusCode#,
+            #list[].itemTypeCode#,
+            #list[].itemTypeName#,
+            #list[].itemCode#,
+            #list[].itemName#,
+            #list[].itemComments#,
+            #list[].serviceDeptNum#,
+            #list[].serviceDeptName#,
+            #list[].executeUserNo#,
+            #list[].executeUserName#
+            )
+        </iterate>
+    </insert>
+
+
+    <!-- 更新保洁工单明细表 -->
+    <update id="updateCSGDMX" parameterClass="java.util.HashMap">
+        update cs_gd_mx
+        set
+        <isNotNull property="statusCode">
+            status_code = #statusCode#,
+        </isNotNull>
+        <isNotNull property="evalGrade">
+            eval_grade = #evalGrade#,
+        </isNotNull>
+        <isNotNull property="evalOpinion">
+            eval_opinion = #evalOpinion#,
+        </isNotNull>
+        <isNotNull property="evalUserNo">
+            eval_user_no = #evalUserNo#,
+        </isNotNull>
+        <isNotNull property="evalUserName">
+            eval_user_name = #evalUserName#,
+        </isNotNull>
+        <isNotNull property="evalTime">
+            eval_time = #evalTime#,
+        </isNotNull>
+        <isNotNull property="evalStatus">
+            eval_status = #evalStatus#,
+        </isNotNull>
+        task_id = #taskId#
+        where task_id = #taskId#
+        <isNotNull prepend=" AND " property="itemCode">
+            item_code = #itemCode#   <!-- 事项编码 -->
+        </isNotNull>
+    </update>
+
+
+    <!-- 根据保洁工单主表的ID 删除保洁工单明细表中的记录 -->
+    <delete id="deleteCSGDMX" parameterClass="string">
+        delete from cs_gd_mx where task_id = #taskId#
+    </delete>
+
+
+    <!-- 根据保洁事项的ID 删除保洁工单明细表中的记录 -->
+    <delete id="deleteCSGDMXById" parameterClass="string">
+        delete from cs_gd_mx where id = #itemId#
+    </delete>
+
+
+    <!-- 往工单流程表插入工单流程记录 -->
+    <insert id="insertCSGDLC">
+        INSERT INTO .cs_gd_lc ( id,  <!-- 保洁工单流程主键（UUID） -->
+                                task_id,  <!-- 保洁工单主表主键 -->
+                                status_code,  <!-- 工单状态 -->
+                                status_code_mean,  <!-- 工单状态含义 -->
+                                operation_user_no,  <!-- 操作人工号 -->
+                                operation_user_name,  <!-- 操作人名称 -->
+                                operation_time,  <!-- 操作时间 -->
+                                datagroup_code  <!-- 账套 -->
+                                )
+        VALUES (#id#, #taskId#, #statusCode#, #statusCodeMean#, #operationUserNo#, #operationUserName#, #operationTime#, #datagroupCode#) 
+    </insert>
+
+
+    <!-- 查询工单的状态码对应的状态含义 -->
+    <select id="queryCodeName" parameterClass="java.util.HashMap"
+        resultClass="java.util.HashMap">
+        SELECT 
+        code_num as 'codeNum',
+        code_name as 'codeName' 
+        FROM `cs_status_code`
+        where code_num = #statusCode#
+    </select>
+
+
+	<!-- ========================================单号处理（流水号处理）开始 ==================================================== -->
+	<!-- 查询存在的任务号 -->
+	<select id="querySerialNo" parameterClass="java.lang.String"
+		resultClass="java.lang.String">
+		select type_num from cs_model_number where type=#value#
+	</select>
+    <!-- 将生成的工单号插入 -->
+	<update id="insertSerialNo" parameterClass="java.util.HashMap">
+		insert into cs_model_number(model_id,type,type_num,create_time,update_time)
+		value (UUID(),#type#,#serialNo#,#updateTime#,#updateTime#)
+	</update>
+    <!-- 更新存储的工单号  -->
+	<update id="updateSerialNo" parameterClass="java.util.HashMap">
+		update cs_model_number set type_num=#serialNo#,update_time=#updateTime# where
+		type=#type#
+	</update>
+	<!-- ========================================单号处理（流水号处理）结束 ==================================================== -->
+
+    <!-- 获取指定用户的账套信息 -->
+    <select id="queryLastDataGroupCode" parameterClass="string" resultClass="string">
+        SELECT last_data_group_code FROM teu99 WHERE user_code = #workNo#
+    </select>
+
+    <!-- 保存图片信息 -->
+    <insert id="insertPic" parameterClass="java.util.Map">
+        insert into cs_tp(id,rec_creator,rec_create_time,data_group_code,task_no,img_name,img_url,wgtj)
+            value (#id#,#recCreator#,#recCreateTime#,#dataGroupCode#,#taskNo#,#fileName#,#path#,#wgtj#)
+    </insert>
+
+    <!-- 查询图片信息 -->
+    <select id="showPic" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+        select
+            task_no taskNo,
+            img_url path
+        from cs_tp
+        where task_no = #taskNo#
+    </select>
+
+</sqlMap>

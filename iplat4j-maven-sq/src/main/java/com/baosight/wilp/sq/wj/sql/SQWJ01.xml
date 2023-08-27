@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+
+<sqlMap namespace="SQWJ01">
+	
+	
+	
+	<!-- 查询未开始的问卷开始时间 -->
+	<select id="queryBeginManage" parameterClass="String" resultClass="java.util.HashMap">
+		SELECT
+			id as manageId,
+			begin_date AS beginDate,
+			batch_no AS batchNo
+		FROM
+			sq_manage
+		WHERE
+			status_code = "00"
+			and
+			begin_date <![CDATA[ = ]]>#value#
+	</select>
+	
+	
+	<!-- 修改未开始问卷的状态为执行状态 -->
+	<update id="updateBeginManage" parameterClass="java.util.HashMap">
+		update sq_manage set status_code = 10 where id = #manageId# and batch_no = #batchNo#
+	</update>
+	
+	
+	
+	<!-- 查询未结束的问卷结束时间 -->
+	<select id="queryEndManage" parameterClass="String" resultClass="java.util.HashMap">
+		SELECT
+			id as manageId,
+			end_date AS endDate,
+			batch_no AS batchNo
+		FROM
+			sq_manage
+		WHERE
+			status_code = "10"
+			and
+			end_date <![CDATA[ = ]]>#value#
+	</select>
+	
+	
+	<!-- 修改未结束问卷的状态为完成状态 -->
+	<update id="updateEndManage" parameterClass="java.util.HashMap">
+		update sq_manage set status_code = 99 where id = #manageId# and batch_no=#batchNo#
+	</update>
+	
+	
+
+	<!-- 查询sql -->
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+				id	as "manageId",
+				batch_no	as "batchNo",
+				standard_name	as "standardName",
+				work_no_leader	as "workNo",
+				work_name_leader	as "workName",
+				begin_date	as "beginDate",
+				end_date	as "endDate",
+				CASE
+				WHEN assess_range = '0' THEN '全院范围'
+				WHEN assess_range = '1' THEN '指定范围'
+				END "assessRange",
+		       	project_code	as "projectCode",
+				project_name	as "projectName",
+				CASE
+				WHEN is_cycle = '0' THEN '否'
+				WHEN is_cycle = '1' THEN '是'
+				END "isCycle",
+				cycle_time	as "cycleTime",
+				cycle_time_unit	as "cycleTimeUnit",
+				creator,
+				create_time	as "createTime",
+				modifier,
+				modify_time	as "modifyTime",
+				parents_name as parentsName,
+				CASE
+				WHEN status_code = '00' THEN '新增'
+				WHEN status_code = '10' THEN '执行'
+				WHEN status_code = '99' THEN '完成'
+				END "statusCode",
+				data_group_code as "dataGroupCode"
+		FROM
+		     sq_manage
+		<dynamic prepend="where">
+			<isNotEmpty prepend=" AND " property="beginDate">
+				begin_date <![CDATA[ >= ]]>#beginDate#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="endDate">
+				end_date <![CDATA[ <= ]]>#endDate#
+			</isNotEmpty>
+		</dynamic>
+		order by
+			batch_no desc
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT
+		    COUNT(*)
+		FROM
+		    sq_manage
+		<dynamic prepend="where">
+			<isNotEmpty prepend=" AND " property="id">
+				id = #id#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	
+	
+	<!-- 生成编码sql -->
+	<select id="queryBatchNoByDate" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		select
+			batch_no batchNo
+		from
+		    sq_manage
+		where
+			batch_no like concat('%',#value#,'%')
+		ORDER BY
+			batch_no desc
+	</select>
+
+	<!-- 生成新的子批次号 -->
+	<select id="createNewBatchNo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			batch_no batchNo
+		from
+			sq_exam_standard
+		where
+			batch_no like concat('%',#existBatchNo#,'%')
+		ORDER BY
+			batch_no desc
+	</select>
+	
+	
+	<!-- 终止问卷 -->
+	<update id="updateSqManage" parameterClass="java.util.HashMap">
+		update sq_manage set status_code = #statusCode# where id = #manageId#
+	</update>
+	
+	
+	<!-- 删除问卷 -->
+	<delete id="deleteManage" parameterClass="java.util.HashMap">
+		DELETE FROM sq_manage WHERE  id = #manageId#
+	</delete>
+
+	<delete id="deleteExamStandard" parameterClass="java.util.HashMap">
+		DELETE FROM sq_exam_standard WHERE batch_no = #batchNo#
+	</delete>
+
+	<delete id="deleteExamProject" parameterClass="java.util.HashMap">
+		DELETE FROM sq_exam_project WHERE standard_id in (select id from sq_exam_standard where batch_no = #batchNo#) and batch_no = #batchNo#
+	</delete>
+
+	<delete id="deleteExamInstance" parameterClass="java.util.HashMap">
+		DELETE FROM sq_exam_instance WHERE project_id in (select id from sq_exam_project where standard_id in (select id from sq_exam_standard where batch_no = #batchNo#)) and batch_no = #batchNo#
+	</delete>
+
+	<delete id="deleteExamItem" parameterClass="java.util.HashMap">
+		DELETE FROM sq_exam_item WHERE instance_id in (select id from sq_exam_instance where project_id in (select id from sq_exam_project where standard_id in (select id from sq_exam_standard where batch_no = #batchNo#))) and batch_no = #batchNo#
+	</delete>
+	
+	<!-- 定时任务：查询与下次开始时间匹配的问卷重新生成新的问卷 -->
+	<select id="queryIscycleAutoCreateStandard" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			batch_no existBatchNo,
+			standard_code standardCode,
+			standard_name standardName,
+			work_no_leader workNoLeader,
+			next_begin_date nextBeginDate,
+			next_end_date nextEndDate,
+			is_cycle isCycle,
+			cycle_time cycleTime,
+			cycle_time_unit cycleTimeUnit
+		from
+			sq_manage
+		where
+			is_cycle = "1"
+		and
+			next_begin_date <![CDATA[<=]]> date_format(date_add(NOW(), interval #day# DAY),'%Y-%m-%d')
+	</select>
+
+	<!-- 查询临期执行问卷 -->
+	<select id="queryAdventManage" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			batch_no batchNo,
+			standard_code standardCode,
+			standard_name standardName,
+			work_no_leader workNoLeader,
+			project_code projectCode,
+			CONCAT("开始时间：",begin_date,"截止时间：",end_date) endDate
+		from
+			sq_manage
+		where
+			status_code = "10"
+		and
+			date_format(begin_date,'%Y-%m') <![CDATA[=]]> date_format(NOW(),'%Y-%m')
+        and
+			parents_id is null
+	</select>
+
+	<!-- 更新周期状态 -->
+	<update id="stopCycle" parameterClass="java.util.HashMap">
+		update sq_manage
+		set is_cycle = "0"
+		where batch_no = #batchNo# and id = #manageId#;
+	</update>
+
+	<!-- 查询考核主题 -->
+	<select id="queryStandardName" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.sq.bz.domain.SQBZ01">
+		SELECT
+		id AS standardCode,
+		standard_name AS standardName
+		FROM
+		sq_manage
+		where parents_id is null
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+	</select>
+</sqlMap>

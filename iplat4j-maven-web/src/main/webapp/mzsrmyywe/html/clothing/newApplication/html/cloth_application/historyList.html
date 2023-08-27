@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>申请记录</title>
+    <link rel="stylesheet" href="../../css/cloth_application/historyList.css">
+    <link rel="stylesheet" href="../../../../../html\reference\mui\css\mui.min.css">
+    <link rel="stylesheet" href="../../../../../html\reference\mui\css\mui.picker.css">
+    <link rel="stylesheet" href="../../../../../html\reference\mui\css\mui.picker.min.css">
+    <link rel="stylesheet" href="../../../reference/css/loading.css" />
+    <link rel="stylesheet" href="../../../../../reference/mui/css/mui.dtpicker.css" />
+</head>
+
+<body>
+    <!-- 顶部区域 -->
+    <header>
+        <div id="app" v-cloak>
+            <!-- 遮罩 -->
+            <div class="mui-backdrop" style="display: none;" id="zzc" @click="zzShow()"></div>
+            <div class='top'>
+                <div id="top-bar">
+                    <span @click="back" id="icon-left-back" class="mui-icon mui-icon-arrowleft"></span>
+                    <h1 class="title">申请记录</h1>
+                    <span @click="searchicon" id="icon-right-search" class="mui-icon mui-icon-search"></span>
+                </div>
+            </div>
+            <!-- 顶部选项卡 -->
+            <div class="Tab">
+                <div @click="sure_Y" class="sure_Y" v-bind:class="{active: isActive_Y}">
+                    已确认
+                </div>
+                <div @click="sure_N" class="sure_N" v-bind:class="{active: isActive_N}">
+                    未确认
+                </div>
+            </div>
+            <!-- 添加 "申请" 浮标 -->
+            <div @click="newApplication" id="newApplication">+</div>
+            <!-- 查询盒子 -->
+            <div class="searchDiv" style="display: none;" id="searchBox">
+                <div class="time">
+                    <span class="timeText">申请时间</span>
+                    <span id="beginTime" @click=beginTime>{{bTime}}</span>
+                    <span class="text">-</span>
+                    <span id="endTime" @click=endTime>{{eTime}}</span>
+                </div>
+                <!-- <div class="dept">
+                    <span class="deptText">科室</span>
+                    <span id="deptChoose" @click="deptChoose">{{deptName}}</span>
+                </div> -->
+                <button id="reset" @click="reset">重置</button>
+                <button id="search" @click="search">查询</button>
+            </div>
+            <!-- 列表项 -->
+            <div class="historylist">
+                <ul class="list_card">
+                    <li v-for="(item, index) in list_history" :key="index" @click="touchCard(index)">
+                        <div class="card">
+                            <div id="top">
+                                <span class="mui-icon mui-icon-list"></span>
+                                <span class="ordNum">{{item.applicationNo}}</span>
+                                <!-- <span class="deptname">{{item.recCreateTime}}</span> -->
+                            </div>
+
+                            <div id="bto">
+                                <div class="content_t card-show">
+                                    <div class="applyTime">
+                                        <span class="Name">申请时间</span>
+                                        <span class="value">{{item.recCreateTime}}</span>
+                                    </div>
+                                    <div class="giveoutTime">
+                                        <span class="Name">发放时间</span>
+                                        <span class="value">{{item.giveOutDate}}</span>
+                                    </div>
+                                    <div class="count">
+                                        <span class="Name">申请总数量</span>
+                                        <span class="gong">共</span><span class="value">{{item.number}}</span><span
+                                            class="jian">件</span>
+                                    </div>
+                                </div>
+                                <div class="content_b card-hide" data-name="hide" hidden="hidden">
+                                    <div v-for="(item,index) in item.list">
+                                        <span class="Name">{{item.fabricName}}</span>
+                                        <span class="value">{{item.number}}</span>
+                                        <span class="jian">件</span>
+                                    </div>
+                                </div>
+                                <!-- 按钮 -->
+                                <div class="btton" :class="{sureNone: isSureNone}">
+                                    <!-- 根据已确认和未确认隐藏按钮 -->
+                                    <span type="button" id="edit" @click="edit(index)">编辑</span>
+                                    <span id="cancel" @click="YNcancel(index)">取消申请</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <script src="../../../../../reference/assets/js/jquery.min.js"></script>
+    <script src="../../../../../html/reference/mui/js/mui.min.js"></script>
+    <script src="../../../../../html/reference/mui/js/mui.picker.min.js"></script>
+    <script src="../../../../../reference/vue/vue.js"></script>
+    <script src="../../../../../html/reference/js/mui.loading.js"></script>
+    <script src="../../../reference/mui/js/jquery-2.1.4.js"></script>
+    <script>
+        var baseUrl = localStorage.getItem("url");
+
+        var app = new Vue({
+            el: "#app",
+            data: function () {
+                _this = this;
+                return {
+                    list_history: [],
+                    list_detail: [],
+                    list: [],
+                    status: '2', //已确认为2 , 未确认为1
+                    bTime: '选择开始时间',
+                    eTime: '选择结束时间',
+                    // deptName: '点击选择科室',
+                    isActive_N: false, //tab切换
+                    isActive_Y: false, //tab切换
+                    isSureNone: false, //已确认 的编辑和取消按钮隐藏
+                }
+            },
+            methods: {
+                //点击卡片获取applicationNo
+                touchCard(index) {
+                    //根据index获取对应卡片的applicationNo
+                    var item = _this.list_history[index];
+                    var applicationNo = item.applicationNo;
+                    //将applicationNo添加至当前页面的地址栏中
+                    var url_p = window.location.origin + window.location.pathname + '?applicationNo=' + applicationNo + ''
+                    window.history.pushState(null, null, url_p)
+                },
+                //获取已确认历史数据列表(包含详细信息)
+                get_list_history(status) {
+                    _this.status=='2'?_this.isSureNone = true:_this.isSureNone = false //判断status,控制按钮的显示与隐藏
+                    _this.status=='2'?_this.isActive_Y = true:_this.isActive_Y = false //判断status,控制tab面板
+                    mui.showLoading("正在加载", "div")
+                    $.ajax({
+                        url: baseUrl + "medical/fabric",
+                        type: "post",
+                        data: {
+                            requestParam: JSON.stringify({
+                                beginTime: "",
+                                endTime: "",
+                                applicationNo: "",
+                                deptNo: localStorage.getItem("deptNo"),
+                                status: _this.status, //历史记录默认加载 已确认记录
+                                limit: "100",
+                                offset: "0"
+                            })
+                        },
+                        headers: {
+                            methodName: "queryApplicationTotal",
+                            serviceName: "OMMFApplication"
+                        },
+                        success: function (data) {
+                            mui.hideLoading();
+                            if (data.statusCode != "0") {
+                                mui.toast(data.msg);
+                                return;
+                            }
+                            app.list_history = data.data;
+                            if (app.list_history.length == 0) {
+                                mui.toast('暂无数据！');
+                                return
+                            }
+                        }
+                    });
+                },
+                //获取历史数据卡片详情
+                get_list_detail() {
+                    $.ajax({
+                        type: "post",
+                        url: baseUrl + "medical/fabric",
+                        data: {
+                            requestParam: '{"applicationNo":"' + applicationNo + '"}',
+                        },
+                        headers: {
+                            methodName: "queryApplicationDetail",
+                            serviceName: "OMMFApplication",
+                        },
+                        success: function (data) {
+                            if (data.statusCode != "0") {
+                                mui.toast(data.respMsg);
+                                return;
+                            }
+                            if (list.length == 0) {
+                                mui.toast("当前没有数据！");
+                                return;
+                            }
+                            const list_detail = data.data
+                        },
+                    });
+                },
+                //编辑 事件
+                edit(index) {
+                    var item = _this.list_history[index];
+                    var _applicationNo = item.applicationNo;
+                    console.log(_applicationNo);
+                    location.href = "./edit.html?applicationNo=" + _applicationNo;
+                },
+                // 取消申请
+                YNcancel(index) {
+                    mui.confirm("是否取消该条申请？", "提示", btnArray, function (e) {
+                        if (e.index == 1) {
+                            //点击'确认'调用cancel函数,删除申请
+                            _this.cancel();
+                        } else {
+                            return
+                        }
+                    });
+                    var btnArray = ["确认", "取消"];
+                },
+                cancel() {
+                    //从地址栏中得到对应的applicationNo
+                    var _applicationNo = _this.GetQueryString('applicationNo');
+
+                    $.ajax({
+                        url: baseUrl + "medical/fabric",
+                        type: "post",
+                        data: {
+                            requestParam: JSON.stringify(
+                                {
+                                    workNo: localStorage.getItem('workNo'),
+                                    userName: localStorage.getItem('userName'),
+                                    applicationNo: _applicationNo
+                                }
+                            )
+                        },
+                        headers: {
+                            methodName: 'deleteApplicationInfo',
+                            serviceName: "OMMFApplication"
+                        },
+                        success: function (data) {
+                            mui.hideLoading();
+                            if (data.statusCode == 66) {
+                                mui.toast(data.msg);
+                                return;
+                            } else if (data.statusCode != 0 && data.statusCode != 199) {
+                                mui.toast(data.msg);
+                                return;
+                            }
+                            if (data.statusCode == "0") {
+                                mui.toast('取消申请成功!');
+                                setTimeout(function() {
+                                    location.href = "./historyList.html"
+                                }, 1500)
+                            } 
+                            // else if (isSignature == "N") {
+                                // 修改状态
+                                // updateStatus();
+                            // } else if (data.statusCode == 199) {
+                            //     mui.toast(data.msg + "，请补签！");
+                            //     setTimeout(function () {
+                            //         location.href = "../menuAPP.html";
+                            //     }, 2000);
+                            // }
+                        }
+                    })
+                },
+                //获取地址栏中的参数
+                GetQueryString(name) {
+                    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                    var r = window.location.search.substr(1).match(reg);
+                    if (r != null) return unescape(r[2]); return null;
+                },
+                //右上角搜索图标点击事件
+                searchicon() {
+                    $("#searchBox").fadeIn();
+                    $("#zzc").fadeIn();
+                },
+                //遮罩的展示与隐藏
+                zzShow() {
+                    $("#zzc").fadeOut();
+                    $("#searchBox").fadeOut();
+                },
+                //选择开始时间
+                beginTime() {
+                    var dtPicker = new mui.DtPicker({ type: 'date' });
+                    dtPicker.show(function (selectItems) {
+                        _this.bTime = selectItems.text
+                        console.log(_this.bTime)
+                    })
+                },
+                // 选择结束时间
+                endTime() {
+                    var dtPicker = new mui.DtPicker({ type: 'date' });
+                    dtPicker.show(function (selectItems) {
+                        _this.eTime = selectItems.text
+                        console.log(_this.eTime)
+                    })
+                },
+                //选择科室
+                deptChoose() {
+                    location.href = "../chooseDept.html";
+                },
+                //搜索框重置按钮
+                reset() {
+                    // app.deptName = "点击选择科室";
+                    app.bTime = "选择开始时间";
+                    app.eTime = "选择结束时间";
+                },
+                // 搜索框搜索按钮
+                search() {
+                    $("#zzc").fadeOut();
+                    $("#searchBox").fadeOut();
+                    //判断开始时间与结束时间
+                    if (app.bTime > app.eTime) {
+                        mui.toast('开始时间需小于结束时间 !')
+                        //搜索内容重置
+                        // app.deptName = "点击选择科室";
+                        app.bTime = "选择开始时间";
+                        app.eTime = "选择结束时间";
+                        return;
+                    }
+                    mui.showLoading("正在查询", "div")
+                    $.ajax({
+                        url: baseUrl + "medical/fabric",
+                        type: "post",
+                        data: {
+                            requestParam: JSON.stringify({
+                                beginTime: app.bTime,
+                                endTime: app.eTime,
+                                applicationNo: "",
+                                deptNo: "",
+                                status: _this.status,
+                                limit: "100",
+                                offset: "0"
+                            })
+                        },
+                        headers: {
+                            methodName: "queryApplicationInfo",
+                            serviceName: "OMMFApplication"
+                        },
+                        success: function (data) {
+                            mui.hideLoading();
+                            if (data.statusCode != "0") {
+                                mui.toast(data.msg);
+                                return;
+                            }
+                            app.list_history = data.data;
+                            if (app.list_history.length == 0) {
+                                mui.toast('暂无数据！');
+                                return
+                            }
+                        }
+                    });
+                },
+                //左上角返回事件
+                back() {
+                    location.href = "../../../menuAPP.html"
+                },
+                //点击浮标创建新申请单
+                newApplication() {
+                    location.href = "./application.html"
+                },
+                // 顶部Tab切换
+                sure_Y() {
+                    _this.isActive_Y = true;
+                    _this.isActive_N = false;
+                    _this.isSureNone = true //取消和编辑按钮的隐藏
+                    _this.status = '2' //根据status获取历史列表
+                    _this.get_list_history(_this.status);
+                },
+                sure_N() {
+                    _this.isActive_N = true;
+                    _this.isActive_Y = false;
+                    _this.isSureNone = false//取消和编辑按钮的隐藏
+                    _this.status = '1' //根据status获取历史列表
+                    _this.get_list_history(_this.status);
+                },
+
+            },
+            created() {
+                this.get_list_history(_this.status);
+            }
+        })
+
+
+        //卡片的收展
+        mui("body").on("tap", ".card-show", function () {
+            var hideOrShow = $(this).next().attr("data-name");
+            if (hideOrShow == "hide") {
+                $(this).next().slideDown();
+                $(this).next().attr("data-name", "show");
+            } else {
+                $(this).next().slideUp();
+                $(this).next().attr("data-name", "hide");
+            }
+        });
+        mui("body").on("tap", ".card-hide", function () {
+            var hideOrShow = $(this).attr("data-name");
+            if (hideOrShow == "hide") {
+                $(this).slideDown();
+                $(this).attr("data-name", "show");
+            } else {
+                $(this).slideUp();
+                $(this).attr("data-name", "hide");
+            }
+        });
+    </script>
+</body>
+
+</html>

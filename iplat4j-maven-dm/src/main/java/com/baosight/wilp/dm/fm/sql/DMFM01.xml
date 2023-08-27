@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="DMFM01">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.dm.fm.domain.DMFM01">
+		SELECT
+				id	as "id",  
+				man_id	as "manId",  <!-- 人员id -->
+				employee_id	as "employeeId",  <!-- 工号 -->
+				man_name	as "manName",  <!-- 姓名 -->
+				room_id	as "roomId",  <!-- 房间id -->
+				room_name	as "roomName",  <!-- 房间地点 -->
+				room_no	as "roomNo",  <!-- 房间编号 -->
+				bed_num	as "bedNum",  <!-- 床位数 -->
+				building_code	as "buildingCode",  <!-- 宿舍楼 -->
+				floor_code	as "floorCode",  <!-- 层 -->
+				dormitory_no	as "dormitoryNo",  <!-- 楼-层-房间编号 -->
+				month_rent	as "monthRent",  <!-- 月租 -->
+				last_elec	as "lastElec",  <!-- 上月用电量 -->
+				last_water	as "lastWater",  <!-- 上月用水量 -->
+				last_waterfee	as "lastWaterfee",  <!-- 上月水费 -->
+				last_elecfee	as "lastElecfee",  <!-- 上月电费 -->
+				water_fee	as "waterFee",  <!-- 本月水费 -->
+				elec_fee	as "elecFee",  <!-- 本月电费 -->
+				month_elec	as "monthElec",  <!-- 本月用电量 -->
+				month_water	as "monthWater",  <!-- 本月用水量 -->
+				creater_time	as "createrTime",  <!-- 创建时间 -->
+				creator	as "creator",  <!-- 创建人 -->
+				buiidTime	as "buiidtime",  <!-- 生成时间 -->
+				remark	as "remark", <!-- 备注 -->
+				hospital_manage_fee as "hospitalManageFee", <!--医院管理费-->
+				property_manage_fee as "propertyManageFee",	<!--物业管理费-->
+				network_fee as "networkFee" <!--网费-->
+		FROM .dorms_room_fee WHERE 1=1
+		<isNotEmpty prepend=" AND " property="buildingCode">
+			building_code = #buildingCode#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT COUNT(*) FROM .dorms_room_fee WHERE 1=1
+		<isNotEmpty prepend=" AND " property="buildingCode">
+			building_code = #buildingCode#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manId">
+			man_id = #manId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="employeeId">
+			employee_id = #employeeId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manName">
+			man_name = #manName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomId">
+			room_id = #roomId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomName">
+			room_name = #roomName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomNo">
+			room_no = #roomNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="bedNum">
+			bed_num = #bedNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="buildingCode">
+			building_code = #buildingCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floorCode">
+			floor_code = #floorCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dormitoryNo">
+			dormitory_no = #dormitoryNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="monthRent">
+			month_rent = #monthRent#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="lastElec">
+			last_elec = #lastElec#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="lastWater">
+			last_water = #lastWater#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="lastWaterfee">
+			last_waterfee = #lastWaterfee#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="lastElecfee">
+			last_elecfee = #lastElecfee#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="waterFee">
+			water_fee = #waterFee#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="elecFee">
+			elec_fee = #elecFee#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="monthElec">
+			month_elec = #monthElec#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="monthWater">
+			month_water = #monthWater#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="createrTime">
+			creater_time = #createrTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="creator">
+			creator = #creator#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="buiidtime">
+			buiidTime = #buiidtime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="remark">
+			remark = #remark#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert" parameterClass="java.util.HashMap">
+		INSERT INTO .dorms_room_fee (id,
+		                                room_id,  <!-- 房间id -->
+										room_name,  <!-- 房间地点 -->
+										room_no,  <!-- 房间编号 -->
+										building_code,  <!-- 宿舍楼 -->
+										floor_code,  <!-- 层 -->
+										dormitory_no,  <!-- 楼-层-房间编号 -->
+										month_rent,  <!-- 月租 -->
+										last_elec,  <!-- 上月用电量 -->
+										last_water,  <!-- 上月用水量 -->
+										last_waterfee,  <!-- 上月水费 -->
+										last_elecfee,  <!-- 上月电费 -->
+										water_fee,  <!-- 本月水费 -->
+										elec_fee,  <!-- 本月电费 -->
+										month_elec,  <!-- 本月用电量 -->
+										month_water,  <!-- 本月用水量 -->
+										creater_time,  <!-- 创建时间 -->
+										creator,  <!-- 创建人 -->
+										buiidTime,  <!-- 生成时间 -->
+										remark,  <!-- 备注 -->
+										hospital_manage_fee,	<!--医院管理费-->
+										property_manage_fee,	<!--物业管理费-->
+										network_fee	<!--网费-->
+										)		 
+	    VALUES
+	    (#id#,#roomId#, #roomName#, #roomNo#, #buildingCode#, #floorCode#, #roomName#, #rent#, #lastElec#, #lastWater#, #lastWaterfee#, #lastElecfee#, #waterFee#, #elecFee#, #monthElec#, #monthWater#, #createrTime#, #creator#,
+	      #createrTime#, #remark#,#hospitalManageFee#,#propertyManageFee#,#networkFee#)
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM .dorms_room_fee WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE .dorms_room_fee 
+		SET 
+					man_id	= #manId#,   <!-- 人员id -->  
+					employee_id	= #employeeId#,   <!-- 工号 -->  
+					man_name	= #manName#,   <!-- 姓名 -->  
+					room_id	= #roomId#,   <!-- 房间id -->  
+					room_name	= #roomName#,   <!-- 房间地点 -->  
+					room_no	= #roomNo#,   <!-- 房间编号 -->  
+					bed_num	= #bedNum#,   <!-- 床位数 -->  
+					building_code	= #buildingCode#,   <!-- 宿舍楼 -->  
+					floor_code	= #floorCode#,   <!-- 层 -->  
+					dormitory_no	= #roomName#,   <!-- 楼-层-房间编号 -->
+					month_rent	= #rent#,   <!-- 月租 -->
+					last_elec	= #lastElec#,   <!-- 上月用电量 -->  
+					last_water	= #lastWater#,   <!-- 上月用水量 -->  
+					last_waterfee	= #lastWaterfee#,   <!-- 上月水费 -->  
+					last_elecfee	= #lastElecfee#,   <!-- 上月电费 -->  
+					water_fee	= #waterFee#,   <!-- 本月水费 -->  
+					elec_fee	= #elecFee#,   <!-- 本月电费 -->  
+					month_elec	= #monthElec#,   <!-- 本月用电量 -->  
+					month_water	= #monthWater#,   <!-- 本月用水量 -->  
+					creater_time	= #createrTime#,   <!-- 创建时间 -->  
+					creator	= #creator#,   <!-- 创建人 -->  
+					buiidTime	= #createrTime#,   <!-- 生成时间 -->
+					remark	= #remark#,  <!-- 备注 -->
+					hospital_manage_fee = #hospitalManageFee#,	<!--医院管理费-->
+					property_manage_fee = #propertyManageFee#,	<!--物业管理费-->
+					network_fee = #networkFee#	<!--网费-->
+			WHERE 	
+			id = #id#
+	</update>
+	
+	<select id="queryById" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+		SELECT
+		id as "id",
+		room_name as "roomName",
+		employee_id as "employeeId",  <!-- 工号 -->
+		man_name as "manName",  <!-- 姓名 -->
+		room_no as "roomNo",  <!-- 房间编号 -->
+		bed_num as "bedNum",  <!-- 床位数 -->
+		building_code as "buildingCode",  <!-- 宿舍楼 -->
+		floor_code as "floorCode",  <!-- 层 -->
+		dormitory_no as "dormitoryNo",  <!-- 楼-层-房间编号 -->
+		month_rent as "rent",  <!-- 月租 -->
+		last_elec as "lastElec",  <!-- 上月用电量 -->
+		last_water as "lastWater",  <!-- 上月用水量 -->
+		last_waterfee as "lastWaterfee",  <!-- 上月水费 -->
+		last_elecfee as "lastElecfee",  <!-- 上月电费 -->
+		water_fee as "waterFee",  <!-- 本月水费 -->
+		elec_fee as "elecFee",  <!-- 本月电费 -->
+		month_elec as "monthElec",  <!-- 本月用电量 -->
+		month_water as "monthWater",  <!-- 本月用水量 -->
+		creater_time as "createrTime",  <!-- 创建时间 -->
+		creator as "creator",  <!-- 创建人 -->
+		buiidTime as "buiidtime",  <!-- 生成时间 -->
+		remark as "remark", <!-- 备注 -->
+		hospital_manage_fee as "hospitalManageFee", <!--医院管理费-->
+		property_manage_fee as "propertyManageFee",	<!--物业管理费-->
+		network_fee as "networkFee" <!--网费-->
+		FROM .dorms_room_fee WHERE 1=1
+		and id=#id#
+
+	</select>
+	
+	<select id="queryStaff" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+		SELECT
+    dr2.man_id as manId,
+	dr3.employee_id as employeeId,
+	dr3.man_name as manName,
+	dr1.id AS roomId,
+	dr1.room_name AS roomName,
+	dr1.building_code AS buildingCode,
+	dr1.floor_code AS floorCode,
+	dr1.room_no AS roomNo,
+	dr1.bed_num AS bedNum,
+	dr4.elec
+FROM
+	dorms_room dr1 
+left join dorms_room_man dr2 on dr2.room_id = dr1.id
+left join dorms_man dr3 on dr3.id = dr2.man_id
+left join dorms_room_elec_middle dr4 on dr4.dormitory_no = CONCAT(pinyin(dr1.building_code),"_",left(dr1.floor_code,1),"_",substring_index(dr1.room_no,"室",1))
+where dr3.if_review = '3'
+	
+	</select>
+	<select id="queryintelligentElecFee" resultClass="java.util.HashMap">
+	SELECT
+	UUID() as id,
+	dr1.id AS roomId,
+	dr1.room_name AS roomName,
+	dr1.building_code AS buildingCode,
+	dr1.floor_code AS floorCode,
+	dr1.room_no AS roomNo,
+	dr1.dormitory_no as dormitoryNo,
+	(dr1.rent+dr1.manage_fee) as monthRent,
+	dr5.last_elec as lastElec,
+	IFNULL(dr4.elec,0)-IFNULL(dr5.last_elec,0) as monthElec,
+	IFNULL(dr4.elec,0)-IFNULL(dr5.last_elec,0) as elecFee,
+	NOW() as createrTime, 
+	NOW() as buiidtime
+FROM
+	dorms_room dr1 
+inner join dorms_room_elec_middle_month dr4 on dr4.dormitory_no = dr1.dormitory_no
+left join (select dormitory_no ,last_elec from dorms_room_elec_middle_lastmonth where PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( operation_date, '%Y%m' ) ) =1) dr5 on  dr5.dormitory_no = dr4.dormitory_no
+where dr1.building_code in ('后勤大楼','培训大楼')
+and date_format(dr4.operation_date,'%Y-%m')=date_format(now(),'%Y-%m')
+	</select>
+
+	<select id="queryRoomName" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+		       id
+        from
+			dorms_room
+        where
+			room_name = #roomName#
+	</select>
+
+	<insert id="insertFee" parameterClass="java.util.HashMap" >
+		INSERT INTO .dorms_room_fee
+		(id,
+		room_id,  <!-- 房间id -->
+		room_name,  <!-- 房间地点 -->
+		room_no,  <!-- 房间编号 -->
+		building_code,  <!-- 宿舍楼 -->
+		floor_code,  <!-- 层 -->
+		dormitory_no,  <!-- 楼-层-房间编号 -->
+		month_rent,  <!-- 月租 -->
+		last_elec,  <!-- 上月用电量 -->
+		last_water,  <!-- 上月用水量 -->
+		last_waterfee,  <!-- 上月水费 -->
+		last_elecfee,  <!-- 上月电费 -->
+		water_fee,  <!-- 本月水费 -->
+		elec_fee,  <!-- 本月电费 -->
+		month_elec,  <!-- 本月用电量 -->
+		month_water,  <!-- 本月用水量 -->
+		creater_time,  <!-- 创建时间 -->
+		creator,  <!-- 创建人 -->
+		buiidTime,  <!-- 生成时间 -->
+		remark  <!-- 备注 -->
+		)
+		VALUES
+		(#id#,#roomId#, #roomName#, #roomNo#, #buildingCode#,
+		#floorCode#, #roomName#, #rent#,
+		#lastElec#, #lastWater#, #lastWaterfee#, #lastElecfee#,
+		#waterFee#, #elecFee#, #monthElec#, #monthWater#, #createrTime#,
+		#creator#, #createrTime#, #remark#)
+	</insert>
+
+ <select id="queryRoomFee" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	 select
+	        id
+     from
+		    dorms_room_fee
+     where
+            room_name = #roomName#
+ </select>
+	<select id="quryRoomName" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+          room_name roomName
+        from
+			dorms_room_fee
+        where
+         room_name = #roomName#
+	</select>
+</sqlMap>

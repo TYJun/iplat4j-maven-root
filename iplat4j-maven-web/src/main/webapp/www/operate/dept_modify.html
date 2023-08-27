@@ -1,0 +1,279 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="../reference/mui/css/mui.css">
+  <link href="../css/mui.picker.css" rel="stylesheet" />
+  <link href="../css/mui.poppicker.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/colorGreen.css">
+  <link rel="stylesheet" href="../css/colorBlue.css">
+  <link rel="stylesheet" href="../css/common.css"/>
+</head>
+<STYLE TYPE="text/css">
+    body,html{
+      background: #eee;
+      height: 100%;
+    }
+    .mui-content {
+      height: 100%;
+    }
+
+      .area {
+        margin: 20px auto 0px auto;
+      }
+      
+      .mui-input-group {
+        margin-top: 10px;
+      }
+      
+      .mui-input-group:first-child {
+        margin-top: 20px;
+      }
+      
+      .mui-input-group label {
+        width: 22%;
+      }
+      
+      .mui-input-row label~input,
+      .mui-input-row label~select,
+      .mui-input-row label~textarea {
+        width: 78%;
+      }
+      
+      .mui-checkbox input[type=checkbox],
+      .mui-radio input[type=radio] {
+        top: 6px;
+      }
+      
+      .mui-content-padded {
+        margin-top: 25px;
+      }
+      
+      .mui-btn {
+        padding: 10px;
+      }
+      
+      .link-area {
+        display: block;
+        margin-top: 25px;
+        text-align: center;
+      }
+      
+      .spliter {
+        color: #bbb;
+        padding: 0px 8px;
+      }
+      
+      .oauth-area {
+        position: absolute;
+        bottom: 20px;
+        left: 0px;
+        text-align: center;
+        width: 100%;
+        padding: 0px;
+        margin: 0px;
+      }
+      
+      .oauth-area .oauth-btn {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        background-size: 30px 30px;
+        background-position: center center;
+        background-repeat: no-repeat;
+        margin: 0px 20px;
+        /*-webkit-filter: grayscale(100%); */
+        border: solid 1px #ddd;
+        border-radius: 25px;
+      }
+      
+      .oauth-area .oauth-btn:active {
+        border: solid 1px #aaa;
+      }
+      
+      .oauth-area .oauth-btn.disabled {
+        background-color: #ddd;
+      }
+
+      .mui-input-row label~input{
+        width:70%;
+      }
+
+      .mui-input-group label {
+          width: 30%;
+      }
+    	
+    	ul.getItemByName{
+				padding:0;
+        max-height: calc(100% - 60px);
+        overflow-x: hidden;
+        overflow-y: auto;
+        /*display: none;*/
+			}
+      ul.getItemByName li {
+        display: none;
+      }
+			
+			.round{
+			  width:100%;
+			  height:200px;
+			  position:absolute;
+			  z-index:3000;
+			  overflow:scroll;
+			  overflow-x:hidden;
+			  background-color:#FFFFFF;
+			  border-radius: 2px;
+			}
+			
+</STYLE>
+<body>
+    <header class="mui-bar mui-bar-nav">
+      <h1 class="mui-title">修改科室</h1>
+      <button class="mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+      </button>
+      <button class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-right" id='submit' style="font-size: 17px;padding-right: 4px;">提交
+      </button>
+    </header>
+
+    <p id="progress" class="mui-progressbar mui-progressbar-in" data-progress="20" style="display:none;"><span></span></p>
+
+    <div id="warn" class="warn" hidden>
+      <small></small>
+    </div>
+
+    <div class="mui-content">
+      <form class="mui-input-group">
+        <div class="mui-input-row">
+          <label>科室</label>
+          <input id='dept' type="text" class="mui-input-clear mui-input" oninput="deptFilter(this.value)" placeholder="请输入科室名称">
+        	<p id="deptNum" hidden></p>
+        </div>
+      </form>
+      <ul class="mui-table-view mui-table-view-chevron getItemByName">       
+      </ul>
+    </div>
+    <!-- 选择器 -->
+    <div id='deptResult' class="ui-alert"></div>
+</body>
+<script type="text/javascript" src="../js/color.js"></script>
+<script src="../reference/mui/js/mui.js" type="text/javascript"></script>
+<script src="../reference/mui/js/mui.picker.js" type="text/javascript"></script>
+<script src="../reference/mui/js/mui.poppicker.js" type="text/javascript"></script>
+<script src="../reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var deptData = new Array();
+    var deptCode = "";
+		var dataGroupCode = localStorage.getItem("dataGroupCode");
+    console.log(dataGroupCode);
+
+    deptList()
+    //加载科室
+    function deptList(){
+        $.ajax({
+        url:baseUrl+'app_maintainController.do?getAddress',
+        type:'post',
+        data:{
+          dataGroupCode: dataGroupCode
+        },
+        success:function(data){
+          var firstLi = "";
+          var data = JSON.parse(data);
+          var list = new Array();
+          list = data.obj;
+          for (var i = 0; i < list.length; i++) {
+              firstLi += "<li value='" + list[i].addressCode + "' class='mui-table-view-cell'><a href='#' class='fontColor'>" + list[i].addressName + "</a></li>"
+              deptData.push(list[i].addressCode)
+          }
+          $("ul.getItemByName").html(firstLi);
+
+          $("ul.getItemByName li").click(function() {
+            $('#deptNum').text($(this).attr("value"));
+            $('#dept').val($(this).find("a").text());
+            $("ul.getItemByName li").hide()
+          });
+        }
+      })
+    }
+
+    function deptFilter(value){
+      var text = value.trim()
+      $('.getItemByName li').each(function(){
+        $(this).hide().filter(":contains("+text+")").show()
+      })
+    }
+    
+    // 保存
+    var progress = mui('#progress');
+    $("#submit").click(function() {
+      var deptName = $("#dept").val();
+      var deptNum  = $('#deptNum').text();
+      if (deptName == '') { 
+        $('#warn small').html("请选择科室 ！");
+        $("#warn").fadeIn(500);
+        setTimeout(function(){$("#warn").fadeOut(500)},3000);
+        return;
+      }
+      if(deptData.indexOf(deptNum) <= -1){
+        $('#warn small').html("请选择科室 ！");
+        $("#warn").fadeIn(500);
+        setTimeout(function(){$("#warn").fadeOut(500)},3000);
+        return;
+      }
+      $("#progress").css("display", "");
+      mui(progress).progressbar().setProgress(30);
+      $.ajax({
+        url: baseUrl + 'app_maintainController.do?modifyDepartment',
+        type: 'post',
+        data: {
+          workNo: workNo,
+          deptNum: deptNum
+        },
+        success: function(data) {
+          var data = JSON.parse(data);
+          console.log(data);
+          if (data.respCode == "200") {
+            mui(progress).progressbar().setProgress(100);
+            localStorage.setItem("deptCode", deptCode);
+            localStorage.setItem("deptName", deptName);
+            $('#warn small').html(data.respMsg);
+            $("#warn").fadeIn(500);
+            setTimeout(function() {
+              $("#warn").fadeOut(500);
+            }, 3000);
+            setTimeout("goBack()", 1000);
+          } else {
+            $("#progress").css("display", "none");
+            $('#warn small').html(data.respMsg);
+            $("#warn").fadeIn(500);
+            setTimeout(function() {
+              $("#warn").fadeOut(500);
+            }, 3000);
+          }
+        }
+      });
+    });
+	
+    /**
+     * mui清除按钮事件(ps:自定义的，不加此方法页面会报错，如果不需要，方法体为空就行)
+     */
+    function clearFunc() {
+
+    }
+
+    /**
+     * mui返回方法(ps:自定义的,不加会报错,不需要的话方法体定义为空)
+     * [goBack description]
+     * @return {[type]} [description]
+     */
+    function goBack() {
+      location.href = "../menu.html";
+    }
+</script>
+</html>

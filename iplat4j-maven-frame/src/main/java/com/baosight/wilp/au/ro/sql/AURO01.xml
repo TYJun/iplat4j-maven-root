@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-06-05 16:10:13
+   		Version :  6.0.731.201809200158
+		tableName :.ac_spot 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 spot_num  VARCHAR, 
+		 spot_name  VARCHAR, 
+		 dept_id  VARCHAR, 
+		 building  VARCHAR, 
+		 floor  VARCHAR, 
+		 room  VARCHAR, 
+		 jp_spot_name  VARCHAR, 
+		 remark  VARCHAR, 
+		 archive_flag  VARCHAR, 
+		 rec_creater  VARCHAR, 
+		 rec_create_time  VARCHAR, 
+		 rec_revisor  VARCHAR, 
+		 rec_revise_time  VARCHAR
+	-->
+<sqlMap namespace="AURO01">
+
+	<select id="queryRole" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+				id,
+				role_num AS roleNum,
+				role_name AS roleName,
+				type,
+				remark,
+				rec_creater AS recCreater,
+				rec_create_time AS recCreatTime,
+				rec_revisor AS recRevisor,
+				rec_revise_time AS recReviseTime
+		FROM $projectSchema$.ac_role at 
+		
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roleNum">
+			role_num = #roleNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roleName">
+			role_name like concat('%', #roleName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="room">
+			at.room like concat('%', #room#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="type">
+			type like concat('%', #type#, '%')
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  rec_create_time desc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="queryRoleCount" parameterClass="java.util.HashMap"  resultClass="int">
+		SELECT count(*)
+		FROM $projectSchema$.ac_role 
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="roleNum">
+		
+			role_num = #roleNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roleName">
+			role_name like concat('%', #roleName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="room">
+			at.room like concat('%', #room#, '%')
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="type">
+			type like concat('%', #type#, '%')
+		</isNotEmpty>
+	</select>
+	
+	<select id="queryLastRoleNum" parameterClass="java.util.HashMap" 
+		resultClass="java.util.HashMap">
+		SELECT role_num as "roleNum"
+		FROM $projectSchema$.ac_role
+		ORDER BY rec_create_time DESC
+		LIMIT 1
+	</select>
+	
+	<select id="countRolePer" parameterClass="java.util.HashMap"  resultClass="int">
+		SELECT COUNT(*) FROM $projectSchema$.ac_rp WHERE 1=1
+		<isNotEmpty prepend=" AND " property="roleId">
+			role_id = #roleId#
+		</isNotEmpty>
+	</select>
+	
+	<select id="countRoleDept" parameterClass="java.util.HashMap"  resultClass="int">
+		SELECT COUNT(*) FROM $projectSchema$.ac_rd WHERE 1=1
+		<isNotEmpty prepend=" AND " property="roleId">
+			role_id = #roleId#
+		</isNotEmpty>
+	</select>
+	
+	<insert id="insertRole" parameterClass="java.util.HashMap">
+		INSERT INTO $projectSchema$.ac_role (id,  <!-- 主键 -->
+										role_num,  
+										role_name, 
+										type, 
+										remark,  
+										rec_creater,  <!-- 创建人 -->
+										rec_create_time,  <!-- 创建时间 -->
+										rec_revisor,  <!-- 修改人 -->
+										rec_revise_time  <!-- 修改时间 -->
+										)		 
+	    VALUES (#id#, #roleNum#, #roleName#,#type#, #remark#, #recCreater#, #recCreateTime#, #recRevisor#, #recReviseTime#) 
+	</insert>
+	
+	<delete id="delete" parameterClass="java.util.HashMap" >
+		DELETE FROM $projectSchema$.ac_role WHERE 
+			id IN
+		<iterate conjunction="," open="(" close=")" property="list">
+			#list[]#
+		</iterate>
+	</delete>
+	
+  	<update id="update"  parameterClass="java.util.HashMap" >
+		UPDATE $projectSchema$.ac_role
+		SET 
+				role_name	= #roleName#,   <!-- 电话号码 -->  
+				remark	= #remark#,   <!-- 备注 -->  
+				rec_revisor	= #recRevisor#,   <!-- 修改人 -->  
+				rec_revise_time	= #recReviseTime#  <!-- 修改时间 -->  
+		WHERE 	
+		id = #id#
+	</update>
+</sqlMap>

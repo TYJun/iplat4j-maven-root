@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!-- 订餐时间配置 -->
+<sqlMap namespace="SSBMDcsj01">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.bm.domain.SSBMDcsj01">
+		SELECT
+		id as "id",
+		canteen_num as "canteenNum",  <!-- 食堂编码 -->
+		canteen_name as "canteenName",  <!-- 食堂名称 -->
+		meal_num as "mealNum",  <!-- 餐次编码 -->
+		meal_name as "mealName",  <!-- 餐次名称 -->
+		today_order_time as "todayOrderTime",  <!-- 当天订餐时间 -->
+		tomorrow_order_time as "tomorrowOrderTime",  <!-- 明天订餐时间 -->
+		advance_time as "advanceTime",  <!-- 送餐时间提前量，分钟为单位 -->
+		send_time as "sendTime",  <!-- 送达时间以逗号分割，如 07:00,08:00,09:00 -->
+		today_meal_type_code as "todayMealTypeCode",
+		remark as "remark" <!-- 备注 -->
+		FROM sc_canteen_times times
+		where 1=1
+        <isNotEmpty prepend=" AND " property="userId">
+            find_in_set(
+                times.canteen_num,
+                (SELECT GROUP_CONCAT(canteen_num) 
+                FROM `sc_canteen_liaison_conf` 
+                where liaison_id like concat('%',#userId#,'%') ) 
+            ) 
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="mealNum">
+            meal_num = #mealNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="canteenNum">
+            canteen_num = #canteenNum#
+        </isNotEmpty>
+		order by canteen_num , meal_num
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_canteen_times WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="mealNum">
+            meal_num = #mealNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="canteenNum">
+            canteen_num = #canteenNum#
+        </isNotEmpty>
+	</select>
+	
+	<select id="countCanteenMeal" resultClass="int" parameterClass="java.util.HashMap">
+		SELECT COUNT(1) FROM sc_canteen_times WHERE 1=1
+		<isNotEmpty prepend=" AND " property="mealNum">
+            meal_num = #mealNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="canteenNum">
+            canteen_num = #canteenNum#
+        </isNotEmpty>
+	</select>
+
+	<select id="getCanteenTimesByCode" parameterClass="HashMap"
+			resultClass="com.baosight.wilp.ss.ac.commen.CanteenTimesEntity">
+		SELECT
+		id ,
+		canteen_num AS canteenNum,
+		canteen_name AS canteenName,
+		meal_num AS mealNum,
+		meal_name AS mealName,
+		today_order_time AS todayOrderTime,
+		tomorrow_order_time AS tomorrowOrderTime,
+		advance_time AS advanceTime,
+		send_time AS sendTime,
+		today_meal_type_code AS todayMealTypeCode,
+		remark
+		FROM sc_canteen_times WHERE 1=1
+		<isNotEmpty prepend="AND" property="canteenNum">
+			canteen_num = #canteenNum#
+		</isNotEmpty>
+		Order by
+		canteen_num DESC
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sc_canteen_times (id,
+		canteen_num,  <!-- 食堂编码 -->
+		canteen_name,  <!-- 食堂名称 -->
+		meal_num,  <!-- 餐次编码 -->
+		meal_name,  <!-- 餐次名称 -->
+		today_order_time,  <!-- 当天订餐时间 -->
+		tomorrow_order_time,  <!-- 明天订餐时间 -->
+		advance_time,  <!-- 送餐时间提前量，分钟为单位 -->
+		send_time,  <!-- 送达时间以逗号分割，如 07:00,08:00,09:00 -->
+		today_meal_type_code,
+		remark  <!-- 备注 -->
+		)
+		VALUES (#id#, #canteenNum#, #canteenName#, #mealNum#, #mealName#,
+		#todayOrderTime#, #tomorrowOrderTime#, #advanceTime#, #sendTime#,
+		#todayMealTypeCode#, #remark#)
+	</insert>
+
+	<!--新增食堂时自动配置订餐时间 - 早餐-->
+	<insert id="autoInsert1" parameterClass="java.util.HashMap">
+		INSERT INTO `sc_canteen_times`
+		    ( `id`, `canteen_num`, `canteen_name`, `meal_num`, `meal_name`, `today_order_time`, `tomorrow_order_time`, `advance_time`, `send_time`, `today_meal_type_code`, `remark` )
+		VALUES
+			( REPLACE(UUID(),"-",""), #canteenNum#, #canteenName#, '001', '早餐', '07:00', '23:00', 30, '08:00', NULL, NULL );
+	</insert>
+	<!--中餐-->
+	<insert id="autoInsert2" parameterClass="java.util.HashMap">
+		INSERT INTO `sc_canteen_times`
+		    ( `id`, `canteen_num`, `canteen_name`, `meal_num`, `meal_name`, `today_order_time`, `tomorrow_order_time`, `advance_time`, `send_time`, `today_meal_type_code`, `remark` )
+		VALUES
+			( REPLACE(UUID(),"-",""), #canteenNum#, #canteenName#, '002', '中餐', '10:00', '23:00', 30, '11:00', NULL, NULL );
+	</insert>
+	<!--晚餐-->
+	<insert id="autoInsert3" parameterClass="java.util.HashMap">
+		INSERT INTO `sc_canteen_times`
+		    ( `id`, `canteen_num`, `canteen_name`, `meal_num`, `meal_name`, `today_order_time`, `tomorrow_order_time`, `advance_time`, `send_time`, `today_meal_type_code`, `remark` )
+		VALUES
+			( REPLACE(UUID(),"-",""), #canteenNum#, #canteenName#, '003', '晚餐', '16:00', '23:00', 30, '17:00', NULL, NULL );
+	</insert>
+
+	<delete id="delete" >
+		DELETE FROM sc_canteen_times WHERE
+		id = #id#
+	</delete>
+
+	<!--根据食堂编码删除-->
+	<delete id="deleteByCanteenNum" parameterClass="java.util.HashMap">
+		DELETE FROM sc_canteen_times WHERE
+			canteen_num = #canteenNum#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_canteen_times
+		SET
+		canteen_num = #canteenNum#,   <!-- 食堂编码 -->
+		canteen_name = #canteenName#,   <!-- 食堂名称 -->
+		meal_num = #mealNum#,   <!-- 餐次编码 -->
+		meal_name = #mealName#,   <!-- 餐次名称 -->
+		today_order_time = #todayOrderTime#,   <!-- 当天订餐时间 -->
+		tomorrow_order_time = #tomorrowOrderTime#,   <!-- 明天订餐时间 -->
+		advance_time = #advanceTime#,   <!-- 送餐时间提前量，分钟为单位 -->
+		send_time = #sendTime#,   <!-- 送达时间以逗号分割，如 07:00,08:00,09:00 -->
+		today_meal_type_code = #todayMealTypeCode#,
+		remark = #remark#  <!-- 备注 -->
+		WHERE
+		id = #id#
+	</update>
+
+</sqlMap>

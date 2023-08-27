@@ -1,0 +1,267 @@
+body,html{
+	height:100%;
+}
+.warn{
+	padding-top: 10px;
+	padding-bottom: 10px;
+	font-size: 20px;
+	top:80%;
+}
+.warns{
+	width:60%;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	font-size: 23px;
+	width:70%;
+	height:53px;
+	padding-top: 18px;
+	top:0;
+	left:0;
+	text-align: center;
+	background: #DD524D;
+}
+.br-theme-bootstrap-stars .br-widget a{
+      margin-right: 17px;
+}
+.br-theme-bootstrap-stars .br-widget{
+  font-size: 25px;
+}
+.panel {
+    border-radius: 0px;
+}
+.panel-heading {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+hr {
+  margin-top: 0px;
+  margin-bottom: -9px;
+}
+h3 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.navbar {
+  margin-bottom: 0px;
+}
+h1 {
+  margin: 0 0 0rem;
+}
+.row {
+  margin-right: 0px;
+  margin-left: 0px;
+}
+.child-window {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2500;/*background-color:#111111; 
+      filter:alpha(opacity=30);            
+      -moz-opacity:0.3;                    
+      opacity: 0.3;*/
+  background: rgba(3, 3, 3, 0.5);
+  filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#7F000000, endcolorstr=#7F000000);
+}
+.btn-gre {
+  background-color: #60C760;
+  text-align: center;
+  color: #fff;
+}
+.btn-red {
+  background-color: #E45959;
+  text-align: center;
+  color: #fff;
+}
+.textarea {
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  padding: 15px;
+}
+#content{
+  background:#F1F1F1;
+  width:100%;
+}
+ul{
+	list-style:none;
+}
+ul li{
+	height:30px;
+	line-height:30px;
+	text-align:center;
+	background:#FFFFFF;
+	border-bottom:1px solid #F1F1F1;
+}
+.div-child{
+  width:100%;
+  background:#fff;
+  border:0px solid #ABABAB;
+  margin-bottom: 15px;
+  border-radius: 2px;
+}
+.btn-pink{
+  background-color: #2aabd2;
+  width:10rem;
+  text-align: center;
+  color: #fff;
+}
+.btn-sub {
+  background-color: #2aabd2;
+  text-align: center;
+  color: #fff;
+}
+.btn-grey {
+  background-color: #ABACAD;
+  text-align: center;
+  color: #fff;
+}
+.eval-unselected{
+  border: 1px solid #717171;
+  color:#717171;
+}
+.eval-selected{
+  border: 1px solid #F38D0F;
+  color:#F38D0F;
+}
+.eval{
+  width:75%;
+  height:30px;
+  line-height: 30px;
+  border-radius: 4px;
+  margin:0 auto;
+  font-size: 13px;
+}
+input{
+	width:20px;
+	height:20px;
+}
+.mui-control-content {
+  background-color: white;
+  min-height: 1000px;
+  background: #eee;
+  /*margin-bottom: 50px;*/
+}
+.mui-control-content .mui-loading {
+  margin-top: 50px;
+}
+.mui-control-item{
+	font-size: 21px;
+}
+body{
+	background-color: #F0F0F0;
+}
+.followCheck{
+	background-color: #F0F0F0;
+}
+.mui-content{
+	height:100%;
+	margin-bottom: 5rem;
+	overflow-y: auto;
+}
+#sliderSegmentedControl .row .center{
+	background: #FFFFFF;
+	padding-top: 4%;
+	padding-bottom: 3%;
+	font-size:21px;
+	width: 50%;
+	float: left;
+}
+#toAll{
+	background-color: #F0F0F0;
+}
+#name{
+	font-size: 17px;
+	padding-right: 3px;
+	color: #FFFFFF;
+}
+.menu-wrapper {
+	position: fixed;
+	top: 200px;
+	left: 0;
+	right: 0;
+	z-index: 4000;
+	width:80%;
+	margin:0 auto;
+	border-radius:6px;
+	text-align: center;
+	background-color: #FFFFFF;
+}
+#menu ul{
+	padding:0;
+	padding-bottom: 0;
+	height:100px;
+	height:0;
+	width:100%;
+	border-radius:6px;
+}
+#menu ul li{
+	color:#000000;
+	width:100%;
+	margin-bottom: 0;
+	border-bottom:1px solid #E1E1E1;
+	background: #FFFFFF;
+	font-size:22px;
+	height:5rem;
+	line-height: 3.8rem;
+	padding-bottom: 50px;
+	padding-top: 15px;
+}
+#qrcodeParent{
+	position: fixed;
+	z-index: 2500;
+	width:250px;
+	height:250px;
+	margin:0 auto;
+	left:0px;
+	right:0px;
+	top:18%;
+	bottom:0;
+}
+.mui-tab-item {
+	font-size: 19px;
+}
+.offCanvasSide{
+	height:100%;
+	width:55%;
+	position: fixed;
+	z-index:7000;
+	right: 0;
+	top:0;
+	background: #333333;
+}
+.mui-title, #back{
+	color:#FFFFFF;
+}
+#followCheck, #toAll{
+	margin-top: 46px;
+}
+.listUl{
+	height:100%;
+	width:130%;
+	margin-left: -25%;
+	overflow: auto;
+	padding-top: 0px;
+	margin-top: 51px;
+	padding-bottom: 85px;
+	border-top:1px solid #000000;
+}
+.listUl li{
+	background: #333333;
+	height:44px;
+	padding-top: 9px;
+	border-bottom:1px solid #000000;
+	color: #FFFFFF;
+}
+.blur {	
+    filter: url(blur.svg#blur); /* FireFox, Chrome, Opera */
+    -webkit-filter: blur(10px); /* Chrome, Opera */
+       -moz-filter: blur(10px);
+        -ms-filter: blur(10px);    
+            filter: blur(10px);
+    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false); /* IE6~IE9 */
+}

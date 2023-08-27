@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/bonawise-maven-pay-hessian/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bonawise-maven-pay-hessian/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-ci/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-ci/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-cm/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-cm/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-commons/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-commons/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-cp/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-cp/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-cs/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-cs/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-df/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-df/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-di/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-di/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-dk/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-dk/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-dm/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-dm/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-fa/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-frame/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-frame/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-hi/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-hi/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-hr/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-hr/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-im/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-im/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-ir/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-ir/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-it/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-it/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-mp-rm/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-mp-rm/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-mp/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-mp/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-ms-mx/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-ms-mx/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-pm/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-pm/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-pr/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-pr/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-sc/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-sc/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-security/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-security/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-si/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-si/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-sq/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-sq/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-vi/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-vi/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-web/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-web/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-xq/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/iplat4j-maven-xq/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+  </component>
+</project>

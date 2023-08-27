@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!-- table information Generate time : 2021-07-12 17:20:40 Version : 6.0.731.201809200158 
+	tableName :sc_work_order_bill_detail id VARCHAR NOT 
+	NULL primarykey, REC_CREATOR VARCHAR, REC_CREATE_NAME VARCHAR, REC_REVISE_TIME 
+	VARCHAR, REC_REVISOR VARCHAR, REC_CREATE_TIME VARCHAR, bill_no VARCHAR, bill_detail_no 
+	VARCHAR, menu_num VARCHAR, menu_name VARCHAR, menu_number INTEGER NOT NULL, 
+	menu_price DECIMAL NOT NULL, menu_total_price DECIMAL NOT NULL, eval_level 
+	INTEGER, eval_content VARCHAR, sche_id VARCHAR -->
+<sqlMap namespace="SSACTscWorkOrderBillDetail">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.ac.domain.SSACTscWorkOrderBillDetail">
+		SELECT
+		id as "id",  <!-- uuid -->
+		REC_CREATOR as "recCreator",  <!-- 创建人工号 -->
+		REC_CREATE_NAME as "recCreateName",  <!-- 创建人姓名 -->
+		REC_REVISE_TIME as "recReviseTime",  <!-- 修改时间 -->
+		REC_REVISOR as "recRevisor",  <!-- 修改人 -->
+		REC_CREATE_TIME as "recCreateTime",  <!-- 创建时间 -->
+		bill_no as "billNo",  <!-- 自取餐主表的bill_no -->
+		bill_detail_no as "billDetailNo",  <!-- 字表订单号：主表订单号+‘0’ ；主表订单号+‘1’ -->
+		menu_num as "menuNum",  <!-- 菜品编码 -->
+		menu_name as "menuName",  <!-- 菜品名称 -->
+		menu_number as "menuNumber",  <!-- 菜品数量 -->
+		menu_price as "menuPrice",  <!-- 菜品单价 -->
+		menu_total_price as "menuTotalPrice",  <!-- 菜品总价 -->
+		eval_level as "evalLevel",  <!-- 评价等级(0-10) -->
+		eval_content as "evalContent",  <!-- 评价内容 -->
+		sche_id as "scheId" <!-- 排班id -->
+		FROM sc_work_order_bill_detail WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+
+	</select>
+	
+	<select id="queryDetailByBillNo" parameterClass="String"
+		resultClass="com.baosight.wilp.ss.ac.domain.SSACTscWorkOrderBillDetail">
+		SELECT
+		    d.id AS "id",
+		    d.REC_CREATOR AS "recCreator",
+		    d.REC_CREATE_NAME AS "recCreateName",
+		    d.REC_REVISE_TIME AS "recReviseTime",
+		    d.REC_REVISOR AS "recRevisor",
+		    d.REC_CREATE_TIME AS "recCreateTime",
+		    d.bill_no AS "billNo",
+		    d.bill_detail_no AS "billDetailNo",
+		    d.menu_num AS "menuNum",
+		    d.menu_name AS "menuName",
+		    d.menu_number AS "menuNumber",
+		    d.menu_price AS "menuPrice",
+		    d.menu_total_price AS "menuTotalPrice",
+		    d.eval_level AS "evalLevel",
+		    d.eval_content AS "evalContent",
+		    d.sche_id AS "scheId" ,
+		    a.room as room,
+		    menu.menu_pic_url,
+			d.package_price AS packagePrice<!-- 打包费-->
+		FROM
+		    sc_work_order_bill_detail d
+		    left join sc_work_order_bill b on b.bill_no = d.bill_no
+		    LEFT JOIN sc_menu_sche sche on sche.id = d.sche_id
+		    LEFT JOIN sc_menu menu on menu.menu_num = sche.menu_num
+		    LEFT JOIN sc_work_order_bill a ON a.bill_no = d.bill_no
+		WHERE
+		    1 = 1
+		and d.bill_no = #billNo#
+
+	</select>
+
+	<select id="queryDetailByBillNoYh" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+	d.discount_amount AS discountAmount
+FROM
+	bona_frame_mzsrmyy.ac_personnel per
+	LEFT JOIN sc_meal_staffing d ON per.type = d.type_code
+WHERE
+	1 = 1
+	AND d.meal_time_code = #mealNum#
+	AND per.work_no = #workNo#
+	<isNotEmpty prepend=" AND " property="menuName">
+		d.menu_name = #menuName#
+	</isNotEmpty>
+	</select>
+
+	<select id="querySubsidy" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+a.work_no as workNo
+FROM sc_meal_subsidy_count a
+LEFT JOIN sc_work_order_bill b on b.bill_no = a.bill_no
+where 1=1
+and b.status_code != '99'
+and a.work_no = #workNo#
+and a.need_date = #needDate#
+and a.meal_num = #mealNum#
+
+	</select>
+
+	<!-- 菜品评价查询 -->
+	<select id="getEvalContent" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.ss.ac.domain.SSACTscWorkOrderBillDetail">
+		SELECT
+			t.eval_level AS evalLevel,
+			t.eval_content AS evalContent,
+			( SELECT AVG( eval_level )
+				FROM `sc_work_order_bill_detail`
+				WHERE 1 = 1
+			    AND menu_num = #menuNum#
+			    AND eval_level > 0
+			) evalAvg,
+			t.REC_REVISOR AS recRevisor,
+			t.REC_REVISE_TIME AS evalTime,
+			t.menu_num AS menuNum
+		FROM
+			sc_work_order_bill_detail t
+		WHERE
+			t.menu_num = #menuNum#
+		  	and eval_level > 0
+		ORDER BY
+			t.REC_REVISE_TIME DESC
+			LIMIT #starts# , #ends#
+	</select>
+	<!-- <isNotEmpty prepend=" AND " property="id"> id = #id# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="recCreator"> REC_CREATOR = #recCreator# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="recCreateName"> REC_CREATE_NAME 
+		= #recCreateName# </isNotEmpty> <isNotEmpty prepend=" AND " property="recReviseTime"> 
+		REC_REVISE_TIME = #recReviseTime# </isNotEmpty> <isNotEmpty prepend=" AND 
+		" property="recRevisor"> REC_REVISOR = #recRevisor# </isNotEmpty> <isNotEmpty 
+		prepend=" AND " property="recCreateTime"> REC_CREATE_TIME = #recCreateTime# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="billNo"> bill_no = #billNo# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="billDetailNo"> bill_detail_no 
+		= #billDetailNo# </isNotEmpty> <isNotEmpty prepend=" AND " property="menuNum"> 
+		menu_num = #menuNum# </isNotEmpty> <isNotEmpty prepend=" AND " property="menuName"> 
+		menu_name = #menuName# </isNotEmpty> <isNotEmpty prepend=" AND " property="menuNumber"> 
+		menu_number = #menuNumber# </isNotEmpty> <isNotEmpty prepend=" AND " property="menuPrice"> 
+		menu_price = #menuPrice# </isNotEmpty> <isNotEmpty prepend=" AND " property="menuTotalPrice"> 
+		menu_total_price = #menuTotalPrice# </isNotEmpty> <isNotEmpty prepend=" AND 
+		" property="evalLevel"> eval_level = #evalLevel# </isNotEmpty> <isNotEmpty 
+		prepend=" AND " property="evalContent"> eval_content = #evalContent# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="scheId"> sche_id = #scheId# </isNotEmpty> -->
+
+	<insert id="insert">
+		INSERT INTO sc_work_order_bill_detail (id,  <!-- uuid -->
+		REC_CREATOR,  <!-- 创建人工号 -->
+		REC_CREATE_NAME,  <!-- 创建人姓名 -->
+		REC_REVISE_TIME,  <!-- 修改时间 -->
+		REC_REVISOR,  <!-- 修改人 -->
+		REC_CREATE_TIME,  <!-- 创建时间 -->
+		bill_no,  <!-- 自取餐主表的bill_no -->
+		bill_detail_no,  <!-- 字表订单号：主表订单号+‘0’ ；主表订单号+‘1’ -->
+		menu_num,  <!-- 菜品编码 -->
+		menu_name,  <!-- 菜品名称 -->
+		menu_number,  <!-- 菜品数量 -->
+		menu_price,  <!-- 菜品单价 -->
+		menu_total_price,  <!-- 菜品总价 -->
+		eval_level,  <!-- 评价等级(0-10) -->
+		eval_content,  <!-- 评价内容 -->
+		sche_id,  <!-- 排班id -->
+		package_price  <!-- 打包费-->
+		)
+		VALUES (#id#, #recCreator#, #recCreateName#, #recReviseTime#, #recRevisor#,
+		#recCreateTime#, #billNo#, #billDetailNo#, #menuNum#, #menuName#,
+		#menuNumber#, #menuPrice#, #menuTotalPrice#, #evalLevel#,
+		#evalContent#, #scheId#, #packagePrice#)
+	</insert>
+
+
+    <insert id="saveBillDetail">
+        INSERT INTO sc_work_order_bill_detail (
+        id,
+        bill_no,
+        bill_detail_no,
+        menu_num,
+        menu_name,
+        menu_number,
+        menu_price,
+        menu_total_price,
+        rec_Create_Time
+        ) VALUES (
+        #id#,
+        #billNo#,
+        #billDetailNo#,
+        #menuNum#,
+        #menuName#,
+        #num#,
+        #menuPrice#,
+        #menuTotalPrice#,
+        #recCreateTime#
+        )
+    </insert>
+
+	<delete id="delete">
+		DELETE FROM
+		sc_work_order_bill_detail WHERE
+		id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_work_order_bill_detail
+		SET
+		REC_CREATOR = #recCreator#,   <!-- 创建人工号 -->
+		REC_CREATE_NAME = #recCreateName#,   <!-- 创建人姓名 -->
+		REC_REVISE_TIME = #recReviseTime#,   <!-- 修改时间 -->
+		REC_REVISOR = #recRevisor#,   <!-- 修改人 -->
+		REC_CREATE_TIME = #recCreateTime#,   <!-- 创建时间 -->
+		bill_no = #billNo#,   <!-- 自取餐主表的bill_no -->
+		bill_detail_no = #billDetailNo#,   <!-- 字表订单号：主表订单号+‘0’ ；主表订单号+‘1’ -->
+		menu_num = #menuNum#,   <!-- 菜品编码 -->
+		menu_name = #menuName#,   <!-- 菜品名称 -->
+		menu_number = #menuNumber#,   <!-- 菜品数量 -->
+		menu_price = #menuPrice#,   <!-- 菜品单价 -->
+		menu_total_price = #menuTotalPrice#,   <!-- 菜品总价 -->
+		eval_level = #evalLevel#,   <!-- 评价等级(0-10) -->
+		eval_content = #evalContent#,   <!-- 评价内容 -->
+		sche_id = #scheId#  <!-- 排班id -->
+		WHERE
+		id = #id#
+	</update>
+
+	<update id="updateZao">
+		UPDATE bona_frame_mzsrmyy.ac_personnel
+		SET
+		zao = "1"
+		WHERE
+		work_no = #workNo#
+	</update>
+	<update id="updateWu">
+		UPDATE bona_frame_mzsrmyy.ac_personnel
+		SET
+		wu = "1"
+		WHERE
+		work_no = #workNo#
+	</update>
+	<update id="updateWan">
+		UPDATE bona_frame_mzsrmyy.ac_personnel
+		SET
+		wan = "1"
+		WHERE
+		work_no = #workNo#
+	</update>
+	<!-- 修改菜品评价信息 -->
+	<update id="updateBillDetailLevel" parameterClass="HashMap">
+		update
+			sc_work_order_bill_detail
+		set
+			eval_level = #evalLevel#,
+			eval_content = #evalContent#,
+			REC_REVISOR = #recRevisor#,
+			REC_REVISE_TIME = #recReviseTime#
+		where
+			menu_num = #menuNum#
+		  and bill_no = #billNo#
+	</update>
+
+	<!-- 查询优惠次数 -->
+	<select id="getEvalContents" parameterClass="String"
+			resultClass="java.util.HashMap">
+		select
+per.meal_discount_count as mealDiscountCount
+from sc_work_order_bill a
+LEFT JOIN bona_frame_mzsrmyy.ac_personnel per on per.work_no = a.REC_CREATOR
+where a.bill_no = #billNo#
+	</select>
+
+	<!-- 查询是否存在订单 -->
+	<select id="queryOrderTimes" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+a.work_no as workNo
+FROM sc_meal_subsidy_count a
+LEFT JOIN sc_work_order_bill b on b.bill_no = a.bill_no
+where 1=1
+and b.status_code != '99'
+and a.work_no = #workNo#
+and a.need_date = #needDate#
+and a.meal_num = #mealNum#
+
+	</select>
+
+</sqlMap>

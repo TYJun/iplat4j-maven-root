@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<link rel="stylesheet" href="../reference/mui/css/mui.min.css">
+	<link rel="stylesheet" href="../reference/mui/css/iconfont.css">
+	<link rel="stylesheet" href="../reference/css/common.css" />
+	<link rel="stylesheet" href="../../css/colorGreen.css"/>
+  	<link rel="stylesheet" href="../../css/colorBlue.css"/>
+</head>
+<STYLE TYPE="text/css">
+	.mui-content>.mui-table-view:first-child {
+		margin-top: 0;
+	}
+	.circle {
+		display: inline-block;
+		width: 18px;
+		height: 18px;
+		border-radius: 50%;
+		margin-right: 15px;
+		vertical-align: middle;
+	}
+	.content {
+		width: 90%;
+		font-size: 14px;
+		line-height: 20px;
+		letter-spacing: 2px;
+		/*text-indent: 24px;*/
+	}
+	.content span {
+		font-size: 16px;
+		color: #f5820f;
+	}
+	
+
+	
+	</STYLE>
+<body>
+    <header class="mui-bar mui-bar-nav">
+		<h1 class="mui-title">使用说明</h1>
+		<button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+	        <span class="mui-icon mui-icon-left-nav"></span>
+	        返回
+      </button>
+	</header>
+	<div id="warn" class="warn" hidden>
+		<small></small>
+	</div>
+
+	<div id="loading" class="loading1" hidden>
+		<div class="loading2">
+			<span class="mui-spinner" style="width:80px;height:80px;"></span>
+		</div>
+	</div>
+
+	<div class="mui-content">
+		<ul class="mui-table-view">
+			<li class="mui-table-view-cell" style="display: flex;">
+				<span class="circle backColor"></span>
+				<span class="content"><span>付款说明</span><br>手机登陆医生活客户端，点击[堂食消费]，向商家展示付款二维码，商家使用扫码设备，快速扫描用户的二维码即可完成交易。</span>
+			</li>
+			<li class="mui-table-view-cell" style="display: flex;">
+				<span class="circle backColor"></span>
+				<span class="content"><span>扣款规则</span><br>扣款顺序按照“补贴-现金”的顺序进行消费扣款；若补贴账户余额不足，将先行扣款补贴账户金额，超出部分补扣现金账户余额。</span>
+			</li>
+			<li class="mui-table-view-cell" style="display: flex;">
+				<span class="circle backColor"></span>
+				<span class="content"><span>付款安全</span><br>二维码具有时效性，两分钟内可成功消费，超出有效时间，需要点击［刷新］按钮，并重新扫描消费。</span>
+			</li>
+		</ul>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="../../js/color.js"></script>
+<script src="../../reference/mui/js/mui.js" type="text/javascript"></script>
+<script src="../../reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../../cordova.js" type="text/javascript"></script>
+<script type="text/javascript">
+	var baseUrl = localStorage.getItem("url");
+	var workNo = localStorage.getItem('workNo');
+
+	
+	document.getElementById("back").addEventListener('tap', function() {
+		location.href = "code.html";
+	});
+
+	// APP系统键回退
+	document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady() {
+      	/**
+		 * 系统返回键监听
+		 */
+		document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+    //返回
+     function onBackKeyDown() {
+       location.href = "code.html";
+     }
+</script>

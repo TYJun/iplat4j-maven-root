@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="IMYC01">
+
+	
+	<!-- 查询异常信息 -->
+	<select id="queryException" parameterClass="java.util.Map" resultClass="com.baosight.wilp.im.yc.domain.IMYC01">
+	SELECT
+	 CASE
+		WHEN dtt.exception_status = "0" THEN "待处理"
+		WHEN dtt.exception_status = "1" THEN "已处理"
+		END "exceptionStatus",
+		dtt.itemID as itemID,
+		dt.taskCode as taskCode,
+		dt.jobContent as jobContent,
+		dt.finishMan as finishMan,
+		date_format(dt.finishTime,'%Y-%m-%d %H:%i:%s') finishTime,
+		dtt.exception_result as exceptionResult,
+		dtt.jitemName as jitemName,
+		dtt.errorContent as errorContent
+	FROM
+		im_task dt
+		LEFT JOIN im_taskitem dtt ON dt.taskID = dtt.taskID
+	where 
+		dtt.successFlag = -1
+		<isNotEmpty prepend=" AND " property="taskCode">
+			dt.taskCode like concat('%',#taskCode#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="jitemName">
+			dtt.jitemName like concat('%',#jitemName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="startTime">
+			dt.recCreateTime <![CDATA[ >= ]]> #startTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">
+			dt.recCreateTime <![CDATA[ >= ]]> #endTime#
+		</isNotEmpty>
+	</select>
+	
+	
+</sqlMap>

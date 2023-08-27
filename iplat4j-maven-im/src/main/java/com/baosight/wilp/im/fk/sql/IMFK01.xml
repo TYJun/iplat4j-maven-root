@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="IMFK01">
+
+
+		<!-- 查询地点表详细信息 -->
+		<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.im.dx.domain.ImObjectSpot">
+		SELECT
+				id	as "id",  <!-- 主键 -->
+				spot_id     as "spotId",   <!-- 地点id -->
+				spot_code	as "spotCode",  <!-- 地点编码 -->
+				spot_name	as "spotName",  <!-- 地点名称 -->
+				obj_name	as "objName",  <!-- 巡检对象 -->
+				obj_remark	as "objRemark",  <!-- 巡检对象备注 -->
+				create_man	as "createMan",  <!-- 创建人 -->
+				create_time	as "createTime",  <!-- 创建时间 -->
+				modify_man	as "modifyMan",  <!-- 修改人 -->
+				modify_time	as "modifyTime",  <!-- 修改时间 -->
+				data_group_code	as "dataGroupCode", <!-- 账套 -->
+				NFC_code as NFCCode <!-- NFC编码 -->
+		FROM im_object_spot WHERE 1=1
+		<isNotEmpty prepend=" AND " property="objName">
+			obj_name LIKE CONCAT ("%",#objName#,"%")
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spotName">
+			spot_name LIKE CONCAT ("%",#spotName#,"%")
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spotNum">
+			spot_code LIKE CONCAT ("%",#spotNum#,"%")
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="NFCCode">
+			NFC_code LIKE CONCAT ("%",#NFCCode#,"%")
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		GROUP BY id
+		<dynamic prepend="ORDER BY">
+         	<isNotEmpty property="orderBy">
+    			  $orderBy$
+   		 	</isNotEmpty>
+   			<isEmpty property="orderBy">
+    		  	create_time DESC
+			</isEmpty>
+  		</dynamic>
+	</select>
+	
+	<!-- 查询地点表行数 -->
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM im_object_spot WHERE 1=1
+			<isNotEmpty prepend=" AND " property="objName">
+			obj_name LIKE CONCAT ("%",#objName#,"%")
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spotName">
+			spot_name LIKE CONCAT ("%",#spotName#,"%")
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spotCode">
+			spot_code LIKE CONCAT ("%",#spotCode#,"%")
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+	
+	<!-- 录入nfc卡号 -->
+	<update id="updateNew" parameterClass="java.util.HashMap">
+		update im_object_spot set NFC_code=#cardCode# where spot_code=#checkedSpotNum#
+	</update>
+
+	
+	<!-- 查询nfc信息 -->
+	<select id="querySpotName" parameterClass="java.lang.String"
+		resultClass="java.util.HashMap">
+		select spot_code spotNum,spot_name spotName from im_object_spot
+		where
+		NFC_code=#value#
+	</select>
+
+
+<!-- 	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+		SELECT
+		t6.id,
+		t6.spot_num spotNum,
+		t6.spot_name spotName,
+		count(dm.spot_code)  用下一行count(t6.spot_num)替换
+		count(dm.fixed_place)
+		machineNum
+		FROM
+		tbmbd06 t6
+		LEFT JOIN im_devicemachine dm ON dm.fixed_place
+		=t6.spot_num
+		where 1=1
+		<isNotEmpty prepend="and" property="spotNum">
+			t6.spot_num like
+			concat('%',#spotNum#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="spotName">
+			t6.spot_name like
+			concat('%',#spotName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="NFCCode">
+			t6.nfcCardNo like
+			concat('%',#NFCCode#,'%')
+		</isNotEmpty>
+			GROUP BY
+			t6.spot_num
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+	<select id="count" resultClass="int">
+		SELECT
+			t6.id
+		FROM
+		tbmbd06 t6
+		LEFT JOIN im_devicemachine dm ON
+		dm.fixed_place= t6.spot_num
+		where 1=1
+		<isNotEmpty prepend="and" property="spotNum">
+			t6.spot_num like
+			concat('%',#spotNum#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="spotName">
+			t6.spot_name like
+			concat('%',#spotName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="NFCCode">
+			t6.nfcCardNo like
+			concat('%',#NFCCode#,'%')
+		</isNotEmpty>
+		GROUP BY
+		t6.spot_num
+	</select>
+	
+	新发卡功能
+	<select id="queryCard" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+		SELECT
+		spot_id id,
+		spot_code spotNum,
+		spot_name spotName,
+		device_count machineNum
+		FROM im_machine_spot
+		where 1=1
+		<isNotEmpty prepend="and" property="spotNum">
+			spot_code like
+			concat('%',#spotNum#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="spotName">
+			spot_name like
+			concat('%',#spotName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="NFCCode">
+			nfc_code like
+			concat('%',#NFCCode#,'%')
+		</isNotEmpty>
+			GROUP BY
+			spot_code
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+	<select id="countCard" resultClass="int">
+		SELECT
+			id
+		FROM
+		im_machine_spot
+		where 1=1
+		<isNotEmpty prepend="and" property="spotNum">
+			spot_code like
+			concat('%',#spotNum#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="spotName">
+			spot_name like
+			concat('%',#spotName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="NFCCode">
+			nfc_code like
+			concat('%',#NFCCode#,'%')
+		</isNotEmpty>
+		GROUP BY
+		spot_code
+	</select>
+
+
+	
+
+	<update id="updateOld" parameterClass="java.lang.String">
+		update im_machine_spot set nfc_code="" where spot_id=#value#
+	</update>
+	 -->
+</sqlMap>

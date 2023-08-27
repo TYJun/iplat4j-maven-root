@@ -1,0 +1,49 @@
+span.warning {
+    color: #faad14;
+}
+span.error {
+    color: red;
+}
+#container, #container2 {
+    width: 626px;
+    height: 400px;
+    display: none;
+    position: absolute;
+    left: 500px;
+    top: 200px;
+    background-color: white;
+    border: 1px solid #dbeefe;
+    cursor: move;
+    z-index: 1001;
+}
+#container2 {
+    left: 120px;
+    top: 50px;
+    width: 1226px;
+    height: 650px;
+    background-image: linear-gradient(#0b1257, #020105);
+}
+#container2 .data {
+    color: white;
+}
+#chart, #chart2 {
+    width: 600px;
+    height: 400px;
+    padding: 0 8px 0 16px;
+}
+#chart2 {
+    width: 1200px;
+    height: 600px;
+}
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+}
+.history {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    cursor: pointer;
+}

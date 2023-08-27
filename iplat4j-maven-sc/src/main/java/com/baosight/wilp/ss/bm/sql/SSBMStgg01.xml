@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!-- 食堂公告 -->
+<sqlMap namespace="SSBMStgg01">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.bm.domain.SSBMStgg01">
+		SELECT
+		id as "id",
+		notice_code as "noticeCode",
+		notice_content as "noticeContent",
+		input_date as "inputDate",
+		effective_date as "effectiveDate",
+		is_effective as "isEffective",  <!-- 是否生效 。0－不生效；1-生效； -->
+		notice_title as "noticeTitle",
+		rec_create_time as "recCreateTime",
+		type_code as "typeCode",  <!-- 类型编码 -->
+		type_name as "typeName" <!-- 类型名称 -->
+		FROM sc_notice WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="isEffective">
+			is_effective = #isEffective#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="noticeTitle">
+			notice_title like
+			concat('%',#noticeTitle#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="noticeContent">
+			notice_content like
+			concat('%',#noticeContent#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="typeCode">
+			type_code = #typeCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTime">
+			rec_create_time like
+			concat('%',#recCreateTime#,'%')
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				rec_create_time desc
+			</isEmpty>
+		</dynamic>
+
+	</select>
+
+<!-- 	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_notice WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select> -->
+
+	<!-- <isNotEmpty prepend=" AND " property="id"> id = #id# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="noticeCode"> notice_code = #noticeCode# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="noticeContent"> notice_content 
+		= #noticeContent# </isNotEmpty> <isNotEmpty prepend=" AND " property="inputDate"> 
+		input_date = #inputDate# </isNotEmpty> <isNotEmpty prepend=" AND " property="effectiveDate"> 
+		effective_date = #effectiveDate# </isNotEmpty> <isNotEmpty prepend=" AND 
+		" property="isEffective"> is_effective = #isEffective# </isNotEmpty> <isNotEmpty 
+		prepend=" AND " property="noticeTitle"> notice_title = #noticeTitle# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="recCreateTime"> rec_create_time = #recCreateTime# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="typeCode"> type_code 
+		= #typeCode# </isNotEmpty> <isNotEmpty prepend=" AND " property="typeName"> 
+		type_name = #typeName# </isNotEmpty> -->
+
+	<insert id="insert">
+		INSERT INTO sc_notice (id,
+		notice_code,
+		notice_content,
+		input_date,
+		effective_date,
+		is_effective,  <!-- 是否生效 。0－不生效；1-生效； -->
+		notice_title,
+		rec_create_time,
+		type_code,  <!-- 类型编码 -->
+		type_name  <!-- 类型名称 -->
+		)
+		VALUES (#id#, #noticeCode#, #noticeContent#, #inputDate:DATE#,
+		#effectiveDate:DATE#, #isEffective#, #noticeTitle#, #recCreateTime#,
+		#typeCode#, #typeName#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM sc_notice WHERE
+		id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_notice
+		SET
+		notice_code = #noticeCode#,
+		notice_content = #noticeContent#,
+		input_date = #inputDate:DATE#,
+		effective_date = #effectiveDate:DATE#,
+		is_effective = #isEffective#,   <!-- 
+			是否生效 。0－不生效；1-生效； -->
+		notice_title = #noticeTitle#,
+		rec_create_time = #recCreateTime#,
+		type_code = #typeCode#,   <!-- 类型编码 -->
+		type_name = #typeName#  <!-- 类型名称 -->
+		WHERE
+		id = #id#
+	</update>
+
+	<!-- 获取订餐公告类型 -->
+	<select id="getNoticeType" resultClass="HashMap">
+		select
+			id,
+			typecode typeCode,
+			typename typeName
+		from sc_type
+		where typegroupid =
+		(SELECT id FROM sc_typegroup where typegroupcode='noticeType')
+	</select>
+</sqlMap>

@@ -1,0 +1,152 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="reference/mui/css/mui.css">
+  <link rel="stylesheet" href="reference/css/common.css"/>
+</head>
+<STYLE TYPE="text/css">
+.search{
+  width: 95%;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+.main-div{
+  position: absolute;
+  z-index: 999;
+  top:44px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-top: 1px solid #eee;
+}
+.parent-div{
+  width: 33.33%;
+  height:100%;
+  overflow-x:hidden;
+  background: #efefef;
+  border-right: 1px solid #eee;
+  float: left;
+}
+.parent-place{
+  text-align: center;
+  min-height: 40px;
+  font-size: 16px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-weight: bold;
+  border-bottom: 1px solid #fff;
+  color:#5d5d5d;
+}
+.child-div{
+  width: 66.66%;
+  height:100%;
+  background: #eee;
+  overflow-x:hidden;
+  background: #fff;
+  border-right: 1px solid #eee;
+  float: left;
+}
+.child-place{
+  min-height: 40px;
+  font-size: 16px;
+  padding: 10px;
+  font-weight: bold;
+  border-bottom: 1px solid #eee;
+}
+.building-selected{
+  background: #fff;
+  color:#eca107;
+}
+</STYLE>
+<body>
+    <header class="mui-bar mui-bar-nav">
+      <h1 class="mui-title">地点选择</h1>
+      <button class="mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+      返回
+    </button>
+    </header>
+
+    <div id="warn" class="warn" hidden>
+      <small></small>
+    </div>
+    
+
+    <div class="mui-content">
+      <div class="main-div">
+        <div class="parent-div">
+          
+        </div>
+
+        <div class="child-div">
+          <ul class="mui-table-view mui-table-view-chevron">
+              
+          </ul>
+        </div>
+      </div>
+    </div>
+  
+</body>
+<script src="reference/mui/js/mui.js" type="text/javascript"></script>
+<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var workNo =localStorage.getItem('workNo');
+    var placeJson = JSON.parse(localStorage.getItem('places'));
+    console.log(placeJson);
+
+    var buildings = '';
+    for(var i=0;i<placeJson.length;i++){
+      buildings += '<div class="parent-place">'+placeJson[i].building+'</div>';
+    }
+    $(".parent-div").html(buildings);
+
+    mui(".parent-div").on('tap','div.parent-place',function(){
+      $(this).parent().find("div").removeClass("building-selected");
+      $(this).addClass("building-selected");
+      getFloor($(this).text());
+    });
+
+    function getFloor(building){
+      var floor = '';
+      for(var i=0;i<placeJson.length;i++){
+        if(placeJson[i].building==building){
+          for(var k=0;k<placeJson[i].floor.length;k++){
+            floor += '<li class="mui-table-view-cell"><a href="#general" class="mui-navigate-right">'+placeJson[i].floor[k]+'</a></li>';
+          }
+          $("ul").html(floor);
+          break;
+        }
+      }
+    }
+
+    mui("ul").on('tap','li.mui-table-view-cell',function(){
+      var place = $(".building-selected").text() + $(this).find("a").text();
+      console.log(place);
+      location.href = "place_list.html?"+encodeURIComponent(place);
+    });
+
+    /**
+     * mui清除按钮事件(ps:自定义的，不加此方法页面会报错，如果不需要，方法体为空就行)
+     */
+    function clearFunc(){
+
+    }
+
+    /**
+     * mui返回方法(ps:自定义的,不加会报错,不需要的话方法体定义为空)
+     * [goBack description]
+     * @return {[type]} [description]
+     */
+    function goBack(){
+      location.href = "main.html";
+    }
+</script>
+</html>

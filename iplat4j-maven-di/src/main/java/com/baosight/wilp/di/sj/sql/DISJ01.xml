@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DISJ01">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+			select 
+				t.taskID,
+				CASE
+				t.STATUS 
+				WHEN '1' THEN
+				'执行中' 
+				WHEN '-1' THEN
+				'已超时' 
+				WHEN '2' THEN
+				'已完工' 
+				WHEN '3' THEN
+				'关闭' 
+				END AS status,
+				t.taskCode,
+				i.schemeName,
+				t.schemeID,
+				case exceptionFlag when '-1' then '异常' when '1' then '正常' end as exceptionFlag,
+				m.machine_name machineName,
+				m.machine_code machineCode,
+				t.jobContent,
+				t.departName deptName,
+				t.managerName name,
+				t.finishManName finishName,
+				date_format(t.createTime,'%Y-%m-%d %H:%i:%s') createTime,
+				date_format(t.finishTime,'%Y-%m-%d %H:%i:%s') finishTime
+			from 
+				di_task t
+			left join
+				di_scheme i
+			on t.schemeID = i.schemeID
+			left join 
+				df_devicemachine m
+			on m.id = i.machineID
+			Where 1=1
+		<isNotEmpty prepend=" AND " property="taskCode">
+			t.taskCode like
+			concat('%',#taskCode#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="taskName">
+			i.schemeName like
+			concat('%',#taskName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status">
+			t.status = #status#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="schemeDept">
+			t.departName like
+			concat('%',#schemeDept#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="startTimeS">
+			t.createTime >=
+			#startTimeS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="startTimeE">
+			t.createTime <![CDATA[<=]]>
+			#startTimeE#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="userId">
+		(t.schemeID IN (SELECT dsj.schemeID FROM di_schemejobs dsj WHERE dsj.jobManNo = #userId#) 
+		or t.managerNo = #userId#)
+		</isNotEmpty>  
+			order by t.taskCode desc
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+	
+	<select id="count" resultClass="int" parameterClass="java.util.HashMap">
+		select 
+			t.taskID
+		from 
+			di_task t
+		left join
+			di_scheme i
+		on t.schemeID = i.schemeID
+		left join 
+			df_devicemachine m
+		on m.id = i.machineID
+		Where 1=1
+		<isNotEmpty prepend=" AND " property="taskCode">
+			t.taskCode like
+			concat('%',#taskCode#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="taskName">
+			i.schemeName like
+			concat('%',#taskName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status">
+			t.status = #status#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineName">
+			m.machine_name like
+			concat('%',#machineName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="startTimeS">
+			t.createTime >=
+			#startTimeS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="startTimeE">
+			t.createTime <![CDATA[<=]]>
+			#startTimeE#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="userId">
+		(t.schemeID IN (SELECT dsj.schemeID FROM di_schemejobs dsj WHERE dsj.jobManNo = #userId#) 
+		or t.managerNo = #userId#)
+		</isNotEmpty> 
+	</select>
+	
+	
+	<select id="queryScheme" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		select 
+				t.taskID,
+				CASE
+				t.STATUS 
+				WHEN '1' THEN
+				'执行中' 
+				WHEN '-1' THEN
+				'已超时' 
+				WHEN '2' THEN
+				'已完工' 
+				WHEN '3' THEN
+				'关闭' 
+				END AS status,
+				t.taskCode,
+				i.schemeName,
+				t.schemeID,
+				case exceptionFlag when '-1' then '异常' when '1' then '正常' end as exceptionFlag,
+				m.machine_name machineName,
+				m.machine_code machineCode,
+				t.jobContent,
+				t.departName deptName,
+				t.managerName name,
+				t.finishManName finishName,
+				date_format(t.createTime,'%Y-%m-%d %H:%i:%s') createTime,
+				date_format(t.finishTime,'%Y-%m-%d %H:%i:%s') finishTime
+			from 
+				di_task t
+			left join
+				di_scheme i
+			on t.schemeID = i.schemeID
+			left join 
+				df_devicemachine m
+			on m.id = i.machineID
+			Where 1=1
+		<isNotEmpty prepend=" AND " property="taskID">
+			t.taskID =#taskID#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="taskCode">
+			t.taskCode like
+			concat('%',#taskCode#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="taskName">
+			i.schemeName like
+			concat('%',#taskName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status">
+			t.status = #status#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineName">
+			m.machine_name like
+			concat('%',#machineName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="startTimeS">
+			t.createTime >=
+			#startTimeS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="startTimeE">
+			t.createTime <![CDATA[<=]]>
+			#startTimeE#
+		</isNotEmpty>
+			order by t.taskCode desc
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+		
+	</select>
+	
+	<select id="queryItem" parameterClass="String" 
+			resultClass="java.util.HashMap">
+		SELECT
+				itemID	as "itemID", 
+				taskID	as "taskID", 
+				itemID_xmID	as "itemIDxmID",  
+				jitemName	as "content", 
+				itemDesc	as "projectDesc", 
+				referenceValue	as "referenceValue", 
+				actualValueUnit	as "actualValueUnit", 
+				successFlag as "successFlag",
+				writeValue as "writeValue",
+				needPhoto	as "needPhoto"
+		FROM 
+			di_taskitem
+		WHERE
+			taskID = #value# order by sort_no
+	</select>
+	
+	
+  	<select id="queryExman" parameterClass="String" 
+			resultClass="java.util.HashMap">
+		SELECT
+				jobID	as "jobID",
+				schemeID	as "schemeID",  
+				jobDepartID	as "jobDepartID",  
+				jobDepartNo	as "deptNo",  
+				jobManID	as "jobManID" ,
+				jobManNo as workNo,
+				jobManName as name,
+				jobDepartName as deptName
+		FROM di_schemejobs j
+		WHERE 1=1 and
+			schemeID = #value#	
+	</select>
+	
+	<update id="updateItemStatus" parameterClass="java.util.HashMap">
+		update di_taskitem set writeValue=#writeValue# where itemID=#itemID#
+	</update>
+	
+	<update id="updateTaskStatus" parameterClass="java.util.HashMap">
+		update di_task set
+		 status=#status#,
+		 finishManName=#finishMan#,
+		 finishTime=#finishTime#
+		  where taskID=#taskID#
+	</update>
+
+</sqlMap>

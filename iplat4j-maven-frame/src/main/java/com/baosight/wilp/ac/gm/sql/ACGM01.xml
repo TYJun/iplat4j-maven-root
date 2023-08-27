@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ACGM01">
+
+    <!-- 查询物资列表 -->
+	<select id="queryMaterialList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			SELECT t.* FROM (
+				SELECT am.id AS "id",
+						am.mat_code AS "matCode",
+						am.mat_name AS "matName",
+						am.mat_class_id AS "matClassId",
+						amc.mat_class_name AS "matClassName",
+						amc.mat_class_code AS "matClassCode",
+						am.mat_spec AS "matSpec",
+						am.mat_model AS "matModel",
+						am.unit AS "unit",
+						format(am.price,2) AS "price",
+						am.supplier AS "supplier",
+						acs.supplier_name AS "supplierText",
+						am.manufacturer AS "manufacturer",
+						am.mat_type_code AS "matTypeCode",
+						am.remark AS "remark",
+						am.status AS "status",
+						CASE am.status
+						WHEN '1' THEN '启用'
+						WHEN '0' THEN '停用'
+						ELSE '未知' END AS "statusText",
+						am.rec_create_time AS "recCreateTime",
+						am.rec_revise_time AS "recReviseTime",
+				        am.picture_uri AS pictureUri,
+						am.pack_factor AS packfactor
+				 FROM $projectSchema$.ac_material am
+				 LEFT JOIN $projectSchema$.ac_material_class amc ON amc.id = am.mat_class_id
+			     LEFT JOIN $projectSchema$.ac_supplier acs ON am.supplier = acs.supplier_code
+		    ) t
+			WHERE 1=1
+		<isNotEmpty prepend="and" property="id">
+			t.id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matClassCode">
+			t.matClassCode = #matClassCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matClassName">
+			t.matClassName  LIKE  concat('%',#matClassName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matClassId">
+			t.matClassId = #matClassId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matCode">
+			t.matCode = #matCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matName">
+			t.matName LIKE  concat('%',#matName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matTypeCode">
+			t.matTypeCode = #matTypeCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="status">
+			t.status = #status#
+		</isNotEmpty>
+
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				t.recReviseTime desc, t.matCode desc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+
+	<!-- 查询科室列数量 -->
+	<select id="queryMaterialListCount" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT count(1) FROM (
+		SELECT am.id AS "id",
+		am.mat_code AS "matCode",
+		am.mat_name AS "matName",
+		am.mat_class_id AS "matClassId",
+		amc.mat_class_name AS "matClassName",
+		amc.mat_class_code AS "matClassCode",
+		am.mat_spec AS "matSpec",
+		am.mat_model AS "matModel",
+		am.unit AS "unit",
+		am.price AS "price",
+		am.supplier AS "supplier",
+		am.manufacturer AS "manufacturer",
+		am.mat_type_code AS "matTypeCode",
+		am.remark AS "remark",
+		am.status AS "status",
+		am.rec_create_time AS "recCreateTime",
+		am.rec_creator AS "recCreator",
+		am.rec_revisor AS "recRevisor",
+		am.rec_revise_time AS "recReviseTime"
+		FROM $projectSchema$.ac_material am
+		LEFT JOIN $projectSchema$.ac_material_class amc ON amc.id = am.mat_class_id
+		) t
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="id">
+			t.id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matClassCode">
+			t.matClassCode = #matClassCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matClassName">
+			t.matClassName = #matClassName#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matClassId">
+			t.matClassId = #matClassId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matCode">
+			t.matCode = #matCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matName">
+			t.matName = #matName#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matTypeCode">
+			t.matTypeCode = #matTypeCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="status">
+			t.status = #status#
+		</isNotEmpty>
+	</select>
+
+	<select id="queryMatClassNameById" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+		select id matClassId,
+		       mat_class_name  matClassName
+		from  $projectSchema$.ac_material_class
+		where id = #matClassId#
+	</select>
+
+	<select id="queryMatTree" resultClass="java.util.HashMap">
+			SELECT t.* from (
+				SELECT id AS "label",
+				   	mat_class_code AS "matClassCode",
+					concat('[',mat_class_code, ']', mat_class_name) matClassName,
+					parent_id AS "pId",
+					status AS "status"
+				FROM $projectSchema$.ac_material_class
+				ORDER BY mat_class_code desc
+			) t
+			WHERE 1=1
+			<isNotEmpty prepend=" AND " property="status">
+				t.status = #status#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="node">
+				t.pId = #node#
+			</isNotEmpty>
+
+
+	</select>
+
+
+
+	<delete id="deleteMat" parameterClass="java.util.HashMap">
+		DELETE FROM $projectSchema$.ac_material WHERE id IN
+		<iterate conjunction="," open="(" close=")" property="list">
+			#list[]#
+		</iterate>
+	</delete>
+
+	<delete id="delete" parameterClass="java.util.HashMap">
+		DELETE FROM $projectSchema$.ac_material_class WHERE id = #id#
+	</delete>
+	<update id="startUsing" parameterClass="java.util.HashMap">
+		UPDATE $projectSchema$.ac_department SET status = 1 WHERE id IN
+		<iterate conjunction="," open="(" close=") " property="list">
+			#list[]#
+		</iterate>
+	</update>
+
+	<update id="stopUsing" parameterClass="java.util.HashMap">
+		UPDATE $projectSchema$.ac_department SET status = 0 WHERE id IN
+		<iterate conjunction="," open="(" close=")" property="list">
+			#list[]#
+		</iterate>
+	</update>
+
+	<select id="getTrueOrFalse" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT dept_id FROM $projectSchema$.ac_personnel WHERE status = 1 AND dept_id IN
+		<iterate conjunction="," open="(" close=")" property="list">
+			#list[]#
+		</iterate>
+	</select>
+
+
+	<insert id="importMatFromExcel" parameterClass="java.util.HashMap">
+
+		INSERT INTO $projectSchema$.ac_material (
+				id,  <!-- 主键 -->
+				mat_code,  <!-- 物资编码-->
+				mat_name,  <!-- 物资名称-->
+				mat_class_id,  <!-- 分类ID -->
+				mat_spec,  <!-- 物资规格 -->
+				mat_model,  <!-- 物资规格 -->
+				unit,  <!-- 计量单位编码 -->
+				price,  <!-- 最近订购单价 -->
+		<!-- 	supplier, 供应商 -->
+				manufacturer,  <!-- 制造商 -->
+				mat_type_code,  <!-- 物资大类编码 -->
+				remark,  <!-- 备注 -->
+				status,  <!-- 状态 -->
+				rec_creator,  <!-- 创建人 -->
+				rec_create_time  <!-- 创建时间 -->
+
+		)VALUES
+		<iterate open="" close="" conjunction="," property="list">
+			(
+				#list[].id#,
+				#list[].matCode#,
+				#list[].matName#,
+				(select id from $projectSchema$.ac_material_class where mat_class_code = #list[].matClassId#),
+				#list[].matSpec#,
+				#list[].matModel#,
+				#list[].unit#,
+				truncate(#list[].price#,2),
+		<!--		#list[].supplier#,-->
+				#list[].manufacturer#,
+				#list[].matTypeCode#,
+				#list[].remark#,
+				#list[].status#,
+				#list[].recCreater#,
+				#list[].recCreateTime#
+			)
+		</iterate>
+	</insert>
+
+	<select id="matClassIsExist" parameterClass="java.util.HashMap" resultClass="int">
+		select count(1) from $projectSchema$.ac_material_class
+		where
+		1 = 1
+		<isNotEmpty prepend=" AND " property="matClassCode">
+			mat_class_code = #matClassCode#
+		</isNotEmpty>
+	</select>
+
+	<select id="queryLastMatCode" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT mat_code as "matCode"
+		FROM $projectSchema$.ac_material
+		where mat_code like 'MA%'
+		  AND LENGTH(mat_code) = 7
+		ORDER BY rec_create_time DESC, mat_code DESC
+			LIMIT 1
+	</select>
+
+	<update id="updateMatStatus" parameterClass="java.util.HashMap">
+		UPDATE $projectSchema$.ac_material
+		SET status = #status#
+		WHERE id IN
+		<iterate property="list" conjunction="," open="(" close=")" >
+			#list[]#
+		</iterate>
+	</update>
+
+	<select id="subClassNotStopCount" parameterClass="java.util.HashMap" resultClass="int">
+		select id
+		from $projectSchema$.ac_material_class
+		where `status` = '1' and parent_id = #id#
+	</select>
+
+	<select id="matNotStopCount" parameterClass="java.util.HashMap" resultClass="int">
+		select id
+		from $projectSchema$.ac_material
+		where `status` = '1' and mat_class_id = #id#
+	</select>
+
+	<update id="updateClassStatus" parameterClass="java.util.HashMap">
+			UPDATE $projectSchema$.ac_material_class
+			SET
+			status=#status#
+			WHERE id IN
+			<iterate property="list" open="(" close=")" conjunction=",">
+				#list[]#
+			</iterate>
+	</update>
+
+
+	<select id="matIsExist" parameterClass="java.util.HashMap" resultClass="int">
+		select count(1) from $projectSchema$.ac_material am
+		join $projectSchema$.ac_material_class ac
+		on am.mat_class_id = ac.id
+		where
+		1 = 1
+		<isNotEmpty prepend=" AND " property="matName">
+			mat_name = #matName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matSpec">
+			mat_spec = #matSpec#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matModel">
+			mat_model = #matModel#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="unit">
+			unit = #unit#
+		</isNotEmpty>
+<!--		<isNotEmpty prepend=" AND " property="supplier">-->
+<!--			supplier = #supplier#-->
+<!--		</isNotEmpty>-->
+		<isNotEmpty prepend=" AND " property="manufacturer">
+			manufacturer = #manufacturer#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeCode">
+			mat_type_code = #matTypeCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matClassId">
+			mat_class_code = #matClassId#
+		</isNotEmpty>
+	</select>
+
+	<select id="queryUnit" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+
+		SELECT
+			item_code itemCode,
+		    item_cname itemCname
+		FROM $platSchema$.tedcm01
+		WHERE CODESET_CODE = 'wilp.ac.gm.unit'
+	</select>
+</sqlMap>

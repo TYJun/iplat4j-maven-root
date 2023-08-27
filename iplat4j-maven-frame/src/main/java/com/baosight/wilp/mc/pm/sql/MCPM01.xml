@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MCPM01">
+
+    <select id="queryMessage" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT mm.id,                                <!-- 主键 -->
+        mt.call_module AS callModule,        <!-- 调用模块 -->
+        bt.MODULE_CNAME_1 AS callModuleText,               <!-- 调用模块显示文本 -->
+        mt.delivery_channel AS deliveryChannel,
+        case mt.delivery_channel                <!-- 发送渠道 -->
+        when 'DX' then '短信'
+        when 'PS' then '推送'
+        when 'DD' then '钉钉'
+        when 'WX' then '企业微信'
+        end as "deliveryChannelText",        <!-- 发送渠道显示文本 -->
+        mm.message AS 'message',                <!-- 消息体-->
+        mm.sending_time AS 'sendingTime',        <!-- 发送时间 -->
+        case mm.status                      <!--阅读状态-->
+        when '0' then '未读'
+        when '1' then '已读'
+        end as status
+        FROM $projectSchema$.mc_message mm
+        LEFT JOIN $projectSchema$.mc_template mt ON mt.id = mm.template_id
+        LEFT JOIN $platSchema$.tedpi02 bt ON bt.MODULE_ENAME_1=mt.call_module
+        WHERE 1=1
+            AND mm.is_success='1'
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="callModule">
+            call_module = #callModule#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deliveryChannel">
+            delivery_channel = #deliveryChannel#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="receiver">
+            receiver = #receiver#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="sendingTimeS">
+            sending_time &gt; #sendingTimeS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="sendingTimeE">
+
+            sending_time &lt; #sendingTimeE#
+        </isNotEmpty>
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                sending_time desc
+            </isEmpty>
+        </dynamic>
+    </select>
+
+
+
+    <update id="setRead" parameterClass="java.util.HashMap">
+        UPDATE $projectSchema$.mc_message SET status = '1' WHERE id IN
+        <iterate conjunction="," open="(" close=") " property="list">
+            #list[].id#
+        </iterate>
+    </update>
+
+
+</sqlMap>

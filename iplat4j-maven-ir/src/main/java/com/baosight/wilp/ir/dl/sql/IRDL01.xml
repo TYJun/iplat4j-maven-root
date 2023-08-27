@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="IRDL01">
+
+	<select id="queryUserLoginInfos" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+				login_name	as "LoginName",
+				date_format(failure_create_time, '%Y-%m-%d %H:%i:%s')	as "failureCreateTime",
+				failure_count as "failureCount"
+		FROM ${platSchema}.xs_user_login_count WHERE 1=1
+		<isNotEmpty prepend=" AND " property="loginName">
+			login_name = #loginName#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insertUserLoginInfos">
+		insert into ${platSchema}.xs_user_login_count
+		(
+			login_name,
+			failure_create_time,
+			failure_count
+		)
+		values
+		(
+		 #loginName#,
+		 #failureCreateTime#,
+		 '1'
+		)
+	</insert>
+
+	<update id="updateUserLoginInfos">
+		update ${platSchema}.xs_user_login_count
+		<dynamic prepend="SET">
+			<isNotEmpty prepend="," property="failureCount">
+				failure_count = #failureCount#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="failureCreateTime">
+				failure_create_time = #failureCreateTime#
+			</isNotEmpty>
+		</dynamic>
+		where login_name = #loginName#
+	</update>
+
+	<delete id="deleteUserLoginInfos">
+		delete from ${platSchema}.xs_user_login_count
+		where login_name = #loginName#
+	</delete>
+
+
+  
+</sqlMap>

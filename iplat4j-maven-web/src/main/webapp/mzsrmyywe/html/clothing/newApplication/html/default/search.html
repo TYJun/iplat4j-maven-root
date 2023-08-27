@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>拖欠查询</title>
+    <link rel="stylesheet" href="../../css/default/search.css" />
+    <link
+      rel="stylesheet"
+      href="../../../../../html\reference\mui\css\mui.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../../../html\reference\mui\css\mui.picker.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../../../html\reference\mui\css\mui.picker.min.css"
+    />
+  </head>
+  <body>
+    <div id="app">
+      <!-- 顶部区域 -->
+      <header>
+        <div class="top">
+          <div id="top-bar">
+            <span
+              id="icon-left-back"
+              class="mui-icon mui-icon-arrowleft"
+            ></span>
+            <h1 id="title">拖欠查询</h1>
+          </div>
+        </div>
+      </header>
+      <!-- 搜索区域 -->
+      <div class="seacarea">
+        <!-- 下拉栏 -->
+        <div class="pulldown" id="dept_choose">
+          <ul class="mui-table-view">
+            <li class="mui-table-view-cell" id="selectdate">
+              <a class="mui-navigate-right" href="#">选择科室</a>
+              <!-- <div class="mui-collapse-content" id="dates">
+                        <p>面板1子内容</p>
+                    </div> -->
+            </li>
+          </ul>
+        </div>
+        <!-- 按钮 -->
+        <div class="btn">
+          <button id="search">查询</button>
+          <button id="reset">重置</button>
+        </div>
+      </div>
+      <!-- 列表项 -->
+      <div class="historylist">
+        <ul class="list_card">
+          <li v-for="(item,index) in historyList" ::key="index">
+            <div class="card">
+              <ul>
+                <li>
+                  <span class="left">拖欠单号</span>
+                  <span class="defNo right">A20211314038</span>
+                </li>
+                <li>
+                  <span class="left">科室名称</span>
+                  <span class="deptNamedefNo right">东院外科</span>
+                </li>
+                <li>
+                  <span class="left">拖欠数量</span>
+                  <span class="defNumdefNo right">3</span>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li v-for="(item,index) in historyList" ::key="index">
+            <div class="card">
+              <ul>
+                <li>
+                  <span class="left">拖欠单号</span>
+                  <span class="defNodefNo right">A20211314038</span>
+                </li>
+                <li>
+                  <span class="left">科室名称</span>
+                  <span class="deptNamedefNo right">东院外科</span>
+                </li>
+                <li>
+                  <span class="left">拖欠数量</span>
+                  <span class="defNumdefNo right">3</span>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- <script src="html\clothing\reference\mui\js\jquery-2.1.4.js"></script> -->
+    <script src="../../../reference/mui/js/jquery-2.1.4.js"></script>
+    <script>
+      $("#icon-right-search").click(function () {
+        location.href = "./search.html";
+      });
+      // $("#icon-left-back").click(function(){
+      //     location.href = './historyList.html';
+      // });
+      var app = new Vue({
+        el: "#app",
+        data: {
+          historyList: [],
+        },
+        methods: {
+          //   获取拖欠列表数据
+          get_historyList() {},
+        },
+        created() {
+          this.get_historyList();
+        },
+      });
+    </script>
+  </body>
+</html>

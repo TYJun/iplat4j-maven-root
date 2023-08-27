@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CMZH01">
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			t1.REC_CREATOR as "recCreator",
+			t1.REC_CREATE_TIME as "recCreateTime",
+			t1.REC_REVSIOR as "recRevsior",
+			t1.REC_REVISE_TIME as "recReviseTime",
+			t1.ARCHIVE_FLAG as "archiveFlag",  <!-- 归档标记 -->
+			t1.ID as "id",
+			t1.CONT_NO as "contNo",  <!-- 合同号 -->
+			t1.ORIGIN_BILL_NO as "originBillNo",  <!-- 来源单据号 -->
+			t1.ORIGIN_BILL_TYPE as "originBillType",  <!-- 来源单据类型 -->
+			t1.CONT_NAME as "contName",  <!-- 合同名称 -->
+			t01.CONT_TYPE_NAME as "contTypeNum",  <!-- 合同类型 -->
+			t1.CONT_SIGN_TIME as "contSignTime",  <!-- 合同签订日期 -->
+			t1.PLAN_TAKEEF_TIME as "planTakeefTime",  <!-- 计划生效日期 -->
+			t1.PLAN_FINISH_TIME as "planFinishTime",  <!-- 计划终止日期 -->
+			CASE
+			WHEN t1.PLAN_FINISH_TIME<![CDATA[ < ]]>now() THEN '9'	<!-- 超期 -->
+			when date_add(t1.PLAN_FINISH_TIME,interval -1 MONTH) <![CDATA[ <= ]]> now() and t1.PLAN_FINISH_TIME >= now() then '8'	<!-- 临期1个月 -->
+			WHEN date_add(t1.PLAN_FINISH_TIME,interval -2 MONTH) <![CDATA[ <= ]]> now() and t1.PLAN_FINISH_TIME >= now() then '7'	<!-- 临期2个月 -->
+			WHEN date_add(t1.PLAN_FINISH_TIME,interval -3 MONTH) <![CDATA[ <= ]]> now() and t1.PLAN_FINISH_TIME >= now() then '6'	<!-- 临期3个月 -->
+			END planFinishTimeRed,<!-- 红色合同号 -->
+			<!-- t25.SURP_NAME as "surpNum", -->
+		CASE
+			WHEN t1.CURR_TYPE='rmb' THEN '人民币'
+		END currType,  <!-- 币种 -->
+			t1.CONT_TAX_EXCLUDE_AMOUNT as "contTaxExcludeAmount",  <!-- 合同不含税金额 -->
+			t1.CONT_TAX_INCLUDE_AMOUNT as "contTaxIncludeAmount",  <!-- 合同含税金额 -->
+			t1.CONT_TAX_RATE as "contTaxRate",  <!-- 税率 -->
+			t1.CONT_TAX_AMOUNT as "contTaxAmount",  <!-- 合同税额 -->
+			t1.CONT_FEE_AMOUNT as "contFeeAmount",  <!-- 合同费用总金额 -->
+			t1.INVOICE_TAX_EXCLUDE_AMOUNT as "invoiceTaxExcludeAmount",  <!-- 发票金额 不含税 -->
+			t1.INVOICE_TAX_INCLUDE_AMOUNT as "invoiceTaxIncludeAmount",  <!-- 发票金额 含税 -->
+			t1.INVOICE_TAX_AMOUNT as "invoiceTaxAmount",  <!-- 发票税额 -->
+			t1.SETTLE_TAX_EXCLUDE_AMOUNT as "settleTaxExcludeAmount",  <!-- 结算金额 不含税 -->
+			t1.SETTLE_TAX_INCLUDE_AMOUNT as "settleTaxIncludeAmount",  <!-- 结算金额 含税 -->
+			t1.SETTLE_TAX_AMOUNT as "settleTaxAmount",  <!-- 结算税额 -->
+			t1.SETTLE_TIME as "settleTime",  <!-- 结算时间 -->
+			t1.PAY_AGRE_NUM as "payAgreNum",  <!-- 付款协议 -->
+		CASE
+			WHEN t1.CONT_STATUS='0'THEN '登记'
+			WHEN t1.CONT_STATUS='1'THEN '执行'
+			WHEN t1.CONT_STATUS='2'THEN '冻结'
+			WHEN t1.CONT_STATUS='3'THEN '终止'
+			WHEN t1.CONT_STATUS='4'THEN '结案'
+		END "contStatus", <!-- 合同状态 -->
+			t1.CONT_ADMIN_NAME as "contAdmin",  <!-- 合同管理员 -->
+			<!-- t1.BILL_MAKER as "billMaker", -->  <!-- 制单人 -->
+			t1.BILL_MAKER as "billMaker",
+			t1.BILL_MAKE_TIME as "billMakeTime",  <!-- 制表时间 -->
+			t1.CHECK_TIME as "checkTime",  <!-- 审批时间 -->
+			t1.CHECK_MAKER as "checkMaker",  <!-- 审批人 -->
+			t1.FINISH_MAKER as "finishMaker",  <!-- 结案人 -->
+			t1.FINISH_TIME as "finishTime",  <!-- 结案时间 -->
+			t1.END_MAKER as "endMaker",  <!-- 终止人 -->
+			t1.END_TIME as "endTime",  <!-- 终止时间 -->
+			t1.QUAR_PERIOD as "quarPeriod",  <!-- 质保期 -->
+			t1.BUDGET as "budget",  <!-- 预算 -->
+			t1.PRE_PAY_DATE as "prePayDate",
+			t1.proNO as "prono",  <!-- 项目号 -->
+			t1.CHECK_MONEY as "checkMoney",  <!-- 审计后金额 -->
+			t1.yesorno as "yesorno",  <!-- 是否发送短信 -->
+			t1.xuqian_contNo as "xuqianContno",  <!-- 续签主合同号 -->
+			t1.msg_status as "msgStatus",
+			t1.device_num as "deviceNum",
+			t1.sms_config1 as "smsConfig1" <!-- 是否发送过 -->
+		FROM
+			cm_contract_bill t1
+		LEFT JOIN cm_contract_type t01 on t1.CONT_TYPE_NUM = t01.CONT_TYPE_NUM
+		WHERE
+			1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contNo">
+			CONT_NO like concat('%',#contNo#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contName">
+			CONT_NAME like concat('%',#contName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contTypeNum">
+			t1.CONT_TYPE_NUM = #contTypeNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contSignTimeS">
+			t1.CONT_SIGN_TIME  <![CDATA[ >= ]]>  #contSignTimeS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contSignTimeE">
+			t1.CONT_SIGN_TIME  <![CDATA[ <= ]]> #contSignTimeE#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contStatus">
+			t1.CONT_STATUS  = #contStatus#
+		</isNotEmpty>
+		ORDER BY CONT_STATUS asc,planFinishTimeRed DESC
+		<!--<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				ID asc
+			</isEmpty>
+		</dynamic>-->
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM cm_contract_bill WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+	</select>
+
+	<select id="querySplitDate" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			CASE
+			WHEN a.planFinishTimeRed="9" THEN
+			"已过期"
+			WHEN a.planFinishTimeRed="8" THEN
+			"临期三个月"
+			WHEN a.planFinishTimeRed="7" THEN
+			"临期两个月"
+			WHEN a.planFinishTimeRed="6" THEN
+			"临期一个月"
+			WHEN a.planFinishTimeRed="5" THEN
+			"正常"
+			ELSE
+			"异常"
+			END planName,
+			a.planFinishTimeRed as planStatus,
+			count(a.planFinishTimeRed) as planCount
+		from
+		(
+			select
+				CASE
+				WHEN t1.PLAN_FINISH_TIME <![CDATA[ < ]]> now() THEN '9'
+				when date_add(t1.PLAN_FINISH_TIME,interval -1 MONTH) <![CDATA[ <= ]]> now() and t1.PLAN_FINISH_TIME >= now() then '6'
+				WHEN date_add(t1.PLAN_FINISH_TIME,interval -2 MONTH) <![CDATA[ <= ]]> now() and t1.PLAN_FINISH_TIME >= now() then '7'
+				WHEN date_add(t1.PLAN_FINISH_TIME,interval -3 MONTH) <![CDATA[ <= ]]> now() and t1.PLAN_FINISH_TIME >= now() then '8'
+				WHEN date_add(t1.PLAN_FINISH_TIME,interval -3 MONTH ) >= now() THEN '5'
+				END planFinishTimeRed
+			from
+				cm_contract_bill t1
+			WHERE
+				t1.CONT_STATUS = "1"
+			or
+				t1.CONT_STATUS = "0"
+		    <isNotEmpty prepend="and" property="splitDate">
+				date_format(t1.REC_CREATE_TIME,'%Y-%m') >= date_format(date_add(curdate(),interval -#splitDate# MONTH),'%Y-%m')
+			</isNotEmpty>
+		) a
+		GROUP BY a.planFinishTimeRed
+	</select>
+
+	<select id="queryLineChart" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			count(*) count,
+			date_format( t1.REC_CREATE_TIME, '%Y-%m' ) date
+		FROM
+			cm_contract_bill t1
+		WHERE
+			1=1
+		<isNotEmpty prepend="and" property="splitDate">
+			date_format(t1.REC_CREATE_TIME,'%Y-%m') >= date_format(date_add(curdate(),interval -#splitDate# MONTH),'%Y-%m')
+		</isNotEmpty>
+		GROUP BY
+			date_format(t1.REC_CREATE_TIME,'%Y-%m')
+	</select>
+
+	<select id="queryPieChart" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		CASE
+		WHEN a.planFinishTimeRed="9" THEN
+		"已过期"
+		WHEN a.planFinishTimeRed="8" THEN
+		"临期三个月"
+		WHEN a.planFinishTimeRed="7" THEN
+		"临期两个月"
+		WHEN a.planFinishTimeRed="6" THEN
+		"临期一个月"
+		WHEN a.planFinishTimeRed="5" THEN
+		"正常"
+		ELSE
+		"异常"
+		END planName,
+		a.planFinishTimeRed as planStatus,
+		count(a.planFinishTimeRed) as planCount
+		from
+		(
+		select
+		CASE
+		WHEN t1.PLAN_FINISH_TIME <![CDATA[ < ]]> now() THEN '9'
+		when date_add(t1.PLAN_FINISH_TIME,interval -1 MONTH) <![CDATA[ <= ]]> now() and t1.PLAN_FINISH_TIME >= now() then '8'
+		WHEN date_add(t1.PLAN_FINISH_TIME,interval -2 MONTH) <![CDATA[ <= ]]> now() and t1.PLAN_FINISH_TIME >= now() then '7'
+		WHEN date_add(t1.PLAN_FINISH_TIME,interval -3 MONTH) <![CDATA[ <= ]]> now() and t1.PLAN_FINISH_TIME >= now() then '6'
+		WHEN date_add(t1.PLAN_FINISH_TIME,interval -3 MONTH ) >= now() THEN '5'
+		END planFinishTimeRed
+		from
+		cm_contract_bill t1
+		WHERE
+			1=1
+		<isNotEmpty prepend="and" property="contStatus">
+			t1.CONT_STATUS = #contStatus#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="splitDate">
+			date_format(t1.REC_CREATE_TIME,'%Y-%m') >= date_format(date_add(curdate(),interval -#splitDate# MONTH),'%Y-%m')
+		</isNotEmpty>
+		) a
+		GROUP BY a.planFinishTimeRed
+	</select>
+</sqlMap>

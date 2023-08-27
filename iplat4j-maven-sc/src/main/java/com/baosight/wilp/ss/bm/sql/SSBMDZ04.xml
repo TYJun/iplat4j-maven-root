@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="SSBMDZ04">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.bm.domain.ScAddr">
+		SELECT
+		id as "id",  <!-- 主键 -->
+		building as "building",
+		menu_num as "menuNum",
+		menu_name as "menuName",
+		(case take_effect
+		when '1' then '生效'
+		when '2' then '未生效'
+		END) as "takeEffect"
+		FROM sc_menu_addr_config WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="menuName">
+			menu_name like concat('%',#menuName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="building">
+			building like concat('%',#building#,'%')
+		</isNotEmpty>
+
+	</select>
+	<update id="update">
+		UPDATE sc_menu_addr_config
+		SET
+		take_effect= '2'
+		WHERE
+		id = #id#
+	</update>
+
+	<select id="queryBuilding" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.ss.bm.domain.ScAddr">
+		SELECT
+		building as "building"
+		FROM sc_address
+		where take_effect = '1'
+		group by building
+
+	</select>
+
+	<select id="queryMenuName" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.ss.bm.domain.ScAddr">
+		SELECT
+			menu_type_num as "menuNum",
+			menu_type_name as menuName
+		FROM sc_menu
+		where canteen_num = 'ST000009'
+		group by menu_type_name
+	</select>
+
+	<insert id="insert">
+	    INSERT INTO `sc_menu_addr_config` (
+		  `id`,
+		  `building`,
+		  `menu_num`,
+		  `menu_name`,
+		  create_time,
+		  take_effect
+		)
+		VALUES
+		  (
+			#id#,
+			 #building#,
+			 #menuNum#,
+			 #menuName#,
+		     now(),
+		     '1'
+		  ) ;
+	</insert>
+	<update id="update1">
+		UPDATE sc_menu_addr_config
+		SET
+		`building`=#building#
+		WHERE
+		id = #id#
+	</update>
+
+	<update id="update2">
+		UPDATE sc_menu_addr_config
+		SET
+		take_effect= '1'
+		WHERE
+		id = #id#
+	</update>
+
+</sqlMap>

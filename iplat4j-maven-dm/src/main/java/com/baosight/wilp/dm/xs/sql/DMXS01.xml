@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2022-02-08 12:44:31
+   		Version :  6.0.731.201809200158
+		tableName :.dorms_room 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 building  VARCHAR, 
+		 floor  VARCHAR, 
+		 room_no  VARCHAR, 
+		 room_name  VARCHAR, 
+		 bed_num  TINYINT,
+		 remaining_bed_num  TINYINT,
+		 type_code  VARCHAR,
+		 dorm_position  VARCHAR, 
+		 dorm_area  VARCHAR,
+		 elevator_room  VARCHAR,
+		 pri_bathroom  VARCHAR, 
+		 rent  VARCHAR, 
+		 manage_fee  VARCHAR, 
+		 note  VARCHAR, 
+		 rec_creater_no  VARCHAR, 
+		 rec_creater_name  VARCHAR, 
+		 rec_create_time  VARCHAR, 
+		 rec_revisor_no  VARCHAR, 
+		 rec_revisor_name  VARCHAR, 
+		 rec_revise_time  VARCHAR
+	-->
+<sqlMap namespace="DMXS01">
+
+	<select id="queryRoomAddr" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.dm.xx.domain.DormsRoom">
+		SELECT
+		id as id,
+        concat(building,' ',floor,'-',room_no) as roomName
+		FROM .dorms_room
+		WHERE 1=1
+        order by concat(building,' ',floor,'-',room_no) asc
+	</select>
+
+	<!-- 将入住信息插入到人员入住信息表 -->
+	<insert id="insertDMRZInfoTable" parameterClass="java.util.HashMap">
+		INSERT INTO .dorms_man(
+		<isNotNull property="manNo">
+			man_no,  <!-- 工号 -->
+		</isNotNull>
+		<isNotNull property="manName">
+			man_name,  <!-- 姓名 -->
+		</isNotNull>
+		<isNotNull property="statusCode">
+			status_code,  <!-- 工单状态(00待审核，01待分配，02待选房，03待入住，04已入住，10申请换宿，98申请退宿，99流程结束) -->
+		</isNotNull>
+		<isNotNull property="sex">
+			sex,  <!-- 性别 -->
+		</isNotNull>
+		<isNotNull property="age">
+			age,  <!-- 员工年龄 -->
+		</isNotNull>
+		<isNotNull property="phone">
+			phone,  <!-- 电话 -->
+		</isNotNull>
+		<isNotNull property="identityCard">
+			identity_card,  <!-- 身份证 -->
+		</isNotNull>
+		<isNotNull property="educationBackground">
+			education_background,  <!-- 学历 -->
+		</isNotNull>
+		<isNotNull property="academicYear">
+			academic_year,  <!-- 学年 -->
+		</isNotNull>
+		<isNotNull property="maritalStatus">
+			marital_status,  <!-- 婚否:是，否 -->
+		</isNotNull>
+		<isNotNull property="deptNum">
+			dept_num,  <!-- 部门科室编码 -->
+		</isNotNull>
+		<isNotNull property="deptName">
+			dept_name,  <!-- 部门科室名称 -->
+		</isNotNull>
+		<isNotNull property="employmentNature">
+			employment_nature,  <!-- 职工性质 -->
+		</isNotNull>
+		<isNotNull property="cashPledge">
+			cash_pledge,  <!-- 押金编号 -->
+		</isNotNull>
+		<isNotNull property="isNetwork">
+			is_network,  <!-- 是否联网 -->
+		</isNotNull>
+		<isNotNull property="isStay">
+			is_stay,  <!-- 是否办暂住证 -->
+		</isNotNull>
+		<isNotNull property="permanentResidence">
+			permanent_residence,  <!-- 户口所在地 -->
+		</isNotNull>
+		<isNotNull property="hiredate">
+			hiredate,  <!-- 入职时间 -->
+		</isNotNull>
+		<isNotNull property="estimatedInDate">
+			estimated_in_date,  <!-- 预计入住时间 -->
+		</isNotNull>
+		<isNotNull property="estimatedOutDate">
+			estimated_out_date,  <!-- 预计退房时间 -->
+		</isNotNull>
+		<isNotNull property="school">
+			school,  <!-- 所属学校 -->
+		</isNotNull>
+		<isNotNull property="major">
+			major,  <!-- 专业 -->
+		</isNotNull>
+		<isNotNull property="roomName">
+			address,  <!-- 房间地址 -->
+		</isNotNull>
+		<isNotNull property="note">
+			note,  <!-- 备注信息 -->
+		</isNotNull>
+		<isNotNull property="recCreator">
+			rec_creator,  <!-- 创建人工号 -->
+		</isNotNull>
+		<isNotNull property="recCreateName">
+			rec_create_name,  <!-- 创建人姓名 -->
+		</isNotNull>
+		<isNotNull property="recCreateTime">
+			rec_create_time,  <!-- 创建时间 -->
+		</isNotNull>
+		<isNotNull property="dormitoryDirector">
+			dormitory_director,  <!-- 是否是宿舍长 -->
+		</isNotNull>
+		is_student,
+		room_id,
+		id  <!-- 主键 -->)
+		VALUES (
+		<isNotNull property="manNo">
+			#manNo#,
+		</isNotNull>
+		<isNotNull property="manName">
+			#manName#,
+		</isNotNull>
+		<isNotNull property="statusCode">
+			#statusCode#,
+		</isNotNull>
+		<isNotNull property="sex">
+			#sex#,
+		</isNotNull>
+		<isNotNull property="age">
+			#age#,
+		</isNotNull>
+		<isNotNull property="phone">
+			#phone#,
+		</isNotNull>
+		<isNotNull property="identityCard">
+			#identityCard#,
+		</isNotNull>
+		<isNotNull property="educationBackground">
+			#educationBackground#,
+		</isNotNull>
+		<isNotNull property="academicYear">
+			#academicYear#,
+		</isNotNull>
+		<isNotNull property="maritalStatus">
+			#maritalStatus#,
+		</isNotNull>
+		<isNotNull property="deptNum">
+			#deptNum#,
+		</isNotNull>
+		<isNotNull property="deptName">
+			#deptName#,
+		</isNotNull>
+		<isNotNull property="employmentNature">
+			#employmentNature#,
+		</isNotNull>
+		<isNotNull property="cashPledge">
+			#cashPledge#,
+		</isNotNull>
+		<isNotNull property="isNetwork">
+			#isNetwork#,
+		</isNotNull>
+		<isNotNull property="isStay">
+			#isStay#,
+		</isNotNull>
+		<isNotNull property="permanentResidence">
+			#permanentResidence#,
+		</isNotNull>
+		<isNotNull property="hiredate">
+			#hiredate#,
+		</isNotNull>
+		<isNotNull property="estimatedInDate">
+			#estimatedInDate#,
+		</isNotNull>
+		<isNotNull property="estimatedOutDate">
+			#estimatedOutDate#,
+		</isNotNull>
+		<isNotNull property="school">
+			#school#,
+		</isNotNull>
+		<isNotNull property="major">
+			#major#,
+		</isNotNull>
+		<isNotNull property="roomName">
+			#roomName#,
+		</isNotNull>
+		<isNotNull property="note">
+			#note#,
+		</isNotNull>
+		<isNotNull property="recCreator">
+			#recCreator#,
+		</isNotNull>
+		<isNotNull property="recCreateName">
+			#recCreateName#,
+		</isNotNull>
+		<isNotNull property="recCreateTime">
+			#recCreateTime#,
+		</isNotNull>
+		<isNotNull property="dormitoryDirector">
+			#dormitoryDirector#,
+		</isNotNull>
+		'1',
+		#roomId#,
+		#id#  <!-- 主键 -->)
+	</insert>
+
+</sqlMap>

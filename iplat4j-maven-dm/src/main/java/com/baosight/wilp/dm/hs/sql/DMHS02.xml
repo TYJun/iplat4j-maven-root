@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2022-02-14 16:34:48
+   		Version :  6.0.731.201809200158
+		tableName :.dorms_change_history 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 drm_id  VARCHAR, 
+		 room_id  VARCHAR,
+		 bed_no  VARCHAR,
+		 actual_in_date  VARCHAR,
+		 change_room_note  VARCHAR, 
+		 apply_change_date  VARCHAR
+	-->
+<sqlMap namespace="DMHS02">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+				id	as "id",  <!-- 主键 -->
+				drm_id	as "drmId",  <!-- 宿舍人员绑定关系表ID -->
+				room_id	as "roomId",  <!-- 换宿前的宿舍id -->
+				change_room_note	as "changeRoomNote",  <!-- 申请换宿时备注 -->
+				apply_change_date	as "applyChangeDate" <!-- 申请换宿时间 -->
+		FROM .dorms_change_history WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .dorms_change_history WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="drmId">
+			drm_id = #drmId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomId">
+			room_id = #roomId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="changeRoomNote">
+			change_room_note = #changeRoomNote#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="applyChangeDate">
+			apply_change_date = #applyChangeDate#
+		</isNotEmpty>
+	-->
+
+	<insert id="insertHistoryTable">
+		INSERT INTO .dorms_change_history (
+		<isNotNull property="drmId">
+			drm_id,  <!-- 宿舍人员绑定关系表ID -->
+		</isNotNull>
+		<isNotNull property="roomId">
+			room_id,  <!-- 换宿前的宿舍id -->
+		</isNotNull>
+		<isNotNull property="bedNo">
+			bed_no,  <!-- 床位号 -->
+		</isNotNull>
+		<isNotNull property="actualInDate">
+			actual_in_date,  <!-- 实际入住时间 -->
+		</isNotNull>
+		<isNotNull property="changeRoomNote">
+			change_room_note,  <!-- 申请换宿时备注 -->
+		</isNotNull>
+		<isNotNull property="applyChangeDate">
+			apply_change_date,  <!-- 申请换宿时间 -->
+		</isNotNull>
+		id  <!-- 主键 -->)
+		VALUES (
+		<isNotNull property="drmId">
+			#drmId#,
+		</isNotNull>
+		<isNotNull property="roomId">
+			#roomId#,
+		</isNotNull>
+		<isNotNull property="bedNo">
+			#bedNo#,
+		</isNotNull>
+		<isNotNull property="actualInDate">
+			#actualInDate#,
+		</isNotNull>
+		<isNotNull property="changeRoomNote">
+			#changeRoomNote#,
+		</isNotNull>
+		<isNotNull property="applyChangeDate">
+			#applyChangeDate#,
+		</isNotNull>
+		#id# )
+	</insert>
+
+
+	<!-- 批量插入宿舍换宿历史信息表 -->
+	<insert id="batchInsertHistoryTable" parameterClass="java.util.List">
+		INSERT INTO .dorms_change_history (
+			drm_id,  <!-- 宿舍人员绑定关系表ID -->
+			room_id,  <!-- 换宿前的宿舍id -->
+			bed_no,  <!-- 床位号 -->
+			actual_in_date,  <!-- 实际入住时间 -->
+			change_room_note,  <!-- 申请换宿时备注 -->
+			apply_change_date,  <!-- 申请换宿时间 -->
+		id  <!-- 主键 -->)
+		VALUES
+		<iterate conjunction=",">
+		(
+			#list[].drmId#,
+			#list[].roomId#,
+			#list[].bedNo#,
+			#list[].actualInDate#,
+			#list[].changeRoomNote#,
+			#list[].applyChangeDate#,
+			#list[].id#
+		)
+		</iterate>
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM .dorms_change_history WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE .dorms_change_history 
+		SET 
+					drm_id	= #drmId#,   <!-- 宿舍人员绑定关系表ID -->  
+					room_id	= #roomId#,   <!-- 换宿前的宿舍id -->  
+					change_room_note	= #changeRoomNote#,   <!-- 申请换宿时备注 -->  
+					apply_change_date	= #applyChangeDate#  <!-- 申请换宿时间 -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

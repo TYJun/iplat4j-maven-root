@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="reference/mui/css/mui.min.css" />
+    <link href="css/buttom.css" rel="stylesheet" />
+    <link href="css/iconfont.css" rel="stylesheet" />
+    <link href="css/mui.picker.min.css" rel="stylesheet" />
+    <link href="reference/css/common.css" rel="stylesheet" />
+    <link href="reference/css/loading.css" rel="stylesheet" />
+
+    <style>
+        .mui-backdrop {
+            top: 95px;
+        }
+        
+        .keshi-ymd-span {
+            height: 45px;
+            line-height: 45px;
+            display: block;
+            width: 50%;
+            margin-left: 25%;
+            font-size: 15px;
+            /*border-bottom:2px  solid #2aabd2;*/
+        }
+        
+        .keshi-shuidianqi {
+            box-shadow: 0px 8px 20px #d1d1d1;
+            margin: 20px 0px;
+        }
+        
+        .first-tr {
+            background: #08c1a3;
+            height: 40px;
+            line-height: 40px;
+            color: #ffffff;
+            text-align: center;
+            /*border-radius: 5px;*/
+            box-shadow: 0px 5px #f7f7f7;
+        }
+        
+        .first-tr-other {
+            /*height: 40px;*/
+            /*line-height: 40px;*/
+            padding: 10px 0;
+            color: #333;
+            text-align: center;
+            border-bottom: 1px solid #a1e4d9;
+            display: flex;
+        }
+        
+        .content-table {
+            background: #fff;
+            overflow-y: auto;
+            margin: 0px 8px;
+            /* width: 100%; */
+        }
+        
+        .first-tr {
+            display: flex;
+        }
+        
+        .over-width {
+            width: 20%;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <button onclick="goback()" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+        返回
+      </button>
+        <h1 class="mui-title">医务科室报修量统计</h1>
+    </header>
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div id="loading" class="loading-div" style="z-index: 999" hidden>
+        <div class="loading-center">
+            <div class="loading-center-absolute">
+                <div class="object" id="object_one"></div>
+                <div class="object" id="object_two"></div>
+                <div class="object" id="object_three"></div>
+                <div class="object" id="object_four"></div>
+            </div>
+        </div>
+    </div>
+    <div class="mui-content">
+        <div class="keshi">
+            <div class="keshi-ymd">
+                <div class="mui-row" style="
+              background: #fbf7fc;
+              text-align: center;
+              box-shadow: 0px 5px #f7f7f7;
+            ">
+                    <div class="mui-col-sm-4 mui-col-xs-4 year-button" style="">
+                        <span class="keshi-ymd-span keshi-year-span">年度</span>
+                    </div>
+                    <div class="mui-col-sm-4 mui-col-xs-4 jidu-button" style="">
+                        <span class="keshi-ymd-span keshi-jidu-span">季度</span>
+                    </div>
+                    <div class="mui-col-sm-4 mui-col-xs-4 month-button">
+                        <span class="keshi-ymd-span keshi-month-span">月份</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="overflow-x: auto">
+            <div style="padding: 8px; padding-bottom: 0; width: 100%">
+                <div class="first-tr">
+                    <div class="mui-col-xs-4">
+                        <span>科室名称</span>
+                    </div>
+                    <div class="mui-col-xs-4">
+                        <span>报修量</span>
+                    </div>
+                    <div class="mui-col-xs-4">
+                        <span>完工量</span>
+                    </div>
+                    <div class="mui-col-xs-4">
+                        <span>未完工</span>
+                    </div>
+                    <!-- <div class="over-width">
+                        <span>维修科室</span>
+                    </div>
+                    <div class="over-width">
+                        <span>维修工时</span>
+                    </div>
+                    <div class="over-width">
+                        <span>维修耗时</span>
+                    </div>
+                    <div class="over-width">
+                        <span>耗时总计</span>
+                    </div> -->
+                </div>
+            </div>
+            <div class="content-table">
+                <!--<div class="first-tr-other">
+						<div class="over-width">
+							<span>科室名称</span>
+						</div>
+						<div class="over-width">
+							<span>报修量</span>
+						</div>
+						<div class="over-width">
+							<span>完工量</span>
+						</div>
+						<div class="over-width">
+							<span>未完工</span>
+						</div>
+						<div class="over-width">
+							<span>维修科室</span>
+						</div>
+						<div class="over-width">
+							<span>维修工时</span>
+						</div>
+						<div class="over-width">
+							<span>维修耗时</span>
+						</div>
+						<div class="over-width">
+							<span>耗时总计</span>
+						</div>
+
+					</div>-->
+            </div>
+        </div>
+    </div>
+    <p class="no-views" style="display: none">
+        ———&nbsp;&nbsp;暂无数据&nbsp;&nbsp;———
+    </p>
+</body>
+<script type="text/javascript" src="js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="js/mui.js"></script>
+<script type="text/javascript" src="js/mui.picker.min.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script src="../../../cordova.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/report-self.js"></script>
+
+<script>
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var deptCode = localStorage.getItem("deptCode");
+    $(".content-table").height($(window).height() - 138 + "px");
+
+    getCurrentDate();
+
+    function loadView() {
+        var prame = {
+            flag: flag,
+            year: canshuYear,
+            season: canshuSeason,
+            month: canshuMonth,
+            workNo: workNo,
+            dept: deptCode,
+        };
+        var prames = JSON.stringify(prame);
+        console.log(prames);
+        $.ajax({
+            url: baseUrl + "MobileAgentService",
+            type: "post",
+            data: {
+                prames,
+            },
+            headers: {
+                methodName: "getDeptRepairNum",
+                serviceName: "MTYD01",
+            },
+            success: function(data) {
+                // console.log(data);
+
+                var taskAppend = "";
+                if (data.respCode == 1 || data.status == "1") {
+                    var list = data.attr.getDeptRepairNum;
+                    if (list.length == 0) {
+                        $(".no-views").css("display", "");
+                    } else {
+                        $(".no-views").css("display", "none");
+                    }
+                    for (var i = 0; i < list.length; i++) {
+                        taskAppend += createHtml1(
+                            list[i].req_dept_name,
+                            list[i].num,
+                            list[i].WGnum,
+                            list[i].WWGnum
+                        );
+                    }
+                    $(".content-table").html(taskAppend);
+                } else {
+                    showMsg(data.msg);
+                }
+            },
+        });
+    }
+
+    function createHtml1(req_dept_name, num, WGnum, WWGnum) {
+        var html = "";
+        html += '<div class="first-tr-other">';
+        html += '<div class="mui-col-xs-4">';
+        html += "	<span>" + req_dept_name + "</span>";
+        html += "</div>";
+        html += '<div class="mui-col-xs-4">';
+        html += "	<span>" + num + "</span>";
+        html += "</div>";
+        html += '<div class="mui-col-xs-4">';
+        html += "<span>" + WGnum + "</span>";
+        html += "</div>";
+        html += '<div class="mui-col-xs-4">';
+        html += "<span>" + WWGnum + "</span>";
+        html += "</div>";
+        html += "</div>";
+        return html;
+    }
+</script>
+
+</html>

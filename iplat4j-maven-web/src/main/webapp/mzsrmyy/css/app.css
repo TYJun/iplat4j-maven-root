@@ -1,0 +1,292 @@
+.order_time[data-v-c36bfcee] {
+    width: 3.2rem;
+    position: relative;
+    top: 0.76rem;
+}
+
+.order_time_nd[data-v-c36bfcee] {
+    margin-top: 0.76rem;
+    position: relative;
+}
+
+.title_btn[data-v-c36bfcee] {
+    display: inline-block;
+    width: 2.6rem;
+    height: 0.56rem;
+    background: rgba(56, 147, 250, 1);
+    border-radius: 0.26667rem;
+    font-size: 0.29333rem;
+    font-family: Source Han Sans SC;
+    font-weight: 500;
+    color: rgba(246, 247, 251, 1);
+    border: none;
+    position: absolute;
+    left: 50%;
+    top: -0.26667rem;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+.time_border[data-v-c36bfcee] {
+    display: inline-block;
+    width: 3.2rem;
+    height: 2.4rem;
+    text-align: center;
+    line-height: 2.13333rem;
+    background: rgba(239, 247, 255, 1);
+    border-radius: 0.10667rem;
+    font-size: 0.32rem;
+    font-family: Source Han Sans SC;
+    font-weight: 400;
+    color: rgba(56, 147, 250, 1);
+}
+
+.title_btn_nd[data-v-c36bfcee] {
+    display: inline-block;
+    width: 2.6rem;
+    height: 0.56rem;
+    background: rgba(56, 147, 250, 1);
+    border-radius: 0.26667rem;
+    font-size: 0.29333rem;
+    font-family: Source Han Sans SC;
+    font-weight: 500;
+    color: rgba(246, 247, 251, 1);
+    border: none;
+    position: absolute;
+    left: 50%;
+    top: -0.26667rem;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+.time_border_nd[data-v-c36bfcee] {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    width: 3.2rem;
+    height: 2.4rem;
+    background: rgba(239, 247, 255, 1);
+    border-radius: 0.10667rem;
+    font-size: 0.32rem;
+    font-family: Source Han Sans SC;
+    font-weight: 400;
+    color: rgba(56, 147, 250, 1);
+    padding-top: 0.32rem;
+}
+
+.time_border_nd p[data-v-c36bfcee] {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    line-height: 0.2rem;
+    text-align: left;
+    padding-left: 0.22667rem;
+}
+
+.time_border_nd p span[data-v-c36bfcee]:nth-of-type(1) {
+    display: inline-block;
+    text-align: left;
+    margin-right: 0.1px;
+}
+
+.notice_wrap ul li[data-v-c36bfcee]:nth-of-type(2),
+.notice_wrap ul li[data-v-c36bfcee]:nth-of-type(3) {
+    height: 0.70667rem;
+    font-size: 0.29333rem;
+    font-family: Source Han Sans SC;
+    font-weight: 400;
+    color: rgba(253, 149, 27, 1);
+    line-height: 0.4rem;
+    margin: auto;
+    text-align: center;
+}
+
+.notice_wrap ul li[data-v-c36bfcee]:nth-of-type(4),
+.notice_wrap ul li[data-v-c36bfcee]:nth-of-type(5),
+.notice_wrap ul li[data-v-c36bfcee]:nth-of-type(6) {
+    width: 6rem;
+    font-size: 0.34667rem;
+    font-family: Source Han Sans SC;
+    font-weight: 400;
+    color: rgba(51, 51, 51, 1);
+    line-height: 0.6rem;
+    margin: auto;
+}
+
+.notice_wrap ul li[data-v-c36bfcee]:nth-of-type(7) {
+    font-size: 0.29333rem;
+    font-family: Source Han Sans CN;
+    font-weight: 300;
+    color: rgba(128, 128, 128, 1);
+    line-height: 0.4rem;
+    text-align: center;
+    margin-top: 0.32rem;
+}
+
+.notice_banner[data-v-c36bfcee] {
+    height: 0.53333rem;
+}
+
+.van-notice-bar[data-v-c36bfcee] {
+    height: 0.53333rem;
+}
+
+img[data-v-09aa8265] {
+    margin-top: 40%;
+    margin-left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%)
+}
+
+p[data-v-09aa8265] {
+    font-size: 0.4rem;
+    color: #A5B8A9;
+    text-align: center
+}
+
+*[data-v-55de952e] {
+    margin: 0;
+    padding: 0;
+}
+
+html[data-v-55de952e] {
+    height: 100%;
+}
+
+body[data-v-55de952e] {
+    margin: 0px;
+}
+
+.information[data-v-55de952e] {
+    position: relative;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 3.4rem;
+    padding: 0 0.4rem;
+    border-bottom: 1px solid #eefaf2;
+}
+
+.info-top[data-v-55de952e] {
+    height: 0.66667rem;
+    line-height: 0.66667rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+}
+
+.username[data-v-55de952e],
+.bednum[data-v-55de952e] {
+    height: 0.66667rem;
+    font-size: 0.33333rem;
+    color: #666;
+}
+
+.date[data-v-55de952e] {
+    /* float: right; */
+    font-size: 0.26667rem;
+    color: #666;
+}
+
+.food[data-v-55de952e],
+.price[data-v-55de952e] {
+    font-size: 0.30667rem;
+    color: #999;
+}
+
+.price>span[data-v-55de952e] {
+    margin-left: 0.4rem;
+    /* color: red; */
+}
+
+.num[data-v-55de952e] {
+    float: right;
+    font-size: 0.26667rem;
+    color: #999;
+}
+
+.itemlist[data-v-55de952e] {
+    min-height: 0.66667rem;
+    line-height: 0.66667rem;
+}
+
+.totalprice[data-v-55de952e] {
+    /* position: absolute; */
+    top: 2rem;
+    left: 0.53333rem;
+    /* float: right; */
+    margin-top: 0.4rem;
+    font-size: 0.4rem;
+    color: #666;
+}
+
+.btn-left[data-v-55de952e] {
+    /* top: 150px;
+		left: 40px; */
+    /* float: left; */
+    margin-top: 0.4rem;
+    font-size: 0.4rem;
+}
+
+.cny[data-v-55de952e] {
+    font-style: normal;
+    color: #ed4220;
+}
+
+.mescroll[data-v-55de952e] {
+    position: fixed;
+    top: 0.58667rem;
+    bottom: 0;
+    height: auto;
+}
+
+.item_money[data-v-55de952e] {
+    margin-top: 0.13333rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding-bottom: 0.06667rem;
+}
+
+.van-dialog-box[data-v-55de952e] {
+    text-align: center;
+}
+
+.rate_wrap[data-v-55de952e] {
+    width: 100%;
+}
+
+.rate_wrap li[data-v-55de952e] {
+    width: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin-top: 0.4rem;
+    text-align: center;
+}
+
+.rate_wrap li[data-v-55de952e]:last-of-type {
+    margin-bottom: 0.4rem;
+}
+
+.rate_wrap .van-field[data-v-55de952e] {
+    border: solid 1px rgb(238, 238, 238);
+}
+
+.rate_title[data-v-55de952e] {
+    display: inline-block;
+    width: 1.73333rem;
+    text-align: right;
+    margin-right: 0.26667rem;
+    margin-left: 1.33333rem;
+}

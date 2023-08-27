@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="FALB01">
+	<!-- ServiceFALB01 -->
+	<!-- 查询类别名称树结构 -->
+	<select id="queryFaTypeTree" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			ft.`id`,
+			ft.type_code typeCode,
+			CONCAT('[',ft.type_code,']',ft.type_name) typeName,
+			ft.parent_id parentId,
+			CASE WHEN COUNT(ft1.id) = 0 THEN TRUE
+			ELSE FALSE
+			END AS "isLeaf"
+		from
+		fa_type ft LEFT JOIN fa_type ft1 ON ft.id = ft1.parent_id
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="parentEname">
+				ft.parent_id = #parentEname#
+			</isNotEmpty>
+		</dynamic>
+		GROUP BY ft.id
+		HAVING COUNT(ft1.id) > 0
+		ORDER BY ft.type_code
+	</select>
+
+	<!-- 将遍历的节点进行查询如果在固定资产信息中被使用则停止删除 -->
+	<select id="existsUsedFaTypeId" resultClass="java.util.HashMap">
+		select id faInfoId
+		from fa_info
+		where
+			goods_type_code in
+		<iterate open="(" close=")" conjunction=",">
+			<![CDATA[	#[]#	]]>
+		</iterate>
+	</select>
+
+	<select id="typeCodeList" resultClass="java.lang.String">
+		select type_code typeCode
+		from fa_type
+		where
+		id in
+		<iterate open="(" close=")" conjunction=",">
+			<![CDATA[	#[]#	]]>
+		</iterate>
+	</select>
+
+	<!-- 查询固定资产类别信息 -->
+	<select id="queryAessettypeInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+		t1.`id` faTypeId,
+		t1.type_code typeCode,
+		t1.type_name typeName,
+		t1.parent_id parentId,
+		CASE t2.type_code
+		WHEN t2.type_code  THEN t2.type_code
+		ELSE "root" END parentCode,
+		CASE t1.parent_id
+		WHEN "root" THEN "根节点"
+		ELSE t2.type_name END parentName,
+		t1.`level`,
+		t1.`is_leaf` isLeaf,
+		t1.`remark`,
+		t1.`use_years` useYears,
+		t1.`code_rule` codeRule,
+		t1.sort_no sortNo,
+		t1.rec_creator recCreator,
+		t1.rec_create_name recCreateName,
+		t1.rec_create_time recCreateTime,
+		t1.rec_revisor recRevisor,
+		t1.rec_revise_name recReviseName,
+		t1.rec_revise_time recReviseTime,
+		t1.data_group_code dataGroupCode,
+		t1.archive_flag archiveFlag
+		from
+		fa_type t1
+		LEFT JOIN fa_type t2 ON t1.parent_id = t2.id
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="typeCode">
+				t1.type_code like concat ('%',#typeCode#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="typeName">
+				t1.type_name like concat ('%',#typeName#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="parentName">
+				t2.type_name like concat ('%',#parentName#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="useYearsS">
+				t1.use_years >= #useYearsS#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="useYearsE">
+				#useYearsE# >= t1.use_years
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="faTypeId">
+				t1.parent_id = #faTypeId#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="codeRule">
+				t1.`code_rule` like concat ('%',#codeRule#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="remark">
+				t1.`remark` like concat ('%',#remark#,'%')
+			</isNotEmpty>
+		</dynamic>
+		order by t1.`sort_no`
+	</select>
+
+	<!-- 通过父节点获取新的level等级 -->
+	<select id="queryAessettypeInfoByParentId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+		CONVERT(`level`,SIGNED) + 1 as level
+		from
+		fa_type
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="parentId">
+				id = #parentId#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<!-- 删除固定资产类别信息 -->
+	<delete id="delete" parameterClass="java.util.List">
+		delete from fa_type where id in
+		<iterate open="(" close=")" conjunction=",">
+			#[]#
+		</iterate>
+	</delete>
+
+	<!-- 递归子节点 -->
+	<select id="recursionChildern" parameterClass="java.lang.String" resultClass="java.lang.String">
+		SELECT
+			id
+		FROM
+			`fa_type`
+		where
+			parent_id = #value#
+	</select>
+
+	<!-- 查询固定资产类别 -->
+	<select id="queryFaTypeEFSelect" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			type_code `value`,
+			type_name `text`
+		from
+			fa_type
+		<isNotEmpty prepend="and" property="parentId">
+			parent_id = #parentId#
+		</isNotEmpty>
+	</select>
+	<!-- ServiceFALB0101 -->
+	<!-- 查询固定资产类别详情信息 -->
+	<select id="queryAessettypeDetailInfo" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+		select
+			t1.`id` faTypeId,
+			t1.type_name typeName,
+			t1.parent_id parentId,
+		    case t1.parent_id
+		    when "root" then
+				"根节点"
+		    else t2.type_name end parentName,
+		    t1.`sort_no` AS "sortNo",
+		    t1.`use_years` AS "useYears",
+		    t1.`code_rule` AS "codeRule",
+			t1.`remark`,
+		    t1.archive_flag archiveFlag
+		from
+			fa_type t1 left join fa_type t2 on t1.parent_id = t2.id
+		where t1.id = #faTypeId#
+		ORDER BY t1.`sort_no`
+	</select>
+
+	<!-- 保存固资类别信息 -->
+	<insert id="saveAessettypeInfo" parameterClass="java.util.HashMap">
+		insert into fa_type
+		    (`id`,`type_code`,`type_name`,`parent_id`,`level`,`is_leaf`,`remark`,`use_years`,`code_rule`,`sort_no`,`rec_creator`,`rec_create_name`,`rec_create_time`,`data_group_code`,`archive_flag`)
+		values
+		    (#id#,#typeCode#,#typeName#,#parentId#,#level#,#isLeaf#,#remark#,#useYears#,#codeRule#,#sortNo#,#recCreator#,#recCreateName#,#recCreateTime#,#dataGroupCode#,#archiveFlag#)
+	</insert>
+
+	<!-- 通过excel表格导入 -->
+	<insert id="saveAessettypeByExcel" parameterClass="java.util.List">
+		insert into fa_type (`id`,`type_code`,`type_name`,`parent_id`,`use_years`,`code_rule`,`sort_no`,`remark`,`archive_flag`)
+		values
+		<iterate conjunction=",">
+			(
+			 	UUID(),
+			 	#aessettypeList[].typeCode#,
+			 	#aessettypeList[].typeName#,
+			 	#aessettypeList[].parentId#,
+				#aessettypeList[].useYears#,
+				#aessettypeList[].codeRule#,
+				#aessettypeList[].sortNo#,
+				#aessettypeList[].remark#,
+			 	"1"
+			)
+		</iterate>
+	</insert>
+
+	<update id="updateParentId" parameterClass="java.util.HashMap">
+		UPDATE fa_type a JOIN fa_type b ON a.type_code = b.parent_id set b.parent_id = a.id where 2 = 2
+	</update>
+
+	<!-- 编辑固定资产类别信息 -->
+	<update id="editAessettypeInfo" parameterClass="java.util.HashMap">
+		update
+			fa_type
+		set
+			type_name = #typeName#,
+			parent_id = #parentId#,
+			`level` = #level#,
+			`remark` = #remark#,
+		    `use_years` = #useYears#,
+		    `code_rule` = #codeRule#,
+			`sort_no` = #sortNo#,
+			rec_revisor = #recRevisor#,
+			rec_revise_name = #recReviseName#,
+			rec_revise_time = #recReviseTime#,
+			data_group_code = #dataGroupCode#,
+			archive_flag = CONVERT(#archiveFlag#,SIGNED) + 1
+			where id = #faTypeId# and archive_flag = #archiveFlag#
+	</update>
+
+	<!-- 查询今日类别号 -->
+	<select id="queryMaxCode" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		select
+			type_code typeCode
+		from
+			fa_type
+		where
+			type_code like concat('%', #value#, '%')
+		order by
+			type_code desc
+	</select>
+</sqlMap>

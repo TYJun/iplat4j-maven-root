@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CMFY01">
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			REC_CREATOR	as "recCreator",  
+			REC_CREATE_TIME	as "recCreateTime",  
+			REC_REVSIOR	as "recRevsior",  
+			REC_REVISE_TIME	as "recReviseTime",  
+			ARCHIVE_FLAG as "archiveFlag",  <!-- 归档标记 -->
+			ID as "id",  <!-- 主键 -->
+			CONT_COST_NUM as "contCostNum",  <!-- 合同费用编码 -->
+			CONT_COST_NAME as "contCostName",  <!-- 合同费用名称 -->
+			REMARK as "remark",  <!-- 备注 -->
+			FLAG as "flag",  
+			checkNum as "checknum" <!-- 选择次数 -->
+		FROM
+			cm_contract_cost WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contCostName">
+			CONT_COST_NAME like concat('%',#contCostName#,'%')
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+	        <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		</isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  CONT_COST_NUM DESC
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="queryId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			REC_CREATOR	as "recCreator",  
+			REC_CREATE_TIME	as "recCreateTime",  
+			REC_REVSIOR	as "recRevsior",  
+			REC_REVISE_TIME	as "recReviseTime",  
+			ARCHIVE_FLAG	as "archiveFlag",  <!-- 归档标记 -->
+			ID	as "id",  <!-- 主键 -->
+			CONT_COST_NUM	as "contCostNum",  <!-- 合同费用编码 -->
+			CONT_COST_NAME	as "contCostName",  <!-- 合同费用名称 -->
+			REMARK	as "remark",  <!-- 备注 -->
+			FLAG	as "flag",  
+			checkNum	as "checknum" <!-- 选择次数 -->
+		FROM
+			cm_contract_cost
+		WHERE
+			ID=#id#
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) cm_contract_cost WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cm_contract_cost
+			(
+				REC_CREATOR,
+				REC_CREATE_TIME,
+				REC_REVSIOR,
+				REC_REVISE_TIME,
+				ARCHIVE_FLAG,  <!-- 归档标记 -->
+				ID,  <!-- 主键 -->
+				CONT_COST_NUM,  <!-- 合同费用编码 -->
+				CONT_COST_NAME,  <!-- 合同费用名称 -->
+				REMARK,  <!-- 备注 -->
+				FLAG,
+				checkNum  <!-- 选择次数 -->
+			)		 
+	    VALUES
+	    	(
+	    		#recCreator#,
+	    		#recCreateTime#,
+	    		#recRevsior#,
+	    		#recReviseTime#,
+	    		#archiveFlag#,
+	    		#id#,
+	    		#contCostNum#,
+	    		#contCostName#,
+	    		#remark#,
+	    		#flag#,
+	    		#checknum#
+	    	) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM cm_contract_cost WHERE ID = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE
+			cm_contract_cost 
+		SET 
+			REC_REVSIOR= #recRevsior#,   
+			REC_REVISE_TIME	= #recReviseTime#,   
+			ARCHIVE_FLAG	= #archiveFlag#,   <!-- 归档标记 -->    
+			CONT_COST_NAME	= #contCostName#,   <!-- 合同费用名称 -->  
+			REMARK	= #remark#,   <!-- 备注 -->  
+			FLAG	= #flag#,   
+			checkNum	= #checknum#  <!-- 选择次数 -->  
+		WHERE 	
+			ID = #id#
+	</update>
+	
+	<!-- 查询最大归档编号 -->
+	<select id="queryContTypeNum" parameterClass="string" resultClass="string">
+		select max(CONT_COST_NUM) from cm_contract_cost where CONT_COST_NUM like concat(#value#, '%')
+	</select>
+  
+</sqlMap>

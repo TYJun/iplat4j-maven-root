@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>分类选择</title>
+    <link rel="stylesheet" href="../css/classselected.css" />
+    <link rel="stylesheet" href="../../../reference/mui/css/mui.min.css" />
+    <link rel="stylesheet" href="../../../reference/mui/css/mui.picker.css" />
+    <link rel="stylesheet" href="../../../reference/mui/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="../../reference/css/loading.css" />
+</head>
+
+<body>
+    <div id="app" v-clock>
+        <!-- 遮罩 -->
+        <div class="mui-backdrop" id="zzc" style="display: none"></div>
+        <!-- 顶部区域 -->
+        <header>
+            <div class="top">
+                <div id="top-bar">
+                    <span id="icon-left-back" class="mui-icon mui-icon-arrowleft" @click="back"></span>
+                    <h1 id="title">分类选择</h1>
+                    <span id="add" @click="add">添加</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 查询区域 -->
+        <div class="search_area">
+            <span>分类名称:</span>
+            <div class="search">
+                <input placeholder="请输入关键字" v-model="message" />
+            </div>
+            <button type="button" class="search_btn" @click="search">查询</button>
+        </div>
+
+        <!-- 表格区域 -->
+        <table class="select_table">
+            <thead>
+                <tr>
+                    <th>分类名称</th>
+                    <th>规格</th>
+                    <th>是否选择</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item,index) in select_list" :key="index">
+                    <td>{{item.fabricName}}</td>
+                    <td>{{item.fabricModel}}</td>
+                    <td>
+                        <div class="mui-input-row mui-checkbox" id="checkbox">
+                            <label></label>
+                            <input v-model="item.check" name="checkbox1" value="Item 1" type="checkbox" />
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+<script src="../../../reference/js/jquery-2.1.4.js"></script>
+<script src="../../../reference/mui/js/mui.min.js"></script>
+<script src="../../../reference/mui/js/mui.picker.js"></script>
+<script src="../../../../reference/vue/vue.js"></script>
+<script src="../../../../html/reference/js/mui.loading.js"></script>
+<script>
+    // var baseUrl = localStorage.getItem("url");
+    var baseUrl = localStorage.getItem("url");
+
+    var app = new Vue({
+        el: "#app",
+        data: function () {
+            _this = this;
+            return {
+                select_list: [], //医用织物列表
+                message: "", //输入框内容
+            };
+        },
+        methods: {
+            add: function () {
+                var btnArray = ["是", "否"];
+                mui.confirm("确定添加吗？", "提示", btnArray, function (e) {
+                    if (e.index == 0) {
+                        _this.addList(); //添加分类函数
+                    } else {
+                    }
+                });
+            },
+            get_select_list() {
+                // 获取表格中的可选择的表格数据
+                mui.showLoading("正在加载", "div");
+                _this.message = _this.message ? _this.message : "";
+                $.ajax({
+                    type: "post",
+                    url: baseUrl + "medical/fabric",
+                    data: {
+                        requestParam: JSON.stringify({
+                            fabricName: _this.message,
+                            limit: "100",
+                            offset: "0",
+                        }),
+                    },
+                    headers: {
+                        methodName: "queryUnusualFabric",
+                        serviceName: "OMMFApplication",
+                    },
+                    success: function (data) {
+                        mui.hideLoading();
+                        if (data.statusCode != "0") {
+                            mui.toast(data.msg);
+                            return;
+                        }
+                        if (data.statusCode == "0" && data.data.length == 0) {
+                            mui.toast("暂无数据 !")
+                        }
+                        app.select_list = data.data;
+                        var _select_list = $.each(data.data, function (index, item) {
+                            item.check = false
+                        });
+                    },
+                });
+            },
+            //点击查询按钮
+            search() {
+                console.log(_this.message);
+                _this.get_select_list()
+            },
+            //添加分类
+            addList() {
+                mui.showLoading();
+                //过滤check值为false的数据,留下选中的数据
+                var _select_list = app.select_list.filter(function (item) {
+                    return item.check;
+                });
+                //需要传的fabricNo参数
+                var _fabricNo = []
+                $.each(_select_list, function (index, item) {
+                    _fabricNo.push({ fabricNo: item.fabricNo, fabricModel: item.fabricModel })
+                    _fabricNo.push({ fabricNo: item.fabricNo, fabricModel: item.fabricModel })
+                })
+                console.log(_fabricNo);
+                var param = {
+                    deptNo: localStorage.getItem("deptNo"),
+                    limit: "20",
+                    offset: "0",
+                    status: "1",
+                    deptName: localStorage.getItem("deptName"),
+                    fabricNo: _fabricNo
+                };
+                $.ajax({
+                    type: "post",
+                    url: baseUrl + "medical/fabric",
+                    data: {
+                        requestParam: JSON.stringify(param),
+                    },
+                    headers: {
+                        methodName: "AddUsualFabric",
+                        serviceName: "OMMFApplication",
+                    },
+                    success: function (data) {
+                        mui.hideLoading();
+                        if (data.statusCode != "0") {
+                            mui.toast(data.msg);
+                            return;
+                        }
+                    },
+                });
+            },
+            back() {
+                location.href = "./cloth_application/application.html"
+            }
+        },
+        created() {
+            _this.get_select_list(); //获取可选择的织物数据
+        },
+    });
+</script>
+
+</html>

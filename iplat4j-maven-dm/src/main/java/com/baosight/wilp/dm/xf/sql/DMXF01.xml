@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2022-01-18 22:11:36
+   		Version :  6.0.731.201809200158
+		tableName :.dorms_room_select 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 room_id  VARCHAR, 
+		 man_id  VARCHAR, 
+		 rec_creator  VARCHAR, 
+		 rec_create_name  VARCHAR, 
+		 rec_create_time  VARCHAR
+	-->
+<sqlMap namespace="DMXF01">
+
+	<select id="queryEmploymentNatureByWorkNo" parameterClass="java.lang.String" resultClass="java.lang.String">
+		select
+		employment_nature as employmentNature
+		from
+		dorms_man
+		where
+		man_no = #workNo#
+		and archive_flag = '0'
+	</select>
+
+
+	<select id="queryAllCanChoose" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		drs.id	as "id",
+		drs.room_id	as "roomId",
+		drs.man_id	as "manId",
+		drs.keep_room_days	as "keepRoomDays",
+		drs.rec_creator	as "recCreator",
+		drs.rec_create_name	as "recCreateName",
+		drs.rec_create_time	as "recCreateTime",
+		dr.room_no AS "roomNo",
+		dr.bed_num AS "bedNum",
+		dr.type_code AS "typeCode",
+		dr.dorm_properties as "dormProperties",
+		CASE dr.type_code
+		WHEN '2' THEN '待定'
+		WHEN '1' THEN '男生宿舍'
+		WHEN '0' THEN '女生宿舍'
+		END AS "typeCodeMeaning",
+		dr.building AS "building",
+		dr.floor AS "floor",
+		dr.note AS "drnote",
+		dr.dorm_position AS "dormPosition",
+		dr.elevator_room AS "elevatorRoom",
+		dr.pri_bathroom AS "priBathroom",
+		dr.dorm_area AS "dormArea",
+		dr.room_name AS "roomName",
+		dr.rent AS "rent",
+		dr.manage_fee AS "manageFee",
+		dr.annual_fee AS "annualFee",
+		dr.remaining_bed_num as remainingBedNum,
+		dm.man_no	as "manNo",
+		dm.man_name	as "manName",
+		dm.status_code	as "statusCode",
+		CASE dm.status_code
+		WHEN 00 THEN '待审核'
+		WHEN 01 THEN '待分配'
+		WHEN 02 THEN '待选房'
+		WHEN 03 THEN '待入住'
+		WHEN 04 THEN '已入住'
+		WHEN 10 THEN '申请换宿'
+		WHEN 98 THEN '申请退宿'
+		WHEN 99 THEN '流程结束'
+		END AS "statusCodeMeaning" ,
+		dm.sex	as "sex",
+		CASE dm.sex
+		WHEN '1' THEN '男'
+		ELSE '女'
+		END AS "sexMeaning",
+		dm.age	as "age",
+		dm.phone	as "phone",
+		dm.identity_card	as "identityCard",
+		dm.education_background	as "educationBackground",
+		dm.academic_year	as "academicYear",
+		dm.marital_status	as "maritalStatus",
+		dm.dept_num	as "deptNum",
+		dm.dept_name	as "deptName",
+		dm.employment_nature	as "employmentNature",
+		dm.cash_pledge	as "cashPledge",
+		dm.is_network	as "isNetwork",
+		dm.is_stay	as "isStay",
+		dm.permanent_residence	as "permanentResidence",
+		dm.note	as "note",
+		dm.hiredate	as "hiredate",
+		dm.estimated_in_date	as "estimatedInDate",
+		dm.estimated_out_date	as "estimatedOutDate",
+		dm.rec_creator	as "recCreator",
+		dm.rec_create_name	as "recCreateName",
+		dm.rec_create_time	as "recCreateTime",
+		dm.rec_revisor	as "recRevisor",
+		dm.rec_revise_name	as "recReviseName",
+		dm.rec_revise_time	as "recReviseTime"
+		FROM dorms_room_select drs
+		LEFT JOIN dorms_room dr on dr.id = drs.room_id
+		LEFT JOIN dorms_man dm on dm.id = drs.man_id
+		WHERE 1=1 and dr.remaining_bed_num > 0
+		<dynamic prepend=" AND ">
+			<isEqual prepend=" AND " property="role" compareValue="DMADMIN">
+				1=1
+				<isNotEmpty prepend=" AND " property="manNatureList">
+					dm.employment_nature in
+					<iterate property="manNatureList" conjunction="," open="(" close=")">
+						#manNatureList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+			<isEqual prepend=" AND " property="role" compareValue="DMSPR">
+				1=1
+				<isNotEmpty prepend=" AND " property="manNatureList">
+					dm.employment_nature in
+					<iterate property="manNatureList" conjunction="," open="(" close=")">
+						#manNatureList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+			<isEqual prepend=" AND " property="role" compareValue="DMZSR">
+				(dm.man_no = #workNo#
+				<isNotEmpty prepend=" AND " property="manNatureList">
+					dm.employment_nature in
+					<iterate property="manNatureList" conjunction="," open="(" close=")">
+						#manNatureList[]#
+					</iterate>
+				</isNotEmpty>
+				)
+			</isEqual>
+		</dynamic>
+		<isNotEmpty prepend=" AND " property="building">
+			dr.building like concat('%', #building#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomId">
+			dr.id= #roomId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floor">
+			dr.floor like concat('%', #floor#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomNo">
+			dr.room_no = #roomNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="typeCode">
+			dr.type_code = #typeCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dormProperties">
+			dr.dorm_properties = #dormProperties#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				dm.man_name asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="countCanChoose" resultClass="int">
+		SELECT COUNT(*) FROM (
+		SELECT
+		drs.id	as "id",
+		drs.room_id	as "roomId",
+		drs.man_id	as "manId",
+		dr.remaining_bed_num as remainingBedNum,
+		dm.age	as "age",  <!-- 员工年龄 -->
+		dm.phone	as "phone"  <!-- 电话 -->
+		FROM dorms_room_select drs
+		LEFT JOIN dorms_room dr on dr.id = drs.room_id
+		LEFT JOIN dorms_man dm on dm.id = drs.man_id
+		WHERE 1=1 and dr.remaining_bed_num > 0
+		<dynamic prepend=" AND ">                                    <!-- 权限过滤数据 -->
+			<isEqual prepend=" AND " property="role" compareValue="DMADMIN">
+				1=1
+				<isNotEmpty prepend=" AND " property="manNatureList">
+					dm.employment_nature in
+					<iterate property="manNatureList" conjunction="," open="(" close=")">
+						#manNatureList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+			<isEqual prepend=" AND " property="role" compareValue="DMSPR">
+				1=1
+				<isNotEmpty prepend=" AND " property="manNatureList">
+					dm.employment_nature in
+					<iterate property="manNatureList" conjunction="," open="(" close=")">
+						#manNatureList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+			<isEqual prepend=" AND " property="role" compareValue="DMZSR">
+				(dm.man_no = #workNo#
+				<isNotEmpty prepend=" AND " property="manNatureList">
+					dm.employment_nature in
+					<iterate property="manNatureList" conjunction="," open="(" close=")">
+						#manNatureList[]#
+					</iterate>
+				</isNotEmpty>
+				)
+			</isEqual>
+		</dynamic>
+		<isNotEmpty prepend=" AND " property="building">
+			dr.building like concat('%', #building#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomId">
+			dr.id= #roomId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floor">
+			dr.floor like concat('%', #floor#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomNo">
+			dr.room_no = #roomNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="typeCode">
+			dr.type_code = #typeCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dormProperties">
+			dr.dorm_properties = #dormProperties#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				dm.man_name asc
+			</isEmpty>
+		</dynamic>) as aaa
+	</select>
+
+
+	<select id="queryCanSelectBuilding" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		DISTINCT dr.building AS "building"
+		FROM
+		dorms_room_select drs
+		LEFT JOIN dorms_room dr ON dr.id = drs.room_id
+		LEFT JOIN dorms_man dm ON dm.id = drs.man_id
+		WHERE 1=1
+		<dynamic prepend=" AND ">                                    <!-- 权限过滤数据 -->
+			<isEqual prepend=" AND " property="role" compareValue="DMADMIN">
+				1=1
+			</isEqual>
+			<isEqual prepend=" AND " property="role" compareValue="DMZSR">
+				(dm.man_no = #workNo#)
+			</isEqual>
+		</dynamic>
+		<isNotEmpty prepend=" AND " property="building">
+			dr.building = #building#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floor">
+			dr.floor = #floor#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomNo">
+			dr.room_no = #roomNo#
+		</isNotEmpty>
+		GROUP BY drs.id
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				dr.building asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="queryCanSelectFloor" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		DISTINCT dr.floor AS "floor"
+		FROM
+		dorms_room_select drs
+		LEFT JOIN dorms_room dr ON dr.id = drs.room_id
+		LEFT JOIN dorms_man dm ON dm.id = drs.man_id
+		WHERE 1=1
+		<dynamic prepend=" AND ">                                    <!-- 权限过滤数据 -->
+			<isEqual prepend=" AND " property="role" compareValue="DMADMIN">
+				1=1
+			</isEqual>
+			<isEqual prepend=" AND " property="role" compareValue="DMZSR">
+				(dm.man_no = #workNo#)
+			</isEqual>
+		</dynamic>
+		<isNotEmpty prepend=" AND " property="building">
+			dr.building = #building#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floor">
+			dr.floor = #floor#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomNo">
+			dr.room_no = #roomNo#
+		</isNotEmpty>
+		GROUP BY drs.id
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				dr.floor ASC
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="queryCanSelectRoomSpot" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT  DISTINCT
+		drs.id	as "id",
+		drs.room_id	as "roomId",
+		drs.man_id	as "manId",
+		dr.building AS "building",
+		dr.floor AS "floor",
+		dr.room_no AS "roomNo",
+		dr.remaining_bed_num as remainingBedNum
+		FROM dorms_room_select drs
+		LEFT JOIN dorms_room dr on dr.id = drs.room_id
+		LEFT JOIN dorms_man dm on dm.id = drs.man_id
+		LEFT JOIN dorms_room_man drm on drm.room_id = dr.id and drm.out_room_status != '1'
+		WHERE 1=1 and dr.remaining_bed_num > 0
+		<dynamic prepend=" AND ">                                    <!-- 权限过滤数据 -->
+			<isEqual prepend=" AND " property="role" compareValue="DMADMIN">
+				1=1
+			</isEqual>
+			<isEqual prepend=" AND " property="role" compareValue="DMZSR">
+				(dm.man_no = #workNo#)
+			</isEqual>
+		</dynamic>
+		<isNotEmpty prepend=" AND " property="building">
+			dr.building = #building#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floor">
+			dr.floor = #floor#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomNo">
+			dr.room_no = #roomNo#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				dr.room_no asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+				id	as "id",  <!-- 主键 -->
+				room_id	as "roomId",  <!-- 宿舍ID -->
+				man_id	as "manId",  <!-- 申请人ID -->
+				rec_creator	as "recCreator",  <!-- 分配人工号 -->
+				rec_create_name	as "recCreateName",  <!-- 分配人姓名 -->
+				rec_create_time	as "recCreateTime" <!-- 分配时间 -->
+		FROM .dorms_room_select WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .dorms_room_select WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomId">
+			room_id = #roomId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manId">
+			man_id = #manId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreator">
+			rec_creator = #recCreator#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateName">
+			rec_create_name = #recCreateName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTime">
+			rec_create_time = #recCreateTime#
+		</isNotEmpty>
+	-->
+
+	<insert id="insertBeSelect" parameterClass="java.util.List">
+		INSERT INTO .dorms_room_select (id,  <!-- 主键 -->
+		man_id,  <!-- 申请人ID -->
+		room_id,  <!-- 宿舍ID -->
+		rec_creator,  <!-- 分配人工号 -->
+		rec_create_name,  <!-- 分配人姓名 -->
+		rec_create_time  <!-- 分配时间 -->
+		)
+		VALUES
+		<iterate conjunction=",">
+		(
+		#list[].id#,
+		#list[].manId#,
+		#list[].roomId#,
+		#list[].recCreator#,
+		#list[].recCreateName#,
+		#list[].recCreateTime#
+		)
+		</iterate>
+	</insert>
+
+	<delete id="deleteChoose" parameterClass="java.lang.String">
+		DELETE FROM .dorms_room_select WHERE
+			man_id = #manId#
+	</delete>
+
+	<!-- 查询当前选房的人员信息在入住申请表中的性别 -->
+	<select id="querySex" parameterClass="String" resultClass="String">
+		select
+			sex
+		from
+			dorms_man
+		where
+			id = #value#
+	</select>
+
+	<!-- 查询当前选房的人员选择的宿舍的宿舍类型 -->
+	<select id="queryTypeCodeMean" parameterClass="String" resultClass="String">
+		select
+			CASE type_code
+			WHEN '2' THEN '待定'
+			WHEN '1' THEN '男生宿舍'
+			WHEN '0' THEN '女生宿舍'
+			END AS "typeCodeMeaning"
+		from
+			dorms_room
+		where
+			id = #value#
+	</select>
+
+	<!-- 查询当前房间是否已经有人入住(判断是否有入住人即可) -->
+	<select id="queryRoomRZCount" parameterClass="String" resultClass="int">
+		SELECT count(*) FROM dorms_room_man drm
+		LEFT JOIN dorms_man man ON man.id = drm.man_id
+		WHERE drm.room_id = #roomId# AND man.status_code != 99
+	</select>
+
+	<!-- 更新宿舍的类型 -->
+	<update id="updateTypeCode">
+		UPDATE .dorms_room
+		SET
+		type_code	= #typeCode#,   <!-- 房间类型(1男生宿舍/0女生宿舍/2待定) -->
+		id = #roomId#
+		WHERE
+		id = #roomId#
+	</update>
+
+</sqlMap>

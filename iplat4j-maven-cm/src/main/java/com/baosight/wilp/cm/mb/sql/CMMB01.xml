@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="CMMB01">
+    <select id="queryContentTemplateFile" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            id fileId,
+            file_path filePath,
+            file_name fileName,
+            file_size fileSize,
+            case file_status
+                when 1 then "启用"
+                else "停用" end
+            fileStatus,
+            rec_creator_no recCreatorNo,
+            rec_creator recCreator,
+            DATE_FORMAT(rec_create_time,'%Y-%m-%d') recCreateTime,
+            rec_revisor_no recRevisorNo,
+            rec_revisor recRevisor,
+            DATE_FORMAT(rec_revise_time,'%Y-%m-%d') recReviseTime
+        from
+            cm_template
+        where
+            1=1
+        <isNotEmpty prepend="and" property="fileName">
+            file_name like concat('%', #fileName#, '%')
+        </isNotEmpty>
+        order by
+            rec_create_time DESC,
+            rec_revise_time DESC
+    </select>
+
+    <insert id="saveContentTemplateFile" parameterClass="java.util.HashMap">
+        insert into cm_template(
+            id,
+            file_path,
+            file_name,
+            file_size,
+            file_status,
+            rec_creator_no,
+            rec_creator,
+            rec_create_time
+        ) values (
+            #uploadId#,
+            #filePath#,
+            #fileName#,
+            #fileSize#,
+            #fileStatus#,
+            #recCreatorNo#,
+            #recCreator#,
+            #recCreateTime#
+        )
+    </insert>
+
+    <update id="startTemplateFile" parameterClass="java.util.HashMap">
+        update cm_template set
+            file_status = 1,
+            rec_revisor_no = #recRevisorNo#,
+            rec_revisor = #recRevisor#,
+            rec_revise_time = #recReviseTime#
+        where id = #fileId#
+    </update>
+
+    <update id="stopTemplateFile" parameterClass="java.util.HashMap">
+        update cm_template set
+            file_status = 2,
+            rec_revisor_no = #recRevisorNo#,
+            rec_revisor = #recRevisor#,
+            rec_revise_time = #recReviseTime#
+        where id = #fileId#
+    </update>
+
+    <delete id="deleterTemplateFile" parameterClass="java.util.HashMap">
+        delete from cm_template where id = #fileId#
+    </delete>
+</sqlMap>

@@ -1,0 +1,903 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2022-03-22 15:17:40
+   		Version :  6.0.731.201809200158
+		tableName :.dorms_room_fee
+		 room_id  VARCHAR,
+		 man_id  VARCHAR,
+		 water_degree  DOUBLE,
+		 elec_degree  DOUBLE,
+		 water_priece  DECIMAL,
+		 elec_priece  DECIMAL,
+		 current_rent  DECIMAL,
+		 current_manage_fee  DECIMAL,
+		 extra_charges  DECIMAL,
+		 remark  VARCHAR,
+		 current_month  VARCHAR,
+		 operator  VARCHAR,
+		 operation_name  VARCHAR,
+		 operation_time  VARCHAR
+	-->
+<sqlMap namespace="DMFY01">
+
+
+	<select id="queryRYFeeList" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		fee.room_id AS "roomId",<!-- 房间id -->
+		fee.man_id AS "manId",<!-- 人员id -->
+		fee.water_degree AS "waterDegree",<!-- 本月用水度数 -->
+		fee.elec_degree AS "elecDegree",<!-- 本月用电度数 -->
+		fee.water_priece AS "waterPriece",<!-- 本月水费 -->
+		fee.elec_priece AS "elecPriece",<!-- 本月电费 -->
+		fee.current_rent AS "currentRent",<!-- 本月实际月租 -->
+		fee.current_manage_fee AS "currentManageFee",<!-- 本月实际管理费 -->
+		IFNULL(fee.return_rent,0) as "returnRent", <!-- 本月退房租 -->
+		IFNULL(fee.return_manage_fee,0) as "returnManageFee", <!-- 本月退管理费 -->
+		IFNULL(fee.return_water_priece,0) as "returnWaterPriece", <!-- 本月退水费 -->
+		IFNULL(fee.return_elec_priece,0) as "returnElecPriece", <!-- 本月退电费 -->
+		IFNULL(fee.replenish_rent,0) as "replenishRent", <!-- 本月补月租 -->
+		IFNULL(fee.replenish_manage_fee,0) as "replenishManageFee", <!-- 本月补管理费 -->
+		IFNULL(fee.replenish_water_priece,0) as "replenishWaterPriece", <!-- 本月补水费 -->
+		IFNULL(fee.replenish_elec_priece,0) as "replenishElecPriece", <!-- 本月补电费 -->
+		IFNULL(fee.extra_charges,0) AS "extraCharges",<!-- 额外费用 -->
+		fee.remark AS "remark",<!-- 备注 -->
+		fee.current_month AS "currentMonth",<!-- 本月所属年月份 -->
+		fee.operator AS "operator",<!-- 操作人工号 -->
+		fee.operation_name AS "operationName",<!-- 操作人人姓名 -->
+		fee.operation_time AS "operationTime",<!-- 操作时间 -->
+		dm.man_no AS "manNo",<!-- 工号 -->
+		dm.man_name AS "manName",<!-- 姓名 -->
+		dm.sex AS "sex",<!-- 性别 -->
+		CASE
+		dm.sex
+		WHEN '1' THEN
+		'男' ELSE '女'
+		END AS "sexMeaning",
+		dm.age AS "age",<!-- 员工年龄 -->
+		dm.phone AS "phone",<!-- 电话 -->
+		dm.archive_flag as "archiveFlag", <!-- 归档标记(0：未归档，1：已归档) -->
+		CASE dm.archive_flag
+		WHEN '0' THEN '未归档'
+		ELSE '已归档'
+		END AS "archiveFlagMean",
+		dm.dept_name AS "deptName",<!-- 部门科室 -->
+		dm.identity_card AS "identityCard",<!-- 身份证 -->
+		dm.is_stay AS "isStay",<!-- 是否办暂住证 -->
+		dm.permanent_residence AS "permanentResidence",<!-- 户口所在地 -->
+		dm.note AS "note",<!-- 备注信息 -->
+		dm.hiredate AS "hiredate",<!-- 入职时间 -->
+		dm.estimated_in_date AS "estimatedInDate",<!-- 预计入住时间 -->
+		dm.estimated_out_date AS "estimatedOutDate",<!-- 预计退房时间 -->
+		drm.id as "drmId", <!-- 宿舍人员绑定关系表主键id -->
+		drm.actual_in_date as "actualInDate", <!-- 实际入住时间 -->
+		drm.actual_out_date as "actualOutDate", <!-- 实际退房时间 -->
+		drm.change_room_status as "changeRoomStatus",
+		drm.change_room_note as "changeRoomNote",
+		drm.apply_change_date as "applyChangeDate",
+		drm.out_room_note as "outRoomNote",
+		drm.apply_out_date as "applyOutDate",
+		drm.checkout_room_status	as "checkoutRoomStatus",  <!-- 是否已经进行退宿检查清单(0为未进行，1已进行) -->
+		drm.actual_rent	as "actualRent",  <!-- 实际房租 -->
+		drm.actual_manage_fee	as "actualManageFee",  <!-- 实际管理费 -->
+		dr.room_no AS "roomNo",
+		dr.bed_num AS "bedNum",
+		dr.type_code AS "typeCode",
+		CASE
+		dr.type_code
+		WHEN '1' THEN
+		'男生宿舍'
+		WHEN '0' THEN
+		'女生宿舍'
+		END AS "typeCodeMeaning",
+		dr.building AS "building",
+		dr.floor AS "floor",
+		dr.note AS "drnote",
+		dr.dorm_position AS "dormPosition",
+		dr.pri_bathroom AS "priBathroom",
+		dr.dorm_area AS "dormArea",
+		dr.room_name AS "roomName"
+		FROM
+		dorms_room_fee fee
+		LEFT JOIN dorms_man dm ON dm.id = fee.man_id
+		LEFT JOIN dorms_room_man drm ON drm.man_id = fee.man_id
+		LEFT JOIN dorms_room dr ON dr.id = fee.room_id
+		where 1=1
+		<dynamic prepend=" AND ">                                    <!-- 权限过滤数据 -->
+			<isEqual prepend=" AND " property="role" compareValue="DMADMIN">
+				1=1
+				<isNotEmpty prepend=" AND " property="manNatureList">
+					dm.employment_nature in
+					<iterate property="manNatureList" conjunction="," open="(" close=")">
+						#manNatureList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+			<isEqual prepend=" AND " property="role" compareValue="DMSPR">
+				1=1
+				<isNotEmpty prepend=" AND " property="manNatureList">
+					dm.employment_nature in
+					<iterate property="manNatureList" conjunction="," open="(" close=")">
+						#manNatureList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+			<isEqual prepend=" AND " property="role" compareValue="DMZSR">
+				(dm.man_no = #workNo#
+				<isNotEmpty prepend=" AND " property="manNatureList">
+					dm.employment_nature in
+					<iterate property="manNatureList" conjunction="," open="(" close=")">
+						#manNatureList[]#
+					</iterate>
+				</isNotEmpty>
+				)
+			</isEqual>
+		</dynamic>
+		<isNotEmpty prepend=" AND " property="manNo">
+			dm.man_no = #manNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manName">
+			dm.man_name like concat('%',#manName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="employmentNature">
+			dm.employment_nature = #employmentNature#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dm.dept_name like concat('%',#deptName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomName">
+			dr.room_name like concat('%', #roomName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="currentMonth">
+			fee.current_month = #currentMonth#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				fee.current_month,dm.archive_flag desc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="countRYFeeList" resultClass="int">
+		SELECT COUNT(*) FROM (
+			SELECT
+			fee.room_id AS "roomId",<!-- 房间id -->
+			fee.man_id AS "manId",<!-- 人员id -->
+			fee.water_degree AS "waterDegree",<!-- 本月用水度数 -->
+			fee.elec_degree AS "elecDegree",<!-- 本月用电度数 -->
+			fee.water_priece AS "waterPriece",<!-- 本月水费 -->
+			fee.elec_priece AS "elecPriece",<!-- 本月电费 -->
+			fee.current_rent AS "currentRent",<!-- 本月实际月租 -->
+			fee.current_manage_fee AS "currentManageFee",<!-- 本月实际管理费 -->
+			fee.extra_charges AS "extraCharges",<!-- 额外费用 -->
+			fee.remark AS "remark",<!-- 备注 -->
+			fee.current_month AS "currentMonth",<!-- 本月所属年月份 -->
+			fee.operator AS "operator",<!-- 操作人工号 -->
+			fee.operation_name AS "operationName",<!-- 操作人人姓名 -->
+			fee.operation_time AS "operationTime",<!-- 操作时间 -->
+			dm.man_no AS "manNo",<!-- 工号 -->
+			dm.man_name AS "manName",<!-- 姓名 -->
+			dm.sex AS "sex",<!-- 性别 -->
+			CASE
+			dm.sex
+			WHEN '1' THEN
+			'男' ELSE '女'
+			END AS "sexMeaning",
+			dm.age AS "age",<!-- 员工年龄 -->
+			dm.phone AS "phone",<!-- 电话 -->
+			dm.dept_name AS "deptName",<!-- 部门科室 -->
+			dm.identity_card AS "identityCard",<!-- 身份证 -->
+			dm.is_stay AS "isStay",<!-- 是否办暂住证 -->
+			dm.permanent_residence AS "permanentResidence",<!-- 户口所在地 -->
+			dm.note AS "note",<!-- 备注信息 -->
+			dm.hiredate AS "hiredate",<!-- 入职时间 -->
+			dm.estimated_in_date AS "estimatedInDate",<!-- 预计入住时间 -->
+			dm.estimated_out_date AS "estimatedOutDate",<!-- 预计退房时间 -->
+			drm.actual_in_date as "actualInDate", <!-- 实际入住时间 -->
+			drm.actual_out_date as "actualOutDate", <!-- 实际退房时间 -->
+			drm.change_room_status as "changeRoomStatus",
+			drm.change_room_note as "changeRoomNote",
+			drm.apply_change_date as "applyChangeDate",
+			drm.out_room_note as "outRoomNote",
+			drm.apply_out_date as "applyOutDate",
+			drm.checkout_room_status	as "checkoutRoomStatus",  <!-- 是否已经进行退宿检查清单(0为未进行，1已进行) -->
+			drm.actual_rent	as "actualRent",  <!-- 实际房租 -->
+			drm.actual_manage_fee	as "actualManageFee",  <!-- 实际管理费 -->
+			dr.room_no AS "roomNo",
+			dr.bed_num AS "bedNum",
+			dr.type_code AS "typeCode",
+			CASE
+			dr.type_code
+			WHEN '1' THEN
+			'男生宿舍'
+			WHEN '0' THEN
+			'女生宿舍'
+			END AS "typeCodeMeaning",
+			dr.building AS "building",
+			dr.floor AS "floor",
+			dr.note AS "drnote",
+			dr.dorm_position AS "dormPosition",
+			dr.pri_bathroom AS "priBathroom",
+			dr.dorm_area AS "dormArea",
+			dr.room_name AS "roomName"
+			FROM
+			dorms_room_fee fee
+			LEFT JOIN dorms_man dm ON dm.id = fee.man_id
+			LEFT JOIN dorms_room_man drm ON drm.man_id = fee.man_id
+			LEFT JOIN dorms_room dr ON dr.id = fee.room_id
+			where 1=1
+			<dynamic prepend=" AND ">                                    <!-- 权限过滤数据 -->
+				<isEqual prepend=" AND " property="role" compareValue="DMADMIN">
+					1=1
+					<isNotEmpty prepend=" AND " property="manNatureList">
+						dm.employment_nature in
+						<iterate property="manNatureList" conjunction="," open="(" close=")">
+							#manNatureList[]#
+						</iterate>
+					</isNotEmpty>
+				</isEqual>
+				<isEqual prepend=" AND " property="role" compareValue="DMSPR">
+					1=1
+					<isNotEmpty prepend=" AND " property="manNatureList">
+						dm.employment_nature in
+						<iterate property="manNatureList" conjunction="," open="(" close=")">
+							#manNatureList[]#
+						</iterate>
+					</isNotEmpty>
+				</isEqual>
+				<isEqual prepend=" AND " property="role" compareValue="DMZSR">
+					(dm.man_no = #workNo#
+					<isNotEmpty prepend=" AND " property="manNatureList">
+						dm.employment_nature in
+						<iterate property="manNatureList" conjunction="," open="(" close=")">
+							#manNatureList[]#
+						</iterate>
+					</isNotEmpty>
+					)
+				</isEqual>
+			</dynamic>
+			<isNotEmpty prepend=" AND " property="manNo">
+				dm.man_no = #manNo#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="manName">
+				dm.man_name like concat('%',#manName#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="employmentNature">
+				dm.employment_nature = #employmentNature#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="deptName">
+				dm.dept_name like concat('%',#deptName#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="roomName">
+				dr.room_name like concat('%', #roomName#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="currentMonth">
+				fee.current_month = #currentMonth#
+			</isNotEmpty>
+		) as aaa
+	</select>
+
+	<select id="queryDMChooseManInfo" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		date_format(CURDATE(), '%Y-%m') as "currentMonth",
+		drm.id	as "id",
+		drm.room_id	as "roomId",
+		drm.bed_no as "bedNo",
+		drm.actual_in_date as "actualInDate",
+		drm.actual_out_date as "actualOutDate",
+		drm.change_room_status as "changeRoomStatus",
+		drm.change_room_note as "changeRoomNote",
+		drm.apply_change_date as "applyChangeDate",
+		drm.out_room_note as "outRoomNote",
+		drm.apply_out_date as "applyOutDate",
+		drm.checkout_room_status	as "checkoutRoomStatus",  <!-- 是否已经进行退宿检查清单(0为未进行，1已进行) -->
+		drm.actual_rent	as "actualRent",  <!-- 实际房租 -->
+		drm.actual_manage_fee	as "actualManageFee",  <!-- 实际管理费 -->
+		dm.id	as "manId",  <!-- 人员ID -->
+		dm.man_no	as "manNo",  <!-- 工号 -->
+		dm.man_name	as "manName",  <!-- 姓名 -->
+		dm.status_code	as "statusCode",  <!-- 工单状态(00待审核，01待分配，02待选房，03待入住，04已入住，10申请换宿，98申请退宿，99流程结束) -->
+		CASE dm.status_code
+		WHEN 00 THEN '待审核'
+		WHEN 01 THEN '待分配'
+		WHEN 02 THEN '待选房'
+		WHEN 03 THEN '待入住'
+		WHEN 04 THEN '已入住'
+		WHEN 10 THEN '申请换宿'
+		WHEN 98 THEN '申请退宿'
+		WHEN 99 THEN '流程结束'
+		END AS "statusCodeMeaning" ,
+		dm.sex	as "sex",  <!-- 性别 -->
+		CASE dm.sex
+		WHEN '1' THEN '男'
+		ELSE '女'
+		END AS "sexMeaning",
+		dm.age	as "age",  <!-- 员工年龄 -->
+		dm.phone	as "phone",  <!-- 电话 -->
+		dm.identity_card	as "identityCard",  <!-- 身份证 -->
+		dm.education_background	as "educationBackground",  <!-- 学历 -->
+		dm.academic_year	as "academicYear",  <!-- 学年 -->
+		dm.marital_status	as "maritalStatus",  <!-- 婚否:是，否 -->
+		dm.dept_num	as "deptNum",  <!-- 部门科室编码 -->
+		dm.dept_name	as "deptName",  <!-- 部门科室名称 -->
+		dm.employment_nature	as "employmentNature",  <!-- 职工性质 -->
+		dm.cash_pledge	as "cashPledge",  <!-- 押金编号 -->
+		dm.is_network	as "isNetwork",  <!-- 是否联网 -->
+		dm.is_stay	as "isStay",  <!-- 是否办暂住证 -->
+		dm.permanent_residence	as "permanentResidence",  <!-- 户口所在地 -->
+		dm.note	as "note",  <!-- 备注信息 -->
+		dm.hiredate	as "hiredate",  <!-- 入职时间 -->
+		dm.estimated_in_date	as "estimatedInDate",  <!-- 预计入住时间 -->
+		dm.estimated_out_date	as "estimatedOutDate",  <!-- 预计退房时间 -->
+		dm.eval_status	as "evalStatus",  <!-- 是否已经进行过评价(0为未评价，1已评价) -->
+		CASE dm.eval_status
+		WHEN '1' THEN '已评价'
+		ELSE '未评价'
+		END AS "evalStatusMeaning",
+		dm.rec_creator	as "recCreator",  <!-- 创建人工号 -->
+		dm.rec_create_name	as "recCreateName",  <!-- 创建人姓名 -->
+		dm.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		dm.rec_revisor	as "recRevisor",  <!-- 修改人工号 -->
+		dm.rec_revise_name	as "recReviseName",  <!-- 修改人姓名 -->
+		dm.rec_revise_time	as "recReviseTime", <!-- 修改时间 -->
+		dr.room_no AS "roomNo",
+		dr.bed_num AS "bedNum",
+		dr.type_code AS "typeCode",
+		CASE dr.type_code
+		WHEN '2' THEN '待定'
+		WHEN '1' THEN '男生宿舍'
+		WHEN '0' THEN '女生宿舍'
+		END AS "typeCodeMeaning",
+		dr.building AS "building",
+		dr.floor AS "floor",
+		dr.note AS "drnote",
+		dr.dorm_position AS "dormPosition",
+		dr.pri_bathroom AS "priBathroom",
+		dr.dorm_area AS "dormArea",
+		dr.room_name AS "roomName",
+		dr.rent AS "rent",
+		dr.manage_fee AS "manageFee"
+		FROM dorms_room_man drm
+		LEFT JOIN dorms_man dm on dm.id = drm.man_id
+		LEFT JOIN dorms_room dr on dr.id = drm.room_id
+		WHERE 1=1 and drm.room_id != '' and drm.id = #id#
+	</select>
+
+
+	<!-- 查询是否存在该用户的相关入住信息 -->
+	<select id="queryIsExistManInfo" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		drm.id	as "id",
+		drm.room_id	as "roomId",
+		drm.bed_no as "bedNo",
+		drm.actual_in_date as "actualInDate",
+		drm.actual_out_date as "actualOutDate",
+		drm.change_room_status as "changeRoomStatus",
+		drm.change_room_note as "changeRoomNote",
+		drm.apply_change_date as "applyChangeDate",
+		drm.out_room_note as "outRoomNote",
+		drm.apply_out_date as "applyOutDate",
+		drm.checkout_room_status	as "checkoutRoomStatus",  <!-- 是否已经进行退宿检查清单(0为未进行，1已进行) -->
+		drm.actual_rent	as "actualRent",  <!-- 实际房租 -->
+		drm.actual_manage_fee	as "actualManageFee",  <!-- 实际管理费 -->
+		dm.eval_status	as "evalStatus",  <!-- 是否已经进行过评价(0为未评价，1已评价) -->
+		CASE dm.eval_status
+		WHEN '1' THEN '已评价'
+		ELSE '未评价'
+		END AS "evalStatusMeaning",
+		dm.id	as "manId",  <!-- 人员ID -->
+		dm.man_no	as "manNo",  <!-- 工号 -->
+		dm.man_name	as "manName",  <!-- 姓名 -->
+		dm.status_code	as "statusCode",  <!-- 工单状态(00待审核，01待分配，02待选房，03待入住，04已入住，10申请换宿，98申请退宿，99流程结束) -->
+		CASE dm.status_code
+		WHEN 00 THEN '待审核'
+		WHEN 01 THEN '待分配'
+		WHEN 02 THEN '待选房'
+		WHEN 03 THEN '待入住'
+		WHEN 04 THEN '已入住'
+		WHEN 10 THEN '申请换宿'
+		WHEN 98 THEN '申请退宿'
+		WHEN 99 THEN '流程结束'
+		END AS "statusCodeMeaning" ,
+		dm.sex	as "sex",  <!-- 性别 -->
+		CASE dm.sex
+		WHEN '1' THEN '男'
+		ELSE '女'
+		END AS "sexMeaning",
+		dm.age	as "age",  <!-- 员工年龄 -->
+		dm.phone	as "phone",  <!-- 电话 -->
+		dm.identity_card	as "identityCard",  <!-- 身份证 -->
+		dm.education_background	as "educationBackground",  <!-- 学历 -->
+		dm.academic_year	as "academicYear",  <!-- 学年 -->
+		dm.marital_status	as "maritalStatus",  <!-- 婚否:是，否 -->
+		dm.dept_num	as "deptNum",  <!-- 部门科室编码 -->
+		dm.dept_name	as "deptName",  <!-- 部门科室名称 -->
+		dm.employment_nature	as "employmentNature",  <!-- 职工性质 -->
+		dm.cash_pledge	as "cashPledge",  <!-- 押金编号 -->
+		dm.is_network	as "isNetwork",  <!-- 是否联网 -->
+		dm.is_stay	as "isStay",  <!-- 是否办暂住证 -->
+		dm.permanent_residence	as "permanentResidence",  <!-- 户口所在地 -->
+		dm.note	as "note",  <!-- 备注信息 -->
+		dm.hiredate	as "hiredate",  <!-- 入职时间 -->
+		dm.estimated_in_date	as "estimatedInDate",  <!-- 预计入住时间 -->
+		dm.estimated_out_date	as "estimatedOutDate",  <!-- 预计退房时间 -->
+		dm.rec_creator	as "recCreator",  <!-- 创建人工号 -->
+		dm.rec_create_name	as "recCreateName",  <!-- 创建人姓名 -->
+		dm.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		dm.rec_revisor	as "recRevisor",  <!-- 修改人工号 -->
+		dm.rec_revise_name	as "recReviseName",  <!-- 修改人姓名 -->
+		dm.rec_revise_time	as "recReviseTime", <!-- 修改时间 -->
+		dr.room_no AS "roomNo",
+		dr.bed_num AS "bedNum",
+		dr.type_code AS "typeCode",
+		CASE dr.type_code
+		WHEN '2' THEN '待定'
+		WHEN '1' THEN '男生宿舍'
+		WHEN '0' THEN '女生宿舍'
+		END AS "typeCodeMeaning",
+		dr.building AS "building",
+		dr.floor AS "floor",
+		dr.note AS "drnote",
+		dr.dorm_position AS "dormPosition",
+		dr.pri_bathroom AS "priBathroom",
+		dr.dorm_area AS "dormArea",
+		dr.room_name AS "roomName",
+		dr.rent AS "rent",
+		dr.manage_fee AS "manageFee"
+		FROM dorms_room_man drm
+		LEFT JOIN dorms_man dm on dm.id = drm.man_id
+		LEFT JOIN dorms_room dr on dr.id = drm.room_id
+		WHERE 1=1 and drm.room_id != '' and dm.man_no = #manNo# and dm.archive_flag = '0'
+	</select>
+
+
+	<!-- 查询该用户当前月份是否存在的相关费用信息 -->
+	<select id="queryIsExistFee" parameterClass="java.util.HashMap"
+			resultClass="int">
+		SELECT COUNT(1) FROM `dorms_room_fee`
+		where room_id = #roomId# and
+		      man_id = #manId# and
+		      current_month = #currentMonth#
+	</select>
+
+
+	<!--
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomId">
+			room_id = #roomId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manId">
+			man_id = #manId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="waterDegree">
+			water_degree = #waterDegree#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="elecDegree">
+			elec_degree = #elecDegree#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="waterPriece">
+			water_priece = #waterPriece#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="elecPriece">
+			elec_priece = #elecPriece#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="currentRent">
+			current_rent = #currentRent#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="currentManageFee">
+			current_manage_fee = #currentManageFee#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="extraCharges">
+			extra_charges = #extraCharges#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="remark">
+			remark = #remark#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="currentMonth">
+			current_month = #currentMonth#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="operator">
+			operator = #operator#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="operationName">
+			operation_name = #operationName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="operationTime">
+			operation_time = #operationTime#
+		</isNotEmpty>
+	-->
+
+	<insert id="batchInsertByExcel"  parameterClass="java.util.List">
+		INSERT INTO .dorms_room_fee (
+			room_id,  <!-- 房间id -->
+			man_id,  <!-- 人员id -->
+			water_degree,  <!-- 本月用水度数 -->
+			elec_degree,  <!-- 本月用电度数 -->
+			water_priece,  <!-- 本月水费 -->
+			elec_priece,  <!-- 本月电费 -->
+			current_rent,  <!-- 本月实际月租 -->
+			current_manage_fee,  <!-- 本月实际管理费 -->
+			return_rent,<!-- 本月退房租 -->
+			return_manage_fee,<!-- 本月退管理费 -->
+			return_water_priece,<!-- 本月退水费 -->
+			return_elec_priece,<!-- 本月退电费 -->
+			replenish_rent,<!-- 本月补月租 -->
+			replenish_manage_fee,<!-- 本月补管理费 -->
+			replenish_water_priece,<!-- 本月补水费 -->
+			replenish_elec_priece,<!-- 本月补电费 -->
+			extra_charges,<!-- 额外费用 -->
+			remark,  <!-- 备注 -->
+			current_month,  <!-- 记录所属年月份 -->
+			settlement_month, <!-- 扣款结算年月份 -->
+			operator,  <!-- 操作人工号 -->
+			operation_name,  <!-- 操作人人姓名 -->
+			operation_time  <!-- 操作时间 -->
+		)
+		VALUES
+		<iterate conjunction=",">
+			(
+		 	#list[].roomId#,
+			#list[].manId#,
+			#list[].waterDegree#,
+			#list[].elecDegree#,
+			#list[].waterPriece#,
+			#list[].elecPriece#,
+			#list[].currentRent#,
+			#list[].currentManageFee#,
+			#list[].returnRent#,
+			#list[].returnManageFee#,
+			#list[].returnWaterPriece#,
+			#list[].returnElecPriece#,
+			#list[].replenishRent#,
+			#list[].replenishManageFee#,
+			#list[].replenishWaterPriece#,
+			#list[].replenishElecPriece#,
+			#list[].extraCharges#,
+			#list[].remark#,
+			#list[].currentMonth#,
+			#list[].settlementMonth#,
+			#list[].operator#,
+			#list[].operationName#,
+			#list[].operationTime#
+		  	)
+		</iterate>
+		ON DUPLICATE KEY UPDATE
+		water_priece = VALUES(water_priece),
+		elec_priece = VALUES(elec_priece),
+		return_rent = VALUES(return_rent),
+		return_manage_fee = VALUES(return_manage_fee),
+		return_water_priece = VALUES(return_water_priece),
+		return_elec_priece = VALUES(return_elec_priece),
+		replenish_rent = VALUES(replenish_rent),
+		replenish_manage_fee = VALUES(replenish_manage_fee),
+		replenish_water_priece = VALUES(replenish_water_priece),
+		replenish_elec_priece = VALUES(replenish_elec_priece),
+		extra_charges = VALUES(extra_charges),
+		remark = VALUES(remark),
+		operator = VALUES(operator),
+		operation_name = VALUES(operation_name),
+		operation_time = VALUES(operation_time)
+	</insert>
+
+
+	<insert id="insert">
+		INSERT INTO .dorms_room_fee (
+		room_id,  <!-- 房间id -->
+		man_id,  <!-- 人员id -->
+		water_degree,  <!-- 本月用水度数 -->
+		elec_degree,  <!-- 本月用电度数 -->
+		water_priece,  <!-- 本月水费 -->
+		elec_priece,  <!-- 本月电费 -->
+		current_rent,  <!-- 本月实际月租 -->
+		current_manage_fee,  <!-- 本月实际管理费 -->
+		extra_charges,  <!-- 额外费用 -->
+		remark,  <!-- 备注 -->
+		current_month,  <!-- 本月所属年月份 -->
+		operator,  <!-- 操作人工号 -->
+		operation_name,  <!-- 操作人人姓名 -->
+		operation_time  <!-- 操作时间 -->
+		)
+		VALUES (#roomId#, #manId#, #waterDegree#, #elecDegree#, #waterPriece#, #elecPriece#, #currentRent#, #currentManageFee#, #extraCharges#, #remark#, #currentMonth#, #operator#, #operationName#, #operationTime#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM .dorms_room_fee WHERE
+			id = #id#
+	</delete>
+
+<!--	<update id="update">-->
+<!--		UPDATE .dorms_room_fee-->
+<!--		SET-->
+<!--		room_id	= #roomId#,   &lt;!&ndash; 房间id &ndash;&gt;-->
+<!--		man_id	= #manId#,   &lt;!&ndash; 人员id &ndash;&gt;-->
+<!--		water_degree	= #waterDegree#,   &lt;!&ndash; 本月用水度数 &ndash;&gt;-->
+<!--		elec_degree	= #elecDegree#,   &lt;!&ndash; 本月用电度数 &ndash;&gt;-->
+<!--		water_priece	= #waterPriece#,   &lt;!&ndash; 本月水费 &ndash;&gt;-->
+<!--		elec_priece	= #elecPriece#,   &lt;!&ndash; 本月电费 &ndash;&gt;-->
+<!--		current_rent	= #currentRent#,   &lt;!&ndash; 本月实际月租 &ndash;&gt;-->
+<!--		current_manage_fee	= #currentManageFee#,   &lt;!&ndash; 本月实际管理费 &ndash;&gt;-->
+<!--		extra_charges	= #extraCharges#,   &lt;!&ndash; 额外费用 &ndash;&gt;-->
+<!--		remark	= #remark#,   &lt;!&ndash; 备注 &ndash;&gt;-->
+<!--		current_month	= #currentMonth#,   &lt;!&ndash; 本月所属年月份 &ndash;&gt;-->
+<!--		operator	= #operator#,   &lt;!&ndash; 操作人工号 &ndash;&gt;-->
+<!--		operation_name	= #operationName#,   &lt;!&ndash; 操作人人姓名 &ndash;&gt;-->
+<!--		operation_time	= #operationTime#  &lt;!&ndash; 操作时间 &ndash;&gt;-->
+<!--		WHERE-->
+<!--		room_id = #roomId# AND man_id = #manId# AND current_month	= #currentMonth#-->
+<!--	</update>-->
+
+
+	<insert id="insertDormsRoomFeeInfo">
+		INSERT INTO .dorms_room_fee (
+		<isNotNull property="roomId">
+			room_id,  <!-- 宿舍ID -->
+		</isNotNull>
+		<isNotNull property="manId">
+			man_id,  <!-- 人员id -->
+		</isNotNull>
+		<isNotNull property="waterDegree">
+			water_degree,  <!-- 本月用水度数 -->
+		</isNotNull>
+		<isNotNull property="elecDegree">
+			elec_degree,  <!-- 本月用电度数 -->
+		</isNotNull>
+		<isNotNull property="waterPriece">
+			water_priece,  <!-- 本月水费 -->
+		</isNotNull>
+		<isNotNull property="elecPriece">
+			elec_priece,  <!-- 本月电费 -->
+		</isNotNull>
+		<isNotNull property="currentRent">
+			current_rent,  <!--  本月实际月租 -->
+		</isNotNull>
+		<isNotNull property="currentManageFee">
+			current_manage_fee,  <!-- 本月实际管理费 -->
+		</isNotNull>
+		<isNotNull property="returnRent">
+			return_rent,  <!-- 退房租 -->
+		</isNotNull>
+		<isNotNull property="returnManageFee">
+			return_manage_fee,  <!-- 退管理费 -->
+		</isNotNull>
+		<isNotNull property="returnWaterPriece">
+			return_water_priece,  <!-- 退水费 -->
+		</isNotNull>
+		<isNotNull property="returnElecPriece">
+			return_elec_priece,  <!-- 退电费 -->
+		</isNotNull>
+		<isNotNull property="replenishRent">
+			replenish_rent,  <!-- 补房租 -->
+		</isNotNull>
+		<isNotNull property="replenishManageFee">
+			replenish_manage_fee,  <!-- 补管理费 -->
+		</isNotNull>
+		<isNotNull property="replenishWaterPriece">
+			replenish_water_priece,  <!-- 补水费 -->
+		</isNotNull>
+		<isNotNull property="replenishElecPriece">
+			replenish_elec_priece,  <!-- 补电费 -->
+		</isNotNull>
+		<isNotNull property="extraCharges">
+			extra_charges,  <!-- 额外费用 -->
+		</isNotNull>
+		<isNotNull property="remark">
+			remark,  <!-- 备注 -->
+		</isNotNull>
+		<isNotNull property="currentMonth">
+			current_month,  <!-- 记录所属年月份 -->
+		</isNotNull>
+		<isNotNull property="settlementMonth">
+			settlement_month,  <!-- 扣款结算年月份-->
+		</isNotNull>
+		<isNotNull property="operator">
+			operator,  <!-- 操作人工号 -->
+		</isNotNull>
+		<isNotNull property="operationName">
+			operation_name,  <!-- 操作人人姓名 -->
+		</isNotNull>
+		<isNotNull property="operationTime">
+			operation_time  <!-- 操作时间 -->
+		</isNotNull>)
+		VALUES (
+		<isNotNull property="roomId">
+			#roomId#,
+		</isNotNull>
+		<isNotNull property="manId">
+			#manId#,
+		</isNotNull>
+		<isNotNull property="waterDegree">
+			#waterDegree#,
+		</isNotNull>
+		<isNotNull property="elecDegree">
+			#elecDegree#,
+		</isNotNull>
+		<isNotNull property="waterPriece">
+			#waterPriece#,
+		</isNotNull>
+		<isNotNull property="elecPriece">
+			#elecPriece#,
+		</isNotNull>
+		<isNotNull property="currentRent">
+			#currentRent#,
+		</isNotNull>
+		<isNotNull property="currentManageFee">
+			#currentManageFee#,
+		</isNotNull>
+		<isNotNull property="returnRent">
+			#returnRent#,
+		</isNotNull>
+		<isNotNull property="returnManageFee">
+			#returnManageFee#,
+		</isNotNull>
+		<isNotNull property="returnWaterPriece">
+			#returnWaterPriece#,
+		</isNotNull>
+		<isNotNull property="returnElecPriece">
+			#returnElecPriece#,
+		</isNotNull>
+		<isNotNull property="replenishRent">
+			#replenishRent#,
+		</isNotNull>
+		<isNotNull property="replenishManageFee">
+			#replenishManageFee#,
+		</isNotNull>
+		<isNotNull property="replenishWaterPriece">
+			#replenishWaterPriece#,
+		</isNotNull>
+		<isNotNull property="replenishElecPriece">
+			#replenishElecPriece#,
+		</isNotNull>
+		<isNotNull property="extraCharges">
+			#extraCharges#,
+		</isNotNull>
+		<isNotNull property="remark">
+			#remark#,
+		</isNotNull>
+		<isNotNull property="currentMonth">
+			#currentMonth#,
+		</isNotNull>
+		<isNotNull property="settlementMonth">
+			#settlementMonth#,
+		</isNotNull>
+		<isNotNull property="operator">
+			#operator#,
+		</isNotNull>
+		<isNotNull property="operationName">
+			#operationName#,
+		</isNotNull>
+		<isNotNull property="operationTime">
+			#operationTime#
+		</isNotNull>)
+		ON DUPLICATE KEY UPDATE
+		water_degree = VALUES(water_degree),
+		elec_degree = VALUES(elec_degree),
+		water_priece = VALUES(water_priece),
+		elec_priece = VALUES(elec_priece),
+		current_rent = VALUES(current_rent),
+		current_manage_fee = VALUES(current_manage_fee),
+		return_rent = VALUES(return_rent),
+		return_manage_fee = VALUES(return_manage_fee),
+		return_water_priece = VALUES(return_water_priece),
+		return_elec_priece = VALUES(return_elec_priece),
+		replenish_rent = VALUES(replenish_rent),
+		replenish_manage_fee = VALUES(replenish_manage_fee),
+		replenish_water_priece = VALUES(replenish_water_priece),
+		replenish_elec_priece = VALUES(replenish_elec_priece),
+		extra_charges = VALUES(extra_charges),
+		remark = VALUES(remark),
+		operator = VALUES(operator),
+		operation_name = VALUES(operation_name),
+		operation_time = VALUES(operation_time)
+	</insert>
+
+
+	<!-- 更新人员住宿相关费用表中的额外费用 -->
+	<update id="updateExtraCharges" parameterClass="java.util.HashMap">
+		update dorms_room_fee
+		set
+		<isNotNull property="extraCharges">
+			extra_charges = #extraCharges#,  <!-- 额外费用 -->
+		</isNotNull>
+		<isNotNull property="remark">
+			remark = #remark#,  <!-- 备注 -->
+		</isNotNull>
+		<isNotNull property="operator">
+			operator = #operator#,  <!-- 操作人工号 -->
+		</isNotNull>
+		<isNotNull property="operationName">
+			operation_name = #operationName#,  <!-- 操作人 -->
+		</isNotNull>
+		<isNotNull property="operationTime">
+			operation_time = #operationTime#,  <!-- 操作时间 -->
+		</isNotNull>
+		room_id=#roomId#, <!-- 宿舍id -->
+		man_id = #manId#,
+		current_month = #currentMonth#
+		where room_id=#roomId# AND man_id = #manId# AND current_month = #currentMonth#
+	</update>
+
+
+	<!-- 查询在本月没有存在费用数据的宿舍人员列表 (有无年费均包含在此) -->
+	<select id="queryNoFeeManList" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT drm.room_id as 'roomId',
+				drm.man_id as 'manId',
+				drm.actual_rent as 'actualRent',
+				drm.actual_manage_fee as 'actualManageFee',
+				drm.annual_fee as 'annualFee'
+		FROM dorms_room_man drm
+				 LEFT JOIN dorms_man man ON man.id = drm.man_id
+				 LEFT JOIN dorms_room room ON room.id = drm.room_id
+		WHERE man.status_code != '99' AND drm.room_id != '' AND man.archive_flag = '0' AND
+		NOT EXISTS
+		(SELECT fee.room_id,fee.man_id,fee.current_month
+		FROM dorms_room_fee fee
+		WHERE fee.room_id = drm.room_id
+		AND fee.man_id = drm.man_id
+		AND fee.current_month = date_format(DATE_SUB(curdate(), INTERVAL 0 MONTH),'%Y-%m')
+		)
+	</select>
+
+	<!-- 每月月初自动新增本月产生的宿舍费用 -->
+	<insert id="batchAutoInsertFeeInfo" parameterClass="java.util.List">
+		INSERT INTO .dorms_room_fee (
+			room_id,  <!-- 宿舍ID -->
+			man_id,  <!-- 人员id -->
+			water_degree,  <!-- 本月用水度数 -->
+			elec_degree,  <!-- 本月用电度数 -->
+			water_priece,  <!-- 本月水费 -->
+			elec_priece,  <!-- 本月电费 -->
+			current_rent,  <!--  本月实际月租 -->
+			current_manage_fee,  <!-- 本月实际管理费 -->
+			return_rent,  <!-- 退房租 -->
+			return_manage_fee,  <!-- 退管理费 -->
+			return_water_priece,  <!-- 退水费 -->
+			return_elec_priece,  <!-- 退电费 -->
+			replenish_rent,  <!-- 补房租 -->
+			replenish_manage_fee,  <!-- 补管理费 -->
+			replenish_water_priece,  <!-- 补水费 -->
+			replenish_elec_priece,  <!-- 补电费 -->
+			extra_charges,  <!-- 额外费用 -->
+			current_month,  <!-- 本月所属年月份 -->
+			settlement_month, <!-- 扣款结算年月份 -->
+			operator,  <!-- 操作人工号 -->
+			operation_name,  <!-- 操作人人姓名 -->
+			operation_time  <!-- 操作时间 -->)
+		VALUES
+		<iterate conjunction=",">
+			(
+			#list[].roomId#,
+			#list[].manId#,
+			#list[].waterDegree#,
+			#list[].elecDegree#,
+			#list[].waterPriece#,
+			#list[].elecPriece#,
+			#list[].currentRent#,
+			#list[].currentManageFee#,
+			#list[].returnRent#,
+			#list[].returnManageFee#,
+			#list[].returnWaterPriece#,
+			#list[].returnElecPriece#,
+			#list[].replenishRent#,
+			#list[].replenishManageFee#,
+			#list[].replenishWaterPriece#,
+			#list[].replenishElecPriece#,
+			#list[].extraCharges#,
+			#list[].currentMonth#,
+			#list[].settlementMonth#,
+			#list[].operator#,
+			#list[].operationName#,
+			#list[].operationTime#
+			)
+		</iterate>
+	</insert>
+
+
+</sqlMap>

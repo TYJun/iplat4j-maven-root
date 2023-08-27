@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MSPL02">
+
+    <select id="query" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.ms.pl.domain.MSPL02">
+        SELECT
+        id, parent_id "parentId", classify_code "classifyCode", classify_name "classifyName", classify_type
+        "classifyType", classify_sort "classifySort", group_id "groupId"
+        FROM
+        `t_param_classify`
+        where 1=1
+        <isNotEmpty prepend="and" property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="parentId">
+            parent_id = #parentId#
+        </isNotEmpty>
+        <isNotEmpty property="name" prepend="AND">
+            name_ like concat('%', #name#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="classifyName">
+            classify_name like concat('%', #classifyName#, '%')
+        </isNotEmpty>
+        order by
+        classify_code +0 desc
+    </select>
+    <select id="queryById" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        SELECT
+        id, parent_id "parentId", classify_code "classifyCode", classify_name "classifyName", classify_type
+        "classifyType", classify_sort "classifySort", group_id "groupId"
+        FROM
+        `t_param_classify`
+        where 1=1
+        <isNotEmpty prepend="and" property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="parentId">
+            parent_id = #parentId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="classifyName">
+            classify_name = #classifyName#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="classifyCode">
+            classify_code = #classifyCode#
+        </isNotEmpty>
+    </select>
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM t_param_classify WHERE 1=1
+        <isNotEmpty prepend="and" property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="parentId">
+            parent_id = #parentId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="classifyName">
+            classify_name like concat('%', #classifyName#, '%')
+        </isNotEmpty>
+    </select>
+    <insert id="insert">
+        insert into t_param_classify (id, parent_id, classify_code, classify_name,
+                                      classify_type, classify_sort, group_id)
+        values (#id#, #parentId#, #classifyCode#, #classifyName#, #classifyType#, #classifySort#, #groupId#)
+    </insert>
+    <update id="update">
+        update t_param_classify
+        set parent_id     = #parentId#,
+            classify_code = #classifyCode#,
+            classify_name = #classifyName#,
+            classify_type = #classifyType#,
+            classify_sort = #classifySort#,
+            group_id      = #groupId#
+        where id = #id#
+    </update>
+    <delete id="delete">
+        DELETE
+        FROM t_param_classify
+        WHERE id =
+              #id#
+    </delete>
+    <delete id="delete2">
+        DELETE
+        FROM grouptable
+        WHERE t_param_id =
+              #id#
+    </delete>
+    <select id="queryTree" resultClass="java.util.HashMap">
+        SELECT
+        id as "label",
+        classify_name as "text",
+        parent_id as "pId",
+        "" as
+        "leaf"
+        FROM t_param_classify
+        <dynamic prepend="WHERE">
+            <isNotEmpty prepend="and" property="node">
+                parent_id = #node#
+            </isNotEmpty>
+        </dynamic>
+        order by
+        classify_code +0 desc
+    </select>
+    <select id="relevance" resultClass="com.baosight.wilp.ms.pl.domain.MSPL0202">
+        select DISTINCT user_group_id "usergroupid",
+        t_param_id "tparamid"
+        from grouptable
+        where 1=1
+        <isNotEmpty prepend="and" property="id">
+            t_param_id = #id#
+        </isNotEmpty>
+    </select>
+    <!--    根据用户ID调用组信息-->
+    <select id="relevance22" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select GROUP_CNAME "groupCname",
+        ID "groupId",
+        USER_ID from
+        ${platSchema}.xs_user_group c
+        LEFT JOIN
+        ( SELECT MEMBER_ID,PARENT_ID FROM ${platSchema}.xs_user_group_member t4
+        ) d ON c.ID = d.PARENT_ID
+        LEFT JOIN
+        ( SELECT USER_ID FROM ${platSchema}.xs_user
+        ) e ON e.USER_ID = d.MEMBER_ID
+        where 1=1
+        <isNotEmpty prepend="and" property="id">
+            USER_ID = #id#
+        </isNotEmpty>
+    </select>
+    <!--    通过分组查询区域 -->
+    <select id="relevance23" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        select DISTINCT GROUP_CNAME "groupCname",
+        ID "groupId",
+        t_param_id
+        from
+        ${platSchema}.xs_user_group c
+        LEFT JOIN
+        ( SELECT user_group_id,t_param_id FROM grouptable
+        ) d ON d.user_group_id = c.ID
+        LEFT JOIN
+        ( SELECT user_group_id FROM t_param_classify
+        ) e ON e.user_group_id = d.t_param_id
+        WHERE 1=1
+        <isNotEmpty prepend="and" property="id">
+            t_param_id = #id#
+        </isNotEmpty>
+        order by
+        ID desc
+    </select>
+
+    <!--    查询所有用户组 -->
+    <select id="relevance24" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        select GROUP_ENAME,
+               GROUP_CNAME "groupCname",
+               ID          "groupId"
+        from ${platSchema}.xs_user_group
+        order by ID
+    </select>
+    <!--    删除关联关系-->
+    <delete id="relevanceDelete">
+        DELETE
+        FROM grouptable
+        WHERE t_param_id =
+              #id#
+          and user_group_id = #groupId#
+    </delete>
+
+    <select id="relevanceSelect" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        SELECT user_group_id,
+               t_param_id
+        FROM grouptable
+        WHERE user_group_id =
+              #id#
+    </select>
+
+    <select id="getOneLevel" resultClass="com.baosight.wilp.ms.pl.domain.MSPL02">
+        SELECT
+            id,
+            parent_id "parentId",
+            classify_code "classifyCode",
+            classify_name "classifyName",
+            classify_type "classifyType",
+            classify_sort "classifySort",
+            group_id "groupId"
+        FROM
+             `t_param_classify`
+        WHERE
+            parent_id = 'root'
+    </select>
+
+    <select id="select_classify_All" resultClass="com.baosight.wilp.ms.pl.domain.MSPL02">
+        SELECT
+            id,
+            parent_id "parentId",
+            classify_code "classifyCode",
+            classify_name "classifyName",
+            classify_type "classifyType",
+            classify_sort "classifySort",
+            group_id "groupId"
+        FROM
+            `t_param_classify`
+    </select>
+
+    <select id="select_Value" resultClass="com.baosight.wilp.ms.pl.domain.MSPL02" parameterClass="java.util.HashMap">
+        SELECT
+            id,
+            parent_id "parentId",
+            classify_code "classifyCode",
+            classify_name "classifyName",
+            classify_type "classifyType",
+            classify_sort "classifySort",
+            group_id "groupId"
+        from
+            `t_param_classify`
+        where  id=#id#
+    </select>
+</sqlMap>

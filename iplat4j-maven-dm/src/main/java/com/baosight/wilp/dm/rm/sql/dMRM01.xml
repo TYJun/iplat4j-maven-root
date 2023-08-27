@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-05-02 22:35:09
+   		Version :  6.0.731.201809200158
+		tableName :.dorms_room 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 room_no  VARCHAR, 
+		 bed_num  TINYINT, 
+		 type_code  VARCHAR, 
+		 building_code  VARCHAR, 
+		 floor_code  VARCHAR, 
+		 dormitory_no  VARCHAR, 
+		 note  VARCHAR, 
+		 direction  VARCHAR, 
+		 dorms_position  VARCHAR, 
+		 dorms_ifwc  VARCHAR, 
+		 dorms_areas  VARCHAR, 
+		 room_name  VARCHAR, 
+		 rent  DECIMAL, 
+		 manage_fee  DECIMAL, 
+		 last_elec  DOUBLE, 
+		 last_water  DOUBLE
+	-->
+<sqlMap namespace="dMRM01">
+
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			dr.id AS "id",
+			dr.room_no AS "roomNo",
+			dr.bed_num,
+			CASE
+				dr.bed_num
+			    WHEN 1 THEN
+			    	'单人间'
+				WHEN 2 THEN
+					'双人间'
+				WHEN 3 THEN
+					'三人间'
+				WHEN 4 THEN
+					'四人间'
+				WHEN 12 THEN
+					'十二人间'
+			END AS "bedNum",
+			dr.type_code AS "typeCode",
+		    CASE
+				dr.type_code 
+				WHEN '男' THEN
+				'男生宿舍' 
+				WHEN '女' THEN
+				'女生宿舍' 
+			END AS "typeCode",
+			dr.building_code AS "buildingCode",
+			dr.floor_code AS "floorCode",
+			dr.dormitory_no AS "dormitoryNo",
+			dr.note AS "note",
+			dr.direction AS "direction",
+			dr.dorms_position AS "dormsPosition",
+			dr.dorms_ifwc AS "dormsIfwc",
+			dr.dorms_areas AS "dormsAreas",
+			dr.room_name AS "roomName",
+			dr.rent AS "rent",
+			dr.manage_fee AS "manageFee",
+			dr.last_elec AS "lastElec",
+			dr.last_water AS "lastWater",
+		    dr.hospital_manage_fee AS "hospitalManageFee",
+		    dr.property_manage_fee AS "propertyManageFee",
+			(dr.bed_num-(SELECT COUNT(1)
+		FROM 
+		       dorms_room_man  
+		WHERE 
+		       room_id = dr.id AND dorms_room_man.out_type = "")) AS remainBed
+
+      FROM
+	      dorms_room as dr 
+	  WHERE 
+	      1=1
+		<isNotEmpty prepend=" AND " property="id">
+			dr.id = #id#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend="and" property="roomNo">
+			dr.room_no LIKE CONCAT ("%",#roomNo#,"%")
+		</isNotEmpty>
+		
+		<isNotEmpty prepend="and" property="floorCode">
+			dr.floor_code LIKE CONCAT ("%",#floorCode#,"%")
+		</isNotEmpty>
+		
+		<isNotEmpty prepend="and" property="buildingCode">
+			dr.building_code LIKE CONCAT ("%",#buildingCode#,"%")
+		</isNotEmpty>
+		
+		<isNotEmpty prepend="and" property="typeCode">
+			dr.type_code LIKE CONCAT ("%",#typeCode#,"%")
+		</isNotEmpty>
+		
+		 <dynamic prepend="ORDER BY">
+		 
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		 
+   		<isEmpty property="orderBy">
+    		  dr.id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" parameterClass="java.util.HashMap"
+				resultClass="int">
+		SELECT COUNT(*) FROM .dorms_room WHERE 1=1
+		<isNotEmpty prepend=" AND " property="typeCode">
+			type_code = #typeCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="buildingCode">
+			building_code = #buildingCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floorCode">
+			floor_code = #floorCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomNo">
+			room_no = #roomNo#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="bedNum">
+			bed_num = #bedNum#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="dormitoryNo">
+			dormitory_no = #dormitoryNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="note">
+			note = #note#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="direction">
+			direction = #direction#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dormsPosition">
+			dorms_position = #dormsPosition#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dormsIfwc">
+			dorms_ifwc = #dormsIfwc#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dormsAreas">
+			dorms_areas = #dormsAreas#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomName">
+			room_name = #roomName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="rent">
+			rent = #rent#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manageFee">
+			manage_fee = #manageFee#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="lastElec">
+			last_elec = #lastElec#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="lastWater">
+			last_water = #lastWater#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert" parameterClass="java.util.HashMap">
+		INSERT INTO .dorms_room (id,  <!-- 主键 -->
+										room_no,  <!-- 房间编号 -->
+										bed_num,  <!-- 床位数 -->
+										type_code,  <!-- 房间类型 -->
+										building_code,  <!-- 宿舍楼 -->
+										floor_code,  <!-- 层 -->
+										dormitory_no,  <!-- 楼-层-房间编号 -->
+										note,  <!-- 备注 -->
+										direction,  <!-- 朝向 -->
+										dorms_position,  <!-- 宿舍位置:院内、院外 -->
+										dorms_ifwc,  <!-- 独立卫生间:有、没有 -->
+										dorms_areas,  <!-- 房屋面积:<50㎡”、“50-100㎡”、“>100㎡ -->
+										room_name,  <!-- 宿舍编号，key,sushelou401 -->
+										rent,  <!-- 房租 -->
+										manage_fee,  <!-- 管理费 -->
+										last_elec, <!-- 上月用电-->
+										last_water,<!--上月用水-->
+										hospital_manage_fee,  <!-- 医院管理费 -->
+										property_manage_fee  <!-- 物业管理费 -->
+										)		 
+	    VALUES (#id#, #roomNo#, #bedNum#, #typeCode#, #buildingCode#, #floorCode#, #dormitoryNo#, #note#, #direction#, #dormsPosition#, #dormsIfwc#, #dormsAreas#, #roomName#, #rent#, #manageFee#, #lastElec#,
+	      #lastWater#,#hospitalManageFee#,#propertyManageFee#)
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM .dorms_room WHERE 
+			id = #id#
+	</delete>
+	
+	
+	<select id="queryRoom" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT dr.id id,  
+		       dr.room_name roomName, 
+		       dr.type_code typeCode, 
+		       dr.rent,
+		       drf.water_fee waterPriece,
+		       drf.elec_fee elecPriece,
+		       (dr.bed_num-(SELECT COUNT(1) 
+		FROM 
+		       dorms_room_man  
+		WHERE 
+		       room_id = dr.id AND dorms_room_man.out_type = "")) AS remainBed 
+		FROM
+		  dorms_room dr
+		  LEFT  JOIN dorms_room_fee drf on dr.id = drf.room_id
+		<!-- SELECT 
+			dorms_room.id id, dorms_room.room_name roomName 
+		FROM dorms_room where 1=1 -->
+		<isNotEmpty prepend=" AND " property="id">
+			id like concat('%', #id#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomName">
+			roomName like concat('%', #roomName#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomName">
+			roomName like concat('%', #typeCode#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomName">
+			remainBed like concat('%', #remainBed#, '%') 
+		</isNotEmpty>
+	</select>
+	
+	<!-- 根据房间编号查询 已使用床位编号 -->
+	<select id="countUsedBed" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		<!-- SELECT COUNT(1) usedBed FROM dorms_room_man WHERE room_id =  #roomId# -->
+		SELECT bed_no usedBed
+		FROM `dorms_room_man` drm
+		WHERE drm.room_id = #roomId# AND drm.out_type != "1"
+		ORDER BY usedBed
+	</select>
+
+	<!-- 根据房间编号查询 总床位数 -->
+	<select id="getBedNumByRoomId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT bed_num  bedNum
+		FROM  dorms_room dr 
+		WHERE  id = #roomId#
+	</select>
+	
+	
+	<update id="update">
+		UPDATE .dorms_room 
+		SET 
+					room_no	= #roomNo#,   <!-- 房间编号 -->  
+					bed_num	= #bedNum#,   <!-- 床位数 -->  
+					type_code	= #typeCode#,   <!-- 房间类型 -->  
+					building_code	= #buildingCode#,   <!-- 宿舍楼 -->  
+					floor_code	= #floorCode#,   <!-- 层 -->  
+					dormitory_no	= #dormitoryNo#,   <!-- 楼-层-房间编号 -->  
+					note	= #note#,   <!-- 备注 -->  
+					direction	= #direction#,   <!-- 朝向 -->  
+					dorms_position	= #dormsPosition#,   <!-- 宿舍位置:院内、院外 -->  
+					dorms_ifwc	= #dormsIfwc#,   <!-- 独立卫生间:有、没有 -->  
+					dorms_areas	= #dormsAreas#,   <!-- 房屋面积:<50㎡”、“50-100㎡”、“>100㎡ -->  
+					room_name	= #roomName#,   <!-- 宿舍编号，key,sushelou401 -->  
+					rent	= #rent#,   <!-- 房租 -->  
+					manage_fee	= #manageFee#,   <!-- 管理费 -->  
+					last_elec	= #lastElec#,   <!-- 上次用电量 -->  
+					last_water	= #lastWater#,  <!-- 上次用水量 -->
+					hospital_manage_fee = #hospitalManageFee#,	<!-- 医院管理费-->
+					property_manage_fee = #propertyManageFee#	<!--物业管理费-->
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

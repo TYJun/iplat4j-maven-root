@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.css" />
+    <link rel="stylesheet" href="../reference/css/iconfont.css" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="../reference/css/colorGreen.css" />
+    <link rel="stylesheet" href="../reference/css/loading.css" />
+    <link rel="stylesheet" href="../../reference/css/common.css" />
+    <link rel="stylesheet" href="../reference/css/clothCommon.css" />
+  </head>
+  <style>
+    .main {
+      margin-top: 55px;
+      background-color: white;
+    }
+
+    .total {
+      float: right;
+      margin-right: 10%;
+    }
+
+    .scan {
+      position: fixed;
+      /*bottom: 15px;*/
+      left: 15px;
+      width: 60px;
+      z-index: 11;
+    }
+
+    .round {
+      border: 1px solid #30c37c;
+      width: 60px;
+      height: 60px;
+      line-height: 29px;
+      text-align: center;
+      color: #fff;
+      background-color: #30c37c;
+      filter: alpha(opacity=100);
+      /* 用于IE浏览器－透明度为20%*/
+      -moz-opacity: 1;
+      /*  用于Moz + Firefox－透明度为20%*/
+      opacity: 1;
+      -webkit-border-radius: 60px;
+      -moz-border-radius: 60px;
+      -o-border-radius: 60px;
+      border-radius: 60px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mui-card {
+      background-color: #30c37c;
+      color: white;
+    }
+
+    .mui-card-content {
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 18px;
+    }
+
+    .mui-numbox {
+      width: 160px;
+      height: 38px;
+    }
+
+    .mask {
+      height: 70%;
+    }
+
+    #update {
+      position: fixed;
+      bottom: 0;
+      background-color: white;
+      width: 100%;
+      height: 30%;
+    }
+
+    .hideHtml {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      align-items: center;
+    }
+  </style>
+
+  <body>
+    <header class="mui-bar mui-bar-nav backColor">
+      <h1 class="mui-title">洁物发放</h1>
+      <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+      </button>
+      <!-- <button id="search" class="mui-btn mui-btn-link mui-btn-nav mui-pull-right">
+            <span class="mui-icon mui-icon-search"></span>
+        </button> -->
+    </header>
+    <div class="main">
+      <div id="chooseDept">
+        <input type="text" placeholder="输入科室" readonly id="initDept" />
+      </div>
+      <div class="list">
+        <ul id="list">
+          <li class="mui-table-view-cell">
+            <div class="mui-card">
+              <!--页眉，放置标题-->
+              <!-- <div class="mui-card-header">布草上装</div> -->
+              <!--内容区-->
+              <div class="mui-card-content">
+                <span class="clothType"
+                  >布草上装（<span class="clothSize">均码</span>）</span
+                >
+
+                <span>发放数量：<span class="num">20</span></span>
+              </div>
+            </div>
+          </li>
+          <li class="mui-table-view-cell">
+            <div class="mui-card">
+              <!--页眉，放置标题-->
+              <!-- <div class="mui-card-header">布草上装</div> -->
+              <!--内容区-->
+              <div class="mui-card-content">
+                <span class="clothType"
+                  >布草上装（<span class="clothSize">X</span>）</span
+                >
+                <span>发放数量：<span class="num">10</span></span>
+              </div>
+            </div>
+          </li>
+          <li class="mui-table-view-cell">
+            <div class="mui-card">
+              <!--页眉，放置标题-->
+              <!-- <div class="mui-card-header">布草下装</div> -->
+              <!--内容区-->
+              <div class="mui-card-content">
+                <span class="clothType">
+                  布草下装（<span class="clothSize">均码</span>）</span
+                >
+                <span>发放数量：<span class="num">30</span></span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div id="update" hidden>
+        <div class="hideHtml">
+          <span id="updateType" style="margin: 10px;font-size: 24px;"
+            >布草上装（<span id="updateSize">均码</span>）</span
+          >
+          <div class="mui-numbox" data-numbox-min="0" style="margin: 10px;">
+            <button class="mui-btn mui-numbox-btn-minus" type="button">
+              -
+            </button>
+            <input class="mui-numbox-input" type="number" id="updateNum" />
+            <button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
+          </div>
+          <div
+            style="display: flex;justify-content: space-between; width: 68%;margin-top: 30px;"
+          >
+            <button
+              style="background-color: #30c37c;color: white;"
+              onclick="cancel()"
+            >
+              取消
+            </button>
+            <button
+              style="background-color: #30c37c;color: white;"
+              onclick="sure()"
+            >
+              确认
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 遮罩 -->
+    <div class="mask"></div>
+  </body>
+  <script type="text/javascript" src="../reference/mui/js/mui.min.js"></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/jquery-2.1.4.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/mui.picker.min.js"
+  ></script>
+  <script type="text/javascript" src="../reference/mui/js/baseInfo.js"></script>
+  <script
+    type="text/javascript"
+    src="../../reference/js/mui.loading.js"
+  ></script>
+  <!-- <script type="text/javascript" src="../../../cordova.js"></script> -->
+
+  <script>
+    localStorage.setItem("initdeptName", "信息科");
+    var initdeptName = localStorage.getItem("initdeptName");
+    $(function() {
+      init();
+    });
+
+    //初始化
+    function init() {
+      mui.showLoading("正在加载", "div");
+      $("#initDept").val(initdeptName);
+      mui.hideLoading();
+    }
+    $("#list")
+      .find(".mui-card")
+      .on("click", function() {
+        $(".mask").show();
+        $("#update").show();
+        mui.toast(
+          $(this)
+            .find(".num")
+            .html()
+        );
+      });
+    $(".mask").click(function() {
+      $(".mask").hide();
+      $("#update").hide();
+    });
+    //确定
+    function sure() {}
+    //取消
+    function cancel() {
+      $(".mask").hide();
+      $("#update").hide();
+    }
+  </script>
+</html>

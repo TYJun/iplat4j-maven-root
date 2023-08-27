@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="CM09">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.cm.domain.TpmSmsConfig">
+		SELECT
+			ID	as id,  
+			CONFIG_TYPE	as configType,  <!-- 配置类型 -->
+			CONFIG_TYPE_NAME	as configTypeName,  <!-- 配置类型名称 -->
+			SMS_TEMP	as smsTemp,  <!-- 短信模板 -->
+			STATUS_CODE	as statusCode,  <!-- 状态 -->
+			LATE_DAYS	as lateDays,  <!-- 超期天数 -->
+			IS_RUNING	as isRuning,  <!-- 是否启用: 1-启用，0-未启用 -->
+			SMS_RECV_CODE	as smsRecvCode, <!-- 短信接收人代码 -->
+		    time,  <!-- 几点发送-->
+			time1
+		FROM cm_sms_config WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="configType">
+			CONFIG_TYPE = #configType#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  ID asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<insert id="insert" parameterClass="com.baosight.wilp.cm.domain.TpmSmsConfig">
+		INSERT INTO cm_sms_config (ID,
+									CONFIG_TYPE,  <!-- 配置类型 -->
+									CONFIG_TYPE_NAME,  <!-- 配置类型名称 -->
+									SMS_TEMP,  <!-- 短信模板 -->
+									STATUS_CODE,  <!-- 状态 -->
+									LATE_DAYS,  <!-- 超期天数 -->
+									IS_RUNING,  <!-- 是否启用: 1-启用，0-未启用 -->
+									SMS_RECV_CODE,  <!-- 短信接收人代码 -->
+		                            time,  <!-- 几点发送-->
+									time1
+									)		 
+	    VALUES (#id#, #configType#, #configTypeName#, #smsTemp#, #statusCode#, #lateDays#, #isRuning#, #smsRecvCode#,#time#,#time1#)
+	</insert>
+  
+	<delete id="delete" parameterClass="java.lang.String">
+	    delete from cm_sms_config where id = #id#
+	</delete>
+
+<!--	获取所有短信合同-->
+	<select id="queryCm" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		t1.ID AS id,
+		t1.CONT_NO as "contNo",  <!-- 合同号 -->
+		t1.CONT_NAME as "contName" <!-- 合同名称 -->
+		FROM
+		cm_contract_bill t1
+		WHERE
+		1=1
+		<isNotEmpty prepend=" AND " property="lateDays">
+			date_add(t1.PLAN_FINISH_TIME,interval -#lateDays# day) = #nowStart#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				ID asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+<!--	获取所有付款短信合同-->
+	<select id="queryCmFk" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		ccb.ID AS id,
+		ccb.CONT_NO AS "contNo", <!-- 合同号 -->
+		ccb.CONT_NAME AS "contName" <!-- 合同名称 -->
+		FROM
+		cm_contract_bill ccb
+		LEFT JOIN
+		cm_contract_bill_payment ccbp ON ccbp.CONT_NO = ccb.ID
+		WHERE
+		1=1
+		<isNotEmpty prepend=" AND " property="lateDays">
+			date_add(ccbp.PLAN_PAYMENT_TIME,interval -#lateDays# day) = #nowStart#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				ccb.ID ASC
+			</isEmpty>
+		</dynamic>
+	</select>
+
+<!--     获取合同联系人-->
+	<select id="queryPersonList" parameterClass="String" resultClass="String">
+		SELECT
+		cl.WORK_NO as "workNo"
+		FROM
+		cm_contract_bill_linkman cl
+		WHERE
+		cl.CONT_NO=#value#
+	</select>
+
+</sqlMap>

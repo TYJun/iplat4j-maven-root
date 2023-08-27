@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ACGM0102">
+
+	<select id="queryMatClassInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	
+			SELECT t.* FROM (
+				SELECT amc.id,
+					   amc.mat_class_code AS "matClassCode",
+					   amc.mat_class_name AS "matClassName",
+					   amc.parent_id AS "parentId",
+					   acmc.mat_class_name AS "parentMatClassName"
+				FROM $projectSchema$.ac_material_class amc
+				LEFT JOIN $projectSchema$.ac_material_class acmc ON acmc.id = amc.parent_id
+		    ) t
+			WHERE t.id = #id# 
+	 
+	</select>
+
+	<select id="initLoad" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			id,mat_class_name matClassName,
+			IFNULL(
+			    (SELECT mat_class_name  FROM $projectSchema$.ac_material_class amc WHERE am.parent_id = amc.id limit 1),
+			     '根节点'
+			) AS parentName,
+		    IFNULL(
+				(SELECT id  FROM $projectSchema$.ac_material_class a WHERE a.id = am.parent_id  limit 1),
+		        'root'
+			)AS parentId
+			FROM $projectSchema$.ac_material_class am
+		WHERE
+			id = #id#
+	</select>
+
+	<update id="update" parameterClass="java.util.HashMap">
+	    update $projectSchema$.ac_material_class 
+	    set 
+	    		<isNotNull  property="matClassName">
+			    	mat_class_name = #matClassName#, 
+			    </isNotNull>
+				<isNotNull  property="parentId">
+			    	parent_id = #parentId#, 
+			    </isNotNull>
+	    	id=#id#
+	    where id=#id#
+    </update>
+	
+</sqlMap>

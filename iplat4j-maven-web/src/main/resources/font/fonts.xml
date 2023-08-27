@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<fontFamilies>
+    <fontFamily name="微软雅黑">
+        <normal>font/weiruanyahei.ttf</normal>
+        <bold>font/weiruanyahei.ttf</bold>
+        <italic>font/weiruanyahei.ttf</italic>
+        <boldItalic>font/weiruanyahei.ttf</boldItalic>
+        <pdfEncoding>Identity-H</pdfEncoding>
+        <pdfEmbedded>true</pdfEmbedded>
+        <exportFonts>
+            <export key="net.sf.jasperreports.html">'微软雅黑', Arial, Helvetica, sans-serif</export>
+        </exportFonts>
+    </fontFamily>
+</fontFamilies>

@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SIKC03">
+
+	<select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.si.kc.domain.SiDayStorage">
+		SELECT
+			id	as "id",  <!-- 主键 -->
+			count_day	as "countDay",  <!-- 统计日期 -->
+			ware_house_no	as "wareHouseNo",  <!-- 仓库号 -->
+			ware_house_name	as "wareHouseName",  <!-- 仓库名称 -->
+			storage_no	as "storageNo",  <!-- 库位号 -->
+			stack_no	as "stackNo",  <!-- 货位号 -->
+			mat_type_num	as "matTypeNum",  <!-- 物资分类编码 -->
+			mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+			mat_num	as "matNum",  <!-- 物资编码 -->
+			mat_name	as "matName",  <!-- 物资名称 -->
+			mat_model	as "matModel",  <!-- 物资型号 -->
+			mat_spec	as "matSpec",  <!-- 物资规格 -->
+			unit	as "unit",  <!-- 计量单位编码 -->
+			unit_name	as "unitName",  <!-- 计量单位名称 -->
+			price	as "price",  <!-- 单价 -->
+			first_num	as "firstNum",  <!-- 日初库存总量 -->
+			first_amount	as "firstAmount",  <!-- 日初库存总价 -->
+			last_num	as "lastNum",  <!-- 日末库存总量 -->
+			last_amount	as "lastAmount",  <!-- 日末库存总价 -->
+			enter_num	as "enterNum",  <!-- 入库数量 -->
+			enter_amount	as "enterAmount",  <!-- 入库总金额 -->
+			transfer_enter_num as "transferEnterNum", <!-- 调拨入库数量 -->
+			transfer_enter_amount as "transferEnterAmount", <!-- 调拨入库总金额 -->
+		    out_num	as "outNum",  <!-- 出库数量 -->
+			out_amount	as "outAmount",  <!-- 出库总金额 -->
+			transfer_out_num as "transferOutNum", <!-- 调拨出库数量 -->
+			transfer_out_amount as "transferOutAmount", <!-- 调拨出库总金额 -->
+			rec_creator	as "recCreator",  <!-- 创建人 -->
+			rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+			rec_revisor	as "recRevisor",  <!-- 修改人 -->
+			rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+			data_group_code	as "dataGroupCode",  <!-- 账套 -->
+			archive_flag	as "archiveFlag" <!-- 归档标记 -->
+		FROM si_day_storage WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="countDay">
+			count_day = #countDay#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNo">
+			ware_house_no = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeName">
+			mat_type_name like concat('%', #matTypeName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNum">
+			mat_num like concat('%', #matNum#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNumEQ">
+			mat_num = #matNumEQ#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matName">
+			mat_name like concat('%', #matName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">
+			count_day >= #beginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">
+			count_day <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			 <isNotEmpty property="orderBy">
+				  $orderBy$
+			 </isNotEmpty>
+			<isEmpty property="orderBy">
+				count_day,ware_house_no,mat_num asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .si_day_storage WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="countDay">
+			count_day = #countDay#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNo">
+			ware_house_no = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeName">
+			mat_type_name like concat('%', #matTypeName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNum">
+			mat_num like concat('%', #matNum#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNumEQ">
+			mat_num = #matNumEQ#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matName">
+			mat_name like concat('%', #matName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">
+			count_day >= #beginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">
+			count_day <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert" parameterClass="java.util.List">
+		INSERT INTO si_day_storage (
+			id,  <!-- 主键 -->
+			count_day,  <!-- 统计日期 -->
+			ware_house_no,  <!-- 仓库号 -->
+			ware_house_name,  <!-- 仓库名称 -->
+			storage_no,  <!-- 库位号 -->
+			stack_no,  <!-- 货位号 -->
+			mat_type_num,  <!-- 物资分类编码 -->
+			mat_type_name,  <!-- 物资分类名称 -->
+			mat_num,  <!-- 物资编码 -->
+			mat_name,  <!-- 物资名称 -->
+			mat_model,  <!-- 物资型号 -->
+			mat_spec,  <!-- 物资规格 -->
+			unit,  <!-- 计量单位编码 -->
+			unit_name,  <!-- 计量单位名称 -->
+			price,  <!-- 单价 -->
+			first_num,  <!-- 日初库存总量 -->
+			first_amount,  <!-- 日初库存总价 -->
+			last_num,  <!-- 日末库存总量 -->
+			last_amount,  <!-- 日末库存总价 -->
+			enter_num,  <!-- 入库数量 -->
+			enter_amount,  <!-- 入库总金额 -->
+			transfer_enter_num, <!-- 调拨入库数量 -->
+			transfer_enter_amount, <!-- 调拨入库总金额 -->
+			out_num,  <!-- 出库数量 -->
+			out_amount,  <!-- 出库总金额 -->
+			transfer_out_num, <!-- 调拨入库数量 -->
+			transfer_out_amount, <!-- 调拨入库总金额 -->
+			rec_creator,  <!-- 创建人 -->
+			rec_create_time,  <!-- 创建时间 -->
+			rec_revisor,  <!-- 修改人 -->
+			rec_revise_time,  <!-- 修改时间 -->
+			data_group_code,  <!-- 账套 -->
+			archive_flag  <!-- 归档标记 -->
+			)
+	    VALUES
+	    <iterate conjunction=",">
+		(
+		 	#list[].id#,
+		 	#list[].countDay#,
+		 	#list[].wareHouseNo#,
+		 	#list[].wareHouseName#,
+		 	#list[].storageNo#,
+		 	#list[].stackNo#,
+		 	#list[].matTypeNum#,
+		 	#list[].matTypeName#,
+		 	#list[].matNum#,
+		 	#list[].matName#,
+		 	#list[].matModel#,
+		 	#list[].matSpec#,
+		 	#list[].unit#,
+		 	#list[].unitName#,
+		 	#list[].price#,
+		 	#list[].firstNum#,
+		 	#list[].firstAmount#,
+		 	#list[].lastNum#,
+		 	#list[].lastAmount#,
+		 	#list[].enterNum#,
+		 	#list[].enterAmount#,
+			#list[].transferEnterNum#,
+			#list[].transferEnterAmount#,
+		 	#list[].outNum#,
+		 	#list[].outAmount#,
+			#list[].transferOutNum#,
+			#list[].transferOutAmount#,
+		 	#list[].recCreator#,
+		 	#list[].recCreateTime#,
+		 	#list[].recRevisor#,
+		 	#list[].recReviseTime#,
+		 	#list[].dataGroupCode#,
+		 	#list[].archiveFlag#
+		 )
+		</iterate>
+	</insert>
+
+	<select id="countNumAndSum" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.si.kc.domain.SiDayStorage">
+		select if(sum(first_num) is null,0,sum(first_num)) firstNum,
+		       if(sum(first_amount) is null,0,sum(first_amount)) firstAmount,
+		       if(sum(last_num) is null,0,sum(last_num)) lastNum,
+		       if(sum(last_amount) is null,0,sum(last_amount)) lastAmount
+		FROM si_day_storage WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="countDay">
+			count_day = #countDay#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNo">
+			ware_house_no = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeName">
+			mat_type_name like concat('%', #matTypeName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNum">
+			mat_num like concat('%', #matNum#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNumEQ">
+			mat_num = #matNumEQ#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matName">
+			mat_name like concat('%', #matName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">
+			count_day >= #beginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">
+			count_day <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+	</select>
+
+	<select id="exportData" parameterClass="java.util.HashMap" resultClass="java.util.LinkedHashMap">
+		SELECT
+			count_day	as "countDay",  <!-- 统计日期 -->
+			ware_house_name	as "wareHouseName",  <!-- 仓库名称 -->
+			mat_num	as "matNum",  <!-- 物资编码 -->
+			mat_name	as "matName",  <!-- 物资名称 -->
+			mat_spec	as "matSpec",  <!-- 物资规格 -->
+			mat_model	as "matModel",  <!-- 物资型号 -->
+			mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+			unit_name	as "unitName",  <!-- 计量单位名称 -->
+			price	as "price",  <!-- 单价 -->
+			first_num	as "firstNum",  <!-- 日初库存总量 -->
+			first_amount	as "firstAmount",  <!-- 日初库存总价 -->
+			last_num	as "lastNum",  <!-- 日末库存总量 -->
+			last_amount	as "lastAmount",  <!-- 日末库存总价 -->
+			enter_num	as "enterNum",  <!-- 入库数量 -->
+			enter_amount	as "enterAmount",  <!-- 入库总金额 -->
+			transfer_enter_num as "transferEnterNum", <!-- 调拨入库数量 -->
+			transfer_enter_amount as "transferEnterAmount", <!-- 调拨入库总金额 -->
+			out_num	as "outNum",  <!-- 出库数量 -->
+			out_amount	as "outAmount",  <!-- 出库总金额 -->
+			transfer_out_num as "transferOutNum", <!-- 调拨出库数量 -->
+			transfer_out_amount as "transferOutAmount" <!-- 调拨出库总金额 -->
+		FROM si_day_storage WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="countDay">
+			count_day = #countDay#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNo">
+			ware_house_no = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeName">
+			mat_type_name like concat('%', #matTypeName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNum">
+			mat_num like concat('%', #matNum#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNumEQ">
+			mat_num = #matNumEQ#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matName">
+			mat_name like concat('%', #matName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">
+			count_day >= #beginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">
+			count_day <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				count_day,ware_house_no,mat_num asc
+			</isEmpty>
+		</dynamic>
+	</select>
+  
+</sqlMap>

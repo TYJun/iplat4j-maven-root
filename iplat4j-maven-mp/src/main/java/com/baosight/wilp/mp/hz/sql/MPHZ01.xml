@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="MPHZ01">
+
+	<delete id="delete" parameterClass="java.lang.String">
+		DELETE FROM mp_require_collect where id = #value#
+	</delete>
+
+	<delete id="deleteDetail" parameterClass="java.lang.String">
+		DELETE FROM mp_require_collect_detail where collect_id = #value#
+	</delete>
+
+	<delete id="deleteRequireRelation" parameterClass="java.lang.String">
+		DELETE FROM mp_require_relation where require_collect_id = #value#
+	</delete>
+
+	<update id="updateRequireCollectStatus" parameterClass="java.util.HashMap">
+		UPDATE
+			mp_require_collect
+		SET
+			status_code = #statusCode#,
+			status_name = #statusName#
+		WHERE
+			id = #id#
+	</update>
+
+
+
+</sqlMap>

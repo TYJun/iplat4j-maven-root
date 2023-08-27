@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="AUHD0101">
+
+    <!--  -->
+	<select id="queryRoleList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			select id,
+				role_num AS 'roleNum',
+				role_name AS 'roleName',
+				remark AS 'remark'
+ 			from $projectSchema$.ac_role
+			WHERE 1=1 
+			
+			<isNotEmpty prepend="and" property="roleNum">
+				role_num =#roleNum#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="roleName">
+				role_name =#roleName#
+			</isNotEmpty>
+			
+			
+	</select>
+						
+	<!--  -->			
+	<select id="queryRoleCount" parameterClass="java.util.HashMap"  resultClass="int">
+			SELECT COUNT(1) FROM (
+					select id,
+						role_num AS 'roleNum',
+						role_name AS 'roleName',
+						remark AS 'remark'
+		 			from $projectSchema$.ac_role
+		    ) t
+			WHERE 1=1
+			<isNotEmpty prepend="and" property="roleNum">
+				t.roleNum =#roleNum#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="roleName">
+				t.roleName =#roleName#
+			</isNotEmpty>
+	</select>
+	
+	<!--  -->
+	<select id="getChildSubsetList" parameterClass="java.util.HashMap"  resultClass="java.util.HashMap">
+            select id from $projectSchema$.ac_department 
+            where parent_set like concat('%',#deptId#,'%')
+				UNION all
+			SELECT #deptId# as id from DUAL		
+			
+	</select>
+	
+	<select id="existRelation" parameterClass="java.util.HashMap"  resultClass="int">
+		SELECT COUNT(1) FROM 
+	 			$projectSchema$.ac_rd
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="roleId">
+			role_id =#roleId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="deptId">
+			dept_id = #deptId#
+		</isNotEmpty>
+	</select>
+	
+	<delete id="deleteRolrDept" parameterClass="java.util.HashMap" >
+			DELETE FROM $projectSchema$.ac_rd 
+		    WHERE 1 = 1
+		    AND
+			<iterate  conjunction="OR" open="(" close=")" property="list">
+			     (role_id = #list[].roleId# AND dept_id = #list[].deptId# )
+			</iterate>
+	</delete>
+	
+	<insert id="bindingRole" parameterClass="java.util.HashMap">
+		INSERT INTO $projectSchema$.ac_rd 
+			(id,role_id,dept_id)
+		VALUES
+		<iterate conjunction="," property="list">
+			(
+			#list[].id#,
+			#list[].roleId#,
+			#list[].deptId#
+			)
+		</iterate>
+	</insert>
+	
+	
+
+</sqlMap>

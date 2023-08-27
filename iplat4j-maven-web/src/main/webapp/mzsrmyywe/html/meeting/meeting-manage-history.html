@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="reference/mui/css/mui.min.css" />
+    <link rel="stylesheet" href="reference/css/buttom.css" />
+    <link rel="stylesheet" href="reference/css/common.css" />
+  </head>
+  <style type="text/css">
+    body {
+      background: #eee;
+    }
+    * {
+      touch-action: pan-y;
+    }
+
+    .task-div {
+      width: 96%;
+      margin: 10px auto;
+      padding-left: 15px;
+      padding-right: 15px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      background: #fff;
+      border-radius: 2px;
+      box-shadow: 0px 2px 5px #d4d4d4;
+    }
+
+    .task-title {
+      height: 40px;
+      line-height: 40px;
+      border-bottom: 1px solid #eee;
+      font-weight: bold;
+    }
+
+    .status-applying {
+      color: #ff9800;
+    }
+
+    .status-accept {
+      color: #0dc515;
+    }
+
+    .status-remove {
+      color: #f5675c;
+    }
+
+    .status-unknown {
+      color: #f5675c;
+    }
+
+    .task-info {
+      padding-top: 10px;
+    }
+
+    .info-title {
+      color: #5d5d5d;
+    }
+
+    .mui-table-view:before {
+      background-color: #eee;
+    }
+
+    .mui-table-view:after {
+      background-color: #eee;
+    }
+
+    .btn-div {
+      width: 100%;
+      text-align: right;
+      border-top: 1px solid #eee;
+      margin-top: 10px;
+      padding-top: 10px;
+      padding-bottom: 5px;
+    }
+
+    .btn-div button {
+      margin-left: 10px;
+    }
+
+    .btn-views {
+      width: 80px;
+      border-radius: 15px;
+      border: 1px solid #2aabd2;
+      color: #2aabd2;
+    }
+  </style>
+
+  <body>
+    <header class="mui-bar mui-bar-nav">
+      <h1 class="mui-title">历史记录</h1>
+      <button
+        id="back"
+        class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left"
+      >
+        <span class="mui-icon mui-icon-left-nav"></span>
+        首页
+      </button>
+    </header>
+
+    <div id="warn" class="warn" hidden>
+      <small></small>
+    </div>
+
+    <div id="loading" class="loading1" hidden>
+      <div class="loading2">
+        <span class="mui-spinner" style="width: 80px; height: 80px"></span>
+      </div>
+    </div>
+
+    <div
+      id="pullrefresh"
+      class="mui-content mui-scroll-wrapper"
+      style="padding-bottom: 50px"
+    >
+      <div class="mui-scroll">
+        <ul
+          class="mui-table-view mui-table-view-chevron"
+          style="background-color: #eee"
+        >
+          <!--<div class="task-div">
+						<div class="mui-row task-title">
+							<div class="mui-col mui-col-xs-8 task-no">申请单号：212018393809</div>
+							<div class="mui-col mui-col-xs-4 right status-applying">待完工</div>
+						</div>
+						<div class="task-content guanli-show">
+							<div class="mui-row task-info">
+								<div class="mui-col mui-col-xs-4">会议室</div>
+								<div class="mui-col mui-col-xs-8 right word-omit">1706多功能会议室</div>
+							</div>
+							<div class="mui-row task-info">
+								<div class="mui-col mui-col-xs-4">会议日期</div>
+								<div class="mui-col mui-col-xs-8 right word-omit">会议室</div>
+							</div>
+							<div class="mui-row task-info">
+								<div class="mui-col mui-col-xs-4">会议主题</div>
+								<div class="mui-col mui-col-xs-8 right word-omit">总务处周列会</div>
+							</div>
+						</div>
+						<div class="task-content guanli-hide" data-name="hide" hidden="hidden">
+							<div class="mui-row task-info">
+								<div class="mui-col mui-col-xs-4">参会人数</div>
+								<div class="mui-col mui-col-xs-8 right word-omit">12</div>
+							</div>
+							<div class="mui-row task-info">
+								<div class="mui-col mui-col-xs-4">申请人</div>
+								<div class="mui-col mui-col-xs-8 right word-omit">陈红</div>
+							</div>
+							<div class="mui-row task-info">
+								<div class="mui-col mui-col-xs-4">联系电话</div>
+								<div class="mui-col mui-col-xs-8 right word-omit">57712</div>
+							</div>
+							<div class="mui-row task-info">
+								<div class="mui-col mui-col-xs-4">申请部门</div>
+								<div class="mui-col mui-col-xs-8 right word-omit">总务处</div>
+							</div>
+							<div class="mui-row task-info">
+								<div class="mui-col mui-col-xs-4">备注</div>
+								<div class="mui-col mui-col-xs-8 right word-omit">备注信息</div>
+							</div>
+						</div>
+						<div class="btn-div">
+							<button type="button" class="mui-btn mui-btn-outlined btn-views">预约</button>
+							<button type="button" class="mui-btn mui-btn-outlined btn-views">预约</button>
+						</div>
+					</div>-->
+        </ul>
+      </div>
+    </div>
+
+    <nav class="mui-bar mui-bar-tab" style="background-color: #fff">
+      <a id="application" class="mui-tab-item yuyue-icon">
+        <span class="mui-icon iconfont icon-shenqing"></span>
+        <span class="mui-tab-label">预约申请</span>
+      </a>
+      <a id="manage" class="mui-tab-item guanli-icon">
+        <span class="mui-icon iconfont icon-guanli"></span>
+        <span class="mui-tab-label">预约管理</span>
+      </a>
+      <a id="history" class="mui-tab-item guanli-icon mui-active">
+        <span class="mui-icon iconfont icon-lishi"></span>
+        <span class="mui-tab-label">历史记录</span>
+      </a>
+    </nav>
+  </body>
+  <script src="reference/mui/js/mui.min.js" type="text/javascript"></script>
+  <script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+  <script src="reference/js/common.js" type="text/javascript"></script>
+  <script src="../../cordova.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var page = 1;
+    var isLeader = false;
+    var viewHtml = "";
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+      /**
+       * 系统返回键监听
+       */
+      document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    loadViews();
+
+    function loadViews() {
+      $.ajax({
+        url: baseUrl + "app_MeetingController/getApplicationList",
+        type: "post",
+        data: {
+          page: page,
+          rows: 10,
+          workNo: workNo,
+          statusCode: "03,04",
+        },
+        success: function (data) {
+          // var data = eval('(' + data + ')');
+          // console.log(data);
+          if (data.statusCode == "0") {
+            // isLeader = data.attributes.meetingManager;
+            var list = data.data;
+            for (var i = 0; i < list.length; i++) {
+              var meetingTime =
+                list[i].meetingDate +
+                " " +
+                list[i].week +
+                " " +
+                list[i].beginTime +
+                "-" +
+                list[i].endTime;
+
+              viewHtml += createView(
+                list[i].billID,
+                list[i].billNo,
+                list[i].meetingID,
+                list[i].meetingName,
+                list[i].meetingSubject,
+                meetingTime,
+                list[i].statusCode,
+                list[i].peopleNumber,
+                list[i].contactTel,
+                list[i].remark,
+                list[i].meetingDate,
+                list[i].beginTime,
+                list[i].endTime,
+                list[i].deptNum,
+                list[i].deptName,
+                list[i].applyUserName,
+                list[i].deviceCondition,
+                list[i].meetingNumber,
+                list[i].cancelReason
+              );
+            }
+            $("ul").html(viewHtml);
+          }
+        },
+      });
+    }
+
+    function createView(
+      billID,
+      billNo,
+      meetingId,
+      meetingName,
+      meetingTheme,
+      meetingTime,
+      status,
+      attendNum,
+      conTel,
+      desc,
+      meetingDate,
+      beginTime,
+      endTime,
+      deptNum,
+      deptName,
+      applicantName,
+      deviceCondition,
+      meetingNumber,
+      revokeReason
+    ) {
+      var json = {
+        billID: billID,
+        billNo: billNo,
+        meetingId: meetingId,
+        meetingName: meetingName,
+        meetingTheme: meetingTheme,
+        meetingTime: meetingTime,
+        attendNum: attendNum,
+        desc: desc,
+        conTel: conTel,
+        meetingDate: meetingDate,
+        beginTime: beginTime,
+        endTime: endTime,
+        lastBeginTime: beginTime,
+        lastEndTime: endTime,
+        deptNum: deptNum,
+        deptName: deptName,
+        meetingNum: meetingNumber,
+        deviceCondition: deviceCondition,
+        status: status,
+      };
+      var jsonStr = JSON.stringify(json);
+      var html = '<div class="task-div">';
+      html += '<div class="mui-row task-title">';
+      html +=
+        '<div class="mui-col mui-col-xs-8 task-no">申请单号：' +
+        billNo +
+        "</div>";
+      if (status == "待审批")
+        html +=
+          '<div class="mui-col mui-col-xs-4 right status-applying">待审批</div>';
+      else if (status == "已审批")
+        html +=
+          '<div class="mui-col mui-col-xs-4 right status-accept">已审批</div>';
+      else if (status == "已撤销")
+        html +=
+          '<div class="mui-col mui-col-xs-4 right status-remove">已撤销</div>';
+      else
+        html +=
+          '<div class="mui-col mui-col-xs-4 right status-unknown">未知状态</div>';
+      html += "</div>";
+      html += '<div class="task-content guanli-show">';
+      html += '<div class="mui-row task-info">';
+      html += '<div class="mui-col mui-col-xs-4 info-title">会议室</div>';
+      html +=
+        '<div class="mui-col mui-col-xs-8 right word-omit"><input style="border:none;outline:none;text-align:right;" value="' +
+        meetingName +
+        '" readonly></div>';
+      html += "</div>";
+      html += '<div class="mui-row task-info">';
+      html += '<div class="mui-col mui-col-xs-4 info-title">会议日期</div>';
+      html +=
+        '<div class="mui-col mui-col-xs-8 right word-omit"><input style="border:none;outline:none;text-align:right;" value="' +
+        meetingTime +
+        '" readonly></div>';
+      html += "</div>";
+      html += '<div class="mui-row task-info">';
+      html += '<div class="mui-col mui-col-xs-4 info-title">会议主题</div>';
+      html +=
+        '<div class="mui-col mui-col-xs-8 right word-omit"><input style="border:none;outline:none;text-align:right;" value="' +
+        meetingTheme +
+        '" readonly></div>';
+      html += "</div>";
+      html += "</div>";
+      html +=
+        '<div class="task-content guanli-hide" data-name="hide" hidden="hidden">';
+      html += '<div class="mui-row task-info">';
+      html += '<div class="mui-col mui-col-xs-4 info-title">参会人数</div>';
+      html +=
+        '<div class="mui-col mui-col-xs-8 right word-omit">' +
+        attendNum +
+        "</div>";
+      html += "</div>";
+      html += '<div class="mui-row task-info">';
+      html += '<div class="mui-col mui-col-xs-4 info-title">申请人</div>';
+      html +=
+        '<div class="mui-col mui-col-xs-8 right word-omit">' +
+        applicantName +
+        "</div>";
+      html += "</div>";
+      html += '<div class="mui-row task-info">';
+      html += '<div class="mui-col mui-col-xs-4 info-title">联系电话</div>';
+      html +=
+        '<div class="mui-col mui-col-xs-8 right word-omit">' +
+        conTel +
+        "</div>";
+      html += "</div>";
+      html += '<div class="mui-row task-info">';
+      html += '<div class="mui-col mui-col-xs-4 info-title">申请部门</div>';
+      html +=
+        '<div class="mui-col mui-col-xs-8 right word-omit">' +
+        deptName +
+        "</div>";
+      html += "</div>";
+      html += '<div class="mui-row task-info">';
+      html += '<div class="mui-col mui-col-xs-4 info-title">备注</div>';
+      html +=
+        '<div class="mui-col mui-col-xs-8 right word-omit">' + desc + "</div>";
+      html += "</div>";
+      if (status == "-1") {
+        if (
+          revokeReason == "" ||
+          revokeReason == null ||
+          revokeReason == "null"
+        )
+          revokeReason = "无";
+        html += '<div class="mui-row task-info">';
+        html += '<div class="mui-col mui-col-xs-4 info-title">撤销原因</div>';
+        html +=
+          '<div class="mui-col mui-col-xs-8 right word-omit">' +
+          revokeReason +
+          "</div>";
+        html += "</div>";
+      }
+      html += "</div>";
+      html += '<div class="btn-div">';
+
+      if (status != -1 && isLeader) {
+        html +=
+          "<button id='" +
+          jsonStr +
+          '\'  type="button" class="mui-btn mui-btn-outlined btn-views edit">编辑</button>';
+        html +=
+          "<button id='" +
+          jsonStr +
+          '\' type="button" class="mui-btn mui-btn-outlined btn-views revoke">撤销</button>';
+      }
+
+      html += "";
+      html += "";
+      html += "</div>";
+      html += "</div>";
+      return html;
+    }
+
+    /**
+     * 下滑刷新
+     * @return {[type]} [description]
+     */
+    function pulldownRefresh() {
+      setTimeout(function () {
+        viewHtml = "";
+        page = 1;
+        loadViews();
+        mui("#pullrefresh").pullRefresh().endPulldownToRefresh();
+      }, 1500);
+    }
+
+    /**
+     * 上滑加载更多
+     * @return {[type]} [description]
+     */
+    function pullupRefresh() {
+      page++;
+      loadViews();
+      setTimeout(function () {
+        //关闭加载框
+        mui("#pullrefresh").pullRefresh().endPullupToRefresh();
+      }, 1500);
+    }
+
+    mui.init({
+      pullRefresh: {
+        container: "#pullrefresh",
+        down: {
+          callback: pulldownRefresh,
+          contentrefresh: "正在刷新",
+        },
+        up: {
+          contentrefresh: "加载中，请稍后",
+          contentnomore: "暂无更多数据",
+          callback: pullupRefresh,
+        },
+      },
+    });
+
+    mui("body").on("tap", "button.approve", function () {
+      $("#loading").show();
+      var params = JSON.parse(this.id);
+      $.ajax({
+        url: baseUrl + "app_MeetingController.do?approveBill",
+        type: "post",
+        data: {
+          billID: params.billID,
+          billNo: params.billNo,
+          applicationUser: workNo,
+        },
+        success: function (data) {
+          var data = eval("(" + data + ")");
+          console.log(data);
+          if (data.success) {
+            showMsg("操作成功");
+            $("#loading").hide();
+            mui("#pullrefresh").pullRefresh().pulldownLoading();
+          } else {
+            showMsg(data.msg);
+            $("#loading").hide();
+          }
+        },
+      });
+    });
+
+    mui("body").on("tap", "button.revoke", function () {
+      localStorage.setItem("returnWhich", "goHostory");
+      location.href = "revoke-reason.html?" + encodeURIComponent(this.id);
+    });
+    mui("body").on("tap", "button.edit", function () {
+      localStorage.setItem("returnWhich", "goHostory");
+      location.href = "meeting-list.html?" + encodeURIComponent(this.id);
+    });
+    document.getElementById("application").addEventListener("tap", function () {
+      location.href = "main.html";
+    });
+    document.getElementById("history").addEventListener("tap", function () {
+      location.href = "meeting-manage-history.html";
+    });
+    document.getElementById("manage").addEventListener("tap", function () {
+      location.href = "meeting-manage.html";
+    });
+    mui("body").on("tap", ".guanli-show", function () {
+      var hideOrShow = $(this).next().attr("data-name");
+      if (hideOrShow == "hide") {
+        $(this).next().slideDown();
+        $(this).next().attr("data-name", "show");
+      } else {
+        $(this).next().slideUp();
+        $(this).next().attr("data-name", "hide");
+      }
+    });
+    mui("body").on("tap", ".guanli-hide", function () {
+      var hideOrShow = $(this).attr("data-name");
+      if (hideOrShow == "hide") {
+        $(this).slideDown();
+        $(this).attr("data-name", "show");
+      } else {
+        $(this).slideUp();
+        $(this).attr("data-name", "hide");
+      }
+    });
+
+    //返回
+    document.getElementById("back").addEventListener("tap", function () {
+      location.href = "../../menu.html";
+    });
+
+    function onBackKeyDown() {
+      location.href = "../../menu.html";
+    }
+  </script>
+</html>

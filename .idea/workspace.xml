@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="iplat4j-maven-web:war exploded" />
+    </artifacts-to-build>
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="4fb1e35a-1e81-4c26-8858-23093e5fa00e" name="变更" comment="V1.1" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+      <option value="module" />
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="TYJun &lt;2391183876@qq.com&gt;" />
+        <option value="霸主 &lt;2391183876@qq.com&gt;" />
+      </list>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/iplat4j-maven-commons/src/main/java/com/baosight/wilp/common/web/SsoDispatcher.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/mc/jk/service/ServiceMCJK01.java" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="myId2FirstActivated">
+      <map>
+        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
+      </map>
+    </option>
+    <option name="myId2Visible">
+      <map>
+        <entry key="com.haulmont.jpb.jpaStructure" value="false" />
+      </map>
+    </option>
+  </component>
+  <component name="LogFilters">
+    <option name="FILTER_ERRORS" value="false" />
+    <option name="FILTER_WARNINGS" value="false" />
+    <option name="FILTER_INFO" value="true" />
+    <option name="FILTER_DEBUG" value="true" />
+    <option name="CUSTOM_FILTER" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="localRepository" value="F:\Work\apache-maven-3.8.5\.m2\repository" />
+        <option name="mavenHome" value="F:/Work/apache-maven-3.8.5" />
+        <option name="useMavenConfig" value="true" />
+        <option name="userSettingsFile" value="F:\Work\apache-maven-3.8.5\.m2\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectId" id="2T1PPHnLrXhkSJtYN9F0rzPSLIS" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/休闲/桌面文件库/代码相关文档/iplat_mzsrmyy&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;问题&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.16894531&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;2c09944a3635f468909da670c9c474e0&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-si\src\main\java\com\baosight\wilp\si\ck\sql" />
+      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-si\src\main\resources\META-INF\resources\SI\CK" />
+      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-si\src\main\java\com\baosight\wilp\si\ck\service" />
+      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-mp-rm\src\main\resources\META-INF\resources\RM\LY" />
+      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-mp-rm\src\main\java\com\baosight\wilp\rm\ly\service" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-dm\src\main\java\com\baosight\wilp\dm\rz\sql" />
+      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy" />
+      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-dk" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="excludedTypes">
+      <set>
+        <option value="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" />
+      </set>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="Tomcat" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
+      <option name="COMMON_VM_ARGUMENTS" value="-Dfile.encoding=UTF-8 " />
+      <option name="SHOW_DIALOG_ON_UPDATE" value="false" />
+      <option name="UPDATING_POLICY" value="redeploy-artifacts" />
+      <deployment>
+        <artifact name="iplat4j-maven-web:war exploded">
+          <settings>
+            <option name="CONTEXT_PATH" value="/iplat4j_maven_web_war_exploded" />
+          </settings>
+        </artifact>
+      </deployment>
+      <server-settings>
+        <option name="BASE_DIRECTORY_NAME" value="7b445938-4597-4ecd-a2b1-f2c136c3e3dc" />
+      </server-settings>
+      <predefined_log_file enabled="true" id="Tomcat" />
+      <predefined_log_file enabled="true" id="Tomcat Catalina" />
+      <predefined_log_file id="Tomcat Manager" />
+      <predefined_log_file id="Tomcat Host Manager" />
+      <predefined_log_file id="Tomcat Localhost Access" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="62772" />
+      </RunnerSettings>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Profile">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <method v="2">
+        <option name="Make" enabled="true" />
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="iplat4j-maven-web:war exploded" />
+        </option>
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\Administrator\AppData\Roaming\Subversion</configuration>
+  </component>
+  <component name="TaskManager">
+    <task id="LOCAL-00001" summary="1.0&#10;&#10;Signed-off-by: 霸主 &lt;2391183876@qq.com&gt;">
+      <created>1690200957538</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1690200957538</updated>
+    </task>
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="4fb1e35a-1e81-4c26-8858-23093e5fa00e" name="变更" comment="1.0&#10;&#10;Signed-off-by: 霸主 &lt;2391183876@qq.com&gt;" />
+      <created>1690207637944</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1690207637944</updated>
+      <workItem from="1690207648539" duration="1471000" />
+      <workItem from="1690246866244" duration="7692000" />
+      <workItem from="1690254643239" duration="2494000" />
+      <workItem from="1690257222683" duration="676000" />
+      <workItem from="1690264087551" duration="13683000" />
+      <workItem from="1690278668632" duration="2373000" />
+      <workItem from="1690333223477" duration="21155000" />
+      <workItem from="1690421404519" duration="21535000" />
+      <workItem from="1690509968725" duration="17730000" />
+      <workItem from="1690607869263" duration="22864000" />
+      <workItem from="1690681503522" duration="3993000" />
+      <workItem from="1690766626669" duration="778000" />
+      <workItem from="1690786860986" duration="718000" />
+      <workItem from="1690788598826" duration="675000" />
+      <workItem from="1690790782089" duration="26000" />
+      <workItem from="1690875642510" duration="742000" />
+      <workItem from="1690877806996" duration="3479000" />
+      <workItem from="1690884275767" duration="883000" />
+      <workItem from="1690945753860" duration="9832000" />
+      <workItem from="1690962461524" duration="2679000" />
+      <workItem from="1690965372807" duration="116000" />
+      <workItem from="1690988296141" duration="1011000" />
+      <workItem from="1691044993259" duration="2990000" />
+      <workItem from="1691110262525" duration="13336000" />
+      <workItem from="1691378065604" duration="555000" />
+      <workItem from="1691456810521" duration="6662000" />
+      <workItem from="1691467799920" duration="9885000" />
+      <workItem from="1691542501268" duration="600000" />
+      <workItem from="1691548320144" duration="2658000" />
+      <workItem from="1691558427187" duration="756000" />
+      <workItem from="1691565239399" duration="2429000" />
+      <workItem from="1691570380837" duration="3010000" />
+      <workItem from="1691716466559" duration="1504000" />
+      <workItem from="1691720920105" duration="654000" />
+      <workItem from="1691742439600" duration="2193000" />
+      <workItem from="1691997204549" duration="6037000" />
+      <workItem from="1692004293459" duration="980000" />
+      <workItem from="1692005288452" duration="472000" />
+      <workItem from="1692060814533" duration="14628000" />
+      <workItem from="1692152971517" duration="5512000" />
+      <workItem from="1692169905075" duration="5033000" />
+      <workItem from="1692191302177" duration="1136000" />
+      <workItem from="1692192682115" duration="1532000" />
+      <workItem from="1692194243637" duration="1323000" />
+      <workItem from="1692196060626" duration="761000" />
+      <workItem from="1692254588905" duration="1789000" />
+      <workItem from="1692257024580" duration="4758000" />
+      <workItem from="1692319988225" duration="15729000" />
+      <workItem from="1692423249551" duration="4539000" />
+      <workItem from="1692514956182" duration="20000" />
+      <workItem from="1692579994113" duration="730000" />
+      <workItem from="1692580793779" duration="2188000" />
+      <workItem from="1692585035718" duration="9226000" />
+      <workItem from="1692773484320" duration="131000" />
+      <workItem from="1692774524360" duration="2730000" />
+      <workItem from="1692858613382" duration="5573000" />
+      <workItem from="1692925283369" duration="8043000" />
+      <workItem from="1692949337103" duration="2225000" />
+      <workItem from="1693124680004" duration="1022000" />
+      <workItem from="1693125729695" duration="522000" />
+      <workItem from="1693126268578" duration="307000" />
+    </task>
+    <task id="LOCAL-00002" summary="1.0">
+      <created>1692064121183</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1692064121183</updated>
+    </task>
+    <task id="LOCAL-00003" summary="1.0">
+      <created>1692067099146</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1692067099146</updated>
+    </task>
+    <task id="LOCAL-00004" summary="1.0">
+      <created>1692091517332</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1692091517332</updated>
+    </task>
+    <task id="LOCAL-00005" summary="V1.0">
+      <created>1692169256075</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1692169256075</updated>
+    </task>
+    <task id="LOCAL-00006" summary="V1.0">
+      <created>1692198516104</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1692198516104</updated>
+    </task>
+    <task id="LOCAL-00007" summary="V1.0">
+      <created>1692258541141</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1692258541141</updated>
+    </task>
+    <task id="LOCAL-00008" summary="V1.0">
+      <created>1692258559397</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1692258559397</updated>
+    </task>
+    <task id="LOCAL-00009" summary="V1.0">
+      <created>1692260632112</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1692260632112</updated>
+    </task>
+    <task id="LOCAL-00010" summary="V1.0">
+      <created>1692320424487</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1692320424487</updated>
+    </task>
+    <task id="LOCAL-00011" summary="V1.0">
+      <created>1692320907669</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1692320907669</updated>
+    </task>
+    <task id="LOCAL-00012" summary="V1.1">
+      <created>1693125203305</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1693125203306</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="bc8d8599-fad4-4bad-b37f-a8b8c00aae83">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="structure">
+                    <value>
+                      <list>
+                        <option value="dir:E:/休闲/桌面文件库/代码相关文档/iplat_mzsrmyy/iplat4j-maven-mp" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="origin/master" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="master" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+      <path value="$PROJECT_DIR$/mzsrmyy" />
+    </ignored-roots>
+    <MESSAGE value="1.0&#10;&#10;Signed-off-by: 霸主 &lt;2391183876@qq.com&gt;" />
+    <MESSAGE value="1.0" />
+    <MESSAGE value="V1.0" />
+    <MESSAGE value="V1.1" />
+    <option name="LAST_COMMIT_MESSAGE" value="V1.1" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/iplat4j-maven-sq/src/main/java/com/baosight/wilp/sq/ap/service/ServiceSQAP01.java</url>
+          <line>129</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="com.baosight.iplat4j.core.ei.EiInfo" memberName="traceId" />
+        <PinnedItemInfo parentTag="org.apache.http.message.BasicHttpResponse" memberName="reasonPhrase" />
+        <PinnedItemInfo parentTag="org.apache.http.message.BufferedHeader" memberName="buffer" />
+        <PinnedItemInfo parentTag="java.util.HashMap$Node" memberName="value" />
+        <PinnedItemInfo parentTag="java.lang.String" memberName="value" />
+        <PinnedItemInfo parentTag="com.baosight.iplat4j.core.ei.EiBlock" memberName="rows" />
+        <PinnedItemInfo parentTag="org.apache.http.impl.io.SessionInputBufferImpl" memberName="buffer" />
+      </pinned-members>
+    </pin-to-top-manager>
+    <watches-manager>
+      <configuration name="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory">
+        <watch expression="info" />
+        <watch expression="outInfo" />
+        <watch expression="((HashMap)outInfo.blocks).entrySet().toArray()[0]" custom="java.util.HashMap" />
+        <watch expression="inInfo" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/iplat4j_maven_root$Tomcat_8_5_66.ic" NAME="Tomcat 8.5.66 Coverage Results" MODIFIED="1660730439557" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+</project>

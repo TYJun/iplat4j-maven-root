@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MSSP01">
+
+    <select id="query" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.ms.sp.domain.MSSP01">
+        SELECT
+        id, parent_id "parentId", monitor_code "monitorCode", monitor_name "monitorName", classify_type
+        "classifyType", classify_sort "classifySort", group_id "groupId"
+        FROM
+        `ms_monitor`
+        where 1=1
+        <isNotEmpty prepend="and" property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="parentId">
+            parent_id = #parentId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="monitorName">
+            monitor_name like concat('%',#monitorName#,'%')
+        </isNotEmpty>
+        order by
+        monitor_code +0 desc
+    </select>
+    <select id="queryById" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        SELECT
+        id, parent_id "parentId", monitor_code "monitorCode", monitor_name "monitorName", url "url", classify_type
+        "classifyType", classify_sort "classifySort", group_id "groupId"
+        FROM
+        `ms_monitor`
+        where 1=1
+        <isNotEmpty prepend="and" property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="parentId">
+            parent_id = #parentId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="monitorName">
+            monitor_name = #monitorName#
+        </isNotEmpty>
+    </select>
+
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM t_area_classify WHERE 1=1
+        <isNotEmpty prepend="and" property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="parentId">
+            parent_id = #parentId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="classifyName">
+            classify_name like concat('%',#classify_name#,'%')
+        </isNotEmpty>
+    </select>
+    <insert id="insert">
+        insert into ms_monitor (id, parent_id, monitor_code, monitor_name,url)
+        values (#id#, #parentId#, #monitorCode#, #monitorName#, #url#)
+    </insert>
+
+    <delete id="delete">
+        DELETE
+        FROM ms_monitor
+        WHERE id =
+              #id#
+    </delete>
+
+    <select id="queryTree" resultClass="java.util.HashMap">
+        SELECT
+        id as "label",
+        monitor_name as "text",
+        parent_id as "pId",
+        "" as "leaf"
+        FROM ms_monitor
+        <dynamic prepend="WHERE">
+            <isNotEmpty prepend="and" property="node">
+                parent_id = #node#
+            </isNotEmpty>
+        </dynamic>
+        order by
+        monitor_code +0 desc
+    </select>
+
+    <select id="queryById1" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        SELECT
+        id, parent_id "parrntId", monitor_code "monitorCode", monitor_name "monitorName", classify_type
+        "classifyType", classify_sort "classifySort", group_id "groupId"
+        FROM
+        `ms_monitor`
+        where 1=1
+        <isNotEmpty prepend="and" property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="monitorName">
+            monitor_name = #monitorName#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="monitorCode">
+            monitor_code = #monitorCode#
+        </isNotEmpty>
+    </select>
+    <update id="update">
+        update ms_monitor
+        set  monitor_code = #monitorCode#,
+            monitor_name = #monitorName#,
+            url = #url#
+        where id = #id#
+    </update>
+    <select id="getLevel" resultClass="com.baosight.wilp.ms.sp.domain.MSSP01">
+        SELECT
+            id,
+            parent_id "parentId",
+            monitor_code "monitorCode",
+            monitor_name "monitorName",
+            url "url",
+            classify_type "classifyType",
+            classify_sort "classifySort",
+            group_id "groupId"
+        FROM
+            `ms_monitor`
+        WHERE
+            url != ''
+    </select>
+</sqlMap>

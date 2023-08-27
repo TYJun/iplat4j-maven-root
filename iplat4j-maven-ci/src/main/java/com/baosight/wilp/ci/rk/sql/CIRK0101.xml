@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CIRK0101">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.ci.rk.domain.CiEnterDetail">
+		SELECT
+				REC_CREATOR	as "recCreator",  <!-- 记录创建责任者 -->
+				REC_CREATE_TIME	as "recCreateTime",  <!-- 记录创建时间 -->
+				REC_REVISOR	as "recRevisor",  <!-- 记录修改责任者 -->
+				REC_REVISE_TIME	as "recReviseTime",  <!-- 记录修改时间 -->
+				ARCHIVE_FLAG	as "archiveFlag",  <!-- 归档标记 -->
+				ID	as "id",  <!-- 主键 -->
+				ENTER_BILL_DETAIL_NO	as "enterBillDetailNo",  <!-- 入库单号 -->
+				ENTER_BILL_NO	as "enterBillNo",  <!-- 入库单号 -->
+				ENTER_TYPE	as "enterType",  <!-- 入库类别 -->
+				enter_type_name	as "enterTypeName",  <!-- 入库类型名称 -->
+				MAT_NUM	as "matNum",  <!-- 物资编码 -->
+				MAT_NAME	as "matName",  <!-- 物资名称 -->
+				MAT_MODEL	as "matModel",  <!-- 物资型号 -->
+				MAT_SPEC	as "matSpec",  <!-- 物资规格 -->
+				UNIT	as "unit",  <!-- 计量单位编码 -->
+				UNIT_NAME	as "unitName",  <!-- 计量单位名称 -->
+				MIN_NUM	as "minNum",  <!-- 最低库存量 -->
+				ENTER_NUM	as "enterNum",  <!-- 入库数量 -->
+				ENTER_PRICE	as "enterPrice",  <!-- 入库单价 -->
+				ENTER_AMOUNT	as "enterAmount",  <!-- 入库总价 -->
+				ENTER_DATE	as "enterDate",  <!-- 入库日期 -->
+				ENTER_TIME	as "enterTime",  <!-- 入库时间 -->
+				BATCH_NO	as "batchNo",  <!-- 物资条码号13 -->
+				BATCH_NUM	as "batchNum",  <!-- 物资条码号12 -->
+				surp_num	as "surpNum",  <!-- 供应商编码 -->
+				surp_name	as "surpName",  <!-- 供应商名称 -->
+				valid_begin	as "validBegin",  <!-- 未知 -->
+				valid_end	as "validEnd" <!-- 未知 -->
+		FROM ci_enter_detail WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="enterBillDetailNo">
+			ENTER_BILL_DETAIL_NO = #enterBillDetailNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="enterBillNo">
+			ENTER_BILL_NO = #enterBillNo#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  ENTER_BILL_DETAIL_NO asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM ci_enter_detail WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="enterBillDetailNo">
+			ENTER_BILL_DETAIL_NO = #enterBillDetailNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="enterBillNo">
+			ENTER_BILL_NO = #enterBillNo#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert" parameterClass="java.util.List">
+		INSERT INTO ci_enter_detail (REC_CREATOR,  <!-- 记录创建责任者 -->
+										REC_CREATE_TIME,  <!-- 记录创建时间 -->
+										REC_REVISOR,  <!-- 记录修改责任者 -->
+										REC_REVISE_TIME,  <!-- 记录修改时间 -->
+										ARCHIVE_FLAG,  <!-- 归档标记 -->
+										ID,  <!-- 主键 -->
+										ENTER_BILL_DETAIL_NO,  <!-- 入库单号 -->
+										ENTER_BILL_NO,  <!-- 入库单号 -->
+										ENTER_TYPE,  <!-- 入库类别 -->
+										enter_type_name,  <!-- 入库类型名称 -->
+										MAT_NUM,  <!-- 物资编码 -->
+										MAT_NAME,  <!-- 物资名称 -->
+										MAT_MODEL,  <!-- 物资型号 -->
+										MAT_SPEC,  <!-- 物资规格 -->
+										UNIT,  <!-- 计量单位编码 -->
+										UNIT_NAME,  <!-- 计量单位名称 -->
+										MIN_NUM,  <!-- 最低库存量 -->
+										ENTER_NUM,  <!-- 入库数量 -->
+										ENTER_PRICE,  <!-- 入库单价 -->
+										ENTER_AMOUNT,  <!-- 入库总价 -->
+										ENTER_DATE,  <!-- 入库日期 -->
+										ENTER_TIME,  <!-- 入库时间 -->
+										BATCH_NO,  <!-- 物资条码号13 -->
+										BATCH_NUM,  <!-- 物资条码号12 -->
+										surp_num,  <!-- 供应商编码 -->
+										surp_name,  <!-- 供应商名称 -->
+										valid_begin,  <!-- 未知 -->
+										valid_end,  <!-- 未知 -->
+										shelf_life,  <!-- 保质期 -->
+										production_date <!-- 生产日期 -->
+										)		 
+	    VALUES 
+	    <iterate conjunction=",">
+	    	(
+		    	#enterDetailList[].recCreator#, 
+		    	#enterDetailList[].recCreateTime#, 
+		    	#enterDetailList[].recRevisor#, 
+		    	#enterDetailList[].recReviseTime#, 
+		    	#enterDetailList[].archiveFlag#, 
+		    	#enterDetailList[].id#, 
+		    	#enterDetailList[].enterBillDetailNo#, 
+		    	#enterDetailList[].enterBillNo#, 
+		    	#enterDetailList[].enterType#, 
+		    	#enterDetailList[].enterTypeName#, 
+		    	#enterDetailList[].matNum#, 
+		    	#enterDetailList[].matName#, 
+		    	#enterDetailList[].matModel#, 
+		    	#enterDetailList[].matSpec#, 
+		    	#enterDetailList[].unit#, 
+		    	#enterDetailList[].unitName#, 
+		    	#enterDetailList[].minNum#, 
+		    	#enterDetailList[].enterNum#, 
+		    	#enterDetailList[].enterPrice#, 
+		    	#enterDetailList[].enterAmount#, 
+		    	#enterDetailList[].enterDate#, 
+		    	#enterDetailList[].enterTime#, 
+		    	#enterDetailList[].batchNo#, 
+		    	#enterDetailList[].batchNum#, 
+		    	#enterDetailList[].surpNum#, 
+		    	#enterDetailList[].surpName#, 
+		    	#enterDetailList[].validBegin#, 
+		    	#enterDetailList[].validEnd#,
+				#enterDetailList[].shelfLife#,
+				#enterDetailList[].productionDate#
+	    	) 
+	    </iterate>
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM ci_enter_detail WHERE
+			ID = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE ci_enter_detail
+		SET 
+		REC_CREATOR	= #recCreator#,   <!-- 记录创建责任者 -->  
+					REC_CREATE_TIME	= #recCreateTime#,   <!-- 记录创建时间 -->  
+					REC_REVISOR	= #recRevisor#,   <!-- 记录修改责任者 -->  
+					REC_REVISE_TIME	= #recReviseTime#,   <!-- 记录修改时间 -->  
+					ARCHIVE_FLAG	= #archiveFlag#,   <!-- 归档标记 -->  
+					ENTER_BILL_DETAIL_NO	= #enterBillDetailNo#,   <!-- 入库单号 -->
+					ENTER_BILL_NO	= #enterBillNo#,   <!-- 入库单号 -->  
+					ENTER_TYPE	= #enterType#,   <!-- 入库类别 -->  
+					enter_type_name	= #enterTypeName#,   <!-- 入库类型名称 -->  
+					MAT_NUM	= #matNum#,   <!-- 物资编码 -->  
+					MAT_NAME	= #matName#,   <!-- 物资名称 -->  
+					MAT_MODEL	= #matModel#,   <!-- 物资型号 -->  
+					MAT_SPEC	= #matSpec#,   <!-- 物资规格 -->  
+					UNIT	= #unit#,   <!-- 计量单位编码 -->  
+					UNIT_NAME	= #unitName#,   <!-- 计量单位名称 -->  
+					MIN_NUM	= #minNum#,   <!-- 最低库存量 -->  
+					ENTER_NUM	= #enterNum#,   <!-- 入库数量 -->  
+					ENTER_PRICE	= #enterPrice#,   <!-- 入库单价 -->  
+					ENTER_AMOUNT	= #enterAmount#,   <!-- 入库总价 -->  
+					ENTER_DATE	= #enterDate#,   <!-- 入库日期 -->  
+					ENTER_TIME	= #enterTime#,   <!-- 入库时间 -->  
+					BATCH_NO	= #batchNo#,   <!-- 物资条码号13 -->  
+					BATCH_NUM	= #batchNum#,   <!-- 物资条码号12 -->  
+					surp_num	= #surpNum#,   <!-- 供应商编码 -->  
+					surp_name	= #surpName#,   <!-- 供应商名称 -->  
+					valid_begin	= #validBegin#,   <!-- 未知 -->  
+					valid_end	= #validEnd#  <!-- 未知 -->  
+			WHERE 	
+			ID = #id#
+	</update>
+  
+</sqlMap>

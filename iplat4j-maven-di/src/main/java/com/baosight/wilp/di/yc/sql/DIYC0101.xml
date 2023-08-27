@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DIYC0101">
+
+	
+	<!-- 修改异常状态 -->
+	<update id="updateTaskitem" parameterClass="java.util.Map">
+		update di_taskitem
+		set  exception_status = 1,
+		     exception_result = #rejectreason#,
+			 finish_time = #finishTime#,
+		     finish_man = #finishMan#,
+			 solution_type = #solutionType#
+		where itemID = #itemID#
+	</update>
+	
+	
+</sqlMap>

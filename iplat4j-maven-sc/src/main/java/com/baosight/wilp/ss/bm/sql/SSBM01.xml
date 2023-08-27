@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2022-05-24 0:10:30
+   		Version :  6.0.731.201809200158
+		tableName :.sc_meal_staffing 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 TypeName  VARCHAR, 
+		 TypeCode  VARCHAR, 
+		 mealTimeName  VARCHAR, 
+		 mealTimeCode  VARCHAR, 
+		 discountAmount  VARCHAR
+	-->
+<sqlMap namespace="SSBM01">
+
+	<select id="query" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.ss.bm.domain.SSBM01">
+		SELECT
+		id	as "id",
+		type_name	as "typeName",  <!-- 员工类型 -->
+		type_code	as "typeCode",  <!-- 员工类型编码 -->
+		meal_time_name	as "mealTimeName",  <!-- 餐次名称 -->
+		meal_time_code	as "mealTimeCode",  <!-- 餐次编码 -->
+		discount_amount	as "discountAmount",  <!-- 优惠金额 -->
+		create_time	as "createTime", <!-- 创建时间 -->
+		menu_name	as "menuName"
+		FROM .sc_meal_staffing WHERE 1=1
+		<isNotEmpty prepend=" AND " property="typeName">
+			typeName = #typeName#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				typeName asc
+			</isEmpty>
+		</dynamic>
+
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .sc_meal_staffing WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+	<!--
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="typeName">
+			type_name = #typeName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="typeCode">
+			type_code = #typeCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="mealTimeName">
+			meal_time_name = #mealTimeName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="mealTimeCode">
+			meal_time_code = #mealTimeCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="discountAmount">
+			discount_amount = #discountAmount#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="createTime">
+			create_time = #createTime#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO .sc_meal_staffing (id,
+		type_name,  <!-- 员工类型 -->
+		type_code,  <!-- 员工类型编码 -->
+		meal_time_name,  <!-- 餐次名称 -->
+		meal_time_code,  <!-- 餐次编码 -->
+		discount_amount,  <!-- 优惠金额 -->
+		create_time,<!-- 创建时间 -->
+		menu_name
+		)
+		VALUES (#id#, #typeName#, #typeCode#, #mealTimeName#, #mealTimeCode#, #discountAmount#, #createTime#,#menuName#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM .sc_meal_staffing WHERE
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE .sc_meal_staffing
+		SET
+		type_name	= #typeName#,   <!-- 员工类型 -->
+		type_code	= #typeCode#,   <!-- 员工类型编码 -->
+		meal_time_name	= #mealTimeName#,   <!-- 餐次名称 -->
+		meal_time_code	= #mealTimeCode#,   <!-- 餐次编码 -->
+		discount_amount	= #discountAmount#,   <!-- 优惠金额 -->
+		create_time	= #createTime#  <!-- 创建时间 -->
+		WHERE
+		id = #id#
+	</update>
+  
+</sqlMap>

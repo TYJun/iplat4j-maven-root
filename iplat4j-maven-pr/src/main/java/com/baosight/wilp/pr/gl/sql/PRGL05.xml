@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="PRGL05">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.pr.gl.domain.PRGL05">
+		SELECT
+		CASE
+		WHEN tsd.status_code = '00' THEN '待认领'
+		WHEN tsd.status_code = '01' THEN '整改被驳回'
+		WHEN tsd.status_code = '10' THEN '已认领'
+		WHEN tsd.status_code = '19' THEN '挂账待认领'
+		WHEN tsd.status_code = '20' THEN '问题被挂账'
+		WHEN tsd.status_code = '30' THEN '已整改'
+		WHEN tsd.status_code = '99' THEN '结束'
+		END "statusCode",
+		tsd.id AS id,
+		tsd.dangerCode AS dangercode,
+		tsd.createMan AS createman,
+		tsd.createTime AS createtime,
+		tsd.dangerWhere AS dangerwhere,
+		tsd.contentDesc AS contentdesc,
+		tsd.requireDesc AS requiredesc,
+		tsd.requiredTime AS requiredtime,
+		tsd.localTypeName AS localtypecode,
+		tsdr.writeMan AS writeMan,
+		tsdr.finishTime AS finishTime,
+		tsdr.contentDesc AS desc1,
+		tsdr.auditContent AS auditContent
+		FROM
+		pr_safty_danger tsd
+		LEFT JOIN pr_safty_danger_result tsdr ON tsd.id = tsdr.dangerID
+		where 1=1
+		<isNotEmpty prepend="AND" property="typecode">
+			tsd.localTypeCode = #typecode#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="problemlevel">
+			tsd.status_code = #problemlevel#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="beginDate">
+		<![CDATA[
+			tsd.createTime >= #beginDate#
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="endDate">
+			<![CDATA[
+			tsd.createTime <= #endDate#
+			]]>
+		</isNotEmpty>
+			
+	</select>
+
+	
+  
+</sqlMap>

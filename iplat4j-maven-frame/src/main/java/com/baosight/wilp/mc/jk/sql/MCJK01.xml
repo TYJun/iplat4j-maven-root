@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MCJK01">
+
+	<insert id="insert">
+	    INSERT INTO `bona_frame_mzsrmyy`.`ac_department` (
+		  `id`,
+		  `dept_num`,
+		  `dept_name`,
+		  `parent_id`,
+		  `fina_code`,
+		  `erp_code`,
+		  `dept_describe`,
+		  `hospital_district`,
+		  `type`,
+		  `status`,
+		  `source`,
+		  `rec_creater`,
+		  `rec_create_time`,
+		  `rec_revisor`,
+		  `rec_revise_time`,
+		   `biz_id`,
+		  `dept_num_parent`,
+		  `dept_name_parent`
+		)
+		VALUES
+		  (
+			uuid(),
+			#DEP_CODE#,
+			#DEP_NAME#,
+			null,
+			null,
+			null,
+			null,
+			"NO00001",
+			null,
+			null,
+			null,
+			"平台获取",
+			null,
+			null,
+			null,
+			#BIZ_ID#,
+			null,
+			null
+  ) ;
+	</insert>
+
+	<update id="update">
+		UPDATE `bona_frame_mzsrmyy`.ac_department
+		SET
+		`dept_num`=#DEP_CODE#,
+		  `dept_name`= #DEP_NAME#
+		WHERE
+		 `biz_id` = #BIZ_ID#
+	</update>
+
+	<statement  id="createTable" parameterClass="java.util.HashMap">
+		CREATE  TABLE $projectSchema$.ac_department$dateTime$
+		LIKE $projectSchema$.ac_department
+	</statement >
+
+	<insert id="insertPreData" parameterClass="java.util.HashMap">
+		INSERT INTO $projectSchema$.ac_department$dateTime$
+		SELECT * FROM $projectSchema$.ac_department
+	</insert>
+
+	<select id="query" resultClass="com.baosight.wilp.mc.jk.domain.DepartMent"
+			parameterClass="java.util.HashMap">
+		SELECT
+		`dept_num`,
+		`dept_name`
+		FROM `bona_frame_mzsrmyy`.ac_department WHERE 1=1
+		<isNotEmpty prepend=" AND " property="BIZ_ID">
+			`biz_id` = #BIZ_ID#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert1">
+		INSERT INTO `bona_wilp_mzsrmyy`.`ac_department` (
+			`id`,
+			`dept_num`,
+			`dept_name`,
+			`parent_id`,
+			`fina_code`,
+			`erp_code`,
+			`dept_describe`,
+			`hospital_district`,
+			`type`,
+			`status`,
+			`source`,
+			`rec_creater`,
+			`rec_create_time`,
+			`rec_revisor`,
+			`rec_revise_time`,
+			`biz_id`,
+			`dept_num_parent`,
+			`dept_name_parent`
+		)
+		VALUES
+			(
+				uuid(),
+				#DEP_CODE#,
+				#DEP_NAME#,
+				null,
+				null,
+				null,
+				null,
+				"NO00001",
+				null,
+				null,
+				null,
+				null,
+				null,
+				"平台获取",
+				now(),
+				#BIZ_ID#,
+				null,
+				null
+			) ;
+	</insert>
+
+<!--bona_wilp_mzsrmyy-->
+
+	<select id="queryByDeptCode" resultClass="java.util.HashMap"
+			parameterClass="java.util.HashMap">
+		SELECT
+		`dept_num`
+		FROM $projectSchema$.ac_department WHERE 1=1
+		<isNotEmpty prepend=" AND " property="DEP_CODE">
+			`dept_num` = #DEP_CODE#
+		</isNotEmpty>
+	</select>
+	<select id="queryDeptAllInfo" resultClass="java.util.HashMap"
+			parameterClass="java.util.HashMap">
+		SELECT
+		`dept_num`
+		FROM $projectSchema$.ac_department WHERE 1=1
+		<isNotEmpty prepend=" AND " property="DEP_ID">
+			`id` = #DEP_ID#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="DEP_CODE">
+			`dept_num` = #DEP_CODE#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="DEP_NAME">
+			`dept_name` = #DEP_NAME#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="DEP_VEST_REF">
+			`parent_id` = #DEP_VEST_REF#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="DEP_DESC">
+			`dept_describe` = #DEP_DESC#
+		</isNotEmpty>
+			AND `hospital_district` = 'NO00001'
+		<isNotEmpty prepend=" AND " property="BRANCH_CODE">
+			`branch_code` = #BRANCH_CODE#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="BRANCH_NAME">
+			`branch_name` = #BRANCH_NAME#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status">
+			`status` = #status#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="BIZ_ID">
+			`biz_id` = #BIZ_ID#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="DEP_VEST_CODE">
+			`dept_num_parent` = #DEP_VEST_CODE#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="DEP_VEST_NAME">
+			`dept_name_parent` = #DEP_VEST_NAME#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="DICT_TYPE">
+			`dict_type` = #DICT_TYPE#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="DEP_CATEGORY_CODE">
+			`dep_category_code` = #DEP_CATEGORY_CODE#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="DICT_TYPE">
+			`dep_category_name` = #DEP_CATEGORY_NAME#
+		</isNotEmpty>
+
+	</select>
+	<insert id="insertDept" parameterClass="java.util.HashMap">
+		INSERT INTO $projectSchema$.`ac_department` (
+			`id`,
+			`dept_num`,
+			`dept_name`,
+		<isNotEmpty property="DEP_VEST_REF">
+			parent_id,
+		</isNotEmpty>
+		<isNotEmpty property="DEP_DESC">
+			`dept_describe`,
+		</isNotEmpty>
+			`hospital_district`,
+			branch_code,
+			branch_name,
+			`type`,
+			`status`,
+			`source`,
+		<isNotEmpty property="BIZ_ID">
+			`biz_id`,
+		</isNotEmpty>
+		<isNotEmpty property="DEP_VEST_CODE">
+			`dept_num_parent`,
+		</isNotEmpty>
+		<isNotEmpty property="DEP_VEST_NAME">
+			`dept_name_parent`,
+		</isNotEmpty>
+		dict_type,
+		dep_category_code,
+		dep_category_name,
+		`rec_creater`,
+		`rec_create_time`
+		)
+		VALUES
+			(
+				#DEP_ID#,
+				#DEP_CODE#,
+				#DEP_NAME#,
+		<isNotEmpty property="DEP_VEST_REF">
+			    #DEP_VEST_REF#,
+		</isNotEmpty>
+		<isNotEmpty property="DEP_DESC">
+			    #DEP_DESC#,
+		</isNotEmpty>
+				'NO00001',
+			    #BRANCH_CODE#,
+				#BRANCH_NAME#,
+				'0',
+			 	#status#,
+			 	'平台',
+		<isNotEmpty property="BIZ_ID">
+			    #BIZ_ID#,
+		</isNotEmpty>
+		<isNotEmpty property="DEP_VEST_CODE">
+				#DEP_VEST_CODE#,
+		</isNotEmpty>
+		<isNotEmpty property="DEP_VEST_NAME">
+				#DEP_VEST_NAME#,
+		</isNotEmpty>
+				#DICT_TYPE#,
+			 	#DEP_CATEGORY_CODE#,
+			 	#DEP_CATEGORY_NAME#,
+		        #recCreater#,
+		        #recCreateTime#
+			) ;
+	</insert>
+
+
+	<update id="updateByDeptCode">
+		UPDATE $projectSchema$.ac_department
+		SET	 id=#DEP_ID#,
+			`dept_num`=#DEP_CODE#,
+			`dept_name`= #DEP_NAME#,
+		<isNotEmpty property="DEP_VEST_REF">
+			parent_id=#DEP_VEST_REF#,
+		</isNotEmpty>
+		<isNotEmpty property="DEP_DESC">
+			dept_describe=#DEP_DESC#,
+		</isNotEmpty>
+			hospital_district='NO00001',
+		<isNotEmpty property="BRANCH_CODE">
+			branch_code=#BRANCH_CODE#,
+		</isNotEmpty>
+		<isNotEmpty property="BRANCH_NAME">
+			branch_name=#BRANCH_NAME#,
+		</isNotEmpty>
+		<isNotEmpty property="status">
+			status=#status#,
+		</isNotEmpty>
+		<isNotEmpty property="BIZ_ID">
+			biz_id=#BIZ_ID#,
+		</isNotEmpty>
+		<isNotEmpty property="DEP_VEST_CODE">
+			dept_num_parent=#DEP_VEST_CODE#,
+		</isNotEmpty>
+		<isNotEmpty property="DEP_VEST_NAME">
+			dept_name_parent=#DEP_VEST_NAME#,
+		</isNotEmpty>
+		    dict_type=#DICT_TYPE#,
+			dep_category_code=#DEP_CATEGORY_CODE#,
+			dep_category_name=#DEP_CATEGORY_NAME#,
+			rec_revisor=#recRevisor#,
+			rec_revise_time=#recReviseTime#
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="DEP_CODE">
+			`dept_num` = #DEP_CODE#
+		</isNotEmpty>
+	</update>
+</sqlMap>

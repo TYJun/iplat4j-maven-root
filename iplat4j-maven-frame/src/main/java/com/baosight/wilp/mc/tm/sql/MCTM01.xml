@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+		
+<sqlMap namespace="MCTM01">
+
+	<select id="queryTemplate" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+			mt.id,									<!-- 主键 -->
+			mt.template_code AS templateCode,		<!-- 模板编码 -->
+			mt.template_name AS templateName,		<!-- 模板名称 -->		
+			mt.call_module AS callModule,			<!--调用模块代码-->
+			te.MODULE_CNAME_1 AS callModuleName,  	<!--调用模块中文名-->
+			mt.delivery_channel AS deliveryChannel,
+			case mt.delivery_channel 				<!-- 发送渠道 -->	
+			 	when 'DX' then '短信'
+			 	when 'PS' then '推送'
+				when 'DD' then '钉钉'
+			 	when 'WX' then '企业微信'
+		    end as "deliveryChannelText",   		<!-- 发送渠道文本显示 -->
+		mt.is_cc AS isCc,
+			(CASE WHEN is_cc = '1' 					<!-- 是否发送抄送人 -->
+				THEN '是' 
+		      	ELSE '否'
+			 	END
+		 	) AS "isCcText",  
+			mt.message,							    <!-- 消息体 -->
+			mv.variable_name AS "variableName",		<!-- 变量 -->
+			mv.variable_code AS "variableCode",		<!-- 变量编码 -->
+			mt.rec_creater AS recCreater,			<!-- 创建人 -->
+			mt.rec_create_time AS recCreateTime,	<!-- 创建时间 -->
+			mt.rec_revisor AS recRevisor,			<!-- 修改人 -->
+			mt.rec_revise_time AS recReviseTime	    <!-- 修改时间 -->
+		FROM $projectSchema$.mc_template mt
+		LEFT JOIN $projectSchema$.mc_variable mv  ON mv.variable_code = mt.variable_code
+		LEFT JOIN (SELECT MODULE_CNAME_1,MODULE_ENAME_1 from $platSchema$.tedpi02 where PROJECT_ENAME='WILP') te  ON te.MODULE_ENAME_1=mt.call_module
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			mt.id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="templateCode">
+			mt.template_code like concat('%', #templateCode#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="templateName">
+			mt.template_name like concat('%', #templateName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="callModule">
+			mt.call_module = #callModule#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deliveryChannel">
+			mt.delivery_channel = #deliveryChannel#
+		</isNotEmpty>
+
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  mt.rec_create_time desc
+			</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="queryTemplateCount" resultClass="int">
+		SELECT count(*)
+		FROM $projectSchema$.mc_template 
+		WHERE 1=1
+	<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="templateCode">
+			template_code like concat('%', #templateCode#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="templateName">
+			template_name like concat('%', #templateName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="callModule">
+			call_module = #callModule#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deliveryChannel">
+			delivery_channel = #deliveryChannel#
+		</isNotEmpty>
+	</select>
+	
+	<select id="queryLastTemplateCode" parameterClass="java.util.HashMap" 
+		resultClass="java.util.HashMap">
+		SELECT template_code as "templateCode"
+		FROM $projectSchema$.mc_template
+		ORDER BY rec_create_time DESC
+		LIMIT 1
+	</select>
+	
+	<insert id="insertTemplate" parameterClass="java.util.HashMap">
+		INSERT INTO $projectSchema$.mc_template (id,  				<!-- 主键 -->
+												template_code,		<!-- 模板编码 -->
+												template_name,	 <!-- 模板名称 -->
+												call_module, <!-- 调用模块 -->
+												delivery_channel,  <!-- 发送渠道 -->
+												is_cc,  <!-- 是否发送抄送人 -->
+												message, <!-- 消息体 --> 
+												variable_code,<!-- 变量编码 --> 
+												rec_creater,  <!-- 创建人 -->
+												rec_create_time,  <!-- 创建时间 -->
+												rec_revisor,  <!-- 修改人 -->
+												rec_revise_time  <!-- 修改时间 -->
+												)		 
+	    VALUES (#id#, #templateCode#, #templateName#,#callModule#, #deliveryChannel#, #isCc#, #message#, #variableCode#, #recCreater#, #recCreateTime#, #recRevisor#, #recReviseTime#) 
+	</insert>
+	
+	<delete id="delete" parameterClass="java.util.HashMap">
+		DELETE FROM $projectSchema$.mc_template WHERE 
+			id IN
+		<iterate property="list" conjunction="," open="(" close=")">
+			#list[]#
+		</iterate>
+	</delete>
+	
+  	<update id="update"  parameterClass="java.util.HashMap" >
+		UPDATE $projectSchema$.mc_template
+		SET 
+			template_name	= #templateName#, <!-- 模板名称 -->
+			call_module	= #callModule#,  <!-- 调用模块 -->
+			delivery_channel = #deliveryChannel#,   <!-- 发送渠道 -->
+			is_cc = #isCc#,  <!-- 是否发送抄送人 -->
+			message	= #message#,  <!-- 消息体 --> 
+			variable_code	= #variableCode#,  <!-- 变量编码 --> 
+			rec_revisor	= #recRevisor#,   <!-- 修改人 -->  
+			rec_revise_time	= #recReviseTime#  <!-- 修改时间 -->  
+		WHERE 	
+		id = #id#
+	</update>
+</sqlMap>

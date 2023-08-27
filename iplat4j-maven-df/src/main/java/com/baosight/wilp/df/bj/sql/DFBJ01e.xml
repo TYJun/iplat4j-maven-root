@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFBJ01e">
+	<insert id="insert" parameterClass="com.baosight.wilp.df.common.domain.DfCleaningExecutor">
+		INSERT INTO df_cleaning_executor
+		(
+		    id,
+			clean_no,
+			work_no,
+			name,
+			dept_num,
+			dept_name
+		)
+		VALUES
+		(
+		 	#id#,
+			#cleanNo#,
+			#workNo#,
+			#name#,
+			#deptNum#,
+			#deptName#
+		)
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM df_cleaning_executor WHERE clean_no = #id#
+	</delete>
+
+</sqlMap>

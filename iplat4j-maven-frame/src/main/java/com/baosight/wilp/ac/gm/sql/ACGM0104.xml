@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ACGM0104">
+
+	<update id="update" parameterClass="java.util.HashMap">
+	    update $projectSchema$.ac_material
+	    set
+			mat_name = #matName#,  <!-- 物资名称 -->
+			mat_class_id = #matClassId#,  <!-- 分类id -->
+			mat_spec = #matSpec#,  <!-- 物资规格 -->
+			mat_model = #matModel#,  <!-- 物资型号 -->
+			unit = #unit#,  <!-- 计量单位编码 -->
+			price = #price#,  <!-- 最近订购单价 -->
+		<!-- supplier = #supplier#,  供应商 -->
+			manufacturer = #manufacturer#,  <!-- 制造商 -->
+			mat_type_code = #matTypeCode#,  <!-- 物资大类编码	 -->
+			rec_revisor = #recRevisor#,  <!-- 修改人	 -->
+			rec_revise_time = #recReviseTime#,  <!-- 修改时间	 -->
+			remark = #remark#,  <!-- 备注	 -->
+	    	picture_uri=#pictureUri#,
+			pack_factor = #packfactor#
+	    where id=#id#
+    </update>
+	
+</sqlMap>

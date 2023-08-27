@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.css" />
+    <link rel="stylesheet" href="../reference/css/iconfont.css" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="../reference/css/colorGreen.css" />
+    <link rel="stylesheet" href="../reference/css/loading.css" />
+    <link rel="stylesheet" href="../reference/css/clothCommon.css" />
+  </head>
+  <style>
+    .scan {
+      position: fixed;
+      /*bottom: 15px;*/
+      left: 15px;
+      width: 60px;
+      z-index: 11;
+    }
+
+    .round {
+      border: 1px solid #bbb;
+      width: 60px;
+      height: 60px;
+      line-height: 26px;
+      text-align: center;
+      color: #fff;
+      background-color: #666666;
+      filter: alpha(opacity=80);
+      /* 用于IE浏览器－透明度为20%*/
+      -moz-opacity: 0.8;
+      /*  用于Moz + Firefox－透明度为20%*/
+      opacity: 0.8;
+      -webkit-border-radius: 60px;
+      -moz-border-radius: 60px;
+      -o-border-radius: 60px;
+      border-radius: 60px;
+    }
+
+    .main {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+
+    .result {
+      width: 260px;
+      background-color: #30c37c;
+      color: white;
+      height: 78px;
+      text-align: center;
+      padding-top: 27px;
+      font-size: 19px;
+      border-radius: 45px;
+    }
+
+    .submit {
+      font-size: 19px;
+      color: white;
+      background-color: #30c37c;
+      border-radius: 10px;
+    }
+
+    .reScan {
+      font-size: 19px;
+      color: white;
+      background-color: #30c37c;
+      border-radius: 10px;
+    }
+
+    .stop {
+      font-size: 19px;
+      color: white;
+      background-color: #30c37c;
+      border-radius: 10px;
+    }
+
+    .text {
+      background-color: #30c37c;
+      color: white;
+      font-size: 20px;
+      padding: 15px;
+      position: absolute;
+      top: 83px;
+      width: 272px;
+    }
+  </style>
+
+  <body>
+    <header class="mui-bar mui-bar-nav backColor">
+      <h1 class="mui-title">扫布草芯片</h1>
+      <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+      </button>
+    </header>
+    <div class="scan" id="scan">
+      <div class="round" id="round">
+        <div style="font-size:15px;">扫描</div>
+        <div style="font-size:15px;">芯片</div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="text">
+        <div id="textList"></div>
+      </div>
+      <div class="result" id="result">
+        <!-- <span>你一共扫描了：100条</span> -->
+      </div>
+      <div style="margin-top: 30px;">
+        <button onclick="reScan()" class="reScan">重新扫描</button>
+        <button onclick="stop()" class="stop">停止扫描</button>
+        <button onclick="toList()" class="submit">完成扫描</button>
+      </div>
+    </div>
+  </body>
+
+  <script type="text/javascript" src="../reference/mui/js/mui.min.js"></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/jquery-2.1.4.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/mui.picker.min.js"
+  ></script>
+  <script type="text/javascript" src="../reference/mui/js/baseInfo.js"></script>
+  <!-- <script type="text/javascript" src="../../../cordova.js"></script> -->
+  <script type="text/javascript">
+    var name = localStorage.getItem("deptName");
+    var num = localStorage.getItem("scarpDeptNum");
+    var numHtml = "";
+    var chipIDArray = [];
+    // touchMove("scan");
+    $(function() {
+      console.log(name);
+      console.log(num);
+      init(chipIDArray.length, name);
+      initText();
+    });
+
+    function initText() {
+      textHtml = "<div><span>正在进行芯片报废</span></div>";
+      $("#textList").append(textHtml);
+    }
+    mui("body").on("tap", "#scan", function() {
+      scanChip();
+    });
+
+    function scanChip() {
+      parent.rovinj.rfidReader.on("inventory", epcTid => {
+        console.log(epcTid);
+        if (chipIDArray.indexOf(epcTid) == -1) {
+          chipIDArray.push(epcTid);
+        }
+      });
+      parent.rovinj.rfidReader
+        .startInventory()
+        .then(res => {
+          mui.toast(res);
+        })
+        .catch(err => {
+          mui.toast(err);
+        });
+    }
+
+    function init(number) {
+      numHtml = "  <span>你一共扫描了：" + number + "条</span>";
+      $("#result").html(numHtml);
+    }
+    //重新扫描
+    function reScan() {
+      chipIDArray = [];
+      init(chipIDArray.length);
+      scanChip();
+    }
+    //完成扫描
+    function toList() {
+      localStorage.setItem("recoveChipNum", chipIDArray.toString());
+      // localStorage.setItem("chipNum", chipIDArray.length);
+      location.href = "scrapList.html?" + chipIDArray.length;
+    }
+    //停止扫描
+    function stop() {
+      parent.rovinj.rfidReader.stopInventory();
+      parent.rovinj.rfidReader.off("inventory");
+      init(chipIDArray.length, name);
+    }
+    /**
+     * @desc   点击返回按钮
+     * @author chenjing
+     */
+    mui("body").on("tap", "#back", function() {
+      location.href = "scrapMain.html";
+    });
+
+    /**
+     * @desc   手机系统返回键
+     * @author chenjing
+     */
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+      document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+      location.href = "scrapMain.html";
+    }
+  </script>
+</html>

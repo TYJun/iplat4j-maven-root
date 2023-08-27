@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-02-09 9:13:43
+   		Version :  6.0.731.201809200158
+		tableName :iplat_v5demo_business.ot_build_config 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 building  VARCHAR, 
+		 work_no  VARCHAR, 
+		 name  VARCHAR, 
+		 flag  VARCHAR, 
+		 phone  VARCHAR
+	-->
+<sqlMap namespace="carriageBuildConfig">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.common.ys.domain.CarriageBuildConfig">
+		SELECT
+				id	as "id",  <!-- 运送楼层人员配置主键（UUID） -->
+				building	as "building",  <!-- 楼层（多个用逗号隔开） -->
+				work_no	as "workNo",  <!-- 运送人工号 -->
+				name	as "name",  <!-- 运送人姓名 -->
+				flag	as "flag",  <!-- 停用标记 -->
+				phone	as "phone" <!-- 联系方式 -->
+		FROM iplat_v5demo_business.ot_build_config WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM iplat_v5demo_business.ot_build_config WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="building">
+			building = #building#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workNo">
+			work_no = #workNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="name">
+			name = #name#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="flag">
+			flag = #flag#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="phone">
+			phone = #phone#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO iplat_v5demo_business.ot_build_config (id,  <!-- 运送楼层人员配置主键（UUID） -->
+										building,  <!-- 楼层（多个用逗号隔开） -->
+										work_no,  <!-- 运送人工号 -->
+										name,  <!-- 运送人姓名 -->
+										flag,  <!-- 停用标记 -->
+										phone  <!-- 联系方式 -->
+										)		 
+	    VALUES (#id#, #building#, #workNo#, #name#, #flag#, #phone#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM iplat_v5demo_business.ot_build_config WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE iplat_v5demo_business.ot_build_config 
+		SET 
+					building	= #building#,   <!-- 楼层（多个用逗号隔开） -->  
+					work_no	= #workNo#,   <!-- 运送人工号 -->  
+					name	= #name#,   <!-- 运送人姓名 -->  
+					flag	= #flag#,   <!-- 停用标记 -->  
+					phone	= #phone#  <!-- 联系方式 -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

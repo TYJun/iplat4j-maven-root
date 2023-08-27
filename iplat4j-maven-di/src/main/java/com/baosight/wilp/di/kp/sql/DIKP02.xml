@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-04-14 17:23:55
+   		Version :  6.0.731.201809200158
+		tableName :.device_card_item_inspection 
+		 itemID  INTEGER   NOT NULL   primarykey, 
+		 itemID_xmID  VARCHAR, 
+		 cardID  VARCHAR, 
+		 jitemName  VARCHAR, 
+		 itemDesc  VARCHAR, 
+		 referenceValue  VARCHAR, 
+		 sortNo  INTEGER, 
+		 actualValueUnit  VARCHAR
+	-->
+<sqlMap namespace="DIKP02">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.di.kp.domain.DIKP02">
+		SELECT
+				itemID	as "itemid",  
+				itemID_xmID	as "itemidXmid",  <!-- 巡检项目ID -->
+				cardID	as "cardid",  
+				jitemName	as "jitemname",  
+				itemDesc	as "itemdesc",  
+				referenceValue	as "referencevalue",  
+				sortNo	as "sortno",  
+				actualValueUnit	as "actualvalueunit" <!-- 巡检实际值单位 -->
+		FROM di_card_relation WHERE 1=1
+		<isNotEmpty prepend=" AND " property="itemid">
+			itemID = #itemid#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  itemID asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM di_card_relation WHERE 1=1
+		<isNotEmpty prepend=" AND " property="itemid">
+			itemID = #itemid#
+		</isNotEmpty>
+	</select>
+
+
+	<insert id="insert">
+		INSERT INTO di_card_relation (itemID,
+										itemID_xmID,  <!-- 巡检项目ID -->
+										cardID,
+										jitemName,
+										itemDesc,
+										referenceValue,
+										sortNo,
+										actualValueUnit  <!-- 巡检实际值单位 -->
+										)		 
+	    VALUES (#itemid#, #itemidXmid#, #cardid#, #jitemname#, #itemdesc#, #referencevalue#, #sortno#, #actualvalueunit#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM di_card_relation WHERE 
+			itemID = #itemid#
+	</delete>
+
+	<update id="update">
+		UPDATE di_card_relation 
+		SET 
+					itemID_xmID	= #itemidXmid#,   <!-- 巡检项目ID -->  
+					cardID	= #cardid#,   
+					jitemName	= #jitemname#,   
+					itemDesc	= #itemdesc#,   
+					referenceValue	= #referencevalue#,   
+					sortNo	= #sortno#,   
+					actualValueUnit	= #actualvalueunit#  <!-- 巡检实际值单位 -->  
+			WHERE 	
+			itemID = #itemid#
+	</update>
+  
+  
+  <select id="queryContTypeNum" parameterClass="string" resultClass="string">
+  select max(cardCode) from di_card
+ </select>
+ 
+<insert id="saveBasicsInfo" parameterClass="java.util.HashMap">
+		INSERT INTO di_card (cardID,
+										cardCode,
+										cardName,
+										cardType,
+										memo,
+										createTime,
+										createMan,
+										createIP,
+										modifyTime,
+										modifyMan,
+										modifyIP,
+										status,  <!-- ״̬,0=δ -->
+										inspType  <!-- 巡检类型 -->
+										)		 
+	    VALUES (#cardid#, #cardcode#, #cardname#, #cardtype#, #memo#, #createtime#, #createman#, #createip#, #modifytime#, #modifyman#, #modifyip#, #status#, #insptype#) 
+	</insert>
+ 
+ <insert id="saveProjectInfo" parameterClass="java.util.HashMap">
+		INSERT INTO di_card_relation (itemID,
+										itemID_xmID,  <!-- 巡检项目ID -->
+										cardID,
+										jitemName,
+										itemDesc,
+										referenceValue,
+										sortNo,
+										actualValueUnit  <!-- 巡检实际值单位 -->
+										)		 
+	    VALUES (#itemid#, #itemidXmid#, #cardid#, #jitemname#, #itemdesc#, #referencevalue#, #sortno#, #actualvalueunit#) 
+	</insert>
+</sqlMap>

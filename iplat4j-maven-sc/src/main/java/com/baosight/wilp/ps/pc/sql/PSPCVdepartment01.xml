@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!-- 科室信息表sqlMap -->
+<sqlMap namespace="PSPCVdepartment01">
+
+
+	<!-- 通过视图查询楼层科室信息 -->
+	<select id="queryDeptByBuildAndFloor" resultClass="HashMap"
+		parameterClass="HashMap">
+		SELECT 
+		  distinct( t1.dept_num ) dept_num,
+          t1.dept_name dept_name 
+		FROM
+		v_frame_ac_spot t 
+		LEFT JOIN
+			(SELECT a.typecode,a.typename 
+			FROM sc_type a,sc_typegroup b 
+			WHERE a.typegroupid = b.ID 
+			AND b.typegroupcode = 'building') c on t.building=c.typename
+		LEFT JOIN
+			(SELECT
+			a.typecode,a.typename 
+			FROM sc_type a,sc_typegroup b 
+			WHERE a.typegroupid = b.ID 
+			AND b.typegroupcode = 'floor') d ON t.floor=d.typename
+		LEFT JOIN
+			v_frame_ac_department t1 on t.dept_id = t1.id 
+		WHERE
+		1=1
+		<isNotEmpty prepend=" AND " property="deptNum">
+			t.dept_num = #deptNum#
+		</isNotEmpty>
+		AND d.typename=#floor#
+		AND
+		c.typename=#building#
+
+		ORDER BY
+		t.spot_num
+	</select>
+
+	<!-- 查询楼层 -->
+	<select id="queryFloor" resultClass="HashMap"
+		parameterClass="String">
+		SELECT
+		distinct(h.floor),a.typename floorName
+		FROM
+		(
+		SELECT * FROM
+		v_frame_ac_spot t,
+		(SELECT a.typecode,a.typename FROM sc_type a,sc_typegroup b 
+		WHERE a.typegroupid = b.ID AND b.typegroupcode = 'building') c
+		WHERE t.building = c.typecode
+		) h ,
+		(SELECT a.typecode,a.typename,a.`sortNo`,a.`paramDesc2`,a.`paramValue2`,a.`paramValue1`
+		FROM sc_type a,sc_typegroup b WHERE a.typegroupid = b.ID AND
+		b.typegroupcode = 'floor') a 
+		WHERE h.floor = a.typecode AND h.floor IS NOT NULL
+		and h.typename =#building#
+		order by h.floor
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM v_frame_ac_department WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+	<select id="queryBilld" resultClass="HashMap"
+			parameterClass="HashMap">
+		SELECT
+user_name as userName
+FROM sc_order_bill_patient
+where 1=1
+and status_code != '99'
+and user_name = #userName#
+and need_date = #needDate#
+and meal_num = #mealNum#
+and role_num = #roleNum#
+	</select>
+
+	<select id="queryBuildAndFloor" resultClass="HashMap"
+			parameterClass="String">
+		select
+building as buildingName,
+floor as floorName,
+dept_name_parent as wardName,
+dept_num_parent as wardCode
+from sc_patient_address
+where 1=1
+and take_effect = '1'
+and dept_num = #deptNum#
+	</select>
+
+</sqlMap>

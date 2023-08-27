@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PRGL0201">
+
+	<!--通过问题id查询图片路径-->
+	<select id="queryPic" parameterClass="String" resultClass="com.baosight.wilp.pr.gl.domain.PRGL0201">
+		SELECT
+			pf.storagePath as storagePath
+		FROM
+			pr_common_file pf left join pr_safty_danger_pic psdp
+			on psdp.fileID = pf.fileID
+		where psdp.dangerID = #value#
+	</select>
+
+	<!-- 查询整改详细信息 -->
+	<select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.pr.gl.domain.PRGL0201">
+			SELECT
+				tsd.id AS id,
+				tsd.dangerWhere AS dangerwhere,
+				tsd.contentDesc AS contentdesc,
+				tsd.dangerLevel AS dangerlevel,
+				tsd.requiredTime AS requiredtime,
+				tsd.localTypeCode AS localtypecode,
+				tsd.requireDesc AS requiredesc,
+				tcf.fileName AS fileName,
+				tcf.storagePath AS storagePath,
+				tsd.id AS dangerid,
+				tsd.localTypeName AS localTypeName
+			FROM
+				pr_safty_danger tsd
+				left join pr_safty_danger_pic tsdp on tsd.id = tsdp.dangerID
+				left join pr_common_file tcf ON tcf.fileID = tsdp.fileID
+			WHERE
+				tsd.id = #id#
+	</select>
+	
+	
+	<!-- 保存问题整改内容 -->
+	<insert id="insert" parameterClass="com.baosight.wilp.pr.gl.domain.PRGL0201">
+		insert into pr_safty_danger_result(
+			id,
+			dangerID,
+			contentDesc,
+			finishTime,
+			writeMan,
+			writeTime,
+			localTypeCode,
+			localTypeName
+		)values(
+		    #id#,
+			#dangerid#,
+			#contentdesc#,
+			#finishTime#,
+			#writeMan#,
+			#writeTime#,
+			#localtypecode#,
+			#localTypeName#
+		);
+	</insert>
+	
+	<!-- 修改问题状态 -->
+	<update id="updateStatusCode" parameterClass="java.util.HashMap">
+		update pr_safty_danger set status_code = #statusCode# where id = #id#
+	</update>
+	
+	<!-- 记录日志  -->
+	<insert id="logs" parameterClass="java.util.HashMap">
+		INSERT INTO pr_safty_danger_logs ( id, dangerID,logsNo, logsMan, logsTime, rejectStatus, rejectReason, dataGroupCode )
+		VALUES
+			( UUID(), #dangerID#,#logsNo#, #logsMan#, #logsTime#, #rejectStatus#, #rejectReason#, #dataGroupCode# )
+	</insert>
+	
+	<!-- 保存整改图片信息 -->
+	<insert id="insertPic" parameterClass="java.util.HashMap">
+		INSERT INTO pr_common_file ( ID, fileID, fileName, storagePath )
+		VALUES
+			( UUID(), #picId#, #fileName#, #storagePath#)
+	</insert>
+	
+	<!-- 查询问题图片自增键 -->
+	<select id="queryProblemPic" parameterClass="java.util.HashMap" resultClass="String">
+		select fileID from pr_common_file where fileName = #fileName#
+	</select>
+	
+	<!-- 图片关联 -->
+	<insert id="picParam">
+		insert into pr_safty_danger_result_pic (picID,dangerResultID,fileID) VALUES (UUID(),#dangerResultID#,#fileID#)
+	</insert>
+
+	<!-- 查询问题自增键 -->
+	<select id="queryResultID" parameterClass="com.baosight.wilp.pr.gl.domain.PRGL0201" resultClass="String">
+		select dangerResultID from pr_safty_danger_result where 1=1
+	<isNotEmpty prepend=" AND " property="contentdesc">
+		contentDesc = #contentdesc#
+	</isNotEmpty>
+	<isNotEmpty prepend=" AND " property="dangerid">
+		dangerID = #dangerid#
+	</isNotEmpty>
+	<isNotEmpty prepend=" AND " property="finishTime">
+		finishTime = #finishTime#
+	</isNotEmpty>
+	<isNotEmpty prepend=" AND " property="writeMan">
+		writeMan = #writeMan#
+	</isNotEmpty>
+	<isNotEmpty prepend=" AND " property="writeTime">
+		writeTime = #writeTime#
+	</isNotEmpty>
+	<isNotEmpty prepend=" AND " property="localtypecode">
+		localTypeCode = #localtypecode#
+	</isNotEmpty>
+	</select>
+
+</sqlMap>

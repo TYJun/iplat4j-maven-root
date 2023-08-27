@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	 
+<!--评价分类表-->
+<sqlMap namespace="PSPCTevalType">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.ps.pc.domain.PSPCTevalType">
+		SELECT
+				id	as "id",  
+				REC_CREATOR	as "recCreator",  <!-- 创建人 -->
+				REC_CREATE_TIME	as "recCreateTime",  <!-- 创建时间 -->
+				REC_REVISOR	as "recRevisor",  <!-- 更新人 -->
+				REC_REVISE_TIME	as "recReviseTime",  <!-- 更新时间 -->
+				eval_type	as "evalType",  <!-- 评价类型 -->
+				eval_type_name	as "evalTypeName",  <!-- 类型名称 -->
+				status_code	as "statusCode",  <!-- 状态1/启用;0/停用 -->
+				canteen_num	as "canteenNum",  <!-- 食堂编码 -->
+				canteen_name	as "canteenName",  <!-- 食堂名称 -->
+				order_no	as "orderNo" <!-- 排序 -->
+		FROM sc_eval_type WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="canteenNum">
+			canteen_num = #canteenNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="evalType">
+			eval_type = #evalType#
+		</isNotEmpty>
+		order by order_no
+
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_eval_type WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreator">
+			REC_CREATOR = #recCreator#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTime">
+			REC_CREATE_TIME = #recCreateTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recRevisor">
+			REC_REVISOR = #recRevisor#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recReviseTime">
+			REC_REVISE_TIME = #recReviseTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="evalType">
+			eval_type = #evalType#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="evalTypeName">
+			eval_type_name = #evalTypeName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			status_code = #statusCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="canteenNum">
+			canteen_num = #canteenNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="canteenName">
+			canteen_name = #canteenName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="orderNo">
+			order_no = #orderNo#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO sc_eval_type (id,
+										REC_CREATOR,  <!-- 创建人 -->
+										REC_CREATE_TIME,  <!-- 创建时间 -->
+										REC_REVISOR,  <!-- 更新人 -->
+										REC_REVISE_TIME,  <!-- 更新时间 -->
+										eval_type,  <!-- 评价类型 -->
+										eval_type_name,  <!-- 类型名称 -->
+										status_code,  <!-- 状态1/启用;0/停用 -->
+										canteen_num,  <!-- 食堂编码 -->
+										canteen_name,  <!-- 食堂名称 -->
+										order_no  <!-- 排序 -->
+										)		 
+	    VALUES (#id#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #evalType#, #evalTypeName#, #statusCode#, #canteenNum#, #canteenName#, #orderNo#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM sc_eval_type WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_eval_type 
+		SET 
+					REC_CREATOR	= #recCreator#,   <!-- 创建人 -->  
+					REC_CREATE_TIME	= #recCreateTime#,   <!-- 创建时间 -->  
+					REC_REVISOR	= #recRevisor#,   <!-- 更新人 -->  
+					REC_REVISE_TIME	= #recReviseTime#,   <!-- 更新时间 -->  
+					eval_type	= #evalType#,   <!-- 评价类型 -->  
+					eval_type_name	= #evalTypeName#,   <!-- 类型名称 -->  
+					status_code	= #statusCode#,   <!-- 状态1/启用;0/停用 -->  
+					canteen_num	= #canteenNum#,   <!-- 食堂编码 -->  
+					canteen_name	= #canteenName#,   <!-- 食堂名称 -->  
+					order_no	= #orderNo#  <!-- 排序 -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

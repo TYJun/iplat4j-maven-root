@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="AUHD01">
+
+    <!--  -->
+	<select id="queryRoleList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			SELECT t.* FROM (
+					select ard.dept_id AS deptId,
+						   ad.dept_name AS deptName,
+						   ard.role_id AS roleId,
+						   aro.role_num AS roleNum,
+						   aro.role_name AS roleName,
+						   aro.remark AS remark
+					from $projectSchema$.ac_rd ard 
+					LEFT JOIN $projectSchema$.ac_role aro  ON ard.role_id = aro.id
+					LEFT JOIN $projectSchema$.ac_department ad ON ad.id =  ard.dept_id
+		    ) t
+			WHERE 1=1 
+			
+			<isNotEmpty prepend="and" property="curDeptId">
+				t.deptId =#curDeptId#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="roleNum">
+				t.roleNum =#roleNum#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="roleName">
+				t.roleName =#roleName#
+			</isNotEmpty>
+			
+	</select>
+						
+	<!--  -->			
+	<select id="queryRoleCount" parameterClass="java.util.HashMap" resultClass="int">
+			SELECT COUNT(1) FROM (
+					select ard.dept_id AS deptId,
+						   ard.role_id AS roleId,
+						   aro.role_num AS roleNum,
+						   aro.role_name AS roleName,
+						   aro.remark AS remark
+					from $projectSchema$.ac_rd ard 
+					LEFT JOIN $projectSchema$.ac_role aro  ON ard.role_id = aro.id
+		    ) t
+			WHERE 1=1
+		
+			<isNotEmpty prepend="and" property="curDeptId">
+				t.deptId =#curDeptId#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="roleNum">
+				t.roleNum =#roleNum#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="roleName">
+				t.roleName =#roleName#
+			</isNotEmpty>
+
+	</select>
+	
+	<select id="getChildrenList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			select id ,
+				 dept_num ,
+				 dept_name 
+			from $projectSchema$.ac_department
+		    where FIND_IN_SET(id, $projectSchema$.getChildrenList(#deptId#))
+		    and id != #deptId#
+	</select>
+	
+	<select id="queryDpList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			select id 
+			from $projectSchema$.ac_rd
+		    WHERE 1 = 1
+		    AND
+			<iterate  conjunction="OR" open="(" close=")" property="parmeList">
+			     (role_id = #parmeList[].roleId# AND dept_id = #parmeList[].deptId# )
+			</iterate>
+	</select>
+	
+	<delete id="relieveRole" parameterClass="java.util.HashMap" >
+			DELETE FROM $projectSchema$.ac_rd 
+		    WHERE 1 = 1
+		    AND
+			<iterate  conjunction="OR" open="(" close=")" property="list">
+			     (role_id = #list[].roleId# AND dept_id = #list[].deptId# )
+			</iterate>
+	</delete>
+	
+
+</sqlMap>

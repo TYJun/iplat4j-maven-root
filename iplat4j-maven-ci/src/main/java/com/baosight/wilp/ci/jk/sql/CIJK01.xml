@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="CIJK01">
+
+	<select id="queryMtMat" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		WARE_HOUSE_NO	as "wareHouseNo",  <!-- 仓库号 -->
+		ware_house_name	as "wareHouseName",  <!-- 仓库名称 -->
+		MAT_TYPE_NUM	as "matTypeNum",  <!-- 物资分类编码 -->
+		mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+		MAT_NUM	as "matNum",  <!-- 物资编码 -->
+		MAT_NAME	as "matName",  <!-- 物资名称 -->
+		MAT_MODEL	as "matModel",  <!-- 物资型号 -->
+		MAT_SPEC	as "matSpec",  <!-- 物资规格 -->
+		UNIT	as "unit",  <!-- 计量单位编码 -->
+		UNIT_NAME	as "unitName",  <!-- 计量单位名称 -->
+		TOTAL_NUM	as "num",  <!-- 库存总量 -->
+		PRICE	as "price",  <!-- 单价 -->
+		surp_num	as "surpNum",  <!-- 供应商编码 -->
+		surp_name	as "surpName" <!-- 供应商名称 -->
+		FROM ci_storge WHERE WARE_HOUSE_NO = #wareHouseNo#  <!-- 仓库号 -->
+		<isNotEmpty prepend=" AND " property="matName"> <!-- 物资名称 -->
+			MAT_NAME like concat('%', #matName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeName"> <!-- 物资分类名称 -->
+			MAT_TYPE_NAME like concat('%', #matTypeName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNum"> <!-- 物资编码 -->
+			MAT_NUM = #matNum#
+		</isNotEmpty>
+		order by MAT_NUM ASC
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+
+	<select id="queryMtMatCount" resultClass="int">
+		SELECT id FROM ci_storge WHERE WARE_HOUSE_NO = #wareHouseNo#
+		<isNotEmpty prepend=" AND " property="matName"> <!-- 物资名称 -->
+			MAT_NAME like concat('%', #matName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeName"> <!-- 物资分类名称 -->
+			MAT_TYPE_NAME like concat('%', #matTypeName#, '%')
+		</isNotEmpty>
+	</select>
+
+	<select id="queryMtMatZRZC" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		b.mat_class_code	as "matTypeNum",  <!-- 物资分类编码 -->
+		b.mat_class_name	as "matTypeName",  <!-- 物资分类名称 -->
+		a.mat_code	as "matNum",  <!-- 物资编码 -->
+		a.mat_name	as "matName",  <!-- 物资名称 -->
+		a.mat_model	as "matModel",  <!-- 物资型号 -->
+		a.mat_spec	as "matSpec",  <!-- 物资规格 -->
+		a.unit	as "unit",  <!-- 计量单位编码 -->
+		a.price	as "price"  <!-- 单价 -->
+		FROM bona_frame_mzsrmyy.ac_material a
+		left join bona_frame_mzsrmyy.ac_material_class b on b.id = a.mat_class_id
+		WHERE a.mat_class_id = 'MC00001' <!-- 仓库号 -->
+		<isNotEmpty prepend=" AND " property="matName"> <!-- 物资名称 -->
+			a.mat_name like concat('%', #matName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeName"> <!-- 物资分类名称 -->
+			b.mat_class_name like concat('%', #matTypeName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNum"> <!-- 物资编码 -->
+			a.mat_code = #matNum#
+		</isNotEmpty>
+		order by a.mat_code ASC
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+
+	<select id="queryMtMatZRZCCount" resultClass="int">
+		SELECT a.id FROM bona_frame_mzsrmyy.ac_material a
+		left join bona_frame_mzsrmyy.ac_material_class b on b.id = a.mat_class_id
+		WHERE a.mat_class_id = 'MC00001'
+		<isNotEmpty prepend=" AND " property="matName"> <!-- 物资名称 -->
+			a.mat_name like concat('%', #matName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeName"> <!-- 物资分类名称 -->
+			b.mat_class_name like concat('%', #matTypeName#, '%')
+		</isNotEmpty>
+	</select>
+
+
+  
+</sqlMap>

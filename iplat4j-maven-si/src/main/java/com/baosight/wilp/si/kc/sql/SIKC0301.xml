@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SIKC0301">
+
+	<select id="queryOutByTime" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select
+			sod.OUT_TYPE outType,
+		    sum(sod.OUT_NUM) outNum,
+		    sum(sod.OUT_AMOUNT) outAmount
+		from si_out so
+		left join si_out_detail sod on so.OUT_BILL_NO = sod.OUT_BILL_NO
+		where sod.MAT_NUM = #matNum# and so.WARE_HOUSE_NO = #wareHouseNo#
+		<isNotEmpty property="date" prepend=" and ">
+			sod.out_time between concat(#date#, ' 00:00:00') and concat(#date#, ' 23:59:59')
+		</isNotEmpty>
+		<isNotEmpty property="month" prepend=" and ">
+			sod.out_time between concat(#month#, '-01 00:00:00') and concat(#month#, '-31 23:59:59')
+		</isNotEmpty>
+		group by sod.OUT_TYPE
+	</select>
+
+	<select id="queryEnterByTime" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select
+			sed.ENTER_TYPE enterType,
+			sum(sed.ENTER_NUM) enterNum,
+			sum(sed.ENTER_AMOUNT) enterAmount
+		from si_enter se
+		left join si_enter_detail sed on se.ENTER_BILL_NO = sed.ENTER_BILL_NO
+		where sed.MAT_NUM = #matNum# and se.WARE_HOUSE_NO = #wareHouseNo#
+		<isNotEmpty property="date" prepend=" and ">
+			sed.enter_time between concat(#date#, ' 00:00:00') and concat(#date#, ' 23:59:59')
+		</isNotEmpty>
+		<isNotEmpty property="month" prepend=" and ">
+			sed.enter_time between concat(#month#, '-01 00:00:00') and concat(#month#, '-31 23:59:59')
+		</isNotEmpty>
+		group by sed.ENTER_TYPE
+	</select>
+  
+</sqlMap>

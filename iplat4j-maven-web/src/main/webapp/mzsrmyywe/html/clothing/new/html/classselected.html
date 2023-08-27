@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>分类选择</title>
+    <link rel="stylesheet" href="../css/classselected.css" />
+    <link
+      rel="stylesheet"
+      href="../../../../../html\reference\mui\css\mui.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../../../html\reference\mui\css\mui.picker.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../../../html\reference\mui\css\mui.picker.min.css"
+    />
+  </head>
+  <body>
+    <div class="app" v-clock>
+      <!-- 顶部区域 -->
+      <header>
+        <div class="top">
+          <div id="top-bar">
+            <span
+              id="icon-left-back"
+              class="mui-icon mui-icon-arrowleft"
+            ></span>
+            <h1 id="title">分类选择</h1>
+            <span id="add" v-on:click="add">添加</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- 查询区域 -->
+      <div class="search_area">
+        <span>分类名称:</span>
+        <div class="search">
+          <input placeholder="请输入关键字" />
+        </div>
+        <button type="button" class="search_btn">查询</button>
+      </div>
+
+      <!-- 表格区域 -->
+      <table class="select_table">
+        <thead>
+          <tr>
+            <th>分类名称</th>
+            <th>规格</th>
+            <th>是否选择</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item,index) in select_list" :key="index">
+            <td>111</td>
+            <td>222</td>
+            <td>
+              <div class="mui-input-row mui-checkbox" id="checkbox">
+                <label></label>
+                <input
+                  name="checkbox1"
+                  value="Item 1"
+                  type="checkbox"
+                />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>aaa</td>
+            <td>bbb</td>
+            <td>
+              <div class="mui-input-row mui-checkbox" id="checkbox">
+                <label></label>
+                <input
+                  name="checkbox1"
+                  value="Item 1"
+                  type="checkbox"
+                />
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+  <script src="../../../../../reference/assets/js/jquery.min.js"></script>
+  <script src="../../../../../html/reference/mui/js/mui.min.js"></script>
+  <script src="../../../../../html/reference/mui/js/mui.picker.min.js"></script>
+  <script src="../../../../../js/vue.js"></script>
+  <script>
+    var app = new Vue({
+      el: "#app",
+      data: {
+        select_list: [],
+      },
+      methods: {
+        get_select_list() {
+          // 获取表格中的可选择的表格数据
+          this.select_list = [];
+        },
+      },
+      created() {
+        this.get_select_list(); //获取可选择的织物数据
+      },
+    });
+    //点击“添加”按钮事件
+    var add = new Vue({
+      el: "#add",
+      data: {},
+      methods: {
+        add: function () {
+          var btnArray = ["是", "否"];
+          mui.confirm("确定添加吗？", "提示", btnArray, function (e) {
+            if (e.index == 0) {
+              if (toSave == 0) {
+                // toSave = 1;
+                // save();
+                // setTimeout(function() {
+                //   toSave = 0;
+                // }, 3000);
+              } else {
+                mui.toast("请勿频繁操作！");
+              }
+            } else {
+            }
+          });
+        },
+      },
+      created() {
+      },
+    });
+  </script>
+</html>

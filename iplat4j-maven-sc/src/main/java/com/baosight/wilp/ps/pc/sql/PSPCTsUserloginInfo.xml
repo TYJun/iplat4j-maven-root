@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd"> 
+
+<sqlMap namespace="PSPCTsUserloginInfo">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.ps.pc.domain.PSPCTsUserloginInfo">
+		SELECT
+				ID	as "id",  <!-- 主键 -->
+				WORK_NO	as "workNo",  <!-- 工号 -->
+				LAST_LOGIN_TIME	as "lastLoginTime",  <!-- 上次登录时间 -->
+				LAST_LOGOUT_TIME	as "lastLogoutTime",  <!-- 上次登出时间 -->
+				LAST_USE_ORG_CODE	as "lastUseOrgCode" <!-- 上次使用机构代码 -->
+		FROM t_s_userlogin_info WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            ID = #id#
+        </isNotEmpty>
+            <dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+              $orderBy$
+         </isNotEmpty>
+        <isEmpty property="orderBy">
+              ID asc
+        </isEmpty>
+        </dynamic>
+	</select>
+	
+	<select id="queryNeedVaildate" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.ps.pc.domain.PSPCTsUserloginInfo">
+		SELECT
+				ID	as "id",  <!-- 主键 -->
+				WORK_NO	as "workNo",  <!-- 工号 -->
+				LAST_LOGIN_TIME	as "lastLoginTime",  <!-- 上次登录时间 -->
+				LAST_LOGOUT_TIME	as "lastLogoutTime",  <!-- 上次登出时间 -->
+				LAST_USE_ORG_CODE	as "lastUseOrgCode" <!-- 上次使用机构代码 -->
+		FROM t_s_userlogin_info WHERE 1=1
+		and  WORK_NO = #workNo#   
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM t_s_userlogin_info WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workNo">
+			WORK_NO = #workNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="lastLoginTime">
+			LAST_LOGIN_TIME = #lastLoginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="lastLogoutTime">
+			LAST_LOGOUT_TIME = #lastLogoutTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="lastUseOrgCode">
+			LAST_USE_ORG_CODE = #lastUseOrgCode#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO t_s_userlogin_info (ID,  <!-- 主键 -->
+										WORK_NO,  <!-- 工号 -->
+										LAST_LOGIN_TIME,  <!-- 上次登录时间 -->
+										LAST_LOGOUT_TIME,  <!-- 上次登出时间 -->
+										LAST_USE_ORG_CODE  <!-- 上次使用机构代码 -->
+										)		 
+	    VALUES (#id#, #workNo#, #lastLoginTime#, #lastLogoutTime#, #lastUseOrgCode#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM t_s_userlogin_info WHERE 
+			ID = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE t_s_userlogin_info 
+		SET 
+					WORK_NO	= #workNo#,   <!-- 工号 -->  
+					LAST_LOGIN_TIME	= #lastLoginTime#,   <!-- 上次登录时间 -->  
+					LAST_LOGOUT_TIME	= #lastLogoutTime#,   <!-- 上次登出时间 -->  
+					LAST_USE_ORG_CODE	= #lastUseOrgCode#  <!-- 上次使用机构代码 -->  
+			WHERE 	
+			ID = #id#
+	</update>
+  
+</sqlMap>

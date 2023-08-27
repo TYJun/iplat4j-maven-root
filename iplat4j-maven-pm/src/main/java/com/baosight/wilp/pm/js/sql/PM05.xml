@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="PM05">
+
+	<!-- 查询归档项目List -->
+	<select id="queryProjectListByDocumentsCode" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			pr.ID as id,  
+			pr.PARENT_PROJECT_PK	as parentProjectPk, 
+			pr.PROJECT_NO	as projectNo, 
+			pr.PROJECT_NAME	as projectName,  
+			pr.PROJECT_PROP	as projectProp,  
+			pr.PROJECT_TYPE_NUM	as projectTypeNum, 
+			pr.PROJECT_PRI_NUM	as projectPriNum, 
+			pr.PROJECT_CONTENT	as projectContent,  
+			pr.PROJECT_STATUS	as projectStatus, 
+			pr.PROJECT_PROGRESS	as projectProgress, 
+			pr.PROJECT_OBJECT_CONS	as projectObjectCons,
+			pr.PROJECT_OBJECT_CONS_NAME as projectObjectConsName,
+			pr.PROJECT_OBJECT_DEPT_NUM	as projectObjectDeptNum,  
+			pr.PROJECT_OBJECT_DEPT_NAME as projectObjectDeptName,
+			pr.CONTOR_ID	as contorId,  
+			pr.CONTOR_NAME as projectPrincipal,
+			pr.UNDERTAKE_DEPT_NUM	as undertakeDeptNum, 
+			pr.UNDERTAKE_DEPT_NAME as undertakeDeptName,
+			pr.START_DATE	as startDate,  
+			pr.FINISH_DEADLINE	as finishDeadline,  
+			pr.ACT_FINISTH_DATE	as actFinisthDate,  
+			pr.FINISH_EXPENSE	as finishExpense,  
+			pr.PROJECT_REMARK	as projectRemark,  
+			pr.WINBID_EXPENSE	as winbidExpense,  
+			pr.YSTIME	as ystime,  
+			pr.ARCHIVE_FLAG	as archiveFlag, 
+			pr.DATAGROUP_CODE	as dataGroupCode,  
+			pr.REC_CREATOR	as recCreator, 
+			pr.REC_CREATE_TIME	as recCreateTime, 
+			pr.REC_REVISOR	as recRevisor, 
+			pr.REC_REVISE_TIME	as recReviseTime, 
+			pr.SUPPLIER_NUM as supplierNum,
+			pr.SUPPLIER_NAME as supplierName 
+		FROM pm01 pr 
+		left join pm_calculate_del tcd on tcd.PROJ_CODE = pr.PROJECT_NO
+		where tcd.DOCUMENTS_CODE = #documentsCode#
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  pr.REC_CREATE_TIME asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+	
+	<!-- 查询归档项目Count -->
+	<select id="queryProjectCountByDocumentsCode" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT pr.* FROM pm01 pr 
+		left join pm_calculate_del tcd on tcd.PROJ_CODE = pr.PROJECT_NO
+		where tcd.DOCUMENTS_CODE = #documentsCode#
+	</select>
+	
+	<!-- 项目归档提交 -->
+	<update id="updateCalculateStatus" parameterClass="java.util.HashMap" >
+		update pm_calculate set DOC_STATUS_CODE = #docStatusCode# where find_in_set(id, #ids#)
+	</update>
+
+	<!-- =============================================工程项目归档主表开始============================================== -->
+	<!-- 查询归档List -->
+	<select id="queryCalculateList" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.pm.domain.TpmCalculate">
+		SELECT
+				tt.ID	as id,  <!-- 主键 -->
+				tt.DOCUMENTS_CODE	as documentsCode,  <!-- 文档编码 -->
+				tt.DOCUMENTS_NAME	as documentsName,  <!-- 文档名称 -->
+				tt.SUBMITTER_CODE	as submitterCode,  <!-- 提交人工号 -->
+				tt.SUBMITTER_NAME AS submitter,
+				tt.RECIPIENT_CODE	as recipientCode,  <!-- 审核人工号 -->
+				tt.RECIPIENT_NAME AS recipient,
+				tt.CHARGE	as charge,  <!-- 结算费用 -->
+				tt.MATERIAL_STATUS_CODE	as materialStatusCode,  <!-- 决算材料 -->
+				tt.STATUS_CODE	as statusCode,  <!-- 施工确认 -->
+				tt.DATA_SUBMITTER_CODE	as dataSubmitterCode,  <!-- 资料提交人员 -->
+				tt.DATA_SUBMITTER_NAME as dataSubmitter,
+				tt.DATA_RECIPIENT_CODE	as dataRecipientCode,  <!-- 审计接受人员 -->
+				tt.DATA_RECIPIENT_NAME as dataRecipient,
+				tt.CAL_CHARGE	as calCharge,  <!-- 审计确认金额 -->
+				tt.DATA_CODE	as dataCode,  <!-- 提交资料编码 -->
+				tt.DATA_NAME	as dataName,  <!-- 提交资料名称 -->
+				tt.DATA_SUBMITTER_CODE_BACK	as dataSubmitterCodeBack,  <!-- 报告交付人员 -->
+				tt.DATA_SUBMITTER_CODE_BACK_NAME as dataSubmitterCodeBackName,
+				tt.DATA_RECIPIENT_CODE_BACK	as dataRecipientCodeBack,  <!-- 报告接收人员 -->
+				tt.DATA_RECIPIENT_CODE_BACK_NAME as dataRecipientCodeBackName,
+				tt.DATAGROUP_CODE	as dataGroupCode,  <!-- 账套 -->
+				tt.DOC_STATUS_CODE	as docStatusCode,  <!-- 归档文件状态编码 -->
+				tt.ARCHIVE_FLAG	as archiveFlag,  <!-- 归档标记 -->
+				tt.REC_CREATOR	as recCreator,  <!-- 记录创建责任者 -->
+				tt.REC_CREATE_TIME	as recCreateTime,  <!-- 记录创建时间 -->
+				tt.REC_REVISOR	as recRevisor,  <!-- 记录修改责任者 -->
+				tt.REC_REVISE_TIME	as recReviseTime <!-- 记录修改时间 -->
+		FROM pm_calculate tt
+		<!-- left join tbmbd02 t2c on tt.DATA_SUBMITTER_CODE = t2c.work_no
+		left join tbmbd02 t2d on tt.DATA_RECIPIENT_CODE = t2d.work_no
+		left join tbmbd02 t2e on tt.DATA_SUBMITTER_CODE_BACK = t2e.work_no
+		left join tbmbd02 t2f on tt.DATA_RECIPIENT_CODE_BACK = t2f.work_no -->
+		WHERE find_in_set(tt.DOC_STATUS_CODE, #docStatusCode# ) 
+		<isNotEmpty prepend=" AND " property="id">
+			tt.ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="documentsName">
+			tt.DOCUMENTS_NAME like concat('%', #documentsName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="submitter">
+			tt.SUBMITTER_NAME like concat('%', #submitter#, '%')
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  tt.REC_CREATE_TIME,DOC_STATUS_CODE asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+	
+	<!-- 查询归档Count -->
+	<select id="queryCalculateCount" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT tt.* FROM pm_calculate tt
+		WHERE tt.DOC_STATUS_CODE = #docStatusCode# 
+		<isNotEmpty prepend=" AND " property="id">
+			tt.ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="documentsName">
+			tt.DOCUMENTS_NAME like concat('%', #documentsName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="submitter">
+			tt.SUBMITTER_NAME like concat('%', #submitter#, '%')
+		</isNotEmpty>
+	</select>
+	
+	<!-- 删除归档信息 -->
+	<delete id="deleteCalculate" parameterClass="java.lang.String">
+		DELETE FROM pm_calculate WHERE ID = #id#
+	</delete>
+	
+	<!-- 归档数据保存  -->
+	<insert id="insertCalculate" parameterClass="com.baosight.wilp.pm.domain.TpmCalculate">
+		INSERT INTO .pm_calculate (ID,  <!-- 主键 -->
+										DOCUMENTS_CODE,  <!-- 文档编码 -->
+										DOCUMENTS_NAME,  <!-- 文档名称 -->
+										SUBMITTER_NAME,  <!-- 提交人 -->
+										SUBMITTER_CODE,  <!-- 提交人工号 -->
+										RECIPIENT_NAME,  <!-- 审核人 -->
+										RECIPIENT_CODE,  <!-- 审核人工号 -->
+										CHARGE,  <!-- 结算费用 -->
+										MATERIAL_STATUS_CODE,  <!-- 决算材料 -->
+										STATUS_CODE,  <!-- 施工确认 -->
+										DATA_SUBMITTER_CODE,  <!-- 资料提交人员 -->
+										DATA_RECIPIENT_CODE,  <!-- 审计接受人员 -->
+										CAL_CHARGE,  <!-- 审计确认金额 -->
+										DATA_CODE,  <!-- 提交资料编码 -->
+										DATA_SUBMITTER_CODE_BACK,  <!-- 报告交付人员 -->
+										DATA_RECIPIENT_CODE_BACK,  <!-- 报告接收人员 -->
+										DATAGROUP_CODE,  <!-- 账套 -->
+										DOC_STATUS_CODE,  <!-- 归档文件状态编码 -->
+										ARCHIVE_FLAG,  <!-- 归档标记 -->
+										REC_CREATOR,  <!-- 记录创建责任者 -->
+										REC_CREATE_TIME,  <!-- 记录创建时间 -->
+										REC_REVISOR,  <!-- 记录修改责任者 -->
+										REC_REVISE_TIME  <!-- 记录修改时间 -->
+										)		 
+	    VALUES (#id#, #documentsCode#, #documentsName#, #submitterName#, #submitterCode#, #recipientName#, #recipientCode#, #charge#, #materialStatusCode#, #statusCode#, #dataSubmitterCode#, #dataRecipientCode#, #calCharge#, #dataCode#, #dataSubmitterCodeBack#, #dataRecipientCodeBack#, #dataGroupCode#, #docStatusCode#, #archiveFlag#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#) 
+	</insert>
+	
+	<!-- 更新归档数据 -->
+	<update id="updateCalculate" parameterClass="com.baosight.wilp.pm.domain.TpmCalculate">
+		UPDATE pm_calculate SET 
+					DOCUMENTS_NAME	= #documentsName#,   <!-- 文档名称 -->  
+					SUBMITTER_NAME	= #submitterName#, 	 <!-- 提交人 -->  
+					SUBMITTER_CODE	= #submitterCode#,   <!-- 提交人工号 -->  
+					RECIPIENT_NAME  = #recipientName#,   <!-- 审核人 -->  
+					RECIPIENT_CODE	= #recipientCode#,   <!-- 审核人工号 -->  
+					CHARGE	= #charge#,   <!-- 结算费用 -->  
+					MATERIAL_STATUS_CODE	= #materialStatusCode#,   <!-- 决算材料 -->  
+					STATUS_CODE	= #statusCode#,   <!-- 施工确认 -->  
+					DATA_SUBMITTER_NAME	= #dataSubmitterName#,   <!-- 资料提交人员 -->  
+					DATA_SUBMITTER_CODE	= #dataSubmitterCode#,   <!-- 资料提交人员工号 -->  
+					DATA_RECIPIENT_NAME	= #dataRecipientName#,   <!-- 审计接受人 -->  
+					DATA_RECIPIENT_CODE	= #dataRecipientCode#,   <!-- 审计接受人员工号 -->  
+					CAL_CHARGE	= #calCharge#,   <!-- 审计确认金额 -->  
+					DATA_NAME	= #dataName#,   <!-- 提交资料编码 --> 
+					DATA_CODE	= #dataCode#,   <!-- 提交资料编码 -->  
+					DATA_SUBMITTER_CODE_BACK_NAME	= #dataSubmitterCodeBackName#,   <!-- 报告交付人 -->  
+					DATA_SUBMITTER_CODE_BACK	= #dataSubmitterCodeBack#,   <!-- 报告交付人工号 --> 
+					DATA_RECIPIENT_CODE_BACK_NAME	= #dataRecipientCodeBackName#,   <!-- 报告接收人 -->  
+					DATA_RECIPIENT_CODE_BACK	= #dataRecipientCodeBack#,   <!-- 报告接收人工号 -->  
+					REC_REVISOR	= #recRevisor#,   <!-- 记录修改责任者 -->  
+					REC_REVISE_TIME	= #recReviseTime#  <!-- 记录修改时间 -->  
+			WHERE ID = #id#
+	</update>
+	<!-- =============================================工程项目归档主表结束============================================== -->
+	
+	
+	<!-- =============================================工程项目归档明细表开始============================================== -->
+	<!-- 查询项目归档中间表List -->
+	<select id="queryCalculateDetailList" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+				ID	as id,  <!-- 主键 -->
+				DOCUMENTS_CODE	as documentsCode,  <!-- 文档编码 -->
+				PROJ_CODE	as projCode,  <!-- 项目编码 -->
+				DOC_STATUS_CODE	as docStatusCode,  <!-- 归档文件状态编码 -->
+				ARCHIVE_FLAG	as archiveFlag,  <!-- 归档标记 -->
+				REC_CREATOR	as recCreator,  <!-- 记录创建责任者 -->
+				REC_CREATE_TIME	as recCreateTime,  <!-- 记录创建时间 -->
+				REC_REVISOR	as recRevisor,  <!-- 记录修改责任者 -->
+				REC_REVISE_TIME	as recReviseTime,  <!-- 记录修改时间 -->
+				DATAGROUP_CODE	as dataGroupCode <!-- 账套 -->
+		FROM pm_calculate_del WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  REC_CREATE_TIME asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+	
+	<!-- 查询项目归档中间表Count -->
+	<select id="queryCalculateDetailCount" parameterClass="java.util.HashMap" resultClass="int" >
+		SELECT * FROM pm_calculate_del WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!-- 删除项目归档中间表 -->
+	<delete id="deleteCalculateDetail" parameterClass="java.lang.String">
+		DELETE FROM pm_calculate_del WHERE ID = #id#
+	</delete>
+	
+	<!-- 保存项目归档中间表 -->
+	<insert id="insertCalculateDetail" parameterClass="com.baosight.wilp.pm.domain.TpmCalculateDel">
+		INSERT INTO pm_calculate_del (ID,  <!-- 主键 -->
+										DOCUMENTS_CODE,  <!-- 文档编码 -->
+										PROJ_CODE,  <!-- 项目编码 -->
+										DOC_STATUS_CODE,  <!-- 归档文件状态编码 -->
+										ARCHIVE_FLAG,  <!-- 归档标记 -->
+										REC_CREATOR,  <!-- 记录创建责任者 -->
+										REC_CREATE_TIME,  <!-- 记录创建时间 -->
+										REC_REVISOR,  <!-- 记录修改责任者 -->
+										REC_REVISE_TIME,  <!-- 记录修改时间 -->
+										DATAGROUP_CODE  <!-- 账套 -->
+										)		 
+	    VALUES (#id#, #documentsCode#, #projCode#, #docStatusCode#, #archiveFlag#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#) 
+	</insert>
+	
+	<!-- 更新项目归档中间表 -->
+	<update id="updateCalculateDetail" parameterClass="java.util.HashMap">
+		UPDATE pm_calculate_del SET 
+					DOCUMENTS_CODE	= #documentsCode#,   <!-- 文档编码 -->  
+					PROJ_CODE	= #projCode#,   <!-- 项目编码 -->  
+					DOC_STATUS_CODE	= #docStatusCode#,   <!-- 归档文件状态编码 -->  
+					REC_REVISOR	= #recRevisor#,   <!-- 记录修改责任者 -->  
+					REC_REVISE_TIME	= #recReviseTime#,   <!-- 记录修改时间 -->  
+			WHERE ID = #id#
+	</update>
+	<!-- =============================================工程项目归档明细表结束============================================== -->
+	
+	<!-- 根据归档id查询项目id -->
+	<select id="queryProjectIdByDocumentId" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+		select pr.id from pm_calculate pc left join pm_calculate_del pcd on pc.DOCUMENTS_CODE = pcd.DOCUMENTS_CODE 
+		left join pm01 pr on pcd.PROJ_CODE = pr.PROJECT_NO where FIND_IN_SET(pc.id, #ids#)
+	</select>
+	
+	<!-- 删除归档恢复项目状态 -->
+	<update id="updateProjectStatus" parameterClass="java.util.HashMap">
+		UPDATE pm01 SET PROJECT_STATUS = '06' WHERE PROJECT_NO IN ( 
+			SELECT tcd.PROJ_CODE FROM pm_calculate_del tcd LEFT JOIN pm_calculate tc ON tc.DOCUMENTS_CODE = tcd.DOCUMENTS_CODE 
+			WHERE FIND_IN_SET( tc.id, #ids# )
+		)
+	</update>
+</sqlMap>

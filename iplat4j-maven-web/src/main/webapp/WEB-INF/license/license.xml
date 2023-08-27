@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<licenses>
+    <license code="iPlat4J V6">
+        <LicenseCode desc="产品代码" type="fixed">iPlat4J V6</LicenseCode>
+        <ExpiringDate desc="过期时间" type="fixed">2021-05-23</ExpiringDate>
+        <AuthorizingCompany desc="签发单位" type="fixed">上海宝信软件股份有限公司-工业互联网研究院/大数据中心-平台研究一所</AuthorizingCompany>
+        <AuthorizingSoftware desc="产品名称" type="fixed">宝信企业信息化 Java 平台软件 V6</AuthorizingSoftware>
+        <AuthorizedClient desc="授权客户名称" type="fixed">佛山市妇幼保健院</AuthorizedClient>
+        <AuthorizedEnterprise desc="授权企业名称" type="fixed">博纳睿通软件科技有限公司</AuthorizedEnterprise>
+        <AuthorizedProject desc="授权项目英文名" type="fixed">wilp</AuthorizedProject>
+        <SigningDate desc="签发时间" type="fixed">20210223</SigningDate>
+        <StartDate desc="开始时间" type="fixed">2021-02-23</StartDate>
+        <LicenseID desc="许可证编号" type="fixed">fsfy20210223</LicenseID>
+        <signature desc="防伪签名" type="fixed">
+            302c021448a0c7818a9126d2fc7233c7a694f424b081bef002146f8dcd7c41a40f26b11852107761083ff68a93f0
+        </signature>
+    </license>
+</licenses>

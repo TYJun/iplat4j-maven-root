@@ -1,0 +1,176 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<link rel="stylesheet" href="../../reference/mui/css/mui.min.css">
+	<link rel="stylesheet" href="../../reference/mui/css/iconfont.css">
+	<link rel="stylesheet" href="../../reference/css/common.css" />
+</head>
+<STYLE TYPE="text/css">
+	body,
+	html {
+		height: 100%;
+		background: #EEEEEE;
+		overflow-y: hidden;
+	}
+
+	.warn {
+		height: 50px;
+		line-height: 38px;
+		top: 62px;
+		font-size: 28px;
+	}
+
+	.btn-report-top {
+		width: 60%;
+		margin: 0 auto;
+		height: 160px;
+		color: white;
+		font-size: 20px;
+	}
+
+	.btn-report-span-top {
+		display: block;
+		width: 100%;
+		height: 110px;
+		text-align: center;
+		line-height: 110px;
+		color: #279721;
+		font-size: 50px;
+		background: #FFFFFF;
+		font-weight: bold;
+		border-top-left-radius: 10px;
+		border-top-right-radius: 10px;
+		border: 1px solid #CCCCCC;
+		border-bottom: 0px;
+	}
+
+	.btn-report-span-bottom {
+		display: block;
+		width: 100%;
+		height: 50px;
+		line-height: 50px;
+		text-align: center;
+		color: #FFFFFF;
+		border-top: 0px;
+		background: #929292;
+		border-bottom-left-radius: 10px;
+		border-bottom-right-radius: 10px;
+		border: 1px solid #CCCCCC;
+		border-top: 0px;
+	}
+</STYLE>
+
+<body>
+	<!--<header class="mui-bar mui-bar-nav" style="height: 60px;">
+      <h1 class="mui-title" style="line-height: 60px;">医废登记</h1>
+    </header>-->
+	<header class="mui-bar mui-bar-nav">
+		<h1 class="mui-title">仓库管理选项</h1>
+		<button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left"><span
+				class="mui-icon mui-icon-left-nav"></span>返回</button>
+		</button>
+
+	</header>
+
+	<div class="warn" class="warn" hidden>
+		<small>呵呵</small>
+	</div>
+	<div id="btn3" class=" btn-report-top">
+		<span id="inStorage" class="btn-report-span-top">0</span>
+		<span class="btn-report-span-bottom">待入库</span>
+	</div>
+	<div id="btn4" class=" btn-report-top">
+		<span id="outStorage" class="btn-report-span-top" style="color:#45caf2;">0</span>
+		<span class="btn-report-span-bottom">待出库</span>
+	</div>
+	<div id="btn5" class=" btn-report-top">
+		<span id="alreadyEnd" class="btn-report-span-top" style="color: #C53D07;">0</span>
+		<span class="btn-report-span-bottom">已结束</span>
+	</div>
+
+</body>
+<script src="../../reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="../../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../../reference/js/common.js" type="text/javascript"></script>
+<script type="text/javascript">
+	var baseUrl = localStorage.getItem("url");
+	var workNo = localStorage.getItem("workNo");
+	var hosId = localStorage.getItem('hosId');
+	var dataGroupCode = localStorage.getItem("dataGroupCode")
+	var num = 0;
+
+	$(function () {
+		setHeight();
+		$.ajax({
+			url: baseUrl + 'trash',
+			type: 'post',
+			headers: {
+				className: 'ServiceNBAP01',
+				methodName: 'getRibbonCount'
+			},
+			data: {
+				userId: workNo,
+				dataGroupCode: dataGroupCode
+			},
+			timeout: 30000,
+			success: function (data) {
+				var list = data.param;
+				console.log(list)
+				var alreadyEnd = list.isFinishedCount; //已结束
+				var outStorage = list.waitingOutofStorageCount; //待出库
+				var inStorage = list.waitingPutIntoStorageCount; //待入库
+				$("#alreadyEnd").text(alreadyEnd);
+				$("#inStorage").text(inStorage);
+				$("#outStorage").text(outStorage);
+			},
+			complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数
+				if (status == 'timeout') {
+					$("#loading").hide();
+					$('#warn small').html('加载失败！');
+					$("#warn").fadeIn(500);
+					setTimeout("$('#warn').fadeOut(500)", 3000);
+				} else if (status == 'error') {
+					$("#loading").hide();
+					$('#warn small').html('网络异常！');
+					$("#warn").fadeIn(500);
+				}
+			}
+		});
+	})
+	$(window).resize(function () {
+		setHeight();
+	});
+
+	function setHeight() {
+		var headerHeight = $("header").height();
+		var marginTop = (document.body.offsetHeight - headerHeight - 3 * 160) / 4;
+		console.log(document.body.offsetHeight);
+		console.log(headerHeight);
+		console.log(marginTop);
+
+		$("#btn3").css({ "margin-top": marginTop + headerHeight + "px" });
+		$("#btn4").css({ "margin-top": marginTop + "px" });
+		$("#btn5").css({ "margin-top": marginTop + "px" });
+	}
+	$("#btn3").click(function () {
+		location.href = "inStorage.html";
+	})
+	$("#btn4").click(function () {
+		location.href = "outStorage.html";
+	})
+	$("#btn5").click(function () {
+		location.href = "alreadyEnd.html";
+	})
+
+	document.getElementById("back").addEventListener('tap', function () {
+		location.href = "../../../menu.html";
+	});
+</script>
+
+</html>

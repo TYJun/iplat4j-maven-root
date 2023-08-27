@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="FABS01">
+
+    <select id="queryFaReimburseInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+        reimburse.id as "faReimburseId",
+        reimburse.reimburse_no as "reimburseNo",
+        info.goods_num as "goodsNum",
+        info.goods_name as "goodsName",
+        info.goods_classify_code as "goodsClassifyCode",
+        info.goods_classify_name as "goodsClassifyName",
+        info.goods_type_code as "goodsTypeCode",
+        info.goods_type_name as "goodsTypeName",
+        info.model as "model",
+        info.buy_cost as "buyCost",
+        info.manufacturer as "manufacturer",
+        info.surp_name as "surpName",
+        DATE_FORMAT( info.buy_date, '%Y-%m-%d' ) as "buyDate",
+        DATE_FORMAT( info.use_date, '%Y-%m-%d' ) as "useDate",
+        info.build as "build",
+        info.floor as "floor",
+        info.install_location as "installLocation",
+        info.dept_num as "deptNum",
+        info.dept_name as "deptName",
+        case info.status_code
+        when "00" then "新增"
+        when "10" then "拆分"
+        when "20" then "在用"
+        when "30" then "闲置"
+        when "40" then "报损"
+        when "50" then "待报废"
+        end as "statusCodeMean",
+        info.status_code as "statusCode",
+        info.unit_num as "unitNum",
+        info.unit_name as "unitName",
+        info.residual_rate as "residualRate",
+        info.estimated_residual_value as "estimatedResidualValue",
+        info.use_years as "useYears",
+        info.funds_source as "fundsSource",
+        info.finace_class_num as "finaceClassNum",
+        DATE_FORMAT( info.in_account_date, '%Y-%m-%d' ) as "inAccountDate",
+        info.invoice_no as "invoiceNo",
+        DATE_FORMAT( info.invoice_date, '%Y-%m-%d' ) as "invoiceDate",
+        info.device_id as "deviceId",
+        info.device_name as "deviceName",
+        info.device_type_name as "deviceTypeName",
+        info.rfid_code as "rfidCode",
+        info.net_asset_value as "netAssetValue",
+        info.remark as "infoRemark",
+        info.depreciation_way as "depreciationWay",
+        info.total_depreciation as "totalDepreciation",
+        info.in_account_status as "inAccountStatus",
+        info.lock_flag as "lockFlag",
+        info.card_status as "cardStatus",
+        CASE info.card_status
+        WHEN '1' THEN '已发卡'
+        WHEN '0' THEN '未发卡'
+        END AS "cardStatusMean",
+        reimburse.reimburse_reason as "reimburseReason",
+        DATE_FORMAT( reimburse.reimburse_date, '%Y-%m-%d' ) as "reimburseDate",
+        DATE_FORMAT( reimburse.finish_time, '%Y-%m-%d' ) as "finishTime",
+        reimburse.goods_id as "goodsId",
+        reimburse.remark as "remark",
+        reimburse.confirm_flag as "confirmFlag",
+        CASE reimburse.confirm_flag
+        WHEN '1' THEN '确认'
+        WHEN '0' THEN '录入'
+        END AS "confirmFlagMean",
+        reimburse.rec_creator as "recCreator",
+        reimburse.rec_create_name as "recCreateName",
+        DATE_FORMAT( reimburse.rec_create_time, '%Y-%m-%d' ) as "recCreateTime",
+        reimburse.rec_revisor as "recRevisor",
+        reimburse.rec_revise_name as "recReviseName",
+        DATE_FORMAT( reimburse.rec_revise_time, '%Y-%m-%d' ) as "recReviseTime",
+        reimburse.archive_flag as "archiveFlag"
+        FROM fa_reimburse reimburse
+        LEFT JOIN fa_info info ON info.id = reimburse.goods_id
+        <dynamic prepend="where">
+            <isNotEmpty prepend="and" property="faTransferId">
+                reimburse.id = #faReimburseId#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="goodsNum">
+                info.goods_num like concat ('%',trim(#goodsNum#),'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="goodsName">
+                info.goods_name like concat ('%',trim(#goodsName#),'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="confirmFlag">
+                reimburse.confirm_flag = #confirmFlag#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="reimburseNo">
+                reimburse.reimburse_no like concat ('%',trim(#reimburseNo#),'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="reimburseDateS">
+                reimburse.reimburse_date >= #reimburseDateS#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="reimburseDateE">
+                #reimburseDateE# >= reimburse.reimburse_date
+            </isNotEmpty>
+        </dynamic>
+    </select>
+
+    <insert id="saveFaReimburseInfo" parameterClass="java.util.HashMap">
+        INSERT INTO fa_reimburse
+        (id, reimburse_no, reimburse_reason, reimburse_date, finish_time, goods_id,
+         remark, confirm_flag, rec_creator, rec_create_name, rec_create_time, rec_revisor,
+         rec_revise_name, rec_revise_time, archive_flag)
+        VALUES (#faReimburseId#, #reimburseNo#, #reimburseReason#, #reimburseDate#, #finishTime#, #goodsId#,
+                #remark#, #confirmFlag#, #recCreator#, #recCreateName#, #recCreateTime#, #recRevisor#,
+                #recReviseName#, #recReviseTime#, #archiveFlag#)
+    </insert>
+
+    <delete id="delete">
+        DELETE
+        FROM fa_reimburse
+        WHERE id = #id#
+    </delete>
+
+    <update id="updateFaReimburseInfo" parameterClass="java.util.HashMap">
+        UPDATE fa_reimburse
+        SET reimburse_no     = #reimburseNo#,
+            reimburse_reason = #reimburseReason#,
+            reimburse_date   = #reimburseDate#,
+            finish_time      = #finishTime#,
+            goods_id         = #goodsId#,
+            remark           = #remark#,
+            rec_revisor      = #recRevisor#,
+            rec_revise_name  = #recReviseName#,
+            rec_revise_time  = #recReviseTime#,
+            archive_flag     = CONVERT(#archiveFlag#, SIGNED) + 1
+        WHERE id = #faReimburseId#
+    </update>
+
+    <update id="updateFaInfoUnlock" parameterClass="java.util.HashMap">
+        update fa_info set lock_flag = "0",status_code = "40" where id = #faInfoId#
+    </update>
+
+    <update id="confirmFaReimburseInfo" parameterClass="java.util.HashMap">
+        UPDATE fa_reimburse
+        SET confirm_flag = "1",
+            archive_flag = CONVERT(#archiveFlag#, SIGNED) + 1
+        WHERE id = #faReimburseId#
+          and archive_flag = #archiveFlag#
+    </update>
+
+    <delete id="removeFaReimburseInfo" parameterClass="java.util.HashMap">
+        delete from fa_reimburse where id = #faReimburseId#
+    </delete>
+
+    <!-- 查询今日类别号 -->
+    <select id="queryMaxCode" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+        select
+            reimburse_no typeCode
+        from
+            fa_reimburse
+        where
+            reimburse_no like concat('%', #value#, '%')
+        order by
+            reimburse_no
+                desc
+    </select>
+</sqlMap>

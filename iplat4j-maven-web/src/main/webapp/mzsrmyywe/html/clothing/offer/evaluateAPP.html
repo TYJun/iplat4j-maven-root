@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.css" />
+    <link rel="stylesheet" href="../reference/css/iconfont.css" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="../reference/css/colorGreen.css" />
+    <link rel="stylesheet" href="../reference/css/loading.css" />
+    <link rel="stylesheet" href="../reference/css/clothCommon.css" />
+    <link rel="stylesheet" href="../../reference/layui/layui/css/layui.css" />
+  </head>
+  <style type="text/css">
+    .mui-scroll {
+      position: unset;
+    }
+
+    .scan {
+      position: fixed;
+      /*bottom: 15px;*/
+      left: 15px;
+      width: 60px;
+      z-index: 11;
+    }
+
+    .round {
+      border: 1px solid #bbb;
+      width: 60px;
+      height: 60px;
+      line-height: 70px;
+      text-align: center;
+      color: #fff;
+      background-color: #666666;
+      filter: alpha(opacity=80);
+      /* 用于IE浏览器－透明度为20%*/
+      -moz-opacity: 0.8;
+      /*  用于Moz + Firefox－透明度为20%*/
+      opacity: 0.8;
+      -webkit-border-radius: 60px;
+      -moz-border-radius: 60px;
+      -o-border-radius: 60px;
+      border-radius: 60px;
+    }
+
+    .shopping_result {
+      position: fixed;
+      z-index: 999;
+      top: 0px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      padding: 15px;
+    }
+
+    .taskNo {
+      height: auto;
+    }
+
+    .eva {
+      width: 100%;
+      background-color: white;
+      /* position: absolute;
+    top: 150px; */
+    }
+
+    .evaList {
+      display: flex;
+      justify-content: space-between;
+      padding: 13px;
+      align-items: center;
+      font-size: 15px;
+      border-bottom: 1px #c0aaaa solid;
+    }
+  </style>
+
+  <body>
+    <header class="mui-bar mui-bar-nav backColor">
+      <h1 class="mui-title">发放评价</h1>
+      <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+      </button>
+      <!-- <button id="search" class="mui-btn mui-btn-link mui-btn-nav mui-pull-right">
+      <span class="mui-icon mui-icon-search"></span>
+    </button> -->
+    </header>
+    <!-- 添加物资框 -->
+    <!-- <div class="scan" id="scan">
+    <div class="round" id="round">
+      <span class="mui-icon iconfont" style="font-size:18px;">扫码</span>
+    </div>
+  </div> -->
+    <!-- loading -->
+    <!-- <div id="loading" class="spinner">
+    <div class="bounce1"></div>
+    <div class="bounce2"></div>
+    <div class="bounce3"></div>
+  </div> -->
+    <!-- tab页 -->
+    <!-- <div class="top-part backColor">
+    <div class="top-bar">
+      <span id="1" class="choose">转出</span>
+      <span id="3">转入</span>
+    </div>
+  </div> -->
+    <!-- 主内容 -->
+    <div
+      id="pullrefresh"
+      class="mui-content mui-scroll-wrapper"
+      style="top:44px"
+    >
+      <div class="mui-scroll" id="content">
+        <ul
+          class="list-ul"
+          id="list"
+          style=" background-color: white;font-size: 16px;"
+        >
+          <!-- <li class="first">
+          发放单号：<span class="taskNo">92781092</span>
+        </li>
+        <li>
+          <span class="left-name">发放人</span>
+          <span class="status">张三</span>
+        </li>
+        <li>
+          <span class="left-name">发放时间</span>
+          <span class="status">2020-05-14 09:10:00</span>
+        </li> -->
+        </ul>
+      </div>
+      <div id="eva" class="eva">
+        <form class="mui-input-group">
+          <ul id="evaList">
+            <li class="evaList">
+              <span>评价项</span>
+              <span style="margin-right: 33px;">评价结果</span>
+            </li>
+            <!-- <li class="evaList">
+            <span>服务态度1</span>
+            <span>
+              <ul>
+                <li class="mui-input-row mui-radio mui-left">
+                  <label>非常满意</label>
+                  <input name="radio1" type="radio">
+                </li>
+                <li class="mui-input-row mui-radio mui-left">
+                  <label>满意</label>
+                  <input name="radio1" type="radio">
+                </li>
+                <li class="mui-input-row mui-radio mui-left">
+                  <label>一般</label>
+                  <input name="radio1" type="radio">
+                </li>
+                <li class="mui-input-row mui-radio mui-left">
+                  <label>不满意</label>
+                  <input name="radio1" type="radio">
+                </li>
+              </ul>
+            </span>
+          </li> -->
+          </ul>
+        </form>
+      </div>
+      <div style="width: 99%;">
+        <textarea
+          name="evaArea"
+          id="evaArea"
+          cols="30"
+          rows="10"
+          placeholder="请输入评价"
+          style="padding: 15px;"
+        ></textarea>
+      </div>
+      <div>
+        <button
+          type="button"
+          class="mui-btn mui-btn-success"
+          onclick="submit()"
+          style="float: right;
+      margin-right: 4%;"
+        >
+          提交
+        </button>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript" src="../reference/mui/js/mui.min.js"></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/jquery-2.1.4.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/mui.picker.min.js"
+  ></script>
+  <script type="text/javascript" src="../reference/mui/js/baseInfo.js"></script>
+  <!-- <script type="text/javascript" src="../../../cordova.js"></script> -->
+  <script
+    type="text/javascript"
+    src="../../reference/layui/layui/layui.js"
+  ></script>
+  <script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var evaIssueNo = localStorage.getItem("evaIssueNo");
+    var evaIssueMan = localStorage.getItem("evaIssueMan");
+    var evaIssueTime = localStorage.getItem("evaIssueTime");
+    var dataGroupCode = localStorage.getItem("dataGroupCode");
+    var workNo = localStorage.getItem("workNo");
+    var listHtml = "";
+    var evaListHtml = "";
+    var subData = {
+      issueNo: evaIssueNo,
+      issueMan: evaIssueMan,
+      issueTime: evaIssueTime,
+      dataGroupCode: dataGroupCode,
+      recCreator: workNo,
+      evaluationOpinion: "",
+      items: ""
+    };
+    $(function() {
+      init();
+      console.log(evaIssueNo);
+      console.log(evaIssueMan);
+      console.log(evaIssueTime);
+    });
+
+    /**
+     * @desc  获取评价项
+     * @param {Object} params 查询参数
+     * @author huoke
+     */
+    function init() {
+      // $("#loading").show();
+      var params = {
+        dataGroupCode: dataGroupCode
+      };
+      $.get(
+        baseUrl + "app_clothIssueQuery.do?queryValuationConfig",
+        params,
+        function(data) {
+          var data = JSON.parse(data);
+          if (data.respCode !== "200") {
+            mui.toast(data.respMsg);
+            return;
+          }
+          var list = data.obj.obj;
+          listHtml = addList(evaIssueNo, evaIssueMan, evaIssueTime);
+          for (var i = 0; i < list.length; i++) {
+            var element = list[i];
+            // list.forEach(element => {
+            evaListHtml = addEvaList(
+              element.valuationItem,
+              JSON.parse(element.valuationValue)
+            );
+            $("#evaList").append(evaListHtml);
+            // });
+          }
+          $("#list").html(listHtml);
+          console.log(list[0].valuationValue);
+        }
+      )
+        .fail(function(XMLHttpRequest) {
+          var text = JSON.parse(XMLHttpRequest.responseText);
+          mui.toast(text.message);
+          return;
+        })
+        .complete(function(XMLHttpRequest, status) {
+          if (status == "timeout") {
+            $("#loading").hide();
+            mui.toast("网速不给力，请重试！");
+            return;
+          } else if (status == "error") {
+            $("#loading").hide();
+            mui.toast("当前网络不可用，请查看网络是否畅通！");
+            return;
+          }
+        });
+    }
+
+    function addList(evaIssueNo, evaIssueMan, evaIssueTime) {
+      var html = "";
+      html =
+        '<li class="first"> 发放单号：<span class="taskNo">' +
+        evaIssueNo +
+        '</span> </li><li><span class="left-name">发放人</span> <span class="status">' +
+        evaIssueMan +
+        '</span> </li> <li> <span class="left-name">发放时间</span><span class="status">' +
+        evaIssueTime +
+        "</span></li>";
+      return html;
+    }
+
+    function addEvaList(valuationItem, valuationValue) {
+      var html = "";
+      html +=
+        '<li class="evaList"> <span>' +
+        valuationItem +
+        '</span><span> <ul class="mui-table-view mui-table-view-radio">';
+      for (var i = 0; i < valuationValue.length; i++) {
+        var element = valuationValue[i];
+        // valuationValue.forEach(element => {
+        html +=
+          '<li class="mui-input-row mui-radio mui-left"> <label >' +
+          element.valuation +
+          '</label> <input name="' +
+          valuationItem +
+          '" type="radio" class="sel" value = "' +
+          element.valuation +
+          '"> </li>';
+        // });
+      }
+      html += "</ul> </span></li>";
+      return html;
+    }
+
+    // 提交
+    function submit() {
+      //选项
+      var selectText = getRadioRes("sel");
+      console.log(selectText);
+      subData.evaluationOpinion = $("#evaArea").val();
+      subData.items = JSON.stringify(selectText);
+      console.log("subData");
+      console.log(subData);
+      $.ajax({
+        url: baseUrl + "app_clothBizController.do?saveValuation",
+        type: "post",
+        data: JSON.stringify(subData),
+        contentType: "application/json",
+        success: function(data) {
+          var data = JSON.parse(data);
+          if (data.respCode != 200) {
+            mui.toast(data.respMsg);
+            return;
+          }
+          mui.toast(data.respMsg);
+        },
+        error: function(XMLHttpRequest) {
+          var text = JSON.parse(XMLHttpRequest.responseText);
+          mui.toast(text.message);
+          return;
+        },
+        complete: function(XMLHttpRequest, status) {
+          if (status == "timeout") {
+            $("#loading").hide();
+            mui.toast("网速不给力，请重试！");
+            return;
+          } else if (status == "error") {
+            $("#loading").hide();
+            mui.toast("当前网络不可用，请查看网络是否畅通！");
+            return;
+          }
+        }
+      });
+    }
+
+    //获取选中
+    function getRadioRes(className) {
+      var rdsobj = document.getElementsByClassName(className);
+      var checkVal = new Array();
+
+      var $k = 0;
+      for (i = 0; i < rdsobj.length; i++) {
+        var checkObj = {
+          valuationItem: "",
+          valuationResult: ""
+        };
+        if (rdsobj[i].checked) {
+          checkObj.valuationItem = rdsobj[i].name;
+          checkObj.valuationResult = rdsobj[i].value;
+          checkVal[$k] = checkObj;
+          $k++;
+        }
+      }
+      return checkVal;
+    }
+
+    /**
+     * @desc   点击返回按钮
+     * @author chenjing
+     */
+    mui("body").on("tap", "#back", function() {
+      location.href = "offerHistoryYAPP.html";
+    });
+
+    /**
+     * @desc   手机系统返回键
+     * @author chenjing
+     */
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+      document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+      location.href = "offerHistoryYAPP.html";
+    }
+  </script>
+</html>

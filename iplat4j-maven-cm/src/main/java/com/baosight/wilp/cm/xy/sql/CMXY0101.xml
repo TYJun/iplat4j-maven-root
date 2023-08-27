@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CMXY0101">
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			ccpd.REC_CREATOR	as "recCreator",
+			ccpd.REC_CREATE_TIME	as "recCreateTime",
+			ccpd.REC_REVSIOR	as "recRevsior",
+			ccpd.REC_REVISE_TIME	as "recReviseTime",
+			ccpd.ARCHIVE_FLAG	as "archiveFlag",  <!-- 归档标记 -->
+			ccpd.ID	as "id",
+			ccpd.PAY_TYPE_NUM	as "payTypeNum",  <!-- 付款类型编码 -->
+			ccpd.NO	as "no",  <!-- 序号 -->
+			ccpd.LAST_TIME	as "lastTime",  <!-- 距离上次付款时间 -->
+			ccpd.PAY_RATE	as "payRate",  <!-- 付款比例 -->
+			ccpd.REMARK	as "remark" <!-- 备注 -->
+		FROM
+		 	cm_contract_payment_details ccpd
+		left join cm_contract_payment ccp
+		on ccpd.PAY_TYPE_NUM = ccp.PAY_TYPE_NUM
+		WHERE
+			ccpd.PAY_TYPE_NUM = #payTypeNum#
+		<dynamic prepend="ORDER BY">
+        	<isNotEmpty property="orderBy">
+    			$orderBy$
+   		 	</isNotEmpty>
+	   		<isEmpty property="orderBy">
+				ccpd.NO
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT * FROM cm_contract_payment_details WHERE PAY_TYPE_NUM=#id#
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cm_contract_payment_details
+		(
+			REC_CREATOR,
+			REC_CREATE_TIME,
+			REC_REVSIOR,
+			REC_REVISE_TIME,
+			ARCHIVE_FLAG,  <!-- 归档标记 -->
+			ID,
+			PAY_TYPE_NUM,  <!-- 付款类型编码 -->
+			NO,  <!-- 序号 -->
+			LAST_TIME,  <!-- 距离上次付款时间 -->
+			PAY_RATE,  <!-- 付款比例 -->
+			REMARK  <!-- 备注 -->
+		)		 
+	    VALUES
+	    (
+	    	#recCreator#,
+	    	#recCreateTime#,
+	    	#recRevsior#,
+	    	#recReviseTime#,
+	    	#archiveFlag#,
+	    	#id#,
+	    	#payTypeNum#,
+	    	#no#,
+	    	#lastTime#,
+	    	#payRate#,
+	    	#remark#
+	    ) 
+	</insert>
+  
+	<delete id="delete" parameterClass="java.lang.String">
+		DELETE FROM cm_contract_payment_details WHERE PAY_TYPE_NUM = #value#
+	</delete>
+
+	<update id="update">
+		UPDATE
+			cm_contract_payment_details 
+		SET 
+			REC_CREATOR	= #recCreator#,   
+			REC_CREATE_TIME	= #recCreateTime#,   
+			REC_REVSIOR	= #recRevsior#,   
+			REC_REVISE_TIME	= #recReviseTime#,   
+			ARCHIVE_FLAG = #archiveFlag#,   <!-- 归档标记 -->  
+			PAY_TYPE_NUM = #payTypeNum#,   <!-- 付款类型编码 -->  
+			NO = #no#,   <!-- 序号 -->  
+			LAST_TIME = #lastTime#,   <!-- 距离上次付款时间 -->  
+			PAY_RATE = #payRate#,   <!-- 付款比例 -->  
+			REMARK = #remark#  <!-- 备注 -->  
+		WHERE 	
+			ID = #id#
+	</update>
+</sqlMap>

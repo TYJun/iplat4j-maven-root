@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ACSU0102">
+
+	<select id="querySuppInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		`id`,
+		`supplier_code` supplierCode,  		/* '供应商编码'*/
+		`supplier_name` supplierName, 		/*'供应商名称'*/
+		`supplier_type` supplierType, 		/*'供应商类型'*/
+		`contacts` contacts, 				/*'联系人'*/
+		`contact_number` contactNumber,		/* '联系电话'*/
+		`contact_address` contactAddress, 	/*'联系地址'*/
+		`contact_email` contactEmail, 		/*'联系邮箱'*/
+		`zip_code` zipCode, 				/*'邮编'*/
+		`legal_representative` legalRepresentative, /*'法人代表',*/
+		`icr_no` icrNo,						/*'工商注册号',*/
+		`business_scope` businessScope, 	/*'经营范围',*/
+		`abbreviation` abbreviation, 		/*'供应商简称',*/
+		`hrp_code` hrpCode, 					/*'hrp编码',*/
+		`status` status, 					/*'状态',*/
+		(CASE `status`
+		WHEN  '1' THEN '启用'
+		ELSE '停用'
+		END) statusText, 					/*'状态',*/
+		`rec_creator` recCreator, 			/*'创建人',*/
+		`rec_create_time` recCreateTime,     /* '创建时间',*/
+		`rec_revisor` recRevisor, 			/*'修改人',*/
+		`rec_revise_time` recReviseTime 	/*'修改时间',*/
+		FROM $projectSchema$.ac_supplier
+		WHERE 1 = 1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+	<update id="update" parameterClass="java.util.HashMap">
+	    UPDATE $projectSchema$.ac_supplier
+	    SET
+			<isNotNull  property="supplierCode">
+				supplier_code = #supplierCode#,
+			</isNotNull>
+			<isNotNull  property="supplierName">
+				supplier_name = #supplierName#,
+			</isNotNull>
+			<isNotNull  property="supplierType">
+				supplier_type = #supplierType#,
+			</isNotNull>
+			<isNotNull  property="contacts">
+				contacts = #contacts#,
+			</isNotNull>
+			<isNotNull  property="contactNumber">
+				contact_number = #contactNumber#,
+			</isNotNull>
+			<isNotNull  property="contactAddress">
+				contact_address = #contactAddress#,
+			</isNotNull>
+			<isNotNull  property="contactEmail">
+				contact_email = #contactEmail#,
+			</isNotNull>
+			<isNotNull  property="zipCode">
+				zip_code = #zipCode#,
+			</isNotNull>
+			<isNotNull  property="legalRepresentative">
+				legal_representative = #legalRepresentative#,
+			</isNotNull>
+			<isNotNull  property="icrNo">
+				icr_no = #icrNo#,
+			</isNotNull>
+			<isNotNull  property="businessScope">
+				business_scope = #businessScope#,
+			</isNotNull>
+			<isNotNull  property="abbreviation">
+				abbreviation = #abbreviation#,
+			</isNotNull>
+			<isNotNull  property="hrpCode">
+				hrp_code = #hrpCode#,
+			</isNotNull>
+				rec_revisor = #recRevisor#,
+				rec_revise_time = #recReviseTime#
+	    WHERE
+	        id = #id#
+    </update>
+	
+</sqlMap>

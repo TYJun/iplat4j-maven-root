@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SSWXThirdCompany">
+
+    <select id="query" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.ss.wx.domain.SSWxThirdCompany">
+        select
+        id as "id",
+        corp_id as "corpId",   <!--企业id-->
+        corp_encrypt_id as "corpEncryptId",   <!--企业id-->
+        corp_name as "corpName",   <!--企业名称-->
+        corp_full_name as "corpFullName",   <!--企业全称-->
+        subject_type as "subjectType",   <!--企业类型-->
+        verified_end_time as "verifiedEndTime",   <!--企业认证到期时间-->
+        agent_id as "agentId",   <!--授权应用id-->
+        status as "status",   <!--账户状态，-1为删除，禁用为0 启用为1-->
+        addtime as "addtime",   <!--创建时间-->
+        modtime as "modtime",   <!--修改时间-->
+        rectime as "rectime",   <!--变动时间-->
+        app_id as "appId",   <!--应用id 可以不写-->
+        agent_secret as "agentSecret",   <!--应用密钥-->
+        agent_token as "agentToken",   <!--审批流程引擎模板id-->
+        agent_encoding_aes_key as "agentEncodingAesKey",   <!--encoding_aes_key-->
+        approval_template_id as "approvalTemplateId"  <!--审批流程引擎模板id-->
+        from sc_wx_third_company WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="corpId">
+            corp_id = #corpId#
+        </isNotEmpty>
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                id asc
+            </isEmpty>
+        </dynamic>
+    </select>
+
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM sc_wx_third_company WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+    </select>
+
+    <!--
+         <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="corpId">
+            corp_id = #corpId#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="corpName">
+            corp_name = #corpName#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="corpFullName">
+            corp_full_name = #corpFullName#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="subjectType">
+            subject_type = #subjectType#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="verifiedEndTime">
+            verified_end_time = #verifiedEndTime#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="agentId">
+            agent_id = #agentId#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="status">
+            status = #status#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="addtime">
+            addtime = #addtime#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="modtime">
+            modtime = #modtime#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="rectime">
+            rectime = #rectime#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="appId">
+            app_id = #appId#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="agentSecret">
+            agent_secret = #agentSecret#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="agentToken">
+            agent_token = #agentToken#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="agentEncodingAesKey">
+            agent_encoding_aes_key = #agentEncodingAesKey#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="approvalTemplateId">
+            approval_template_id = #approvalTemplateId#
+        </isNotEmpty>
+         -->
+
+    <!--新增所有列-->
+    <insert id="insert">
+        insert into sc_wx_third_company(
+        id,
+        corp_id,   <!--企业id-->
+        corp_encrypt_id,
+        corp_name,   <!--企业名称-->
+        corp_full_name,   <!--企业全称-->
+        subject_type,   <!--企业类型-->
+        verified_end_time,   <!--企业认证到期时间-->
+        agent_id,   <!--授权应用id-->
+        status,   <!--账户状态，-1为删除，禁用为0 启用为1-->
+        addtime,   <!--创建时间-->
+        modtime,   <!--修改时间-->
+        rectime,   <!--变动时间-->
+        app_id,   <!--应用id 可以不写-->
+        agent_secret,   <!--应用密钥-->
+        agent_token,   <!--审批流程引擎模板id-->
+        agent_encoding_aes_key,   <!--encoding_aes_key-->
+        approval_template_id  <!--审批流程引擎模板id-->
+        )
+        values (
+        #id# ,
+        #corpId# ,
+        #corpEncryptId# ,
+        #corpName# ,
+        #corpFullName# ,
+        #subjectType# ,
+        #verifiedEndTime# ,
+        #agentId# ,
+        #status# ,
+        #addtime# ,
+        #modtime# ,
+        #rectime# ,
+        #appId# ,
+        #agentSecret# ,
+        #agentToken# ,
+        #agentEncodingAesKey# ,
+        #approvalTemplateId#
+        )
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update sc_wx_third_company
+        set
+        corp_id = #corpId# , <!--企业id-->
+        corp_encrypt_id = #corpEncryptId# , <!--企业id-->
+        corp_name = #corpName# , <!--企业名称-->
+        corp_full_name = #corpFullName# , <!--企业全称-->
+        subject_type = #subjectType# , <!--企业类型-->
+        verified_end_time = #verifiedEndTime# , <!--企业认证到期时间-->
+        agent_id = #agentId# , <!--授权应用id-->
+        status = #status# , <!--账户状态，-1为删除，禁用为0 启用为1-->
+        addtime = #addtime# , <!--创建时间-->
+        modtime = #modtime# , <!--修改时间-->
+        rectime = #rectime# , <!--变动时间-->
+        app_id = #appId# , <!--应用id 可以不写-->
+        agent_secret = #agentSecret# , <!--应用密钥-->
+        agent_token = #agentToken# , <!--审批流程引擎模板id-->
+        agent_encoding_aes_key = #agentEncodingAesKey# , <!--encoding_aes_key-->
+        approval_template_id = #approvalTemplateId#  <!--审批流程引擎模板id-->
+        where id = #id#
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="delete">
+        delete from sc_wx_third_company where id = #id#
+    </delete>
+
+</sqlMap>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!-- 卡片充值记录表 -->
+<sqlMap namespace="SSACTscCardRechargeInfo">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.ac.domain.SSACTscCardRechargeInfo">
+		SELECT
+		id as "id",
+		create_time as "createTime",  <!-- 创建时间 -->
+		work_no as "workNo",  <!-- 工号 -->
+		card_id as "cardId",  <!-- 卡片物理ID -->
+		card_no as "cardNo",  <!-- 卡片业务编码 -->
+		card_balance_before as "cardBalanceBefore",  <!-- 充值前金额 -->
+		card_recharge_money as "cardRechargeMoney",  <!-- 充值金额 -->
+		card_balance_after as "cardBalanceAfter",  <!-- 充值后金额 -->
+		resvise_time as "resviseTime",  <!-- 回掉时间 -->
+		flag as "flag",  <!-- 状态 /00-待充值/01-充值成功/99-结束 -->
+		bill_id as "billId",  <!-- 单据ID -->
+		msg as "msg",  <!-- 信息 -->
+		canteen_num as "canteenNum",  <!-- 食堂编码 -->
+		hosptial_no as "hosptialNo",  <!-- 支付宝商号 -->
+		recharge_type as "rechargeType",  <!-- 充值类型 -->
+		bill_type as "billType",  <!-- 单据类型 /work - 职工/patient - 病患/ -->
+		trade_no as "tradeNo",  <!-- 交易号 -->
+		out_trade_no as "outTradeNo",  <!-- 商户号 -->
+		buyer_email as "buyerEmail",  <!-- 付款账户 -->
+		seller_email as "sellerEmail",  <!-- 收款账户 -->
+		gmt_payment as "gmtPayment",  <!-- 交易完成时间 -->
+		gmt_create as "gmtCreate", <!-- 交易创建时间 -->
+		transaction_id as "transactionId" <!-- 交易流水号(微信或支付宝) -->
+		FROM sc_card_recharge_info WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<select id="queryByBillId" parameterClass="String"
+		resultClass="com.baosight.wilp.ss.ac.domain.SSACTscCardRechargeInfo">
+		SELECT
+		id as "id",
+		create_time as "createTime",  <!-- 创建时间 -->
+		work_no as "workNo",  <!-- 工号 -->
+		card_id as "cardId",  <!-- 卡片物理ID -->
+		card_no as "cardNo",  <!-- 卡片业务编码 -->
+		card_balance_before as "cardBalanceBefore",  <!-- 充值前金额 -->
+		card_recharge_money as "cardRechargeMoney",  <!-- 充值金额 -->
+		card_balance_after as "cardBalanceAfter",  <!-- 充值后金额 -->
+		resvise_time as "resviseTime",  <!-- 回掉时间 -->
+		flag as "flag",  <!-- 状态 /00-待充值/01-充值成功/99-结束 -->
+		bill_id as "billId",  <!-- 单据ID -->
+		msg as "msg",  <!-- 信息 -->
+		canteen_num as "canteenNum",  <!-- 食堂编码 -->
+		hosptial_no as "hosptialNo",  <!-- 支付宝商号 -->
+		recharge_type as "rechargeType",  <!-- 充值类型 -->
+		bill_type as "billType",  <!-- 单据类型 /work - 职工/patient - 病患/ -->
+		trade_no as "tradeNo",  <!-- 交易号 -->
+		out_trade_no as "outTradeNo",  <!-- 商户号 -->
+		buyer_email as "buyerEmail",  <!-- 付款账户 -->
+		seller_email as "sellerEmail",  <!-- 收款账户 -->
+		gmt_payment as "gmtPayment",  <!-- 交易完成时间 -->
+		gmt_create as "gmtCreate" ,<!-- 交易创建时间 -->
+		transaction_id as "transactionId" <!-- 交易流水号(微信或支付宝) -->
+		FROM sc_card_recharge_info WHERE 1=1
+		and id = #id# or trade_no = #id#
+	</select>
+
+	<!-- <isNotEmpty prepend=" AND " property="id"> id = #id# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="createTime"> create_time = #createTime# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="workNo"> work_no = #workNo# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="cardId"> card_id = #cardId# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="cardNo"> card_no = #cardNo# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="cardBalanceBefore"> card_balance_before 
+		= #cardBalanceBefore# </isNotEmpty> <isNotEmpty prepend=" AND " property="cardRechargeMoney"> 
+		card_recharge_money = #cardRechargeMoney# </isNotEmpty> <isNotEmpty prepend=" 
+		AND " property="cardBalanceAfter"> card_balance_after = #cardBalanceAfter# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="resviseTime"> resvise_time 
+		= #resviseTime# </isNotEmpty> <isNotEmpty prepend=" AND " property="flag"> 
+		flag = #flag# </isNotEmpty> <isNotEmpty prepend=" AND " property="billId"> 
+		bill_id = #billId# </isNotEmpty> <isNotEmpty prepend=" AND " property="msg"> 
+		msg = #msg# </isNotEmpty> <isNotEmpty prepend=" AND " property="canteenNum"> 
+		canteen_num = #canteenNum# </isNotEmpty> <isNotEmpty prepend=" AND " property="hosptialNo"> 
+		hosptial_no = #hosptialNo# </isNotEmpty> <isNotEmpty prepend=" AND " property="rechargeType"> 
+		recharge_type = #rechargeType# </isNotEmpty> <isNotEmpty prepend=" AND " 
+		property="billType"> bill_type = #billType# </isNotEmpty> <isNotEmpty prepend=" 
+		AND " property="tradeNo"> trade_no = #tradeNo# </isNotEmpty> <isNotEmpty 
+		prepend=" AND " property="outTradeNo"> out_trade_no = #outTradeNo# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="buyerEmail"> buyer_email = #buyerEmail# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="sellerEmail"> seller_email 
+		= #sellerEmail# </isNotEmpty> <isNotEmpty prepend=" AND " property="gmtPayment"> 
+		gmt_payment = #gmtPayment# </isNotEmpty> <isNotEmpty prepend=" AND " property="gmtCreate"> 
+		gmt_create = #gmtCreate# </isNotEmpty> -->
+
+	<insert id="insert">
+		INSERT INTO sc_card_recharge_info (id,
+		create_time,  <!-- 创建时间 -->
+		work_no,  <!-- 工号 -->
+		card_id,  <!-- 卡片物理ID -->
+		card_no,  <!-- 卡片业务编码 -->
+		card_balance_before,  <!-- 充值前金额 -->
+		card_recharge_money,  <!-- 充值金额 -->
+		card_balance_after,  <!-- 充值后金额 -->
+		resvise_time,  <!-- 回掉时间 -->
+		flag,  <!-- 状态 /00-待充值/01-充值成功/99-结束 -->
+		bill_id,  <!-- 单据ID -->
+		msg,  <!-- 信息 -->
+		canteen_num,  <!-- 食堂编码 -->
+		hosptial_no,  <!-- 支付宝商号 -->
+		recharge_type,  <!-- 充值类型 -->
+		bill_type,  <!-- 单据类型 /work - 职工/patient - 病患/ -->
+		trade_no,  <!-- 交易号 -->
+		out_trade_no,  <!-- 商户号 -->
+		buyer_email,  <!-- 付款账户 -->
+		seller_email,  <!-- 收款账户 -->
+		gmt_payment,  <!-- 交易完成时间 -->
+		gmt_create,  <!-- 交易创建时间 -->
+		transaction_id  <!-- 交易流水号(微信或支付宝) -->
+		)
+		VALUES (#id#, #createTime#, #workNo#, #cardId#, #cardNo#,
+		#cardBalanceBefore#, #cardRechargeMoney#, #cardBalanceAfter#,
+		#resviseTime#, #flag#, #billId#, #msg#, #canteenNum#, #hosptialNo#,
+		#rechargeType#, #billType#, #tradeNo#, #outTradeNo#, #buyerEmail#,
+		#sellerEmail#, #gmtPayment#, #gmtCreate#, #transactionId#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM
+		sc_card_recharge_info WHERE
+		id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_card_recharge_info
+		SET
+		create_time = #createTime#,   <!-- 创建时间 -->
+		work_no = #workNo#,   <!-- 工号 -->
+		card_id = #cardId#,   <!-- 卡片物理ID -->
+		card_no = #cardNo#,   <!-- 卡片业务编码 -->
+		card_balance_before = #cardBalanceBefore#,   <!-- 充值前金额 -->
+		card_recharge_money = #cardRechargeMoney#,   <!-- 充值金额 -->
+		card_balance_after = #cardBalanceAfter#,   <!-- 充值后金额 -->
+		resvise_time = #resviseTime#,   <!-- 回掉时间 -->
+		flag = #flag#,   <!-- 状态 /00-待充值/01-充值成功/99-结束 -->
+		bill_id = #billId#,   <!-- 单据ID -->
+		msg = #msg#,   <!-- 信息 -->
+		canteen_num = #canteenNum#,   <!-- 食堂编码 -->
+		hosptial_no = #hosptialNo#,   <!-- 支付宝商号 -->
+		recharge_type = #rechargeType#,   <!-- 充值类型 -->
+		bill_type = #billType#,   <!-- 单据类型 /work - 职工/patient - 病患/ -->
+		trade_no = #tradeNo#,   <!-- 交易号 -->
+		out_trade_no = #outTradeNo#,   <!-- 商户号 -->
+		buyer_email = #buyerEmail#,   <!-- 付款账户 -->
+		seller_email = #sellerEmail#,   <!-- 收款账户 -->
+		gmt_payment = #gmtPayment#,   <!-- 交易完成时间 -->
+		gmt_create = #gmtCreate#,  <!-- 交易创建时间 -->
+		transaction_id = #transactionId#  <!-- 交易流水号(微信或支付宝) -->
+		WHERE
+		id = #id#
+	</update>
+
+</sqlMap>

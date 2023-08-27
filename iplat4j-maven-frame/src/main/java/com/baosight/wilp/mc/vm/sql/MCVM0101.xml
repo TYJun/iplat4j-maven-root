@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+		
+<sqlMap namespace="MCVM0101">
+	<insert id="insert" parameterClass="java.util.HashMap">
+		INSERT INTO $projectSchema$.mc_variable (
+			id,  <!-- 主键 -->
+			variable_code,<!-- 变量编码 -->
+			variable_name, <!-- 变量名称 -->
+			rec_creater,  <!-- 创建人 -->
+			rec_create_time,  <!-- 创建时间 -->
+			rec_revisor,  <!-- 修改人 -->
+			rec_revise_time  <!-- 修改时间 -->
+		)
+	    VALUES (#id#, #variableCode#, #variableName#, #recCreater#, #recCreateTime#, #recRevisor#, #recReviseTime#)
+	</insert>
+
+	<select id="queryLastVarNum" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT variable_code as "variableCode"	<!-- 变量编码 -->
+		FROM $projectSchema$.mc_variable
+		ORDER BY rec_create_time DESC
+		LIMIT 1
+	</select>
+</sqlMap>

@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HIBZ01">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.hi.common.domain.HiStandard">
+		SELECT
+		id	as "id",  <!-- 主键 -->
+		standard_num	as "standardNum",  <!-- 标准编号 -->
+		standard_name	as "standardName",  <!-- 标准名称 -->
+		classify_id	as "classifyId",  <!-- 标识分类表ID -->
+		classify_name	as "classifyName",  <!-- 标识分类名称 -->
+		remark	as "remark",  <!-- 备注 -->
+		rec_creator	as "recCreator",  <!-- 创建人 -->
+		rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		rec_revisor	as "recRevisor",  <!-- 修改人 -->
+		rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+		data_group_code	as "dataGroupCode",  <!-- 账套 -->
+		archive_flag	as "archiveFlag" <!-- 归档标记 -->
+		FROM .hi_standard WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="classifyId">
+			classify_id = #classifyId#
+		</isNotEmpty>
+
+
+		<isNotEmpty prepend=" AND " property="standardNum">
+			standard_num like concat('%', #standardNum#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="standardName">
+			standard_name like concat('%', #standardName#, '%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+				standard_num asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+
+	<select id="queryId" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.hi.common.domain.HiFile">
+		SELECT
+		id	as "id",  <!-- 主键 -->
+		relation_id	as "relationId",  <!-- 关联id -->
+		file_name	as "fileName",  <!-- 附件名称 -->
+		file_size	as "fileSize",  <!-- 附件大小 -->
+		doc_id	as "docId",  <!-- iplat库附件ID(下载使用) -->
+		remark	as "remark",  <!-- 附件说明 -->
+		rec_creator	as "recCreator",  <!-- 创建人 -->
+		rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		rec_revisor	as "recRevisor",  <!-- 修改人 -->
+		rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+		data_group_code	as "dataGroupCode",  <!-- 账套 -->
+		archive_flag	as "archiveFlag", <!-- 归档标记 -->
+		file_path as "filePath"
+		FROM .hi_file WHERE archive_flag = '1'
+		<isNotEmpty prepend=" AND " property="id">
+			relation_id  = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="fileStatus">
+			file_status  = #fileStatus#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				relation_id asc
+			</isEmpty>
+		</dynamic>
+
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .hi_standard WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="standardNum">
+			standard_num like concat('%', #standardNum#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="standardName">
+			standard_name like concat('%', #standardName#, '%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+	</select>
+	
+	<!-- PC端查询维修事项分类 -->
+	<select id="queryItemTypeTree" resultClass="java.util.HashMap">
+		SELECT
+			t1.id as "label",
+			t1.classify_num	as "code",
+			t1.classify_name as "text",
+			t1.parent_id as "pId",
+		    CASE count(t2.id)
+				WHEN 0 THEN TRUE
+				ELSE FALSE
+			END AS leaf
+		FROM hi_classify t1
+		left join hi_classify t2 on t1.id = t2.parent_id
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend=" AND " property="parentId">
+				t1.parent_id = #parentId#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="dataGroupCode">
+				t1.data_group_code = #dataGroupCode#
+			</isNotEmpty>
+		</dynamic>
+		group by t1.id
+		order by t1.classify_num
+	</select>
+	
+	<!-- 选择维修事项分类 -->
+ 	<select id="selectItemTypeNames" parameterClass="java.util.Map" resultClass="com.baosight.wilp.hi.common.domain.HiClassify">
+  		SELECT id,
+		    classify_num classifyNum,
+		    classify_name classifyName,
+  			data_group_code dataGroupCode 
+  		FROM hi_classify  where 1=1
+  		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="classifyName">
+			classify_name like concat('%', #classifyName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="classifyNum">
+			classify_num = #classifyNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" and " property="parentId">
+			parent_id = #parentId#
+		</isNotEmpty>
+ 	</select>
+
+	<select id="selectItemTypeNamesNew" parameterClass="java.util.Map" resultClass="com.baosight.wilp.hi.common.domain.HiClassify">
+		SELECT id,
+			   item_type_num itemTypeNum,
+			   item_type_name itemTypeName,
+			   wgroup_num wgroupNum,  <!-- 维修科室编码 -->
+			   wgroup_name wgroupName  <!-- 维修科室名称 -->
+		FROM mt_sx_fl where 1=1
+		<dynamic prepend=" and ">
+			<isNotEmpty prepend="and" property="parentId">
+				find_in_set(id,getMtChildrenList(#parentId#,0))
+			</isNotEmpty>
+			<isEmpty prepend="and" property="parentId">
+				parent_id = 'root'
+			</isEmpty>
+		</dynamic>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+	</select>
+	
+	<insert id="insert" parameterClass="com.baosight.wilp.hi.common.domain.HiStandard">
+		INSERT INTO .hi_standard (
+		id,  <!-- 主键 -->
+		standard_num,  <!-- 标准编号 -->
+		standard_name,  <!-- 标准名称 -->
+		classify_id,  <!-- 标识分类表ID -->
+		classify_name,  <!-- 标识分类名称 -->
+		remark,  <!-- 备注 -->
+		rec_creator,  <!-- 创建人 -->
+		rec_create_time,  <!-- 创建时间 -->
+		rec_revisor,  <!-- 修改人 -->
+		rec_revise_time,  <!-- 修改时间 -->
+		data_group_code,  <!-- 账套 -->
+		archive_flag  <!-- 归档标记 -->
+		)
+		VALUES (
+		#id#,
+		#standardNum#,
+		#standardName#,
+		#classifyId#,
+		#classifyName#,
+		#remark#,
+		#recCreator#,
+		#recCreateTime#,
+		#recRevisor#,
+		#recReviseTime#,
+		#dataGroupCode#,
+		#archiveFlag#
+		)
+	</insert>
+  
+	<delete id="delete">
+		DELETE t1,
+t2
+FROM
+	hi_standard AS t1
+	LEFT JOIN hi_file t2 ON t1.id = t2.relation_id
+WHERE
+	t1.id = #id#
+	AND t2.relation_id = #id#
+	</delete>
+
+	<update id="update" parameterClass="com.baosight.wilp.hi.common.domain.HiStandard">
+		UPDATE .hi_standard
+		SET
+		standard_num	= #standardNum#,   <!-- 标准编号 -->
+		standard_name	= #standardName#,   <!-- 标准名称 -->
+		classify_id	= #classifyId#,   <!-- 标识分类表ID -->
+		classify_name	= #classifyName#,   <!-- 标识分类名称 -->
+		remark	= #remark#,   <!-- 备注 -->
+		rec_creator	= #recCreator#,   <!-- 创建人 -->
+		rec_create_time	= #recCreateTime#,   <!-- 创建时间 -->
+		rec_revisor	= #recRevisor#,   <!-- 修改人 -->
+		rec_revise_time	= #recReviseTime#,   <!-- 修改时间 -->
+		data_group_code	= #dataGroupCode#,   <!-- 账套 -->
+		archive_flag	= #archiveFlag#  <!-- 归档标记 -->
+		WHERE
+		id = #id#
+	</update>
+	
+	<select id="isDelete" parameterClass="java.util.Map" resultClass="int">
+		select sum(col) from
+		(
+		select count(*) col from hi_standard where id = #id#
+		) tt
+	</select>
+
+	<!-- 根据分类编码或id查询指定维修事项 -->
+	<select id="queryMtSxDept" parameterClass="string" resultClass="com.baosight.wilp.hi.common.domain.HiClassify">
+		SELECT
+		id	as "id",  <!-- 主键 -->
+		classify_num	as "classifyNum",  <!-- 标识分类编码 -->
+		classify_name	as "classifyName",  <!-- 标识分类名称 -->
+		parent_id	as "parentId",  <!-- 上级分类id(根节点root) -->
+		super_classify_num as "superClassifyNum",
+		super_classify_name as  "superClassifyName",
+		level	as "level",  <!-- 等级 -->
+		is_leaf	as "isLeaf",  <!-- 是否是叶子节点（N=不是，Y=是） -->
+		remark	as "remark",  <!-- 备注 -->
+		sort_no	as "sortNo",  <!-- 排序字段 -->
+		rec_creator	as "recCreator",  <!-- 创建人 -->
+		rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		rec_revisor	as "recRevisor",  <!-- 修改人 -->
+		rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+		data_group_code	as "dataGroupCode",  <!-- 账套 -->
+		archive_flag	as "archiveFlag" <!-- 归档标记 -->
+		FROM .hi_classify WHERE id = #value# or classify_num = #value#
+	</select>
+
+
+
+	<!-- 修改项目附件 -->
+	<update id="updateFile" parameterClass="java.util.HashMap">
+		update  .hi_file  set
+			archive_flag='2',
+			remark=#remark#,
+			rec_revisor=#recRevisor#,
+		    rec_revise_time=#recReviseTime#
+		where relation_id =#relationId#
+		  and doc_id = #docId#
+	</update>
+
+
+	<!-- 查询删除项目附件List -->
+	<select id="queryDeleteFile" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		id	as "id",  <!-- 主键 -->
+		relation_id	as "relationId",  <!-- 关联id -->
+		file_name	as "fileName",  <!-- 附件名称 -->
+		file_size	as "fileSize",  <!-- 附件大小 -->
+		doc_id	as "docId",  <!-- iplat库附件ID(下载使用) -->
+		remark	as "remark",  <!-- 附件说明 -->
+		rec_creator	as "recCreator",  <!-- 创建人 -->
+		rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		rec_revisor	as "recRevisor",  <!-- 修改人 -->
+		rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+		data_group_code	as "dataGroupCode",  <!-- 账套 -->
+		archive_flag	as "archiveFlag" <!-- 归档标记 -->
+		FROM .hi_file
+		WHERE archive_flag='2' and
+		relation_id=#id#
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				rec_create_time asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<!-- 保存项目附件 -->
+	<insert id="insertFile">
+		INSERT INTO .hi_file
+		(id,  <!-- 主键 -->
+		relation_id,  <!-- 关联id -->
+		file_name,  <!-- 附件名称 -->
+		file_size,  <!-- 附件大小 -->
+		doc_id,  <!-- iplat库附件ID(下载使用) -->
+		remark,  <!-- 附件说明 -->
+		rec_creator,  <!-- 创建人 -->
+		rec_create_time,  <!-- 创建时间 -->
+		rec_revisor,  <!-- 修改人 -->
+		rec_revise_time,  <!-- 修改时间 -->
+		data_group_code,  <!-- 账套 -->
+		archive_flag,  <!-- 归档标记 -->
+		file_path,
+		file_status
+		)
+		VALUES (
+		#id#,
+		#relationId#,
+		#fileName#,
+		#fileSize#,
+		#docId#,
+		#remark#,
+		#recCreator#,
+		#recCreateTime#,
+		#recRevisor#,
+		#recReviseTime#,
+		#dataGroupCode#,
+		#archiveFlag#,
+		#filePath#,
+		#fileStatus#
+		)
+	</insert>
+
+	<!-- 删除项目附件 -->
+	<delete id="deleteFile" parameterClass="java.util.HashMap">
+		DELETE FROM .hi_file  WHERE relation_id = #id# and archive_flag ='1'
+		<isNotEmpty prepend=" AND " property="fileStatus">
+			file_status  = #fileStatus#
+		</isNotEmpty>
+	</delete>
+
+
+
+	<select id="queryRecCreator" parameterClass="String"
+			resultClass="String">
+        select rec_creator
+        from hi_file
+        where archive_flag = '1'
+        and
+		relation_id = #id#
+	</select>
+</sqlMap>

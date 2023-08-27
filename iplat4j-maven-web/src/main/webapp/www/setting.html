@@ -1,0 +1,837 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="reference/mui/css/mui.css">
+    <link rel="stylesheet" href="reference/mui/css/iconfont.css">
+    <link rel="stylesheet" href="css/common.css" />
+    <link rel="stylesheet" href="css/colorGreen.css">
+    <link rel="stylesheet" href="css/colorBlue.css">
+</head>
+<STYLE TYPE="text/css">
+    body {
+        background: #eee;
+    }
+    
+    .icon-logo {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .mui-content>.mui-table-view:first-child {
+        margin-top: 0px;
+    }
+    
+    .mui-page-content {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #eee;
+    }
+    
+    .round {
+        border: 1px solid #bbb;
+        width: 60px;
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+        color: #fff;
+        background-color: #666666;
+        filter: alpha(opacity=80);
+        /* 用于IE浏览器－透明度为20%*/
+        -moz-opacity: 0.8;
+        /*  用于Moz + Firefox－透明度为20%*/
+        opacity: 0.8;
+        -webkit-border-radius: 60px;
+        -moz-border-radius: 60px;
+        -o-border-radius: 60px;
+        border-radius: 60px;
+    }
+    
+    .mui-card-header {
+        font-size: 14px;
+        color: #0090bb;
+        font-weight: 500;
+    }
+    
+    .mui-card-header.mui-card-media .mui-media-body {
+        font-size: 14px;
+        font-weight: 500;
+        color: #0090bb;
+    }
+    
+    .box {
+        width: 100%;
+        height: 100px;
+        background: #fff;
+        padding: 10px;
+        overflow: hidden;
+    }
+    
+    .img_alt {
+        filter: progid: DXImageTransform.Microsoft.gradient(startcolorstr=#7F000000, endcolorstr=#7F000000);
+        z-index: 1;
+        height: 30px;
+        line-height: 30px;
+        color: #444;
+        padding-left: 15px;
+        padding-right: 15px;
+        width: 100%;
+        background: #fff;
+        letter-spacing: 1px;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+    
+    .update-windows {
+        /*position:fixed;*/
+        z-index: 999;
+        background: #fff;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.6);
+        filter: progid: DXImageTransform.Microsoft.gradient(startcolorstr=#7F000000, endcolorstr=#7F000000);
+    }
+    
+    .mui-grid-view.mui-grid-9 .mui-table-view-cell {
+        border-right: none;
+        border-bottom: none;
+    }
+    
+    .mui-grid-view.mui-grid-9 .mui-media-body {
+        letter-spacing: 1px;
+    }
+    
+    .mui-icon-pulldown {
+        margin-left: 24px;
+        padding-top: 18px;
+        transform: rotate(-90deg);
+    }
+    
+    canvas {
+        margin-top: 10px;
+    }
+    
+    .icon-gonggao {
+        font-size: 28px;
+        vertical-align: middle;
+        color: white;
+        padding-right: 4px;
+    }
+    
+    .rolediv {
+        width: 100%;
+        background: #fff;
+    }
+    
+    nav.mui-bar-tab {
+        background-color: #fff;
+        margin-bottom: -3px;
+        box-shadow: 0 0 0.5px rgba(0, 0, 0, .2);
+    }
+    
+    .updateDiv {
+        width: 80%;
+        min-height: 40%;
+        position: absolute;
+        bottom: 30%;
+        left: 10%;
+    }
+    
+    .updateDiv .versionUpdate {
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        border-bottom: 1px solid #eee;
+        font-size: 18px;
+        font-weight: bold;
+        background: #30c37c;
+        color: #fff;
+    }
+    
+    .versionDiv {
+        min-height: 150px;
+        padding: 15px;
+        font-size: 16px;
+    }
+    
+    #update {
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        border-top: 1px solid #eee;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    
+    #menuPic {
+        width: 100%;
+        height: 200px;
+        background: url(img/hospital.jpg);
+        background-size: cover;
+    }
+    
+    .hosNameDiv {
+        height: 40px;
+        line-height: 40px;
+        padding-left: 15px;
+        background: #ffffff;
+        color: #676767;
+        border-radius: 8px 8px 0 0;
+        margin: 0 5px;
+        font-size: 16px;
+    }
+    
+    #changeColor {
+        touch-action: none;
+    }
+    
+    #scrollGG .circle {
+        width: 10px;
+        height: 10px;
+        background: red;
+        border-radius: 50%;
+        position: absolute;
+        right: 8px;
+        top: 6px;
+    }
+    
+    .mui-bar-nav {
+        box-shadow: none;
+        -webkit-box-shadow: none;
+    }
+    
+    .mui-navigate-right:after {
+        font-size: 20px;
+    }
+    
+    .settingBackColor p {
+        color: #fff;
+        font-size: 15px;
+    }
+    
+    .settingBackColor p#name {
+        font-size: 16px;
+        letter-spacing: 1px;
+    }
+    
+    .settingBackColor p#telPhone {
+        width: 46%;
+        text-align: center;
+        border-radius: 10px;
+        opacity: 0.8;
+        letter-spacing: 1px;
+        margin-top: 4px;
+        font-size: 13px;
+    }
+    
+    .settingBackColor .mui-navigate-right:after {
+        color: #fff;
+        font-size: 20px;
+    }
+    
+    #currentVersion {
+        padding-left: 6px;
+    }
+    
+    .mui-table-view-cell {
+        padding: 13px 15px;
+        font-size: 15px;
+    }
+    
+    .mui-table-view-cell .iconfont {
+        font-size: 23px;
+        vertical-align: middle;
+        padding-right: 16px;
+        margin-top: -4px;
+    }
+    
+    .icon-qunfengxiugaimima,
+    .icon-mimaxiantiao {
+        color: #5179f5;
+    }
+    
+    .icon-qian,
+    .icon-50 {
+        color: #335feb;
+    }
+    
+    .icon-solid-home,
+    .icon-keshi {
+        color: #ffa558;
+    }
+    
+    .icon-shouji,
+    .icon-shouji1 {
+        color: #15b96a;
+    }
+    
+    .icon-theme,
+    .icon-zhuti1 {
+        color: #fbd210;
+    }
+    
+    .icon-erweima {
+        color: #2098d6;
+        font-size: 19px !important;
+        padding-left: 2px;
+    }
+    
+    .icon-banben {
+        font-size: 19px !important;
+    }
+    
+    #account {
+        padding-top: 10px;
+        padding-bottom: 20px;
+        margin-bottom: -13px;
+    }
+    
+    #head-img {
+        max-width: 52px;
+        height: 52px;
+    }
+    
+    .shortDiv {
+        padding-top: 0 !important;
+    }
+    
+    .icon-yifu {
+        color: #fff;
+        font-size: 24px !important;
+    }
+    
+    .mui-table-view-cell:after {
+        background: #e2e2e2;
+    }
+    
+    .icon-zhanghu {
+        color: #ffa558;
+    }
+    
+    .icon-anquan2 {
+        color: #15b96a;
+    }
+    
+    .icon-kefu {
+        color: #fbd210;
+        font-size: 26px !important;
+        padding-right: 12px !important;
+        margin-left: -2px;
+    }
+    
+    .phoneColor {
+        color: #6b6b6b;
+        letter-spacing: 1px;
+    }
+    
+    .phoneColor span {
+        display: inline-block;
+        width: 40%;
+    }
+    
+    .changeTheme {
+        position: absolute;
+        right: 0;
+        top: 43px;
+        width: 60px;
+        border-radius: 6px;
+    }
+    
+    .changeTheme li {
+        padding-right: 15px !important;
+    }
+    
+    .settingBackColor .mui-table-view-cell>a:not(.mui-btn).mui-active {
+        background: #30c37c;
+    }
+    
+    .mask {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        z-index: 2;
+        display: none;
+    }
+    
+    .icon-qiapian {
+        color: #0272ec;
+    }
+    /*输入支付密码*/
+    
+    .diceng {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 250;
+        background: black;
+        opacity: 0.5;
+    }
+    
+    .realMoney {
+        position: fixed;
+        z-index: 251;
+        width: 100%;
+        /*bottom: 0px;*/
+        background: #FFFFFF;
+        height: 300px;
+        padding: 0 10px;
+    }
+    
+    .setInput {
+        color: #333333;
+        width: 100%;
+        border: 0;
+        outline: none;
+        text-align: left;
+        font-size: 15px;
+    }
+    
+    .editButtons {
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        font-size: 19px;
+        width: 90%;
+        margin-left: 5%;
+        margin-bottom: 20px;
+        border-radius: 6px;
+    }
+    
+    .applyTitle {
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+        font-size: 18px;
+        color: #666666;
+        letter-spacing: 1px;
+    }
+    
+    .applyInput {
+        padding: 15px 15px;
+    }
+    
+    .mui-input-row .mui-input-clear~.mui-icon-clear,
+    .mui-input-row .mui-input-password~.mui-icon-eye,
+    .mui-input-row .mui-input-speech~.mui-icon-speech {
+        top: 6px;
+    }
+    
+    .mui-popup-title {
+        color: #1fbf71;
+    }
+    
+    .mui-popup-title+.mui-popup-text {
+        margin: 6px 0 0;
+        letter-spacing: 1.2px;
+    }
+    
+    .mui-popup-button.mui-popup-button-bold {
+        font-weight: normal;
+    }
+    
+    .mui-popup-button {
+        color: #1fbf71;
+    }
+    
+    .mui-icon-closeempty {
+        display: inline-block;
+        float: right;
+        height: 60px;
+        line-height: 60px;
+        font-size: 40px;
+        color: #30c37c;
+    }
+</STYLE>
+
+<body>
+    <header id="header" class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">我的</h1>
+        <span class="mui-icon iconfont icon-yifu mui-pull-right" onclick="changeTheme()" id="theme"></span>
+        <ul class="mui-table-view mui-table-view-chevron changeTheme" style="display:none;">
+            <li class="mui-table-view-cell" style="color: #30c37c">
+                <a data-color="3" onclick="changeColor(event)">绿色</a>
+            </li>
+            <li class="mui-table-view-cell" style="color: #5bc0de">
+                <a data-color="4" onclick="changeColor(event)">蓝色</a>
+            </li>
+        </ul>
+    </header>
+    <div class="mask"></div>
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+    <nav class="mui-bar mui-bar-tab" style="box-shadow: 0 0 0.5px rgba(0, 0, 0, .2);">
+        <a id="home" class="mui-tab-item">
+            <span class="mui-icon mui-icon-home"></span>
+            <span class="mui-tab-label">首页</span>
+        </a>
+        <a id="report" class="mui-tab-item" style="display: none;">
+            <span class="mui-icon iconfont icon-baobiaofenxi"></span>
+            <span class="mui-tab-label">报表</span>
+        </a>
+        <a id="mine" class="mui-tab-item mui-active">
+            <span class="mui-icon mui-icon-person"></span>
+            <span class="mui-tab-label">我的</span>
+        </a>
+    </nav>
+    <div class="mui-content shortDiv">
+        <div class="mui-scroll">
+            <ul class="mui-table-view mui-table-view-chevron settingBackColor">
+                <li class="mui-table-view-cell mui-media" style="padding-top:54px">
+                    <a id="account" class="mui-navigate-right">
+                        <img class="mui-media-object mui-pull-left head-img" id="head-img" src="img/icon.png">
+                        <p class="mui-ellipsis name" style="line-height: 25px"></p>
+                        <div style="display: flex;justify-content: space-between;">
+                            <p class="mui-ellipsis backColor telPhone" id="telPhone"></p>
+                            <!-- <p class="mui-ellipsis">版本<span id="currentVersion"></span></p> -->
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <ul class="mui-table-view mui-table-view-chevron">
+                <li class="mui-table-view-cell">
+                    <a onclick="location.href='operate/myInfo.html?myInfo'" class="mui-navigate-right"><span class="mui-icon iconfont icon-zhanghu"></span>个人信息</a>
+                </li>
+<!--                <li class="mui-table-view-cell" style="display:none;">-->
+<!--                    <a class="mui-navigate-right" onclick="location.href='operate/paychoose.html'"><span class="mui-icon iconfont icon-anquan2"></span>安全设置</a>-->
+<!--                </li>-->
+<!--                <li class="mui-table-view-cell  yueMoney">-->
+<!--                    <a class="mui-navigate-right"><span class="mui-icon iconfont icon-50"></span>我的账户-->
+<!--                  <i id="balance" class="mui-pull-right update"></i>-->
+<!--                </a>-->
+<!--                </li>-->
+<!--                <li class="mui-table-view-cell  cardManeger">-->
+<!--                    <a class="mui-navigate-right" onclick="location.href='operate/card_manage.html'"><span class="mui-icon iconfont icon-qiapian"></span>卡片管理-->
+<!--                  <i id="balance" class="mui-pull-right update"></i>-->
+<!--                </a>-->
+<!--                </li>-->
+<!--                <li class="mui-table-view-cell  payChoose">-->
+<!--                    <a class="mui-navigate-right" onclick="location.href='operate/paychoose.html'"><span class="mui-icon iconfont icon-qiapian"></span>修改密码-->
+<!--                        <i id="balance" class="mui-pull-right update"></i>-->
+<!--                    </a>-->
+<!--                </li>-->
+            </ul>
+<!--            <ul class="mui-table-view mui-table-view-chevron" style="margin-top: 15px">-->
+<!--                <li class="mui-table-view-cell">-->
+<!--                    <a class="mui-navigate-right erweima"><span class="mui-icon iconfont icon-erweima"></span>二维码分享-->
+<!--                  <i class="mui-pull-right"></i>-->
+<!--                </a>-->
+<!--                </li>-->
+<!--                <li class="mui-table-view-cell">-->
+<!--                    <a class="mui-navigate-right" id="kefuPhone" onclick="phoneShow()"><span class="mui-icon iconfont icon-kefu"></span>客服电话-->
+<!--                  <i class="mui-pull-right"></i>-->
+<!--                </a>-->
+<!--                </li>-->
+<!--                <ul class="mui-table-view mui-table-view-chevron changePhone" style="display:none;">-->
+                    <!-- <li class="mui-table-view-cell phoneColor" >
+                  <a><span>医院总务处</span></a>
+              </li> -->
+<!--                    <li class="mui-table-view-cell phoneColor">-->
+<!--                        <a><span>系统咨询电话</span>025-57716635</a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--                <li class="mui-table-view-cell" id="version">-->
+<!--                    <a><span class="mui-icon iconfont icon-banben" style="color:#2fa0b5"></span>版本号-->
+<!--                  <i id="currentVersion" style="float: right"></i>-->
+<!--                </a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--            <ul class="mui-table-view mui-table-view-chevron" style="margin-top: 15px">-->
+<!--                <li class="mui-table-view-cell">-->
+<!--                    <a class="mui-navigate-right" onclick="location.href='login.html'">重新登陆-->
+<!--              </a>-->
+<!--                </li>-->
+<!--                <li id="quit" class="mui-table-view-cell">-->
+<!--                    <a class="mui-navigate-right">退出登录</a>-->
+<!--                </li>-->
+<!--            </ul>-->
+            <!--  <ul class="mui-table-view mui-table-view-chevron" style="margin-top: 15px">
+            <li id="quit" class="mui-table-view-cell" style="text-align: center;">
+                <a>退出登录</a>
+            </li>
+        </ul> -->
+            <div style="height:100px;"></div>
+        </div>
+    </div>
+
+    <!-- 输入支付密码 -->
+<!--    <div class="diceng" hidden></div>-->
+<!--    <div class="realMoney pwdWrite" hidden>-->
+<!--        <div class="applyTitle">请输入支付密码<span class="mui-icon mui-icon-closeempty"></span></div>-->
+<!--        <form class="mui-input-group" style="margin-bottom: 80px">-->
+<!--            <div class="mui-input-row">-->
+<!--                <label>工号</label>-->
+<!--                <input id='workNumber' type="text" class="mui-input" readonly>-->
+<!--            </div>-->
+<!--            <div class="mui-input-row">-->
+<!--                <label>支付密码</label>-->
+<!--                <input id='password' type="password" class="mui-input-clear mui-input" placeholder="请输入支付密码">-->
+<!--            </div>-->
+<!--        </form>-->
+<!--        <div class="editButtons paySure" style="background:#30c37c;color: #FFFFFF;margin-top: 6px;display: none;">确定</div>-->
+<!--        <div class="editButtons paySureCount" style="background:#30c37c;color: #FFFFFF;margin-top: 6px;display: none;">确定</div>-->
+<!--    </div>-->
+</body>
+<script type="text/javascript" src="js/color.js"></script>
+<script src="reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/qrcode.js"></script>
+<script type="text/javascript" src="js/jquery.qrcode.js"></script>
+<!-- <script src="cordova.js" type="text/javascript"></script> -->
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var role = localStorage.getItem("role");
+    console.log(role);
+    if (role.indexOf("LEADER") > -1) {
+        $('#report').show()
+    }
+    var roleName = localStorage.getItem("roleName").split(",");
+    var role_name = '';
+    for (var i = 0; i < roleName.length; i++) {
+        role_name += '<span class="mui-badge mui-badge-inverted" style="margin-right:10px;margin-bottom:5px;font-size:13px;">' + roleName[i] + '</span>';
+    }
+    $("#role_name").html(role_name);
+    var hosId = localStorage.getItem("hosId");
+    console.log("医院编号：" + hosId);
+    var menuImg = localStorage.getItem("menuImg");
+    var developer = localStorage.getItem("developer");
+    console.log("开发者模式：" + developer);
+    var appUrl = "";
+
+    (function(win, doc) {
+        function change() {
+            var a = $(window).height() - $(".realMoney").height();
+            $(".realMoney").css("bottom", 0 / 2 + "px");
+        }
+        change();
+        win.addEventListener('resize', change, false);
+    })(window, document);
+    /**
+     * 系统返回键监听
+     */
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        /**
+         * 版本更新
+         * @param appID
+         */
+        $.ajax({
+            url: baseUrl + 'app_versionController.do?getAppVersion',
+            type: 'post',
+            data: {
+                appId: 'com.bonawise.yishenghuo'
+            },
+            timeout: 30000,
+            success: function(data) {
+                var data = eval("(" + data + ")");
+                var versions = data.app_version;
+                appUrl = data.app_url;
+                cordova.getAppVersion.getVersionNumber(function(version) {
+                    $("#currentVersion").html("V" + version);
+                });
+            }
+        });
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+    /**
+     * 系统返回键方法
+     * @return {[type]} [description]
+     */
+    // function onBackKeyDown() {
+    //   if(('#accountHeader').is(':visible')){
+    //     $('nav.mui-bar').show()
+    //     $('#accountDiv').hide()
+    //     $('#accountHeader').hide()
+    //     $('.mui-scroll').show()
+    //     $('#header').show()
+    //     $('.mui-content').addClass('shortDiv')
+    //   }else if(('#erCode').is(':visible')){
+    //     $('nav.mui-bar').show()
+    //     $('#bigQr').hide()
+    //     $('#erCode').hide()
+    //     $('.mui-scroll').show()
+    //     $('#header').show()
+    //     $('.mui-content').addClass('shortDiv')
+    //   }else {
+    //     navigator.app.exitApp();
+    //   }
+    // }
+    function onBackKeyDown() {
+        navigator.app.exitApp();
+    }
+
+    //基本信息
+    $('.name').html(localStorage.getItem("name"));
+    $('#workNo').html(localStorage.getItem("workNo"));
+    $('.telPhone').html(localStorage.getItem("telPhone") == "" ? "无" : localStorage.getItem("telPhone"));
+
+    //退出登录
+    document.getElementById("quit").addEventListener('tap', function() {
+        $('.changePhone').slideUp()
+        $('#kefuPhone').removeClass('select')
+
+        var btnArray = ['否', '是'];
+        mui.confirm('此操作将会清除当前用户登录信息，下次登陆需要重新下载资源文件，确认退出吗?', '退出确认', btnArray, function(e) {
+            if (e.index == 1) {
+                localStorage.clear();
+                navigator.app.exitApp();
+            }
+        })
+    });
+
+
+    /**
+     * mui返回方法(ps:自定义的,不加会报错,不需要的话方法体定义为空)
+     * [goBack description]
+     * @return {[type]} [description]
+     */
+    function goBack() {
+        location.href = "hosArea.html";
+    }
+
+    function changeTheme() {
+        if ($('#theme').hasClass('choose')) {
+            $('.changeTheme').slideUp()
+            $('#theme').removeClass('choose')
+            $('.mask').hide()
+        } else {
+            $('.changeTheme').slideDown()
+            $('#theme').addClass('choose')
+            $('.mask').show()
+        }
+    }
+    $('.mask').click(function() {
+        $('.changeTheme').slideUp()
+        $('#theme').removeClass('choose')
+        $('.mask').hide()
+    })
+
+    function phoneShow() {
+        if ($('#kefuPhone').hasClass('select')) {
+            $('.changePhone').slideUp()
+            $('#kefuPhone').removeClass('select')
+        } else {
+            $('.changePhone').slideDown()
+            $('#kefuPhone').addClass('select')
+        }
+    }
+    mui('body').on('tap', '#account', function() {
+        location.href = 'operate/myInfo.html?myInfo'
+    })
+
+    mui('body').on('tap', '#version', function() {
+            $('.changePhone').slideUp()
+            $('#kefuPhone').removeClass('select')
+        })
+        // 二维码
+    mui('body').on('tap', '.erweima', function() {
+        location.href = 'operate/myInfo.html?erweima'
+    })
+
+    mui('nav').on('tap', '#home', function() {
+        location.href = 'menu.html';
+    })
+    mui('nav').on('tap', '#report', function() {
+        location.href = 'html/report/reportMenu.html';
+    })
+
+    // 点击我的账户
+    $(".yueMoney").click(function() {
+        // 如果维护了身份证
+        if (localStorage.getItem('IDYN') == 'Y') {
+            // 已经输过支付密码，不需要重新输入
+            if (localStorage.getItem('pwdYN') == 'Y') {
+                location.href = 'html/card/card-recharge.html';
+            } else {
+                $('#workNumber').val(localStorage.getItem("workNo"));
+                $('.pwdWrite').show();
+                $('.diceng').show();
+                $('#password').val('');
+                $('.paySureCount').show();
+                $('.paySure').hide();
+                $('.paySureCount').click(function() {
+                    if ($('#password').val() == '') {
+                        $("#warn small").html('支付密码不能为空！');
+                        $("#warn").fadeIn(500);
+                        setTimeout('$("#warn").fadeOut(500)', 3000);
+                        $('#password').focus();
+                        return
+                    }
+                    if ($('#password').val() == '000000') {
+                        var btn = ['否', '是']
+                        /* mui.confirm('当前支付密码为6个0，请先修改！', '安全提示', btn, function(e) {
+                            if (e.index == 1) {
+                                location.href = 'operate/payPwd_modify.html'
+                            } else {
+                                $('#password').val('');
+                                $('#password').focus();
+                            }
+                        })
+                        return */
+                    }
+                    $.ajax({
+                        //url: baseUrl + 'app_payPasswordController.do?verificationPassWord',
+                        url: baseUrl + 'cardmeal',
+                        type: 'post',
+                        headers:{
+                            className : 'CardWorkConsumeService',
+                            methodName : 'checkPayPassword'
+                        },
+                        data: {
+                            workNo: $('#workNumber').val(),
+                            payPassword: $('#password').val()
+                        },
+                        success: function(data) {
+                            //var data = JSON.parse(data);
+                            console.log(data);
+                            if (data.success) {
+                                $("#warn small").html(data.respMsg);
+                                $("#warn").fadeIn(500);
+                                setTimeout('$("#warn").fadeOut(500)', 3000);
+                                $('.pwdWrite').hide();
+                                $('.diceng').hide();
+                                localStorage.setItem('pwdYN', 'Y');
+                                location.href = 'html/card/card-recharge.html';
+                            } else {
+                                $("#warn small").html(data.respMsg);
+                                $("#warn").fadeIn(500);
+                                setTimeout('$("#warn").fadeOut(500)', 3000);
+                                $('#password').val('');
+                                $('#password').focus();
+                            }
+                        }
+                    })
+                })
+            }
+        } else {
+            $("#warn small").html('请联系人力资源部维护身份证信息，否则无法使用！（此功能仅对职工开放）');
+            $("#warn").fadeIn(500);
+            setTimeout('$("#warn").fadeOut(500)', 3000);
+        }
+
+    })
+
+    $('.diceng,.mui-icon-closeempty').click(function() {
+        $('.pwdWrite').hide();
+        $('.diceng').hide();
+    })
+</script>
+
+</html>

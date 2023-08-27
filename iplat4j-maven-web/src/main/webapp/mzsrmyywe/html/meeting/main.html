@@ -1,0 +1,714 @@
+<!doctype html>
+<html class="no-js">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" href="reference/mui/css/mui.min.css">
+		<link rel="stylesheet" href="reference/mui/css/mui.picker.min.css">
+		<link rel="stylesheet" href="reference/css/buttom.css">
+		<link rel="stylesheet" href="reference/css/common.css" />
+	</head>
+	<STYLE TYPE="text/css">
+		body {
+			background: #f7f7f7;
+		}
+		
+		.title-div {
+			position: fixed;
+			top: 44px;
+			left: 0;
+			right: 0;
+			z-index: 999;
+			box-shadow: 0px 2px 5px #dcdcdc;
+		}
+		
+		.big-titles {
+			height: 36px;
+			background: #FFFFFF;
+			padding: 0px 5px;
+		}
+		
+		.big-title {
+			width: 95%;
+			height: 36px;
+			line-height: 36px;
+			text-align: center;
+			margin-left: 2.5%;
+			font-size: 14px;
+			color: #d1d1d1;
+		}
+		
+		.small-title {
+			width: 80%;
+			height: 36px;
+			line-height: 36px;
+			text-align: center;
+			margin-left: 10%;
+			font-size: 12px;
+			color: #d1d1d1;
+		}
+		
+		.list-div {
+			width: 100%;
+			margin: 15px auto;
+			padding: 15px;
+			background: #fff;
+			box-shadow: 0px 2px 5px #e8e8e8;
+			border-radius: 2px;
+		}
+		
+		.list-title {
+			width: 100%;
+			border-bottom: 1px solid #eee;
+		}
+		
+		.title-name {
+			height: 36px;
+			line-height: 36px;
+			font-size: 18px;
+			font-weight: bold;
+		}
+		
+		.btn-appointment-div {
+			height: 36px;
+			text-align: right;
+			padding-top: 2px;
+		}
+		
+		.btn-appointment {
+			width: 80px;
+			border-radius: 15px;
+			border: 1px solid #2aabd2;
+			color: #2aabd2;
+		}
+		
+		.less-title {
+			color: #9a9a9a;
+			padding: 2px 0 7px 0;
+		}
+		
+		.time-axis-div {
+			width: 100%;
+			height: 66px;
+			padding-top: 10px;
+			padding-bottom: 5px;
+		}
+		
+		.time-axis-nomarl {
+			/*display:inline-block;
+  float:left;*/
+			position: absolute;
+			font-size: 10px;
+			color: #1275c3;
+		}
+		
+		.time-axis-nomar2 {
+			/*display:inline-block;
+  float:left;*/
+			position: absolute;
+			font-size: 10px;
+			color: #ff9800;
+		}
+		
+		.time-axis-ui {
+			width: 100%;
+			height: 25px;
+		}
+		
+		.no-use-div {
+			width: 2%;
+			height: 15px;
+			background: #fff;
+			display: inline-block;
+			float: left;
+		}
+		
+		.time-separation {
+			width: 2%;
+			height: 15px;
+			background: #e5f3f8;
+			border: 1px solid #e5f3f8;
+			display: inline-block;
+			float: left;
+		}
+		
+		.time-checked {
+			width: 2%;
+			height: 15px;
+			background: #2aabd2;
+			border: 1px solid #2aabd2;
+			display: inline-block;
+			float: left;
+		}
+		
+		.time-checked2 {
+			width: 2%;
+			height: 15px;
+			background: #ff9800;
+			border: 1px solid #ff9800;
+			display: inline-block;
+			float: left;
+		}
+		
+		.time-axis-value {
+			font-size: 12px;
+			color: #2aabd2;
+		}
+	</STYLE>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">预约会议</h1>
+			<button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+        首页
+      </button>
+		</header>
+        
+		<div id="warn" class="warn" hidden>
+			<small></small>
+		</div>
+
+		<div id="loading" class="loading1" hidden>
+			<div class="loading2">
+				<span class="mui-spinner" style="width:80px;height:80px;"></span>
+			</div>
+		</div>
+
+		<div class="title-div">
+			<div class="mui-row big-titles   meetKinds">
+         
+				<!--<div class="mui-col-sm-3 mui-col-xs-3 ">
+					<div class="big-title" style="border-bottom: 1px  solid #2aabd2;">全部</div>
+				</div>
+				<div class="mui-col-sm-3 mui-col-xs-3 ">
+					<div class="big-title">大型会议室</div>
+				</div>
+				<div class="mui-col-sm-3 mui-col-xs-3 ">
+					<div class="big-title">中型会议室</div>
+				</div>
+				<div class="mui-col-sm-3 mui-col-xs-3 ">
+					<div class="big-title">小型会议室</div>
+				</div>-->
+			</div>
+			<div class="mui-row big-titles">
+				<div class="mui-col-sm-3 mui-col-xs-3 ">
+					<div class="small-title" style="border-bottom: 1px  solid #2aabd2;">今天</div>
+				</div>
+				<div class="mui-col-sm-3 mui-col-xs-3 ">
+					<div class="small-title">明天</div>
+				</div>
+				<div class="mui-col-sm-3 mui-col-xs-3 ">
+					<div class="small-title">后天</div>
+				</div>
+				<div class="mui-col-sm-3 mui-col-xs-3 ">
+					<div id="datePicker" class="small-title selectDate">选择日期</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="mui-content" style="padding-top:116px;padding-bottom:50px;">
+
+			<!-- <div class="list-div">
+        <div class="list-title">
+          <div class="mui-row">
+            <div class="mui-col mui-col-xs-8 title-name">1号会议室</div>
+            <div class="mui-col mui-col-xs-4 btn-appointment-div">
+              <button type="button" class="mui-btn mui-btn-outlined btn-appointment">
+                预约
+              </button>
+            </div>
+            <div class="mui-col mui-col-xs-12 less-title">撒开链接打开链接</div>
+          </div>
+        </div>
+        <div class="list-content">
+          <div class="time-axis-div">
+            <div class="time-axis-nomarl" style="margin-left:20%;">
+              <div>11:00</div>
+              <div>|</div>
+              <div>12:00</div>
+            </div>
+          </div>
+          <div class="time-axis-ui">
+              <div class="no-use-div"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-checked"></div>
+              <div class="time-checked"></div>
+              <div class="time-checked"></div>
+              <div class="time-checked"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="time-separation"></div>
+              <div class="no-use-div"></div>
+          </div>
+          <div class="mui-row">
+            <div class="mui-col mui-col-xs-6 time-axis-value">7:00</div>
+            <div class="mui-col mui-col-xs-6 time-axis-value right">17:00</div>
+          </div>
+        </div>
+      </div> -->
+
+		</div>
+
+		<nav class="mui-bar mui-bar-tab" style="background-color:#fff;">
+			<a id="application" class="mui-tab-item yuyue-icon mui-active">
+				<span class="mui-icon iconfont icon-shenqing"></span>
+				<span class="mui-tab-label">预约申请</span>
+			</a>
+			<a id="manage" class="mui-tab-item guanli-icon ">
+				<span class="mui-icon iconfont icon-guanli"></span>
+				<span class="mui-tab-label">预约管理</span>
+			</a>
+			<a id="history" class="mui-tab-item guanli-icon">
+				<span class="mui-icon iconfont icon-lishi"></span>
+				<span class="mui-tab-label">历史记录</span>
+			</a>
+		</nav>
+
+	</body>
+	<script src="reference/mui/js/mui.min.js" type="text/javascript"></script>
+	<script src="reference/mui/js/mui.picker.min.js" type="text/javascript"></script>
+	<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+	<script src="reference/js/common.js" type="text/javascript"></script>
+	<script src="../../cordova.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		var baseUrl = localStorage.getItem("url");
+		var meetingType = "01,02,03";
+		var dateTime = date_YMD();
+		//预约时间规则，默认可以提前100天
+		var futureDay = 100;
+		var endDate = new Date();
+		var meetingRoles = localStorage.getItem("meetingRoles");
+        var newBeginMinute = ""
+        var newEndMinute = ""
+        var newBeginMinute2 = ""
+        var newEndMinute2 = ""
+        
+		if(meetingRoles != undefined && meetingRoles != "") {
+			meetingRoles = JSON.parse(meetingRoles);
+			futureDay = parseInt(meetingRoles.interval);
+		}
+		endDate.setDate(endDate.getDate() + futureDay);
+
+		var speMargin = ($(window).width() - 30) * 2 / 100;
+
+		document.addEventListener("deviceready", onDeviceReady, false);
+
+		function onDeviceReady() {
+			/**
+			 * 系统返回键监听
+			 */
+			document.addEventListener("backbutton", onBackKeyDown, false);
+		}
+		loadMeetingKind();
+
+		function loadMeetingKind() {
+			
+			$.ajax({
+				url: baseUrl + "app_MeetingController/getMeetingType",
+				type: "post",
+				
+				success: function(data) {
+					// var data = JSON.parse(data)
+
+					var list = data.data;
+					console.log(list)
+					var html = '<div class="mui-col-sm-3 mui-col-xs-3 ">';
+					html += '<div class="big-title" data-num="01,02,03" style="border-bottom: 1px  solid #2aabd2;">全部</div>';
+					html += '</div>';
+
+					for(var i = 0; i < list.length; i++) {
+
+						html += '<div class="mui-col-sm-3 mui-col-xs-3 ">';
+						html += '<div class="big-title" data-num="' + list[i].typecode + '">' + list[i].typename + '</div>';
+						html += '</div>';
+					}
+					$(".meetKinds").html(html);
+
+				}
+
+			});
+		}
+		/**
+		 * 选择会议室
+		 */
+		mui("body").on('tap', ".big-title", function() {
+			$(".big-title").css("border-bottom", "0");
+			$(".big-title").css("color", "#D1D1D1");
+			$(this).css("border-bottom", "1px solid #2aabd2");
+			$(this).css("color", "#2aabd2");
+			meetingType = $(this).attr("data-num");
+			console.log(meetingType)
+			//			if($(this).text() == "全部") {
+			//				meetingType = "01,02,03";
+			//			} else if($(this).text() == "大型会议室") {
+			//				meetingType = "01";
+			//			} else if($(this).text() == "中型会议室") {
+			//				meetingType = "02";
+			//			} else {
+			//				meetingType = "03";
+			//			}
+			loadData();
+		});
+
+		/**
+		 * 选择时间
+		 */
+		mui("body").on('tap', ".small-title", function() {
+			$(".small-title").css("border-bottom", "0");
+			$(".small-title").css("color", "#D1D1D1");
+			$(this).css("border-bottom", "1px solid #2aabd2");
+			$(this).css("color", "#2aabd2");
+			if($(this).text() == "今天") {
+				dateTime = date_YMD();
+				$('#datePicker').html("选择日期");
+				loadData();
+			} else if($(this).text() == "明天") {
+				dateTime = dateBeforeOrAfter(1);
+				$('#datePicker').html("选择日期");
+				loadData();
+			} else if($(this).text() == "后天") {
+				dateTime = dateBeforeOrAfter(2);
+				$('#datePicker').html("选择日期");
+				loadData();
+			} else {
+				var dtPicker = new mui.DtPicker({
+					"type": "date",
+					"beginDate": new Date(),
+					"endDate": endDate
+				});
+				dtPicker.show(function(rs) {
+					dateTime = rs.text;
+					$('#datePicker').html(rs.text);
+					dtPicker.dispose();
+					loadData();
+				})
+			}
+		});
+
+		//会议室状态
+
+		mui("body").on('tap', ".list-content", function() {
+			location.href = "meeting-code.html?" + encodeURIComponent(this.id);
+		});
+
+		loadData();
+
+		function loadData() {
+			
+			var loading = '<div style="width:100%;text-align:center;margin-top:100px;font-size:40px;"><span class="mui-spinner"></span></div>';
+			$(".mui-content").html(loading);
+			$.ajax({
+				url: baseUrl + 'app_MeetingController/getMeetingList',
+				type: 'post',
+				data: {
+					meetingType: meetingType,
+					meetingDate: dateTime
+				},
+				headers:{
+					serviceName : 'CRRE01',
+					methodName : 'getMeetingList'
+				},
+				success: function(data) {
+					// var data = eval('(' + data + ')');
+					console.log(data);
+					var str = data.msg
+					console.log(str)
+					localStorage.setItem('msg', str)
+					var list = data.data;
+					var html = '';
+					for(var i = 0; i < list.length; i++) {
+						var temporaryList = [];
+						var temporaryList2 = [];
+						for(var k = 0; k < list[i].timeArea.length; k++) {
+							var hour = list[i].timeArea[k].split(":")[0];
+							var minute = list[i].timeArea[k].split(":")[1];
+                            newBeginMinute = list[i].timeArea[0].split(":")[1];
+                            newEndMinute = list[i].timeArea[list[i].timeArea.length-1].split(":")[1];
+							var roles = parseInt(hour) * 4 + parseInt(minute) / 15 - 28;
+							temporaryList.push(roles);
+						}
+						temporaryList.sort(function(a, b) {
+							return a - b;
+						});
+						for(var k = 0; k < list[i].timeArea2.length; k++) {
+							var hour2 = list[i].timeArea2[k].split(":")[0];
+							var minute2 = list[i].timeArea2[k].split(":")[1];
+                            newBeginMinute2 = list[i].timeArea2[0].split(":")[1];
+                            newEndMinute2 = list[i].timeArea2[list[i].timeArea2.length-1].split(":")[1];
+							var roles2 = parseInt(hour2) * 4 + parseInt(minute2) / 15 - 28;
+							temporaryList2.push(roles2);
+						}
+						temporaryList2.sort(function(a, b) {
+							return a - b;
+						});
+						html += createViews(list[i].id, list[i].meetinCode, list[i].meetingName, list[i].deviceCondition, list[i].meetingNumber, list[i].timeArea, temporaryList, temporaryList2);
+					}
+					$('.mui-content').html(html);
+
+				}
+			});
+		}
+
+		//测试数据
+		// var a = [0,1,2,3,11,12,13,14,15,25,26,27,28,29,30,46,47],testhtml = '';
+		// var b = [4,5,6,7,8,9,23,24,25,26,27,28,37,38,39,40];
+		// testhtml += createViews('1','1','1','1','1',[],a);
+		// testhtml += createViews('1','1','1','1','1',[],b);
+		// $('.mui-content').html(testhtml);
+
+		/**
+		 * 创建视图
+		 * @param  {[type]} meetingId       [description]
+		 * @param  {[type]} meetingCode     [description]
+		 * @param  {[type]} meetingName     [description]
+		 * @param  {[type]} deviceCondition [description]
+		 * @param  {[type]} meetingNum      [description]
+		 * @param  {[type]} meetingTime     [description]
+		 * @param  {[type]} temporaryList   [description]
+		 * @return {[type]}                 [description]
+		 */
+		function createViews(meetingId, meetingCode, meetingName, deviceCondition, meetingNum, meetingTime, temporaryList, temporaryList2) {
+			var html = '<div class="list-div">';
+
+			//显示与时间轴对应的时间
+			var beginNum = temporaryList[0],
+				endNum = 0;
+			var lastNum = temporaryList[0];
+			var timeAxisValue = '';
+			var beginNum2 = temporaryList2[0],
+				endNum2 = 0;
+			var lastNum2 = temporaryList2[0];
+			var timeAxisValue2 = '';
+			/**
+			 * 由于每15分钟一个div，所以在与时间对应时存在问题
+			 * 如07:00-08:00，时间数组为["07:00","07:15","07:30","07:45","08:00"]
+			 * 而对应的块只有4个，所以将处理结果放到viewList中
+			 */
+			var viewList = [];
+			var viewList2 = [];
+			for(var i = 0; i < temporaryList.length; i++) {
+				viewList.push(temporaryList[i]);
+				var separation = temporaryList[i] - lastNum;
+				if(separation > 1) {
+					endNum = temporaryList[i - 1];
+					timeAxisValue += dealTime(beginNum, endNum);
+					beginNum = temporaryList[i];
+					viewList.splice(viewList.length - 2, 1);
+				} else if(i == temporaryList.length - 1) {
+					endNum = temporaryList[i];
+					timeAxisValue += dealTime(beginNum, endNum);
+					viewList.splice(viewList.length - 1, 1);
+				}
+				lastNum = temporaryList[i];
+
+			}
+			//			console.log(viewList);
+			//console.log(temporaryList2);
+			for(var i = 0; i < temporaryList2.length; i++) {
+				viewList2.push(temporaryList2[i]);
+				var separation2 = temporaryList2[i] - lastNum2;
+				if(separation2 > 1) {
+					endNum2 = temporaryList2[i - 1];
+					timeAxisValue2 += dealTime2(beginNum2, endNum2);
+					beginNum2 = temporaryList2[i];
+					viewList2.splice(viewList2.length - 2, 1);
+				} else if(i == temporaryList2.length - 1) {
+					endNum2 = temporaryList2[i];
+					timeAxisValue2 += dealTime2(beginNum2, endNum2);
+					viewList2.splice(viewList2.length - 1, 1);
+				}
+				lastNum2 = temporaryList2[i];
+
+			}
+			//console.log(viewList2);
+			//生成时间轴
+			var timeAxisUI = '<div class="no-use-div"></div>';
+			var timeAxisUI2 = '<div class="no-use-div"></div>';
+			for(var i = 0; i < 48; i++) {
+				if($.inArray(i, viewList) != -1) {
+					timeAxisUI += '<div class="time-checked"></div>';
+				} else if($.inArray(i, viewList2) != -1) {
+					timeAxisUI += '<div class="time-checked2"></div>';
+				} else {
+					timeAxisUI += '<div class="time-separation"></div>';
+				}
+
+			}
+			timeAxisUI += '<div class="no-use-div"></div>';
+
+			timeAxisUI2 += '<div class="no-use-div"></div>';
+			var json = {
+				"meetingId": meetingId,
+				"meetingCode": meetingCode,
+				"meetingName": meetingName,
+				"deviceCondition": deviceCondition,
+				"meetingNum": meetingNum,
+				"dateTime": dateTime
+			}
+			var jsonStr = JSON.stringify(json);
+
+			html += '<div class="list-title">';
+			html += '<div class="mui-row">';
+			html += '<div  class="mui-col mui-col-xs-8 title-name" >' + meetingName + '</div>';
+			html += '<div class="mui-col mui-col-xs-4 btn-appointment-div">';
+			html += '<button id=\'' + jsonStr + '\' type="button" class="mui-btn mui-btn-outlined btn-appointment">预约</button>';
+			html += '</div>';
+			html += '<div class="mui-col mui-col-xs-12 less-title">' + deviceCondition + '</div>';
+			html += '</div>';
+			html += '</div>';
+			html += '<div id=\'' + jsonStr + '\' class="list-content">';
+			html += '<div class="time-axis-div">';
+			html += timeAxisValue;
+			html += timeAxisValue2;
+			html += '</div>';
+			html += '<div class="time-axis-ui">';
+			html += timeAxisUI;
+			html += '</div>';
+			html += '<div class="mui-row">';
+			html += '<div class="mui-col mui-col-xs-3 time-axis-value">7:00</div>';
+			html += '<div class="mui-col mui-col-xs-3 time-axis-value" style="color:#ff9800;">黄色：已审批</div>';
+			html += '<div class="mui-col mui-col-xs-3 time-axis-value">蓝色：申请中</div>';
+			html += '<div class="mui-col mui-col-xs-3 time-axis-value right">19:00</div>';
+			html += '</div>';
+			html += '</div>';
+			html += '</div>';
+			return html;
+		}
+
+		function dealTime(beginNum, endNum) {
+			var timeAxisValue = '';
+
+			var beginHour = Math.floor(beginNum / 4) + 7;
+			var beginMinute = (beginNum % 4) * 15;
+			var endHour = Math.floor(endNum / 4) + 7;
+			var endMinute = (endNum % 4) * 15;
+			if(beginNum < 24) {
+				var margin = (beginNum + 1) * speMargin + 15;
+				var style = 'style="left:' + margin + 'px;"';
+			} else {
+				var margin = (48 - endNum + 1) * speMargin + 15;
+				var style = 'style="right:' + margin + 'px;"';
+			}
+			timeAxisValue += '<div class="time-axis-nomarl" ' + style + '>';
+			timeAxisValue += '<div style="height:18px;line-height:18px;">' + timeView(beginHour, newBeginMinute) + '</div>';
+			timeAxisValue += '<div style="height:15px;line-height:15px;text-align:center;">|</div>';
+			timeAxisValue += '<div style="height:18px;line-height:18px;">' + timeView(endHour, newEndMinute) + '</div>';
+			timeAxisValue += '</div>';
+
+			return timeAxisValue;
+		}
+
+		function dealTime2(beginNum2, endNum2) {
+			var timeAxisValue2 = '';
+
+			var beginHour2 = Math.floor(beginNum2 / 4) + 7;
+			var beginMinute2 = (beginNum2 % 4) * 15;
+			var endHour2 = Math.floor(endNum2 / 4) + 7;
+			var endMinute2 = (endNum2 % 4) * 15;
+			if(beginNum2 < 24) {
+				var margin2 = (beginNum2 + 1) * speMargin + 15;
+				var style = 'style="left:' + margin2 + 'px;"';
+			} else {
+				var margin2 = (48 - endNum2 + 1) * speMargin + 15;
+				var style = 'style="right:' + margin2 + 'px;"';
+			}
+			timeAxisValue2 += '<div class="time-axis-nomar2" ' + style + '>';
+			timeAxisValue2 += '<div style="height:18px;line-height:18px;">' + timeView2(beginHour2, beginMinute2) + '</div>';
+			timeAxisValue2 += '<div style="height:15px;line-height:15px;text-align:center;">|</div>';
+			timeAxisValue2 += '<div style="height:18px;line-height:18px;">' + timeView2(endHour2, endMinute2) + '</div>';
+			timeAxisValue2 += '</div>';
+
+			return timeAxisValue2;
+		}
+
+		function timeView(hour, minute) {
+			if(hour < 10)
+				hour = "0" + hour;
+			if(minute < 10)
+				minute = "0" + minute;
+			return hour + ":" + minute;
+		}
+
+		function timeView2(hour2, minute2) {
+			if(hour2 < 10)
+				hour2 = "0" + hour2;
+			if(minute2 < 10)
+				minute2 = "0" + minute2;
+			return hour2 + ":" + minute2;
+		}
+		//预约按钮点击事件
+		mui("body").on('tap', 'button.btn-appointment', function() {
+            localStorage.setItem("dateTime", dateTime)
+			location.href = "meeting-application.html?" + encodeURIComponent(this.id);
+		});
+
+		document.getElementById("application").addEventListener('tap', function() {
+
+		});
+
+		document.getElementById("manage").addEventListener('tap', function() {
+			location.href = "meeting-manage.html";
+		});
+
+		document.getElementById("history").addEventListener('tap', function() {
+			location.href = "meeting-manage-history.html";
+		});
+
+		//返回
+		document.getElementById("back").addEventListener('tap', function() {
+			location.href = '../../menu.html';
+		});
+
+		function onBackKeyDown() {
+			location.href = '../../menu.html';
+		}
+
+        
+	</script>
+
+</html>

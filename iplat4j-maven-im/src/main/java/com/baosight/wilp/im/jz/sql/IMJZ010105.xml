@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="IMJZ010105">
+
+
+
+	<!-- 查询设备包信息 -->
+	<select id="queryPacket" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.im.jz.domain.ImDevicePacket"> 
+		SELECT
+			id as packetId,
+			packet_code as packetCode,
+			packet_name as packetName
+		FROM
+			im_device_packet 
+		WHERE
+			STATUS = 1
+		<isNotEmpty prepend=" AND " property="packetCode">
+			packet_code like concat('%',#packetCode#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="packetName">
+			packet_name like concat('%',#packetName#,'%')
+		</isNotEmpty>
+		<isNotEmpty property="offset"> 	<!-- 分页 -->			
+			 limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+	
+</sqlMap>

@@ -1,0 +1,64 @@
+{
+    "data": {
+        "list":  [
+            {
+              text: "一号楼",
+              children: [
+                {
+                  text: "全部",
+                  value: "",
+                  children: [{ text: "全部", value: "" }],
+                },
+                {
+                  text: "一层",
+                  children: [
+                    {
+                      text: "全部",
+                      value: "",
+                      children: [],
+                    },
+                    {
+                      text: "病理科",
+                      children: [
+                        {
+                          text: "全部",
+                          value: "",
+                          children: [],
+                        },
+                        {
+                          text: "1",
+                        },
+                        {
+                          text: "2",
+                          values: 2,
+                        },
+                      ],
+                    },
+                    {
+                      text: "化验科",
+                      values: 2,
+                      children: [
+                        {
+                          text: "全部",
+                          value: "",
+                          children: [],
+                        },
+                        {
+                          text: "3",
+                          values: 1,
+                        },
+                        {
+                          text: "4",
+                          values: 2,
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        "status": 200,
+        "msg": "查询成功"
+    }
+}

@@ -1,0 +1,31 @@
+/*头部header*/
+.mui-bar-nav {
+	-webkit-box-shadow: 0 1px 6px #2aabd2;
+    box-shadow: 0 1px 6px #2aabd2;
+}
+.mui-bar {
+	background-color: #5bc0de;
+}
+/*登录按钮*/
+.mui-btn-blue, .mui-btn-primary, input[type=submit] {
+	border: 1px solid #2aabd2;
+    background-color: #5bc0de;
+}
+/*列表页的箭头颜色*/
+.mui-navigate-right:after {
+	color: #5bc0de;
+}
+/*导航栏*/
+.mui-bar-tab .mui-tab-item.mui-active {
+	color: #007aff;
+}
+/*字体颜色都添加这个类*/
+.fontColor {
+	color: #337ab7;
+}
+.backColor {
+	background: #337ab7;
+}
+.borderColor {
+	border: 1px solid #337ab7;
+}

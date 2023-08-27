@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MSPA01">
+    <select id="query" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.ms.pa.domain.MSPA01">
+        select t.id ,
+        t.staffid ,
+        t.name_ ,
+        t.tel ,
+        t.email ,
+        t.grade_filter,
+        t.create_by,
+        t.create_date
+        from tmspa01 t
+        WHERE
+        1=1
+        <isNotEmpty prepend="and" property="parentId">
+            t.t_param_classify_id =
+            #parentId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="Staffid">
+            t.staffid =
+            #Staffid#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="Name_">
+            t.name_ like
+            concat('%',#Name_#,'%')
+        </isNotEmpty>
+    </select>
+
+    <delete id="delete">
+        DELETE
+        FROM tmspa01
+        WHERE id = #id#
+    </delete>
+
+    <select id="queryTree" resultClass="java.util.HashMap">
+        SELECT
+        id as "label",
+        classify_name as "text",
+        parent_id as "pId",
+        "" as
+        "leaf"
+        FROM t_param_classify
+        <dynamic prepend="WHERE">
+            1=1
+            <isNotEmpty prepend="and" property="node">
+                parent_id = #node#
+            </isNotEmpty>
+        </dynamic>
+        order by id
+    </select>
+
+
+    <select id="query2" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.ms.pa.domain.T_Param_Classify">
+        SELECT classify_name FROM t_param_classify
+        WHERE
+        1=1
+        <isNotEmpty prepend="and" property="parentId">
+            id=#parentId#
+        </isNotEmpty>
+    </select>
+
+    <select id="queryByClassifyId" parameterClass="com.baosight.wilp.ms.pa.domain.MSPA01"
+            resultClass="com.baosight.wilp.ms.pa.domain.MSPA01">
+        SELECT
+        t.id,
+        t.staffid,
+        t.name_,
+        t.tel ,
+        t.email ,
+        t.grade_filter,
+        t.t_param_classify_id
+        FROM
+        tmspa01 t
+        WHERE
+        1=1
+        <isNotEmpty prepend="and" property="t_param_classify_id">
+            t.t_param_classify_id = #t_param_classify_id#
+        </isNotEmpty>
+    </select>
+
+    <insert id="saveRecord" parameterClass="HashMap">
+        insert  into message_record
+        values(#param#, #man#, now())
+    </insert>
+
+
+
+</sqlMap>

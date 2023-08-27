@@ -1,0 +1,264 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="../../reference/mui/css/mui.css">
+  <link rel="stylesheet" href="../../css/common.css" />
+</head>
+<STYLE TYPE="text/css">
+  .loading1 {
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .loading2 {
+    margin: 0 auto;
+    margin-top: 250px;
+    text-align: center;
+    line-height: 100px;
+  }
+
+  .main-div {
+    width: 50%;
+    height: 150px;
+    display: inline-block;
+    float: left;
+    color: #303133;
+  }
+
+  .main-div img {
+    width: 50%;
+    margin: 25%;
+  }
+
+  .icon-div {
+    width: 100%;
+    height: 110px;
+  }
+
+  .flex {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+  }
+
+  .flex-align-center {
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+  }
+
+  .flex-pack-justify {
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+  }
+
+  .title-div {
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 17px;
+  }
+
+  .odd-border {
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+  }
+
+  .even-border {
+    border-bottom: 1px solid #eee;
+  }
+
+  .operate-enable {
+    color: #3a82bb;
+  }
+</STYLE>
+
+<body>
+  <div id="app">
+    <header class="mui-bar mui-bar-nav">
+      <h1 class="mui-title">报表</h1>
+      <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+        首页
+      </button>
+    </header>
+
+    <div id="warn" class="warn" hidden>
+      <small></small>
+    </div>
+    <div class="mui-content">
+      <div v-for="(item,index) in menu_list" class="main-div odd-border" :key="item.url" v-if="item.show">
+        <div @click="jump(item.url)" class="icon-div flex flex-align-center flex-pack-justify">
+          <a>
+            <img :src="item.img" alt="">
+          </a>
+        </div>
+        <div class="title-div">{{item.text}}</div>
+      </div>
+    </div>
+
+
+</body>
+<script src="../../reference/mui/js/mui.js" type="text/javascript"></script>
+<script src="../../reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../../js/vue.js"></script>
+<script type="text/javascript">
+  var app = new Vue({
+    el: "#app",
+    data() {
+      return {
+        menu_list: [{
+            url: "repair/repair_menu.html",
+            img: "img/repair.png",
+            text: "维修报表",
+            show: false,
+          }, {
+            url: "device/device_menu.html",
+            img: "img/device_inspection2.png",
+            text: "巡检报表",
+            show: true,
+          }, {
+            url: "patrol/patrol_menu.html",
+            img: "img/patrol.png",
+            text: "巡查报表",
+            show: true,
+          }, {
+            url: "transport/transport_menu.html",
+            img: "img/ys.png",
+            text: "运送报表",
+            show: false,
+          }, {
+            url: "medical/report.html",
+            img: "img/ys.png",
+            text: "医废报表",
+            show: false,
+          }, {
+            url: "dkDevice/dkDevice_menu.html",
+            img: "img/ys.png",
+            text: "保养报表",
+            show: true,
+          }, {
+            url: "clothing/clothing_menu.html",
+            img: "img/yf2.png",
+            text: "布草报表",
+            show: false,
+          }, {
+            url: "satisfy/satisfy_menu.html",
+            img: "img/myd.png",
+            text: "满意度报表",
+            show: true,
+          }, {
+            url: "stock/stock_menu.html",
+            img: "img/stock.png",
+            text: "库存报表",
+            show: false,
+          },
+          {
+            url: "./ys_report/ys_report.html",
+            img: "../../img/ys_report.png",
+            text: "运送报表",
+            show: false,
+          },
+          {
+            url: "./pj_report/pj_report.html",
+            img: "../../img/pj_report.png",
+            text: "陪检报表",
+            show: false,
+          }
+        ]
+      }
+    },
+    methods: {
+      jump(url, call_back) {
+        call_back ? call_back() : location.href = url;
+      },
+    },
+  })
+  var hosId = localStorage.getItem("hosId");
+  var developer = localStorage.getItem("developer");
+  var role = localStorage.getItem("role");
+
+  console.log(role);
+  //模块权限
+  $.ajax({
+    url: 'http://wx.yyhq365.cn/smp_wx/invoke',
+    type: 'post',
+    data: {
+      method: 'enabledModule',
+      mobile: 'APP',
+      hosCode: hosId,
+      roleCodes: role
+    },
+    timeout: 15000,
+    success: function (data) {
+      var data = eval("(" + data + ")");
+      console.log(data);
+      var list = new Array();
+      var list = eval("(" + data.respMsg + ")");
+      console.log("模块权限");
+      console.log(list);
+      if (list.length != 0) {
+        for (var i = 0; i < list.length; i++) {
+          code = list[i].moduleCode;
+          $("#" + code).css("display", "block");
+        }
+      }
+    }
+  });
+
+
+
+  $("#back").click(function () {
+    location.href = '../../menu.html';
+  })
+
+  $("#REPAIR").click(function () {
+    location.href = 'repair/repair_menu.html';
+  });
+
+  $("#MEAL").click(function () {
+    location.href = 'meal/meal_menu.html';
+  });
+
+  $("#DEVICE_INSPECTION").click(function () {
+    location.href = 'device/device_menu.html';
+  });
+
+  $("#MAINTAIN").click(function () {
+    location.href = 'maintain/maintain_menu.html';
+  });
+
+  $("#CLOTHING").click(function () {
+    location.href = 'clothing/clothing_menu.html';
+  });
+
+  $("#TRANSPORT").click(function () {
+    location.href = 'transport/transport_menu.html';
+  });
+  $("#SATISFACTION").click(function () {
+    location.href = 'satisfy/satisfy_menu.html';
+  });
+  $("#YIFEI").click(function () {
+    location.href = 'report/workReport.html';
+  });
+  $("#BAOYANG").click(function () {
+    location.href = 'dkDevice/dkDevice_menu.html';
+  });
+</script>
+
+</html>

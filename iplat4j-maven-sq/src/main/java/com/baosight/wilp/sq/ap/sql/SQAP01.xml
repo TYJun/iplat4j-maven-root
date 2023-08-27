@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SQAP01">
+	<!-- 查询问卷信息 -->
+	<select id="getAssessManage" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			am.id,
+			am.batch_no,
+			am.creator,
+			DATE_FORMAT(am.create_time,'%Y-%m-%d %h:%i:%s') as create_time,
+			am.standard_code,
+			am.standard_name,
+			DATE_FORMAT(am.begin_date,'%Y-%m-%d') as begin_date,
+			DATE_FORMAT(am.end_date,'%Y-%m-%d') as end_date,
+			am.status_code,
+			am.assess_range,
+			IFNULL(am.work_name_leader,"") as work_name_leader,
+			IFNULL(am.project_name, "" ) AS project_name,
+			IFNULL(am.project_code, "" ) AS project_code,
+		    case when DATE_FORMAT(NOW(),'%Y-%m-%d') > DATE_FORMAT(am.end_date,'%Y-%m-%d')  then '-1' end as isNow
+ 		from
+ 			sq_manage am
+ 			where parents_id is null
+			<isNotEmpty prepend=" and " property="datagroupCode">
+				am.data_group_code = #datagroupCode#
+			</isNotEmpty>
+ 		order by
+ 			create_time DESC
+	</select>
+
+	<!-- 查询答卷信息 -->
+	<select id="getAssessManageScoreByBatchNoAndWorkMsg" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+		select
+			id,
+			batch_no,
+			dept_num,
+			dept_name,
+			work_no,
+			work_name,
+			score,
+			point,
+			advice
+		from
+			sq_manage_score
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="batch_no">
+				parent_batch_no = #batch_no#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="creator">
+				work_name = #workName#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="workNo">
+				work_no = #workNo#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<!-- 查询分组信息 -->
+	<select id="countGroup" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select per_group_no from sq_personnel_group where per_group_no = #project_code# and work_no = #workNo# and name = #workName#
+	</select>
+
+	<!-- 查询项目信息 -->
+	<select id="getAssessManageProjects" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+		SELECT
+			project.id AS projectId,
+			project.batch_no batchNo,
+			project.project_name AS projectName,
+			project.project_remark AS projectRemark,
+			project.creator AS creator,
+			project.create_time AS createTime,
+			project.order_no AS orderNumber,
+			advice.advice
+		FROM
+			sq_exam_project project
+		left join (select advice,project_id from sq_manage_advice where batch_no = #batchNo# AND score_id in (SELECT id FROM sq_manage_score WHERE batch_no = #batchNo# and work_no = #workNo#)) advice on advice.project_id = project.id
+		where
+			project.batch_no = #batchNo#
+		group by
+			project.id
+		ORDER BY
+			project.order_no
+	</select>
+
+	<!-- 查询子问卷 -->
+	<select id="getChildrenManage" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+		SELECT
+			a.BATCH_NO batchNo,
+			a.standard_name standardName
+		FROM
+			sq_manage a
+		WHERE
+			a.parents_id in (
+		SELECT
+			c.id
+		FROM
+			sq_manage c
+		WHERE
+			c.batch_no = #batchNo#)
+	</select>
+
+	<!--获取该问卷下项目中的题目-->
+	<select id="queryManageInstanceList" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+		SELECT
+			seinstance.id instanceId,
+			seinstance.batch_no batchNo,
+			seinstance.instance_name instanceName,
+			seinstance.point,
+			CASE WHEN seinstance.point = 0 THEN 0
+				 WHEN IFNULL(b.item_score,0) = 0 THEN 0
+			ELSE
+				b.item_score
+			END score
+		FROM
+			sq_exam_instance seinstance
+				LEFT JOIN (
+				SELECT
+					seitem.instance_id,
+					seitem.item_score
+				FROM
+					sq_exam_item seitem
+						LEFT JOIN (
+						SELECT
+							smitem.instance_id instanceid,
+							smitem.instance_result
+						FROM
+							sq_manage_item smitem
+						WHERE
+								smitem.instance_id IN ( SELECT seinstance.id instanceId FROM sq_exam_instance seinstance WHERE seinstance.project_id = #projectId# AND seinstance.batch_no = #batchNo# GROUP BY seinstance.id )
+						GROUP BY
+								instance_id
+								AND smitem.batch_no = #batchNo#
+					) a ON seitem.id = a.instance_result
+				GROUP BY
+					seitem.instance_id
+			) b ON b.instance_id = seinstance.id
+		WHERE
+			seinstance.project_id = #projectId#
+		  AND seinstance.batch_no = #batchNo#
+		GROUP BY
+			seinstance.id
+		ORDER BY
+			order_no
+	</select>
+
+
+	<!-- 查询问题打分信息 -->
+	<select id="getQueryInstance" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+		SELECT
+			instance.id as instanceId,
+			instance.batch_no as batchNo,
+			instance.project_id as projectId,
+			instance.instance_name as instanceName,
+			instance.point as point,
+			instance.point_type as pointType,
+			instance.order_no as orderNo,
+			instance.creator as creator,
+			instance.create_time as createTime,
+			a.instance_result selectValue
+		FROM
+			sq_exam_instance instance
+		LEFT JOIN
+		(SELECT
+			instance_id,
+			instance_result
+		from
+			sq_manage_item
+		WHERE
+			score_id =
+		(SELECT
+			id
+		FROM
+			sq_manage_score
+		WHERE
+			batch_no = #batchNo#
+		and
+			work_no = #workNo#)) a ON a.instance_id = instance.id
+		<dynamic prepend="where">
+			<isNotEmpty prepend="AND" property="projectId">
+				instance.project_id = #projectId#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="instanceId">
+				instance.id = #instanceId#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="batchNo">
+				instance.batch_no = #batchNo#
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY
+			instance.order_no
+	</select>
+
+	<!-- 查询项目打分 -->
+	<select id="getSqManageProjectInstance" parameterClass="HashMap" resultClass="HashMap">
+		SELECT
+			instance.id as id,
+			project.project_name as projectName,
+			instance.instance_name as instanceName,
+			instance.point,
+			instance.point_type pointType,
+			instance.order_no as orderNumber,
+			item.instance_result,
+			CASE WHEN instance.point_type = '3' AND item.instance_result != 0 THEN item.instance_result
+			WHEN eitem.item_score IS NULL THEN "不涉及"
+			ELSE
+			eitem.item_score END score
+		FROM
+			sq_exam_instance instance
+		left join sq_exam_project project on instance.project_id = project.id
+		left join (
+		    select
+				instance_id,
+				instance_result,
+				score_id
+			FROM
+				sq_manage_item
+			WHERE
+				score_id = ( SELECT id FROM sq_manage_score WHERE batch_no = #batchNo# AND work_name = #creator# )
+		) item ON item.instance_id = instance.id
+		LEFT JOIN sq_exam_item eitem ON eitem.id = item.instance_result
+		LEFT JOIN sq_manage_score score ON item.score_id = score.id
+		WHERE
+			instance.project_id = #projectId#
+		AND
+			instance.batch_no = #batchNo#
+		<isNotEmpty prepend="and" property="creator">
+			score.work_name = #creator#
+		</isNotEmpty>
+		GROUP BY
+			instance.id
+		ORDER BY
+			instance.order_no
+ 	</select>
+
+	<!-- 查询题目的选项通过题目Id -->
+	<select id="queryItemByInstanceId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			seItem.item_name label,
+			seItem.id value,
+			seItem.item_score score,
+			seInstance.point point
+		from
+			sq_exam_item seItem
+		left join sq_exam_instance seInstance on seItem.instance_id = seInstance.id
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="instanceId">
+				seItem.instance_id = #instanceId#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="batchNo">
+				seItem.batch_no = #batchNo#
+			</isNotEmpty>
+		</dynamic>
+		GROUP BY
+			seItem.id
+		order by
+			seItem.order_no
+	</select>
+
+	<insert id="insertSqManageItem" parameterClass="net.sf.json.JSONObject">
+		insert into sq_manage_item (
+			id,
+			score_id,
+			batch_no,
+			instance_id,
+			instance_result
+		)
+		values (
+			#sqManageItemId#,
+		    #scoreId#,
+		    #batchNo#,
+		    #instanceId#,
+		    #instanceResult#
+		);
+	</insert>
+
+	<insert id="insertSqManageScore" parameterClass="java.util.HashMap">
+		insert into sq_manage_score (
+			id,
+			batch_no,
+			dept_num,
+			dept_name,
+			work_no,
+			work_name,
+			score,
+		    point,
+		    advice,
+			parent_batch_no
+		)
+		values (
+			#scoreId#,
+		    #batchNo#,
+		    #deptNum#,
+		    #deptName#,
+			#workNo#,
+			#workName#,
+		    #score#,
+		    #point#,
+		    #standardAdvice#,
+			#parentBatchNo#
+		);
+	</insert>
+
+	<insert id="insertSqItem" parameterClass="java.util.HashMap">
+		insert into sq_item (
+			id,
+			parent_batch_no,
+			batch_no,
+			project_id,
+			project_name,
+			instance_id,
+			instance_name,
+			item_name,
+			item_score,
+			item_point,
+			work_no,
+			advice
+		)
+		values (
+			#id#,
+			#parentBatchNo#,
+       		#batchNo#,
+		    #projectId#,
+		    #projectName#,
+			#instanceId#,
+			#instanceName#,
+		    #itemName#,
+		    #itemScore#,
+			#itemPoint#,
+			#workNo#,
+			#advice#
+		);
+	</insert>
+
+
+	<!--删除问卷明细-->
+	<delete id="deleteSqManageItem" parameterClass="java.util.HashMap">
+		delete from sq_manage_item where score_id = (select id from sq_manage_score where batch_no = #batchNo# and work_no = #workNo#)
+	</delete>
+	<!--删除问卷建议-->
+	<delete id="deleteSqManageAdvice" parameterClass="java.util.HashMap">
+		delete from sq_manage_advice where score_id = (select id from sq_manage_score where batch_no = #batchNo# and work_no = #workNo#)
+	</delete>
+
+	<!--删除问卷分数-->
+	<delete id="deleteSqManageScore" parameterClass="java.util.HashMap">
+		delete from sq_manage_score where batch_no = #batchNo# and work_no = #workNo#
+	</delete>
+
+	<!-- 保存每个项目的建议与评价 -->
+	<insert id="insertSqManageAdvice" parameterClass="net.sf.json.JSONObject">
+		insert into sq_manage_advice (
+			id,
+		    batch_no,
+			project_id,
+			score_id,
+			advice
+		)
+		values (
+		   	#adviceId#,
+		    #batchNo#,
+		    #projectId#,
+		    #scoreId#,
+		    #advice#
+		);
+	</insert>
+
+	<!--查询该问卷的意见和建议-->
+	<select id="queryAssessManageAdvice" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			advice
+		from
+		    sq_manage_score
+		where
+			batch_no = #batchNo#
+		and
+			work_no = #workNo#
+	</select>
+
+	<!--查询项目的意见和建议-->
+	<select id="querySQManageAdvice" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			advice
+		from sq_manage_advice
+		where
+			batch_no = #batchNo#
+		and
+			project_id = #projectId#
+		and score_id in (select id from sq_manage_score where work_no = #workNo# and batch_no = #batchNo#)
+	</select>
+</sqlMap>

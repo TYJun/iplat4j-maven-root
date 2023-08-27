@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!-- 订单状态变更 -->
+<sqlMap namespace="PSPCStatusChange">
+
+    <select id="getUserGroups" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	    SELECT
+		    c.USER_ID AS "userId",
+		    c.LOGIN_NAME AS "loginName",
+		    c.USER_NAME AS "userName",
+		    e.ORG_ID AS "orgId",
+		    e.ORG_ENAME AS "orgEname",
+		    e.ORG_CNAME AS "orgCname" 
+		FROM
+		    $platSchema$.XS_USER_GROUP_MEMBER a
+		    LEFT JOIN $platSchema$.XS_USER_GROUP b ON a.PARENT_ID = b.ID
+		    LEFT JOIN $platSchema$.XS_USER c ON a.MEMBER_ID = c.USER_ID
+		    LEFT JOIN $platSchema$.TXSOG02 d ON a.MEMBER_ID = d.USER_ID
+		    LEFT JOIN $platSchema$.TXSOG01 e ON d.ORG_ID = e.ORG_ID 
+		WHERE
+		    a.MEMBER_TYPE = 'USER' 
+		    <isNotEmpty prepend=" AND " property="groupEname">
+                b.GROUP_ENAME = #groupEname# 
+            </isNotEmpty>
+		ORDER BY
+		    c.LOGIN_NAME ASC
+    </select>
+
+	<insert id="savePboHistory" parameterClass="HashMap">
+		insert into
+		sc_operation_history(
+		uuid,
+		pbo_code,
+		bill_no,
+		status_code,
+		operation_route,
+		handle_advice,
+		creator_id,
+		creator_name,
+		create_date,
+		task_node
+		)
+		values(
+		UUID(),
+		#pboCode#,
+		#billId#,
+		#beforeStatus#,
+		#oprationRoute#,
+		#handleAdvice#,
+		#creatorId#,
+		#creatorName#,
+		now(),
+		''
+		)
+	</insert>
+
+
+	<update id="updatePboTable" parameterClass="HashMap">
+		UPDATE
+		$pboTbName$
+		SET
+		status_code = #afterStatus#,
+		current_dealer = #currentDealer#,
+		REC_REVISE_TIME = DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s'),
+		REC_REVISOR = #creatorId#
+		<isEqual prepend="" property="isReject" compareValue="0">
+			,reject_code = null
+			,reject_reason = null
+		</isEqual>
+		<isEqual prepend="" property="isReject" compareValue="1">
+			<isNotEmpty prepend="" property="rejectCode">
+				,reject_code = #rejectCode#
+			</isNotEmpty>
+			<isNotEmpty prepend="" property="rejectReason">
+				,reject_reason = #rejectReason#
+			</isNotEmpty>
+		</isEqual>
+		WHERE
+		ID = #billId# and status_code=#beforeStatus#
+	</update>
+
+	<select id="getOperationHistory" parameterClass="String" resultClass="java.util.HashMap">
+
+		select uuid,
+			   pbo_code,
+			   bill_no,
+			   status_code,
+			   operation_route,
+			   handle_advice,
+			   creator_id,
+			   creator_name,
+			   create_date,
+			   task_node
+		from sc_operation_history
+		where operation_route ='支付成功确认状态'
+		and handle_advice = '提交'
+		and bill_no = #billNo#
+		LIMIT 1
+
+	</select>
+
+</sqlMap>

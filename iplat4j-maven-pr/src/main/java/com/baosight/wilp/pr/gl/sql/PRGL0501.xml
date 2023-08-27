@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="PRGL0501">
+	
+	<!-- 查询整改详细信息 -->
+	<select id="query" parameterClass="String" resultClass="com.baosight.wilp.pr.gl.domain.PRGL0501">
+			SELECT
+				d.id AS id,
+				d.dangerWhere AS dangerWhere,
+				d.localTypeName AS paramValue1,
+				d.requiredTime AS requiredTime,
+				d.contentDesc AS contentdesc,
+				d.requireDesc AS requireDesc,
+				r.writeMan AS writeman,
+				r.finishTime AS finishtime,
+				r.contentDesc AS contentdesc2,
+				r.id AS dangerresultid,
+				r.auditContent as auditcontent
+			FROM
+				pr_safty_danger d
+				LEFT JOIN pr_safty_danger_result r ON d.id = r.dangerID
+			WHERE
+				d.id = #id#
+	</select>
+
+	<!-- 查询整改前图片信息 -->
+	<select id="queryPic" parameterClass="String" resultClass="com.baosight.wilp.pr.gl.domain.PRGL0501">
+	SELECT
+		tcf.fileName
+	FROM
+		pr_common_file tcf
+		LEFT JOIN pr_safty_danger_pic tsdp ON tcf.fileID = tsdp.fileID
+		LEFT JOIN pr_safty_danger tsd ON tsd.dangerID = tsdp.dangerID 
+	WHERE
+		tsd.id = #value#
+	</select>
+	
+	
+	<!-- 查询整改后图片信息 -->
+	<select id="queryRectifyPic" parameterClass="String" resultClass="com.baosight.wilp.pr.gl.domain.PRGL0501">
+		SELECT
+			tcf.fileName 
+		FROM
+			pr_common_file tcf
+			LEFT JOIN pr_safty_danger_result_pic tsdrp ON tcf.fileID = tsdrp.fileID
+			LEFT JOIN pr_safty_danger_result tsdr ON tsdrp.dangerResultID = tsdr.dangerResultID
+			LEFT JOIN pr_safty_danger tsd ON tsd.dangerID = tsdr.dangerID 
+		WHERE
+			tsd.id = #value#
+	</select>
+	
+	
+</sqlMap>

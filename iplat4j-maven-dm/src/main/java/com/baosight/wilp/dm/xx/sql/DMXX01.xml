@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2022-02-08 12:44:31
+   		Version :  6.0.731.201809200158
+		tableName :.dorms_room 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 building  VARCHAR, 
+		 floor  VARCHAR, 
+		 room_no  VARCHAR, 
+		 room_name  VARCHAR, 
+		 bed_num  TINYINT,
+		 remaining_bed_num  TINYINT,
+		 type_code  VARCHAR,
+		 dorm_position  VARCHAR, 
+		 dorm_area  VARCHAR,
+		 elevator_room  VARCHAR,
+		 pri_bathroom  VARCHAR, 
+		 rent  VARCHAR, 
+		 manage_fee  VARCHAR, 
+		 note  VARCHAR, 
+		 rec_creater_no  VARCHAR, 
+		 rec_creater_name  VARCHAR, 
+		 rec_create_time  VARCHAR, 
+		 rec_revisor_no  VARCHAR, 
+		 rec_revisor_name  VARCHAR, 
+		 rec_revise_time  VARCHAR
+	-->
+<sqlMap namespace="DMXX01">
+
+	<select id="queryRoomList" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		room.id	as "id",  <!-- 主键 -->
+		room.id	as "roomId",  <!-- 主键 -->
+		room.building	as "building",  <!-- 宿舍楼 -->
+		room.floor	as "floor",  <!-- 宿舍层 -->
+		room.room_no	as "roomNo",  <!-- 宿舍号 -->
+		room.room_name	as "roomName",  <!-- 宿舍总称(楼+层+宿舍号) -->
+		room.bed_num	as "bedNum",  <!-- 床位数 -->
+		room.remaining_bed_num as remainingBedNum, <!-- 剩余床位数量 -->
+		room.type_code	as "typeCode",  <!-- 房间类型(1男生宿舍/0女生宿舍) -->
+		room.dorm_properties as "dormProperties", <!-- 宿舍属性(学生宿舍/职工宿舍) -->
+		CASE room.type_code
+		WHEN '2' THEN '待定'
+		WHEN '1' THEN '男生宿舍'
+		WHEN '0' THEN '女生宿舍'
+		END AS "typeCodeName",
+		room.open_room as "openRoom",
+		CASE room.open_room
+		WHEN '1' THEN '已开放'
+		WHEN '0' THEN '未开放'
+		END AS "openRoomMean",
+		room.dorm_position	as "dormPosition",  <!-- 宿舍位置：院内、院外 -->
+		room.dorm_area	as "dormArea",  <!-- 房屋面积："<50㎡"、"50-100㎡"、">100㎡" -->
+		room.elevator_room	as "elevatorRoom",  <!-- 是否为电梯房 -->
+		room.pri_bathroom	as "priBathroom",  <!-- 独立卫生间：有、没有 -->
+		room.rent	as "rent",  <!-- 房租 -->
+		room.manage_fee	as "manageFee",  <!-- 管理费 -->
+		room.annual_fee	as "annualFee",  <!--年费 -->
+		room.note	as "note",  <!-- 备注信息 -->
+		room.rec_creater_no	as "recCreaterNo",  <!-- 创建人工号 -->
+		room.rec_creater_name	as "recCreaterName",  <!-- 创建人 -->
+		room.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		room.rec_revisor_no	as "recRevisorNo",  <!-- 修改人工号 -->
+		room.rec_revisor_name	as "recRevisorName",  <!-- 修改人 -->
+		room.rec_revise_time	as "recReviseTime"<!-- 修改时间 -->
+		FROM .dorms_room room
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			room.id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="roomIdList">
+			room.id not in
+			<iterate property="roomIdList" conjunction="," open="(" close=")">
+				#roomIdList[].roomId#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="building">
+			room.building like concat('%', #building#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floor">
+			room.floor like concat('%', #floor#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomNo">
+			room.room_no = #roomNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="typeCode">
+			room.type_code = #typeCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dormProperties">
+			room.dorm_properties = #dormProperties#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="openRoom">
+			room.open_room = #openRoom#
+		</isNotEmpty>
+		GROUP BY room.id
+		ORDER BY
+		room.building
+		<isNotEmpty prepend=" , " property="orderBy">
+			$orderBy$
+		</isNotEmpty>
+		<isEmpty prepend=" , " property="orderBy">
+			room.id asc
+		</isEmpty>
+
+	</select>
+
+	<select id="queryRoomInfoMat" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		mat.id as id,
+		mat.mat_code as matCode,
+		mat.mat_name as matName,
+		mat.mat_spec as matSpec,
+		mat.mat_model as matModel,
+		mat.num as num
+		from
+		 dorm_mat mat
+		WHERE mat.dorm_id = #roomId#
+	</select>
+
+	<select id="roomMatCount" resultClass="int">
+		SELECT
+			COUNT(*)
+		from
+			dorm_mat mat
+		WHERE mat.dorm_id = #roomId#
+	</select>
+
+	<select id="roomListCount" parameterClass="java.util.HashMap"
+			resultClass="int">
+		SELECT COUNT(*) FROM
+		(SELECT
+		room.id	as "id",  <!-- 主键 -->
+		room.id	as "roomId",  <!-- 主键 -->
+		room.building	as "building",  <!-- 宿舍楼 -->
+		room.floor	as "floor",  <!-- 宿舍层 -->
+		room.room_no	as "roomNo",  <!-- 宿舍号 -->
+		room.room_name	as "roomName",  <!-- 宿舍总称(楼+层+宿舍号) -->
+		room.bed_num	as "bedNum",  <!-- 床位数 -->
+		room.remaining_bed_num as remainingBedNum, <!-- 剩余床位数量 -->
+		room.type_code	as "typeCode",  <!-- 房间类型(1男生宿舍/0女生宿舍) -->
+		CASE room.type_code
+		WHEN '2' THEN '待定'
+		WHEN '1' THEN '男生宿舍'
+		WHEN '0' THEN '女生宿舍'
+		END AS "typeCodeName",
+		room.dorm_position	as "dormPosition",  <!-- 宿舍位置：院内、院外 -->
+		room.dorm_area	as "dormArea",  <!-- 房屋面积："<50㎡"、"50-100㎡"、">100㎡" -->
+		room.elevator_room	as "elevatorRoom",  <!-- 是否为电梯房 -->
+		room.pri_bathroom	as "priBathroom",  <!-- 独立卫生间：有、没有 -->
+		room.rent	as "rent",  <!-- 房租 -->
+		room.manage_fee	as "manageFee",  <!-- 管理费 -->
+		room.note	as "note",  <!-- 备注信息 -->
+		room.rec_creater_no	as "recCreaterNo",  <!-- 创建人工号 -->
+		room.rec_creater_name	as "recCreaterName",  <!-- 创建人 -->
+		room.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		room.rec_revisor_no	as "recRevisorNo",  <!-- 修改人工号 -->
+		room.rec_revisor_name	as "recRevisorName",  <!-- 修改人 -->
+		room.rec_revise_time	as "recReviseTime" <!-- 修改时间 -->
+		FROM .dorms_room room
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			room.id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="roomIdList">
+			room.id not in
+			<iterate property="roomIdList" conjunction="," open="(" close=")">
+				#roomIdList[].roomId#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="building">
+			room.building like concat('%', #building#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floor">
+			room.floor like concat('%', #floor#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomNo">
+			room.room_no = #roomNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="typeCode">
+			room.type_code = #typeCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dormProperties">
+			room.dorm_properties = #dormProperties#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="openRoom">
+			room.open_room = #openRoom#
+		</isNotEmpty>
+		GROUP BY room.id ) aaa
+	</select>
+
+	<!-- 查询床位大于0的宿舍 -->
+	<select id="queryLeftRoom" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		room.id	as "id",  <!-- 主键 -->
+		room.id	as "roomId",  <!-- 主键 -->
+		room.building	as "building",  <!-- 宿舍楼 -->
+		room.floor	as "floor",  <!-- 宿舍层 -->
+		room.room_no	as "roomNo",  <!-- 宿舍号 -->
+		room.room_name	as "roomName",  <!-- 宿舍总称(楼+层+宿舍号) -->
+		room.bed_num	as "bedNum",  <!-- 床位数 -->
+		room.remaining_bed_num as remainingBedNum, <!-- 剩余床位数量 -->
+		room.type_code	as "typeCode",  <!-- 房间类型(1男生宿舍/0女生宿舍) -->
+		room.dorm_properties as "dormProperties", <!-- 宿舍属性(学生宿舍/职工宿舍) -->
+		CASE room.type_code
+		WHEN '2' THEN '待定'
+		WHEN '1' THEN '男生宿舍'
+		WHEN '0' THEN '女生宿舍'
+		END AS "typeCodeName",
+		room.dorm_position	as "dormPosition",  <!-- 宿舍位置：院内、院外 -->
+		room.dorm_area	as "dormArea",  <!-- 房屋面积："<50㎡"、"50-100㎡"、">100㎡" -->
+		room.elevator_room	as "elevatorRoom",  <!-- 是否为电梯房 -->
+		room.pri_bathroom	as "priBathroom",  <!-- 独立卫生间：有、没有 -->
+		room.rent	as "rent",  <!-- 房租 -->
+		room.manage_fee	as "manageFee",  <!-- 管理费 -->
+		room.annual_fee	as "annualFee",  <!-- 年费 -->
+		room.note	as "note",  <!-- 备注信息 -->
+		room.rec_creater_no	as "recCreaterNo",  <!-- 创建人工号 -->
+		room.rec_creater_name	as "recCreaterName",  <!-- 创建人 -->
+		room.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		room.rec_revisor_no	as "recRevisorNo",  <!-- 修改人工号 -->
+		room.rec_revisor_name	as "recRevisorName",  <!-- 修改人 -->
+		room.rec_revise_time	as "recReviseTime" <!-- 修改时间 -->
+		FROM .dorms_room room
+		WHERE 1=1 and room.remaining_bed_num > 0 and room.open_room = '1'
+		<isNotEmpty prepend=" AND " property="id">
+			room.id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="roomIdList">
+			room.id not in
+			<iterate property="roomIdList" conjunction="," open="(" close=")">
+				#roomIdList[].roomId#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="building">
+			room.building like concat('%', #building#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floor">
+			room.floor like concat('%', #floor#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomNo">
+			room.room_no = #roomNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomName">
+			room.room_name = #roomName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="typeCode">
+			room.type_code = #typeCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dormProperties">
+			room.dorm_properties = #dormProperties#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				room.id asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="leftRoomListCount" parameterClass="java.util.HashMap"
+			resultClass="int">
+		SELECT COUNT(*) FROM
+		(SELECT
+		room.id	as "id",  <!-- 主键 -->
+		room.id	as "roomId",  <!-- 主键 -->
+		room.building	as "building",  <!-- 宿舍楼 -->
+		room.floor	as "floor",  <!-- 宿舍层 -->
+		room.room_no	as "roomNo",  <!-- 宿舍号 -->
+		room.room_name	as "roomName",  <!-- 宿舍总称(楼+层+宿舍号) -->
+		room.bed_num	as "bedNum",  <!-- 床位数 -->
+		room.remaining_bed_num as remainingBedNum, <!-- 剩余床位数量 -->
+		room.type_code	as "typeCode",  <!-- 房间类型(1男生宿舍/0女生宿舍) -->
+		CASE room.type_code
+		WHEN '2' THEN '待定'
+		WHEN '1' THEN '男生宿舍'
+		WHEN '0' THEN '女生宿舍'
+		END AS "typeCodeName",
+		room.dorm_position	as "dormPosition",  <!-- 宿舍位置：院内、院外 -->
+		room.dorm_area	as "dormArea",  <!-- 房屋面积："<50㎡"、"50-100㎡"、">100㎡" -->
+		room.elevator_room	as "elevatorRoom",  <!-- 是否为电梯房 -->
+		room.pri_bathroom	as "priBathroom",  <!-- 独立卫生间：有、没有 -->
+		room.rent	as "rent",  <!-- 房租 -->
+		room.manage_fee	as "manageFee",  <!-- 管理费 -->
+		room.note	as "note",  <!-- 备注信息 -->
+		room.rec_creater_no	as "recCreaterNo",  <!-- 创建人工号 -->
+		room.rec_creater_name	as "recCreaterName",  <!-- 创建人 -->
+		room.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		room.rec_revisor_no	as "recRevisorNo",  <!-- 修改人工号 -->
+		room.rec_revisor_name	as "recRevisorName",  <!-- 修改人 -->
+		room.rec_revise_time	as "recReviseTime" <!-- 修改时间 -->
+		FROM .dorms_room room
+		WHERE 1=1 and room.remaining_bed_num > 0  and room.open_room = '1'
+		<isNotEmpty prepend=" AND " property="id">
+			room.id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="roomIdList">
+			room.id not in
+			<iterate property="roomIdList" conjunction="," open="(" close=")">
+				#roomIdList[].roomId#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="building">
+			room.building like concat('%', #building#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floor">
+			room.floor like concat('%', #floor#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomNo">
+			room.room_no = #roomNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomName">
+			room.room_name = #roomName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="typeCode">
+			room.type_code = #typeCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dormProperties">
+			room.dorm_properties = #dormProperties#
+		</isNotEmpty>
+		) aaa
+	</select>
+
+	<!-- 根据房间编号查询 已使用床位编号 -->
+	<select id="countUsedBed" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT bed_no usedBed
+		FROM `dorms_room_man` drm
+		LEFT JOIN dorms_man dm ON dm.id = drm.man_id
+		WHERE drm.room_id = #roomId# AND dm.status_code != "99"
+		ORDER BY usedBed
+	</select>
+
+	<!-- 根据房间编号查询 总床位数、剩余床位数 -->
+	<select id="getBedNumByRoomId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT bed_num  bedNum,
+			   remaining_bed_num remainingBedNum
+		FROM  dorms_room
+		WHERE  id = #roomId#
+	</select>
+
+	<!-- 查询宿舍的详情 -->
+	<select id="queryRoomInfo" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		SELECT
+		room.id	as "id",  <!-- 主键 -->
+		room.id	as "roomId",  <!-- 主键 -->
+		room.building	as "building",  <!-- 宿舍楼 -->
+		room.floor	as "floor",  <!-- 宿舍层 -->
+		room.room_no	as "roomNo",  <!-- 宿舍号 -->
+		room.room_name	as "roomName",  <!-- 宿舍总称(楼+层+宿舍号) -->
+		room.bed_num	as "bedNum",  <!-- 床位数 -->
+		room.remaining_bed_num as remainingBedNum, <!-- 剩余床位数量 -->
+		room.type_code	as "typeCode",  <!-- 房间类型(1男生宿舍/0女生宿舍) -->
+		room.dorm_properties as "dormProperties", <!-- 宿舍属性(学生宿舍/职工宿舍) -->
+		CASE room.type_code
+		WHEN '2' THEN '待定'
+		WHEN '1' THEN '男生宿舍'
+		WHEN '0' THEN '女生宿舍'
+		END AS "typeCodeName",
+		room.open_room as "openRoom",
+		CASE room.open_room
+		WHEN '1' THEN '已开放'
+		WHEN '0' THEN '未开放'
+		END AS "openRoomMean",
+		room.dorm_position	as "dormPosition",  <!-- 宿舍位置：院内、院外 -->
+		room.dorm_area	as "dormArea",  <!-- 房屋面积："<50㎡"、"50-100㎡"、">100㎡" -->
+		room.elevator_room	as "elevatorRoom",  <!-- 是否为电梯房 -->
+		room.pri_bathroom	as "priBathroom",  <!-- 独立卫生间：有、没有 -->
+		room.rent	as "rent",  <!-- 房租 -->
+		room.manage_fee	as "manageFee",  <!-- 管理费 -->
+		room.annual_fee	as "annualFee",  <!-- 年费 -->
+		room.note	as "note",  <!-- 备注信息 -->
+		room.rec_creater_no	as "recCreaterNo",  <!-- 创建人工号 -->
+		room.rec_creater_name	as "recCreaterName",  <!-- 创建人 -->
+		room.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		room.rec_revisor_no	as "recRevisorNo",  <!-- 修改人工号 -->
+		room.rec_revisor_name	as "recRevisorName",  <!-- 修改人 -->
+		room.rec_revise_time	as "recReviseTime" <!-- 修改时间 -->
+		FROM .dorms_room room
+		WHERE room.id = #roomId#
+	</select>
+
+	<!-- 宿舍大屏查询所有宿舍相关信息  楼 -->
+	<select id="queryRoomBuildingInfo"
+			resultClass="java.util.HashMap">
+		SELECT
+			dr.building AS "building",
+			count(dr.room_no) AS "totalRoom",
+			sum(dr.bed_num) AS "totalBed",
+			sum(dr.remaining_bed_num) AS "remainBed",
+			sum(dr.bed_num) - sum(dr.remaining_bed_num) AS "useBed",
+			concat(round(((sum(dr.bed_num) - sum(dr.remaining_bed_num))/sum(dr.bed_num))*100,2),'%') AS "useRate"
+			FROM
+			dorms_room dr
+			WHERE 1=1
+		<isNotEmpty prepend=" AND " property="building">
+			dr.building = #building#
+		</isNotEmpty>
+		GROUP BY dr.building
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				dr.building asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<!-- 宿舍大屏查询所有宿舍相关信息  层 -->
+	<select id="queryFloorByBuilding"
+			resultClass="java.util.HashMap">
+		SELECT
+		DISTINCT dr.floor AS "floor"
+		FROM
+		dorms_room dr
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="building">
+			dr.building = #building#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				dr.floor asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<!-- 宿舍大屏查询所有宿舍相关信息  宿舍信息 -->
+	<select id="queryFloorRoom"
+			resultClass="java.util.HashMap">
+		SELECT
+		dr.id AS "id",
+		dr.id AS "roomId",
+		dr.room_no AS "roomNo",
+		dr.room_name AS "roomName",
+		dr.bed_num AS "bedNum",
+		dr.type_code AS "typeCode"
+		FROM
+		dorms_room dr
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="building">
+			dr.building = #building#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floor">
+			dr.floor = #floor#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				dr.room_no asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<!-- 宿舍大屏查询所有宿舍相关信息  入住信息 -->
+	<select id="queryDetailRZInfo"
+			resultClass="java.util.HashMap">
+		SELECT
+		dm.man_no AS "workNo",
+		dm.man_name AS "workName",
+		dm.phone AS "phone",
+		drm.bed_no AS "bedNo",
+		drm.actual_in_date AS "firstInDate",
+		"use" as status
+		FROM dorms_room_man drm
+		LEFT JOIN dorms_man dm on dm.id = drm.man_id
+		WHERE 1=1 and dm.status_code != '99'
+		<isNotEmpty prepend=" AND " property="roomId">
+			drm.room_id = #roomId#
+		</isNotEmpty>
+	</select>
+
+	<!-- 根据宿舍id删除宿舍 -->
+	<delete id="deleteDrom" parameterClass="string">
+		DELETE FROM .dorms_room WHERE
+			id = #roomId#
+	</delete>
+
+	<update id="update">
+		UPDATE .dorms_room 
+		SET 
+					building	= #building#,   <!-- 宿舍楼 -->  
+					floor	= #floor#,   <!-- 宿舍层 -->  
+					room_no	= #roomNo#,   <!-- 宿舍号 -->  
+					room_name	= #roomName#,   <!-- 宿舍总称(楼+层+宿舍号) -->  
+					bed_num	= #bedNum#,   <!-- 床位数 -->  
+					type_code	= #typeCode#,   <!-- 房间类型(1男生宿舍/0女生宿舍) -->
+					dorm_position	= #dormPosition#,   <!-- 宿舍位置：院内、院外 -->  
+					dorm_area	= #dormArea#,   <!-- 房屋面积："<50㎡"、"50-100㎡"、">100㎡" -->  
+					pri_bathroom	= #priBathroom#,   <!-- 独立卫生间：有、没有 -->  
+					rent	= #rent#,   <!-- 房租 -->  
+					manage_fee	= #manageFee#,   <!-- 管理费 -->  
+					note	= #note#,   <!-- 备注信息 -->  
+					rec_creater_no	= #recCreaterNo#,   <!-- 创建人工号 -->  
+					rec_creater_name	= #recCreaterName#,   <!-- 创建人 -->  
+					rec_create_time	= #recCreateTime#,   <!-- 创建时间 -->  
+					rec_revisor_no	= #recRevisorNo#,   <!-- 修改人工号 -->  
+					rec_revisor_name	= #recRevisorName#,   <!-- 修改人 -->  
+					rec_revise_time	= #recReviseTime#  <!-- 修改时间 -->  
+			WHERE 	
+			id = #id#
+	</update>
+
+	<!-- 获取指定人员的用户组/角色 -->
+	<select id="getUserRole" parameterClass="java.util.Map"
+			resultClass="java.util.HashMap">
+		select
+		ifnull(GROUP_CONCAT(xug.GROUP_ENAME),'') roles,
+		ifnull(GROUP_CONCAT(xug.GROUP_CNAME),'') roleNames
+		from
+		${platSchema}.xs_user_group xug
+		left join
+		${platSchema}.xs_user_group_member xugm on xug.ID =
+		xugm.PARENT_ID
+		left
+		join ${platSchema}.xs_user xu on xu.USER_ID = xugm.MEMBER_ID
+		left join
+		${platSchema}.txsog03 o3 on xug.ID = o3.USER_GROUP_ID
+		left join
+		${platSchema}.txsog01 o1 on o3.ORG_ID = o1.ORG_ID
+		where (o1.IS_DELETED
+		= '0' or o1.IS_DELETED is null) and xu.LOGIN_NAME =
+		#workNo#
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			(o1.ORG_ENAME =
+			#dataGroupCode# or o1.ORG_ENAME is null)
+		</isNotEmpty>
+	</select>
+
+  
+</sqlMap>

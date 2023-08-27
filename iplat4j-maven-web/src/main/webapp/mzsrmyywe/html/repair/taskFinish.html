@@ -1,0 +1,666 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!-- <link rel="stylesheet" href="../reference/mui/css/mui.css">
+    <link rel="stylesheet" href="../reference/css/iconfont.css">
+    <link rel="stylesheet" href="../css/loading.css" />
+    <link rel="stylesheet" href="../css/colorGreen.css" />
+    <link rel="stylesheet" href="../css/colorBlue.css" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css">
+    <link rel="stylesheet" href="../css/addModify.css"> -->
+    <link rel="stylesheet" href="../../reference/bootstrap-3.3.5/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../reference/bootstrap-3.3.5/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../css/android-ios.css">
+    <link rel="stylesheet" href="../../css/loading.css" />
+    <link rel="stylesheet" href="reference/css/iconfont.css">
+    <link rel="stylesheet" href="css/tcj-font.css" />
+    <link rel="stylesheet" href="reference/mui/css/mui.picker.min.css">
+    <link rel="stylesheet" href="reference/mui/css/mui.min.css">
+    <link rel="stylesheet" href="css/colorGreen.css">
+
+    <style>
+        body {
+            touch-action: none;
+        }
+        
+        .col-lg-1,
+        .col-lg-10,
+        .col-lg-11,
+        .col-lg-12,
+        .col-lg-2,
+        .col-lg-3,
+        .col-lg-4,
+        .col-lg-5,
+        .col-lg-6,
+        .col-lg-7,
+        .col-lg-8,
+        .col-lg-9,
+        .col-md-1,
+        .col-md-10,
+        .col-md-11,
+        .col-md-12,
+        .col-md-2,
+        .col-md-3,
+        .col-md-4,
+        .col-md-5,
+        .col-md-6,
+        .col-md-7,
+        .col-md-8,
+        .col-md-9,
+        .col-sm-1,
+        .col-sm-10,
+        .col-sm-11,
+        .col-sm-12,
+        .col-sm-2,
+        .col-sm-3,
+        .col-sm-4,
+        .col-sm-5,
+        .col-sm-6,
+        .col-sm-7,
+        .col-sm-8,
+        .col-sm-9,
+        .col-xs-1,
+        .col-xs-10,
+        .col-xs-11,
+        .col-xs-12,
+        .col-xs-2,
+        .col-xs-3,
+        .col-xs-4,
+        .col-xs-5,
+        .col-xs-6,
+        .col-xs-7,
+        .col-xs-8,
+        .col-xs-9 {
+            position: relative;
+            min-height: 1px;
+            padding-right: 10px;
+            padding-left: 0px;
+        }
+        
+        .col-xs-6 {
+            width: 50%;
+        }
+        
+        .col-xs-1,
+        .col-xs-10,
+        .col-xs-11,
+        .col-xs-12,
+        .col-xs-2,
+        .col-xs-3,
+        .col-xs-4,
+        .col-xs-5,
+        .col-xs-6,
+        .col-xs-7,
+        .col-xs-8,
+        .col-xs-9 {
+            float: left;
+        }
+        
+        .picDiv .pic img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+        }
+        
+        .picDiv .pic {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            margin-right: 15px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .picDiv {
+            display: flex;
+            padding: 10px 20px 0;
+            height: 80px;
+        }
+        
+        .js-signature canvas {
+            width: 100%;
+        }
+        
+        .mui-bar .mui-btn-link {
+            color: #333
+        }
+        
+        .mui-btn-link {
+            color: #333
+        }
+        
+        .add {
+            color: #333
+        }
+        
+        #submit {
+            color: white
+        }
+        
+        .mui-title {
+            color: white
+        }
+        
+        .icon-addition_fill {
+            position: absolute;
+            top: 8px;
+            right: 6px;
+            color: #6d6d6d;
+        }
+        
+        .PreviewList {
+            text-align: center;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="mui-bar mui-bar-nav backColor">
+        <h1 class="mui-title">完成任务</h1>
+        <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+    </button>
+    </header>
+    <div id="loading" class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+
+    <!-- 主内容 -->
+    <div class="mui-content" style="overflow-x: hidden;">
+        <!-- 签名 -->
+        <div id="myModalsss" style="margin-top:-50px;margin-bottom: 15%;display: none;">
+            <div class='row' id="topDiv" style='height:40px;line-height:40px;background:#fff;color:#6d6d6d;font-weight:bold;border-bottom:1px solid #FFFFFF;margin-top: 50px;'>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-left: 14px;">
+                    下方签名
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="width: 100%;padding-right: 0;border-bottom:1px solid #B9B9B9;overflow:hidden;">
+                    <div class="js-signature" data-width="400%" data-height="240" style="width:100%;margin-top: 2%;margin-bottom: -1%;">
+
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="color:#FFFFFF;">
+                <button class="mui-btn mui-btn-primary" style="border-right:1px solid #FFFFFF;text-align:center;float: left;margin-bottom: 7px;" onclick="clearCanvas()">
+                清除签字
+            </button>
+                <!-- <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="background:#40B5D8;height:40px;line-height:40px;text-align:center;" onclick="saveSignature()">
+              确认签字
+            </div> -->
+            </div>
+        </div>
+        <!-- <div class="row" style="width:100%;background:#fff;overflow-x:hidden;">
+      <div id="signature">
+
+      </div>
+    </div> -->
+        <!-- 上传图片 -->
+        <div class="row" id="myPic" style="display: none;">
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell" style="width: 335px;">
+                    <div style="font-weight: bold;color:#6d6d6d">图片上传</div>
+                    <div class="picDiv">
+                        <!-- <div class="pic">
+                            <img src="../../img/alipay.png" alt="">
+                            <span class="iconfont icon-addition_fill"></span>
+                            <span class="glyphicon glyphicon-remove-circle icon-addition_fill"></span>
+                        </div> -->
+                        <!-- <div class="pic">
+                        <img src="../img/sign.jpeg">
+                        <span class="iconfont icon-addition_fill"></span>
+                    </div>
+                    <div class="pic">
+                        <img src="../img/worker.jpg">
+                        <span class="iconfont icon-addition_fill"></span>
+                    </div>
+                    <div class="pic">
+                        <img src="../img/worker.jpg">
+                        <span class="iconfont icon-addition_fill"></span>
+                    </div> -->
+                        <a class="pic add" href="#picture">
+                            <span class="mui-icon mui-icon-plusempty"></span>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!-- 图片 -->
+        <div id="picture" class="mui-popover mui-popover-action mui-popover-bottom">
+            <ul class="mui-table-view">
+                <li id="btnCamera" class="mui-table-view-cell">
+                    <a href="#">相机拍照</a>
+                </li>
+                <li id="btnPicture" class="mui-table-view-cell">
+                    <a href="#">本地上传</a>
+                </li>
+            </ul>
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                    <a href="#picture"><b>取消</b></a>
+                </li>
+            </ul>
+        </div>
+        <!-- 图片预览模态框 -->
+        <div class="maskPreview" style="position:fixed;top:0;left:0;background:rgba(0,0,0,0.7);z-index:2;width:100%;height:100%;display:none;"></div>
+        <div class="contentPreview" style="position:absolute;z-index: 5000;margin-top:-150px">
+            <div class="modal_content">
+                <div class="PreviewContent">
+                    <ul class="PreviewList"><img id="bigPicture"></ul>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="row" id="photoTake" style="height:40px;line-height:40px;margin-top: 10px;">
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="background:#eee;">
+        图片上传
+      </div>
+      <div id="btnPicture" class="col-xs-3 col-sm-3 col-md-3 col-lg-3 all-nopadding" style="text-align:center;background:#8a8a8a;color:#fff;width: 90px;">
+        本地上传
+      </div>
+      <div id="btnCamera" class="col-xs-3 col-sm-3 col-md-3 col-lg-3 all-nopadding" style="text-align:center;background:#bbb;color:#fff;width: 90px;">
+        相机拍摄
+      </div>
+    </div>
+    <div class="row" style="min-height:100px;">
+      <div id="pictureSign" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row" style="margin-top:10px;margin-bottom:150px;">
+      </div>
+    </div>
+ </div> -->
+
+        <nav class="mui-bar mui-bar-tab">
+            <span id="submit" class="mui-tab-item menu">
+        提交
+            </span>
+        </nav>
+    </div>
+    <div id="succeed" style="position: absolute" class="result-window" hidden>
+        <span class="glyphicon glyphicon-ok-circle" style="font-size:40px;color:#25F706;"></span>
+        <span style="color:#25F706;">提交成功</span>
+    </div>
+</body>
+<!-- <script type="text/javascript" src="../js/color.js"></script>
+<script type="text/javascript" src="../reference/mui/js/mui.min.js"></script>
+<script type="text/javascript" src="../reference/mui/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="../js/jq-signature.js"></script>
+<script type="text/javascript" src="../../../cordova.js"></script>
+<script type="text/javascript" src="../reference/mui/js/mui.picker.min.js"></script> -->
+<script src="../../reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../../reference/bootstrap-3.3.5/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="js/jq-signature.js"></script>
+<script src="reference/mui/js/mui.min.js"></script>
+<script src="reference/mui/js/mui.picker.min.js" type="text/javascript"></script>
+<script src="../../cordova.js"></script>
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var taskNo = ""; //任务单号
+    console.log(location.search.substr(1));
+    taskNo = location.search.substr(1);
+    var role = localStorage.getItem("role");
+    var hosId = localStorage.getItem("hosId");
+    var workNo = localStorage.getItem("workNo");
+    var dataGroupCode = localStorage.getItem("dataGroupCode");
+    var signature = localStorage.getItem('signature');
+    var isPhoto = localStorage.getItem('isPhoto');
+    var list = [];
+    var jqSignatureIsEmpty = true; // 判断签名是否为空
+    // console.log("item_TypeNum",item_TypeNum);
+    // console.log("itemTypeName",itemTypeName);
+    // console.log("item_Num",item_Num);
+    // console.log("itemName1",itemName);
+    //验收确认时隐藏图片上传
+    $(function() {
+            // if (btnName == '验收确认') {
+            //     $('ul.mui-table-view').hide();
+            // }
+            $('#loading').hide();
+            getMaterial()
+                // $('#myModalsss').hide();
+            if (signature == "Y") {
+                $('#myModalsss').show();
+            }
+            if (isPhoto == "Y") {
+                $('#myPic').show();
+            }
+        })
+        //签名
+    function getMaterial() {
+        var coursePrame = {
+            taskNo
+        };
+        coursePrame = JSON.stringify(coursePrame);
+        console.log(coursePrame)
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            data: {
+                prames: coursePrame
+            },
+            headers: {
+                "methodName": "query",
+                "serviceName": "MTFS0102"
+            },
+            success: function(data) {
+                if (data.blocks.result != undefined) {
+                    list = data.blocks.result.rows;
+                }
+            }
+        })
+    }
+    $(document).on('ready', function() {
+        if ($('.js-signature').length) {
+            $('.js-signature').jqSignature();
+        }
+    });
+
+    function clearCanvas() {
+        jqSignatureIsEmpty = true;
+        $('.js-signature').eq(0).jqSignature('clearCanvas');
+        $('#signature').text(" ");
+    }
+
+    // function saveSignature() {
+    //   var dataUrl = $('.js-signature').eq(0).jqSignature('getDataURL');
+    //   console.log(dataUrl)
+    //   var img = $('<img>').attr('src', dataUrl);
+    //   $('#signature').html(img);
+    // }
+
+    $('.js-signature').eq(0).on('jq.signature.changed', function() {
+        jqSignatureIsEmpty = false;
+        $('#saveBtn').attr('disabled', false);
+    });
+
+    //确认提交
+    mui('body').on('click', '#submit', function() {
+        var value = '';
+        var pic1 = "";
+        var pic2 = "";
+        var pic3 = "";
+        //签名照片上传；
+        var pic = '';
+        if (signature == 'Y') {
+            if (jqSignatureIsEmpty === false) {
+                pic = $('.js-signature').eq(0).jqSignature('getDataURL');
+            } else {
+                mui.toast('请签名');
+                return;
+            }
+        }
+        console.log(pic)
+
+        // alert(pic)
+        //照片拍摄上传；
+        // var picsbak = [];
+        // $(".picDiv img").each(function(index, element) {
+        //     if (index == 0) {
+        //         var pic1 = getBase64Image(element);
+        //         // alert(pic1)
+        //         picsbak.push(pic1)
+        //     } else if (index == 1) {
+        //         var pic2 = getBase64Image(element);
+        //         picsbak.push(pic2)
+        //     } else {
+        //         var pic3 = getBase64Image(element);
+        //         picsbak.push(pic3)
+        //     }
+        // });
+        var picList = [];
+        console.log('iii', $(".picDiv img").length)
+        if (isPhoto == 'Y') {
+            if ($(".picDiv img").length == 0) {
+                mui.toast('请拍照');
+                return;
+            }
+            $(".picDiv img").each(function(index, element) {
+                var obj = {};
+                obj.fileName = '1.jpg';
+                obj.path = '';
+                obj.base64 = getBase64Image(element);
+                obj.type = 'FS';
+                picList.push(obj)
+            });
+        }
+        // var fileID = JSON.stringify(picsbak);
+        // alert(fileID)
+        var prame = {
+            taskNo: taskNo,
+            workNo: workNo,
+            dataGroupCode,
+            role,
+            statusCode: '07',
+            isCurrent: "1",
+            isActual: "1",
+            picList: picList,
+            qmImgBase64: pic,
+            list
+        };
+        prame = JSON.stringify(prame);
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            data: {
+                prames: prame
+            },
+            headers: {
+                methodName: 'finish',
+                serviceName: 'MTFS0101'
+            },
+            timeout: 30000,
+            success: function(data) {
+                if (data.status != "-1") {
+                    //location.reload();
+                    // relaodSelf();
+                    $("#succeed").fadeIn(1000);
+                    setTimeout("location.href='taskList.html';", 2000);
+                } else {
+                    $('#warn small').html(data.msg);
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                }
+            },
+            complete: function(XMLHttpRequest, status) { //请求完成后最终执行参数  　　　　
+                if (status == 'timeout') {
+                    $("#loading").hide();
+                    $('#warn small').html('提交超时！请检查网络并重试！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                } else if (status == 'error') {
+                    $("#loading").hide();
+                    $('#warn small').html('网络异常！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                }
+            }
+        });
+    })
+
+
+
+    //拍摄照片
+    $("#btnCamera").click(function() {
+        // if ($("#pictureSign").find("img").length == 3) {
+        //     $("#warn small").html("最多只能上传三张图片");
+        //     $("#warn").fadeIn(500);
+        //     setTimeout("$('#warn').fadeOut(500)", 3000);
+        //     return;
+        // };
+        if ($(".picDiv").find("img").length == 3) {
+            $("#warn small").html("最多只能上传三张图片");
+            $("#warn").fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return;
+        };
+        navigator.camera.getPicture(onSuccess, onFail, {
+            quality: 50,
+            destinationType: Camera.DestinationType.FILE_URI,
+            sourceType: Camera.PictureSourceType.CAMERA,
+            allowEdit: false,
+            encodingType: Camera.EncodingType.JPEG,
+            popoverOptions: CameraPopoverOptions,
+            saveToPhotoAlbum: false
+        });
+    })
+
+    function onSuccess(imageData) {
+        $('#picture').css('display', 'none');
+        $('.mui-backdrop').css('display', 'none');
+        var img = $('<img>');
+        img.attr('src', imageData);
+        var div = $('<div class="pic">');
+        // var span = $('<span class="mui-icon mui-icon-closeempty icon-addition_fill"></span>');
+        var span = $('<span class="glyphicon glyphicon-remove-circle icon-addition_fill"></span>');
+        img.appendTo(div);
+        span.appendTo(div);
+        div.prependTo('.picDiv');
+    }
+
+    //拍摄失败
+    function onFail(message) {
+        //alert('Failed because: ' + message);
+    }
+
+    //本地上传
+    $('#btnPicture').bind('touchstart', function() {
+        if ($(".picDiv").find("img").length == 3) {
+            $("#warn small").html("最多只能上传三张图片");
+            $("#warn").fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return;
+        };
+
+        navigator.camera.getPicture(function(data) {
+            $('#picture').css('display', 'none');
+            $('.mui-backdrop').css('display', 'none');
+            var img = $('<img>');
+            img.attr('src', data);
+            var div = $('<div class="pic">');
+            div.attr('href', data);
+            // var span = $('<span class="mui-icon mui-icon-closeempty icon-addition_fill"></span>');
+            var span = $('<span class="glyphicon glyphicon-remove-circle icon-addition_fill"></span>');
+            img.appendTo(div);
+            span.appendTo(div);
+            div.prependTo('.picDiv');
+
+        }, function(error) {}, {
+            destinationType: Camera.DestinationType.FILE_URI,
+            sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+            allowEdit: false,
+            mediaType: Camera.MediaType.PICTURE
+        });
+    });
+    //获取图片base64
+    function getBase64Image(img) {
+        var canvas = document.createElement("canvas");
+        var image = new Image();
+        image.src = img.src;
+        img.crossOrigin = "Anonymous";
+        var width;
+        var height;
+        width = 768;
+        height = image.height * 768 / image.width;
+        background = 'red';
+        canvas.width = width;
+        canvas.height = height;
+        canvas.background = "#FFFFFF";
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(image, 0, 0, width, height);
+        var dataURL = canvas.toDataURL("image/JPEG");
+        //data:image/jpeg;base64,
+        // return dataURL.substring(23, dataURL.length);
+        return dataURL.replace("data:image/png;base64,", "");
+    };
+    //删除图片
+    mui('body').on('click', '.icon-addition_fill', function() {
+        $(this).parents('.pic').remove();
+        $(this).remove()
+    })
+
+    //预览照片
+    view()
+
+    function view() {
+        mui('body').on('click', '.pic img', function() {
+            var _this = $(this); //将当前的pimg元素作为_this传入函数  
+            imgShow(".maskPreview", ".contentPreview", "#bigPicture", _this);
+        })
+    }
+
+    function imgShow(maskPreview, contentPreview, bigPicture, _this) {
+        var src = _this.attr("src"); //获取当前点击的pimg元素中的src属性  
+        $(bigPicture).attr("src", src); //设置#bigimg元素的src属性  
+        console.log("a", $(bigPicture).attr("src"));
+        /*获取当前点击图片的真实大小，并显示弹出层及大图*/
+        $("<img/>").attr("src", src).load(function() {
+            var windowW = $(window).width(); //获取当前窗口宽度  
+            console.log("窗口宽度 ", windowW);
+            var windowH = $(window).height(); //获取当前窗口高度  
+            console.log("窗口高度 ", windowH);
+            var realWidth = this.width; //获取图片真实宽度  
+            console.log("图片真实宽度 ", realWidth);
+            var realHeight = this.height; //获取图片真实高度  
+            console.log("图片真实高度", realHeight);
+            var imgWidth, imgHeight;
+            var scale = 0.8; //缩放尺寸，当图片真实宽度和高度大于窗口宽度和高度时进行缩放  
+
+            if (realHeight > windowH * scale) { //判断图片高度  
+                imgHeight = windowH * scale; //如大于窗口高度，图片高度进行缩放  
+                imgWidth = imgHeight / realHeight * realWidth; //等比例缩放宽度  
+                if (imgWidth > windowW * scale) { //如宽度扔大于窗口宽度  
+                    imgWidth = windowW * scale; //再对宽度进行缩放  
+                } else if (realWidth > windowW * scale) { //如图片高度合适，判断图片宽度  
+                    imgWidth = windowW * scale; //如大于窗口宽度，图片宽度进行缩放  
+                    imgHeight = imgWidth / realWidth * realHeight; //等比例缩放高度  
+                } else { //如果图片真实高度和宽度都符合要求，高宽不变  
+                    imgWidth = realWidth;
+                    imgHeight = realHeight;
+                }
+                console.log("真实宽度", imgWidth);
+                console.log("真实高度", imgHeight);
+                $('#bigPicture').css("width", imgWidth); //以最终的宽度对图片缩放  
+
+                var w = (windowW - imgWidth) / 2; //计算图片与窗口左边距  
+                var h = (windowH - imgHeight) / 2; //计算图片与窗口上边距  
+                console.log("真实宽度", w);
+                console.log("真实高度", h);
+                $('.contentPreview').css({
+                    "top": h + "1",
+                    "left": w
+                }); //设置#innerdiv的top和left属性  
+                $('.contentPreview').css({
+                    "position": "absolute",
+                    "bottom": "80px"
+                });
+
+                $('.contentPreview').fadeIn("fast");
+                $('.maskPreview').fadeIn("fast"); //淡入显示#outerdiv及.pimg  
+            } else {
+                $('.contentPreview').css('width', '100%')
+            }
+        });
+        $('body').css({
+            "height": "100%",
+            "overflow": "hidden"
+        });
+        $('.maskPreview').click(function() {  //再次点击淡出消失弹出层
+            $(this).fadeOut("fast");
+            $('.contentPreview').fadeOut("fast");
+            $('body').css("overflow", "visible");
+        });
+    }
+    mui('body').on('tap', '#back', function() {
+        location.href = 'taskList.html'
+    })
+</script>
+
+</html>

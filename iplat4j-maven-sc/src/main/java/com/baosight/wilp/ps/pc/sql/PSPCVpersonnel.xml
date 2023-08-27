@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!-- 员工信息表sqlMap -->
+<sqlMap namespace="PSPCVpersonnel">
+
+    <select id="query" parameterClass="java.util.HashMap"
+        resultClass="java.util.HashMap">
+        SELECT
+        rec_creater as "recCreater", 
+        rec_create_time as "recCreateTime", 
+        rec_revisor as "recRevisor", 
+        rec_revise_time as "recReviseTime", 
+        id as "id", 
+        work_no as "workNo",
+        name as "name",  
+        dept_id as "deptId",  
+        gender as "gender", 
+        contact_tel as "contactTel",
+        status ,
+        pic_url as "picUrl",         
+        id_no as "idNo" 
+        FROM v_frame_ac_personnel WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="workNo">
+            work_no = #workNo#
+        </isNotEmpty>
+    </select>
+</sqlMap>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Head>
+        <Return>
+            <Source>YYSS</Source>
+            <RecordFlow>消息ID，可为空</RecordFlow>
+            <TransNo>HTIP.IN.BILLREF.0002</TransNo>
+            <RetCode>1：表示成功，0：表示失败</RetCode>
+            <RetType>默认为1</RetType>
+            <RetCont>成功时为空，失败是说明失败原因</RetCont>
+        </Return>
+    </Head>
+    <Body>
+        <BillingRefund>
+            <RecordFlow> </RecordFlow>
+            <FeeSn>String</FeeSn>
+            <HospitalCode>String</HospitalCode>
+            <InoutFlag>String</InoutFlag>
+            <IPID>String</IPID>
+            <OPID>String</OPID>
+            <EPID>String</EPID>
+            <PID>String</PID>
+            <RegisterSn>String</RegisterSn>
+            <PatientName>String</PatientName>
+            <MedicalInsuranceType>String</MedicalInsuranceType>
+            <SocialCardNo>String</SocialCardNo>
+            <CertNo>String</CertNo>
+            <OrderSn>String</OrderSn>
+            <BillingRefFlag>String</BillingRefFlag>
+            <ChargeType>String</ChargeType>
+            <AddChargeCode>String</AddChargeCode>
+            <AddChargeAmout>String</AddChargeAmout>
+            <AdmissionTime>String</AdmissionTime>
+            <DischargeTime>String</DischargeTime>
+            <ChargeDate>String</ChargeDate>
+            <FeeTypeCode>String</FeeTypeCode>
+            <FeeTypeName>String</FeeTypeName>
+            <Fee>String</Fee>
+            <FeeUnit>String</FeeUnit>
+            <AddFee>String</AddFee>
+            <AddFeeUnit>String</AddFeeUnit>
+            <TotalFee>String</TotalFee>
+            <TotalFeeUnit>String</TotalFeeUnit>
+            <OperatorID>String</OperatorID>
+            <Operator>String</Operator>
+        </BillingRefund>
+    </Body>
+</Response>

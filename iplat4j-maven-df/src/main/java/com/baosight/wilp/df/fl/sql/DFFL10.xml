@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFFL10">
+
+	<!-- 查询设备分类集合 -->
+	<select id="getClassInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			id,
+			memo,
+			classify_name classifyName,
+			classify_code classifyCode 
+		from
+			df_modulebaseclassfy 
+		where
+			1=1
+		<isNotEmpty prepend=" AND " property="classifyName">
+			classify_name like concat('%', #classifyName#, '%') 
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="classifyMemo">
+			memo like concat('%', #classifyMemo#, '%') 
+		</isNotEmpty>
+	
+		<isNotEmpty prepend=" AND " property="moduleId">
+			id like concat('%', #moduleId#, '%') 
+		</isNotEmpty>
+		order by classify_code asc 
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+
+	<!-- 查询设备分类count -->
+	<select id="getClassInfoCount" parameterClass="java.util.HashMap" resultClass="int">
+		select id
+		from df_modulebaseclassfy
+		<dynamic prepend="where">
+			<isNotEmpty prepend=" AND " property="classifyName">
+				classify_name like concat('%', #classifyName#, '%')
+			</isNotEmpty>
+
+			<isNotEmpty prepend=" AND " property="classifyMemo">
+				memo like concat('%', #classifyMemo#, '%')
+			</isNotEmpty>
+
+			<isNotEmpty prepend=" AND " property="moduleId">
+				id like concat('%', #moduleId#, '%')
+			</isNotEmpty>
+		</dynamic>
+
+
+	</select>
+
+	<!-- 查询设备分类树 -->
+	<select id="queryDFFLTree" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			t1.id,
+			t1.module_code moduleCode,
+			t1.classify_code classifyCode,
+			t1.classify_name classifyName,
+			t1.parent_id parentId,
+			t1.memo,
+			(
+				CASE t1.parent_id
+					WHEN 'root' THEN
+						'分类信息'
+					ELSE
+						(SELECT classify_name
+						 FROM df_modulebaseclassfy
+						 WHERE id = t1.parent_id)
+					END
+				) AS parentName,
+			CASE COUNT(t2.id)
+				WHEN 0 THEN
+					TRUE
+				ELSE
+					FALSE
+				END AS isLeaf
+		FROM
+			df_modulebaseclassfy t1
+				LEFT JOIN df_modulebaseclassfy t2 ON t1.id = t2.parent_id
+		WHERE
+			t1.parent_id = #node#
+		GROUP BY
+			t1.id
+	</select>
+
+	<!-- 新增设备分类 -->
+	<insert id="insert" parameterClass="java.util.HashMap">
+		insert into df_modulebaseclassfy(id,module_code,classify_code,classify_name,parent_id,memo)
+		values(#id#,#moduleCode#,#classifyCode#,#classifyName#,#parentId#,#memo#)
+	</insert>
+	
+	<!-- 更新设备分类 -->
+	<update id="update" parameterClass="java.util.HashMap">
+		update df_modulebaseclassfy set classify_name = #classifyName#,memo = #memo#
+		where id = #id#
+	</update>
+
+	<!-- 查询子节点 -->
+	<select id="getChildId" parameterClass="java.lang.String" resultClass="java.lang.String">
+		select id from df_modulebaseclassfy where parent_id=#value#
+	</select>
+
+	<!-- 批量删除设备分类 -->
+	<delete id="deleteBatch" parameterClass="java.util.List">
+		DELETE FROM
+			df_modulebaseclassfy
+		WHERE
+			id
+		IN
+		<iterate conjunction="," open="(" close=")">
+			#value[]#
+		</iterate>
+	</delete>
+	
+	<!-- 查询设备参数最大编码==ParamKeyCode使用-->
+	<select id="getMaxItemClass" parameterClass="java.lang.String" resultClass="java.lang.String">
+		select 
+			max(param_key) 
+		from
+			df_classfyparam
+		where 
+			param_key like concat('%',#value#,'%') 
+	</select>
+
+	<!-- 查询根据设备分类ID设备参数  -->
+	<select id="queryParameter" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			param_key paramKey,
+			param_name paramName,
+			param_value paramValue,
+			param_unit paramUnit,
+			memo
+		from
+			df_classfyparam
+		where
+			module_id = #machineTypeId#
+	</select>
+
+	<!-- 查询设备参数 -->
+	<select id="queryDeviceList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			t1.id,
+			t1.module_id moduleId,
+			t1.param_name paramName,
+			t1.param_key paramKey,
+			t1.param_value paramValue,
+			t1.param_unit paramUnit,
+			t1.memo,
+			t2.classify_name classifyName
+		FROM
+			df_classfyparam t1
+				LEFT JOIN df_modulebaseclassfy t2 ON t1.module_id = t2.id
+		GROUP BY t1.id
+		ORDER BY t1.param_key
+	</select>
+
+	<!-- 查询设备参数==未使用 -->
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			dc.id AS id,
+			dc.module_id AS "moduleId",
+			dc.param_key AS "paramKey",
+			dc.param_name AS "paramName",
+			dc.param_value AS "paramValue",
+			dc.param_unit AS "paramUnit",
+			dc.memo
+		FROM
+			df_classfyparam dc
+		WHERE
+			dc.module_id = #moduleId#
+		GROUP BY dc.param_key
+	</select>
+
+	<!-- =============================================兼容代码（基本废弃）v5.0.1之前使用============================================= -->
+
+	<!-- 查询地点 -->
+	<select id="querySpot" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		u.spot_num AS spotNum,
+		u.spot_name AS spotName,
+		u.building AS building,
+		u.floor AS floor,
+		u.room AS room,
+		d.DEPT_NUM AS deptNum,
+		d.DEPT_NAME AS deptName
+		FROM
+		tbmbd06 u
+		LEFT JOIN tbmbd01 d ON u.dept_num = d.DEPT_NUM
+
+		where 1=1
+
+		<isNotEmpty prepend=" AND " property="spotNum">
+			u.spot_num like concat('%', #spotNum#, '%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="building">
+			u.building like concat('%', #building#, '%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="floor">
+			u.floor like concat('%', #floor#, '%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="room">
+			u.room like concat('%', #room#, '%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="spotName">
+			u.spot_name like concat('%', #spotName#, '%')
+		</isNotEmpty>
+
+		ORDER BY
+		u.building,
+		u.floor,
+		u.room,
+		u.spot_name
+	</select>
+
+	<!-- =============================================兼容代码（基本废弃）============================================= -->
+</sqlMap>

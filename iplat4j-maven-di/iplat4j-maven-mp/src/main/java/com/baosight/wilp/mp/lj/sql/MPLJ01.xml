@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MPLJ01">
+
+	<select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.mp.lj.domain.MpPurchasePlan">
+		SELECT
+			p.id	as "id",  <!-- 主键 -->
+			p.resource_id	as "resourceId",  <!-- 来源单据ID(需求汇总ID/补库计划ID) -->
+			p.purchase_no	as "purchaseNo",  <!-- 采购计划单号 -->
+			p.status_code	as "statusCode",  <!-- 状态编码 -->
+			p.status_name	as "statusName",  <!-- 状态名称 -->
+			p.purchase_num	as "purchaseNum",  <!-- 采购物资总数 -->
+			p.purchase_cost	as "purchaseCost",  <!-- 总金额 -->
+			p.dept_num	as "deptNum",  <!-- 专业科室编码 -->
+			p.dept_name	as "deptName",  <!-- 专业科室编码 -->
+			p.remark	as "remark",  <!-- 备注 -->
+		    p.purchase_remark as "purchaseRemark",  <!-- 采购计划描述 -->
+			p.rec_creator	as "recCreator",  <!-- 创建（申请）人 -->
+			p.rec_creator_name	as "recCreatorName",  <!-- 创建（申请）人姓名 -->
+			p.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+			date_format(p.rec_create_time, '%Y-%m-%d %H:%i:%s') as "recCreateTimeStr",  <!-- 创建时间 -->
+			p.rec_revisor	as "recRevisor",  <!-- 修改人 -->
+			p.rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+			p.data_group_code	as "dataGroupCode",  <!-- 账套 -->
+			p.archive_flag	as "archiveFlag", <!-- 归档标记 -->
+			a.reject_reason as "rejectReason" <!-- 驳回原因 -->
+		FROM  mp_purchase_plan p
+		left join mp_approval a on a.relate_id = p.id and a.status = '1' and a.approval_result_code = '20'
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			p.id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="purchaseNo">
+			p.purchase_no like concat('%', #purchaseNo#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="purchaseNoEQ">
+			p.purchase_no = #purchaseNoEQ#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			p.status_code = #statusCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCodes">
+			p.status_code in
+			<iterate property="statusCodes" open="(" conjunction="," close=")">
+				#statusCodes[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			p.dept_num = #deptNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="purchaseRemark">
+			p.purchase_remark like concat('%', #purchaseRemark#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			p.data_group_code = #dataGroupCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTimeS">
+			p.rec_create_time >= concat(#recCreateTimeS#,' 00:00:00')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTimeE">
+			p.rec_create_time <![CDATA[<=]]> concat(#recCreateTimeE#, ' 23:59:59')
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+         	<isNotEmpty property="orderBy">
+    		  	$orderBy$
+   		 	</isNotEmpty>
+   			<isEmpty property="orderBy">
+    		  	p.purchase_no desc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM mp_purchase_plan WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			p.id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="purchaseNo">
+			p.purchase_no like concat('%', #purchaseNo#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="purchaseNoEQ">
+			p.purchase_no = #purchaseNoEQ#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			p.status_code = #statusCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCodes">
+			p.status_code in
+			<iterate property="statusCodes" open="(" conjunction="," close=")">
+				#statusCodes[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			p.dept_num = #deptNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="purchaseRemark">
+			p.purchase_remark like concat('%', #purchaseRemark#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			p.data_group_code = #dataGroupCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTimeS">
+			p.rec_create_time >= concat(#recCreateTimeS#,' 00:00:00')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTimeE">
+			p.rec_create_time <![CDATA[<=]]> concat(#recCreateTimeE#, ' 23:59:59')
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert" parameterClass="com.baosight.wilp.mp.lj.domain.MpPurchasePlan">
+		INSERT INTO  mp_purchase_plan (
+			id,  <!-- 主键 -->
+			resource_id,  <!-- 来源单据ID(需求汇总ID/补库计划ID) -->
+			purchase_no,  <!-- 采购计划单号 -->
+			status_code,  <!-- 状态编码 -->
+			status_name,  <!-- 状态名称 -->
+			purchase_num,  <!-- 采购物资总数 -->
+			purchase_cost,  <!-- 总金额 -->
+			dept_num,  <!-- 专业科室编码 -->
+			dept_name,  <!-- 专业科室编码 -->
+			remark,  <!-- 备注 -->
+			rec_creator,  <!-- 创建（申请）人 -->
+			rec_creator_name,  <!-- 创建（申请）人姓名 -->
+			rec_create_time,  <!-- 创建时间 -->
+			rec_revisor,  <!-- 修改人 -->
+			rec_revise_time,  <!-- 修改时间 -->
+			data_group_code,  <!-- 账套 -->
+			archive_flag,  <!-- 归档标记 -->
+			purchase_remark
+		)
+		VALUES (
+			#id#,
+			#resourceId#,
+			#purchaseNo#,
+			#statusCode#,
+			#statusName#,
+			#purchaseNum#,
+			#purchaseCost#,
+			#deptNum#,
+			#deptName#,
+			#remark#,
+			#recCreator#,
+			#recCreatorName#,
+			#recCreateTime#,
+			#recRevisor#,
+			#recReviseTime#,
+			#dataGroupCode#,
+			#archiveFlag#,
+			#purchaseRemark#
+		)
+	</insert>
+
+	<update id="update" parameterClass="com.baosight.wilp.mp.lj.domain.MpPurchasePlan">
+		UPDATE mp_purchase_plan
+		SET
+			<isNotEmpty property="statusCode">status_code = #statusCode#, </isNotEmpty>  <!-- 状态编码 -->
+			<isNotEmpty property="statusName">status_name = #statusName#, </isNotEmpty>  <!-- 状态名称 -->
+			rec_revisor	= #recRevisor#,   <!-- 修改人 -->
+			rec_revise_time	= #recReviseTime#   <!-- 修改时间 -->
+		WHERE id = #id#
+	</update>
+
+	<select id="queryMpConfig" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+     SELECT id,config_value_radio as configValueRadio from mp_config where config_code = #configCode#
+	</select>
+
+
+	<select id="queryDetail" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.mp.lj.domain.MpPurchasePlanDetail">
+		SELECT
+			t1.id	as "id",  <!-- 主键 -->
+			t1.purchase_id	as "purchaseId",  <!-- 采购计划ID -->
+			t1.mat_num	as "matNum",  <!-- 物资编码 -->
+			t1.mat_name	as "matName",  <!-- 物资名称 -->
+			t1.mat_type_id	as "matTypeId",  <!-- 物资分类ID -->
+			t1.mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+			t1.mat_spec	as "matSpec",  <!-- 物资规格 -->
+			t1.mat_model	as "matModel",  <!-- 物资型号 -->
+			t1.unit	as "unit",  <!-- 计量单位 -->
+			t1.unit_name	as "unitName",  <!-- 计量单位 -->
+			t1.price	as "price",  <!-- 单价 -->
+			t1.num	as "num",  <!-- 计划数量 -->
+			t1.conted_num	as "contedNum", <!-- 以生成合同数量 -->
+			t2.purchase_no as "purchaseNo", <!-- 采购计划单号 -->
+		    t1.picture_uri as "pictureUri" <!-- 图片地址 -->
+		FROM mp_purchase_plan_detail t1
+		LEFT JOIN mp_purchase_plan  t2 ON t1.purchase_id = t2.id
+		where t1.purchase_id = #purchaseId#
+		<isNotEmpty prepend=" and " property="notShowOver">
+			t1.num > t1.conted_num
+		</isNotEmpty>
+		order by t1.mat_num
+	</select>
+
+	<select id="countDetail" parameterClass="java.util.HashMap" resultClass="int">
+		select count(*) from mp_purchase_plan_detail where purchase_id = #purchaseId#
+		<isNotEmpty prepend=" and " property="notShowOver">
+			t1.num > t1.conted_num
+		</isNotEmpty>
+	</select>
+
+	<insert id="insertDetail" parameterClass="java.util.List">
+		INSERT INTO mp_purchase_plan_detail (
+			id,  <!-- 主键 -->
+			purchase_id,  <!-- 采购计划ID -->
+			mat_num,  <!-- 物资编码 -->
+			mat_name,  <!-- 物资名称 -->
+			mat_type_id,  <!-- 物资分类ID -->
+			mat_type_name,  <!-- 物资分类名称 -->
+			mat_spec,  <!-- 物资规格 -->
+			mat_model,  <!-- 物资型号 -->
+			unit,  <!-- 计量单位 -->
+			unit_name,  <!-- 计量单位 -->
+			price,  <!-- 单价 -->
+			num,  <!-- 计划数量 -->
+			conted_num,  <!-- 以生成合同数量 -->
+		   	picture_uri      <!-- 图片地址 -->
+		)
+		VALUES
+		<iterate conjunction=",">
+		(
+			#list[].id#,
+			#list[].purchaseId#,
+			#list[].matNum#,
+			#list[].matName#,
+			#list[].matTypeId#,
+			#list[].matTypeName#,
+			#list[].matSpec#,
+			#list[].matModel#,
+			#list[].unit#,
+			#list[].unitName#,
+			#list[].price#,
+			#list[].num#,
+			#list[].contedNum#,
+			#list[].pictureUri#
+		)
+		</iterate>
+	</insert>
+	
+	<update id="reduceContedNum" parameterClass="com.baosight.wilp.mp.lj.domain.MpContractDetail">
+		update mp_purchase_plan_detail set conted_num = conted_num - #num# where purchase_id = #purchasePlanId#
+			and mat_num = #matNum# and mat_type_id = #matTypeId#
+	</update>
+
+	<update id="addContedNum" parameterClass="com.baosight.wilp.mp.lj.domain.MpContractDetail">
+		update mp_purchase_plan_detail set conted_num = conted_num + #num# where purchase_id = #purchasePlanId#
+ 			and mat_num = #matNum# and mat_type_id = #matTypeId#
+	</update>
+
+	<select id="allGenCont" parameterClass="string" resultClass="int">
+		select id from mp_purchase_plan_detail where purchase_id = #value# and num > conted_num
+	</select>
+
+	<select id="noneGenCont" parameterClass="string" resultClass="int">
+		select id from mp_purchase_plan_detail where purchase_id = #value# and conted_num > 0
+	</select>
+
+	<select id="hasEnoughNum" parameterClass="com.baosight.wilp.mp.lj.domain.MpContractDetail" resultClass="int">
+		select id from mp_purchase_plan_detail where purchase_id = #purchasePlanId#
+		 and mat_num = #matNum# and mat_type_id= #matTypeId# and num >= conted_num + #num#
+	</select>
+</sqlMap>

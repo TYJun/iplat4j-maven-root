@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="PM0301">
+	
+	<!-- ===========================================项目督办开始================================================= -->
+	<!-- 查询督办List -->
+	<select id="queryViaList" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+			tt.ID	as id,  <!-- 项目督办主键 -->
+			tt.PROJECT_PK	as projectPk,  <!-- 项目主键 -->
+			tt.SUPERVISE_MAKER	as superviseMaker,  <!-- 督办人 -->
+			tt.SUPERVISE_MAKER	as superviseMakerNo,  <!-- 督办人 -->
+			tt.SUPERVISE_MAKER_NAME as superviseMakerName,
+			tt.SUPERVISE_INFO	as superviseInfo,  <!-- 督办信息 -->
+			tt.START_TIME	as startTime,  <!-- 开始时间 -->
+			tt.END_TIME	as endTime,  <!-- 结束时间 -->
+			tt.ARCHIVE_FLAG	as archiveFlag,  <!-- 归档标记 -->
+			tt.REC_CREATOR	as recCreator,  <!-- 记录创建责任者 -->
+			tt.REC_CREATE_TIME	as recCreateTime,  <!-- 记录创建时间 -->
+			tt.REC_REVISOR	as recRevisor,  <!-- 记录修改责任者 -->
+			tt.REC_REVISE_TIME	as recReviseTime <!-- 记录修改时间 -->
+		FROM pm_via tt
+		where tt.PROJECT_PK = #id# 
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  tt.REC_CREATE_TIME asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+	
+	<!-- 查询督办Count -->
+	<select id="queryViaCount" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT tt.* FROM pm_via tt 
+		where tt.PROJECT_PK = #id#
+	</select>
+
+	<!-- 新增督办信息 -->
+	<insert id="insertVia" parameterClass="com.baosight.wilp.pm.domain.TpmVia">
+		INSERT INTO pm_via (ID,  <!-- 项目督办主键 -->
+							PROJECT_PK,  <!-- 项目主键 -->
+							SUPERVISE_MAKER_NAME,  <!-- 督办人 -->
+							SUPERVISE_MAKER,  <!-- 督办人 工号-->
+							SUPERVISE_INFO,  <!-- 督办信息 -->
+							START_TIME,  <!-- 开始时间 -->
+							END_TIME,  <!-- 结束时间 -->
+							ARCHIVE_FLAG,  <!-- 归档标记 -->
+							REC_CREATOR,  <!-- 记录创建责任者 -->
+							REC_CREATE_TIME,  <!-- 记录创建时间 -->
+							REC_REVISOR,  <!-- 记录修改责任者 -->
+							REC_REVISE_TIME,  <!-- 记录修改时间 -->
+							DATAGROUP_CODE
+							)		 
+	    VALUES (#id#, #projectPk#, #superviseMakerName#, #superviseMaker#, #superviseInfo#, #startTime#, #endTime#, #archiveFlag#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#) 
+	</insert>
+	
+	<!-- 删除督办信息 -->
+	<delete id="deleteVia" parameterClass="java.lang.String">
+		delete from pm_via where PROJECT_PK = #value#
+	</delete>
+	
+	<!-- ===========================================项目督办结束================================================= -->
+	
+	<!-- 查询项目的督办人 -->
+	<select id="querySendVia" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		select PROJECT_PK projectPk, GROUP_CONCAT(SUPERVISE_MAKER) workNos from pm_via group by PROJECT_PK
+	</select>
+  
+</sqlMap>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="SIRK0108">
+
+	<select id="query" parameterClass="string" resultClass="java.util.HashMap">
+		SELECT
+			sed.ID	as "id",  <!-- 主键 -->
+			sed.enter_bill_detail_no	as "enterBillDetailNo",  <!-- 入库单号 -->
+			sed.enter_bill_no	as "enterBillNo",  <!-- 入库单号 -->
+			sed.enter_type	as "enterType",  <!-- 入库类别 -->
+			sed.enter_type_name	as "enterTypeName",  <!-- 入库类型名称 -->
+			sed.mat_type_num as "matTypeNum", <!-- 物资分类编码 -->
+			sed.mat_type_name as "matTypeName", <!-- 物资分类名称 -->
+			sed.mat_num	as "matNum",  <!-- 物资编码 -->
+			sed.mat_name	as "matName",  <!-- 物资名称 -->
+			sed.mat_modeL	as "matModel",  <!-- 物资型号 -->
+			sed.mat_spec	as "matSpec",  <!-- 物资规格 -->
+			sed.unit	as "unit",  <!-- 计量单位编码 -->
+			sed.unit_name	as "unitName",  <!-- 计量单位名称 -->
+			sed.enter_price	as "enterPrice",  <!-- 入库单价 -->
+			sed.enter_num	as "redRushNum",  <!-- 红冲数量 -->
+		    sed.enter_num as tempNum, <!-- 临时数据,值为初始红冲数量 -->
+		    (select enter_num from si_enter_detail c where c.enter_bill_no = se.origin_bill_no and c.mat_num = sed.mat_num) enterNum,
+			(select ifnull(sum(b.enter_num),0) from si_enter a left join si_enter_detail b on a.ENTER_BILL_NO = b.ENTER_BILL_NO
+				where a.ORIGIN_BILL_NO = se.origin_bill_no and b.MAT_NUM = sed.MAT_NUM and a.ENTER_TYPE = '05'  ) totalRedRushNum,
+			sed.batch_num	as "batchNum",  <!-- 物资条码号12 -->
+			sed.surp_num	as "surpNum",  <!-- 供应商编码 -->
+			sed.surp_name	as "surpName"  <!-- 供应商名称 -->
+		FROM si_enter se left join si_enter_detail sed on se.enter_bill_no = sed.enter_bill_no
+		where se.enter_bill_no = #enterBillNo#
+		order by enter_bill_detail_no
+	</select>
+  
+</sqlMap>

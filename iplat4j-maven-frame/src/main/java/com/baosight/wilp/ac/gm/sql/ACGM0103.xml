@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ACGM0103">
+
+	<insert id="insert" parameterClass="java.util.HashMap">
+		INSERT INTO $projectSchema$.ac_material (
+			id,  <!-- 主键 -->
+			mat_code,  <!-- 物资编码 -->
+			mat_name,  <!-- 物资名称 -->
+			mat_class_id,  <!-- 分类id -->
+			mat_spec,  <!-- 物资规格 -->
+			mat_model,  <!-- 物资型号 -->
+			unit,  <!-- 计量单位编码 -->
+			price,  <!-- 最近订购单价 -->
+			supplier,  <!-- 供应商 -->
+			manufacturer,  <!-- 制造商 -->
+			mat_type_code,  <!-- 物资大类编码	 -->
+			remark,  <!-- 备注	 -->
+			status,  <!-- 状态	 -->
+			rec_creator,  <!-- 创建人-->
+			rec_create_time,  <!-- 创建时间 -->
+		    picture_uri,
+			pack_factor
+		)VALUES (
+			#id#,
+			#matCode#,
+			#matName#,
+			#matClassId#,
+			#matSpec#,
+			#matModel#,
+			#unit#,
+			truncate(#price#,2),
+			#supplier#,
+			#manufacturer#,
+			#matTypeCode#,
+			#remark#,
+			#status#,
+			#recCreator#,
+			#recCreateTime#,
+			#pictureUri#,
+			#packfactor#
+		)
+	</insert>
+
+
+</sqlMap>

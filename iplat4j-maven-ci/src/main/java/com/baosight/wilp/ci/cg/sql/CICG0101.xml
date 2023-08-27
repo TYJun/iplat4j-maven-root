@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CICG0101">
+
+	<select id="query" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.ci.cg.domain.CiApplyDetail">
+		SELECT
+		rec_creator	as "recCreator",  <!-- 记录创建责任者 -->
+		rec_create_time	as "recCreateTime",  <!-- 记录创建时间 -->
+		rec_revisor	as "recRevisor",  <!-- 记录修改责任者 -->
+		rec_revise_time	as "recReviseTime",  <!-- 记录修改时间 -->
+		archive_flag	as "archiveFlag",  <!-- 归档标记 -->
+		id	as "id",  <!-- 主键 -->
+		apply_bill_no	as "applyBillNo",  <!-- 领用单号 -->
+		apply_bill_detail_no	as "applyBillDetailNo",  <!-- 领用单明细号 -->
+		mat_num	as "matNum",  <!-- 物资编码 -->
+		mat_name	as "matName",  <!-- 物资名称 -->
+		mat_model	as "matModel",  <!-- 物资型号 -->
+		mat_spec	as "matSpec",  <!-- 物资规格 -->
+		unit	as "unit",  <!-- 计量单位编码 -->
+		unit_name	as "unitName",  <!-- 计量单位名称 -->
+		apply_num	as "applyNum", <!-- 领用数量 -->
+	    price as "price", <!-- 单价 -->
+		supplier as "supplier", <!-- 供应商 -->
+		supplier_name as   "supplierName" <!-- 供应商 -->
+		FROM ci_apply_detail WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="applyBillNo">
+			apply_bill_no = #applyBillNo#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				id asc
+			</isEmpty>
+		</dynamic>
+
+	</select>
+
+	<select id="queryDetailByApplyId" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.ci.cg.domain.CiApplyDetail">
+		SELECT
+		ad.rec_creator	as "recCreator",  <!-- 记录创建责任者 -->
+		ad.rec_create_time	as "recCreateTime",  <!-- 记录创建时间 -->
+		ad.rec_revisor	as "recRevisor",  <!-- 记录修改责任者 -->
+		ad.rec_revise_time	as "recReviseTime",  <!-- 记录修改时间 -->
+		ad.archive_flag	as "archiveFlag",  <!-- 归档标记 -->
+		ad.id	as "id",  <!-- 主键 -->
+		ad.apply_bill_no	as "applyBillNo",  <!-- 领用单号 -->
+		ad.apply_bill_detail_no	as "applyBillDetailNo",  <!-- 领用单明细号 -->
+		ad.mat_num	as "matNum",  <!-- 物资编码 -->
+		ad.mat_name	as "matName",  <!-- 物资名称 -->
+		ad.mat_model	as "matModel",  <!-- 物资型号 -->
+		ad.mat_spec	as "matSpec",  <!-- 物资规格 -->
+		ad.unit	as "unit",  <!-- 计量单位编码 -->
+		ad.unit_name	as "unitName",  <!-- 计量单位名称 -->
+		ad.apply_num	as "applyNum", <!-- 领用数量 -->
+		ad.price as "price", <!-- 单价 -->
+		ad.supplier as "supplier", <!-- 供应商 -->
+		ad.supplier_name as   "supplierName" <!-- 供应商 -->
+		FROM ci_apply_detail ad
+		LEFT JOIN ci_enter ce ON ad.apply_bill_no = ce.origin_bill_no
+		where ce.id is null
+		<isNotEmpty prepend=" AND " property="id">
+			ad.id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="applyBillNo">
+			ad.apply_bill_no = #applyBillNo#
+		</isNotEmpty>
+
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM ci_apply_detail WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+	<!--
+		<isNotEmpty prepend=" AND " property="recCreator">
+			REC_CREATOR = #recCreator#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTime">
+			REC_CREATE_TIME = #recCreateTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recRevisor">
+			REC_REVISOR = #recRevisor#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recReviseTime">
+			REC_REVISE_TIME = #recReviseTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="archiveFlag">
+			ARCHIVE_FLAG = #archiveFlag#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="applyBillNo">
+			APPLY_BILL_NO = #applyBillNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="applyBillDetailNo">
+			APPLY_BILL_DETAIL_NO = #applyBillDetailNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNum">
+			MAT_NUM = #matNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matName">
+			MAT_NAME = #matName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matModel">
+			MAT_MODEL = #matModel#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matSpec">
+			MAT_SPEC = #matSpec#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="unit">
+			UNIT = #unit#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="unitName">
+			UNIT_NAME = #unitName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="applyNum">
+			APPLY_NUM = #applyNum#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO ci_apply_detail (rec_creator,  <!-- 记录创建责任者 -->
+		rec_create_time,  <!-- 记录创建时间 -->
+		rec_revisor,  <!-- 记录修改责任者 -->
+		rec_revise_time,  <!-- 记录修改时间 -->
+		archive_flag,  <!-- 归档标记 -->
+		id,  <!-- 主键 -->
+		apply_bill_no,  <!-- 领用单号 -->
+		apply_bill_detail_no,  <!-- 领用单明细号 -->
+		mat_num,  <!-- 物资编码 -->
+		mat_name,  <!-- 物资名称 -->
+		mat_model,  <!-- 物资型号 -->
+		mat_spec,  <!-- 物资规格 -->
+		unit,  <!-- 计量单位编码 -->
+		unit_name,  <!-- 计量单位名称 -->
+		apply_num,  <!-- 领用数量 -->
+		price, <!-- 单价 -->
+		supplier, <!-- 供应商 -->
+		supplier_name <!-- 供应商 -->
+		)
+		VALUES (#recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #archiveFlag#, #id#, #applyBillNo#, #applyBillDetailNo#, #matNum#, #matName#, #matModel#, #matSpec#, #unit#, #unitName#, #applyNum#, #price#,#supplier#, #supplierName#)
+	</insert>
+
+	<delete id="delete" parameterClass="String">
+		DELETE FROM ci_apply_detail WHERE
+			apply_bill_no = #applyBillNo#
+	</delete>
+
+	<update id="update">
+		UPDATE ci_apply_detail
+		SET
+		rec_creator	= #recCreator#,   <!-- 记录创建责任者 -->
+		rec_create_time	= #recCreateTime#,   <!-- 记录创建时间 -->
+		rec_revisor	= #recRevisor#,   <!-- 记录修改责任者 -->
+		rec_revise_time	= #recReviseTime#,   <!-- 记录修改时间 -->
+		archive_flag	= #archiveFlag#,   <!-- 归档标记 -->
+		apply_bill_no	= #applyBillNo#,   <!-- 领用单号 -->
+		apply_bill_detail_no	= #applyBillDetailNo#,   <!-- 领用单明细号 -->
+		mat_num	= #matNum#,   <!-- 物资编码 -->
+		mat_name	= #matName#,   <!-- 物资名称 -->
+		mat_model	= #matModel#,   <!-- 物资型号 -->
+		mat_spec	= #matSpec#,   <!-- 物资规格 -->
+		unit	= #unit#,   <!-- 计量单位编码 -->
+		unit_name	= #unitName#,   <!-- 计量单位名称 -->
+		apply_num	= #applyNum#  <!-- 领用数量 -->
+		WHERE
+		id = #id#
+	</update>
+
+</sqlMap>

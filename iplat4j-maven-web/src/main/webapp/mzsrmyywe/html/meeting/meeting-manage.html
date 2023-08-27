@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="reference/mui/css/mui.min.css" />
+    <link rel="stylesheet" href="reference/css/buttom.css" />
+    <link rel="stylesheet" href="reference/css/common.css" />
+    <link rel="stylesheet" href="reference/mui/css/mui.picker.min.css" />
+  </head>
+  <style type="text/css">
+    body {
+      background: #eee;
+    }
+    * {
+      touch-action: pan-y;
+    }
+    .task-div {
+      width: 96%;
+      margin: 10px auto;
+      /*margin-top: 144px;*/
+      padding-left: 15px;
+      padding-right: 15px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      background: #fff;
+      border-radius: 2px;
+      box-shadow: 0px 2px 5px #d4d4d4;
+    }
+
+    .task-title {
+      height: 40px;
+      line-height: 40px;
+      border-bottom: 1px solid #eee;
+      font-weight: bold;
+    }
+
+    .status-applying {
+      color: #ff9800;
+    }
+
+    .status-accept {
+      color: #0dc515;
+    }
+
+    .status-unknown {
+      color: #f5675c;
+    }
+
+    .task-info {
+      padding-top: 10px;
+    }
+
+    .info-title {
+      color: #5d5d5d;
+    }
+
+    .mui-table-view:before {
+      background-color: #eee;
+    }
+
+    .mui-table-view:after {
+      background-color: #eee;
+    }
+
+    .btn-div {
+      width: 100%;
+      text-align: right;
+      border-top: 1px solid #eee;
+      margin-top: 10px;
+      padding-top: 10px;
+      padding-bottom: 5px;
+    }
+
+    .btn-div button {
+      margin-left: 10px;
+    }
+
+    .btn-views {
+      width: 80px;
+      border-radius: 15px;
+      border: 1px solid #2aabd2;
+      color: #2aabd2;
+    }
+
+    /*新增*/
+    .row-content {
+      height: 40px;
+      line-height: 40px;
+      padding: 0 15px;
+      border-bottom: 1px solid #eeeeee;
+      font-size: 14px;
+      color: #666666;
+      background: #ffffff;
+    }
+
+    .row-right {
+      text-align: right;
+      color: #333333;
+    }
+
+    .new-icon-color {
+      color: #aaa;
+    }
+
+    .quxiao {
+      height: 32px;
+      width: 21%;
+      background: #fafafa;
+      text-align: center;
+      line-height: 32px;
+      border-radius: 15px;
+      margin-top: 24px;
+      color: #a6a6a6;
+    }
+
+    .queding {
+      height: 32px;
+      width: 21%;
+      background: #2aabd2;
+      text-align: center;
+      line-height: 32px;
+      border-radius: 15px;
+      margin-top: 24px;
+      color: #fff;
+    }
+
+    .new-row-tcj {
+      height: 80px;
+      line-height: 80px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+
+    /*.mui-pull-top-pocket .mui-block {
+        margin-top: 94px;
+    }*/
+    #pullrefresh .mui-pull-top-pocket {
+      top: 0px;
+    }
+  </style>
+
+  <body>
+    <header class="mui-bar mui-bar-nav">
+      <h1 class="mui-title">会议管理</h1>
+      <button
+        id="back"
+        class="
+          mui-action-back
+          mui-btn
+          mui-btn-blue
+          mui-btn-link
+          mui-btn-nav
+          mui-pull-left
+        "
+      >
+        <span class="mui-icon mui-icon-left-nav"></span>
+        首页
+      </button>
+    </header>
+    <div id="warn" class="warn" hidden>
+      <small></small>
+    </div>
+    <div id="loading" class="loading1" hidden>
+      <div class="loading2">
+        <span class="mui-spinner" style="width: 80px; height: 80px"></span>
+      </div>
+    </div>
+
+    <!-- 查询 -->
+    <div class="searchSelf" style="padding-top: 46px">
+      <div class="mui-row row-content">
+        <div class="mui-col-sm-3 mui-col-xs-3">
+          <span class="mui-icon iconfont icon-shijian new-icon-color"></span>
+          时间：
+        </div>
+        <div class="mui-col-sm-4 mui-col-xs-4 row-right">
+          <input
+            type="text"
+            id="beginTime"
+            style="
+              width: 80%;
+              border: 0;
+              outline: none;
+              font-size: 14px;
+              padding: 0px;
+              text-align: right;
+              margin-bottom: 0;
+              height: 21px;
+            "
+            placeholder="开始时间"
+            readonly="readonly"
+          />
+        </div>
+        <div
+          class="mui-col-sm-1 mui-col-xs-1 row-right"
+          style="text-align: center"
+        >
+          -
+        </div>
+        <div class="mui-col-sm-4 mui-col-xs-4 row-right" style="">
+          <input
+            type="text"
+            id="endTime"
+            style="
+              width: 80%;
+              border: 0;
+              outline: none;
+              font-size: 14px;
+              padding: 0px;
+              text-align: left;
+              margin-bottom: 0;
+              height: 21px;
+            "
+            placeholder="截止时间"
+            readonly="readonly"
+          />
+          <span
+            class="mui-icon iconfont icon-youjiantou"
+            style="color: #2aabd2; font-weight: bold"
+          ></span>
+        </div>
+      </div>
+
+      <!-- <div class="mui-row row-content">
+
+        <div class="mui-col-sm-5 mui-col-xs-5">
+            <span class="mui-icon   iconfont   icon-fenglei new-icon-color"></span> 状态：
+        </div>
+        <div class="mui-col-sm-7 mui-col-xs-7 row-right ">
+            <input type="text" id="status" style="width: 80%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;" placeholder="请选择状态" readonly="readonly" />
+            <span class="mui-icon iconfont icon-youjiantou" style="color:#2aabd2;font-weight: bold;"></span>
+            <input hidden="hidden" type="text" id="statusCode" style="width: 80%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;" placeholder="请输入布草名称" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" />
+
+        </div>
+    </div> -->
+
+      <div class="mui-row row-content new-row-tcj">
+        <div class="quxiao">重置</div>
+        <div class="queding">查询</div>
+      </div>
+    </div>
+
+    <!-- 查询结束 -->
+    <div
+      id="pullrefresh"
+      class="mui-content mui-scroll-wrapper"
+      style="padding-bottom: 50px; margin-top: 145px"
+      data-scroll="1"
+    >
+      <div class="mui-scroll">
+        <ul
+          class="mui-table-view mui-table-view-chevron"
+          style="background-color: #eee"
+        >
+          <!-- <div class="task-div">
+            <div class="mui-row task-title">
+                <div class="mui-col mui-col-xs-8 task-no">申请单号：212018393809</div>
+                <div class="mui-col mui-col-xs-4 right status-applying">待完工</div>
+            </div>
+            <div class="task-content">
+                <div class="mui-row task-info">
+                    <div class="mui-col mui-col-xs-4">会议室</div>
+                    <div class="mui-col mui-col-xs-8 right word-omit">会议室</div>
+                </div>
+                <div class="mui-row task-info">
+                    <div class="mui-col mui-col-xs-4">会议日期</div>
+                    <div class="mui-col mui-col-xs-8 right word-omit">会议室</div>
+                </div>
+                <div class="mui-row task-info">
+                    <div class="mui-col mui-col-xs-4">会议主题</div>
+                    <div class="mui-col mui-col-xs-8 right word-omit">会议室</div>
+                </div>
+            </div>
+            <div class="btn-div">
+                <button type="button" class="mui-btn mui-btn-outlined btn-views">预约</button>
+                <button type="button" class="mui-btn mui-btn-outlined btn-views">预约</button>
+            </div>
+        </div> -->
+        </ul>
+      </div>
+    </div>
+    <nav class="mui-bar mui-bar-tab" style="background-color: #fff">
+      <a id="application" class="mui-tab-item yuyue-icon">
+        <span class="mui-icon iconfont icon-shenqing"></span>
+        <span class="mui-tab-label">预约申请</span>
+      </a>
+      <a id="manage" class="mui-tab-item guanli-icon mui-active">
+        <span class="mui-icon iconfont icon-guanli"></span>
+        <span class="mui-tab-label">预约管理</span>
+      </a>
+      <a id="history" class="mui-tab-item guanli-icon">
+        <span class="mui-icon iconfont icon-lishi"></span>
+        <span class="mui-tab-label">历史记录</span>
+      </a>
+    </nav>
+  </body>
+  <script src="reference/mui/js/mui.min.js" type="text/javascript"></script>
+  <script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+  <script src="reference/js/common.js" type="text/javascript"></script>
+  <script src="../../cordova.js" type="text/javascript"></script>
+  <script
+    src="../../reference/mui/js/mui.picker.min.js"
+    type="text/javascript"
+  ></script>
+
+  <script type="text/javascript">
+  var dtPicker
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+
+    var url = location.search;
+    var height = url.substring(1, url.length);
+    console.log("url的地址", url);
+
+    var page = 1;
+    var isLeader = false;
+
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+      /**
+       * 系统返回键监听
+       */
+      document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    /*默认加载的方法*/
+    $(function () {
+      //-------------编辑按钮：回到原来的位置----------------
+      var editPage = localStorage.getItem("editPage");
+      console.log("默认加载的页码", editPage);
+    
+      for (var i = 1; i < editPage; i++) {
+        page++;
+        loadViews();
+      }
+      var hhh = localStorage.getItem("scrollTop");
+      setTimeout(function () {
+        mui(".mui-scroll-wrapper").scroll().refresh();
+        mui(".mui-scroll-wrapper").scroll().scrollTo(0, hhh, 100);
+        setTimeout(function () {
+          mui(".mui-scroll-wrapper").scroll().refresh();
+          mui(".mui-scroll-wrapper").scroll().scrollTo(0, hhh, 100);
+          console.log("滚动条的位置1", hhh);
+        }, 1000);
+        localStorage.removeItem("scrollTop");
+        localStorage.removeItem("editPage");
+      }, 300);
+    });
+
+    loadViews(); //获取预约会议列表
+
+    function loadViews() {
+      $.ajax({
+        url: baseUrl + "app_MeetingController/getApplicationList",
+        type: "post",
+        data: {
+          page: page,
+          rows: "10",
+          workNo: workNo,
+          statusCode: "02,03",
+          beginTime: $("#beginTime").val(),
+          endTime: $("#endTime").val(),
+        },
+        success: function (data) {
+          // var data = eval('(' + data + ')');
+          var viewHtml="";
+          console.log(data);
+          if (data.statusCode == "0") {
+            // isLeader = data.attributes.meetingManager;
+            // console.log(isLeader);
+            var list = new Array();
+            list = data.data;
+            for (var i = 0; i < list.length; i++) {
+              var meetingTime =
+                list[i].meetingDate +
+                " " +
+                list[i].week +
+                " " +
+                list[i].beginTime +
+                " - " +
+                list[i].endTime;
+              viewHtml += createView(
+                list[i].billID,
+                list[i].billNo,
+                list[i].meetingID,
+                list[i].meetingName,
+                list[i].meetingSubject,
+                meetingTime,
+                list[i].statusCode,
+                list[i].peopleNumber,
+                list[i].contactTel,
+                list[i].remark,
+                list[i].meetingDate,
+                list[i].beginTime,
+                list[i].endTime,
+                list[i].deptNum,
+                list[i].deptName,
+                list[i].applyUserName,
+                list[i].deviceCondition,
+                list[i].meetingNumber
+              );
+            }
+            $("ul").append(viewHtml);
+          }
+        },
+      });
+    }
+
+    function createView(
+      billID,
+      billNo,
+      meetingId,
+      meetingName,
+      meetingTheme,
+      meetingTime,
+      status,
+      attendNum,
+      conTel,
+      desc,
+      meetingDate,
+      beginTime,
+      endTime,
+      deptNum,
+      deptName,
+      applicantName,
+      deviceCondition,
+      meetingNumber
+    ) {
+      var json = {
+        billID: billID,
+        billNo: billNo,
+        meetingId: meetingId,
+        meetingName: meetingName,
+        meetingTheme: meetingTheme,
+        meetingTime: meetingTime,
+        attendNum: attendNum,
+        desc: desc,
+        conTel: conTel,
+        meetingDate: meetingDate,
+        beginTime: beginTime,
+        endTime: endTime,
+        lastBeginTime: beginTime,
+        lastEndTime: endTime,
+        deptNum: deptNum,
+        deptName: deptName,
+        meetingNum: meetingNumber,
+        deviceCondition: deviceCondition,
+        status: status,
+      };
+	  console.log(json)
+      var jsonStr = JSON.stringify(json);
+      var html = '<div class="task-div" id="task">';
+      html += '<div class="mui-row task-title">';
+      html +=
+        '<div class="mui-col mui-col-xs-8 task-no">申请单号：' +
+        billNo +
+        "</div>";
+      if (status == "待审批")
+        html +=
+          '<div class="mui-col mui-col-xs-4 right status-applying">待审批</div>';
+      else if (status == "已审批")
+        html +=
+          '<div class="mui-col mui-col-xs-4 right status-accept">已审批</div>';
+      else
+        html +=
+          '<div class="mui-col mui-col-xs-4 right status-unknown">未知状态</div>';
+      html += "</div>";
+      // html += '<div class="task-content guanli-show">';
+      // html += '<div class="mui-row task-info">';
+      // html += '<div class="mui-col mui-col-xs-4 info-title">会议室</div>';
+      // html += '<div class="mui-col mui-col-xs-8 right word-omit"><input style="border:none;outline:none;text-align:right;" value="' + meetingName + '" readonly></div>';
+      // html += '</div>';
+      // html += '<div class="mui-row task-info">';
+      // html += '<div class="mui-col mui-col-xs-4 info-title">会议日期</div>';
+      // html += '<div class="mui-col mui-col-xs-8 right word-omit"><input style="border:none;outline:none;text-align:right;" value="' + meetingTime + '" readonly></div>';
+      // html += '</div>';
+
+      html += '<div class="task-content guanli-show">';
+      html += '<div class="mui-row task-info">';
+      html += '<div class="mui-col mui-col-xs-4 info-title">会议室</div>';
+      html +=
+        '<div class="mui-col mui-col-xs-8 right word-omit">' +
+         meetingName +
+        "</div>";
+      html += "</div>";
+      html += '<div class="mui-row task-info">';
+      html += '<div class="mui-col mui-col-xs-4 info-title">会议日期</div>';
+      html +=
+        '<div class="mui-col mui-col-xs-8 word-omit">' + meetingTime + "</div>";
+      html += "</div>";
+      html += '<div class="mui-row task-info">';
+      html += '<div class="mui-col mui-col-xs-4 info-title">会议主题</div>';
+      html +=
+        '<div class="mui-col mui-col-xs-8 right word-omit">' +
+        meetingTheme +
+        "</div>";
+
+      html += "</div>";
+      html += "</div>";
+
+      html +=
+        '<div class="task-content guanli-hide" data-name="hide" hidden="hidden">';
+      html += '	<div class="mui-row task-info">';
+      html += '<div class="mui-col mui-col-xs-4 info-title">参会人数</div>';
+      html +=
+        '	<div class="mui-col mui-col-xs-8 right word-omit">' +
+        attendNum +
+        "</div>";
+      html += "	</div>";
+      html += '	<div class="mui-row task-info">';
+      html += '	<div class="mui-col mui-col-xs-4 info-title">申请人</div>';
+      html +=
+        '<div class="mui-col mui-col-xs-8 right word-omit">' +
+        applicantName +
+        "</div>";
+      html += "	</div>";
+      html += '<div class="mui-row task-info">';
+      html += '	<div class="mui-col mui-col-xs-4 info-title">联系电话</div>';
+      html +=
+        '	<div class="mui-col mui-col-xs-8 right word-omit">' +
+        conTel +
+        "</div>";
+      html += "	</div>";
+      html += '	<div class="mui-row task-info">';
+      html += '<div class="mui-col mui-col-xs-4 info-title">申请部门</div>';
+      html +=
+        '<div class="mui-col mui-col-xs-8 right word-omit">' +
+        deptName +
+        "</div>";
+      html += "	</div>";
+      html += '<div class="mui-row task-info">';
+      html += '<div class="mui-col mui-col-xs-4 info-title">备注</div>';
+      html +=
+        '	<div class="mui-col mui-col-xs-8 right word-omit">' + desc + "</div>";
+      html += "</div>";
+      html += "</div>";
+      html += '<div class="btn-div">';
+
+      if (status == "待审批") {
+        // html +=
+        //   "<button id='" +
+        //   jsonStr +
+        //   '\' type="button" class="mui-btn mui-btn-outlined btn-views edit">编辑</button>';
+        if (isLeader)
+          html +=
+            "<button id='" +
+            jsonStr +
+            '\' type="button" class="mui-btn mui-btn-outlined btn-views approve">通过</button>';
+        // html +=
+        //   "<button id='" +
+        //   jsonStr +
+        //   '\' type="button" class="mui-btn mui-btn-outlined btn-views revoke">撤销</button>';
+        // html +='<input id="hdnvalue" hidden/>'
+      } else if (status == "已审批") {
+        if (isLeader) {
+          html +=
+            "<button id='" +
+            jsonStr +
+            '\' type="button" class="mui-btn mui-btn-outlined btn-views giveOther">派工</button>';
+          html +=
+            "<button id='" +
+            jsonStr +
+            '\' type="button" class="mui-btn mui-btn-outlined btn-views revoke">撤销</button>';
+        }
+      }
+
+      html += "";
+      html += "";
+      html += "</div>";
+      html += "</div>";
+      return html;
+    }
+
+    /**
+     * 下滑刷新
+     * @return {[type]} [description]
+     */
+    function pulldownRefresh() {
+      setTimeout(function () {
+		$("ul").html("")
+        page = 1;
+        loadViews();
+        mui("#pullrefresh").pullRefresh().endPulldownToRefresh();
+      }, 1500);
+    }
+
+    /**
+     * 上滑加载更多
+     * @return {[type]} [description]
+     */
+    function pullupRefresh() {
+      page++;
+      loadViews();
+      setTimeout(function () {
+        //关闭加载框
+        mui("#pullrefresh").pullRefresh().endPullupToRefresh();
+      }, 1500);
+    }
+
+    mui.init({
+      pullRefresh: {
+        container: "#pullrefresh",
+        down: {
+          callback: pulldownRefresh,
+          contentrefresh: "正在刷新",
+        },
+        up: {
+          contentrefresh: "加载中，请稍后",
+          contentnomore: "暂无更多数据",
+          callback: pullupRefresh,
+        },
+      },
+    });
+
+    mui("body").on("tap", "button.edit", function () {
+      localStorage.setItem("returnWhich", "gomanager");
+      location.href = "application-edit.html?" + encodeURIComponent(this.id);
+
+      var aa = mui(".mui-scroll-wrapper").scroll().y;
+      localStorage.setItem("scrollTop", aa);
+      localStorage.setItem("editPage", page);
+      console.log("滚动条的位置", aa);
+      console.log("编辑中的page页码", page);
+    });
+
+    mui("body").on("tap", "button.approve", function () {
+      var btnArray = ["否", "是"];
+      var params = JSON.parse(this.id);
+      mui.confirm("确认审批，确认？", "是否审批", btnArray, function (e) {
+        if (e.index == 1) {
+          $("#loading").show();
+
+          $.ajax({
+            url: baseUrl + "app_MeetingController.do?approveBill",
+            type: "post",
+            data: {
+              billID: params.billID,
+              billNo: params.billNo,
+              applicationUser: workNo,
+            },
+            success: function (data) {
+              var data = eval("(" + data + ")");
+              console.log(data);
+              var aa = mui(".mui-scroll-wrapper").scroll().y;
+              localStorage.setItem("scrollTop", aa);
+              localStorage.setItem("editPage", page);
+
+              if (data.success) {
+                showMsg("操作成功");
+                $("#loading").hide();
+                location.href = "meeting-manage.html";
+                // mui('#pullrefresh').pullRefresh().pulldownLoading();
+              } else {
+                showMsg(data.msg);
+                $("#loading").hide();
+              }
+            },
+          });
+        }
+      });
+    });
+
+    mui("body").on("tap", "button.giveOther", function () {
+      location.href = "giveOther.html?" + encodeURIComponent(this.id);
+
+      //派工
+      var aa = mui(".mui-scroll-wrapper").scroll().y;
+      localStorage.setItem("scrollTop", aa);
+      localStorage.setItem("editPage", page);
+    });
+    mui("body").on("tap", "button.revoke", function () {
+      localStorage.setItem("returnWhich", "gomanager");
+      location.href = "revoke-reason.html?" + encodeURIComponent(this.id);
+
+      var aa = mui(".mui-scroll-wrapper").scroll().y;
+      localStorage.setItem("scrollTop", aa);
+      localStorage.setItem("editPage", page);
+    });
+    document.getElementById("history").addEventListener("tap", function () {
+      location.href = "meeting-manage-history.html";
+    });
+    document.getElementById("application").addEventListener("tap", function () {
+      location.href = "main.html";
+    });
+
+    document.getElementById("manage").addEventListener("tap", function () {
+      location.href = "meeting-manage.html";
+    });
+    mui("body").on("tap", ".guanli-show", function () {
+      var hideOrShow = $(this).next().attr("data-name");
+      if (hideOrShow == "hide") {
+        $(this).next().slideDown();
+        $(this).next().attr("data-name", "show");
+      } else {
+        $(this).next().slideUp();
+        $(this).next().attr("data-name", "hide");
+      }
+    });
+    mui("body").on("tap", ".guanli-hide", function () {
+      var hideOrShow = $(this).attr("data-name");
+      if (hideOrShow == "hide") {
+        $(this).slideDown();
+        $(this).attr("data-name", "show");
+      } else {
+        $(this).slideUp();
+        $(this).attr("data-name", "hide");
+      }
+    });
+
+    //返回
+    document.getElementById("back").addEventListener("tap", function () {
+      location.href = "../../menu.html";
+    });
+
+    function onBackKeyDown() {
+      location.href = "../../menu.html";
+    }
+
+    //确定
+    mui("body").on("tap", ".queding", function () {
+      // alert(4)
+      var beginTime = $("#beginTime").val();
+      var endTime = $("#endTime").val();
+      var aa = new Date(beginTime).getTime();
+      var bb = new Date(endTime).getTime();
+
+      if (aa > bb) {
+        $("#warn small").html("截止时间不能早于开始时间！");
+        $("#warn").fadeIn(500);
+        setTimeout("$('#warn').fadeOut(500)", 3000);
+        return;
+      } else {
+		page = 1
+	
+		$("ul").html("")
+		//   $("ul").append(viewHtml);
+        loadViews();
+      }
+      console.log(aa);
+      console.log(bb);
+    });
+    //取消
+    mui("body").on("tap", ".quxiao", function () {
+      $("#beginTime").val("");
+      $("#endTime").val("");
+    //   loadViews();
+      // $("#status").val("");
+      // $("#statusCode").val("");
+    });
+
+    //选择日期
+    mui("body").on("tap", "#beginTime", function () {
+      // 日期选择器
+	  $(this).toggleClass("mui-active");
+         dtPicker = new mui.DtPicker({
+          type: "date",
+        });
+        //selectItems为选中的 日期
+        dtPicker.show(function (selectItems) {
+          $("#beginTime").val(selectItems.text);
+        });
+    });
+	
+	mui("body").on("tap", ".mui-backdrop", function(){
+		dtPicker&&dtPicker.dispose()
+	})
+
+    mui("body").on("tap", "#endTime", function () {
+		$(this).toggleClass("mui-active");
+		dtPicker = new mui.DtPicker({
+          type: "date",
+        });
+        //selectItems为选中的 日期
+        dtPicker.show(function (selectItems) {
+          $("#endTime").val(selectItems.text);
+        });
+    });
+  </script>
+</html>

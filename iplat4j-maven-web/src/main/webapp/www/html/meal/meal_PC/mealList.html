@@ -1,0 +1,2027 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.min.css">
+    <link rel="stylesheet" href="../reference/mui/css/iconfont.css">
+    <link rel="stylesheet" href="../reference/css/common.css" />
+    <link rel="stylesheet" href="../../../css/colorGreen.css" />
+    <link rel="stylesheet" href="../../../css/colorBlue.css" />
+    <link rel="stylesheet" href="../reference/css/fontawesome-stars.css" />
+    <link rel="stylesheet" href="../reference/css/font-awesome.min.css" />
+</head>
+<style type="text/css">
+    .mui-bar-nav~.mui-content .mui-pull-top-pocket {
+        top: 0;
+    }
+    
+    .mui-pull-bottom-pocket {
+        bottom: -20px;
+    }
+    
+    .mask,
+    .diceng {
+        position: fixed;
+        top: 79px;
+        width: 100%;
+        bottom: 50px;
+        background-color: #000;
+        opacity: 0.5;
+        display: none;
+        z-index: 3;
+    }
+    
+    .diceng {
+        top: 0px;
+        bottom: 0px;
+        display: block;
+    }
+    
+    .maskDetail {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        bottom: 50px;
+        background-color: #000;
+        opacity: 0.5;
+        display: none;
+        z-index: 11;
+    }
+    
+    .mui-bar {
+        padding: 0 20px;
+    }
+    
+    .mui-bar .mui-btn .mui-icon {
+        font-size: 30px;
+        top: 3px;
+    }
+    
+    .prompt {
+        display: flex;
+    }
+    
+    .btn-div {
+        width: 33.3%;
+        background: #fff;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        border-bottom: 1px solid #E4E4E4;
+        border-right: 1px solid #E4E4E4;
+    }
+    
+    .btn-div .mui-icon {
+        font-size: 18px;
+        padding-left: 5px;
+        /*color: #2aabd2;*/
+    }
+    /*下拉选择*/
+    
+    .menu {
+        position: fixed;
+        top: 79px;
+        width: 100%;
+        background-color: #fff;
+        z-index: 4;
+    }
+    
+    .menu .mui-table-view-cell {
+        padding-left: 20px;
+    }
+    
+    .menu .mui-table-view-cell.mui-selected {
+        color: #007aff;
+    }
+    
+    .menu-list {
+        /*position: fixed;
+			width: 100%;
+			height: calc(100% - 80px);
+			overflow-y: auto;
+			padding-bottom: 50px;*/
+    }
+    
+    .menu-list .left {
+        font-size: 8px;
+        width: 50px;
+        height: 16px;
+        line-height: 16px;
+        text-align: center;
+        /*background-color: #fdc3c3;*/
+        color: #ff1010;
+        border-radius: 3px;
+    }
+    
+    .menu-list .price {
+        color: #333;
+        padding-top: -2px;
+    }
+    
+    .menu-list .unitPrice {
+        font-size: 16px;
+        padding-left: 5px;
+        font-weight: bold;
+    }
+    
+    .menu-list img {
+        width: 48px;
+        height: 48px;
+    }
+    
+    .mui-table-view .mui-media-object {
+        max-width: 48px;
+        height: 48px;
+    }
+    
+    .mui-table-view .mui-media-object.mui-pull-left {
+        margin-right: 15px;
+    }
+    
+    .mui-numbox {
+        height: 25px;
+        padding: 0 0;
+        border: none;
+        width: 80px;
+        float: right;
+        margin-right: 10px;
+        background-color: #fff;
+    }
+    
+    .mui-numbox [class*=btn-numbox] {
+        width: 22px;
+        font-size: 22px;
+        background-color: #6d9eeb;
+        color: #fff;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .mui-numbox .mui-icon {
+        font-size: 25px !important;
+    }
+    
+    .mui-numbox .mui-input-numbox {
+        border-right: 1px solid #fff !important;
+        border-left: 1px solid #fff !important;
+    }
+    
+    .mui-table-view-cell>a:not(.mui-btn).mui-active {
+        background-color: #fff !important;
+        /*border: 1px solid #2aabd2;*/
+    }
+    /*底部购物车选菜*/
+    
+    .bottom {
+        position: fixed;
+        z-index: 5;
+        bottom: 0;
+        width: 100%;
+        height: 50px;
+        border-top: 1px solid #ddd;
+        background: #FFFFFF;
+    }
+    
+    .rubbish {
+        text-align: center;
+        padding-right: 0px;
+        padding-left: 0px;
+        float: left;
+        height: 50px;
+    }
+    
+    .rubbishText {
+        text-align: left;
+        padding-right: 0px;
+        height: 50px;
+        line-height: 50px;
+        font-size: 16px;
+    }
+    
+    .userBtn {
+        margin-top: 0.4rem;
+        position: relative;
+        font-size: 40px;
+        color: #1ea4ea;
+    }
+    
+    #total {
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        border-radius: 50%;
+        background: red;
+        color: #fff;
+        position: absolute;
+        right: 0.5rem;
+        top: 0.5rem;
+        font-size: 10px;
+        display: none;
+        /*right: -0.3rem;
+			top: -0.8rem;*/
+    }
+    
+    #confirm {
+        text-align: center;
+        font-size: 18px;
+        color: #FFFFFF;
+        height: 50px;
+        /*background:#5bc0de;*/
+        line-height: 50px;
+    }
+    
+    #totalPrice {
+        color: #f21313;
+        font-size: 20px;
+        font-weight: bold;
+        padding: 0 4px;
+    }
+    /*点击购物车*/
+    
+    .cartContent {
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+        background: #FFFFFF;
+        max-height: 300px;
+        /*box-shadow: 0 0 4px #6d9eeb;*/
+        z-index: 4;
+    }
+    
+    #desc {
+        position: fixed;
+        width: 100%;
+        height: calc(100% - 150px);
+        top: 150px;
+        /*top:0;*/
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #fff;
+        z-index: 12;
+        overflow-y: auto;
+    }
+    
+    #desc .desc-delete {
+        position: fixed;
+        right: 15px;
+        top: 165px;
+        color: #666;
+        z-index: 11;
+        font-size: 26px;
+    }
+    
+    #desc1 {
+        margin-top: 8px;
+        color: #000;
+        font-size: 16px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        display: inline-block;
+        width: 60%;
+        float: left;
+    }
+    
+    #desc2 {
+        display: inline-block;
+        width: 40%;
+        margin-top: 5px;
+        text-align: center;
+    }
+    
+    .desc3 {
+        width: 100%;
+        color: #fa2828;
+        display: flex;
+        justify-content: left;
+        margin-top: 8px;
+    }
+    
+    .desc3 span {
+        font-size: 16px;
+        font-weight: bold;
+        padding-left: 5px;
+    }
+    
+    .detail .mui-table-view:after {
+        height: 0;
+    }
+    
+    .detail .mui-table-view a {
+        width: 100%;
+        float: left;
+        padding-left: 30px;
+    }
+    
+    .detail .mui-table-view span {
+        display: inline-block;
+        float: right;
+        width: 60%;
+        text-align: right;
+    }
+    
+    .hh {
+        font-weight: bold;
+        font-size: 15px;
+        color: #565656;
+        padding-left: 10px;
+        padding-top: 6px;
+        padding-bottom: 6px;
+        letter-spacing: 1px;
+    }
+    
+    #evalList ul .mui-media-body {
+        color: #8f8f94;
+    }
+    
+    #evalList ul .buyTime {
+        float: right;
+        padding-right: 8px;
+    }
+    
+    #evalList .comment {
+        color: #000;
+        padding-top: 4px;
+    }
+    
+    .alert {
+        background-color: #F5F5F5;
+        text-align: center;
+        border-top: 1px solid #d2d1d1;
+        height: 30px;
+        line-height: 30px;
+        color: #f65d0e;
+    }
+    
+    #slider img {
+        height: 235px;
+    }
+    /*五星评价*/
+    
+    .br-theme-fontawesome-stars .br-widget {
+        height: 22px;
+    }
+    
+    .br-theme-fontawesome-stars .br-widget a.br-selected:after {
+        color: #f51a1a;
+    }
+    
+    .mui-numbox {
+        width: 100px;
+    }
+    
+    .mui-numbox .mui-icon {
+        font-size: 22px;
+        color: #3b6eea;
+    }
+    
+    .mui-numbox .mui-input-numbox {
+        width: 40px !important;
+        vertical-align: top;
+    }
+    
+    .prompt {
+        font-size: 16px;
+    }
+    
+    #DY,
+    #orderMeal,
+    #mealType ul li {
+        font-size: 16px;
+    }
+    
+    .nobackColor {
+        background: #adadad;
+    }
+</style>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">菜品</h1>
+        <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+		        <span class="mui-icon mui-icon-left-nav"></span>
+	      	</button>
+        <!-- <button id="eval" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-right">
+		        <span class="mui-icon iconfont icon-pinglun" style="top: 6px;font-size: 28px;"></span>
+	      	</button> -->
+    </header>
+
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div id="loading" class="loading1" hidden>
+        <div class="loading2">
+            <span class="mui-spinner" style="width:80px;height:80px;"></span>
+        </div>
+    </div>
+    <div class="mui-content">
+        <div class="prompt">
+            <div id="btnS1" class="col-xs-4 col-sm-4 col-md-4 col-lg-4 btn-div">
+                2018-09-25
+                <span class="mui-icon iconfont icon-sanjiao"></span>
+            </div>
+            <div id="btnS2" class="col-xs-4 col-sm-4 col-md-4 col-lg-4 btn-div">
+                早餐
+                <span class="mui-icon iconfont icon-sanjiao"></span>
+            </div>
+            <div id="btnS3" class="col-xs-4 col-sm-4 col-md-4 col-lg-4 btn-div">
+                选择餐类
+                <span class="mui-icon iconfont icon-sanjiao"></span>
+            </div>
+        </div>
+        <!-- 菜品列表 -->
+        <div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="overflow-y: auto;margin-top: 84px;margin-bottom: 60px;">
+            <div class="mui-scroll">
+                <ul class="mui-table-view mui-table-view-chevron">
+                    <div id="content" class="menu-list">
+                        <ul class="mui-table-view">
+                            <!-- <li class="mui-table-view-cell mui-media">
+							        <a href="javascript:;">
+							            <img class="mui-media-object mui-pull-left" src="../img/meal.png">
+							            <div class="mui-media-body">
+							                小菜
+							                <p class='mui-ellipsis left'>剩余<span>100</span>份</p>
+							                <p class='mui-ellipsis price mui-row'>
+							                	<div class="mui-col-xs-6 mui-col-sm-6" style="float: left"><span>0.01</span>元/份</div>
+						                		<div class="mui-numbox mui-col-xs-6 mui-col-sm-6">
+						                			<button class="mui-btn mui-btn-numbox-minus" type="button">-</button>
+						                			<input type="number" class="mui-input-numbox">
+						                			<button class="mui-btn mui-btn-numbox-plus" type="button" style="pointer-events:none;background:#ccc;"><span class="mui-icon iconfont icon-jia1"></span></button>
+						                		</div>
+							                </p>
+							            </div>
+							        </a>
+							    </li> -->
+                        </ul>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 今日明日 -->
+    <div id="DY" class="menu" hidden>
+        <ul class="mui-table-view mui-table-view-radio">
+        </ul>
+    </div>
+
+    <!-- 早中晚 -->
+    <div id="orderMeal" class="menu" hidden>
+        <ul class="mui-table-view mui-table-view-radio">
+            <li id="001" class="mui-table-view-cell mui-selected">
+                <a class="mui-navigate-right">早餐</a>
+            </li>
+            <li id="002" class="mui-table-view-cell">
+                <a class="mui-navigate-right">中餐</a>
+            </li>
+            <li id="003" class="mui-table-view-cell">
+                <a class="mui-navigate-right">晚餐</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 餐类 -->
+    <div id="mealType" class="menu" hidden>
+        <ul class="mui-table-view mui-table-view-radio">
+            <!-- <li class="mui-table-view-cell mui-selected">
+					<a class="mui-navigate-right">全部</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">普餐</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">套餐</a>
+				</li> -->
+        </ul>
+    </div>
+
+    <div class="mask"></div>
+    <div class="maskDetail"></div>
+
+    <nav class="mui-row bottom">
+        <div id="cart-box" class="mui-col-xs-8 mui-col-sm-8 mui-col-md-8 mui-col-lg-8">
+            <div class="mui-col-xs-4 mui-col-sm-4 mui-col-md-4 mui-col-lg-4 rubbish">
+                <span class="mui-icon iconfont icon-gouwuchekong userBtn"></span>
+                <div id="total">
+                    0
+                </div>
+            </div>
+            <div class="rubbishText mui-col-xs-8 mui-col-sm-8 mui-col-md-8 mui-col-lg-8" style="float: left">
+                <span style="position:absolute;bottom:0px;" id="priceInfoS">购物车是空的</span>
+                <span style="position:absolute;bottom:0px;" id="priceInfo" hidden>共<span id="totalPrice">0.00</span>元</span>
+            </div>
+        </div>
+        <div id="confirm" class="mui-col-xs-4 mui-col-sm-4 mui-col-md-4 mui-col-lg-4" style="">
+            选好了
+        </div>
+    </nav>
+
+    <!--  购物车 -->
+    <div class="cartContent">
+        <h5 style="padding-left:15px;padding-top: 5px;font-size: 15px;margin-top:8px;margin-bottom: 12px">
+            已选商品
+            <span style="position:absolute;right:15px;top:0px;" class="clear">
+	    		<h5>
+	    		<span class="mui-icon iconfont icon-shanchu" style="display:inline-block;padding-top: 4px"></span> 清空
+        </h5>
+        </span>
+        </h5>
+        <div id="mealList" style="max-height: 250px;overflow-y:auto;border-top: 1px solid #e2e2e2;display: none">
+            <ul class="mui-table-view">
+            </ul>
+        </div>
+    </div>
+
+    <!-- 菜品详情 -->
+    <div id="desc" hidden>
+        <span class="mui-icon iconfont icon-delete desc-delete"></span>
+        <div class="addWrap">
+            <div id="slider" class="mui-slider">
+                <div class="mui-slider-group mui-slider-loop imgDetail">
+                    <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+                    <div class="mui-slider-item mui-slider-item-duplicate">
+                        <a href="#">
+                            <img src="../img/1.png">
+                        </a>
+                    </div>
+                    <div class="mui-slider-item">
+                        <a href="#">
+                            <img src="../img/2.png">
+                        </a>
+                    </div>
+                    <div class="mui-slider-item">
+                        <a href="#">
+                            <img src="../img/1.png">
+                        </a>
+                    </div>
+                    <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+                    <div class="mui-slider-item mui-slider-item-duplicate">
+                        <a href="#">
+                            <img src="../img/2.png">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="padding-left:15px;">
+            <h5 id="desc1">土豆烧肉</h5>
+            <span id="desc2" class="mui-col-xs-6 mui-col-sm-6 mui-col-md-6 mui-col-lg-6 left-nopadding">好</span>
+            <div class="desc3">¥<span id="desc3">0.01</span></div>
+        </div>
+        <hr style="width: 100%;margin-bottom: 0">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 all-nopadding" style="float: none;">
+            <div style="width: 100%;height: 10px;background-color: #eee;"></div>
+        </div>
+        <div class="detail">
+            <h5 class="hh">商品描述</h5>
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                    <a>菜品比例<span id="desc4">11</span></a>
+                </li>
+                <li class="mui-table-view-cell">
+                    <a>描述<span id="desc5">22</span></a>
+                </li>
+                <li class="mui-table-view-cell">
+                    <a>热量<span id="desc8">33</span></a>
+                </li>
+                <li class="mui-table-view-cell">
+                    <a>营养价值<span id="desc9">33</span></a>
+                </li>
+                <li class="mui-table-view-cell">
+                    <a>适宜人群<span id="desc6">糖尿病</span></a>
+                </li>
+                <li class="mui-table-view-cell">
+                    <a>不适宜人群<span id="desc7">33</span></a>
+                </li>
+            </ul>
+            <hr style="margin-top:10px;margin-bottom:0px;">
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 all-nopadding" style="float: none;">
+            <div style="width: 100%;height: 10px;background-color: #eee;"></div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="float: none;">
+            <h5 class="hh">菜品评价</h5>
+        </div>
+        <div id="evalList">
+            <ul class="mui-table-view">
+                <!-- <li class="mui-table-view-cell mui-media">
+					        <a href="javascript:;">
+					            <img class="mui-media-object mui-pull-left" src="../img/meal.png">
+					            <div class="mui-media-body">
+					                <span class="buyer">匿名用户</span>
+					                <span class="buyTime">2018.09.23</span>
+					                <p class='mui-ellipsis'><span class="mui-icon"></span>攒了该菜品</p>
+					                <p class='mui-ellipsis comment'>不错不错</p>
+					            </div>
+					        </a>
+					    </li>
+					    <li class="mui-table-view-cell mui-media">
+					        <a href="javascript:;">
+					            <img class="mui-media-object mui-pull-left" src="../img/meal.png">
+					            <div class="mui-media-body">
+					                <span class="buyer">匿名用户</span>
+					                <span class="buyTime">2018.09.23</span>
+					                <p class='mui-ellipsis'><span></span>攒了该菜品</p>
+					                <p class='mui-ellipsis comment'>不错不错</p>
+					            </div>
+					        </a>
+					    </li> -->
+            </ul>
+        </div>
+        <div id="loadMoreEval" class="alert">
+            加载更多<span class="mui-icon mui-icon mui-icon-arrowdown" style="font-size: 22px;padding-left: 4px;"></span>
+        </div>
+    </div>
+
+</body>
+
+</html>
+<script type="text/javascript" src="../../../js/color.js"></script>
+<script src="../reference/mui/js/mui.js" type="text/javascript"></script>
+<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../reference/js/common.js" type="text/javascript"></script>
+<script src="../reference/js/math.js" type="text/javascript"></script>
+<script src="../reference/js/jquery.barrating.js" type="text/javascript"></script>
+<!-- <script src="../../../cordova.js" type="text/javascript"></script> -->
+<script type="text/javascript">
+    var url = location.search;
+    var canteenNum = url.substring(1, url.length);
+    localStorage.setItem("canteenNum",canteenNum);
+    console.log(canteenNum);
+    // var baseUrl = 'http://192.168.1.11:8081/smp/';//localStorage.getItem("url");
+    var baseUrl = localStorage.getItem("url");
+    var canteenName = localStorage.getItem("canteenName");
+    // 餐次提前多久预定
+    var canteenTimesInfo = JSON.parse(localStorage.getItem("canteenTimesInfo"));
+    console.log(canteenTimesInfo);
+    var BtodayOrderTime, BtomorrowOrderTime, LtodayOrderTime, LtomorrowOrderTime, DtodayOrderTime, DtomorrowOrderTime;
+    for (var i = 0; i < canteenTimesInfo.length; i++) {
+        if (canteenTimesInfo[i].mealNum == '001') {
+            BtodayOrderTime = canteenTimesInfo[i].todayOrderTime;
+            BtomorrowOrderTime = canteenTimesInfo[i].tomorrowOrderTime;
+        }
+        if (canteenTimesInfo[i].mealNum == '002') {
+            LtodayOrderTime = canteenTimesInfo[i].todayOrderTime;
+            LtomorrowOrderTime = canteenTimesInfo[i].tomorrowOrderTime;
+        }
+        if (canteenTimesInfo[i].mealNum == '003') {
+            DtodayOrderTime = canteenTimesInfo[i].todayOrderTime;
+            DtomorrowOrderTime = canteenTimesInfo[i].tomorrowOrderTime;
+        }
+    }
+
+    // var dataGroupCode = 'CSYY2';//localStorage.getItem("dataGroupCode");
+    var dataGroupCode = localStorage.getItem("dataGroupCode");
+    var dayFlag = date_YMD(),
+        mealNum = "",
+        mealName = "",
+        mealType = "";
+    var breakfast = "",
+        lunch = "",
+        dinner = "";
+    var total = 0,
+        page = 1,
+        evalPage = 1;
+    var totalPrice = 0.00;
+    var mealList = [];
+    // 获取当前时间
+    var date = new Date(),
+        year = date.getFullYear(),
+        month = date.getMonth() + 1,
+        day = date.getDate(),
+        now = year + "-" + month + "-" + day,
+        nowHour = parseInt(date.getHours()), //现在小时
+        nowMinutes = parseInt(date.getMinutes()); //现在分钟
+    location.hash = "#menu";
+
+
+    nowTime = dateChange(now + ' ' + nowHour + ':' + nowMinutes + ':00'); //当前时间
+    BtodayOrderTime = dateChange(now + ' ' + BtodayOrderTime + ':00'); //早餐订餐时间
+    LtodayOrderTime = dateChange(now + ' ' + LtodayOrderTime + ':00'); //午餐订餐时间
+    DtodayOrderTime = dateChange(now + ' ' + DtodayOrderTime + ':00'); //晚餐订餐时间
+    BtomorrowOrderTime = dateChange(now + ' ' + BtomorrowOrderTime + ':00'); //明日早餐订餐时间
+    LtomorrowOrderTime = dateChange(now + ' ' + LtomorrowOrderTime + ':00'); //明日午餐订餐时间
+    DtomorrowOrderTime = dateChange(now + ' ' + DtomorrowOrderTime + ':00'); //明日晚餐订餐时间
+    console.log(nowTime, BtodayOrderTime, LtodayOrderTime, DtodayOrderTime);
+    console.log(nowTime, BtomorrowOrderTime, LtomorrowOrderTime, DtomorrowOrderTime);
+
+    localStorage.setItem("openIdcode",GetQueryString("code"));
+    //alert("code"+GetQueryString("code"));
+    //获取早餐/午餐/晚餐开始预定时间
+    // loadSendTime(); 
+
+    // 获取4天订餐时间
+    loadSevenDays();
+
+    // 根据当前时间获取餐次
+    // showDYList();
+
+    $(function() {
+        $(".mui-title").html(canteenName + "菜品");
+        // loadData();
+        if (total == 0) {
+            $("#confirm").css({
+                'pointer-events': 'none'
+            });
+            $("#confirm").removeClass('backColor').addClass('nobackColor')
+        }
+    });
+
+    // 加载餐类
+    $.ajax({
+        //url: baseUrl + 'app_baseBasicInfoController.do?getMenuTypeInfo',
+        url: baseUrl + 'meal',
+        type: 'post',
+        headers:{
+            className : 'AppBaseInfoService',
+            methodName : 'getMealType'
+        },
+        data: {
+            canteenNum: canteenNum,
+            dataGroupCode: dataGroupCode
+        },
+        success: function(data) {
+            //var data = JSON.parse(data);
+            console.log("餐类");
+            console.log(data);
+            var list = new Array();
+            list = data.obj;
+            var html = '<li class="mui-table-view-cell mui-selected"><a class="mui-navigate-right">全部</a></li>';
+            for (var i = 0; i < list.length; i++) {
+                html += '<li id="' + list[i].mealTypeNum + '" class="mui-table-view-cell" style="font-size: 16px"><a class="mui-navigate-right">' + list[i].mealTypeName + '</a></li>';
+            }
+            $("#btnS3").html("全部" + "<span class='mui-icon iconfont icon-sanjiao'></span>");
+            $("#mealType ul").html(html);
+
+        }
+    });
+
+    function loadSevenDays() {
+        $.ajax({
+            //url: baseUrl + 'app_baseBasicInfoController.do?queryMealDate',
+            url: baseUrl + 'meal',
+            type: 'post',
+            headers:{
+                className : 'AppBaseInfoService',
+                methodName : 'getDateList'
+            },
+            data: {
+                canteenTypeNum: 'zgst'
+            },
+            success: function(data) {
+                //var data = JSON.parse(data);
+                //var data = JSON.parse(data.jsonStr);
+                // console.log(data);
+                var moveGetDate = [];
+                var taskList = "";
+                if (data.success) {
+                    for (x in data.obj) {
+                        moveGetDate.push(data.obj[x]);
+                    }
+                    console.log(moveGetDate)
+                    for (var i = 0; i < moveGetDate.length; i++) {
+                        taskList += createSevenDay(moveGetDate[i], i);
+                    }
+                    $("#btnS1").html(moveGetDate[0] + '<span class="mui-icon iconfont icon-sanjiao"></span>');
+                    $("#DY ul").html(taskList);
+                    // showDYList();
+                } else {
+                    mui.toast('获取服务器日期失败!');
+                }
+            }
+        });
+    }
+
+    function createSevenDay(listDate, i) {
+        var html = '';
+        if (i == 0) {
+            html += '<li id="' + i + '" class="mui-table-view-cell mui-selected selectTime">';
+            html += '<a class="mui-navigate-right">' + listDate + '</a>';
+            html += '</li>';
+        } else {
+            html += '<li id="' + i + '" class="mui-table-view-cell selectTime">';
+            html += '<a class="mui-navigate-right">' + listDate + '</a>';
+            html += '</li>';
+        }
+        return html;
+    }
+
+    //获取餐次间隔时间
+    function loadSendTime() {
+        $.ajax({
+            url: baseUrl + 'app_baseBasicInfoController.do?sendTime',
+            type: 'post',
+            data: {
+                canteenNum: canteenNum
+            },
+            async: false,
+            success: function(data) {
+                var data = JSON.parse(data);
+                console.log(data);
+                if (data.success) {
+                    var list = new Array();
+                    list = data.obj;
+                    var time = "",
+                        hour = "",
+                        minutes = "";
+                    for (var i = 0; i < list.length; i++) {
+                        mealTime = list[i].mealTime;
+                        sendTimeS = list[i].sendTime;
+                        sendTime = sendTimeS.split(":"),
+                            sendHour = parseInt(sendTime[0]),
+                            sendMinutes = parseInt(sendTime[1]);
+                        // 设置早中晚的开始预定时间
+                        if (mealTime == '001') {
+                            if (sendMinutes >= advanceTimeB) {
+                                sendMinutes -= advanceTimeB;
+                            } else {
+                                sendHour -= 1;
+                                sendMinutes = 60 - advanceTimeB;
+                            }
+                            sendTimeS = sendHour + ":" + sendMinutes;
+                            if (breakfast == "") {
+                                breakfast = sendTimeS;
+                            }
+                            console.log(breakfast)
+                        }
+                        if (mealTime == '002') {
+                            if (sendMinutes >= advanceTimeL) {
+                                sendMinutes -= advanceTimeL;
+                            } else {
+                                sendHour -= 1;
+                                sendMinutes = 60 - advanceTimeL;
+                            }
+                            sendTimeS = sendHour + ":" + sendMinutes;
+                            console.log(sendTimeS)
+                            if (lunch == "") {
+                                lunch = sendTimeS;
+                            }
+                        }
+                        if (mealTime == '003') {
+                            if (sendMinutes >= advanceTimeD) {
+                                sendMinutes -= advanceTimeD;
+                            } else {
+                                sendHour -= 1;
+                                sendMinutes = 60 - advanceTimeD;
+                            }
+                            sendTimeS = sendHour + ":" + sendMinutes;
+                            console.log(sendTimeS)
+                            if (dinner == "") {
+                                dinner = sendTimeS;
+                            }
+                        }
+                    }
+                    console.log("breakfast:" + breakfast);
+                    console.log("lunch:" + lunch);
+                    console.log("dinner:" + dinner);
+                } else {
+                    mui.toast("获取餐次开始预定时间失败！");
+                }
+            }
+        });
+    }
+
+
+    //加载数据
+    function loadData() {
+        $('#upload').show();
+        page = 1;
+        $.ajax({
+            //url: baseUrl + 'app_baseBasicInfoController.do?queryMenuInfo',
+            url: baseUrl + 'meal',
+            type: 'post',
+            headers:{
+                className : 'AppBaseInfoService',
+                methodName : 'queryMenuInfo'
+            },
+            data: {
+                dayFlag: dayFlag,
+                mealNum: mealNum,
+                canteenNum: canteenNum,
+                mealType: mealType
+                // page: page,
+                // dataGroupCode: dataGroupCode
+            },
+            success: function(data) {
+                $('#upload').hide();
+                $('.cartContent').animate({
+                    'bottom': '0px'
+                });
+                console.log('菜品');
+                console.log(data);
+                var arr = data.obj;
+                console.log(arr);
+                var mealHtml = "";
+                var id,
+                    menuId,
+                    menuNum,
+                    menuPrice,
+                    menuPicUrl,
+                    menuName,
+                    surplus,menuFee;
+                
+                if (arr.length == 0) {
+                    mui.toast("没有菜品！");
+                }
+
+                for (var i = 0; i < arr.length; i++) {
+                    id = arr[i].id;
+                    menuId = arr[i].menuId;
+                    menuNum = arr[i].menuNum;
+                    menuPrice = parseFloat(arr[i].priceAfterDiscount).toFixed(2);
+                    // console.log("jiafe"+arr[i].menuPrice)
+                    menuPicUrl = arr[i].menuPicUrl;
+                    if (menuPicUrl) {
+                        menuPicUrl = baseUrl + menuPicUrl;
+                        //menuPicUrl = menuPicUrl;
+                    } else {
+                        menuPicUrl = "../img/meal.png";
+                    }
+                    menuName = arr[i].menuName;
+                    surplus = arr[i].surplus; //菜品份数
+                    menuFee = arr[i].menuFee; //打包费
+                    mealHtml += createHtml(id, menuNum, menuId, menuPrice, menuPicUrl, menuName, surplus,menuFee);
+                }
+
+                $("#content ul").html(mealHtml);
+                // loadSevenDays();
+
+                mui('body').on('tap', '.menu-list .media-left', function() {
+                    $('#desc').show();
+                    $('.maskDetail').show();
+                    location.hash = "#info";
+                    evalPage = 1;
+                    page = 1;
+                    var menuNum = $(this).attr('id');
+                    $.ajax({
+                        //url: baseUrl + 'app_baseBasicInfoController.do?getMenuInfo',
+                        url: baseUrl + 'meal',
+                        type: 'post',
+                        headers:{
+                            className : 'AppBaseInfoService',
+                            methodName : 'getMenuDetail'
+                        },
+                        data: {
+                            menuNum: menuNum,
+                            // dataGroupCode: localStorage.getItem("dataGroupCode")
+                        },
+                        success: function(data) {
+                            //var data = JSON.parse(data);
+                            console.log('菜品详情');
+                            console.log(data);
+                            if (data.success) {
+                                var imgList = new Array();
+                                imgList = data.obj[0].picList;
+                                var imgHtml = createImg(imgList);
+                                $('.addWrap .imgDetail').html(imgHtml);
+                                // 菜单详情信息
+                                var desc1 = data.obj[0].menuName == null ? "无" : data.obj[0].menuName;
+                                //var desc2 = createStar(data.obj[0].evalLevel);
+                                var desc3 = data.obj[0].menuPrice.toFixed(2) + "元/份</span>";
+                                var desc4 = data.obj[0].comprise == "" ? "无" : data.obj[0].comprise; //菜品配比
+                                var desc5 = data.obj[0].descption == "" ? "无" : data.obj[0].descption; //描述
+                                var desc6 = data.obj[0].suitGroup == "" ? "无" : data.obj[0].suitGroup; //适宜人群
+                                var desc7 = data.obj[0].notSuitGroup == "" ? "无" : data.obj[0].notSuitGroup; //不适宜人群
+                                var desc8 = data.obj[0].heat == "" ? "无" : data.obj[0].heat; //热量
+                                var desc9 = data.obj[0].nutrition == "" ? "无" : data.obj[0].nutrition; //营养价值
+                                $("#desc1").html(desc1);
+
+                                $("#desc3").html(desc3);
+                                $("#desc4").html(desc4);
+                                $("#desc5").html(desc5);
+                                $("#desc6").html(desc6);
+                                $("#desc7").html(desc7);
+                                $("#desc8").html(desc8);
+                                $("#desc9").html(desc9);
+                                $("#loadMoreEval").attr("menuNum", menuNum);
+                                // 加载星级
+                                createEval(menuNum, evalPage);
+                                $('.eval').barrating({
+                                    theme: 'fontawesome-stars',
+                                    showSelectedRating: false,
+                                    readonly: true
+                                });
+
+
+                            } else {
+                                mui.toast("加载详情失败！");
+                            }
+                        }
+                    })
+                })
+            }
+        });
+    }
+
+    // 菜单-加
+    mui('#content').on('tap', '.icon-jia', function(e) {
+            $('#mealList').hide();
+            console.log(55)
+            e.stopPropagation();
+            $(this).siblings('.icon-jianqu').css('visibility', 'visible');
+            $(this).prev('.num').css('visibility', 'visible');
+            total++;
+            var _this = this;
+            var num = parseInt($(_this).prev('.num').val());
+            // alert($(_this).prev('.num').val());
+            var surplus = parseInt($(_this).prev('input.num').attr('surplus'));
+            var id = $(_this).parents('li.mui-table-view-cell').attr('id');
+            var menuNum = $(_this).parents('li.mui-table-view-cell').attr('menunum');
+            num++;
+            $(_this).prev('.num').val(num);
+            // debugger
+            if (total > 0) {
+                $("#confirm").css({
+                    'pointer-events': 'auto'
+                });
+                $("#confirm").addClass('backColor').removeClass('nobackColor')
+                $('#priceInfoS').hide();
+                $('#priceInfo').show();
+                $('#total').show();
+            }
+            var price = $(this).parent().prev().find('.unitPrice').text();
+            priceChange(price, "plus");
+            var packagePrice = $(this).parent().prev().find('.packagePrice').text();
+            priceChange(packagePrice, "plus");
+            $('#total').text(total);
+            if (num <= surplus) {
+                menuHtml(num, id, _this, price, menuNum, surplus,packagePrice);
+            } else {
+                mui.toast('您选择的菜品数量不足！');
+                return
+            }
+
+        })
+        //菜单-减
+    mui('#content').on('tap', '.icon-jianqu', function(e) {
+            e.stopPropagation();
+            var price = $(this).parent().prev().find('.unitPrice').text();
+            var num = parseInt($(this).next('.num').val());
+            var id = $(this).parents('li.mui-table-view-cell').attr('id');
+            priceChange(price, "minus");
+            var packagePrice = $(this).parent().prev().find('.packagePrice').text();
+            priceChange(packagePrice, "minus");
+            total--;
+            num--;
+            $(this).next('.num').val(num);
+            if ($(this).next('.num').val() < 1) {
+                $(this).css('visibility', 'hidden');
+                $(this).next('.num').css('visibility', 'hidden');
+
+            }
+            if (total > 0) {
+                $("#confirm").css({
+                    'pointer-events': 'auto'
+                });
+                $("#confirm").addClass('backColor').removeClass('nobackColor')
+            } else {
+                $("#confirm").css({
+                    'pointer-events': 'none'
+                });
+                $("#confirm").removeClass('backColor').addClass('nobackColor')
+                $('#total').hide();
+            }
+            $('#total').text(total);
+            if (num >= 1) {
+                $("#mealList ul li#" + id).find("input.numList").val(num);
+            } else {
+                $("#mealList ul li#" + id).remove();
+            }
+        })
+        // 购物车-加
+    mui('#mealList').on('tap', '.icon-jia', function(e) {
+            e.stopPropagation();
+            total++;
+            var _this = this;
+            var num = parseInt($(_this).prev('.numList').val());
+            var surplus = parseInt($(_this).prev('input.numList').attr('surplus'));
+            var menuNum = $(_this).parents('li.mui-table-view-cell').attr('menunum');
+            var idAdd = $(_this).parents('.children').attr('id');
+            num++;
+            $(_this).prev('.numList').val(num);
+            var contentArr = $('#content ul li');
+            for (var i = 0; i < contentArr.length; i++) {
+                if (idAdd == contentArr.eq(i).attr('id')) {
+                    contentArr.eq(i).find('.num').val(num);
+                }
+            }
+            var price = $(this).parent().prev().find('.mealListPrice').text();
+            priceChange(price, "plus");
+            var packagePrice = $(this).parent().prev().find('.packagePrice').text();
+            priceChange(packagePrice, "plus");
+            $('#total').text(total);
+            if (num > surplus) {
+                mui.toast('您选择的菜品数量不足！');
+                return
+            }
+        })
+        // 购物车-减
+    mui('#mealList').on('tap', '.icon-jianqu', function(e) {
+        e.stopPropagation();
+        var price = $(this).parent().prev().find('.mealListPrice').text();
+        var num = parseInt($(this).next('.numList').val());
+        var idMinus = $(this).parents('li.mui-table-view-cell').attr('id');
+        priceChange(price, "minus");
+        //计算打包费
+        var packagePrice = $(this).parent().prev().find('.packagePrice').text();
+        priceChange(packagePrice, "minus");
+        total--;
+        num--;
+        $(this).next('.numList').val(num);
+        var contentArr = $('#content ul li');
+        for (var i = 0; i < contentArr.length; i++) {
+            if (idMinus == contentArr.eq(i).attr('id')) {
+                contentArr.eq(i).find('.num').val(num);
+                if (num < 1) {
+                    contentArr.eq(i).find("input.num").css('visibility', 'hidden').val('0').prev().css('visibility', 'hidden');
+                }
+            }
+        }
+        if ($(this).next('.numList').val() < 1) {
+            $(this).parents('li.mui-table-view-cell').remove();
+        }
+        if (total > 0) {
+            $("#confirm").css({
+                'pointer-events': 'auto'
+            });
+            $("#confirm").addClass('backColor').removeClass('nobackColor')
+        } else {
+            $("#confirm").css({
+                'pointer-events': 'none'
+            });
+            $("#confirm").removeClass('backColor').addClass('nobackColor')
+            $('#total').hide();
+        }
+        $('#total').text(total);
+        // 购物车里没有数据了，弹框消失
+        if ($('#mealList ul li').length == 0) {
+            $('.userBtn').removeClass('choose');
+            $('.mask').hide();
+            $('.cartContent').animate({
+                'bottom': '0px'
+            });
+        }
+    })
+    mui('body').on('tap', '.cartContent .clear', function() {
+        var btnArry = ['否', '是'];
+        mui.confirm('确定清空购物车里所有菜品吗？', '清空购物车', btnArry, function(e) {
+            if (e.index == 1) {
+                $('.cartContent').animate({
+                    'bottom': '0px'
+                });
+                $('.mask').hide();
+                $('#mealList').hide();
+                total = 0;
+                totalPrice = 0.00;
+                mealList = [];
+                $("#mealList ul").children('li').remove();
+                $("input.num").val('0');
+                $("input.num").css('visibility', 'hidden');
+                $(".menu-list .icon-jianqu").css('visibility', 'hidden');
+                $('.userBtn').removeClass('choose');
+                $("#total").html(total);
+                $("#totalPrice").html(totalPrice);
+                $("#total").hide();
+                $("#priceInfo").hide();
+                $("#priceInfoS").show();
+                $("#confirm").css({
+                    'pointer-events': 'none'
+                });
+                $("#confirm").removeClass('backColor').addClass('nobackColor')
+            }
+
+        })
+    })
+
+    function priceChange(price, plusOrMinus) {
+        if (plusOrMinus == "plus") {
+            if (total == 0) {
+                totalPrice = parseFloat(accAdd(totalPrice, price)).toFixed(2);
+                $("#totalPrice").html(totalPrice);
+                $("#priceInfoS").hide();
+                $("#priceInfo").show();
+            } else {
+                totalPrice = parseFloat(accAdd(totalPrice, price)).toFixed(2);
+                $("#totalPrice").html(totalPrice);
+            }
+        } else {
+            if (total == 1) {
+                totalPrice = 0.00;
+                $("#totalPrice").html(totalPrice);
+                $("#priceInfo").hide();
+                $("#priceInfoS").show();
+            } else {
+                totalPrice = parseFloat(accSub(totalPrice, price)).toFixed(2);
+                $("#totalPrice").html(totalPrice);
+            }
+        }
+    }
+
+    function createHtml(id, menuNum, menuId, menuPrice, menuPicUrl, menuName, surplus,menuFee) {
+        var num = 0;
+        var create = '';
+        var listArr = [];
+        // console.log(mealList);
+
+        if (mealList.length > 0) {
+            for (var i = 0; i < mealList.length; i++) {
+                if (id == mealList[i].id) {
+                    num = mealList[i].num;
+                    create = '<span class="mui-icon iconfont icon-jianqu" style="visibility: visible"></span><input type="number" class="mui-input-numbox num" style="visibility: visible" surplus="' + surplus + '" readonly value="' + num + '">';
+                    mealList.splice(i, 1);
+                    console.log(mealList)
+                } else {
+
+                    create = '<span class="mui-icon iconfont icon-jianqu" style="visibility: hidden"></span><input type="number" class="mui-input-numbox num" style="visibility: hidden" surplus="' + surplus + '" readonly value="0">';
+                }
+            }
+
+        } else {
+            create = '<span class="mui-icon iconfont icon-jianqu" style="visibility: hidden"></span><input type="number" class="mui-input-numbox num" style="visibility: hidden" surplus="' + surplus + '" readonly value="0">';
+        }
+
+        var html = '';
+        html += '<li class="mui-table-view-cell mui-media" id="' + id + '" menuNum="' + menuNum + '">';
+        html += '<a href="javascript:;" style="padding-right: 10px">';
+        html += '<img id="' + menuNum + '" class="mui-media-object mui-pull-left media-left" src="' + menuPicUrl + '">';
+        html += '<div class="mui-media-body"><span class="cartName" style="font-size:16px">' + menuName + '</span>';
+        if (surplus == '0') {
+            html += '<p class="mui-ellipsis left">已售完</p>';
+        } else {
+            html += '<p class="mui-ellipsis left">剩<span>' + surplus + '</span>份</p>';
+        }
+        html += '<div class="mui-ellipsis price mui-row">';
+        html += '<div class="mui-col-xs-6 mui-col-sm-6 mui-col-md-6 mui-col-lg-6" style="float: left;color: #FA2828;padding-top: 4px;">'
+            +'¥<span class="unitPrice" style="font-size:18px">' + menuPrice + '</span>';
+        if(menuFee){
+            //拼接打包费
+            html +='&nbsp;打包费¥<span class="packagePrice" style="font-size:18px">' + menuFee + '</span>'
+        }
+        html +='</div>';
+        html += '<div class="mui-numbox mui-col-xs-5 mui-col-sm-5 mui-col-md-5 mui-col-lg-5">';
+        html += create;
+        // html += '<button class="mui-btn mui-btn-numbox-minus" type="button" style="display:none"><span class="mui-icon iconfont icon-jian"></span></button>';
+        // html += '<input type="number" class="mui-input-numbox num" style="visibility: hidden" surplus="'+surplus+'" readonly>';
+        html += '<span class="mui-icon iconfont icon-jia" style="';
+        if (surplus == '0') {
+            html += "pointer-events:none;background:#ccc;";
+        }
+        html += '"></span>';
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
+        html += '</a>';
+        html += '</li>';
+        return html;
+    }
+
+    function createImg(imgList) {
+        console.log("图片");
+        console.log(imgList);
+        var Img = '';
+        if (!imgList || imgList.length == 0) {
+        	imgList = [];
+            imgList.push('../img/meal.png');
+            Img += '<div class="mui-slider-item mui-slider-item-duplicate"><a href="#">';
+            Img += '<img src="' + imgList[0] + '"></a></div>';
+            Img += '<div class="mui-slider-item"><a href="#">';
+            Img += '<img src="' + imgList[0] + '"></a></div>';
+            Img += '<div class="mui-slider-item mui-slider-item-duplicate"><a href="#">';
+            Img += '<img src="' + imgList[0] + '"></a></div>';
+
+        } else {
+            Img += '<div class="mui-slider-item mui-slider-item-duplicate"><a href="#">';
+            Img += '<img src="' + imgList[imgList.length - 1].fileUrl + '"></a></div>';
+            for (var i = 0; i < imgList.length; i++) {
+                Img += '<div class="mui-slider-item"><a href="#">';
+                Img += '<img src="' + imgList[i].fileUrl + '"></a></div>';
+            }
+            Img += '<div class="mui-slider-item mui-slider-item-duplicate"><a href="#">';
+            Img += '<img src="' + imgList[0].fileUrl + '"></a></div>';
+
+        }
+
+        return Img;
+    }
+
+    // 购物车菜品
+    function menuHtml(num, id, _this, price, menuNum, surplus,packagePrice) {
+        if (num == 1) {
+            var menuHtml = '';
+            menuHtml += '<li class="mui-table-view-cell children" id="' + id + '" menuNum="' + menuNum + '">';
+            menuHtml += '<a href="javascript:;"><div class="mui-media-body mui-row">';
+            menuHtml += '<div class="mui-col-xs-4 mui-col-sm-4 mui-col-md-4 mui-col-lg-4 mealListName">' + $(_this).parents("li.mui-table-view-cell").find(".cartName").text() + '</div>';
+            menuHtml += '<div class="mui-col-xs-3 mui-col-sm-3 mui-col-md-3 mui-col-lg-3" style="color: #fa2828">'
+            menuHtml +='¥<span class="mealListPrice" style="font-size: 18px;padding-left: 4px;">' + price + '</span>'
+            if(packagePrice){
+                menuHtml +='&nbsp;打包费¥<span class="packagePrice" style="font-size: 18px;padding-left: 4px;">' + packagePrice + '</span>'
+            }
+            menuHtml +='</div>';
+            menuHtml += '<div class="mui-numbox mui-col-xs-4 mui-col-sm-4 mui-col-md-4 mui-col-lg-4" style="float: right">';
+            menuHtml += '<span class="mui-icon iconfont icon-jianqu"></span>';
+            menuHtml += '<input type="number" class="mui-input-numbox numList" surplus="' + surplus + '" value="' + num + '" readonly>';
+            menuHtml += '<span class="mui-icon iconfont icon-jia"></span>';
+            menuHtml += '</div>';
+            menuHtml += '</div>';
+            menuHtml += '</a>';
+            menuHtml += '</li>';
+            $("#mealList ul").append(menuHtml);
+        } else {
+            $("#mealList ul li#" + id).find("input.numList").val(num);
+        }
+
+    }
+    //菜品星级评定
+    function createStar(evalLevel) {
+        var html = "";
+        html += "<select class='eval' name='rating'>";
+        html += "<option value=''></option>";
+        if (evalLevel == "1" || evalLevel == "2") {
+            html += "<option value='2' selected>非常差</option>";
+        } else {
+            html += "<option value='2'>非常差</option>";
+        }
+
+        if (evalLevel == "3" || evalLevel == "4") {
+            html += "<option value='4' selected>差</option>";
+        } else {
+            html += "<option value='4'>差</option>";
+        }
+
+        if (evalLevel == "5" || evalLevel == "6") {
+            html += "<option value='6' selected>一般</option>";
+        } else {
+            html += "<option value='6'>一般</option>";
+        }
+
+        if (evalLevel == "7" || evalLevel == "8") {
+            html += "<option value='8' selected>好</option>";
+        } else {
+            html += "<option value='8'>好</option>";
+        }
+
+        if (evalLevel == "9" || evalLevel == "10") {
+            html += "<option value='10' selected>非常好</option>";
+        } else {
+            html += "<option value='10'>非常好</option>";
+        }
+
+        html += "</select>";
+        return html;
+    }
+
+    //菜品信息评价内容
+    function createEval(menuNum, page) {
+        if (page == 1) {
+            $("#evalList ul").empty();
+        }
+        $.ajax({
+            //url: baseUrl + "app_baseBasicInfoController.do?getEvalInfo",
+            url: baseUrl + 'workmeal',
+            type: 'post',
+            headers:{
+                className : 'AppWorkBaseInfoService',
+                methodName : 'getEvalInfo'
+            },
+            data: {
+                menuNum: menuNum,
+                curPage: page,
+                rows: 5,
+                // dataGroupCode: dataGroupCode
+            },
+            success: function(data) {
+                //var data = JSON.parse(data);
+                console.log('评价');
+                console.log(data);
+                //清除评价表元素
+                $("#evalList .mui-table-view").empty();
+                if (data.success) {
+                    var list = data.obj;
+                    var html = "",
+                        evalContent, evalLevel, evalTime, evalUserName, sendDate, parentId;
+                    if(list && list.length > 0){
+                        var evalAvg = parseInt(list[0].evalAvg);
+                        var desc2 = createStar(evalAvg)
+                        $("#desc2").html(desc2);
+                    }
+                    for (var i = 0; i < list.length; i++) {
+                        evalContent = list[i].evalContent;
+                        evalLevel = list[i].evalLevel;
+                        evalTime = list[i].evalTime;
+                        if(evalLevel){
+                            html += createEvalHtml(evalContent, evalLevel, evalTime);
+                        }
+                    }
+
+                    if (list != null && list.length < 5) {
+                        $('#loadMoreEval').text('暂无更多数据');
+                    } else {
+                        $('#loadMoreEval').html('加载更多' + '<span class="mui-icon mui-icon mui-icon-arrowdown" style="font-size: 22px;padding-left: 4px;"></span>');
+                    }
+
+                    $("#evalList ul").append(html);
+
+                    $('.eval').barrating({
+                        theme: 'fontawesome-stars',
+                        showSelectedRating: false,
+                        readonly: true
+                    });
+                } else {
+                    $('#loadMoreEval').text('暂无更多数据');
+                }
+            }
+        })
+    }
+
+    function createEvalHtml(evalContent, evalLevel, evalTime) {
+        var html = '';
+        html += '<li class="mui-table-view-cell mui-media">';
+        html += '<a href="javascript:;">';
+        html += '<span class="mui-icon mui-icon-contact" style="float: left;padding-right: 10px;"></span>';
+        html += '<div class="mui-media-body">';
+        html += '<span class="buyer">匿名用户</span>';
+        html += '<span class="buyTime">' + evalTime + '</span>';
+        html += '<p class="mui-ellipsis">';
+        html += createStar(evalLevel);
+        html += '</p>';
+        html += '<p class="mui-ellipsis comment">' + evalContent + '</p>';
+        html += '</div>';
+        html += '</a>';
+        html += '</li>';
+
+        return html;
+    }
+
+
+
+    //选择日期
+    document.querySelector('#DY .mui-table-view.mui-table-view-radio').addEventListener('selected', function(e) {
+        // debugger
+        // 超过今日/明日订餐时间，则切换天时，显示早餐
+        mealNum = '001';
+        mealName = "早餐";
+        $("#001").show();
+        $("#002").show();
+        $("#003").show();
+        $("#001").addClass('mui-selected').siblings().removeClass('mui-selected');
+        $("#btnS2").html(mealName + '<span class="mui-icon iconfont icon-sanjiao"></span>');
+
+        // loadData();
+        e.preventDefault();
+        $('.mask').hide();
+        $('.cartContent').animate({
+            'bottom': '0px'
+        });
+        $('#DY').hide();
+        $('#btnS1').html(e.detail.el.innerText + '<span class="mui-icon iconfont icon-sanjiao"></span>').removeClass('selected');
+        total = 0;
+        totalPrice = 0.00;
+        mealList = [];
+        $("#mealList ul").children('li').remove();
+        $("input.num").val('0');
+        $("input.num").css('visibility', 'hidden');
+        $(".menu-list .icon-jianqu").css('visibility', 'hidden');
+        $('.userBtn').removeClass('choose');
+        $("#total").html(total);
+        $("#totalPrice").html(totalPrice);
+        $("#total").hide();
+        $("#priceInfo").hide();
+        $("#priceInfoS").show();
+        $("#confirm").css({
+            'pointer-events': 'none'
+        });
+        $("#confirm").removeClass('backColor').addClass('nobackColor')
+        dayFlag = e.detail.el.innerText;
+        console.log("选择的日期:" + dayFlag);
+        // 判断明天订餐时间
+        if (dayFlag == dateBeforeOrAfter(1)) {
+            // alert(mealNum)
+            // alert(mealName)
+            // debugger
+            if (nowTime <= BtomorrowOrderTime) {
+                mealNum = "001";
+                mealName = "早餐";
+                $("#001").addClass('mui-selected').siblings().removeClass('mui-selected');
+                $("#001").show();
+                $("#002").show();
+                $("#003").show();
+            } else if (nowTime > BtomorrowOrderTime && nowTime <= LtomorrowOrderTime) {
+                mealNum = "002";
+                mealName = "中餐";
+                $("#002").addClass('mui-selected').siblings().removeClass('mui-selected');
+                $("#001").hide();
+                $("#002").show();
+                $("#003").show();
+            } else if (nowTime > LtomorrowOrderTime && nowTime <= DtomorrowOrderTime) {
+                mealNum = "003";
+                mealName = "晚餐";
+                $("#003").addClass('mui-selected').siblings().removeClass('mui-selected');
+                $("#001").hide();
+                $("#002").hide();
+                $("#003").show();
+            } else {
+                // 修改部分
+                mealNum = "";
+                mealName = "无可选餐次";
+                $("#001").hide();
+                $("#002").hide();
+                $("#003").hide();
+                $('#DY #1').remove();
+                mui.toast('已超出明天订餐期限，请选择其他时间！');
+            }
+            $("#btnS2").html(mealName + '<span class="mui-icon iconfont icon-sanjiao"></span>');
+        }
+        // 切换回当天日期
+        if (e.detail.el.id == 0 || e.detail.el.id == '0') {
+            $("#btnS1").html(dayFlag + '<span class="mui-icon iconfont icon-sanjiao"></span>');
+            showDYList();
+            // 	var time = "",
+            // 		timeH, timeM;
+
+            // 	switch(mealNum) {
+            // 		case "001":
+            // 			time = lunch;
+            // 			break;
+            // 		case "002":
+            // 			time = dinner;
+            // 			break;
+            // 		case "003":
+            // 			break;
+            // 		default:
+            // 			break;
+            // 	}
+            // 	if(time != "") {
+            // 		console.log(mealNum);
+            // 		timeH = parseInt(time.split(":")[0]);
+            // 		timeM = parseInt(time.split(":")[1]);
+            // 		if(nowHour > timeH || (nowHour == timeH && nowMinutes >= timeM)) {
+            // 			mealNum++;
+            // 			mealNum = "00" + mealNum;
+            // 			$("#btnS2").html($("#" + mealNum).find('a').text() + '<span class="mui-icon iconfont icon-sanjiao"></span>');
+            // 			$('#' + mealNum).addClass('mui-selected').siblings().removeClass('mui-selected');
+            // 			time = dinner;
+            // 			timeH = parseInt(time.split(":")[0]);
+            // 			timeM = parseInt(time.split(":")[1]);
+            // 			if(mealNum == "002" && (nowHour > timeH || (nowHour == timeH && nowMinutes >= timeM))) {
+            // 				mealNum++;
+            // 				mealNum = "00" + mealNum;
+            // 				$("#btnS2").html($("#" + mealNum).find('a').text() + '<span class="mui-icon iconfont icon-sanjiao"></span>');
+            // 				$('#' + mealNum).addClass('mui-selected').siblings().removeClass('mui-selected');
+            // 			}
+            // 		}
+            // 	}
+
+        }
+
+
+        // else {
+        // 	$("#001").show();
+        // 	$("#002").show();
+        // 	$("#003").show();
+        // }
+
+        loadData();
+
+    });
+
+
+    //默认显示早中晚餐次
+    if (mealNum == "") {
+        if (nowTime <= BtodayOrderTime) {
+            mealNum = "001";
+            mealName = "早餐";
+            $("#001").addClass('mui-selected').siblings().removeClass('mui-selected');
+            $("#001").show();
+            $("#002").show();
+            $("#003").show();
+        } else if (nowTime > BtodayOrderTime && nowTime <= LtodayOrderTime) {
+            mealNum = "002";
+            mealName = "中餐";
+            $("#002").addClass('mui-selected').siblings().removeClass('mui-selected');
+            $("#001").hide();
+            $("#002").show();
+            $("#003").show();
+        } else if (nowTime > LtodayOrderTime && nowTime <= DtodayOrderTime) {
+            mealNum = "003";
+            mealName = "晚餐";
+            $("#003").addClass('mui-selected').siblings().removeClass('mui-selected');
+            $("#001").hide();
+            $("#002").hide();
+            $("#003").show();
+        } else {
+            // mealNum = "";
+            mealName = "无可选餐次";
+            $("#001").hide();
+            $("#002").hide();
+            $("#003").hide();
+            $('#DY #0').remove();
+            mui.toast('已超出今天订餐期限，请选择其他时间！');
+        }
+
+        $("#btnS2").html(mealName + '<span class="mui-icon iconfont icon-sanjiao"></span>');
+        loadData();
+
+    } else {
+        $("#btnS2").html($("#" + mealNum).children('a').text() + '<span class="mui-icon iconfont icon-sanjiao"></span>');
+    }
+
+
+    //按照当前时间显示今天餐次
+    function showDYList() {
+        if (nowTime <= BtodayOrderTime) {
+            mealNum = "001";
+            mealName = "早餐";
+            $("#001").show();
+            $("#002").show();
+            $("#003").show();
+            $("#001").addClass('mui-selected').siblings().removeClass('mui-selected');
+        } else if (nowTime > BtodayOrderTime && nowTime <= LtodayOrderTime) {
+            mealNum = "002";
+            mealName = "中餐";
+            $("#001").hide();
+            $("#002").show();
+            $("#003").show();
+            $("#002").addClass('mui-selected').siblings().removeClass('mui-selected');
+        } else if (nowTime > LtodayOrderTime && nowTime <= DtodayOrderTime) {
+            mealNum = "003";
+            mealName = "晚餐";
+            $("#001").hide();
+            $("#002").hide();
+            $("#003").show();
+            $("#003").addClass('mui-selected').siblings().removeClass('mui-selected');
+        }
+        $("#btnS2").html(mealName + '<span class="mui-icon iconfont icon-sanjiao"></span>');
+
+    }
+
+
+
+    mui('body').on('tap', '#btnS1', function() {
+        $(this).siblings().removeClass('selected');
+        if ($(this).hasClass('selected')) {
+            $(this).removeClass('selected');
+            $('#DY').hide();
+            $('.mask').hide();
+        } else {
+            $(this).addClass('selected');
+            $('#DY').show();
+            $('#orderMeal').hide();
+            $('#mealType').hide();
+            $('.mask').show();
+        }
+    })
+
+    //选择餐次
+    document.querySelector('#orderMeal .mui-table-view.mui-table-view-radio').addEventListener('selected', function(e) {
+        e.preventDefault();
+        $('.mask').hide();
+        $('.cartContent').animate({
+            'bottom': '0px'
+        });
+        $('#orderMeal').hide();
+        $('#btnS2').html(e.detail.el.innerText + '<span class="mui-icon iconfont icon-sanjiao"></span>').removeClass('selected');
+        total = 0;
+        totalPrice = 0.00;
+        mealList = [];
+        $("#mealList ul").children('li').remove();
+        $("input.num").val('0');
+        $("input.num").css('visibility', 'hidden');
+        $(".menu-list .icon-jianqu").css('visibility', 'hidden');
+        $('.userBtn').removeClass('choose');
+        $("#total").html(total);
+        $("#totalPrice").html(totalPrice);
+        $("#total").hide();
+        $("#priceInfo").hide();
+        $("#priceInfoS").show();
+        $("#confirm").css({
+            'pointer-events': 'none'
+        });
+        $("#confirm").removeClass('backColor').addClass('nobackColor')
+        mealNum = e.detail.el.id;
+        loadData();
+    });
+    mui('body').on('tap', '#btnS2', function() {
+        $(this).siblings().removeClass('selected');
+        if ($(this).hasClass('selected')) {
+            $(this).removeClass('selected');
+            $('#orderMeal').hide();
+            $('.mask').hide();
+        } else {
+            $(this).addClass('selected');
+            $('#orderMeal').show();
+            $('#DY').hide();
+            $('#mealType').hide();
+            $('.mask').show();
+        }
+    })
+
+    //选择餐类
+    document.querySelector('#mealType .mui-table-view.mui-table-view-radio').addEventListener('selected', function(e) {
+        e.preventDefault();
+        $('.mask').hide();
+        $('.cartContent').animate({
+            'bottom': '0px'
+        });
+        $('#mealType').hide();
+        $('#btnS3').html(e.detail.el.innerText + '<span class="mui-icon iconfont icon-sanjiao"></span>').removeClass('selected');
+        $("input.num").val('0');
+        $("input.num").css('visibility', 'hidden');
+        $(".menu-list .icon-jianqu").css('visibility', 'hidden');
+        $('.userBtn').removeClass('choose');
+        mealList = [];
+        //遍历购物车
+        $("#mealList ul li").each(function(index, element) {
+            console.log($("#mealList li").eq(index).find("input.numList").val());
+            var json = {
+                "id": $("#mealList li").eq(index).attr('id'),
+                "num": $("#mealList li").eq(index).find("input.numList").val()
+            }
+            console.log(json);
+            mealList.push(json);
+
+        });
+        console.log("购物车数据")
+        console.log(mealList);
+        mealType = e.detail.el.id;
+        loadData();
+        // setTimeout('loadData()',1500);
+
+    });
+    mui('body').on('tap', '#btnS3', function() {
+        $(this).siblings().removeClass('selected');
+        if ($(this).hasClass('selected')) {
+            $(this).removeClass('selected');
+            $('#mealType').hide();
+            $('.mask').hide();
+        } else {
+            $(this).addClass('selected');
+            $('#mealType').show();
+            $('#DY').hide();
+            $('#orderMeal').hide();
+            $('.mask').show();
+        }
+    })
+
+
+
+
+
+
+    // 提交	
+    mui('body').on('tap', '#confirm', function() {
+        var id, menuNum, menuName, menuPrice, menuNumber, menuSurplus,packagePrice;
+        var meal = [];
+        $("#mealList ul li.children").each(function(index, element) {
+            id = $(this).attr('id');
+            menuNum = $(this).attr('menunum');
+            menuName = $(this).find('.mealListName').text();
+            menuPrice = $(this).find('.mealListPrice').text();
+            packagePrice = $(this).find('.packagePrice').text();
+            menuNumber = $(this).find('.numList').val();
+            //menuTotalPrice = parseFloat(menuPrice).toFixed(2) * parseInt(menuNumber);
+            //计算打包费
+            menuTotalPrice = parseFloat(accMul(menuPrice, menuNumber)+accMul(packagePrice, menuNumber)).toFixed(2);
+
+            menuSurplus = $(this).find('.numList').attr("surplus");
+            meal[index] = {
+                "id": id,
+                "menuNum": menuNum,
+                "menuName": menuName,
+                "menuTotalPrice": menuTotalPrice,
+                "menuPrice": menuPrice,
+                "packagePrice": packagePrice,
+                "menuNumber": menuNumber,
+                "num": menuNumber,
+                "menuSurplus": menuSurplus
+            };
+        });
+        if (meal.length == 0) return;
+        if (!validatePrice(meal)) return;
+        var jsonbak = {
+            "canteenNum": canteenNum,
+            "mealNum": mealNum,
+            "needDate": dayFlag,
+            "totalPrice": totalPrice,
+            "mealInfo": meal
+        };
+        var json = JSON.stringify(jsonbak);
+        // 送餐
+        location.href = "mealConfirme.html?" + encodeURIComponent(json);
+        // 到店自取
+        //  location.href = "inDinner.html?" + encodeURIComponent(json);
+
+    });
+
+    /* 验证价格 */
+    function validatePrice(mealInfo) {
+        var price = 0;
+        for (var i = 0; i < mealInfo.length; i++) {
+            var s1 = parseFloat(accMul(mealInfo[i].menuPrice, mealInfo[i].menuNumber) + accMul(mealInfo[i].packagePrice, mealInfo[i].menuNumber)).toFixed(2)
+            price = parseFloat(accAdd(s1, price)).toFixed(2);
+        }
+        if (price != parseFloat(totalPrice).toFixed(2)) {
+            total = 0;
+            totalPrice = 0.00;
+            $("#total").html(total);
+            $("#totalPrice").html(totalPrice);
+            $("#total").hide();
+            $("#priceInfo").hide();
+            $("#priceInfoS").show();
+            $('#warn small').html("菜品价格与总价不匹配，请重新选择！");
+            $('#warn').fadeIn(500);
+            setTimeout("location.reload()", 2000);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    // 点击购物车出现已选商品
+    mui('body').on('tap', '.userBtn', function () {
+        if (total > 0) {
+            if ($(this).hasClass('choose')) {
+                $('.cartContent').animate({
+                    'bottom': '0px'
+                });
+                $('#mealList').hide();
+                $('.mask').hide();
+                $(this).removeClass('choose');
+            } else {
+                $(this).addClass('choose');
+                $('.cartContent').animate({
+                    'bottom': '48px'
+                });
+                $('.mask').show();
+                $('#mealList').show();
+            }
+        } else {
+            return
+        }
+
+    })
+
+
+    // 菜品详情滑动
+    mui.init({
+        gestureConfig: {
+            tap: true, //默认为true
+            doubletap: true, //默认为false
+            longtap: true, //默认为false
+            swipe: true, //默认为true
+            drag: true, //默认为true
+            hold: false, //默认为false，不监听
+            release: false //默认为false，不监听
+        }
+    });
+
+    mui('body').on('swipeup', '#desc', function() {
+        $('#desc').animate({
+            'top': '0',
+            'height': '100%'
+        });
+        $('.desc-delete').animate({
+            'top': '15px'
+        });
+    })
+
+
+    // 详情页点击关闭
+    mui('body').on('tap', '.desc-delete', function() {
+        $('#desc').hide();
+        $('.maskDetail').hide();
+        $('#desc').animate({
+            'top': '150px'
+        });
+        $('.desc-delete').animate({
+            'top': '165px'
+        });
+    })
+
+    mui('body').on('tap', '.mask', function() {
+        $('.menu').hide();
+        $('.mask').hide();
+        $('#mealList').hide();
+        $('.userBtn').removeClass('choose');
+        $('.cartContent').animate({
+            'bottom': '0px'
+        })
+    })
+
+    mui('body').on('tap', '.maskDetail', function() {
+        $('#desc').hide();
+        $('.maskDetail').hide();
+    })
+
+    $("#back").click(function() {
+        location.href = "../main.html";
+    });
+
+    $("#eval").click(function() {
+        location.href = "evalService.html?" + canteenNum;
+    });
+
+    /**
+     * 获取url参数
+     * @method GetQueryString
+     * @param  {[type]}       paramKey [description]
+     */
+    function GetQueryString(paramKey) {
+        var reg = new RegExp("(^|&)" + paramKey + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null)
+            return unescape(r[2]);
+        else
+            return null;
+    }
+
+
+    /**
+     * 下滑刷新
+     * @return {[type]} [description]
+     */
+    function pulldownRefresh() {
+        setTimeout(function() {
+            tasklist = "";
+            page = 1;
+            // loadView();
+            mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+        }, 1500);
+    }
+
+    /**
+     * 上滑加载更多
+     * @return {[type]} [description]
+     */
+    function pullupRefresh() {
+        page++;
+        // loadView();
+        setTimeout(function() {
+            //关闭加载框
+            mui('#pullrefresh').pullRefresh().endPullupToRefresh();
+        }, 1500);
+    }
+
+    mui.init({
+        pullRefresh: {
+            container: '#pullrefresh',
+            down: {
+                callback: pulldownRefresh,
+                contentrefresh: "正在刷新",
+            },
+            up: {
+                contentrefresh: "加载中，请稍后",
+                contentnomore: '暂无更多数据',
+                callback: pullupRefresh
+            }
+        }
+    });
+
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+        location.href = "../main.html";
+
+    }
+
+    // function dateChange(dataCh){
+    // 	var date = new Date(dataCh);
+    // 	var time = date.getTime();
+    // 	return time;
+    // }
+    function dateChange(dataCh) {
+        // var date = new Date(dataCh);
+        // var time = date.getTime();
+        // return time;
+        return (new Date(Date.parse(dataCh.replace(/-/g, "/")))).getTime();
+    }
+
+    // APP系统键回退
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        /**
+         * 系统返回键监听
+         */
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+    //返回
+    function onBackKeyDown() {
+        location.href = "../main.html";
+    }
+</script>

@@ -1,0 +1,1258 @@
+    <!DOCTYPE html>
+<html lang="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" type="text/css" href="./css/example.css">
+    <link rel="stylesheet" type="text/css" href="./css/weui.css">
+    <link rel="stylesheet" type="text/css" href="./css/iconfont.css">
+    <title>选择菜品</title>
+</head>
+<style type="text/css">
+    * {
+        box-sizing: border-box;
+    }
+    
+    body,
+    #app {
+        /*background: #fff;*/
+        width: 100%;
+        height: 100%;
+    }
+    
+    .top-info-div {
+        width: 100%;
+        padding: 15px;
+    }
+    
+    .meal-date,
+    .meal-time,
+    .meal-type {
+        padding: 10px 15px;
+        text-align: center;
+        background: url("./img/meal/more.png") no-repeat scroll right center transparent;
+        background-size: 14px 14px;
+        font-size: 13px;
+    }
+    
+    .btn-div {
+        width: 100%;
+        padding: 15px;
+        display: flex;
+        justify-content: space-around;
+        border-top: 1px solid #eee;
+    }
+    
+    .btn-cancel {
+        width: 40%;
+        height: 40px;
+        border: 1px solid #DCDFE6;
+        background: #fff;
+        color: #606266;
+        border-radius: 2px;
+    }
+    
+    .btn-confirm {
+        width: 40%;
+        height: 40px;
+        background: #09bb07;
+        border: 1px solid #09bb07;
+        color: #fff;
+        border-radius: 2px;
+    }
+    
+    .bottom-div {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 50px;
+        /*border-top: 1px solid #E4E7ED;*/
+        background: #fff;
+        z-index: 9;
+    }
+    
+    .dish-list-div {
+        width: 100%;
+        padding-left: 15px;
+        overflow: scroll;
+        overflow-x: hidden;
+    }
+    
+    .dish-div {
+        width: 100%;
+        /*height: 90px;*/
+        border-bottom: 1px solid #EBEEF5;
+        padding: 10px 15px 10px 0;
+        /*display: flex;*/
+    }
+    
+    .dish-logo {
+        width: 100px;
+        height: 70px;
+    }
+    
+    .dish-info {
+        width: calc(100% - 100px);
+    }
+    
+    .dish-name {
+        /* height: 23px; */
+        font-weight: bold;
+        color: #303133;
+    }
+    
+    .dish-num-left {
+        height: 22px;
+        font-size: 12px;
+        color: #909399;
+    }
+    
+    .price-and-num {
+        width: 100%;
+        height: 25px;
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .dish-price {
+        font-size: 17px;
+        color: #ff5722;
+    }
+    
+    .price-logo {
+        font-size: 12px;
+    }
+    
+    .dish-num-div {
+        display: flex;
+    }
+    
+    .btn-minus {
+        width: 25px;
+        height: 25px;
+        background: url("./img/meal/minus.png") no-repeat scroll center center transparent;
+        background-size: 25px 25px;
+    }
+    
+    .btn-plus {
+        width: 25px;
+        height: 25px;
+        background: url("./img/meal/plus-weixin.png") no-repeat scroll center center transparent;
+        background-size: 25px 25px;
+    }
+    
+    .dish-num {
+        width: 40px;
+        height: 25px;
+        line-height: 25px;
+        text-align: center;
+        color: #606266;
+    }
+    
+    .dish-num0 {
+        width: 90px;
+        height: 25px;
+        line-height: 25px;
+        text-align: right;
+        color: #909399;
+        font-size: 13px;
+    }
+    
+    .unable-confirm-div {
+        width: 120px;
+        height: 50px;
+        line-height: 50px;
+        background: #8a8a8a;
+        color: #fff;
+    }
+    
+    .confirm-div {
+        width: 120px;
+        height: 50px;
+        line-height: 50px;
+        background: #09bb07;
+        color: #fff;
+    }
+    
+    .shop-div {
+        width: 80px;
+        height: 50px;
+    }
+    
+    .total-price {
+        color: #ff5722;
+        line-height: 25px;
+        text-align: center
+    }
+    
+    .total-price span {
+        font-size: 16px;
+        font-weight: normal;
+    }
+    
+    .sendMoney {
+        color: #333;
+        font-size: 13px;
+    }
+    
+    .counter-div {
+        position: absolute;
+        top: -10px;
+        left: 55px;
+        width: 20px;
+        height: 20px;
+        background: #ff5722;
+        font-size: 12px;
+        z-index: 99;
+        border-radius: 10px;
+        color: #fff;
+        text-align: center;
+        line-height: 20px;
+    }
+    
+    .mask-div {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 50px;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 7;
+    }
+    
+    .selected-div {
+        position: absolute;
+        bottom: 50px;
+        z-index: 8;
+        width: 100%;
+        background: #fff;
+    }
+    
+    .operation-div {
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        color: #fff;
+        font-size: 14px;
+        background: #8e8e8e;
+        padding: 0 15px;
+    }
+    
+    .selected-list-div {
+        width: 100%;
+        padding-left: 15px;
+        max-height: 325px;
+        overflow: scroll;
+        overflow-x: hidden;
+    }
+    
+    .selected {
+        width: 100%;
+        height: 50px;
+        border-bottom: 1px solid #EBEEF5;
+        padding-right: 15px;
+    }
+    
+    .dish-name1 {
+        font-size: 14px;
+        color: #303133;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .dish-num1 {
+        width: 50px;
+        font-size: 12px;
+        color: #909399;
+    }
+    
+    .dish-price1 {
+        width: 80px;
+        color: #ff5722;
+    }
+    
+    .dish-price1 span {
+        font-size: 12px;
+    }
+    
+    .white-div {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 999;
+        background: #fff;
+    }
+    
+    .am-filter-class-title {
+        color: #aaa;
+        margin: 10px;
+        font-size: 13px;
+    }
+    
+    .am-flexbox {
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .am-ft-center {
+        text-align: center;
+    }
+    
+    .chooseItem {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: #fff;
+        z-index: 99;
+    }
+    
+    .diceng {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #000;
+        z-index: 98;
+        opacity: 0.6;
+    }
+    
+    .mealTypeSelf-title {
+        font-size: 15px;
+        color: #aaa;
+        padding: 11px;
+        padding-bottom: 0px;
+    }
+    
+    .mealTypeSelf {
+        display: flex;
+        /*justify-content: space-around;*/
+        flex-wrap: wrap;
+    }
+    
+    .mealTypeSelf li {
+        width: 30%;
+        height: 35px;
+        line-height: 35px;
+        text-align: center;
+        font-size: 15px;
+        background: #eee;
+        color: #666;
+        margin-left: 2.5%;
+        margin-top: 10px;
+    }
+    
+    .mealTypeSelf a {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .choose-selected {
+        color: #09bb07;
+        background: #09bb0745;
+    }
+    
+    .desc-div {
+        width: 100%;
+        padding-top: 10px;
+        font-size: 13px;
+        color: #ff5722;
+        /*font-weight: bold;*/
+    }
+</style>
+
+<body ref="body">
+    <div id="app">
+        <!-- 页面过渡div -->
+        <div v-if="whiteShow" class="white-div"></div>
+        <div id="toastMsg" style="display: none;">
+            <div class="weui-mask_transparent"></div>
+            <div class="weui-toast">
+                <i class="weui-icon-cancel weui-icon_toast" style="font-size: 35px;"></i>
+                <p class="weui-toast__content">{{toastMsg}}</p>
+            </div>
+        </div>
+        <div id="loadingToast" v-if="loadShow">
+            <div class="weui-mask_transparent"></div>
+            <div class="weui-toast">
+                <i class="weui-loading weui-icon_toast"></i>
+                <p class="weui-toast__content">正在加载</p>
+            </div>
+        </div>
+
+        <div class="js_dialog" id="androidDialog1" v-if="dialogShow">
+            <div class="weui-mask"></div>
+            <div class="weui-dialog">
+                <div class="weui-dialog__hd"><strong class="weui-dialog__title">清空购物车</strong></div>
+                <div class="weui-dialog__bd"></div>
+                <div class="weui-dialog__ft">
+                    <a @click="quxiao" class="weui-dialog__btn weui-dialog__btn_default">取消</a>
+                    <a @click="qingkong" class="weui-dialog__btn weui-dialog__btn_primary">清空</a>
+                </div>
+            </div>
+        </div>
+        <!--<div class="weui-mask" v-bind:class="{ show: isShow}"></div>-->
+        <div class="diceng" v-if="isShow"></div>
+        <div class="chooseItem" v-if="isShow">
+            <div class="mealTypeSelf-title">日期</div>
+            <ul class="mealTypeSelf">
+                <li v-for="item in options.mealDate" class="am-filter-item-wrap">
+                    <a v-if="item == optionDate" class="choose-selected">
+							{{item}}
+						</a>
+                    <a @click="dateChange(item)" v-else>
+							{{item}}
+						</a>
+                </li>
+            </ul>
+            <div class="mealTypeSelf-title">餐次</div>
+            <ul class="mealTypeSelf">
+                <li v-for="item in options.mealTime" class="am-filter-item-wrap">
+                    <a v-if="item.mealNum==optionTimeCode" class="choose-selected">
+							{{item.mealName}}
+						</a>
+                    <a @click="timeChange(item)" v-else>
+							{{item.mealName}}
+						</a>
+                </li>
+            </ul>
+            <div class="mealTypeSelf-title">餐类</div>
+            <ul class="mealTypeSelf">
+                <li v-for="item in options.allowMealType" class="am-filter-item-wrap">
+                    <a v-if="item.mealTypeNum == optionTypeCode" class="choose-selected">
+							{{item.mealTypeName}}
+						</a>
+                    <a @click="typeChange(item)" v-else class="am-filter-item">
+							{{item.mealTypeName}}
+						</a>
+                </li>
+            </ul>
+            <div class="btn-div">
+                <button type="button" @click="filterCancel" class="btn-cancel">取消</button>
+                <button type="button" @click="filterCommit" class="btn-confirm">确定</button>
+            </div>
+        </div>
+
+        <div class="weui-flex" style="border-bottom: 1px solid #E4E7ED;padding: 0 15px;background: #fff;">
+            <div @click="showFilter" style="display: flex;width: 100%;">
+                <div class="weui-flex__item meal-date">{{realDate}}</div>
+                <div class="weui-flex__item meal-time">{{realTimeName}}</div>
+                <div class="weui-flex__item meal-type">{{realTypeName}}</div>
+            </div>
+        </div>
+        <div class="dish-list-div" v-bind:style="{height: listHeight + 'px' }">
+            <div v-for="item in dishes" :key="item.id" v-if="item.menuTypeNum.indexOf(realTypeCode)>-1" class="dish-div">
+                <div style="display: flex;width: 100%;">
+                    <div class="dish-logo">
+                        <img v-if="item.menuPicUrl != ''" v-bind:src="item.menuPicUrl" style="width: 70px;height: 70px;">
+                        <img v-else src="./img/meal/no-img.png" style="width: 70px;height: 70px;">
+                    </div>
+                    <div class="dish-info">
+                        <div class="dish-name">{{item.menuName}}</div>
+                        <div class="dish-num-left">剩余{{item.surplus}}份</div>
+                        <div class="price-and-num">
+                            <div class="dish-price">
+                                <div class="am-ft-17 am-ft-price">
+                                    <span class="price-logo">¥</span> {{item.menuPrice.toFixed(2)}}
+                                </div>
+                            </div>
+                            <div class="dish-num-div">
+                                <div @click="numMinus(item)" v-if="item.num>0" class="btn-minus"></div>
+                                <div v-if="item.surplus>0" class="dish-num">{{item.num}}</div>
+                                <div v-else class="dish-num0">已售罄</div>
+                                <div @click="numPlus(item)" v-if="item.surplus>0&&item.surplus>item.num" class="btn-plus"></div>
+                                <div v-else-if="item.surplus>0" style="width: 25px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="desc-div">
+                    不适宜人群：<span style="color: #606266;">{{item.notSuitGroup==""?"无":item.notSuitGroup}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="am-flexbox bottom-div">
+            <div v-if="counter > 0" class="counter-div">{{counter}}</div>
+            <div @click="showSelections" class="am-ft-center shop-div">
+                <img src="./img/meal/shop.png" style="width: 55px;margin-top: -10px;">
+            </div>
+            <div class="am-flexbox-item total-price">
+                <div class="am-ft-20 am-ft-price" style="line-height: 50px;">
+                    <span>¥</span> {{totalPrice.toFixed(2)}}
+                </div>
+                <!-- <div class="am-ft-20 sendMoney">
+                    满 {{overMoney}}元免{{sendMoney}}元配送费
+                </div> -->
+            </div>
+
+            <div v-if="counter > 0" @click="confirm" class="am-ft-center confirm-div">确认下单</div>
+            <div v-else class="am-ft-center unable-confirm-div">确认下单</div>
+        </div>
+        <div v-if="showSelection" class="mask-div" @click="showSelections"></div>
+        <div v-if="showSelection" class="selected-div">
+            <div class="weui-flex operation-div">
+                <div class="weui-flex__item">
+                    已选商品
+                </div>
+                <div @click="clear" class="weui-flex__item" style="width:60px;text-align: right;">
+                    <span class="iconfont icon-delete"></span> 清空
+                </div>
+            </div>
+            <div v-if="breakfast != ''">
+                <p style="color:#2aabd2;">&nbsp;早餐</p>
+                <div class="selected-list-div">
+                    <div v-for="item in breakfast" v-if="item.num > 0" :key="item.id" class="weui-flex selected" style="line-height: 49px;">
+                        <div class="weui-flex__item">
+                            <div class="placeholder dish-name1">{{item.menuName}}</div>
+                        </div>
+                        <div class="weui-flex__item">
+                            <div class="placeholder dish-price1"><span>¥</span> {{item.menuPrice.toFixed(2)}}</div>
+                        </div>
+                        <div class="weui-flex__item">
+                            <div class="placeholder dish-num-div" style="margin-top: 12px;">
+                                <div @click="numMinus(item)" v-if="item.num>0" class="btn-minus"></div>
+                                <div class="dish-num">{{item.num}}</div>
+                                <div @click="numPlus(item)" class="btn-plus"></div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div v-if="lunch != ''">
+                <p style="color:#2aabd2;">&nbsp;中餐</p>
+                <div class="selected-list-div">
+                    <div v-for="item in lunch" v-if="item.num > 0" :key="item.id" class="weui-flex selected" style="line-height: 49px;">
+                        <div class="weui-flex__item">
+                            <div class="placeholder dish-name1">{{item.menuName}}</div>
+                        </div>
+                        <div class="weui-flex__item">
+                            <div class="placeholder dish-price1"><span>¥</span> {{item.menuPrice.toFixed(2)}}</div>
+                        </div>
+                        <div class="weui-flex__item">
+                            <div class="placeholder dish-num-div" style="margin-top: 12px;">
+                                <div @click="numMinus(item)" v-if="item.num>0" class="btn-minus"></div>
+                                <div class="dish-num">{{item.num}}</div>
+                                <div @click="numPlus(item)" class="btn-plus"></div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div v-if="dinner != ''">
+                <p style="color:#2aabd2;">&nbsp;晚餐</p>
+                <div class="selected-list-div">
+                    <div v-for="item in dinner" v-if="item.num > 0" :key="item.id" class="weui-flex selected" style="line-height: 49px;">
+                        <div class="weui-flex__item">
+                            <div class="placeholder dish-name1">{{item.menuName}}</div>
+                        </div>
+                        <div class="weui-flex__item">
+                            <div class="placeholder dish-price1"><span>¥</span> {{item.menuPrice.toFixed(2)}}</div>
+                        </div>
+                        <div class="weui-flex__item">
+                            <div class="placeholder dish-num-div" style="margin-top: 12px;">
+                                <div @click="numMinus(item)" v-if="item.num>0" class="btn-minus"></div>
+                                <div class="dish-num">{{item.num}}</div>
+                                <div @click="numPlus(item)" class="btn-plus"></div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+<script src="./js/vue.min.js"></script>
+<script src="./js/jquery-2.1.4.min.js"></script>
+<script src="./js/zepto.min.js"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+<script type="text/javascript" src="./js/big.min.js"></script>
+<!--<script src="https://cdn.bootcss.com/vConsole/3.8.1/vconsole.min.js"></script>-->
+<script type="text/javascript">
+//new VConsole();
+    new Vue({
+        el: '#app',
+        data: {
+            overMoney: 0,
+            sendMoney: 0,
+            whiteShow: true,
+            loadShow: false,
+            dialogShow: false,
+            dicengShow: false,
+            toastMsg: "",
+            baseUrl: "http://119.146.152.53:8081/mzsrmyy/",
+            canteenCode: "",
+            canteenName: "",
+            dataGroupCode: localStorage.getItem("dataGroupCode"),
+            isShow: false,
+            dishes: [],
+            // 新增数组
+            allDishes: [],
+            breakfast: [],
+            lunch: [],
+            dinner: [],
+            //菜品数量限制
+            limitNum:100,
+            showSelection: false,
+            listHeight: 200,
+            options: {
+                mealDate: [],
+                mealType: [],
+                allowMealType: [],
+                mealTime: []
+            },
+            //选择的值
+            optionDate: '',
+            optionTypeCode: '',
+            optionTypeName: '全部',
+            optionTimeCode: '',
+            optionTimeName: '',
+            //实际的值
+            realDate: '',
+            realTypeCode: '',
+            realTypeName: '全部',
+            realTimeCode: '001',
+            realTimeName: '',
+            /**
+             * 规则字段
+             * nowTime: 当前时间戳
+             * ruleTime1: 今日上午10:00的时间戳，用于限定今日午餐
+             * ruleTime2: 今日下午4:00的时间戳，用于限定今日晚餐
+             * ruleTime3: 今日下午3:30的时间戳，用于限定点明日餐
+             * @type {Object}
+             */
+            rules: {
+                nowTime: '',
+                ruleTime1: '',
+                ruleTime2: '',
+                ruleTime3: '',
+                ruleTime4: '',
+                ruleTime5: ''
+            }
+        },
+        methods: {
+            init: function() {
+                var _this = this;
+                //日期
+                var mealDate = [];
+                //餐类，在数组前添加全部餐类选项
+
+                var allType = [{
+                    "mealTypeName": "全部",
+                    "mealTypeNum": "",
+                    "spuerMealTypeName": "",
+                    "spuerMealTypeNum": "",
+                    "statusCode": null
+                }];
+                _this.overMoney = Number(localStorage.getItem("overMoney"));
+                _this.baseUrl = localStorage.getItem("baseUrl");
+                _this.rules.nowTime = _this.timestampFormat(_this.getNowTime());
+
+                _this.canteenCode = localStorage.getItem("canteenCode");
+                _this.canteenName = localStorage.getItem("canteenName");
+                _this.options.mealDate = localStorage.getItem("mealDate").split(',');
+                var mealTypes = allType.concat(JSON.parse(localStorage.getItem("mealType")));
+                _this.options.mealType = mealTypes;
+                _this.options.mealTime = JSON.parse(localStorage.getItem("mealTime"));
+
+
+
+                /**
+                 * 这里是测试时间
+                 */
+                // _this.rules.nowTime = _this.timestampFormat("2020-03-21 15:31:00");
+
+                /**
+                 * 这里处理一些规则时间
+                 * @type {[type]}
+                 */
+                //今日早餐
+                var ruleTime0 = _this.options.mealDate[0] + ' ' + _this.options.mealTime[0].todayOrderTime + ':00';
+                _this.rules.ruleTime0 = _this.timestampFormat(ruleTime0);
+                //今日午餐
+                var ruleTime1 = _this.options.mealDate[0] + ' ' + _this.options.mealTime[1].todayOrderTime + ':00';
+                _this.rules.ruleTime1 = _this.timestampFormat(ruleTime1);
+                //今日晚餐
+                var ruleTime2 = _this.options.mealDate[0] + ' ' + _this.options.mealTime[2].todayOrderTime + ':00';
+                _this.rules.ruleTime2 = _this.timestampFormat(ruleTime2);
+                //明日餐
+                var ruleTime3 = _this.options.mealDate[0] + ' ' + _this.options.mealTime[0].tomorrowOrderTime + ':00';
+                _this.rules.ruleTime3 = _this.timestampFormat(ruleTime3);
+                var ruleTime4 = _this.options.mealDate[0] + ' ' + _this.options.mealTime[1].tomorrowOrderTime + ':00';
+                _this.rules.ruleTime4 = _this.timestampFormat(ruleTime4);
+                var ruleTime5 = _this.options.mealDate[0] + ' ' + _this.options.mealTime[2].tomorrowOrderTime + ':00';
+                _this.rules.ruleTime5 = _this.timestampFormat(ruleTime5);
+
+
+
+                if (_this.rules.nowTime < _this.rules.ruleTime0) {
+                    _this.optionTimeCode = _this.options.mealTime[0].mealNum;
+                    _this.optionTimeName = _this.options.mealTime[0].mealName;
+                    _this.realTimeCode = _this.options.mealTime[0].mealNum;
+                    _this.realTimeName = _this.options.mealTime[0].mealName;
+                    _this.optionDate = _this.options.mealDate[0];
+                    _this.realDate = _this.options.mealDate[0];
+                    var allowType = _this.options.mealTime[0].todayMealTypeCode;
+                    //_this.options.allowMealType = _this.mealTypeFilter(allowType.split(','));
+					_this.options.allowMealType = _this.options.mealType;
+                } else if (_this.rules.nowTime < _this.rules.ruleTime1) {
+                    _this.optionTimeCode = _this.options.mealTime[1].mealNum;
+                    _this.optionTimeName = _this.options.mealTime[1].mealName;
+                    _this.realTimeCode = _this.options.mealTime[1].mealNum;
+                    _this.realTimeName = _this.options.mealTime[1].mealName;
+                    _this.optionDate = _this.options.mealDate[0];
+                    _this.realDate = _this.options.mealDate[0];
+                    var allowType = _this.options.mealTime[1].todayMealTypeCode;
+                    //_this.options.allowMealType = _this.mealTypeFilter(allowType.split(','));
+					_this.options.allowMealType = _this.options.mealType;
+                } else if (_this.rules.nowTime < _this.rules.ruleTime2) {
+                    _this.optionTimeCode = _this.options.mealTime[2].mealNum;
+                    _this.optionTimeName = _this.options.mealTime[2].mealName;
+                    _this.realTimeCode = _this.options.mealTime[2].mealNum;
+                    _this.realTimeName = _this.options.mealTime[2].mealName;
+                    _this.optionDate = _this.options.mealDate[0];
+                    _this.realDate = _this.options.mealDate[0];
+                    var allowType = _this.options.mealTime[2].todayMealTypeCode;
+                    //_this.options.allowMealType = _this.mealTypeFilter(allowType.split(','));
+                    _this.options.allowMealType = _this.options.mealType;
+                } else if (_this.rules.nowTime < _this.rules.ruleTime3) {
+                    _this.optionTimeCode = _this.options.mealTime[0].mealNum;
+                    _this.optionTimeName = _this.options.mealTime[0].mealName;
+                    _this.realTimeCode = _this.options.mealTime[0].mealNum;
+                    _this.realTimeName = _this.options.mealTime[0].mealName;
+                    _this.optionDate = _this.options.mealDate[1];
+                    _this.realDate = _this.options.mealDate[1];
+                    _this.options.allowMealType = _this.options.mealType;
+                } else if (_this.rules.nowTime < _this.rules.ruleTime4) {
+                    _this.optionTimeCode = _this.options.mealTime[1].mealNum;
+                    _this.optionTimeName = _this.options.mealTime[1].mealName;
+                    _this.realTimeCode = _this.options.mealTime[1].mealNum;
+                    _this.realTimeName = _this.options.mealTime[1].mealName;
+                    _this.optionDate = _this.options.mealDate[1];
+                    _this.realDate = _this.options.mealDate[1];
+                    _this.options.allowMealType = _this.options.mealType;
+                } else if (_this.rules.nowTime < _this.rules.ruleTime5) {
+                    _this.optionTimeCode = _this.options.mealTime[2].mealNum;
+                    _this.optionTimeName = _this.options.mealTime[2].mealName;
+                    _this.realTimeCode = _this.options.mealTime[2].mealNum;
+                    _this.realTimeName = _this.options.mealTime[2].mealName;
+                    _this.optionDate = _this.options.mealDate[1];
+                    _this.realDate = _this.options.mealDate[1];
+                    _this.options.allowMealType = _this.options.mealType;
+                } else {
+                    _this.optionTimeCode = _this.options.mealTime[0].mealNum;
+                    _this.optionTimeName = _this.options.mealTime[0].mealName;
+                    _this.realTimeCode = _this.options.mealTime[0].mealNum;
+                    _this.realTimeName = _this.options.mealTime[0].mealName;
+                    _this.optionDate = _this.options.mealDate[2];
+                    _this.realDate = _this.options.mealDate[2];
+                    _this.options.allowMealType = _this.options.mealType;
+                }
+
+                _this.loadDishes();
+
+            },
+            showMsg: function(msg) {
+                var _this = this
+                _this.toastMsg = msg
+                var $toast = $("#toastMsg")
+                if ($toast.css('display') != 'none') return;
+
+                $toast.fadeIn(100);
+                setTimeout(function() {
+                    $toast.fadeOut(100);
+                }, 2000);
+
+            },
+            //将时间字符串转换为时间戳
+            timestampFormat: function(time) {
+                return (new Date(Date.parse(time.replace(/-/g, "/")))).getTime();
+            }, //今日餐可能只允许点具体某些餐类，这里根据实际情况进行筛选
+            mealTypeFilter: function(allowType) {
+                var allowTypes = [{
+                    "mealTypeName": "全部",
+                    "mealTypeNum": "",
+                    "spuerMealTypeName": "",
+                    "spuerMealTypeNum": "",
+                    "statusCode": null
+                }];
+                var allType = this.options.mealType;
+                for (var i = 0; i < allType.length; i++) {
+                    for (var k = 0; k < allowType.length; k++) {
+                        if (allowType[k] == allType[i].mealTypeNum) {
+                            allowTypes.push(allType[i]);
+                        }
+                    }
+                }
+                return allowTypes;
+            },
+            showFilter: function() {
+
+                var _this = this;
+                _this.isShow = true
+            },
+            quxiao: function() {
+                var _this = this;
+                _this.dialogShow = false
+            },
+            qingkong: function() {
+                var _this = this;
+                _this.dialogShow = false
+                for (var i = 0; i < _this.allDishes.length; i++) {
+                    _this.allDishes[i].num = 0;
+                }
+
+            },
+            clear: function() {
+                var _this = this;
+                _this.dialogShow = true
+
+            },
+            filterCancel: function() {
+                this.optionDate = this.realDate
+                this.optionTypeCode = this.realTypeCode
+                this.optionTypeName = this.realTypeName
+                this.optionTimeCode = this.realTimeCode
+                this.optionTimeName = this.realTimeName
+                this.isShow = false
+            },
+            // 面板中确定
+            filterCommit: function() {
+                // debugger
+                var _this = this;
+                var breakfast = this.breakfast;
+                var lunch = this.lunch;
+                var dinner = this.dinner;
+                _this.rules.nowTime = _this.timestampFormat(_this.getNowTime());
+                if (!_this.filterRules())
+                    return;
+                if (_this.realDate != _this.optionDate) {
+                    _this.realDate = _this.optionDate
+                    _this.realTimeCode = _this.optionTimeCode
+                    _this.realTimeName = _this.optionTimeName
+                    _this.loadDishes()
+                } else if (_this.realTimeCode != _this.optionTimeCode) {
+                    switch (_this.optionTimeCode) {
+                        case '001':
+                            if (_this.breakfast.length != 0) {
+                                _this.realDate = _this.optionDate
+                                _this.realTimeCode = _this.optionTimeCode
+                                _this.realTimeName = _this.optionTimeName
+                                _this.dishes = breakfast;
+                            } else {
+                                _this.realDate = _this.optionDate
+                                _this.realTimeCode = '001'
+                                _this.realTimeName = _this.optionTimeName
+                                _this.loadDishes();
+                            }
+                            break;
+                        case '002':
+                            if (_this.lunch.length != 0) {
+                                _this.realDate = _this.optionDate
+                                _this.realTimeCode = _this.optionTimeCode
+                                _this.realTimeName = _this.optionTimeName
+                                _this.dishes = lunch;
+                            } else {
+                                _this.realDate = _this.optionDate
+                                _this.realTimeCode = '002'
+                                _this.realTimeName = _this.optionTimeName
+                                _this.loadDishes();
+                            }
+                            break;
+                        case '003':
+                            if (_this.dinner.length != 0) {
+                                _this.realDate = _this.optionDate
+                                _this.realTimeCode = _this.optionTimeCode
+                                _this.realTimeName = _this.optionTimeName
+                                _this.dishes = dinner;
+                            } else {
+                                _this.realDate = _this.optionDate
+                                _this.realTimeCode = '003'
+                                _this.realTimeName = _this.optionTimeName
+                                _this.loadDishes();
+
+                            }
+                            break;
+                    }
+                }
+                _this.realTypeCode = _this.optionTypeCode
+                _this.realTypeName = _this.optionTypeName
+                _this.isShow = false
+
+            },
+            getNowTime: function() {
+                var now = new Date();
+                var year = now.getFullYear(); //年  
+                var month = now.getMonth() + 1; //月  
+                var day = now.getDate(); //日  
+                var hh = now.getHours(); //时  
+                var mm = now.getMinutes(); //分  
+                var ss = now.getSeconds(); //秒
+                var clock = year + "-";
+                if (month < 10)
+                    clock += "0";
+                clock += month + "-";
+                if (day < 10)
+                    clock += "0";
+                clock += day + " ";
+                if (hh < 10)
+                    clock += "0";
+                clock += hh + ":";
+                if (mm < 10) clock += '0';
+                clock += mm + ":";
+                if (ss < 10) clock += '0';
+                clock += ss;
+                return (clock);
+
+            },
+            filterRules: function() {
+                if (this.optionDate == this.options.mealDate[0]) {
+                    //今日早餐
+                    if (this.rules.nowTime > this.rules.ruleTime0 && this.optionTimeCode == '001') {
+
+                        this.showMsg("已超出今日早餐订餐时间")
+
+                        return false;
+                    }
+
+                    //今日午餐
+                    if (this.rules.nowTime > this.rules.ruleTime1 && this.optionTimeCode == '002') {
+
+                        this.showMsg("已超出今日午餐时间限制")
+
+                        return false;
+                    }
+
+                    //今日晚餐
+                    if (this.rules.nowTime > this.rules.ruleTime2 && this.optionTimeCode == '003') {
+
+                        this.showMsg("已超出今日晚餐订餐时间")
+
+                        return false;
+                    }
+
+                } else if (this.optionDate == this.options.mealDate[1]) {
+                    if (this.rules.nowTime > this.rules.ruleTime3 && this.optionTimeCode == '001') {
+
+                        this.showMsg("已超出明日订餐时间限制")
+
+                        return false;
+                    }
+
+                    if (this.rules.nowTime > this.rules.ruleTime4 && this.optionTimeCode == '002') {
+
+                        this.showMsg("已超出明日午餐时间限制")
+
+                        return false;
+                    }
+
+                    if (this.rules.nowTime > this.rules.ruleTime5 && this.optionTimeCode == '003') {
+
+                        this.showMsg("已超出明日晚餐订餐时间")
+
+                        return false;
+                    }
+                } else {
+                    var date = new Date();
+                    var hour = date.getHours();
+                    if (hour >= 17) {
+                        this.showMsg("已超出后日早餐订餐时间")
+                    }
+                }
+                return true;
+            },
+            loadDishes: function() {
+                var _this = this;
+                this.dishes = [];
+                //_this.loadShow = true
+                $.ajax({
+                    //url: _this.baseUrl + 'app_basicInfoController.do?queryMenuInfo',
+                    url: _this.baseUrl + 'meal',
+					type: 'post',
+                    headers:{
+                        className : 'AppBaseInfoService',
+                        methodName : 'queryMenuInfo'
+                    },
+                    data: {
+                        dayFlag: _this.realDate,
+                        mealNum: _this.realTimeCode,
+                        canteenNum: _this.canteenCode,
+                        mealType: '',
+                        dataGroupCode: _this.dataGroupCode
+                    },
+                    success: function(data) {
+                        _this.loadShow = false
+                        if (data.success) {
+                            if (data.obj !== null) {
+                                _this.dishes = data.obj;
+                            }
+
+
+                        } else {
+                            _this.showMsg("暂时无法订餐！")
+                        }
+                    }
+                });
+
+                $.ajax({
+                    url: _this.baseUrl + 'meal',
+                    type: 'post',
+                    headers:{
+                        className : 'AppBaseInfoService',
+                        methodName : 'getLimitNum'
+                    },
+                    data: {
+                        canteenCode: _this.canteenCode,
+                        dataGroupCode: localStorage.getItem("dataGroupCode")
+                    },
+                    success: function(data) {
+                        if (data.success) {
+                            if (data.obj !== null) {
+                                _this.limitNum = data.obj[0].dishesNumber;
+                            }
+                        }
+                    }
+                });
+            },
+            numPlus: function(item) {
+                var _this = this;
+
+                if(_this.limitNum != null && _this.limitNum < item.num+1 ){
+                    _this.showMsg("数量超过限制！");
+                    return false;
+                }
+                item.num += 1;
+                if (_this.optionTimeCode == '001') {
+                    this.breakfast = this.dishes;
+                    // this.allDishes.push(this.breakfast)
+
+                } else if (_this.optionTimeCode == '002') {
+                    this.lunch = this.dishes;
+                    // this.allDishes.push(this.lunch)
+
+                } else {
+                    this.dinner = this.dishes;
+                    // this.allDishes.push(this.dinner)
+
+                }
+                this.addAll();
+            },
+            numMinus: function(item) {
+                var _this = this;
+                item.num -= 1;
+                var breakfast = this.breakfast;
+                var lunch = this.lunch;
+                var dinner = this.dinner;
+                if (_this.optionTimeCode == '001') {
+                    this.breakfast = this.dishes;
+                } else if (_this.optionTimeCode == '002') {
+                    this.lunch = this.dishes;
+                } else {
+                    this.dinner = this.dishes;
+                }
+            },
+
+            addAll: function() {
+                this.allDishes = this.breakfast.concat(this.lunch).concat(this.dinner);
+            },
+            confirm: function() {
+                var _this = this;
+                _this.rules.nowTime = _this.timestampFormat(_this.getNowTime());
+
+                if (!_this.filterRules())
+                    return;
+
+                var list = _this.allDishes;
+                var breakfast = _this.breakfast;
+                var lunch = _this.lunch;
+                var dinner = _this.dinner;
+
+                var params = {
+                    mealDate: _this.realDate,
+                    mealTimeCode: _this.realTimeCode,
+                    mealTimeName: _this.realTimeName,
+                    mealList: [],
+                    mealBreakfast: [],
+                    mealLunch: [],
+                    mealDinner: []
+                }
+                for (var i = 0; i < list.length; i++) {
+                    console.log(list[i])
+                    if (list[i].num > 0)
+                        params.mealList.push(list[i])
+                }
+                for (var i = 0; i < breakfast.length; i++) {
+                    if (breakfast[i].num > 0)
+                        params.mealBreakfast.push(breakfast[i])
+                }
+                for (var i = 0; i < lunch.length; i++) {
+                    if (lunch[i].num > 0)
+                        params.mealLunch.push(lunch[i])
+                }
+                for (var i = 0; i < dinner.length; i++) {
+                    if (dinner[i].num > 0)
+                        params.mealDinner.push(dinner[i])
+                }
+
+
+                localStorage.setItem('params', JSON.stringify(params));
+                location.href = "confirm.html";
+
+            },
+            showSelections: function() {
+                if (this.counter > 0)
+                    this.showSelection = !this.showSelection;
+            },
+            dateChange: function(item) {
+                this.optionDate = item;
+
+                if (this.optionDate == this.options.mealDate[2]) {
+                    this.options.mealTime = [];
+                    this.options.mealTime.push(JSON.parse(localStorage.getItem("mealTime"))[0]);
+                    this.optionTimeCode = "001";
+                    this.optionTimeName = "早餐";
+                } else {
+                    this.options.mealTime = JSON.parse(localStorage.getItem("mealTime"));
+                }
+
+                //如果日期变更，则菜品分类变为全部
+                this.optionTypeCode = ''
+                this.optionTypeName = '全部'
+
+                if (this.optionDate != this.options.mealDate[0]) {
+                    this.allDishes = [];
+                    this.breakfast = [];
+                    this.lunch = [];
+                    this.dinner = [];
+
+                    this.options.allowMealType = this.options.mealType;
+                } else {
+                    var mealTimes = this.options.mealTime;
+                    var optionTimeCode = this.optionTimeCode;
+                    for (var i = 0; i < mealTimes.length; i++) {
+                        if (mealTimes[i].mealNum == optionTimeCode) {
+                            //this.options.allowMealType = this.mealTypeFilter(mealTimes[i].todayMealTypeCode.split(','));
+                            this.options.allowMealType = _this.options.mealType;
+                        }
+                    }
+                }
+            },
+            typeChange: function(item) {
+                this.optionTypeCode = item.mealTypeNum
+                this.optionTypeName = item.mealTypeName
+            },
+            timeChange: function(item) {
+                this.optionTimeCode = item.mealNum
+                this.optionTimeName = item.mealName
+                if (this.optionDate == this.options.mealDate[0]) {
+                    //this.options.allowMealType = this.mealTypeFilter(item.todayMealTypeCode.split(','));
+                    this.options.allowMealType = _this.options.mealType;;
+                }
+            },
+            GetQueryString: function(paramKey) {
+
+                var reg = new RegExp("(^|&)" + paramKey + "=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if (r != null)
+                    return unescape(r[2]);
+                else
+                    return null;
+
+            },
+            getOppenId: function(code) {
+			
+                var _this = this;
+                //_this.loadShow = true;
+                $.ajax({
+                    //url: _this.baseUrl + 'app_patientBillInfoController.do?getWeChatOpenId',
+                    url: _this.baseUrl + 'meal',
+                    type: 'post',
+                    headers:{
+                        className : 'AppBaseInfoService',
+                        methodName : 'getWeChatOpenId'
+                    },
+                    data: {
+                        canteenNum: _this.canteenCode,
+                        canteenName: _this.canteenName,
+                        dataGroupCode: _this.dataGroupCode,
+                        code: code
+                    },
+                    success: function(data) {
+					
+						console.log(data);
+                        _this.loadShow = false
+                        var resp = data;
+                        if (resp.success) {
+                            localStorage.setItem("userId", resp.obj);
+
+                        } else {
+                            _this.showMsg("openId获取失败")
+                        }
+                    }
+                });
+
+            }
+        },
+        computed: {
+            counter: function() {
+                var _this = this
+                var sum = this.allDishes.reduce(function(sum, dish) {
+                    return sum + dish.num
+                }, 0)
+                if (sum == 0) {
+                    this.showSelection = false
+                }
+                return sum
+            },
+            totalPrice: function() {
+                return this.allDishes.reduce(function(sum, dish) {
+                    var price = new Big(dish.menuPrice)
+                    return Number(price.times(dish.num).plus(sum))
+                }, 0)
+            }
+        },
+        //页面初始化完成生命钩子
+        mounted: function() {
+            this.$nextTick(function() {
+			
+                var _this = this
+                var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+                this.listHeight = h - 90
+                this.init()
+                this.whiteShow = false
+                /*var state = localStorage.getItem("userId");
+                state = "null";
+                var aa = [null, "", "null", undefined, "undefined"]
+                if (aa.indexOf(state) > -1 && aa.indexOf(_this.GetQueryString("code")) === -1)
+                    this.getOppenId(_this.GetQueryString("code"))*/
+					
+				// 没有openId就获取
+				// var validationArr = [null, 'null', '', undefined, 'undefined']
+				// var openId = localStorage.getItem("userId");
+			
+				// if (validationArr.indexOf(openId) > -1) {
+					_this.getOppenId(_this.GetQueryString('code'))
+				// }
+            })
+        }
+    })
+</script>
+
+</html>

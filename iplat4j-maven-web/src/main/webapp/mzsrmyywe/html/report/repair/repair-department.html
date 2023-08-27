@@ -1,0 +1,334 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" href="reference/mui/css/mui.min.css">
+		<link href="css/buttom.css" rel="stylesheet" />
+		<link href="css/iconfont.css" rel="stylesheet" />
+		<link href="css/mui.picker.min.css" rel="stylesheet" />
+		<link href="reference/css/common.css" rel="stylesheet" />
+		<link href="reference/css/loading.css" rel="stylesheet" />
+
+		<style>
+			.mui-backdrop {
+				top: 95px;
+			}
+			
+			.keshi-ymd-span {
+				height: 45px;
+				line-height: 45px;
+				display: block;
+				width: 50%;
+				margin-left: 25%;
+				font-size: 15px;
+				/*border-bottom:2px  solid #2aabd2;*/
+			}
+			
+			.keshi-shuidianqi {
+				box-shadow: 0px 8px 20px #d1d1d1;
+				margin: 20px 0px;
+			}
+			
+			table {
+				width: 100%;
+			}
+			
+			.first-tr {
+				background: #f1f1f1;
+				height: 45px;
+			}
+			
+			.first-tr-other {
+				background: #F7F7F7;
+				height: 40px;
+			}
+			
+			.first-tr span {
+				display: block;
+				height: 30px;
+				line-height: 30px;
+				width: 80%;
+				/*margin-left: 10%;*/
+				border-left: 1px solid #cae9e3;
+			}
+			
+			.width-24:nth-child(1) span {
+				border-left: 0;
+			}
+			
+			.width-24 {
+				width: 24%;
+				text-align: center;
+			}
+			
+			.width-14 {
+				width: 14%;
+				text-align: center;
+			}
+			
+			.span-bottom {
+				display: block;
+				height: 40px;
+				/*line-height: 40px;*/
+				width: 100%;
+				/*width: 80%;
+				margin-left: 10%;*/
+				border-bottom: 1px solid #cae9e3;
+			}
+			
+			.span-bottom-first {
+				width: 85%;
+				margin-left: 15%;
+				text-align: center;
+			}
+			
+			.span-bottom-last {
+				color: #fb6767;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<button onclick="goback()" class=" mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+        返回
+      </button>
+			<h1 class="mui-title">报修科室使用材料统计</h1>
+
+		</header>
+		<div id="warn" class="warn" hidden>
+			<small></small>
+		</div>
+
+		<div id="loading" class="loading-div" style="z-index: 999;" hidden>
+			<div class="loading-center">
+				<div class="loading-center-absolute">
+					<div class="object" id="object_one"></div>
+					<div class="object" id="object_two"></div>
+					<div class="object" id="object_three"></div>
+					<div class="object" id="object_four"></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="mui-content">
+			<div class="keshi">
+				<div class="keshi-ymd">
+					<div class="mui-row " style="background: #fbf7fc;text-align: center;box-shadow: 0px 5px  #F7F7F7;">
+						<div class="mui-col-sm-4 mui-col-xs-4 year-button" style="">
+							<span class="keshi-ymd-span keshi-year-span">年度</span>
+						</div>
+						<div class="mui-col-sm-4 mui-col-xs-4 jidu-button" style="">
+
+							<span class="keshi-ymd-span keshi-jidu-span">季度</span>
+						</div>
+						<div class="mui-col-sm-4 mui-col-xs-4 month-button">
+
+							<span class="keshi-ymd-span keshi-month-span">月份</span>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<table>
+				<tr class="first-tr">
+					<td class="width-24">
+						<span>科室名称</span>
+
+					</td>
+					<td class="width-24">
+
+						<span>材料分类</span>
+					</td>
+					<td class="width-24">
+						<span>材料名称</span>
+					</td>
+					<td class="width-14">
+						<span>规格</span>
+					</td>
+					<td class="width-14">
+						<span>数量</span>
+					</td>
+
+				</tr>
+			</table>
+			<table class="table-main">
+				<!--<tr class="first-tr-other">
+					<td class="width-24" rowspan="4" style="border-right: 1px solid  #47edd4;">
+						<span style="border-left: 4px  solid #fc736d; padding-left: 5px;">科室名称</span>
+					</td>
+					<td class="width-24">
+						<span class="span-bottom span-bottom-first" style="">材料分类</span>
+					</td>
+					<td class="width-24">
+						<span class="span-bottom">材料名称</span>
+					</td>
+					<td class="width-14">
+						<span class="span-bottom">规格</span>
+					</td>
+					<td class="width-14">
+						<span class="span-bottom span-bottom-last">数量</span>
+					</td>
+				</tr>
+				<tr class="first-tr-other">
+
+					<td class="width-24">
+						<span class="span-bottom span-bottom-first" style="">材料分类</span>
+					</td>
+					<td class="width-24">
+						<span class="span-bottom">材料名称</span>
+					</td>
+					<td class="width-14">
+						<span class="span-bottom">规格</span>
+					</td>
+					<td class="width-14">
+						<span class="span-bottom span-bottom-last">数量</span>
+					</td>
+				</tr>
+				<tr class="first-tr-other">
+
+					<td class="width-24">
+						<span class="span-bottom span-bottom-first" style="">材料分类</span>
+					</td>
+					<td class="width-24">
+						<span class="span-bottom">材料名称</span>
+					</td>
+					<td class="width-14">
+						<span class="span-bottom">规格</span>
+					</td>
+					<td class="width-14">
+						<span class="span-bottom span-bottom-last">数量</span>
+					</td>
+				</tr>
+				<tr class="first-tr-other">
+
+					<td class="width-24">
+						<span class="span-bottom span-bottom-first" style="">材料分类</span>
+					</td>
+					<td class="width-24">
+						<span class="span-bottom">材料名称</span>
+					</td>
+					<td class="width-14">
+						<span class="span-bottom">规格</span>
+					</td>
+					<td class="width-14">
+						<span class="span-bottom span-bottom-last">数量</span>
+					</td>
+				</tr>-->
+
+			</table>
+
+		</div>
+		<p class="no-views" style="display: none;">———&nbsp;&nbsp;暂无数据&nbsp;&nbsp;———</p>
+
+	</body>
+	<script type="text/javascript" src="js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="js/mui.js"></script>
+	<script type="text/javascript" src="js/mui.picker.min.js"></script>
+	<script type="text/javascript" src="js/common.js"></script>
+	<script src="../../../cordova.js" type="text/javascript"></script>
+	<script type="text/javascript" src="js/report-self.js"></script>
+
+	<script>
+		       var baseUrl = localStorage.getItem("url");
+		var workNo = localStorage.getItem("workNo");
+		var deptCode = localStorage.getItem("deptCode");
+
+		getCurrentDate();
+
+		function loadView() {
+
+			$.ajax({
+				url: baseUrl + 'app_maintainReportController2.do?getDeptStuffCpt',
+				type: 'post',
+				data: {
+					flag: flag,
+					year: canshuYear,
+					season: canshuSeason,
+					month: canshuMonth,
+					workNo: workNo,
+					dept: deptCode
+				},
+				success: function(data) {
+					var data = eval("(" + data + ")");
+					console.log(data)
+					
+					var taskAppend = "";
+					if(data.respCode == 200 || data.respCode == "200") {
+						var list = data.obj.data;
+						if(list.length == 0) {
+							$(".no-views").css("display", "");
+						} else {
+							$(".no-views").css("display", "none");
+						}
+						for(var i = 0; i < list.length; i++) {
+							taskAppend += createHtml1(list[i].reqDeptName, list[i].matData, i);
+						}
+						$(".table-main").html(taskAppend);
+					} else {
+						showMsg(data.respMsg);
+
+					}
+				}
+
+			});
+		}
+
+		function createHtml1(reqDeptName, matData) {
+			var html = "";
+
+			for(var a = 0; a < matData.length; a++) {
+				var matName = matData[a].matName == null ? "" : matData[a].matName;
+				var matTypeName = matData[a].matTypeName == null ? "" : matData[a].matTypeName;
+				var matSpec = matData[a].matSpec == null ? "" : matData[a].matSpec;
+				var num = matData[a].num == null ? "" : matData[a].num;
+				if(a == 0) {
+					html += '<tr class="first-tr-other">';
+					html += '<td class="width-24" rowspan="' + matData.length + '" style="border-right: 1px solid  #47edd4;border-bottom: 1px solid  #47edd4;width:26%;">';
+					html += '	<span style="border-left: 4px  solid #fc736d; padding-left: 5px;">' + reqDeptName + '</span>';
+					html += '</td>';
+					html += '<td class="width-24"  style="width:27%;">';
+					html += '	<span class="span-bottom span-bottom-first" style="">' + matTypeName + '</span>';
+					html += '</td>';
+					html += '<td class="width-24">';
+					html += '	<span class="span-bottom">' + matName + '</span>';
+					html += '</td>';
+					html += '<td class="width-14">';
+					html += '	<span class="span-bottom">' + matSpec + '</span>';
+					html += '</td>';
+					html += '<td class="width-14">';
+					html += '	<span class="span-bottom span-bottom-last">' + num + '</span>';
+					html += '</td>';
+					html += '</tr>';
+				} else {
+					html += '<tr class="first-tr-other">';
+					html += '<td class="width-24"  style="width:27%;">';
+					html += '<span class="span-bottom span-bottom-first" style="">'+matTypeName+'</span>';
+					html += '</td>';
+					html += '<td class="width-24">';
+					html += '<span class="span-bottom">' + matName + '</span>';
+					html += '</td>';
+					html += '<td class="width-14">';
+					html += '<span class="span-bottom">' + matSpec + '</span>';
+					html += '</td>';
+					html += '<td class="width-14">';
+					html += '<span class="span-bottom span-bottom-last">' + num + '</span>';
+					html += '	</td>';
+					html += '	</tr>';
+				}
+
+			}
+
+			return html;
+		}
+	</script>
+
+</html>

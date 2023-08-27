@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="IMJZ0201">
+
+	<select id="query" parameterClass="java.util.ArrayList" 
+			resultClass="java.util.HashMap">
+			SELECT
+			t1.id,
+			t1.module_id moduleId,
+			t1.param_name paramName,
+			t1.param_key paramKey,
+			t1.param_value paramValue,
+			t1.param_unit paramUnit,
+			t1.memo memo,
+			t2.classify_name classifyName
+		FROM
+			im_classfyparam t1
+		LEFT JOIN im_modulebaseclassfy t2 ON t1.module_id = t2.id
+		WHERE
+		t1.id
+		in
+		<iterate conjunction="," open="(" close=")">
+			#value[]#
+		</iterate>
+		ORDER BY
+			t1.param_key	
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM im_devicemachine WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	
+	<!-- 保存设备包 -->
+	<insert id="insertPack" parameterClass="java.util.HashMap">
+	INSERT INTO im_device_packet (id,packet_code,packet_name,memo,createTime,createMan,status)
+		VALUES
+	(#id#,#packet_code#,#packet_name#,#memo#,#createTime#,#createMan#,"0")
+	</insert>
+  
+
+	<!-- 保存设备包明细 -->
+	<insert id="insertPackDetail" parameterClass="java.util.HashMap">
+	INSERT INTO im_device_packet_relation (packet_id,device_id,machine_code,machine_name,fixed_place,models)
+		VALUES
+	(#packet_id#,#device_id#,#machine_code#,#machine_name#,#fixed_place#,#models#)
+	</insert>
+	
+	
+
+
+
+
+	<!-- 查询当天生成的编码数量 -->
+	<select id="dangerCodeCount" parameterClass="String" resultClass="int">
+			select count(1) from im_device_packet where packet_code like concat(#value#,'%')
+	</select>
+  
+</sqlMap>

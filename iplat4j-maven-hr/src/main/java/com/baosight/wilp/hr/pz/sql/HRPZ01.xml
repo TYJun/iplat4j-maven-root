@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HRPZ01">
+
+	<select id="query" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.hr.pz.domain.HrPeopleConfig">
+		SELECT
+		id	as "id",  <!-- 主键ID -->
+		creator_id	as "creatorId",  <!-- 创建人工号 -->
+		creator_name	as "creatorName",  <!-- 创建人名称 -->
+		create_time	as "createTime",  <!-- 创建时间 -->
+		surp_num	as "surpNum",  <!-- 物业公司编码 -->
+		surp_name	as "surpName",  <!-- 物业公司名称 -->
+		service_dept_name	as "serviceDeptName",  <!-- 服务科室名称 -->
+		service_dept_num	as "serviceDeptNum",  <!-- 服务科室编码 -->
+		position	as "position",  <!-- 岗位 -->
+		people_lines	as "peopleLines",  <!-- 招标配额 -->
+		people_lines_stable	as "peopleLinesStable",  <!-- 稳定配额 -->
+		memo	as "memo" <!-- 备注 -->
+		FROM .hr_people_config WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="surpName">
+			surp_name  like  concat('%', #surpName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="serviceDeptName">
+			service_dept_name like  concat('%', #serviceDeptName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="position">
+			position like  concat('%', #position#, '%')
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				id asc
+			</isEmpty>
+		</dynamic>
+
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .hr_people_config WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+	<!--
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="creatorId">
+			creator_id = #creatorId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="creatorName">
+			creator_name = #creatorName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="createTime">
+			create_time = #createTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="surpNum">
+			surp_num = #surpNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="surpName">
+			surp_name = #surpName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="serviceDeptName">
+			service_dept_name = #serviceDeptName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="serviceDeptNum">
+			service_dept_num = #serviceDeptNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="position">
+			position = #position#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="peopleLines">
+			people_lines = #peopleLines#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="peopleLinesStable">
+			people_lines_stable = #peopleLinesStable#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="memo">
+			memo = #memo#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO .hr_people_config (id,  <!-- 主键ID -->
+		creator_id,  <!-- 创建人工号 -->
+		creator_name,  <!-- 创建人名称 -->
+		create_time,  <!-- 创建时间 -->
+		surp_num,  <!-- 物业公司编码 -->
+		surp_name,  <!-- 物业公司名称 -->
+		service_dept_name,  <!-- 服务科室名称 -->
+		service_dept_num,  <!-- 服务科室编码 -->
+		position,  <!-- 岗位 -->
+		people_lines,  <!-- 招标配额 -->
+		people_lines_stable,  <!-- 稳定配额 -->
+		memo  <!-- 备注 -->
+		)
+		VALUES (#id#, #creatorId#, #creatorName#, #createTime#, #surpNum#, #surpName#, #serviceDeptName#, #serviceDeptNum#, #position#, #peopleLines#, #peopleLinesStable#, #memo#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM .hr_people_config WHERE
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE .hr_people_config
+		SET
+		creator_id	= #creatorId#,   <!-- 创建人工号 -->
+		creator_name	= #creatorName#,   <!-- 创建人名称 -->
+		create_time	= #createTime#,   <!-- 创建时间 -->
+		surp_num	= #surpNum#,   <!-- 物业公司编码 -->
+		surp_name	= #surpName#,   <!-- 物业公司名称 -->
+		service_dept_name	= #serviceDeptName#,   <!-- 服务科室名称 -->
+		service_dept_num	= #serviceDeptNum#,   <!-- 服务科室编码 -->
+		position	= #position#,   <!-- 岗位 -->
+		people_lines	= #peopleLines#,   <!-- 招标配额 -->
+		people_lines_stable	= #peopleLinesStable#,   <!-- 稳定配额 -->
+		memo	= #memo#  <!-- 备注 -->
+		WHERE
+		id = #id#
+	</update>
+
+</sqlMap>

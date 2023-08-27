@@ -1,0 +1,1913 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DIJZ01">
+
+	
+	<!-- 获取指定人员的用户组 -->
+	<select id="getUserRole" parameterClass="java.util.Map" resultClass="String">
+		select 
+			ifnull(GROUP_CONCAT(xug.GROUP_ENAME),'') roles
+		from ${platSchema}.xs_user_group xug 
+		left join ${platSchema}.xs_user_group_member xugm on xug.ID = xugm.PARENT_ID 
+		left join ${platSchema}.xs_user xu on xu.USER_ID = xugm.MEMBER_ID
+		left join ${platSchema}.txsog03 o3 on xug.ID = o3.USER_GROUP_ID 
+		left join ${platSchema}.txsog01 o1 on o3.ORG_ID = o1.ORG_ID
+		where (o1.IS_DELETED = '0' or o1.IS_DELETED is null) and xu.LOGIN_NAME = #workNo# 
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			(o1.ORG_ENAME = #dataGroupCode# or o1.ORG_ENAME is null)
+		</isNotEmpty>
+	</select>
+	
+	
+	
+	
+	<!-- 查询设备包设备信息 -->
+	<select id="queryPacket" parameterClass="java.util.HashMap"  resultClass="java.util.HashMap" >
+		SELECT
+			packet_id,
+			device_id,
+			machine_code,
+			machine_name,
+			fixed_place 
+		FROM
+			di_device_packet_relation 
+		WHERE
+			packet_id = #packetID#
+			and
+			device_id = #machineID#
+	</select>
+	
+	
+	
+	<!-- 保存图片相关信息 -->
+	<insert id="insertPic" parameterClass="java.util.HashMap">
+	INSERT INTO di_device_task_pic ( id, path, fileName, taskID, itemID, create_time, create_man)
+	VALUES
+		(UUID( ),#path#,#fileName#,#taskID#, #itemID# ,#createTime#,#workNo#)
+	</insert> 
+	
+	
+	<!-- 查询当前年份节日 -->
+	<select id="festival" parameterClass="String"  resultClass="String" >
+		select param from festival where year = #value#
+	</select>
+	
+
+	<select id="queryScheme" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+		DISTINCT
+				d.schemeID, 
+				d.schemeCode,
+				d.schemeName, 
+				d.departID, 
+				d.packetID,
+				d.departNo,
+				d.departName,
+				d.managerID, 
+				d.managerNo , 
+				d.managerName,
+				d.activeTime,
+				d.jobContent, 
+				d.memo, 
+				d.machineID, 
+				m.machine_code as machineCode,
+				m.machine_name as machineName,
+				m.spot_code spotCode,
+				m.fixed_place fixedPlace,
+				m.fixed_place as spotName,
+				date_format(d.createTime,'%Y-%m-%d %H:%i:%s') createTime,
+				d.createMan,
+				d.modifyTime, 
+				d.modifyMan,  
+				d.status,
+				case d.status when 0 then '新建'
+				when 1 then '启用'
+				when -1 then '禁用'
+				end as statusName, 
+				d.smsSend, 
+				d.timeoutReminderTime
+		FROM di_scheme d
+		LEFT JOIN (
+		SELECT
+			a.id,
+			a.machine_code,
+			a.machine_name,
+			a.models,
+			a.spot_code,
+			a.fixed_place
+		FROM
+		df_devicemachine a UNION all
+		SELECT
+			b.id,
+			b.machine_code,
+			b.machine_name,
+			b.models,
+			"" as spot_code,
+			b.fixed_place
+		FROM
+		df_special_device b) m on m.id = d.machineID
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="schemeID">
+			d.schemeID = #schemeID#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			d.departName like concat('%',#deptName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="schemeCode">
+			d.schemeCode like concat('%',#schemeCode#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="schemeName">
+			d.schemeName like concat('%',#schemeName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="schemeDept">
+			d.departName like concat('%',#schemeDept#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineCode">
+			m.machine_code like concat('%',#machineCode#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineName">
+			m.machine_name like concat('%',#machineName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status">
+			d.status = #status#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="fixedPlace">
+			m.fixed_place like concat('%',#fixedPlace#,'%')
+		</isNotEmpty>
+		ORDER BY
+		d.createTime DESC,d.schemeCode desc
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+		
+	</select>
+	
+	<select id="countScheme" parameterClass="java.util.HashMap" 
+			resultClass="int">
+		SELECT
+				d.schemeID
+		FROM di_scheme d
+		LEFT JOIN (
+		SELECT
+			a.id,
+			a.machine_code,
+			a.machine_name,
+			a.models,
+			a.spot_code,
+			a.fixed_place
+		FROM
+		df_devicemachine a UNION all
+		SELECT
+			b.id,
+			b.machine_code,
+			b.machine_name,
+			b.models,
+			"" as spot_code,
+			b.fixed_place
+		FROM
+		df_special_device b) m on m.id = d.machineID
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="schemeID">
+			d.schemeID = #schemeID#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="schemeCode">
+			d.schemeCode like concat('%',#schemeCode#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="schemeName">
+			d.schemeName like concat('%',#schemeName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="schemeDept">
+			d.departName like concat('%',#schemeDept#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineCode">
+			m.machine_code like concat('%',#machineCode#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineName">
+			m.machine_name like concat('%',#machineName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status">
+			d.status = #status#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="fixedPlace">
+			m.fixed_place like concat('%',#fixedPlace#,'%')
+		</isNotEmpty>
+	</select>
+
+	<insert id="insertScheme" parameterClass="java.util.HashMap">
+		INSERT INTO di_scheme (schemeID,  
+								schemeCode,  
+								schemeName, 
+								departNo, 
+								departName,
+								managerNo, 
+								managerName,
+								activeTime,  
+								jobContent, 
+								memo, 
+								machineID, 
+								createTime, 
+								createMan,
+								createManName, 
+								modifyTime,  
+								modifyMan, 
+								status, 
+								smsSend, 
+								timeoutReminderTime,
+								packetID
+								)		 
+	    VALUES (#schemeID#, #schemeCode#, #schemeName#, #departNo#, #departName#,
+	    #managerNo#,#managerName#, #activeTime#, #jobContent#, #memo#, #machineID#, 
+	    #createTime#, #createMan#, #createManName#,#modifyTime#, #modifyMan#, #status#, 
+	    #smsSend#, #timeoutReminderTime#, #packetId#) 
+	</insert>
+  
+	<delete id="deleteScheme" parameterClass="java.util.ArrayList">
+		DELETE FROM di_scheme WHERE 
+			schemeID
+		IN
+		<iterate conjunction="," open="(" close=")">
+			#value[]#
+		</iterate>
+	</delete>
+	
+	<!-- 通过基准id判断是否生成任务 -->
+	<select id="isTask" parameterClass="java.util.ArrayList" 
+			resultClass="java.util.HashMap">
+		SELECT
+		   taskID
+		FROM di_task
+		where schemeID
+              IN
+		<iterate conjunction="," open="(" close=")">
+			#value[]#
+		</iterate>
+	</select>
+	
+	<delete id="deleteOneScheme" parameterClass="String">
+		DELETE FROM di_scheme WHERE schemeID = #value#
+	</delete>
+
+	<update id="updateScheme" parameterClass="java.util.HashMap">
+		UPDATE di_scheme 
+		SET 
+		<isNotNull property="schemeCode">
+			schemeCode = #schemeCode#,
+		</isNotNull>
+		<isNotNull property="schemeName">
+			schemeName = #schemeName#,
+		</isNotNull>
+		<isNotNull property="departNo">
+			departNo = #departNo#,
+		</isNotNull>
+		<isNotNull property="departName">
+			departName = #departName#,
+		</isNotNull>
+		<isNotNull property="managerNo">
+			managerNo = #managerNo#,
+		</isNotNull>
+		<isNotNull property="managerName">
+			managerName = #managerName#,
+		</isNotNull>
+		<isNotNull property="activeTime">
+			activeTime = #activeTime#,
+		</isNotNull>
+		<isNotNull property="jobContent">
+			jobContent = #jobContent#,
+		</isNotNull>
+		<isNotNull property="memo">
+			memo = #memo#,
+		</isNotNull>
+		<isNotNull property="machineID">
+			machineID = #machineID#,
+		</isNotNull>
+		<isNotNull property="createTime">
+			createTime = #createTime#,
+		</isNotNull>
+		<isNotNull property="createMan">
+			createMan = #createMan#,
+		</isNotNull>
+		<isNotNull property="createManName">
+			createManName = #createManName#,
+		</isNotNull>
+		<isNotNull property="modifyTime">
+			modifyTime = #modifyTime#,
+		</isNotNull>
+		<isNotNull property="modifyMan">
+			modifyMan = #modifyMan#,
+		</isNotNull>
+		<isNotNull property="status">
+			status = #status#,
+		</isNotNull>
+		<isNotNull property="smsSend">
+			smsSend = #smsSend#,
+		</isNotNull>
+		<isNotNull property="timeoutReminderTime">
+			timeoutReminderTime = #timeoutReminderTime#,
+		</isNotNull>
+			schemeID = #schemeID#
+		WHERE 	
+		schemeID = #schemeID#
+	</update>
+	
+	<select id="queryDevice" parameterClass="String" 
+			resultClass="java.util.HashMap">
+		select 
+			c.id,
+			c.id as machineId,
+			c.machine_code machineCode,
+			c.machine_name machineName,
+			c.models,
+			c.fixed_place fixedPlace 
+		from (
+		SELECT
+			a.id,
+			a.machine_code,
+			a.machine_name,
+			a.models,
+			a.fixed_place
+		FROM
+		df_devicemachine a UNION all
+		SELECT
+			b.id,
+			b.machine_code,
+			b.machine_name,
+			b.models,
+			b.fixed_place
+		FROM
+		df_special_device b) c
+		where 
+			id = #value#
+	</select>
+	
+	<select id="queryCycle" parameterClass="String" 
+			resultClass="java.util.HashMap">
+		SELECT
+				id	as "id",  
+				scheme_id	as "schemeId",  
+				next_execute_time	as "nextExecuteTime",  
+				create_man	as "createMan",  
+				create_time	as "createTime",  
+				unit	as "unit",  
+				case unit when 'h' then '时' 
+					when 'd' then '天'
+					when 'm' then '月'  end  as unitName,
+				cycle	as "cycle",  
+				start_time	as "startTime",  
+				holiday	as "holiday",  
+				case holiday when 'Y' then '是'
+					when 'N' then '否' end as holidayName,
+				weekend	as "weekend" ,  
+				case weekend when 'Y' then '是'
+					when 'N' then '否' end as weekendName
+		FROM di_schemecycle 
+		WHERE
+		scheme_id = #value#
+	</select>
+
+	<insert id="insertCycle" parameterClass="java.util.HashMap">
+		INSERT INTO di_schemecycle (id,
+										scheme_id,
+										next_execute_time,
+										create_man,
+										create_time,
+										unit,
+										cycle,
+										start_time,
+										holiday,
+										weekend
+										)		 
+	    VALUES (#id#, #schemeID#, #nextExecuteTime#, #createMan#, #createTime#, #unit#, #cycle#, #startTime#, #holiday#, #weekend#) 
+	</insert>
+  
+	<delete id="deleteCycle" parameterClass="String">
+		DELETE FROM di_schemecycle WHERE scheme_id = #value#
+	</delete>
+	
+	<select id="queryItem" parameterClass="String" 
+			resultClass="java.util.HashMap">
+		SELECT
+				itemID	as "itemID", 
+				schemeID	as "schemeID", 
+				itemID_xmID	as "itemIDxmID",  
+				cardItemID	as "cardItemID",
+				itemName	as "itemName", 
+				itemDesc	as "itemDesc", 
+				referenceValue	as "referenceValue", 
+				actualValueUnit	as "actualValueUnit", 
+				needPhoto	as "needPhoto",
+				sort_no  as "sortNo"
+		FROM 
+			di_schemeitem 
+		WHERE
+			schemeID = #value#
+		order by sort_no
+	</select>
+	
+	<insert id="insertItem" parameterClass="java.util.HashMap">
+		INSERT INTO di_schemeitem (itemID,  
+								schemeID,  
+								itemID_xmID,
+								cardItemID, 
+								itemName, 
+								itemDesc, 
+								referenceValue,  
+								actualValueUnit, 
+								needPhoto,
+		                        sort_no
+								)		 
+	    VALUES (#itemID#, #schemeID#, #itemIDxmID#, #cardItemID#, #itemName#, #itemDesc#, #referenceValue#, #actualValueUnit#, #needPhoto#,#sortNo#)
+	</insert>
+  
+	<delete id="deleteItem" parameterClass="String">
+		DELETE FROM di_schemeitem WHERE schemeID = #value#
+	</delete>
+  
+  	<select id="queryExman" parameterClass="String" 
+			resultClass="java.util.HashMap">
+		SELECT
+				jobID	as "jobID",
+				schemeID	as "schemeID",  
+				jobDepartID	as "jobDepartID",  
+				jobDepartNo	as "deptNum",  
+				jobManID	as "jobManID" ,
+				jobManNo as workNo,
+				jobManName as name,
+				jobDepartName as deptName
+		FROM di_schemejobs j
+		WHERE
+			schemeID = #value#
+		order by jobManNo
+	</select>
+
+	<insert id="insertExman" parameterClass="java.util.HashMap">
+		INSERT INTO di_schemejobs (jobID, 
+										schemeID,  
+										jobDepartNo,  
+										jobManNo,
+										jobManName,
+										jobDepartName
+										)		 
+	    VALUES (#jobID#, #schemeID#,#jobDepartNo#,#jobManNo#,#jobManName#,#jobDepartName#) 
+	</insert>
+  
+	<delete id="deleteExman" parameterClass="String">
+		DELETE FROM di_schemejobs WHERE schemeID = #value#	
+	</delete>
+	
+	
+	<select id="queryNeedScheme" parameterClass="java.lang.String"
+		resultClass="java.util.HashMap">
+		SELECT
+			dsc.scheme_id schemeID,
+			dsc.id,
+			dsc.unit,
+			dsc.cycle,
+			dsc.weekend,
+			dsc.holiday,
+			dsc.next_execute_time nextExecuteTime
+		FROM
+			di_schemecycle dsc
+			JOIN di_scheme ds ON ds.schemeId = dsc.scheme_id 
+		WHERE
+			ds.STATUS = '1' and 
+		next_execute_time<![CDATA[<]]>#value#
+	</select>
+	
+	<update id="updateDeviceCyc" parameterClass="java.util.HashMap">
+		update
+		di_schemecycle set next_execute_time=#nowTime#
+		where id=#id#
+	</update>
+	
+	<insert id="insertTask">
+				INSERT INTO di_task (taskID,  
+							taskCode,  
+							departID, 
+							managerID, 
+							activeTime,  
+							jobContent, 
+							memo, 
+							schemeID, 
+							machineID, 
+							recCreateTime, 
+							createTime,
+							lastWriteTime,
+							lastWriteMan, 
+							finishTime,
+							finishMan, 
+							invalidTime, 
+							invalidMan,  
+							status, 
+							exceptionFlag,
+							managerNo,
+							managerName,
+							departNo,
+							departName
+								)		 
+	    VALUES (#taskID#, #taskCode#, #departID#, #managerID#, #activeTime#, #jobContent#, #memo#, #schemeID#, #machineID#, #recCreateTime#, #createTime#, #lastWriteTime#, #lastWriteMan#, #finishTime#, #finishMan#, #invalidTime#, #invalidMan#, #status#, #exceptionFlag#,#managerNo#,#managerName#,#departNo#,#departName#)
+	</insert>
+	
+	<insert id="addTaskItem" parameterClass="java.util.HashMap">
+		INSERT INTO di_taskitem (itemID, 
+								taskID, 
+								jitemName,  
+								itemDesc,  
+								referenceValue,
+								errorContent, 
+								writeValue,
+								successFlag,
+								writeTime, 
+								writeMan,
+								sortNo, 
+								itemID_xmID,
+								exception_status, 
+								exception_result,  
+								actualValueUnit,  
+								needPhoto,
+		                        sort_no
+								)		 
+	    VALUES (#itemID#, #taskID#, #jitemName#, #itemDesc#, #referenceValue#, #errorContent#, #writeValue#, #successFlag#, #writeTime#, #writeMan#, #sortNo#, #itemIDxmID#, #exceptionStatus#, #exceptionResult#, #actualValueUnit#, #needPhoto#, #sortNo#)
+	</insert>
+	
+	
+	
+	
+	<select id="getCheckNormalFlag" resultClass="String">
+		SELECT
+			page
+		FROM
+			di_config
+		WHERE
+			id = 'checkNormal'
+	</select>
+  
+  	<select id="getLastTaskId" parameterClass="String" resultClass="String">
+		SELECT
+		a.taskID
+		FROM
+		di_task a
+		LEFT JOIN di_task b ON b.taskID = #value# and b.schemeID = a.schemeID
+		WHERE
+		a.taskID != b.taskID
+		AND a.createTime <![CDATA[<]]> b.createTime
+		ORDER BY
+		a.createTime DESC
+		LIMIT 1
+	</select>
+	
+	<select id="getExceptionHandle" parameterClass="String" resultClass="java.util.HashMap">
+		SELECT
+			itemID,
+			itemID_xmID xmID,
+			successFlag successFlag,
+			exception_status exceptionStatus
+		FROM
+			di_taskitem
+		WHERE
+			taskid = #value#
+	</select>
+	
+	<select id="getXmByItemID" parameterClass="String" resultClass="String">
+		SELECT
+			itemID_xmID
+		FROM
+			di_taskitem
+		WHERE
+			itemID = #value#
+	</select>
+	
+	<select id="getTaskCodeById" parameterClass="String" resultClass="String">
+		select 
+			taskCode 
+		from 
+			di_task 
+		where 
+			taskID = #value#
+	</select>
+	
+	<select id="getTaskStatusString" parameterClass="String" resultClass="String">
+		select status from di_task where taskID=#value#
+	</select>
+	
+	<select id="getTaskTime" parameterClass="String" resultClass="String">
+		select createTime from di_task where taskID=#value#
+	</select>
+	
+	
+	
+	<select id="getDeviceConfig"  parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		select * from di_config
+		where 1=1
+		<isNotEmpty prepend="and" property="value">
+			id = #value#			
+		</isNotEmpty>
+	</select>
+	
+	 <select id="getDDZXUser"  resultClass="HashMap">
+ 		SELECT
+			c.username
+		FROM
+			t_s_role a
+		LEFT JOIN t_s_role_user b ON a.id = b.roleid
+		LEFT JOIN t_s_base_user c ON b.userid = c.id
+		WHERE
+			a.rolecode = 'MAINTAIN_DDZX'
+ 	</select>
+ 	
+ 	 <select id="getDeviceError"  resultClass="HashMap">
+		 ELECT
+			tt.taskCode,
+			tt.schemeName,
+			tt.machine_code,
+			tt.machine_name,
+			GROUP_CONCAT(t.errorContent) as error,
+			tt.inspType,
+			tt.taskID,
+			tt.schemeID
+		FROM
+			`di_taskitem` t
+		LEFT JOIN (
+			SELECT
+				t.taskID,
+				t.taskCode,
+				t.schemeID,
+				x.schemeName,
+				t.taskType,
+				v.machine_code,
+				v.machine_name,
+				t.inspType
+			FROM
+				di_task t
+			LEFT JOIN di_scheme x ON t.schemeID = x.schemeID
+			LEFT JOIN df_devicemachine v on	t.machineID = v.id
+		) tt ON tt.taskID = t.taskID
+		WHERE
+			t.successFlag = '-1'
+		AND t.exception_status = '0'
+		AND tt.taskType = 'inspection'
+		AND tt.inspType = 'dev'
+		GROUP BY tt.taskCode
+		ORDER BY
+			taskCode DESC
+ 	</select>
+ 	
+ 	<delete id="delDeviceError" parameterClass="String">
+		DELETE FROM di_errortop WHERE workNo = #value#
+	</delete>
+	
+	 <insert id="saveDeviceError" parameterClass="HashMap" >
+		insert into di_errortop(
+		id,
+		taskCode,
+		machine_code,
+		machine_name,
+		errorContent,
+		workNo,
+		inspType,
+		taskID,
+		schemeID,
+		recreatime,
+		flagType
+		) VALUES(
+			#id#,#taskCode#,#machine_code#,#machine_name#,#error#,#workNo#,#inspType#,#taskID#,
+			#schemeID#,#recreatime#,#flagType#
+		)
+	</insert>
+	
+	<select id="getRoleUser" parameterClass="String" resultClass="HashMap">
+		SELECT 
+			a.* 
+		FROM t_s_role a 
+		LEFT JOIN t_s_role_user b ON a.id = b.roleid 
+		LEFT JOIN t_s_base_user c ON c.id = b.userid 
+		WHERE c.username = #value#
+	</select>
+  
+  	<select id="getDevExceptionTask" parameterClass="HashMap" resultClass="HashMap">
+		select distinct tb.taskID,tt.itemID,tt.jitemName,dm.machine_name,tb.taskCode,tm.schemeName,tt.writeValue,tt.errorContent,tt.exception_status,
+		tb.finishTime,dm.fixed_place as fixedPlace
+		from di_task tb 
+		left join di_taskitem tt on tt.taskID = tb.taskID
+		left join di_scheme tm on tm.schemeID = tb.schemeID
+		left join di_schemejobs tn on tn.schemeID = tm.schemeID
+		left join df_devicemachine dm on dm.id = tm.machineID
+		where tt.successFlag = '-1' 
+		and tt.exception_status = #exceptionStatus# 
+		and tb.taskType = 'inspection' 
+		and tb.inspType = 'dev'
+		<isNotEmpty prepend="and" property="userID">
+			tb.managerNo = #userID#
+		</isNotEmpty>
+		order by tb.taskCode desc
+		limit #startRow#,#rows#
+	</select>
+	
+	<select id="getPicList" parameterClass="String" resultClass="HashMap">
+		select tb.fileID,tb.thumbnailPath,tb.fileName from t_common_file tb left join di_taskpic tt on tt.fileID = tb.fileID where tt.itemID = #itemID#
+	</select>
+	
+	<update id="handDevExceptionTask" parameterClass="HashMap">
+		update di_taskitem
+		set 
+			exception_status = 1,
+		 	exception_result = #exceptionResult#
+		where itemID = #itemID#
+	</update>
+	
+	<select id="getMachineInfo" parameterClass="String" resultClass="HashMap">
+		SELECT
+			t.id,
+			t.machine_code,
+			t.machine_name,
+			sf.classify_name AS machine_type_id,
+			t.maker_brand,
+			t.models,
+			t.fixed_place,
+			date_format( t.fixed_time, '%Y-%m-%d' ) AS fixed_time,
+			t.manufacturer_name,
+			t.supplier_name,
+			t.buy_time,
+			t.use_time,
+			date_format( t.last_maintain_time, '%Y-%c-%d %h:%i:%s' ) AS last_maintain_time,
+			t.use_deaprt_name AS manager_depart_id,
+			t.manager_man AS manager_man_id,
+			t.memo,
+			t.STATUS,
+			t.building,
+			t.floor,
+			t.use_for,
+			t.need_scan 
+		FROM
+			(SELECT
+			a.id,
+			a.machine_code,
+			a.machine_name,
+			a.machine_type_id,
+			a.models,
+			a.spot_id,
+			a.spot_code,
+			a.fixed_place,
+			maker_brand,
+			fixed_time,
+			manufacturer_name,
+			supplier_name,
+			buy_time,
+			use_time,
+			last_maintain_time,
+			use_deaprt_name,
+			manager_man,
+			memo,
+			STATUS,
+			building,
+			floor,
+			use_for,
+			a.need_scan
+		FROM
+		df_devicemachine a UNION all
+		SELECT
+			b.id,
+			b.machine_code,
+			b.machine_name,
+		    b.machine_type_id,
+			b.models,
+			fixed_id as spot_id,
+			"" as spot_code,
+			b.fixed_place,
+			"" as maker_brand,
+			fixed_time,
+			manufacturer_name,
+			"" as supplier_name,
+			"" as buy_time,
+			use_time,
+			"" as last_maintain_time,
+			use_deaprt_name,
+			"" as manager_man,
+			memo,
+			"" as STATUS,
+			"" as building,
+			"" as floor,
+			use_for,
+			b.need_scan
+		FROM
+		df_special_device b) t
+			LEFT JOIN df_modulebaseclassfy sf ON sf.id = t.machine_type_id 
+		WHERE
+			t.id = #value#
+	</select>
+	
+	<select id="getDeviceOfflineTask4leader" parameterClass="Map" resultClass="java.util.HashMap">
+		SELECT
+			td.schemeName,
+			td.XJType,
+			td.taskID,
+			td.taskCode,
+			td.taskType,
+			td.jobContent,
+			td.machineID,
+			td.createTimeView,
+			td.STATUS,
+			td.finishTimeView,
+			td.machineCode ,
+			td.machineName,
+			td.fixedPlace,
+			td.needScan,
+			tb.sortNo,
+			tb.itemID,
+			tb.jitemName,
+			tb.itemDesc,
+			tb.referenceValue,
+			ifnull(tb.writeValue,'') AS writeValue,
+			ifnull(tb.actualValueUnit,'') AS actualValueUnit,
+			ifnull(tb.successFlag,'') AS successFlag,
+			ifnull(tb.errorContent,'') AS errorContent,
+			tb.itemID_xmID,
+			tt.xunjian_abnormal AS xunjianAbnormal,
+			tt.CODE AS itemCode,
+			td.machineCodeOld,
+			tb.needPhoto
+		FROM
+			(
+				SELECT
+					tb.sortNo,
+					tb.itemID,
+					tb.taskID,
+					tb.jitemName,
+					tb.itemDesc,
+					tb.referenceValue,
+					tb.writeValue,
+					tb.actualValueUnit,
+					tb.successFlag,
+					tb.errorContent,
+					tb.itemID_xmID,
+					tb.needPhoto
+				FROM
+					di_taskitem tb
+				WHERE
+					tb.taskID IN (
+						SELECT
+							taskid
+						FROM
+							di_task dt
+						LEFT JOIN tbmbd02 t2 ON t2.id = dt.mangerID
+						LEFT JOIN di_scheme ds ON ds.schemeID = dt.schemeID
+						WHERE
+						date_format(dt.createTime, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d')
+						AND dt. STATUS = 1
+						<isNotEmpty prepend="AND" property="taskType">
+			        		dt.taskType = #taskType#
+			        	</isNotEmpty>
+			        	<isNotEmpty prepend="AND" property="inspType">
+			        		dt.inspType = #inspType#
+			        	</isNotEmpty>
+					)
+			) tb
+		LEFT JOIN di_item tt ON tb.itemID_xmID = tt.id
+		LEFT JOIN (
+			SELECT
+				ds.schemeName,
+				ds.XJType,
+				dt.taskID,
+				dt.taskCode,
+				dt.taskType,
+				dt.jobContent,
+				dt.machineID,
+				date_format(dt.createTime,'%Y-%m-%d %H:%i:%s') as createTimeView,
+				dt.STATUS,
+				date_format(date_add(
+					dt.createTime,
+					INTERVAL ds.activeTime HOUR
+				),'%Y-%m-%d %H:%i:%s') AS finishTimeView,
+				dm.machine_code AS machineCode,
+				dm.machine_name AS machineName,
+				dm.fixed_place AS fixedPlace,
+				dm.need_scan AS needScan,
+				dm.machine_code_old AS machineCodeOld
+			FROM
+				di_task dt
+			LEFT JOIN tbmbd02 t2 ON t2.id = dt.mangerID
+			LEFT JOIN df_devicemachine dm ON dm.id = dt.machineID
+			LEFT JOIN di_scheme ds ON ds.schemeID = dt.schemeID
+			WHERE
+			date_format(dt.createTime, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d')
+			AND dt. STATUS = 1
+			<isNotEmpty prepend="AND" property="taskType">
+        		dt.taskType = #taskType#
+        	</isNotEmpty>
+        	<isNotEmpty prepend="AND" property="inspType">
+        		dt.inspType = #inspType#
+        	</isNotEmpty>
+		) td ON tb.taskID = td.taskID
+		ORDER BY
+			td.taskID asc, machineCode asc,finishTimeView asc
+	</select>
+	
+	<select id="getDeviceOfflineTask" parameterClass="Map" resultClass="java.util.HashMap">
+		SELECT
+			td.schemeName,
+			td.XJType,
+			td.taskID,
+			td.taskCode,
+			td.taskType,
+			td.jobContent,
+			td.machineID,
+			td.createTimeView,
+			td.STATUS,
+			td.finishTimeView,
+			td.machineCode ,
+			td.machineName,
+			td.fixedPlace,
+			td.needScan,
+			tb.sortNo,
+			tb.itemID,
+			tb.jitemName,
+			tb.itemDesc,
+			tb.referenceValue,
+			ifnull(tb.writeValue,'') AS writeValue,
+			ifnull(tb.actualValueUnit,'') AS actualValueUnit,
+			ifnull(tb.successFlag,'') AS successFlag,
+			ifnull(tb.errorContent,'') AS errorContent,
+			tb.itemID_xmID,
+			tt.xunjian_abnormal AS xunjianAbnormal,
+			tt.CODE AS itemCode,
+			td.machineCodeOld,
+			tb.needPhoto
+		FROM
+			(
+				SELECT
+					tb.sortNo,
+					tb.itemID,
+					tb.taskID,
+					tb.jitemName,
+					tb.itemDesc,
+					tb.referenceValue,
+					tb.writeValue,
+					tb.actualValueUnit,
+					tb.successFlag,
+					tb.errorContent,
+					tb.itemID_xmID,
+					tb.needPhoto
+				FROM
+					di_taskitem tb
+				WHERE
+					tb.taskID IN (
+						SELECT
+							taskid
+						FROM
+							di_task dt
+						LEFT JOIN tbmbd02 t2 ON t2.id = dt.mangerID
+						LEFT JOIN di_scheme ds ON ds.schemeID = dt.schemeID
+						WHERE
+							(
+								dt.schemeID IN (
+									SELECT
+										dsj.schemeID
+									FROM
+										di_schemejobs dsj
+									LEFT JOIN tbmbd02 t2 ON t2.id = dsj.jobManID
+									WHERE
+										t2.work_no = #userID#
+								)
+								OR t2.work_no = #userID#
+							)
+						AND date_format(date_add(dt.createTime,INTERVAL ds.activeTime HOUR), '%Y-%m-%d') <![CDATA[<]]>= date_add(curdate(),INTERVAL 30 day)
+						AND dt. STATUS = 1
+						<isNotEmpty prepend="AND" property="taskType">
+			        		dt.taskType = #taskType#
+			        	</isNotEmpty>
+			        	<isNotEmpty prepend="AND" property="inspType">
+			        		dt.inspType = #inspType#
+			        	</isNotEmpty>
+					)
+			) tb
+		LEFT JOIN di_item tt ON tb.itemID_xmID = tt.id
+		LEFT JOIN (
+			SELECT
+				ds.schemeName,
+				ds.XJType,
+				dt.taskID,
+				dt.taskCode,
+				dt.taskType,
+				dt.jobContent,
+				dt.machineID,
+				date_format(dt.createTime,'%Y-%m-%d %H:%i:%s') as createTimeView,
+				dt.STATUS,
+				date_format(date_add(
+					dt.createTime,
+					INTERVAL ds.activeTime HOUR
+				),'%Y-%m-%d %H:%i:%s') AS finishTimeView,
+				dm.machine_code AS machineCode,
+				dm.machine_name AS machineName,
+				dm.fixed_place AS fixedPlace,
+				dm.need_scan AS needScan,
+				dm.machine_code_old AS machineCodeOld
+			FROM
+				di_task dt
+			LEFT JOIN tbmbd02 t2 ON t2.id = dt.mangerID
+			LEFT JOIN df_devicemachine dm ON dm.id = dt.machineID
+			LEFT JOIN di_scheme ds ON ds.schemeID = dt.schemeID
+			WHERE
+				(
+					dt.schemeID IN (
+						SELECT
+							dsj.schemeID
+						FROM
+							di_schemejobs dsj
+						LEFT JOIN tbmbd02 t2 ON t2.id = dsj.jobManID
+						WHERE
+							t2.work_no = #userID#
+					)
+					OR t2.work_no = #userID#
+				)
+			AND date_format(date_add(dt.createTime,INTERVAL ds.activeTime HOUR), '%Y-%m-%d') <![CDATA[<]]>= date_add(curdate(),INTERVAL 30 day)
+			AND dt. STATUS = 1
+			<isNotEmpty prepend="AND" property="taskType">
+        		dt.taskType = #taskType#
+        	</isNotEmpty>
+        	<isNotEmpty prepend="AND" property="inspType">
+        		dt.inspType = #inspType#
+        	</isNotEmpty>
+		) td ON tb.taskID = td.taskID
+		ORDER BY
+			td.taskID asc,machineCode asc,finishTimeView asc
+	</select>
+	
+	<select id="getDevTaskHistory" parameterClass="HashMap" resultClass="HashMap">
+		SELECT DISTINCT dt.taskID,
+		ifnull(ds.schemeName,'') AS schemeName,
+		dt.taskCode,dt.taskType,dt.jobContent,dt.memo,dt.machineID,dm.machine_code,dm.machine_name,dm.fixed_place,
+		case when dt.status='2' then '已完工' when dt.status='1' then '执行中' else '已超时' end as  status,
+		date_format(dt.createTime,'%Y-%m-%d %H:%i:%s') as createTime,
+	    date_format(date_add(dt.createTime,INTERVAL dt.`activeTime` hour),'%Y-%m-%d %h:%i:%s')  as endTime,
+		date_format(dt.finishTime,'%Y-%m-%d %H:%i:%s') as finishTime,
+		ts.name AS finishMan,dm.need_scan 
+		FROM di_task dt 
+		left join `di_schemejobs` tb on tb.`schemeID`  = dt.`schemeID` 
+		left join TBMBD02 t2 on t2.id = tb.`jobManID` 
+		left join tbmbd02 ts on ts.id=dt.`mangerID`  
+		left join df_devicemachine dm on dm.id=dt.machineID 
+		left join di_scheme ds on ds.schemeID=dt.schemeID 
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="machineID">
+			(dt.machineID = #machineID# or dm.machine_code_old = #machineID#)
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="deptID">
+			dt.departID = #deptID#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="taskType">
+			dt.taskType = #taskType#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="inspType">
+			dt.inspType = #inspType#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="userID">
+			(t2.work_no = #userID# or ts.work_no = #userID#)
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="status">
+			dt.status = #status#
+		</isNotEmpty> 
+		<isNotEmpty prepend="and" property="xjType">
+			ds.XJtype = #xjType#
+		</isNotEmpty> 
+		<isNotEmpty prepend="and" property="beginDate">
+			DATE_FORMAT(dt.createTime, '%Y-%m-%d') >= #beginDate# 
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="endDate">
+			DATE_FORMAT(dt.createTime, '%Y-%m-%d') <![CDATA[<]]>= #endDate# 
+		</isNotEmpty>
+		ORDER BY dt.createTime DESC LIMIT #startRow# ,#rows#  
+	</select>
+	
+	<select id="getDeviceInspectionDetail"  resultClass="HashMap" parameterClass="String">
+		SELECT 
+			ii.sortNo,
+			ii.itemID,
+			ii.taskID,
+			ii.jitemName,
+			ii.itemDesc,
+			ii.referenceValue,
+			ii.writeValue,
+			ii.successFlag ,
+			ii.errorContent,
+			dc.xunjian_abnormal,
+			dc.code as itemCode
+		FROM di_taskitem ii
+		LEFT JOIN di_item dc on ii.itemID_xmID = dc.id
+		where
+        ii.taskID = #value#
+        order by ii.sortNo asc
+	</select>
+	
+	<select id="getTaskMat" parameterClass="String" resultClass="HashMap">
+		select 
+			t1.amount,
+			t2.price,
+			t2.mat_name,
+			t2.id,
+			t1.itemID 
+		from 
+			di_taskmat t1 
+		left join tbmbd08 t2 on t1.matid = t2.id 
+		where t1.taskid = #value#
+	</select>
+	
+	
+	<!-- ====================================巡检App接口sql============================================ -->
+	<!-- 查询巡检任务 -->
+	<select id="queryTask" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select
+			ds.schemeCode, 							<!-- 基准编码 -->
+			ds.schemeName,							<!-- 基准名称（任务名称） -->
+			ds.activeTime,							<!-- 任务有效时间 -->
+			ds.jobContent,							<!-- 作业说明 -->
+			dt.departNo manageDeptNum,				<!-- 责任科室编码 -->
+			dt.departName manageDeptNum,			<!-- 责任科室名称 -->
+			dt.managerNo managerCode,				<!-- 负责人工号 -->
+			dt.managerName managerName,					<!-- 负责人名称 -->
+			dv.id machineId,				        <!-- 设备Id  -->
+			dv.machine_code machineCode,			<!-- 设备编码 -->
+			dv.machine_name machineName,			<!-- 设备名称 -->
+			dv.spot_id fixedPlaceId,						<!-- 设备安装地点Id -->
+			dv.spot_code fixedPlaceCode,			<!-- 设备安装地点 -->
+			dv.fixed_place fixedPlaceName,			<!-- 设备安装地点 -->
+			dv.need_scan needScan,					<!-- 是否需要扫描二维码 -->
+			dt.taskID,								<!-- 任务ID -->
+			dt.taskCode,							<!-- 任务编码 -->
+			dt.status taskStatusCode,				<!-- 任务状态编码 -->
+			CASE dt.status				
+				when '1' then '执行中'
+				when '-1' then '已超时'
+				when '2' then '完成'
+				when '3' then '关闭'
+			END taskStatusName,						<!-- 任务状态名称 -->
+			DATE_FORMAT(dt.createTime, '%Y-%m-%d %H:%i:%s') createTime,							<!-- 任务执行时间 -->
+			DATE_FORMAT( DATE_ADD(dt.createTime,INTERVAL ds.activeTime HOUR), '%Y-%m-%d %H:%i:%s' ) limitTime, <!-- 截止时间 -->
+			DATE_FORMAT(dt.finishTime, '%Y-%m-%d %H:%i:%s') finishTime,							<!-- 完工时间 -->
+			dt.finishMan finishManCode,				<!-- 完工人工号 -->
+			dt.finishManName finishManName,		<!-- 完工人名称 -->
+			dt.exceptionFlag,						<!-- 任务结果状态编码 -->
+			CASE dt.exceptionFlag		
+				when '-1' then '异常'		
+				when '1' then '正常'		
+			END exceptionFlagName,					<!-- 任务结果状态名称 -->
+			dti.itemID,								<!-- 巡检项目ID -->
+			dti.jitemName,							<!-- 作业项目（巡检项目名称） -->
+			dti.itemDesc,							<!-- 作业说明（巡检项目说明） -->
+			dti.referenceValue,						<!-- 参考值 -->
+			dti.writeValue,							<!-- 巡检录入值（巡检实际值） -->
+			dti.actualValueUnit,					<!-- 巡检实际值单位 -->
+			dti.errorContent,						<!-- 异常故障描述 -->
+			dti.successFlag,						<!-- 巡检项结果状态编码 -->
+			CASE dti.successFlag
+				when '-1' then '异常'
+				when '1' then '正常'
+				when '2' then '停用'
+			END successFlagName,					<!-- 巡检项结果状态名称 -->
+			dti.exception_status exceptionStatus,	<!-- 异常处理状态 -->
+			dti.exception_result exceptionResult,	<!-- 异常处理结果-->
+			dti.needPhoto,							<!-- 巡检项是否需要拍照 -->
+			dti.sort_no sortNo
+		from di_task dt 
+		left join di_scheme ds on dt.schemeID = ds.schemeID
+		left join (
+		SELECT
+			a.id,
+			a.machine_code,
+			a.machine_name,
+			a.models,
+			a.spot_id,
+			a.spot_code,
+			a.fixed_place,
+			a.need_scan
+		FROM
+		df_devicemachine a UNION all
+		SELECT
+			b.id,
+			b.machine_code,
+			b.machine_name,
+			b.models,
+			fixed_id as spot_id,
+			"" as spot_code,
+			b.fixed_place,
+			b.need_scan
+		FROM
+		df_special_device b) dv on dt.machineID = dv.id
+		left join di_taskitem dti on dt.taskID = dti.taskID
+		where 1=1		
+		<isNotEmpty property="isAdvance" prepend=" and "> <!-- 是否可以提前看到任务，默认不可以 -->
+			dt.createTime <![CDATA[<=]]> date_add(current_time(),INTERVAL #isAdvance# HOUR)
+		</isNotEmpty>
+		<isNotEmpty property="taskID" prepend=" and ">  				<!-- 任务id -->
+			dt.taskID = #taskID#
+		</isNotEmpty>
+		<isNotEmpty property="taskCode" prepend=" and ">				<!-- 任务编码 -->
+			dt.taskCode like concat('%', #taskCode#, '%') 
+		</isNotEmpty>
+		<isNotEmpty property="taskStatus" prepend=" and ">				<!-- 任务状态 -->
+			dt.status = #taskStatus#
+		</isNotEmpty>
+		<isNotEmpty property="successFlag" prepend=" and ">				<!-- 巡检项结果状态 -->
+			dti.successFlag = #successFlag# 
+		</isNotEmpty>
+		<isNotEmpty property="exceptionStatus" prepend=" and ">			<!-- 异常处理状态  -->
+			dti.exception_status = #exceptionStatus# 
+		</isNotEmpty>
+		<isNotEmpty property="fixedCode" prepend=" and ">				<!-- 地点编码  -->
+			dv.fixed_place = #fixedCode# 
+		</isNotEmpty>
+		<isNotEmpty property="beginTime" prepend=" and ">				<!-- 执行时间>=  -->
+			DATE_FORMAT(dt.createTime, '%Y-%m-%d') >= #beginTime#  
+		</isNotEmpty>
+		<isNotEmpty property="endTime" prepend=" and ">					<!-- 执行时间<=  -->
+			DATE_FORMAT(dt.createTime, '%Y-%m-%d') <![CDATA[<=]]> #endTime#  
+		</isNotEmpty>
+		<!-- <isEqual property="isLeader" prepend=" and " compareValue="N">	非巡检领导，判断用户是否是执行人或者是负责人
+				dt.finishMan = #userName#
+		</isEqual> -->
+		<isEqual property="isLeader" prepend=" and " compareValue="N">	<!-- 非巡检领导，判断用户是否是执行人或者是负责人 -->
+			(dt.schemeID IN (SELECT dsj.schemeID FROM di_schemejobs dsj 
+			WHERE dsj.jobManNo = #userID#) or ds.managerNo = #userID#) 
+		</isEqual>
+		order by dt.taskCode desc,dti.sort_no ASC
+		<isNotEmpty property="offset"> 	<!-- 分页 -->			
+			 limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+	
+	<select id="queryTaskCount" parameterClass="java.util.Map" resultClass="int">
+		select 
+			dt.taskID
+		from di_task dt 
+		left join di_scheme ds on dt.schemeID = ds.schemeID
+		left join (
+		SELECT
+			a.id,
+			a.machine_code,
+			a.machine_name,
+			a.models,
+			a.spot_id,
+			a.spot_code,
+			a.fixed_place
+		FROM
+		df_devicemachine a UNION all
+		SELECT
+			b.id,
+			b.machine_code,
+			b.machine_name,
+			b.models,
+			fixed_id as spot_id,
+			"" as spot_code,
+			b.fixed_place
+		FROM
+		df_special_device b) dv on dt.machineID = dv.id
+		left join di_taskitem dti on dt.taskID = dti.taskID
+		where 1=1
+		<isNotEmpty property="isAdvance" prepend=" and "> <!-- 是否可以提前看到任务，默认不可以 -->
+			dt.createTime <![CDATA[<=]]> date_add(current_time(),INTERVAL #isAdvance# HOUR)
+		</isNotEmpty>
+		<isNotEmpty property="taskID" prepend=" and ">  				<!-- 任务id -->
+			dt.taskID = #taskID#
+		</isNotEmpty>
+		<isNotEmpty property="taskCode" prepend=" and ">				<!-- 任务编码 -->
+			dt.taskCode like concat('%', #taskCode#, '%') 
+		</isNotEmpty>
+		<isNotEmpty property="taskStatus" prepend=" and ">				<!-- 任务状态 -->
+			dt.status = #taskStatus#
+		</isNotEmpty>
+		<isNotEmpty property="successFlag" prepend=" and ">				<!-- 巡检项结果状态 -->
+			dti.successFlag = #successFlag# 
+		</isNotEmpty>
+		<isNotEmpty property="exceptionStatus" prepend=" and ">			<!-- 异常处理状态  -->
+			dti.exception_status = #exceptionStatus# 
+		</isNotEmpty>
+		<isNotEmpty property="fixedCode" prepend=" and ">				<!-- 地点编码  -->
+			dv.fixed_place = #fixedCode# 
+		</isNotEmpty>
+		<isNotEmpty property="beginTime" prepend=" and ">				<!-- 执行时间>=  -->
+			DATE_FORMAT(dt.createTime, '%Y-%m-%d') >= #beginTime#  
+		</isNotEmpty>
+		<isNotEmpty property="endTime" prepend=" and ">					<!-- 执行时间<=  -->
+			DATE_FORMAT(dt.createTime, '%Y-%m-%d') <![CDATA[<=]]> #endTime#  
+		</isNotEmpty>
+		<!-- <isEqual property="isLeader" prepend=" and " compareValue="N">	非巡检领导，判断用户是否是执行人或者是负责人
+			(dt.schemeID IN (SELECT dsj.schemeID FROM di_schemejobs dsj LEFT JOIN tbmbd02 t2 
+				ON t2.id = dsj.jobManID WHERE t2.work_no = #userID#) or ts2.work_no = #userID#) 
+		</isEqual> -->
+		<isEqual property="isLeader" prepend=" and " compareValue="N">	<!-- 非巡检领导，判断用户是否是执行人或者是负责人 -->
+			(dt.schemeID IN (SELECT dsj.schemeID FROM di_schemejobs dsj 
+			WHERE dsj.jobManNo = #userID#) or ds.managerNo = #userID#) 
+		</isEqual>
+	</select>
+
+	<select id="queryTaskBySchemeID" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		SELECT
+		dt.taskID,
+		dt.taskCode
+		FROM
+		di_task dt
+		LEFT JOIN di_scheme ds ON dt.schemeID = ds.schemeID
+		where 1=1
+
+		<isNotEmpty property="isAdvance" prepend=" and "> <!-- 是否可以提前看到任务，默认不可以 -->
+			dt.createTime <![CDATA[<=]]> date_add(current_time(),INTERVAL #isAdvance# HOUR)
+		</isNotEmpty>
+
+<!--		<isNotEmpty property="taskID" prepend=" and ">  				&lt;!&ndash; 任务id &ndash;&gt;-->
+<!--			dt.taskID = #taskID#-->
+<!--		</isNotEmpty>-->
+<!--		<isNotEmpty property="taskCode" prepend=" and ">				&lt;!&ndash; 任务编码 &ndash;&gt;-->
+<!--			dt.taskCode like concat('%', #taskCode#, '%')-->
+<!--		</isNotEmpty>-->
+
+
+		<isNotEmpty property="taskStatus" prepend=" and ">				<!-- 任务状态 -->
+			dt.status = #taskStatus#
+		</isNotEmpty>
+
+
+<!--		<isNotEmpty property="successFlag" prepend=" and ">				&lt;!&ndash; 巡检项结果状态 &ndash;&gt;-->
+<!--			dti.successFlag = #successFlag#-->
+<!--		</isNotEmpty>-->
+<!--		<isNotEmpty property="exceptionStatus" prepend=" and ">			&lt;!&ndash; 异常处理状态  &ndash;&gt;-->
+<!--			dti.exception_status = #exceptionStatus#-->
+<!--		</isNotEmpty>-->
+<!--		<isNotEmpty property="fixedCode" prepend=" and ">				&lt;!&ndash; 地点编码  &ndash;&gt;-->
+<!--			dv.fixed_place = #fixedCode#-->
+<!--		</isNotEmpty>-->
+<!--		<isNotEmpty property="beginTime" prepend=" and ">				&lt;!&ndash; 执行时间>=  &ndash;&gt;-->
+<!--			DATE_FORMAT(dt.createTime, '%Y-%m-%d') >= #beginTime#-->
+<!--		</isNotEmpty>-->
+<!--		<isNotEmpty property="endTime" prepend=" and ">					&lt;!&ndash; 执行时间<=  &ndash;&gt;-->
+<!--			DATE_FORMAT(dt.createTime, '%Y-%m-%d') <![CDATA[<=]]> #endTime#-->
+<!--		</isNotEmpty>-->
+
+		<isEqual property="isLeader" prepend=" and " compareValue="N">	<!-- 非巡检领导，判断用户是否是执行人或者是负责人 -->
+			(dt.schemeID IN (SELECT dsj.schemeID FROM di_schemejobs dsj
+			WHERE dsj.jobManNo = #userID#) or ds.managerNo = #userID#)
+		</isEqual>
+
+		order by dt.taskCode desc
+
+		<isNotEmpty property="offset"> 	<!-- 分页 -->
+			limit #offset#,#limit#
+		</isNotEmpty>
+
+	</select>
+
+	<select id="queryTaskitemByTaskID" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		SELECT
+			ds.schemeCode,
+			ds.schemeName,
+			ds.activeTime,
+			ds.jobContent,
+			dt.departNo manageDeptNum,
+			dt.departName manageDeptNum,
+			dt.managerNo managerCode,
+			dt.managerName managerName,
+			dv.id machineId,
+			dv.machine_code machineCode,
+			dv.machine_name machineName,
+			dv.spot_id fixedPlaceId,
+			dv.spot_code fixedPlaceCode,
+			dv.fixed_place fixedPlaceName,
+			dv.need_scan needScan,
+			dt.taskID,
+			dt.taskCode,
+			dt.STATUS taskStatusCode,
+			CASE
+				dt.STATUS
+				WHEN '1' THEN
+					'执行中'
+				WHEN '-1' THEN
+					'已超时'
+				WHEN '2' THEN
+					'完成'
+				WHEN '3' THEN
+					'关闭'
+				END taskStatusName,
+			DATE_FORMAT( dt.createTime, '%Y-%m-%d %H:%i:%s' ) createTime,
+			DATE_FORMAT( DATE_ADD( dt.createTime, INTERVAL ds.activeTime HOUR ), '%Y-%m-%d %H:%i:%s' ) limitTime,
+			DATE_FORMAT( dt.finishTime, '%Y-%m-%d %H:%i:%s' ) finishTime,
+			dt.finishMan finishManCode,
+			dt.finishManName finishManName,
+			dt.exceptionFlag,
+			CASE
+				dt.exceptionFlag
+				WHEN '-1' THEN
+					'异常'
+				WHEN '1' THEN
+					'正常'
+				END exceptionFlagName,
+			dti.itemID,
+			dti.jitemName,
+			dti.itemDesc,
+			dti.referenceValue,
+			dti.writeValue,
+			dti.actualValueUnit,
+			dti.errorContent,
+			dti.successFlag,
+			CASE
+				dti.successFlag
+				WHEN '-1' THEN
+					'异常'
+				WHEN '1' THEN
+					'正常'
+				WHEN '2' THEN
+					'停用'
+				END successFlagName,
+			dti.exception_status exceptionStatus,
+			dti.exception_result exceptionResult,
+			dti.needPhoto,
+			dti.sort_no sortNo
+		FROM
+			di_taskitem dti
+				LEFT JOIN  di_task dt on dti.taskID = dt.taskID
+				LEFT JOIN  di_scheme ds on ds.schemeID = dt.schemeID
+				LEFT JOIN (
+				SELECT
+					a.id,
+					a.machine_code,
+					a.machine_name,
+					a.models,
+					a.spot_id,
+					a.spot_code,
+					a.fixed_place,
+					a.need_scan
+				FROM
+					df_devicemachine a UNION ALL
+				SELECT
+					b.id,
+					b.machine_code,
+					b.machine_name,
+					b.models,
+					fixed_id AS spot_id,
+					"" AS spot_code,
+					b.fixed_place,
+					b.need_scan
+				FROM
+					df_special_device b
+			) dv ON dt.machineID = dv.id
+		WHERE
+			dti.taskID = #taskID#
+	</select>
+
+
+	<!-- 查询任务状态 -->
+	<select id="getTaskStatus" parameterClass="String" resultClass="HashMap">
+		SELECT status FROM  di_task WHERE taskID = #value#
+	</select>
+
+	<!-- 更新巡检任务 -->
+	<update id="updateDeviceTask" parameterClass="java.util.Map">
+		update di_task set 
+			<isNotNull  property="finishTime">
+			    finishTime = #finishTime#, 
+			</isNotNull>
+			<isNotNull  property="finishMan">
+			    finishMan = #finishMan#, 
+			</isNotNull>
+			<isNotNull  property="finishManName">
+			    finishManName = #finishManName#, 
+			</isNotNull>
+			<isNotNull  property="exceptionFlag">
+			    exceptionFlag = #exceptionFlag#,
+			</isNotNull>
+			<isNotNull  property="invalidTime">
+			    invalidTime = #invalidTime#, 
+			</isNotNull>
+			<isNotNull  property="invalidMan">
+			    invalidMan = #invalidMan#, 
+			</isNotNull>
+			status = #status# where taskID = #taskID#
+	</update>
+	
+	<!-- 更新巡检任务巡检项 -->
+	<update id="updateTaskItem" parameterClass="java.util.Map">
+		update 
+			di_taskitem 
+		set 
+			<isNotNull  property="errorContent">
+			    errorContent = #errorContent#, 
+			</isNotNull>
+			<isNotNull  property="writeValue">
+			    writeValue = #writeValue#, 
+			</isNotNull>
+			<isNotNull  property="writeTime">
+			    writeTime = #writeTime#, 
+			</isNotNull>
+			<isNotNull  property="writeMan">
+			    writeMan = #writeMan#, 
+			</isNotNull>
+			<isNotNull  property="exceptionStatus">
+			    exception_status = #exceptionStatus#, 
+			</isNotNull>
+			<isNotNull  property="exceptionResult">
+			    exception_result = #exceptionResult#,
+			</isNotNull>
+			successFlag = #successFlag# 
+		where itemID = #itemID#
+	</update>
+	
+	
+	<!-- ====================================巡检App报表接口sql============================================ -->
+	<!-- 巡检异常报表 -->
+	<select id="getDevExceptionTaskApp" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		select 
+		distinct tb.taskID,
+		tt.itemID,
+		tt.jitemName,
+		dm.machine_name,
+		tb.taskCode,
+		tm.schemeName,
+		tt.writeValue,
+		tt.errorContent,
+		tt.exception_status
+		from di_task tb 
+		left join di_taskitem tt on tt.taskID = tb.taskID
+		left join di_scheme tm on tm.schemeID = tb.schemeID
+		left join di_schemejobs tn on tn.schemeID = tm.schemeID
+		left join df_devicemachine dm on dm.id = tm.machineID
+		where tt.successFlag = '-1' 
+		<isNotEmpty prepend="and" property="exception_status">
+			tt.exception_status = #exceptionStatus# 
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="userID">
+			tb.managerNo = #userID#
+		</isNotEmpty>
+		order by tb.taskCode desc
+		limit #startRow#,#rows#
+	</select>
+	<!-- 巡检异常报表count -->
+	<select id="getDevExceptionTaskAppCount" parameterClass="java.util.HashMap" 
+			resultClass="int">
+		select 
+		distinct tb.taskID,
+		tt.itemID,
+		tt.jitemName,
+		dm.machine_name,
+		tb.taskCode,
+		tm.schemeName,
+		tt.writeValue,
+		tt.errorContent,
+		tt.exception_status
+		from di_task tb 
+		left join di_taskitem tt on tt.taskID = tb.taskID
+		left join di_scheme tm on tm.schemeID = tb.schemeID
+		left join di_schemejobs tn on tn.schemeID = tm.schemeID
+		left join df_devicemachine dm on dm.id = tm.machineID
+		where tt.successFlag = '-1' 
+		<isNotEmpty prepend="and" property="exception_status">
+			tt.exception_status = #exceptionStatus# 
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="userID">
+			(tb.managerNo = #userID# or (select ))
+		</isNotEmpty>
+	</select>
+	
+	<select id="getPicListApp" parameterClass="int" resultClass="HashMap">
+		select tb.fileID,
+		tb.thumbnailPath,
+		tb.fileName from 
+		t_common_file tb left join device_task_pic tt 
+		on tt.fileID = tb.fileID where tt.itemID = #itemID#
+	</select>
+	
+	<!-- <select id="getDeviceWorkloadApp" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		select * from 
+		(SELECT t.id AS deptID,
+		DEPT_NAME AS NAME,
+		ifnull(sum(a.num), 0) AS jgnum,
+		ifnull(sum(a.wgnum), 0) AS wgnum,
+		ifnull(sum(a.csnum), 0) AS csnum,
+		ifnull(sum(a.zxnum), 0) AS zxnum,
+		ifnull(sum(a.cswgnum), 0) AS cswgnum 
+		FROM tbmbd01 t LEFT JOIN 
+		(SELECT t.departID,
+		1 AS num,
+		case t.status when '2' then 1 else 0 end as wgnum,
+		case t.status when '-1' then 1 else 0 end as csnum,
+		case t.status when '1' then 1 else 0 end as zxnum,
+		case t.status when '4' then 1 else 0 end as cswgnum 
+		FROM di_task t 	LEFT JOIN di_scheme ds on 
+		t.schemeID = ds.schemeID WHERE 1=1
+		<isNotEmpty prepend=" AND " property="startTimeS">
+			DATE_FORMAT(t.createTime, '%Y-%m-%d') >=
+			#startTimeS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="startTimeE">
+			DATE_FORMAT(t.createTime, '%Y-%m-%d') <![CDATA[<=]]>
+			#startTimeE#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="taskType">
+			t.taskType = #taskType#
+		</isNotEmpty>
+		) a
+		DATE_FORMAT(t.createTime, '%Y-%m-%d') >= ? AND 
+		DATE_FORMAT(t.createTime, '%Y-%m-%d') <= ? 
+		AND t.taskType = ? ) a 
+		ON t.DEPT_NUM = a.departID WHERE 1=1 
+		AND EXISTS(SELECT 1 FROM di_scheme s WHERE s.departID=t.DEPT_NUM) 
+		GROUP BY DEPT_NAME) tb where tb.jgnum != 0 
+		order by tb.jgnum desc
+    </select> -->
+    
+    
+    
+	<!--<select id="getDeviceWorkloadApp" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		select * from 
+
+		(SELECT dis.departNo AS deptID,
+		dis.departName AS NAME,
+		ifnull(sum(a.num), 0) AS jgnum,
+		ifnull(sum(a.wgnum), 0) AS wgnum,
+		ifnull(sum(a.csnum), 0) AS csnum,
+		ifnull(sum(a.zxnum), 0) AS zxnum,
+		ifnull(sum(a.cswgnum), 0) AS cswgnum 
+		FROM di_scheme dis LEFT JOIN 
+		
+		(
+		SELECT t.departNo,
+		1 AS num,
+		case t.status when '2' then 1 else 0 end as wgnum,
+		case t.status when '-1' then 1 else 0 end as csnum,
+		case t.status when '1' then 1 else 0 end as zxnum,
+		case t.status when '4' then 1 else 0 end as cswgnum 
+		FROM di_task t 	LEFT JOIN di_scheme ds on 
+		t.schemeID = ds.schemeID WHERE 1=1
+		<isNotEmpty prepend=" AND " property="startTimeS">
+			DATE_FORMAT(t.createTime, '%Y-%m-%d') >=
+			#startTimeS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="startTimeE">
+			DATE_FORMAT(t.createTime, '%Y-%m-%d') <![CDATA[<=]]>
+			#startTimeE#
+		</isNotEmpty>
+		&lt;!&ndash; <isNotEmpty prepend=" AND " property="taskType">
+			t.taskType = #taskType#
+		</isNotEmpty> &ndash;&gt;
+		) a
+	&lt;!&ndash; 	DATE_FORMAT(t.createTime, '%Y-%m-%d') >= ? AND
+		DATE_FORMAT(t.createTime, '%Y-%m-%d') <= ? 
+		AND t.taskType = ? ) a  &ndash;&gt;
+		ON dis.departNo = a.departNo WHERE 1=1 
+		AND EXISTS(SELECT 1 FROM di_scheme s WHERE s.departNo=dis.departNo) 
+		GROUP BY departName) tb 
+		where tb.jgnum != 0 
+		order by tb.jgnum desc
+    </select>-->
+
+	<select id="getDeviceWorkloadApp" parameterClass="java.util.Map" resultClass="java.util.HashMap" >
+		SELECT
+			a.departNo AS deptID,
+			a.departName AS NAME,
+			ifnull(sum(a.num), 0) AS jgnum,
+			ifnull(sum(a.wgnum), 0) AS wgnum,
+			ifnull(sum(a.csnum), 0) AS csnum,
+			ifnull(sum(a.dzxnum), 0) AS zxnum,
+			ifnull(sum(a.cswgnum),0) as cswgnum
+		FROM
+		(
+			SELECT t.departNo,
+			t.departName,
+			1 AS num,
+			case t.status when '2' then 1 else 0 end as wgnum,
+			case t.status when '-1' then 1 else 0 end as csnum,
+			case t.status when '1' and now() <![CDATA[<]]> t.createTime then 1 else 0 end as dzxnum,
+		    case t.status when '4' then 1 else 0 end as cswgnum
+			FROM di_task t
+			WHERE 1=1
+			<isNotEmpty prepend=" AND " property="startTimeS">
+				DATE_FORMAT(t.createTime, '%Y-%m-%d') >= #startTimeS#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="startTimeE">
+				DATE_FORMAT(t.createTime, '%Y-%m-%d') <![CDATA[<=]]> #startTimeE#
+			</isNotEmpty>
+		) a group by a.departNo,a.departName
+	</select>
+  
+  
+  
+<!-- ======================================================================================================================================= -->
+  <!-- 查询巡检异常任务 -->
+	<select id="queryTaskExc" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+				select 
+			ds.schemeCode, 							<!-- 基准编码 -->
+			ds.schemeName,							<!-- 基准名称（任务名称） -->
+			ds.activeTime,							<!-- 任务有效时间 -->
+			ds.jobContent,							<!-- 作业说明 -->
+			dt.departNo manageDeptNum,				<!-- 责任科室编码 -->
+			dt.departName manageDeptNum,			<!-- 责任科室名称 -->
+			dt.managerNo managerCode,				<!-- 负责人工号 -->
+			dt.managerName managerName,					<!-- 负责人名称 -->
+			dv.id machineId,				        <!-- 设备Id  -->
+			dv.machine_code machineCode,			<!-- 设备编码 -->
+			dv.machine_name machineName,			<!-- 设备名称 -->
+			dv.spot_id fixedPlaceId,						<!-- 设备安装地点Id -->
+			dv.spot_code fixedPlaceCode,			<!-- 设备安装地点 -->
+			dv.fixed_place fixedPlaceName,			<!-- 设备安装地点 -->
+			dv.need_scan needScan,					<!-- 是否需要扫描二维码 -->
+			dt.taskID,								<!-- 任务ID -->
+			dt.taskCode,							<!-- 任务编码 -->
+			dt.status taskStatusCode,				<!-- 任务状态编码 -->
+			CASE dt.status				
+				when '1' then '执行中'
+				when '-1' then '已超时'
+				when '2' then '完成'
+				when '3' then '关闭'
+			END taskStatusName,						<!-- 任务状态名称 -->
+			DATE_FORMAT(dt.createTime, '%Y-%m-%d %H:%i:%s') createTime,							<!-- 任务执行时间 -->
+			DATE_FORMAT( DATE_ADD(dt.createTime,INTERVAL ds.activeTime HOUR), '%Y-%m-%d %H:%i:%s' ) limitTime, <!-- 截止时间 -->
+			DATE_FORMAT(dt.finishTime, '%Y-%m-%d %H:%i:%s') finishTime,							<!-- 完工时间 -->
+			dt.finishMan finishManCode,				<!-- 完工人工号 -->
+			dt.finishManName finishManName,		<!-- 完工人名称 -->
+			dt.exceptionFlag,						<!-- 任务结果状态编码 -->
+			CASE dt.exceptionFlag		
+				when '-1' then '异常'		
+				when '1' then '正常'		
+			END exceptionFlagName,					<!-- 任务结果状态名称 -->
+			dti.itemID,								<!-- 巡检项目ID -->
+			dti.jitemName,							<!-- 作业项目（巡检项目名称） -->
+			dti.itemDesc,							<!-- 作业说明（巡检项目说明） -->
+			dti.referenceValue,						<!-- 参考值 -->
+			dti.writeValue,							<!-- 巡检录入值（巡检实际值） -->
+			dti.actualValueUnit,					<!-- 巡检实际值单位 -->
+			dti.errorContent,						<!-- 异常故障描述 -->
+			dti.successFlag,						<!-- 巡检项结果状态编码 -->
+			CASE dti.successFlag
+				when '-1' then '异常'
+				when '1' then '正常'
+				when '2' then '停用'
+			END successFlagName,					<!-- 巡检项结果状态名称 -->
+			dti.exception_status exceptionStatus,	<!-- 异常处理状态 -->
+			dti.exception_result exceptionResult,	<!-- 异常处理结果-->
+			dti.needPhoto							<!-- 巡检项是否需要拍照 -->
+		from di_task dt 
+		left join di_scheme ds on dt.schemeID = ds.schemeID
+		left join (
+		SELECT
+			a.id,
+			a.machine_code,
+			a.machine_name,
+			a.models,
+			a.spot_id,
+			a.spot_code,
+			a.fixed_place,
+			a.need_scan
+		FROM
+		df_devicemachine a UNION all
+		SELECT
+			b.id,
+			b.machine_code,
+			b.machine_name,
+			b.models,
+			fixed_id as spot_id,
+			"" as spot_code,
+			b.fixed_place,
+			b.need_scan
+		FROM
+		df_special_device b) dv on dt.machineID = dv.id
+		left join di_taskitem dti on dt.taskID = dti.taskID
+		where 1=1		
+		<isNotEmpty property="isAdvance" prepend=" and "> <!-- 是否可以提前看到任务，默认不可以 -->
+			dt.createTime <![CDATA[<=]]> date_add(current_time(),INTERVAL #isAdvance# HOUR)
+		</isNotEmpty>
+		<isNotEmpty property="taskID" prepend=" and ">  				<!-- 任务id -->
+			dt.taskID = #taskID#
+		</isNotEmpty>
+		<isNotEmpty property="taskCode" prepend=" and ">				<!-- 任务编码 -->
+			dt.taskCode like concat('%', #taskCode#, '%') 
+		</isNotEmpty>
+		<isNotEmpty property="taskStatus" prepend=" and ">				<!-- 任务状态 -->
+			dt.status = #taskStatus#
+		</isNotEmpty>
+		<isNotEmpty property="successFlag" prepend=" and ">				<!-- 巡检项结果状态 -->
+			dti.successFlag = #successFlag# 
+		</isNotEmpty>
+		<isNotEmpty property="exceptionStatus" prepend=" and ">			<!-- 异常处理状态  -->
+			dti.exception_status = #exceptionStatus# 
+		</isNotEmpty>
+		<isNotEmpty property="fixedCode" prepend=" and ">				<!-- 地点编码  -->
+			dv.fixed_place = #fixedCode# 
+		</isNotEmpty>
+		<isNotEmpty property="beginTime" prepend=" and ">				<!-- 执行时间>=  -->
+			DATE_FORMAT(dt.createTime, '%Y-%m-%d') >= #beginTime#  
+		</isNotEmpty>
+		<isNotEmpty property="endTime" prepend=" and ">					<!-- 执行时间<=  -->
+			DATE_FORMAT(dt.createTime, '%Y-%m-%d') <![CDATA[<=]]> #endTime#  
+		</isNotEmpty>
+		<isEqual property="isLeader" prepend=" and " compareValue="N">	<!-- 非巡检领导，判断用户是否是执行人或者是负责人-->
+				dt.finishMan = #userID#
+		</isEqual>
+		order by dt.taskCode desc 
+		<isNotEmpty property="offset"> 	<!-- 分页 -->			
+			 limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+  
+  
+  
+  <select id="queryTaskCountExc" parameterClass="java.util.Map" resultClass="int">
+		select 
+			dt.taskID
+		from di_task dt 
+		left join di_scheme ds on dt.schemeID = ds.schemeID
+		left join (
+		SELECT
+			a.id,
+			a.machine_code,
+			a.machine_name,
+			a.models,
+			a.spot_id,
+			a.spot_code,
+			a.fixed_place,
+			a.need_scan
+		FROM
+		df_devicemachine a UNION all
+		SELECT
+			b.id,
+			b.machine_code,
+			b.machine_name,
+			b.models,
+			fixed_id as spot_id,
+			"" as spot_code,
+			b.fixed_place,
+			b.need_scan
+		FROM
+		df_special_device b) dv on dt.machineID = dv.id
+		left join di_taskitem dti on dt.taskID = dti.taskID
+		where 1=1
+		<isNotEmpty property="isAdvance" prepend=" and "> <!-- 是否可以提前看到任务，默认不可以 -->
+			dt.createTime <![CDATA[<=]]> date_add(current_time(),INTERVAL #isAdvance# HOUR)
+		</isNotEmpty>
+		<isNotEmpty property="taskID" prepend=" and ">  				<!-- 任务id -->
+			dt.taskID = #taskID#
+		</isNotEmpty>
+		<isNotEmpty property="taskCode" prepend=" and ">				<!-- 任务编码 -->
+			dt.taskCode like concat('%', #taskCode#, '%') 
+		</isNotEmpty>
+		<isNotEmpty property="taskStatus" prepend=" and ">				<!-- 任务状态 -->
+			dt.status = #taskStatus#
+		</isNotEmpty>
+		<isNotEmpty property="successFlag" prepend=" and ">				<!-- 巡检项结果状态 -->
+			dti.successFlag = #successFlag# 
+		</isNotEmpty>
+		<isNotEmpty property="exceptionStatus" prepend=" and ">			<!-- 异常处理状态  -->
+			dti.exception_status = #exceptionStatus# 
+		</isNotEmpty>
+		<isNotEmpty property="fixedCode" prepend=" and ">				<!-- 地点编码  -->
+			dv.fixed_place = #fixedCode# 
+		</isNotEmpty>
+		<isNotEmpty property="beginTime" prepend=" and ">				<!-- 执行时间>=  -->
+			DATE_FORMAT(dt.createTime, '%Y-%m-%d') >= #beginTime#  
+		</isNotEmpty>
+		<isNotEmpty property="endTime" prepend=" and ">					<!-- 执行时间<=  -->
+			DATE_FORMAT(dt.createTime, '%Y-%m-%d') <![CDATA[<=]]> #endTime#  
+		</isNotEmpty>
+		<isEqual property="isLeader" prepend=" and " compareValue="N">	<!-- 非巡检领导，判断用户是否是执行人或者是负责人 -->
+			dt.finishMan = #userID#
+		</isEqual>
+	</select>
+
+	<!-- ===============================================短信相关（开始）=============================================== -->
+
+	<!-- 获取即将超时的任务 -->
+	<select id="queryComingSoonOutTimeTask" parameterClass="string" resultClass="java.util.HashMap">
+		select dt.taskCode,ds.schemeName taskName,dt.schemeID
+		from di_task dt
+		left join di_scheme ds on dt.schemeID = ds.schemeID
+		where dt.status = 1
+		and dt.createTime <![CDATA[<=]]> DATE_SUB(now(),INTERVAL dt.activeTime*60-#outTime# MINUTE)
+		and dt.createTime >= DATE_SUB(now(),INTERVAL dt.activeTime HOUR)
+	</select>
+
+	<!-- 统计指定人员当天的巡检任务量 -->
+	<select id="countTaskOfDay" parameterClass="string" resultClass="java.util.HashMap">
+		select #value# workNo, count(*) taskCount
+		from di_task where (managerNo = #value#
+			or schemeID in (select schemeID from di_schemejobs where jobManNo = #value#))
+			and DATE_FORMAT(createTime,'%Y-%m-%d') = CURRENT_DATE()
+	</select>
+
+	<!-- 获取任务执行人 -->
+	<select id="queryTaskExcutor" parameterClass="string" resultClass="string">
+		select jobManNo from di_schemejobs where schemeID = #schemeID#
+	</select>
+
+	<!-- 获取当天有巡检任务的人员 -->
+	<select id="queryTaskWorkersForPrincipal" parameterClass="string" resultClass="string" >
+		select DISTINCT managerNo from di_task where DATE_FORMAT(createTime,'%Y-%m-%d') = CURRENT_DATE();
+	</select>
+
+	<!-- 获取当天有巡检任务的负责人 -->
+	<select id="queryTaskWorkersForExcutor" parameterClass="string" resultClass="string" >
+		select DISTINCT dsj.jobManNo from di_schemejobs dsj left join di_task dt on dsj.schemeID = dt.schemeID
+		where DATE_FORMAT(dt.createTime,'%Y-%m-%d') = CURRENT_DATE();
+	</select>
+
+
+	<!-- ===============================================短信相关（结束）=============================================== -->
+  
+</sqlMap>

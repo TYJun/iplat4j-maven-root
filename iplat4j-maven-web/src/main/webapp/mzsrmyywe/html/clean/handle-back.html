@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="reference/mui/css/mui.css" />
+    <link rel="stylesheet" href="css/colorGreen.css" />
+  </head>
+  <style type="text/css">
+    body {
+      background: #f7f7f7;
+    }
+
+    textarea {
+      border: none;
+      border-top: 1px solid #d4d4d4;
+      border-bottom: 1px solid #d4d4d4;
+      border-radius: 0px;
+    }
+
+    .btn-div {
+      width: 100%;
+      padding: 15px;
+    }
+
+    .tab {
+      width: 100%;
+      height: 35px;
+      line-height: 35px;
+      padding-left: 15px;
+      padding-right: 15px;
+      color: #696969;
+    }
+  </style>
+
+  <body>
+    <header id="header" class="mui-bar mui-bar-nav">
+      <h1 class="mui-title">退单</h1>
+      <button
+        class="mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left"
+      >
+        <span class="mui-icon mui-icon-left-nav"></span>
+        返回
+      </button>
+    </header>
+
+    <div class="mui-content">
+      <div class="tab">退单原因</div>
+      <textarea id="textarea" rows="5" placeholder="请输入退单原因"></textarea>
+      <div class="btn-div">
+        <button
+          id="submit"
+          type="button"
+          class="mui-btn mui-btn-primary mui-btn-block"
+        >
+          退单
+        </button>
+      </div>
+    </div>
+    <!-- <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    图片上传
+                </div>
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                    <button type="button" id="btnPicture" class="btn btn-info btn-sm">本地上传</button>
+                    <button type="button" id="btnCamera" class="btn btn-info btn-sm">相机拍摄</button>
+                </div>
+            </div>
+            <hr style="margin-top:10px;">
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 font-grey">
+                    图片
+                </div>
+            </div>
+            <hr style="margin-top:10px;"> -->
+    <div class="row" style="margin-top:10px;">
+      <div
+        id="picture"
+        class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row"
+      ></div>
+    </div>
+    <div
+      class="modal fade"
+      id="myModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+      hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">
+              图片预览
+            </h4>
+          </div>
+          <div style="text-align:center;">
+            <img id="bigPicture" />
+          </div>
+          <div class="modal-footer">
+            <button
+              id="delPic"
+              type="button"
+              class="btn btn-danger btn-block"
+              data-dismiss="modal"
+            >
+              删除图片
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary btn-block"
+              data-dismiss="modal"
+            >
+              关闭
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="reference/mui/js/mui.js" type="text/javascript"></script>
+  <script
+    src="reference/mui/js/jquery-2.1.4.js"
+    type="text/javascript"
+  ></script>
+  <script
+    src="../../reference/bootstrap-3.3.5/js/bootstrap.min.js"
+    type="text/javascript"
+  ></script>
+  <script
+    src="../../reference/loading/loaders.css.js"
+    type="text/javascript"
+  ></script>
+  <script
+    src="../../reference/mobiscroll-2.5.2/js/mobiscroll.custom-2.5.2.min.js"
+    type="text/javascript"
+  ></script>
+  <script
+    src="../../reference/mobiscroll-2.5.2/dev/js/mobiscroll.core-2.5.2-zh.js"
+    type="text/javascript"
+  ></script>
+  <script
+    src="../../reference/mobiscroll-2.5.2/dev/js/mobiscroll.datetime-2.5.1-zh.js"
+    type="text/javascript"
+  ></script>
+  <script type="text/javascript" src="../../cordova.js"></script>
+  <script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var role = localStorage.getItem("role");
+    var dataGroupCode = localStorage.getItem("dataGroupCode");
+    var url = location.search;
+    var params = url.substring(1, url.length);
+    var status = params.split("@@")[1];
+    var taskNo = params.split("@@")[0];
+    console.log(status);
+    console.log(taskNo);
+
+    //拍摄照片
+    $("#btnCamera").click(function() {
+      if ($("#picture").find("img").length == 3) {
+        $("#warn small").html("最多只能上传三张图片");
+        $("#warn").fadeIn(500);
+        setTimeout("$('#warn').fadeOut(500)", 3000);
+        return;
+      }
+      //$('#myModal').modal('hide');
+      navigator.camera.getPicture(onSuccess, onFail, {
+        quality: 50,
+        destinationType: Camera.DestinationType.FILE_URI,
+        sourceType: Camera.PictureSourceType.CAMERA,
+        allowEdit: false,
+        encodingType: Camera.EncodingType.JPEG,
+        popoverOptions: CameraPopoverOptions,
+        saveToPhotoAlbum: false
+      });
+    });
+    function drawImage(imageBase64) {
+      var img = $('<img class="img-circle" style="width:100%;">');
+      img.attr("src", "data:image/jpeg;base64," + imageBase64);
+      var a = $('<a href="#" class="thumbnail"></a>');
+      var div = $('<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>');
+      img.appendTo(a);
+      a.appendTo(div);
+      div.appendTo("#picture");
+      var width = $("a.thumbnail:parent").width();
+      $("img.img-circle").css("height", width);
+
+      $("a.thumbnail").click(function() {
+        _this = $(this);
+        $("#bigPicture").removeAttr("style");
+        var image = new Image();
+        image.src = $(this)
+          .find("img")
+          .attr("src");
+        var width;
+        var height;
+        if (image.width >= image.height) {
+          $("#bigPicture").css("width", screen.width - 40);
+        } else {
+          var i;
+          height = screen.height - 200;
+          i = image.height / height;
+          width = image.width / i;
+        }
+        $("#bigPicture").css("width", width);
+        $("#bigPicture").css("height", height);
+        $("#bigPicture").attr(
+          "src",
+          $(this)
+            .find("img")
+            .attr("src")
+        );
+        $("#myModal").modal("show");
+        return false;
+      });
+    }
+    //本地上传
+    $("#btnPicture").bind("touchstart", function() {
+      if ($("#picture").find("img").length == 3) {
+        $("#warn small").html("最多只能上传三张图片");
+        $("#warn").fadeIn(500);
+        setTimeout("$('#warn').fadeOut(500)", 3000);
+        return;
+      }
+      navigator.camera.getPicture(
+        function(data) {
+          var img = $('<img class="img-circle" style="width:100%;">');
+          img.attr("src", data);
+          var a = $('<a class="thumbnail"></a>');
+          a.attr("href", data);
+          var div = $(
+            '<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>'
+          );
+          img.appendTo(a);
+          a.appendTo(div);
+          div.appendTo("#picture");
+
+          //alert($("a.thumbnail:parent").width());
+          var width = $("a.thumbnail:parent").width();
+          //$("a.thumbnail:parent").css('height',width);
+          $("img.img-circle").css("height", width);
+
+          $("a.thumbnail").click(function() {
+            _this = $(this);
+            $("#bigPicture").removeAttr("style");
+            var image = new Image();
+            image.src = $(this)
+              .find("img")
+              .attr("src");
+            var width;
+            var height;
+            if (image.width >= image.height) {
+              $("#bigPicture").css("width", screen.width - 40);
+            } else {
+              var i;
+              height = screen.height - 200;
+              i = image.height / height;
+              width = image.width / i;
+            }
+            $("#bigPicture").css("width", width);
+            $("#bigPicture").css("height", height);
+            $("#bigPicture").attr(
+              "src",
+              $(this)
+                .find("img")
+                .attr("src")
+            );
+            $("#myModal").modal("show");
+            return false;
+          });
+        },
+        function(error) {
+          //console.log('Error');
+        },
+        {
+          destinationType: Camera.DestinationType.FILE_URI,
+          sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+          allowEdit: false,
+          mediaType: Camera.MediaType.PICTURE
+        }
+      );
+    });
+    //获取图片base64
+    function getBase64Image(img) {
+      var canvas = document.createElement("canvas");
+      var image = new Image();
+      image.src = img.src;
+      var width;
+      var height;
+      width = 768;
+      height = (image.height * 768) / image.width;
+      canvas.width = width;
+      canvas.height = height;
+      var ctx = canvas.getContext("2d");
+      ctx.drawImage(image, 0, 0, width, height);
+      var dataURL = canvas.toDataURL("image/JPEG");
+      //data:image/jpeg;base64,
+      return dataURL.substring(23, dataURL.length);
+
+      // return dataURL.replace("data:image/png;base64,", "");
+    }
+
+    function onSuccess(imageData) {
+      var img = $('<img class="img-circle" style="width:100%;">');
+      img.attr("src", imageData);
+      var a = $('<a href="#" class="thumbnail"></a>');
+      var div = $('<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>');
+      img.appendTo(a);
+      a.appendTo(div);
+      div.appendTo("#picture");
+
+      //$("a.thumbnail:parent").width();
+      var width = $("a.thumbnail:parent").width();
+      //$("a.thumbnail:parent").css('height',width);
+      $("img.img-circle").css("height", width);
+      $("a.thumbnail").click(function() {
+        _this = $(this);
+        $("#bigPicture").removeAttr("style");
+        var image = new Image();
+        image.src = $(this)
+          .find("img")
+          .attr("src");
+        var width;
+        var height;
+        if (image.width >= image.height) {
+          $("#bigPicture").css("width", screen.width - 40);
+        } else {
+          var i;
+          height = screen.height - 200;
+          i = image.height / height;
+          width = image.width / i;
+        }
+        $("#bigPicture").css("width", width);
+        $("#bigPicture").css("height", height);
+        $("#bigPicture").attr(
+          "src",
+          $(this)
+            .find("img")
+            .attr("src")
+        );
+        $("#myModal").modal("show");
+        return false;
+      });
+    }
+
+    function onFail(message) {
+      //alert('Failed because: ' + message);
+    }
+    // <!-- $(function() { -->
+
+    // 	<!-- $.ajax({ -->
+    // 		<!-- url: baseUrl + 'app_maintainController.do?getReturnReason', -->
+    // 		<!-- type: 'post', -->
+    // 		<!-- data: { -->
+    // 			<!-- taskNo: taskNo -->
+
+    // 		<!-- }, -->
+    // 		<!-- success: function(data) { -->
+
+    // 			<!-- var data = eval('(' + data + ')'); -->
+    // 			<!-- console.log(data) -->
+    // 			<!-- if(data.respCode == "200") { -->
+    // 				<!-- if(data. respMsg != null && data. respMsg != "" && data. respMsg != "null") { -->
+    // 					<!-- $('textarea').val(data. respMsg); -->
+    // 				<!-- } -->
+    // 			<!-- } -->
+    // 		<!-- } -->
+    // 	<!-- }); -->
+
+    // <!-- }) -->
+
+    document.getElementById("submit").addEventListener("tap", function() {
+      var reason = $("textarea")
+        .val()
+        .replace(/\s/g, "");
+      if (reason == "") {
+        mui.toast("退单原因不能为空");
+        return;
+      }
+      // 	var pic1 = "";
+      //    var pic2 = "";
+      //    var pic3 = "";
+      //    $("#picture img").each(function(index, element) {
+      //        if (index == 0) {
+      //            pic1 = getBase64Image(element);
+      //        } else if (index == 1) {
+      //            pic2 = getBase64Image(element);
+      //        } else {
+      //            pic3 = getBase64Image(element);
+      //        }
+      //    });
+      // var picsbak = {
+      //        "pic1": pic1,
+      //        "pic2": pic2,
+      //        "pic3": pic3
+      //    };
+      // var pics = JSON.stringify(picsbak);
+      var statusCode = "12";
+      if (status == "03" || status == "05") {
+        statusCode = "11";
+      }
+      var prame = {
+        returnReason: reason,
+        taskNo: taskNo,
+        workNo: workNo,
+        dataGroupCode,
+        role,
+        statusCode: statusCode,
+        isCurrent: "1",
+        isActual: "1"
+      };
+      prame = JSON.stringify(prame);
+      $.ajax({
+        url: baseUrl + "MobileAgentService",
+        type: "post",
+        data: { prames: prame },
+        headers: {
+          methodName: "chargebackReason",
+          serviceName: "MTDP0102"
+        },
+        timeout: 3000,
+        success: function(data) {
+          goBack();
+        }
+      });
+    });
+    function goBack() {
+      location.href = "taskList.html";
+    }
+  </script>
+</html>

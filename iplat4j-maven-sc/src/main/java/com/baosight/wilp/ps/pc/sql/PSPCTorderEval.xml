@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!--      table information
+		Generate time : 2021-11-11 14:19:00
+   		Version :  6.0.731.201809200158
+		tableName sc_order_eval
+	-->
+<!--订单评价-->
+<sqlMap namespace="PSPCTorderEval">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.ps.pc.domain.PSPCTorderEval">
+		SELECT
+				id	as "id",  <!-- 主键 -->
+				menu_num	as "menuNum",  <!-- 菜品编码 -->
+				eval_type_name	as "evalTypeName",  <!-- 评价类目名称 -->
+				eval_type	as "evalType",  <!-- 评价类目编码 -->
+				eval_level	as "evalLevel",  <!-- 评价等级(0-10) -->
+				eval_content	as "evalContent",  <!-- 评价内容 -->
+				eval_user_name	as "evalUserName",  <!-- 评价用户名 -->
+				eval_time	as "evalTime",  <!-- 评价时间 -->
+				send_date	as "sendDate",  <!-- 送餐时间 -->
+				canteen_num	as "canteenNum" <!-- 食堂编码 -->
+		FROM sc_order_eval WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_order_eval WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="menuNum">
+			menu_num = #menuNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="evalTypeName">
+			eval_type_name = #evalTypeName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="evalType">
+			eval_type = #evalType#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="evalLevel">
+			eval_level = #evalLevel#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="evalContent">
+			eval_content = #evalContent#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="evalUserName">
+			eval_user_name = #evalUserName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="evalTime">
+			eval_time = #evalTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="sendDate">
+			send_date = #sendDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="canteenNum">
+			canteen_num = #canteenNum#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO
+		sc_order_eval (id,  <!-- 主键 -->
+				menu_num,  <!-- 菜品编码 -->
+				eval_type_name,  <!-- 评价类目名称 -->
+				eval_type,  <!-- 评价类目编码 -->
+				eval_level,  <!-- 评价等级(0-10) -->
+				eval_content,  <!-- 评价内容 -->
+				eval_user_name,  <!-- 评价用户名 -->
+				eval_time,  <!-- 评价时间 -->
+				send_date,  <!-- 送餐时间 -->
+				canteen_num  <!-- 食堂编码 -->
+				)
+	    VALUES (#id#, #menuNum#, #evalTypeName#, #evalType#, #evalLevel#, #evalContent#, #evalUserName#, #evalTime#, #sendDate#, #canteenNum#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM sc_order_eval WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_order_eval 
+		SET 
+					menu_num	= #menuNum#,   <!-- 菜品编码 -->  
+					eval_type_name	= #evalTypeName#,   <!-- 评价类目名称 -->  
+					eval_type	= #evalType#,   <!-- 评价类目编码 -->  
+					eval_level	= #evalLevel#,   <!-- 评价等级(0-10) -->  
+					eval_content	= #evalContent#,   <!-- 评价内容 -->  
+					eval_user_name	= #evalUserName#,   <!-- 评价用户名 -->  
+					eval_time	= #evalTime#,   <!-- 评价时间 -->  
+					send_date	= #sendDate#,   <!-- 送餐时间 -->  
+					canteen_num	= #canteenNum#  <!-- 食堂编码 -->  
+			WHERE 	
+			id = #id#
+	</update>
+
+	<!-- 修改菜品评价信息 -->
+	<update id="updateBillDetailLevel" parameterClass="HashMap">
+		update
+			sc_order_bill_detail
+		set
+			 eval_level = #evalLevel#,
+			 done = 'Y',
+			 rec_revisor = #recRevisor#,
+			 rec_revise_Time = #recReviseTime#,
+			 eval_content = #evalContent#
+		where
+			menu_num = #menuNum#
+		  and bill_no = #billNo#
+	</update>
+
+</sqlMap>

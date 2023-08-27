@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="SIRK03">
+
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			se.rec_creator	as "recCreator",  <!-- 记录创建责任者 -->
+			se.rec_create_time	as "recCreateTime",  <!-- 记录创建时间 -->
+			se.data_group_code	as "dataGroupCode",  <!-- 院区（账套） -->
+			se.id	as "id",  <!-- 主键 -->
+			se.enter_bill_no	as "enterBillNo",  <!-- 入库单号 -->
+			se.enter_type	as "enterType",  <!-- 入库类别 -->
+			se.enter_type_name	as "enterTypeName",  <!-- 入库类型名称 -->
+			se.origin_bill_no	as "originBillNo",  <!-- 来源单据号 -->
+			se.origin_bill_type	as "originBillType",  <!-- 来源单据类型 -->
+			se.origin_bill_type_name	as "originBillTypeName",  <!-- 来源单据类型名称 -->
+			se.cont_no	as "contNo",  <!-- 合同号 -->
+			se.purc_demand_detail_no	as "purcDemandDetailNo",  <!-- 采购计划明细号 -->
+			se.ware_house_no	as "wareHouseNo",  <!-- 仓库号 -->
+			se.ware_house_name	as "wareHouseName",  <!-- 仓库名称 -->
+			se.bill_make_time	as "billMakeTime",  <!-- 制单日期 -->
+			se.bill_maker	as "billMaker",  <!-- 制单人员 -->
+			se.bill_maker_name	as "billMakerName",  <!-- 制单人员姓名 -->
+			se.invoice_num	as "invoiceNum",  <!-- 发票流水号 -->
+			se.remark	as "remark", <!-- 备注/红冲原因 -->
+			sed.enter_bill_detail_no	as "enterBillDetailNo",  <!-- 入库单号 -->
+			sed.mat_num	as "matNum",  <!-- 物资编码 -->
+			sed.mat_name	as "matName",  <!-- 物资名称 -->
+			sed.mat_type_num	as "matTypeNum",  <!-- 物资分类编码 -->
+			sed.mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+			sed.mat_model	as "matModel",  <!-- 物资型号 -->
+			sed.mat_spec	as "matSpec",  <!-- 物资规格 -->
+			sed.unit	as "unit",  <!-- 计量单位编码 -->
+			sed.unit_name	as "unitName",  <!-- 计量单位名称 -->
+			sed.enter_num	as "enterNum",  <!-- 入库数量 -->
+			sed.enter_price	as "enterPrice",  <!-- 入库单价 -->
+			sed.enter_amount	as "enterAmount",  <!-- 入库总价 -->
+			sed.enter_date	as "enterDate",  <!-- 入库日期 -->
+			sed.enter_time	as "enterTime",  <!-- 入库时间 -->
+			sed.batch_no	as "batchNo",  <!-- 物资条码号13 -->
+			sed.surp_num	as "surpNum",  <!-- 供应商编码 -->
+			sed.surp_name	as "surpName"  <!-- 供应商名称 -->
+		FROM si_enter se
+		left join si_enter_detail sed on se.enter_bill_no = sed.enter_bill_no
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="enterBillNo"> <!-- 入库单号(模糊) -->
+			se.enter_bill_no like concat('%', #enterBillNo# ,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="enterType"> <!-- 入库类别 -->
+			se.enter_type = #enterType#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNo"> <!-- 仓库号 -->
+			se.WARE_HOUSE_NO = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNum"> <!-- 物资编码 -->
+			sed.mat_num like concat('%', #matNum# ,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matName"> <!-- 物资名称 -->
+			sed.mat_name like concat('%', #matName# ,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="supplierName"> <!-- 供应商 -->
+			sed.surp_name like concat('%', #supplierName# ,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">   <!-- 制单日期（>=） -->
+			date_format(se.bill_make_time,'%Y-%m-%d') >= #beginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">    <!-- 制单日期止（<=） -->
+			date_format(se.bill_make_time,'%Y-%m-%d') <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">  <!-- 院区（账套） -->
+			se.data_group_code = #dataGroupCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="billMakerName">  <!-- 状态 -->
+			se.bill_maker_name like concat('%', #billMakerName# ,'%')
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  se.enter_bill_no DESC
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM si_enter se
+		left join si_enter_detail sed on se.enter_bill_no = sed.enter_bill_no
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="enterBillNo"> <!-- 入库单号(模糊) -->
+			se.enter_bill_no like concat('%', #enterBillNo# ,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="enterType"> <!-- 入库类别 -->
+			se.enter_type = #enterType#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNo"> <!-- 仓库号 -->
+			se.WARE_HOUSE_NO = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNum"> <!-- 物资编码 -->
+			sed.mat_num like concat('%', #matNum# ,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matName"> <!-- 物资名称 -->
+			sed.mat_name like concat('%', #matName# ,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">   <!-- 制单日期（>=） -->
+			date_format(se.bill_make_time,'%Y-%m-%d') >= #beginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">    <!-- 制单日期止（<=） -->
+			date_format(se.bill_make_time,'%Y-%m-%d') <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">  <!-- 院区（账套） -->
+			se.data_group_code = #dataGroupCode#
+		</isNotEmpty>
+	</select>
+</sqlMap>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	 
+<!--评价分类表-->
+<sqlMap namespace="PSPCDCXX01">
+	<select id="queryLimitNum" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			dishes_number as dishesNumber
+		FROM
+		     sc_canteen_liaison_conf
+		WHERE
+		      canteen_num = #canteenCode#
+		AND
+		      datagroup_code = #dataGroup#
+
+	</select>
+
+	<select id="queryShipFee" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			ship_fee as shipFee
+		FROM
+			sc_canteen_liaison_conf
+		WHERE
+			canteen_num = #canteenCode#
+		  AND
+			datagroup_code = #dataGroup#
+
+	</select>
+  
+</sqlMap>

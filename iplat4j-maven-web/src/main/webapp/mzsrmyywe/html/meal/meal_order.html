@@ -1,0 +1,548 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<link rel="stylesheet" href="reference/mui/css/mui.min.css">
+	<link rel="stylesheet" href="reference/mui/css/iconfont.css">
+	<link rel="stylesheet" href="reference/css/common.css" />
+	<link rel="stylesheet" href="../../css/colorGreen.css" />
+	<link rel="stylesheet" href="../../css/colorBlue.css" />
+</head>
+<STYLE TYPE="text/css">
+	body {
+		background: #eee;
+		
+	}
+
+	.task {
+		width: 96%;
+		background: #fff;
+		margin: 0 auto;
+		box-shadow: 1px 1px 10px #b9b9b9;
+		margin-bottom: 10px;
+		border-top-left-radius: 4px;
+		border-top-right-radius: 4px;
+		border-bottom-right-radius: 4px;
+		border-bottom-left-radius: 4px;
+		margin-top: 5px;
+	}
+
+	.task-title {
+		width: 100%;
+		height: 40px;
+		line-height: 40px;
+		padding-left: 15px;
+		padding-right: 15px;
+		/*background: #607d8b;*/
+		border-bottom: 1px solid #eee;
+		border-top-left-radius: 4px;
+		border-top-right-radius: 4px;
+		font-weight: bold;
+	}
+
+	.task-info {
+		padding-left: 15px;
+		padding-right: 15px;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		border-bottom-right-radius: 4px;
+		border-bottom-left-radius: 4px;
+		color: #5a5a5a;
+	}
+
+	.task-status {
+		color: #f39e22;
+	}
+
+	.task-btn {
+		width: 100%;
+		height: 50px;
+		border-top: 1px solid #eee;
+		text-align: right;
+		padding-left: 15px;
+		padding-right: 15px;
+		/*padding-top: 8px;*/
+	}
+
+	.task-btn button {
+		margin: 8px 0 0 10px;
+	}
+
+	.mui-table-view:before {
+		height: 0;
+	}
+
+	.mui-table-view:after {
+		height: 0;
+	}
+
+	.loading1 {
+		position: fixed;
+		z-index: 999;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+	}
+
+	.loading2 {
+		margin: 0 auto;
+		margin-top: 200px;
+		text-align: center;
+		line-height: 100px;
+	}
+	.share{
+		
+		position: absolute;z-index:5555;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		display: none;
+		
+		width:200px !important;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		height:200px !important;
+		background-color:#fff;
+	}
+	
+	.share_tools{ 
+		padding-left: 20px;
+		padding-top: 20px;
+	}
+	.closeshare{ 
+		z-index: 9999;
+		position: absolute;
+		
+		top: 0;
+		left: 0;
+		width:100vw;
+		height:100vh;
+		background-color: rgba(144, 141, 141, 0.079);
+		display: none;
+	}
+</STYLE>
+
+<body>
+	<div onclick="closeShare()" class="closeshare"></div>
+	
+	<div class="share">
+		
+		<div class="share_tools"></div>
+		
+		
+	</div>
+	<header class="mui-bar mui-bar-nav">
+		<h1 class="mui-title">订单列表</h1>
+		<button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+			<span class="mui-icon mui-icon-left-nav"></span>
+			返回
+		</button>
+	</header>
+
+	<div id="loading" class="loading1" hidden>
+		<div class="loading2">
+			<span class="mui-spinner" style="width:80px;height:80px;"></span>
+		</div>
+	</div>
+
+	<div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="padding-bottom:50px;">
+		<div class="mui-scroll">
+			<ul class="mui-table-view mui-table-view-chevron" style="background-color:#eee;">
+				<div style="width:100%;text-align:center;margin-top:100px;font-size:40px;"><span
+						class="mui-spinner"></span></div>
+			</ul>
+		</div>
+	</div>
+
+	<nav class="mui-bar mui-bar-tab" style="background:#fff;">
+		<a id="main" class="mui-tab-item menu" href="javascript:void(0)">
+			<span class="mui-icon mui-icon-home"></span>
+			<span class="mui-tab-label">食堂</span>
+		</a>
+		<a id="notice" class="mui-tab-item notice" href="javascript:void(0)">
+			<span class="mui-icon mui-icon-email"></span>
+			<span class="mui-tab-label">消息</span>
+		</a>
+		<a id="order" class="mui-tab-item mui-active order" href="javascript:void(0)">
+			<span class="mui-icon mui-icon-compose"></span>
+			<span class="mui-tab-label">订单</span>
+		</a>
+	</nav>
+</body>
+<script type="text/javascript" src="../../js/color.js"></script>
+<script src="reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../../js/jquery.qrcode.min.js"></script>
+<script src="../../js/erweima.js"></script>
+<script src="reference/js/common.js" type="text/javascript"></script>
+<script src="../../cordova.js" type="text/javascript"></script>
+<script type="text/javascript">
+	var baseUrl = localStorage.getItem("url");
+	var workNo = localStorage.getItem('workNo');
+	var page = 1,
+		html = '';
+
+	//init();
+	function init() {
+		$.ajax({
+			//url: baseUrl + 'app_basicInfoController.do?queryCardWorkInfo',
+			url: baseUrl + 'cardmeal',
+			type: 'post',
+			headers: {
+				className: 'CardWorkConsumeService',
+				methodName: 'queryWorkInfo'
+			},
+			data: {
+				JSNHID: "UEzTab3BHgDYrE+W7sFECMtYMbF4FNsXM/Wo6WkDWNs="
+			},
+			success: function (data) {
+				// var data = eval("(" + data + ")");
+				console.log(data);
+				if (data.success) {
+					if (!data.obj || !data.obj[0].cardBalance) {
+						return;
+					}
+					workNo = data.obj[0].cardUserCode;
+					localStorage.setItem('workNo', workNo)
+					console.log('===', workNo);
+					var name = data.obj[0].cardUserName;
+					localStorage.setItem('name', name)
+					console.log('===', name);
+					var telPhone = data.obj[0].cardUserPhone;
+					localStorage.setItem('telPhone', telPhone)
+					console.log('===', telPhone);
+					$("#Kye").text(Number(data.obj[0].cardBalance / 100).toFixed(2));
+					//loadViews();
+				} else {
+					$("#warn small").html(data.respMsg);
+					$("#warn").fadeIn(500);
+					setTimeout('$("#warn").fadeOut(500)', 3000);
+				}
+			}
+		});
+	}
+	
+
+	document.addEventListener("deviceready", onDeviceReady, false);
+
+	function onDeviceReady() {
+		document.addEventListener("backbutton", onBackKeyDown, false);
+	}
+
+	function onBackKeyDown() {
+		location.href = "main.html";
+	}
+
+	mui.init({
+		pullRefresh: {
+			container: '#pullrefresh',
+			down: {
+				callback: pulldownRefresh,
+				contentrefresh: "正在加载",
+			},
+			up: {
+				contentrefresh: "加载中，请稍后",
+				contentnomore: '暂无更多数据',
+				callback: pullupRefresh
+			}
+		}
+	});
+
+	loadData();
+
+	function loadData() {
+		$.ajax({
+			//url: baseUrl + 'app_comboMealRuleController.do?getWorkBillList',
+			url: baseUrl + 'workmeal',
+			type: 'post',
+			headers: {
+				className: 'AppWorkBaseInfoService',
+				methodName: 'queryPaginationWorkBillInfo'
+			},
+			data: {
+				page: page,
+				userCode: workNo
+			},
+			success: function (data) {
+				//var data = JSON.parse(data);
+				console.log(data);
+				if (data.success) {
+					var list = data.obj;
+					for (var i = 0; i < list.length; i++) {
+						html += createTask(list[i].billNo, list[i].userName, list[i].userType, list[i].statusCode, list[i].statusName, list[i].deptName, list[i].billTotalPrice, list[i].needDate + ' ' + list[i].reqSendTime, list[i].comboNum, list[i].payType);
+					}
+					$('ul').html(html);
+				} else {
+					mui.toast("获取订单列表失败");
+				}
+			}
+		});
+	}
+
+	function createTask(bill_no, user_name, user_type, status_code, status_name, dept_name, total_price, send_time, combo_no, pay_type) {
+		var times = getMinute(send_time);
+		var htmls = '<div class="task">';
+		htmls += '<div class="task-title fontColor">订餐编号：<span class="task_code">' + bill_no + '</span></div>';
+		htmls += '<div class="mui-row task-info">';
+		htmls += '<div class="mui-col mui-col-xs-12">单据状态：<span class="task-status">' + status_name + '</span></div>';
+		htmls += '<div class="mui-col mui-col-xs-12">订餐人员：<span>' + user_name + '</span></div>';
+		htmls += '<div class="mui-col mui-col-xs-12">科室名称：<span class="abnormal">' + dept_name + '</span></div>';
+		htmls += '<div class="mui-col mui-col-xs-12">订餐总价：<span>' + parseFloat(total_price).toFixed(2) + '元</span></div>';
+		htmls += '</div>';
+
+		if ((status_code == "02" || status_code == "01") && times > 1800000) {
+			htmls += '<div class="task-btn">';
+			 htmls += '<button id="' + bill_no + '" type="button" class="ma" onclick="erweima(this)">生成二维码</button>';
+			htmls += '<button id="' + bill_no + '" type="button" class="mui-btn mui-btn-outlined info">查看详情</button>';
+			htmls += '<button id="' + bill_no + '" type="button" class="mui-btn mui-btn-primary mui-btn-outlined cancel">取消订单</button>';
+			htmls += '</div>';
+		} else if (status_code == "03") {
+			htmls += '<div class="task-btn">';
+			  htmls += '<button id="' + bill_no + '" type="button" class="ma" onclick="erweima(this)">生成二维码</button>';
+			htmls += '<button id="' + bill_no + '" type="button" class="mui-btn mui-btn-outlined info">查看详情</button>';
+			htmls += '</div>';
+		} else if (status_code == "04") {
+			htmls += '<div class="task-btn">';
+			  htmls += '<button id="' + bill_no + '" type="button" class="ma" onclick="erweima(this)">生成二维码</button>';
+			htmls += '<button id="' + bill_no + '" type="button" class="mui-btn mui-btn-outlined info">查看详情</button>';
+			htmls += '<button id="' + bill_no + '" type="button" class="mui-btn mui-btn-primary mui-btn-outlined arrival">确认送达</button>';
+			htmls += '</div>';
+		} else if (status_code == "05") {
+			htmls += '<div class="task-btn">';
+			  htmls += '<button id="' + bill_no + '" type="button" class="ma" onclick="erweima(this)">生成二维码</button>';
+			htmls += '<button id="' + bill_no + '" type="button" class="mui-btn mui-btn-outlined info">查看详情</button>';
+			htmls += '<button id="' + bill_no + '" name="' + combo_no + '" type="button" class="mui-btn mui-btn-primary mui-btn-outlined eval">评价</button>';
+			htmls += '</div>';
+		} else if (status_code == "00") {
+			htmls += '<div class="task-btn">';
+			  htmls += '<button id="' + bill_no + '" type="button" class="ma" onclick="erweima(this)">生成二维码</button>';
+			htmls += '<button id="' + bill_no + '" type="button" class="mui-btn mui-btn-outlined info">查看详情</button>';
+			htmls += '<button id="' + bill_no + '" type="button" class="mui-btn mui-btn-primary mui-btn-outlined cancel">取消订单</button>';
+			htmls += '</div>';
+		} else {
+			htmls += '<div class="task-btn">';
+			//  htmls += '<button id="' + bill_no + '" type="button" class="ma" onclick="erweima(this)">生成二维码</button>';
+			htmls += '<button id="' + bill_no + '" type="button" class="mui-btn mui-btn-outlined info">查看详情</button>';
+			htmls += '</div>';
+		}
+		htmls += '</div>';
+		return htmls;
+	}
+	function erweima(el) {
+		
+		creatqrcode (el.id+'&'+workNo)
+
+
+	}
+	var share=document.querySelector('.share')
+	var share_tools=document.querySelector('.share_tools')
+	var closeshare=document.querySelector('.closeshare')
+	// var workNo = localStorage.getItem("workNo");
+	function closeShare(){ 
+		share.style.display='none'
+		closeshare.style.display='none'
+
+	}
+	var creatqrcode = function (text) {
+		share.style.display='block'
+		closeshare.style.display='block'
+		// 生成二维码
+		var codeFigure = new AraleQRCode({
+			"render": "svg",  // 生成的类型 'svg' or 'table'
+			"text": text, // 需要生成二维码的链接
+			"size": 160,// 生成二维码大小
+			"foreground": "#000000", // 二维码颜色
+			// "image": logo, // 二维码中间logo
+			// "imageSize": 50, // 二维码中间logo大小
+		});
+		// var share_tools = document.querySelector('#qrcodeimg');
+		// 先清空之前的二维码，在填充新的二维码
+		$(share_tools).empty();
+		share_tools.appendChild(codeFigure);
+		// console.lo;
+	}
+
+	function getMinute(times) {
+		var str = times.replace(/-/g, "/");
+		var time = new Date(str);
+		var now = new Date();
+		var s1 = time.getTime();
+		var s2 = now.getTime();
+		var s3 = s1 - s2;
+		return s3;
+	}
+	// 生成二维码
+	// mui("body").on('tap','button.ma',function(){
+	// 	console.log(this.id)
+	// })
+
+	//查看详情
+	mui("body").on('tap', 'button.info', function () {
+		var difference = this.id.substring(0, 2);
+		if (difference == "CC")
+			location.href = "meal_TC/order_info.html?" + this.id;
+		else
+			location.href = "meal_PC/orderInfo.html?" + this.id;
+	});
+
+	//取消订单
+	mui("body").on('tap', 'button.cancel', function () {
+		var difference = this.id.substring(0, 2);
+		var bill_no = this.id;
+		var methodName = "";
+		if (difference == "CC") {
+			methodName = 'cancelConfirmBill';
+			//var sendUrl = baseUrl + 'app_comboMealRuleController.do?suspendBillTask';
+		}
+		else {
+			methodName = 'cancelOrder';
+			//var sendUrl = baseUrl + 'app_workBillInfoController.do?suspendBillTask'; 
+		}
+		//订单作废
+
+		var btnArray = ['取消', '确定'];
+		mui.prompt('请输入取消原因', '', '取消订单', btnArray, function (e) {
+			if (e.index == 1) {
+				cancel(methodName, e.value, bill_no);
+			}
+		});
+	});
+	
+
+	function cancel(methodName, reason, bill_no) {
+		if (reason == "") {
+			mui.toast("取消原因不能为空");
+			return;
+		}
+		$('#loading').show();
+		$.ajax({
+			url: baseUrl + 'workmeal',
+			type: 'post',
+			headers: {
+				className: 'AppWorkOrderService',
+				methodName: methodName
+			},
+			data: {
+				billNo: bill_no,
+				openId: workNo,
+				rejectReason: reason,
+				dataGroupCode: localStorage.getItem("dataGroupCode")
+			},
+			success: function (data) {
+				//var data = eval('(' + data + ')');
+				console.log(data);
+				if (data.success) {
+					mui.toast("操作成功");
+					$('#loading').hide();
+					// debugger
+					// location.reload();
+					mui('#pullrefresh').pullRefresh().pulldownLoading();
+				} else {
+					mui.toast(data.respMsg);
+					$('#loading').hide();
+				}
+			}
+		});
+	}
+
+	//确认送达
+	mui("body").on('tap', 'button.arrival', function () {
+		// console.log(this.id);
+		$('#loading').show();
+		var difference = this.id.substring(0, 2);
+		if (difference == "CC")
+			var sendUrl = baseUrl + 'app_comboMealRuleController.do?finishSend';
+		else
+			var sendUrl = baseUrl + 'app_workBillInfoController.do?finishSend';
+		$.ajax({
+			url: sendUrl,
+			type: 'post',
+			data: {
+				openId: workNo,
+				billNo: this.id,
+				// dataGroupCode: localStorage.getItem("dataGroupCode")
+			},
+			success: function (data) {
+				var data = eval('(' + data + ')');
+				console.log(data);
+				if (data.success) {
+					mui.toast("操作成功");
+					$('#loading').hide();
+					location.reload();
+					// mui('#pullrefresh').pullRefresh().pulldownLoading();
+				} else {
+					mui.toast("操作失败");
+					$('#loading').hide();
+				}
+			}
+		});
+	});
+
+	//评价
+	mui("body").on('tap', 'button.eval', function () {
+		var difference = this.id.substring(0, 2);
+		if (difference == "CC")
+			location.href = "meal_TC/eval.html?" + this.id + "@" + this.name;
+		else
+			location.href = "meal_PC/eval.html?" + this.id;
+
+	});
+
+	//下拉刷新
+	function pulldownRefresh() {
+		setTimeout(function () {
+			html = '';
+			page = 1;
+			loadData();
+			mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+		}, 1500);
+	}
+
+	//上拉加载更多
+	function pullupRefresh() {
+		page++;
+		loadData();
+		setTimeout(function () {
+			//关闭加载框
+			mui('#pullrefresh').pullRefresh().endPullupToRefresh();
+		}, 1500);
+	}
+
+	document.getElementById("main").addEventListener('tap', function () {
+		location.href = "main.html";
+	});
+
+	document.getElementById("order").addEventListener('tap', function () {
+		location.reload();
+	});
+
+	document.getElementById("notice").addEventListener('tap', function () {
+		location.href = "notice.html";
+	});
+
+	document.getElementById("back").addEventListener('tap', function () {
+		location.href = "main.html";
+	});
+
+	// APP系统键回退
+	document.addEventListener("deviceready", onDeviceReady, false);
+	function onDeviceReady() {
+		/**
+	 * 系统返回键监听
+	 */
+		document.addEventListener("backbutton", onBackKeyDown, false);
+	}
+	//返回
+	function onBackKeyDown() {
+		location.href = "../../menu.html";
+	}
+</script>
+
+</html>

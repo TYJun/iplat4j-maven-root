@@ -1,0 +1,794 @@
+<!doctype html>
+<html class="no-js">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" href="reference/mui/css/mui.min.css">
+		<link rel="stylesheet" href="reference/mui/css/iconfont.css">
+		<link rel="stylesheet" href="reference/css/common.css" />
+		<link rel="stylesheet" href="reference/mui/css/mui.picker.min.css">
+		<link rel="stylesheet" href="../../css/colorGreen.css"/>
+  		<link rel="stylesheet" href="../../css/colorBlue.css"/>
+	</head>
+	<STYLE TYPE="text/css">
+		body {
+			background: #eee;
+			font-weight: bold;
+		}
+		
+		.task {
+			width: 96%;
+			background: #fff;
+			margin: 0 auto;
+			box-shadow: 1px 1px 10px #b9b9b9;
+			margin-bottom: 10px;
+			border-top-left-radius: 4px;
+			border-top-right-radius: 4px;
+			border-bottom-right-radius: 4px;
+			border-bottom-left-radius: 4px;
+			margin-top: 5px;
+		}
+		
+		.task-title {
+			width: 100%;
+			height: 40px;
+			line-height: 40px;
+			padding-left: 15px;
+			padding-right: 15px;
+			/*background: #607d8b;*/
+			border-bottom: 1px solid #eee;
+			border-top-left-radius: 4px;
+			border-top-right-radius: 4px;
+			font-weight: bold;
+		}
+		
+		.task-info {
+			padding-left: 15px;
+			padding-right: 15px;
+			padding-top: 10px;
+			padding-bottom: 10px;
+			border-bottom-right-radius: 4px;
+			border-bottom-left-radius: 4px;
+			color: #5a5a5a;
+		}
+		
+		.task-status {
+			color: #f39e22;
+		}
+		
+		.task-btn {
+			width: 100%;
+			height: 50px;
+			border-top: 1px solid #eee;
+			text-align: right;
+			padding-left: 15px;
+			padding-right: 15px;
+			/*padding-top: 8px;*/
+		}
+		
+		.task-btn button {
+			margin: 8px 0 0 10px;
+		}
+		
+		.mui-table-view:before {
+			height: 0;
+		}
+		
+		.mui-table-view:after {
+			height: 0;
+		}
+		
+		.loading1 {
+			position: fixed;
+			z-index: 999;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+		}
+		
+		.loading2 {
+			margin: 0 auto;
+			margin-top: 200px;
+			text-align: center;
+			line-height: 100px;
+		}
+		/*.row-content {*/
+		/*	position: relative;*/
+		/*	height: 40px;*/
+		/*	line-height: 40px;*/
+		/*	padding: 0 15px;*/
+		/*	border-bottom: 1px solid #EEEEEE;*/
+		/*	font-size: 14px;*/
+		/*	color: #666666;*/
+		/*	background: #ffffff;*/
+		/*	top: 40px;*/
+		/*}*/
+		.mui-icon-search {
+			color: #fff;
+		}
+		/*模糊查询*/
+
+		.mask {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: 10;
+			display: none;
+		}
+		.self-select {
+			position: fixed;
+			top: 40%;
+			left: 50%;
+			transform: translate(-50%, -40%);
+			height: 210px;
+			width: 90%;
+			background: #fff;
+			border-radius: 2px;
+			z-index: 50;
+			display: none;
+			border-radius: 4px;
+		}
+
+		.row-content {
+			height: 50px;
+			line-height: 50px;
+			padding: 0 15px;
+			border-bottom: 1px solid #EEEEEE;
+			font-size: 16px;
+			color: #666666;
+			background: #ffffff;
+			font-weight: normal;
+		}
+
+		.mui-icon-arrowright {
+			color: #11539b;
+			font-size: 20px;
+		}
+
+		.new-row-tcj {
+			height: 60px;
+			line-height: 60px;
+			display: flex;
+			justify-content: space-between;
+			font-size: 14px;
+		}
+
+		.queding {
+			height: 32px;
+			width: 40%;
+			background: #5bc0de;
+			text-align: center;
+			line-height: 32px;
+			border-radius: 15px;
+			margin-top: 14px;
+			color: #fff;
+			box-shadow: 0 0 7px #11539b;
+		}
+
+		.mui-poppicker {
+			z-index: 1000;
+		}
+
+		.mui-backdrop {
+			z-index: 999;
+		}
+
+		.no-views {
+			text-align: center;
+			margin-top: 180px;
+			margin-left: -15px;
+		}
+
+		.mui-popup-input input {
+			height: 40px;
+		}
+	</STYLE>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">订单列表</h1>
+			<button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+
+        <span class="mui-icon mui-icon-left-nav"></span>
+        返回
+      </button>
+			<span class="mui-icon mui-icon mui-icon-search mui-pull-right"></span>
+		</header>
+
+		
+		<div id="loading" class="loading1" hidden>
+			<div class="loading2">
+				<span class="mui-spinner" style="width:80px;height:80px;"></span>
+			</div>
+		</div>
+			<div class="mui-col-sm-1 mui-col-xs-1 row-right " style="text-align: center;">-
+			</div>
+
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="padding-bottom:50px;">
+			<div class="mui-scroll">
+				<ul class="mui-table-view mui-table-view-chevron" style="background-color:#eee;">
+					<div style="width:100%;text-align:center;margin-top:100px;font-size:40px;"><span class="mui-spinner"></span></div>
+				</ul>
+			</div>
+		</div>
+
+<!--		<div class="mui-content" style="padding-top:34px;margin-bottom:100px;"> </div>>-->
+
+		<nav class="mui-bar mui-bar-tab" style="background:#fff;">
+			<a id="main" class="mui-tab-item menu" href="javascript:void(0)">
+				<span class="mui-icon mui-icon-home"></span>
+				<span class="mui-tab-label">食堂</span>
+			</a>
+			<a id="notice" class="mui-tab-item notice" href="javascript:void(0)">
+				<span class="mui-icon mui-icon-email"></span>
+				<span class="mui-tab-label">消息</span>
+			</a>
+			<a id="order" class="mui-tab-item mui-active order" href="javascript:void(0)">
+				<span class="mui-icon mui-icon-compose"></span>
+				<span class="mui-tab-label">订单</span>
+			</a>
+			<a id="deptOrder" class="mui-tab-item mui-active order" href="javascript:void(0)">
+				<span class="mui-icon mui-icon-compose"></span>
+				<span class="mui-tab-label">科室订单</span>
+			</a>
+		</nav>
+		<!-- 蒙版 -->
+		<div class="mask"></div>
+
+		<!-- 查询列表 -->
+		<div class="self-select">
+			<div class="mui-row row-content">
+				<div class="mui-col-sm-4 mui-col-xs-4">餐次：
+				</div>
+				<div class="mui-col-sm-8 mui-col-xs-8 row-right meal">
+					<input type="text" id="meal" style="width: 86%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;" placeholder="请选择餐次" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" readonly="readonly" />
+					<span class="mui-icon mui-icon-arrowright"></span>
+				</div>
+			</div>
+			<div class="mui-row row-content">
+				<div class="mui-col-sm-4 mui-col-xs-4">日期：
+				</div>
+				<div class="mui-col-sm-8 mui-col-xs-8 row-right time">
+					<input type="text" id="time" style="width: 86%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;" placeholder="请选择日期" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" readonly="readonly" />
+					<span class="mui-icon mui-icon-arrowright"></span>
+				</div>
+			</div>
+
+			<div class="mui-row row-content new-row-tcj">
+				<div class="queding">查询</div>
+			</div>
+		</div>
+		<p class="no-views" hidden>———&nbsp;&nbsp;暂无数据&nbsp;&nbsp;———</p>
+	</body>
+	<script type="text/javascript" src="../../js/color.js"></script>
+	<script src="reference/mui/js/mui.min.js" type="text/javascript"></script>
+	<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+	<script src="reference/mui/js/mui.picker.min.js" type="text/javascript"></script>
+	<script src="reference/js/common.js" type="text/javascript"></script>
+	<!-- <script src="../../cordova.js" type="text/javascript"></script> -->
+	<script type="text/javascript">
+		var baseUrl = localStorage.getItem("url");
+		var workNo = localStorage.getItem('workNo');
+        var deptNum = localStorage.getItem('deptCode');
+		var page = 1,
+			html = '';
+
+		$(function() {
+			loadData();
+		});
+			//init();
+    function init() {
+			$.ajax({
+				//url: baseUrl + 'app_basicInfoController.do?queryCardWorkInfo',
+				url: baseUrl + 'cardmeal',
+                type: 'post',
+                headers:{
+                    className : 'CardWorkConsumeService',
+                    methodName : 'queryWorkInfo'
+                },
+				data: {
+					JSNHID: "UEzTab3BHgDYrE+W7sFECMtYMbF4FNsXM/Wo6WkDWNs="
+				},
+				success: function(data) {
+					// var data = eval("(" + data + ")");
+					console.log(data);
+					if(data.success ) {
+						if(!data.obj || !data.obj[0].cardBalance ){
+							return;
+						}
+                        workNo = data.obj[0].cardUserCode;
+                        localStorage.setItem('workNo',workNo)
+                        console.log('===',workNo);
+                        var name = data.obj[0].cardUserName;
+                        localStorage.setItem('name',name)
+                        console.log('===',name);
+                        var telPhone = data.obj[0].cardUserPhone;
+                        localStorage.setItem('telPhone',telPhone)
+                        console.log('===',telPhone);
+						$("#Kye").text(Number(data.obj[0].cardBalance/100).toFixed(2));
+						//loadViews();
+					} else {
+						$("#warn small").html(data.respMsg);
+						$("#warn").fadeIn(500);
+						setTimeout('$("#warn").fadeOut(500)', 3000);
+					}
+				}
+			});
+		}
+
+		document.addEventListener("deviceready", onDeviceReady, false);
+
+		function onDeviceReady() {
+			document.addEventListener("backbutton", onBackKeyDown, false);
+		}
+
+		function onBackKeyDown() {
+			location.href = "main.html";
+		}
+
+		mui.init({
+			pullRefresh: {
+				container: '#pullrefresh',
+				down: {
+					callback: pulldownRefresh,
+					contentrefresh: "正在加载",
+				},
+				up: {
+					contentrefresh: "加载中，请稍后",
+					contentnomore: '暂无更多数据',
+					callback: pullupRefresh
+				}
+			}
+		});
+		// baseUrl='http://lch520.nat200.top/';
+		// loadData();
+
+		function loadData(mealNum, needDate) {
+			$.ajax({
+				//url: baseUrl + 'app_comboMealRuleController.do?getWorkBillList',
+				url: baseUrl + 'workmeal',
+				type: 'post',
+		        headers:{
+		            className : 'AppWorkBaseInfoService',
+		            methodName : 'queryPaginationWorkBillInfo'
+		        },
+				data: {
+					page: page,
+					userCode: workNo,
+					// deptNum: deptNum,
+					mealNum: mealNum,
+					needDate: needDate
+				},
+				success: function(data) {
+					//var data = JSON.parse(data);
+					console.log(data);
+					if(data.success) {
+						var list = data.obj;
+						if (list.length == 0) {
+							$('.no-views').show();
+						} else {
+							$('.no-views').hide();
+						}
+						for(var i = 0; i < list.length; i++) {
+							html += createTask(list[i].billNo, list[i].recCreator, list[i].userName, list[i].userType, list[i].statusCode, list[i].statusName, list[i].mealNum, list[i].deptName, list[i].billTotalPrice, list[i].needDate,  list[i].reqSendTime, list[i].comboNum, list[i].payType);
+						}
+
+						$('ul').html(html);
+						// $(".mui-content").append(html);
+					} else {
+						mui.toast("获取订单列表失败");
+					}
+				}
+			});
+		}
+
+		function createTask(bill_no, REC_CREATOR, user_name, user_type, status_code, status_name, mealNum, dept_name,  total_price, need_date, send_time, combo_no, pay_type) {
+			var times = getMinute(send_time);
+			var htmls = '<div class="task">';
+			htmls += '<div class="task-title fontColor">订餐编号：<span class="task_code">' + bill_no + '</span></div>';
+			htmls += '<div class="mui-row task-info">';
+			htmls += '<div class="mui-col mui-col-xs-12">单据状态：<span class="task-status">' + status_name + '</span></div>';
+			htmls += '<div class="mui-col mui-col-xs-12">订餐人员：<span>' + user_name + '</span></div>';
+			htmls += '<div class="mui-col mui-col-xs-12">科室名称：<span class="abnormal">' + dept_name + '</span></div>';
+			htmls += '<div class="mui-col mui-col-xs-12">用餐时间：<span class="need_date">' + need_date + '</span></div>';
+			if (mealNum == '001') {
+				htmls += '<div class="mui-col mui-col-xs-12 desc">餐次：<span>早餐</span></div>';
+			}
+			if (mealNum == '002') {
+				htmls += '<div class="mui-col mui-col-xs-12 desc">餐次：<span>午餐</span></div>';
+			}
+			if (mealNum == '003') {
+				htmls += '<div class="mui-col mui-col-xs-12 desc">餐次：<span>晚餐</span></div>';
+			}
+			htmls += '<div class="mui-col mui-col-xs-12">订餐总价：<span>' + parseFloat(total_price).toFixed(2) + '元</span></div>';
+			htmls += '</div>';
+			//&& (pay_type == "0000" || pay_type == "0401" || pay_type == "0001")
+			if(REC_CREATOR == workNo){
+				if((status_code == "02" || status_code == "01") && times > 1800000 ) {
+					htmls += '<div class="task-btn">';
+					htmls += '<button id="' + bill_no + '" type="button" class="mui-btn mui-btn-outlined info">查看详情</button>';
+					htmls += '<button id="' + bill_no + '" type="button" class="mui-btn mui-btn-primary mui-btn-outlined cancel">取消订单</button>';
+					htmls += '</div>';
+				} else if(status_code == "03") {
+					htmls += '<div class="task-btn">';
+					htmls += '<button id="' + bill_no + '" type="button" class="mui-btn mui-btn-outlined info">查看详情</button>';
+					htmls += '<button id="' + bill_no + '" name="' + combo_no + '" type="button" class="mui-btn mui-btn-primary mui-btn-outlined eval">评价</button>';
+					htmls += '</div>';
+				} else if(status_code == "04") {
+					htmls += '<div class="task-btn">';
+					htmls += '<button id="' + bill_no + '" type="button" class="mui-btn mui-btn-outlined info">查看详情</button>';
+					htmls += '<button id="' + bill_no + '" type="button" class="mui-btn mui-btn-primary mui-btn-outlined arrival">确认送达</button>';
+					htmls += '</div>';
+				} else if(status_code == "05") {
+					htmls += '<div class="task-btn">';
+					htmls += '<button id="' + bill_no + '" type="button" class="mui-btn mui-btn-outlined info">查看详情</button>';
+					htmls += '</div>';
+				} else if(status_code == "00") {
+					htmls += '<div class="task-btn">';
+					htmls += '<button id="' + bill_no + '" type="button" class="mui-btn mui-btn-outlined info">查看详情</button>';
+					htmls += '<button id="' + bill_no + '" type="button" class="mui-btn mui-btn-primary mui-btn-outlined cancel">取消订单</button>';
+					htmls += '<button id="' + bill_no + '" type="button" class="mui-btn mui-btn-primary mui-btn-outlined repay">去支付</button>';
+					htmls += '</div>';
+				} else {
+					htmls += '<div class="task-btn">';
+					htmls += '<button id="' + bill_no + '" type="button" class="mui-btn mui-btn-outlined info">查看详情</button>';
+					htmls += '</div>';
+				}
+			}
+
+			htmls += '</div>';
+			htmls += '</div>';
+			return htmls;
+		}
+
+		function getMinute(times) {
+			var str = times.replace(/-/g, "/");
+			var time = new Date(str);
+			var now = new Date();
+			var s1 = time.getTime();
+			var s2 = now.getTime();
+			var s3 = s1 - s2;
+			return s3;
+		}
+
+		//查看详情
+		mui("body").on('tap', 'button.info', function() {
+			var difference = this.id.substring(0, 2);
+			// var bill_no = this.id;
+			// var methodName = "";
+			// if(difference == "CC")
+			// 	location.href = "meal_TC/order_info.html?" + this.id;
+			// else
+				location.href = "meal_PC/orderInfo.html?" + this.id;
+		});
+
+		/**
+		 * 模糊查询
+		 */
+		mui('body').on('tap', '.mui-icon-search', function() {
+			$('.mask').show();
+			$('.self-select').show();
+			$('#meal').val('');
+			$('#time').val('');
+		})
+
+		mui('body').on('tap', '.mask', function() {
+			$('.mask').hide();
+			$('.self-select').hide();
+		})
+
+		/**
+		 * 查询餐次
+		 */
+		mui('body').on('tap', '.meal', function() {
+			var options = [{
+				value: "001",
+				text: "早餐"
+			}, {
+				value: "002",
+				text: "中餐"
+			}, {
+				value: "003",
+				text: "晚餐"
+			}];
+			var mealPicker = new mui.PopPicker();
+			mealPicker.setData(options);
+			mealPicker.show(function(item) {
+				$('#meal').val(item[0].text);
+				$('#meal').attr('data-name', item[0].value);
+			})
+		})
+		/**
+		 * 查询日期
+		 */
+		mui('body').on('tap', '.time', function() {
+			var options = {
+				"type": "date"
+			}
+			var timePicker = new mui.DtPicker(options);
+			timePicker.show(function(item) {
+				$('#time').val(item.text);
+			})
+		})
+
+		mui('body').on('tap', '.queding', function() {
+			// $(".mui-content").html('');
+			$('ul').html('');
+			$('.mask').hide();
+			$('.self-select').hide();
+			// alert($('#time').val());
+			// alert(JSON.stringify($('#time').val()));
+			html='';
+			loadData($('#meal').attr('data-name'), $('#time').val());
+
+			// $('ul').html('');
+		})
+		//查看订单详情界面
+		// function cancel(methodName, bill_no) {
+		// 	$.ajax({
+		// 		url: baseUrl + 'workmeal',
+		// 		type: 'post',
+		// 		headers:{
+		// 			className : 'AppWorkOrderService',
+		// 			methodName : methodName
+		// 		},
+		// 		data: {
+		// 			billNo: bill_no,
+		// 			openId: workNo,
+		// 			rejectReason: reason,
+		// 			dataGroupCode: localStorage.getItem("dataGroupCode")
+		// 		},
+		// 		success: function(data) {
+		// 			//var data = eval('(' + data + ')');
+		// 			console.log(data);
+		// 			if(data.success) {
+		// 				mui.toast("操作成功");
+		// 				$('#loading').hide();
+		// 				// debugger
+		// 				// location.reload();
+		// 				mui('#pullrefresh').pullRefresh().pulldownLoading();
+		// 			} else {
+		// 				mui.toast(data.respMsg);
+		// 				$('#loading').hide();
+		// 			}
+		// 		}
+		// 	});
+		// }
+
+		//去支付
+		mui("body").on('tap', 'button.repay', function() {
+			var billNo = this.id;
+			//判断订单是否超时
+			$.ajax({
+				url: baseUrl + 'workmeal',
+				type: 'post',
+				headers: {
+					className: 'AppWorkOrderService',
+					methodName: 'billRepayCheck'
+				},
+				data: {
+					billNo: this.id
+				},
+				success: function (data) {
+
+					if(data.respCode == "200"){
+						//200正常订单，跳转支付页面
+						location.href = "meal_PC/meal_repay.html?" + billNo;
+					}else if(data.respCode == "201"){
+						//201关闭超时订单，202关闭截止订单，206支付订单,无需重复操作
+						mui.toast("订单超时未支付，已被系统关闭");
+						setTimeout(function(){
+							location.reload();
+						},1000);
+					}else if(data.respCode == "202"){
+						mui.toast("订单超过截止时间，已被系统关闭");
+						setTimeout(function(){
+							location.reload();
+						},1000);
+					}else if(data.respCode == "206"){
+						mui.toast("订单已支付，无需重复操作");
+						setTimeout(function(){
+							location.reload();
+						},1000);
+					}
+				}
+			});
+		});
+
+		//取消订单
+		mui("body").on('tap', 'button.cancel', function() {
+			var difference = this.id.substring(0, 2);
+			var bill_no = this.id;
+			var methodName = "";
+				if(difference == "CC"){
+					methodName = 'cancelConfirmBill';
+					//var sendUrl = baseUrl + 'app_comboMealRuleController.do?suspendBillTask';
+				}
+				else{
+					methodName = 'cancelOrder';
+					//var sendUrl = baseUrl + 'app_workBillInfoController.do?suspendBillTask';
+				}
+				//订单作废
+
+				var btnArray = ['取消', '确定'];
+				mui.prompt('请输入取消原因', '', '取消订单', btnArray, function(e) {
+					if(e.index == 1) {
+						cancel(methodName, e.value, bill_no);
+					}
+				});
+
+
+		});
+
+		function cancel(methodName, reason, bill_no) {
+			if(reason == "") {
+				mui.toast("取消原因不能为空");
+				return;
+			}
+			$('#loading').show();
+			$.ajax({
+				url: baseUrl + 'workmeal',
+				type: 'post',
+				headers:{
+		            className : 'AppWorkOrderService',
+		            methodName : methodName
+		        },
+				data: {
+					billNo: bill_no,
+					openId: workNo,
+					rejectReason: reason,
+					dataGroupCode: localStorage.getItem("dataGroupCode")
+				},
+				success: function(data) {
+					//var data = eval('(' + data + ')');
+					console.log(data);
+					if(data.success) {
+						mui.toast("操作成功");
+						$('#loading').hide();
+						// debugger
+						// location.reload();
+						mui('#pullrefresh').pullRefresh().pulldownLoading();
+					} else {
+						mui.toast(data.respMsg);
+						$('#loading').hide();
+					}
+				}
+			});
+		}
+
+		//确认送达
+		mui("body").on('tap', 'button.arrival', function() {
+			// console.log(this.id);
+			$('#loading').show();
+			var difference = this.id.substring(0, 2);
+			if(difference == "CC")
+				var sendUrl = baseUrl + 'app_comboMealRuleController.do?finishSend';
+			else
+				var sendUrl = baseUrl + 'app_workBillInfoController.do?finishSend';
+			$.ajax({
+				url: sendUrl,
+				type: 'post',
+				data: {
+					openId: workNo,
+					billNo: this.id,
+					// dataGroupCode: localStorage.getItem("dataGroupCode")
+				},
+				success: function(data) {
+					var data = eval('(' + data + ')');
+					console.log(data);
+					if(data.success) {
+						mui.toast("操作成功");
+						$('#loading').hide();
+						location.reload();
+						// mui('#pullrefresh').pullRefresh().pulldownLoading();
+					} else {
+						mui.toast("操作失败");
+						$('#loading').hide();
+					}
+				}
+			});
+		});
+
+		//评价
+		mui("body").on('tap', 'button.eval', function() {
+			var difference = this.id.substring(0, 2);
+			if(difference == "CC")
+				location.href = "meal_TC/eval.html?" + this.id + "@" + this.name;
+			else
+				location.href = "meal_PC/eval.html?" + this.id;
+
+		});
+
+		//下拉刷新
+		function pulldownRefresh() {
+			setTimeout(function() {
+				html = '';
+				page = 1;
+				loadData($('#meal').attr('data-name'), $('#time').val());
+				mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+			}, 1500);
+		}
+
+		//上拉加载更多
+		function pullupRefresh() {
+			page++;
+			loadData($('#meal').attr('data-name'), $('#time').val());
+			setTimeout(function() {
+				//关闭加载框
+				mui('#pullrefresh').pullRefresh().endPullupToRefresh();
+			}, 1500);
+		}
+
+		function startTime(){      //获取当前时间的函数
+			var today=new Date()
+			var h=today.getHours()    //时
+			var m=today.getMinutes()  //分
+			var s=today.getSeconds()  //秒
+			m=checkTime(m)
+			s=checkTime(s)
+			var txt = document.getElementById('txt').innerHTML=h+":"+m+":"+s
+			t=setTimeout('startTime()',500)  //每隔500就触发一次函数
+		}
+
+		function checkTime(i){   //检查分和秒，如果小于10，则在数字前加上0
+			if (i<10)
+			{i="0" + i}
+			return i
+		}
+
+		/**
+		 * mui清除按钮事件(ps:自定义的，不加此方法页面会报错，如果不需要，方法体为空就行)
+		 */
+		function clearFunc() {}
+
+		/**
+		 * mui返回方法(ps:自定义的,不加会报错,不需要的话方法体定义为空)
+		 * [goBack description]
+		 * @return {[type]} [description]
+		 */
+		function goBack() {}
+
+		document.getElementById("main").addEventListener('tap', function() {
+			location.href = "main.html";
+		});
+
+		document.getElementById("order").addEventListener('tap', function() {
+			location.reload();
+		});
+
+		document.getElementById("notice").addEventListener('tap', function() {
+			location.href = "notice.html";
+		});
+
+		document.getElementById("deptOrder").addEventListener('tap', function() {
+			location.href = "meal_order_dept.html";
+		});
+
+		document.getElementById("back").addEventListener('tap', function() {
+			location.href = "main.html";
+		});
+
+		// APP系统键回退
+		document.addEventListener("deviceready", onDeviceReady, false);
+	    function onDeviceReady() {
+	      	/**
+			 * 系统返回键监听
+			 */
+			document.addEventListener("backbutton", onBackKeyDown, false);
+	    }
+	    //返回
+	     function onBackKeyDown() {
+	       location.href = "../../menu.html";
+	     }
+	</script>
+
+
+</html>

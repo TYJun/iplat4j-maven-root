@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2022-01-13 13:56:45
+   		Version :  6.0.731.201809200158
+		tableName :v501_business.dr_work_plan 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 rec_creator  VARCHAR, 
+		 rec_creator_name  VARCHAR, 
+		 rec_create_time  VARCHAR, 
+		 rec_revisor  VARCHAR, 
+		 rec_revisor_name  VARCHAR, 
+		 rec_revise_time  VARCHAR, 
+		 plan_date  VARCHAR, 
+		 work_no  VARCHAR, 
+		 work_name  VARCHAR, 
+		 schedule_id  VARCHAR, 
+		 schedule_name  VARCHAR, 
+		 dept_num  VARCHAR, 
+		 dept_name  VARCHAR, 
+		 status  CHAR, 
+		 gender  CHAR, 
+		 contact_tel  VARCHAR, 
+		 id_no  VARCHAR, 
+		 start_time  VARCHAR, 
+		 end_time  VARCHAR, 
+		 rest_start_time  VARCHAR, 
+		 rest_end_time  VARCHAR, 
+		 day_span  CHAR, 
+		 work_start_time  VARCHAR, 
+		 work_end_time  VARCHAR, 
+		 datagroup_code  VARCHAR
+	-->
+<sqlMap namespace="HRPBJhcx01">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.hr.pb.domain.HRPBJhcx01">
+		SELECT
+				id	as "id",  <!-- 主键 -->
+				rec_creator	as "recCreator",  <!-- 创建人 -->
+				rec_creator_name	as "recCreatorName",  <!-- 创建人姓名 -->
+				rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+				rec_revisor	as "recRevisor",  <!-- 更新人ID -->
+				rec_revisor_name	as "recRevisorName",  <!-- 更新人 -->
+				rec_revise_time	as "recReviseTime",  <!-- 更新时间 -->
+				plan_date	as "planDate",  <!-- 排班日期 -->
+				work_no	as "workNo",  <!-- 工号 -->
+				work_name	as "workName",  <!-- 姓名 -->
+				schedule_id	as "scheduleId",  <!-- 班次id -->
+				schedule_name	as "scheduleName",  <!-- 班次名称 -->
+				dept_num	as "deptNum",  <!-- 班组编码 -->
+				dept_name	as "deptName",  <!-- 班组名称 -->
+				status	as "status",  <!-- 排班状态(00-休息，01-在岗) -->
+				gender	as "gender",  <!-- 性别 -->
+				contact_tel	as "contactTel",  <!-- 联系电话 -->
+				id_no	as "idNo",  <!-- 身份证号码 -->
+				start_time	as "startTime",  <!-- 开始时间 -->
+				end_time	as "endTime",  <!-- 结束时间 -->
+				rest_start_time	as "restStartTime",  <!-- 休息开始时间 -->
+				rest_end_time	as "restEndTime",  <!-- 休息结束时间 -->
+				day_span	as "daySpan",  <!-- 是否跨天(0-否，1-是) -->
+				work_start_time	as "workStartTime",  <!-- 上班具体时间 -->
+				work_end_time	as "workEndTime",  <!-- 下班具体时间 -->
+				datagroup_code	as "datagroupCode" <!-- 院区 -->
+		FROM dr_work_plan WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM dr_work_plan WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreator">
+			rec_creator = #recCreator#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreatorName">
+			rec_creator_name = #recCreatorName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTime">
+			rec_create_time = #recCreateTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recRevisor">
+			rec_revisor = #recRevisor#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recRevisorName">
+			rec_revisor_name = #recRevisorName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recReviseTime">
+			rec_revise_time = #recReviseTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="planDate">
+			plan_date = #planDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workNo">
+			work_no = #workNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workName">
+			work_name = #workName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="scheduleId">
+			schedule_id = #scheduleId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="scheduleName">
+			schedule_name = #scheduleName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			dept_num = #deptNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name = #deptName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status">
+			status = #status#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="gender">
+			gender = #gender#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contactTel">
+			contact_tel = #contactTel#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="idNo">
+			id_no = #idNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="startTime">
+			start_time = #startTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">
+			end_time = #endTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="restStartTime">
+			rest_start_time = #restStartTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="restEndTime">
+			rest_end_time = #restEndTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="daySpan">
+			day_span = #daySpan#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workStartTime">
+			work_start_time = #workStartTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workEndTime">
+			work_end_time = #workEndTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="datagroupCode">
+			datagroup_code = #datagroupCode#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO dr_work_plan (id,  <!-- 主键 -->
+										rec_creator,  <!-- 创建人 -->
+										rec_creator_name,  <!-- 创建人姓名 -->
+										rec_create_time,  <!-- 创建时间 -->
+										rec_revisor,  <!-- 更新人ID -->
+										rec_revisor_name,  <!-- 更新人 -->
+										rec_revise_time,  <!-- 更新时间 -->
+										plan_date,  <!-- 排班日期 -->
+										work_no,  <!-- 工号 -->
+										work_name,  <!-- 姓名 -->
+										schedule_id,  <!-- 班次id -->
+										schedule_name,  <!-- 班次名称 -->
+										dept_num,  <!-- 班组编码 -->
+										dept_name,  <!-- 班组名称 -->
+										status,  <!-- 排班状态(00-休息，01-在岗) -->
+										gender,  <!-- 性别 -->
+										contact_tel,  <!-- 联系电话 -->
+										id_no,  <!-- 身份证号码 -->
+										start_time,  <!-- 开始时间 -->
+										end_time,  <!-- 结束时间 -->
+										rest_start_time,  <!-- 休息开始时间 -->
+										rest_end_time,  <!-- 休息结束时间 -->
+										day_span,  <!-- 是否跨天(0-否，1-是) -->
+										work_start_time,  <!-- 上班具体时间 -->
+										work_end_time,  <!-- 下班具体时间 -->
+										datagroup_code  <!-- 院区 -->
+										)		 
+	    VALUES (#id#, #recCreator#, #recCreatorName#, #recCreateTime#, #recRevisor#, #recRevisorName#, #recReviseTime#, #planDate#, #workNo#, #workName#, #scheduleId#, #scheduleName#, #deptNum#, #deptName#, #status#, #gender#, #contactTel#, #idNo#, #startTime#, #endTime#, #restStartTime#, #restEndTime#, #daySpan#, #workStartTime#, #workEndTime#, #datagroupCode#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM dr_work_plan WHERE
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE dr_work_plan
+		SET 
+					rec_creator	= #recCreator#,   <!-- 创建人 -->  
+					rec_creator_name	= #recCreatorName#,   <!-- 创建人姓名 -->  
+					rec_create_time	= #recCreateTime#,   <!-- 创建时间 -->  
+					rec_revisor	= #recRevisor#,   <!-- 更新人ID -->  
+					rec_revisor_name	= #recRevisorName#,   <!-- 更新人 -->  
+					rec_revise_time	= #recReviseTime#,   <!-- 更新时间 -->  
+					plan_date	= #planDate#,   <!-- 排班日期 -->  
+					work_no	= #workNo#,   <!-- 工号 -->  
+					work_name	= #workName#,   <!-- 姓名 -->  
+					schedule_id	= #scheduleId#,   <!-- 班次id -->  
+					schedule_name	= #scheduleName#,   <!-- 班次名称 -->  
+					dept_num	= #deptNum#,   <!-- 班组编码 -->  
+					dept_name	= #deptName#,   <!-- 班组名称 -->  
+					status	= #status#,   <!-- 排班状态(00-休息，01-在岗) -->  
+					gender	= #gender#,   <!-- 性别 -->  
+					contact_tel	= #contactTel#,   <!-- 联系电话 -->  
+					id_no	= #idNo#,   <!-- 身份证号码 -->  
+					start_time	= #startTime#,   <!-- 开始时间 -->  
+					end_time	= #endTime#,   <!-- 结束时间 -->  
+					rest_start_time	= #restStartTime#,   <!-- 休息开始时间 -->  
+					rest_end_time	= #restEndTime#,   <!-- 休息结束时间 -->  
+					day_span	= #daySpan#,   <!-- 是否跨天(0-否，1-是) -->  
+					work_start_time	= #workStartTime#,   <!-- 上班具体时间 -->  
+					work_end_time	= #workEndTime#,   <!-- 下班具体时间 -->  
+					datagroup_code	= #datagroupCode#  <!-- 院区 -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

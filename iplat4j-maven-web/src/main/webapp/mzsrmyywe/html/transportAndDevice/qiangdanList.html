@@ -1,0 +1,373 @@
+<!doctype html>
+<html class="no-js">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" href="../reference/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../reference/css/common.css" />
+		<link rel="stylesheet" href="css/loading.css" />
+	</head>
+	<STYLE TYPE="text/css">
+		body {
+			background: #eee;
+		}
+		
+		.task-div {
+			width: 96%;
+			margin: 10px auto;
+			padding-left: 15px;
+			padding-right: 15px;
+			padding-top: 15px;
+			padding-bottom: 10px;
+			background: #fff;
+			border-radius: 2px;
+			box-shadow: 0px 2px 5px #d4d4d4;
+		}
+		
+		.task-title {
+			height: 40px;
+			line-height: 40px;
+			border-bottom: 1px solid #eee;
+			font-weight: bold;
+			color: #333333;
+		}
+		
+		.status-applying {
+			color: #ff9800;
+		}
+		
+		.status-accept {
+			color: #0dc515;
+		}
+		
+		.status-remove {
+			color: #f5675c;
+		}
+		
+		.status-unknown {
+			color: #f5675c;
+		}
+		
+		.task-info {
+			padding-top: 5px;
+			color: #333;
+		}
+		
+		.info-title {
+			color: #5d5d5d;
+		}
+		
+		.mui-table-view:before {
+			background-color: #eee;
+		}
+		
+		.mui-table-view:after {
+			background-color: #eee;
+		}
+		
+		.btn-div {
+			width: 100%;
+			text-align: right;
+			border-top: 1px solid #eee;
+			margin-top: 10px;
+			padding-top: 10px;
+			padding-bottom: 5px;
+		}
+		
+		.btn-div button {
+			margin-left: 10px;
+		}
+		
+		.btn-views {
+			width: 80px;
+			border-radius: 15px;
+			border: 1px solid #2aabd2;
+			color: #2aabd2;
+		}
+		
+		.title-deal {
+			height: 40px;
+			line-height: 40px;
+			text-align: center;
+			opacity: 0.77;
+			font-size: 17px;
+			float: left;
+			width: 40%;
+		}
+		
+		.submit {
+			position: fixed;
+			bottom: 0px;
+			left: 0;
+			right: 0;
+			background: #2AABD2;
+			text-align: center;
+			line-height: 50px;
+			height: 50px;
+			color: #FFFFff;
+			font-size: 19px;
+		}
+		
+		.diceng {
+			position: fixed;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			z-index: 100000;
+			background: black;
+			opacity: 0.5;
+		}
+		
+		.applyMoney {
+			position: fixed;
+			z-index: 100099;
+			width: 90%;
+			left: 5%;
+			top: 180px;
+			background: #FFFFFF;
+		}
+		
+		.applyTitle {
+			height: 50px;
+			line-height: 50px;
+			border-bottom: 1px solid #e1e1e1;
+			text-align: center;
+			font-size: 20px;
+			color: #666666;
+		}
+		
+		.applyInput {
+			height: 80px;
+			line-height: 80px;
+			padding: 22.5px 15px;
+		}
+		
+		.setInput {
+			color: #333333;
+			width: 100%;
+			border: 0;
+			outline: none;
+			text-align: left;
+			font-size: 15px;
+		}
+		
+		.editButtons {
+			height: 40px;
+			line-height: 40px;
+			text-align: center;
+			font-size: 19px;
+		}
+		
+		.word-omit {
+			color: #333333;
+		}
+		
+		.mui-bar-tab .mui-tab-item.mui-active {
+			color: #2aabd2;
+		}
+	</STYLE>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">订单列表</h1>
+			<button onclick="history.back(-1)" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+        返回
+      </button>
+		</header>
+
+		<div id="warn" class="warn" hidden>
+			<small></small>
+		</div>
+
+		<div id="loading" class="loading-div" style="z-index: 9;" hidden>
+			<div class="loading-center">
+				<div class="loading-center-absolute">
+					<div class="object" id="object_one"></div>
+					<div class="object" id="object_two"></div>
+					<div class="object" id="object_three"></div>
+					<div class="object" id="object_four"></div>
+				</div>
+			</div>
+		</div>
+
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="">
+			<div class="mui-scroll">
+				<ul class="mui-table-view mui-table-view-chevron" style="background-color:#eee;">
+				</ul>
+			</div>
+		</div>
+
+	</body>
+	<script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+	<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+	<script src="../reference/js/common.js" type="text/javascript"></script>
+	<script src="../../cordova.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		var baseUrl = localStorage.getItem('url');
+		var workNo = localStorage.getItem('workNo');
+		var name = localStorage.getItem('name');
+		var taskListAppend = "";
+		var url = location.search;
+		var jsonStrBack = url.substring(1, url.length);
+
+		loadViews();
+
+		function loadViews() {
+			$("#loading").show();
+			$.ajax({
+				url: baseUrl + 'app_carriageAppController.do?queryCarriageRob',
+				type: 'post',
+				data: {
+					workNo: workNo,
+					carriageType : jsonStrBack
+				},
+				success: function(data) {
+					$("#loading").hide();
+					console.log(data);
+					if(data.respCode == "200" || data.respCode == 200) {
+
+						var list = data.obj;
+
+						for(var i = 0; i < list.length; i++) {
+
+							taskListAppend += createView1(list[i].billNo, list[i].id, list[i].from_address, list[i].createCateView, list[i].dected_class_name);
+						}
+						$('ul').html(taskListAppend);
+					} else {
+						showMsg(data.respMsg);
+					}
+				}
+			});
+
+		}
+//创建抢单视图函数
+		function createView1(bill_no, id, from_address, createCateView, dected_class_name) {
+			var json = {
+				"billNo": bill_no,
+				"id": id,
+				"from_address": from_address,
+				"createCateView": createCateView,
+				"dected_class_name": dected_class_name
+			};
+			var jsonb = JSON.stringify(json);
+			var html = "";
+
+			var detail = "";
+			var menu_number = 0;
+			html += '<div class="task-div">';
+			html += '<div class="mui-row task-title">';
+			html += '<div class="mui-col mui-col-xs-8 task-no">订单号：<span id="billNo" style="color:#2aabd2;">' + bill_no + '</span></div>';
+
+			html += '<div class="mui-col mui-col-xs-4 right  status-accept"></div>';
+
+			html += '</div>';
+			html += '<div class="task-content ">';
+			html += '<div class="mui-row task-info">';
+			html += '<div class="mui-col mui-col-xs-4" style="color:#999;">下单时间</div>';
+			html += '<div class="mui-col mui-col-xs-8 right word-omit">';
+			html += '<sapn id="start">' + createCateView + '</span></div></div>';
+			html += '<div class="mui-row task-info">';
+			html += '<div class="mui-col mui-col-xs-4" style="color:#999;">运送地点</div>';
+			html += '<div class="mui-col mui-col-xs-8 right word-omit" ><span >' + from_address + '</span></div>';
+			html += '</div>';
+
+			html += '</div>';
+			html += '<div class="task-content ">';
+			html += '<div class="mui-row task-info">';
+			html += '<div class="mui-col mui-col-xs-12" style="color:#999;">订单详情</div>';
+			html += '</div>';
+			html += '<div class="mui-row task-info" style="padding-top: 5px;">';
+			html += '<div class="mui-col mui-col-xs-12">';
+			html += '<input type="text" style="padding: 0px;border: 0px;outline: none;text-align:left;margin-bottom:0;height: 20px;line-height: 20px;" readonly="readonly" value=\"' + dected_class_name + '\" />';
+			html += '</div>';
+			html += '</div>';
+			html += '</div>';
+			html += '	<div class="btn-div">';
+			html += '	<button id=\'' + jsonb + '\' type="button" class="mui-btn mui-btn-outlined btn-views qiang">抢单</button>';
+			html += '	</div>';
+
+			html += '	</div>';
+			return html;
+		}
+
+		/**
+		 * 下滑刷新
+		 * @return {[type]} [description]
+		 */
+		function pulldownRefresh() {
+			setTimeout(function() {
+				taskListAppend = "";
+				page = 1;
+				loadViews();
+				mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+			}, 1500);
+		}
+
+		mui.init({
+			pullRefresh: {
+				container: '#pullrefresh',
+				down: {
+					callback: pulldownRefresh,
+					contentrefresh: "正在刷新",
+				}
+			}
+		});
+
+		mui("body").on("tap", ".qiang", function() {
+
+			complete(this.id);
+
+		});
+
+		//取消订单
+		function complete(id) {
+			$("#loading").show();
+			$.ajax({
+				url: baseUrl + 'app_carriageAppController.do?acceptCarriageRob',
+				type: 'post',
+				data: {
+					billId: JSON.parse(id).id,
+					workNo: workNo,
+					name: name
+				},
+				success: function(data) {
+
+					console.log(data);
+					if(data.respCode == 200 || data.respCode == "200") {
+						$("#loading").hide();
+						showMsg(data.respMsg);
+						setTimeout("location.reload()", 1000);
+					} else {
+						$("#loading").hide();
+						showMsg(data.respMsg);
+					}
+				}
+			});
+
+		}
+
+		document.addEventListener("deviceready", onDeviceReady, false);
+
+		function onDeviceReady() {
+			/**
+			 * 系统返回键监听
+			 */
+			document.addEventListener("backbutton", onBackKeyDown, false);
+		}
+
+		/**
+		 * 系统返回键方法
+		 * @return {[type]} [description]
+		 */
+		function onBackKeyDown() {
+			history.back(-1);
+		}
+	</script>
+
+</html>

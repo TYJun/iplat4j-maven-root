@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../../reference/mui/css/mui.min.css" />
+    <!-- <link rel="stylesheet" href="" /> -->
+</head>
+<style type="text/css">
+    #app {
+        height: 100vh;
+        background-color: #f5f5f5;
+    }
+
+    .iconBtn {
+        margin-top: 44px;
+       
+        box-sizing: border-box;
+        padding: 32px;
+    }
+
+    .main-div {
+        width: 50%;
+        height: 150px;
+        display: inline-block;
+        float: left;
+        color: #666;
+        font-size: 16px;
+    }
+    
+    .icon-div {
+        width: 100%;
+        height: 110px;
+    }
+    
+    .flex {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+    }
+    
+    .flex-align-center {
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+    
+    .flex-pack-justify {
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+    }
+    
+    .title-div {
+        width: 100%;
+        height: 40px;
+        text-align: center;
+        font-weight: bold;
+    }
+    
+    .odd-border {
+        border-right: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .even-border {
+        border-bottom: 1px solid #eee;
+    }
+    
+    .operate-enable {
+        color: #30c37c;
+    }
+    .radius{
+        width: 80px;
+        height: 80px;
+        /* background-color: #30c37c; */
+        background-image: linear-gradient(to bottom right, #4adf97,#0ab562);
+        box-shadow: 0px 0px 10px 0px #afd3c2;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .radius img{
+        width: 42px;
+    }
+</style>
+
+<body>
+    <div id="app">
+        <header class="mui-bar mui-bar-nav">
+            <h1 class="mui-title">采购</h1>
+            <button id="back" onclick="onBackKeyDown()"
+                class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+                <span class="mui-icon mui-icon-left-nav"></span>
+                返回
+            </button>
+        </header>
+        <div class="mui-content">
+            <div onclick="toXuqiu()" class="main-div odd-border">
+                <div class="icon-div flex flex-align-center flex-pack-justify">
+                    <div class="radius">
+                        <img src="../../img/xuqiu.png" alt="">
+                    </div>
+                </div>
+                <div class="title-div">需求计划审批</div>
+            </div>
+    
+            <div onclick="toCaigou()" class="main-div odd-border">
+                <div class="icon-div flex flex-align-center flex-pack-justify">
+                    <div class="radius">
+                        <img src="../../img/cg.png" alt="">
+                    </div>
+                </div>
+                <div class="title-div">采购计划审批</div>
+            </div>
+    
+            <div onclick="toBuku()" class="main-div odd-border">
+                <div class="icon-div flex flex-align-center flex-pack-justify">
+                    <div class="radius">
+                        <img style="width: 48px;" src="../../img/buku.png" alt="">
+                    </div>
+                </div>
+                <div class="title-div">补库计划审批</div>
+            </div>
+    
+            <div onclick="toWuzi()" class="main-div odd-border">
+                <div class="icon-div flex flex-align-center flex-pack-justify">
+                    <div class="radius">
+                        <img style="width: 40px;" src="../../img/wz.png" alt="">
+                    </div>
+                </div>
+                <div class="title-div">领用单</div>
+            </div>
+            <div onclick="toAdd()"  class="main-div odd-border">
+                <div class="icon-div flex flex-align-center flex-pack-justify">
+                    <div class="radius">
+                        <img src="../../img/xz.png" alt="">
+                    </div>
+                </div>
+                <div class="title-div">新增领用单</div>
+            </div>
+        </div>
+
+</body>
+<script src="../../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script type="text/javascript">
+    function onBackKeyDown() {
+        location.href = "../../menu.html";
+    }
+    function toXuqiu() {
+        location.href = "../Approval/XuqiuApproval/approval.html"+'?from=caigou';
+    }
+    function toCaigou() {
+        location.href = "../Approval/CaigouApproval/approval.html"+'?from=caigou';
+    }
+    function toBuku() {
+        location.href = "../Approval/BukuApproval/approval.html"+'?from=caigou';
+    }
+    function toWuzi() {
+        location.href = "../Approval/MaterialApproval/approval.html"+'?from=caigou';
+    }
+    function toAdd(){
+        location.href = "../Approval/MaterialApproval/collectingDoc.html"+'?from=caigou';
+    }
+</script>
+
+</html>

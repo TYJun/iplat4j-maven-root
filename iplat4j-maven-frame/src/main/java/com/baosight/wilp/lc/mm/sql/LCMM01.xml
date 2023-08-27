@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+		
+<sqlMap namespace="LCMM01">
+
+	<select id="queryMonitoring" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			select id,
+				`module`,
+				class as "className",
+				`method`,
+				is_monitoring AS "isMonitoring",
+				CASE is_monitoring
+				WHEN '1' THEN '是'
+				WHEN '0' THEN '否'
+				END AS 'isMonitoringText',
+				is_parameter AS "isParameter",
+				CASE is_parameter
+				WHEN '1' THEN '是'
+				WHEN '0' THEN '否'
+				END AS 'isParameterText'
+			from $projectSchema$.lc_monitoring
+			WHERE 1=1
+			<isNotEmpty prepend=" AND " property="module">
+				module like concat('%', #module#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="method">
+				method like concat('%', #method#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="isMonitoring">
+				is_monitoring = #isMonitoring#
+			</isNotEmpty>
+
+	</select>
+
+	<select id="queryMonitoringCount" resultClass="int" parameterClass="java.util.HashMap">
+			SELECT COUNT(1)
+			from $projectSchema$.lc_monitoring
+			WHERE 1=1
+			<isNotEmpty prepend=" AND " property="module">
+				module like concat('%', #module#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="method">
+				method like concat('%', #method#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="isMonitoring">
+				is_monitoring = #isMonitoring#
+			</isNotEmpty>
+	</select>
+	<update id="update" parameterClass="java.util.HashMap">
+		UPDATE $projectSchema$.lc_monitoring
+		SET
+		is_monitoring=#status#
+		WHERE id IN
+		<iterate property="list" open="(" close=")" conjunction=",">
+			#list[]#
+		</iterate>
+	</update>
+
+	<update id="updateParam" parameterClass="java.util.HashMap">
+		UPDATE $projectSchema$.lc_monitoring
+		SET
+		is_parameter=#isParameter#
+		WHERE id IN
+		<iterate property="list" open="(" close=")" conjunction=",">
+			#list[]#
+		</iterate>
+	</update>
+</sqlMap>

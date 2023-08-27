@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="SIYJ01">
+
+	<!-- 保存库存预警信息 -->
+	<update id="update" parameterClass="java.util.Map">
+		UPDATE si_storge 
+		<dynamic prepend="set">
+			<isGreaterThan prepend="," property="minNum" compareValue="0">
+				min_num = #minNum#
+			</isGreaterThan>
+			<isGreaterThan prepend="," property="maxNum" compareValue="0">
+				max_num =#maxNum#
+			</isGreaterThan>
+		</dynamic>
+		WHERE WARE_HOUSE_NO = #wareHouseNo# and MAT_NUM = #matNum#
+	</update>
+
+	<!-- 删除库存预警信息 -->
+	<update id="delete">
+		UPDATE si_storge SET min_num = 0, max_num = 0 WHERE id = #id#
+	</update>
+	
+</sqlMap>

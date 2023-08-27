@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+		
+<sqlMap namespace="MCVM01">
+
+	<select id="queryVar" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+			id,									<!-- 主键 -->
+			variable_code AS variableCode,		<!-- 模板编码 -->
+			variable_name AS variableName,		<!-- 模板名称 -->
+			rec_create_time AS recCreateTime,	<!-- 创建时间 -->
+			rec_creater AS recCreater			<!-- 创建人 -->
+		FROM $projectSchema$.mc_variable
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="variableCode">
+			variable_code like concat('%', #variableCode#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="variableName">
+			variable_name like concat('%', #variableName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreater">
+			rec_creater = #recCreater#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  rec_create_time desc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="queryVarCount" resultClass="int" parameterClass="java.util.HashMap">
+		SELECT count(1)
+		FROM $projectSchema$.mc_variable
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="variableCode">
+			variable_code like concat('%', #variableCode#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="variableName">
+			variable_name like concat('%', #variableName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreater">
+			rec_creater = #recCreater#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				rec_create_time desc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+
+	<select id="queryPer" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+			mv.id AS 'id',						<!-- 主键id -->
+			ap.work_no AS 'workNo',				<!-- 人员工号 -->
+			ap.`name` AS 'name',				<!-- 人员名称 -->
+			ap.contact_tel AS 'contactTel',		<!-- 联系电话 -->
+			mv.variable_id AS 'variableId'		<!-- 变量id -->
+		FROM $projectSchema$.`ac_personnel` ap
+		LEFT JOIN $projectSchema$.`mc_vp` mv
+		ON mv.perl_id = ap.id
+		WHERE mv.variable_id = #curVarId#
+	</select>
+
+	<select id="queryPerCount" resultClass="int" parameterClass="java.util.HashMap">
+		SELECT count(1)
+		FROM $projectSchema$.`ac_personnel` ap
+	 	LEFT JOIN $projectSchema$.`mc_vp` mv
+	   	ON mv.perl_id = ap.id
+		WHERE mv.variable_id = #curVarId#
+	</select>
+
+	<delete id="delete" parameterClass="java.util.HashMap">
+		DELETE FROM $projectSchema$.mc_variable WHERE
+			id IN
+		<iterate property="list" conjunction="," open="(" close=")">
+			#list[]#
+		</iterate>
+	</delete>
+
+	<delete id="deletePer" parameterClass="java.util.HashMap">
+		DELETE FROM $projectSchema$.mc_vp WHERE
+		id IN
+		<iterate property="list" conjunction="," open="(" close=")">
+			#list[]#
+		</iterate>
+	</delete>
+
+	<delete id="deleteVarPer" parameterClass="java.util.HashMap">
+		DELETE FROM $projectSchema$.mc_vp WHERE
+		variable_id IN
+		<iterate property="list" conjunction="," open="(" close=")">
+			#list[]#
+		</iterate>
+	</delete>
+</sqlMap>

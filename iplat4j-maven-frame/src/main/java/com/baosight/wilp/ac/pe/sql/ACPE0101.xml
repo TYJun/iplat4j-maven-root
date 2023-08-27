@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ACPE0101">
+
+	<insert id="insert" parameterClass="java.util.HashMap">
+    	INSERT INTO $projectSchema$.ac_personnel (
+				<isNotNull  property="workNo">
+					work_no,  <!-- 工号 -->
+				</isNotNull>
+				<isNotNull  property="name">
+					name,  <!-- 姓名 -->
+				</isNotNull>
+				<isNotNull  property="deptId">
+					dept_id,  <!-- 所属科室ID -->
+				</isNotNull>
+				<isNotNull  property="contactTel">
+					contact_tel,  <!-- 联系电话 -->
+				</isNotNull>
+				<isNotNull  property="idNo">
+					id_no,  <!-- 身份证号 -->
+				</isNotNull>
+				<isNotNull  property="gender">
+					gender,  <!-- 性别 -->
+				</isNotNull>
+				<isNotNull  property="isService">
+			    	is_service, <!-- 服务人员 -->
+			    </isNotNull>
+				<isNotNull  property="type">
+			    	type,  <!-- 人员类型 -->
+			    </isNotNull>
+				<isNotNull  property="status">
+					status,  <!-- 人员状态 -->
+				</isNotNull>
+				<isNotNull  property="recCreater">
+					rec_creater,  <!-- 创建人 -->
+				</isNotNull>
+				<isNotNull  property="recCreateTime">
+					rec_create_time,  <!-- 创建时间 -->
+				</isNotNull>
+				<isNotNull  property="recRevisor">
+					rec_revisor,  <!-- 修改人 -->
+				</isNotNull>
+				<isNotNull  property="recReviseTime">
+					rec_revise_time,  <!-- 修改时间 -->
+				</isNotNull>
+					id  <!-- 主键 -->
+			)VALUES ( 
+				<isNotNull  property="workNo">
+			    	#workNo#, 
+			    </isNotNull>
+				<isNotNull  property="name">
+			    	#name#, 
+			    </isNotNull>
+			    <isNotNull  property="deptId">
+					#deptId#,   
+				</isNotNull>
+			    <isNotNull  property="contactTel">
+					#contactTel#,  
+				</isNotNull>
+				<isNotNull  property="idNo">
+			    	#idNo#, 
+			    </isNotNull>
+				<isNotNull  property="gender">
+			    	#gender#, 
+			    </isNotNull>
+			    <isNotNull  property="isService">
+			    	#isService#, 
+			    </isNotNull>
+			    <isNotNull  property="type">
+			    	#type#, 
+			    </isNotNull>
+				<isNotNull  property="status">
+			    	#status#, 
+			    </isNotNull>
+				<isNotNull  property="recCreater">
+			    	#recCreater#, 
+			    </isNotNull>
+				<isNotNull  property="recCreateTime">
+			    	#recCreateTime#, 
+			    </isNotNull>
+				<isNotNull  property="recRevisor">
+			    	#recRevisor#, 
+			    </isNotNull>
+				<isNotNull  property="recReviseTime">
+			    	#recReviseTime#, 
+			    </isNotNull>
+			    	#id#
+		    ) 
+	</insert>
+	
+
+	
+</sqlMap>

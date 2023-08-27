@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="TSFW01">
+
+    <select id="queryTempData" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        SELECT
+        data
+        FROM ${projectSchema}.temp_data WHERE 1=1
+        <isNotEmpty prepend=" AND " property="userId">
+            user_id = #userId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="pageId">
+            page_id = #pageId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="controlId">
+            control_id = #controlId#
+        </isNotEmpty>
+    </select>
+
+    <delete id="deleteLastTempData" parameterClass="java.util.HashMap">
+        DELETE
+        FROM ${projectSchema}.temp_data
+        WHERE user_id = #userId#
+          AND page_id = #pageId#
+          AND control_id = #controlId#
+    </delete>
+
+    <insert id="insertTempData" parameterClass="java.util.HashMap">
+        INSERT INTO ${projectSchema}.temp_data
+            (user_id, page_id, control_id, data, last_update_time)
+        VALUES (#userId#, #pageId#, #controlId#, #data#, #lastUpdateTime#);
+    </insert>
+
+
+</sqlMap>

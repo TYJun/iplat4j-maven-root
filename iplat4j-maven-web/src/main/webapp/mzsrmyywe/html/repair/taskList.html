@@ -1,0 +1,3454 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../../reference/bootstrap-3.3.5/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../reference/bootstrap-3.3.5/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../css/android-ios.css">
+    <link rel="stylesheet" href="../../css/loading.css" />
+    <link rel="stylesheet" href="reference/css/iconfont.css" />
+    <link rel="stylesheet" href="css/tcj-font.css" />
+    <link rel="stylesheet" href="reference/mui/css/mui.picker.min.css">
+    <link rel="stylesheet" href="reference/mui/css/mui.min.css">
+    <link rel="stylesheet" href="css/colorGreen.css">
+
+</head>
+<STYLE TYPE="text/css">
+    .br-theme-bootstrap-stars .br-widget a {
+        margin-right: 17px;
+    }
+    
+    .br-theme-bootstrap-stars .br-widget {
+        font-size: 25px;
+    }
+    
+    .panel {
+        border-radius: 0px;
+    }
+    
+    .panel-heading {
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+    }
+    
+    hr {
+        margin-top: 0px;
+        margin-bottom: -9px;
+    }
+    
+    h3 {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .navbar {
+        margin-bottom: 0px;
+    }
+    
+    h1 {
+        margin: 0 0 0rem;
+    }
+    
+    .col-lg-8,
+    .col-md-8,
+    .col-sm-8,
+    .col-xs-8 {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+    
+    .col-xs-4,
+    .col-sm-4,
+    .col-md-4,
+    .col-lg-4 {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+    
+    .col-xs-2,
+    .col-sm-2,
+    .col-md-2,
+    .col-lg-2 {
+        padding-left: 2px;
+    }
+    
+    .row {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+    
+    .child-window {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 2200;
+        /*background-color:#111111; 
+      filter:alpha(opacity=30);            
+      -moz-opacity:0.3;                    
+      opacity: 0.3;*/
+        background: rgba(0, 0, 0, 0.5);
+        filter: progid: DXImageTransform.Microsoft.gradient(startcolorstr=#7F000000, endcolorstr=#7F000000);
+    }
+    
+    .btn-gre {
+        background-color: #60C760;
+        text-align: center;
+        color: #fff;
+    }
+    
+    .btn-red {
+        background-color: #E45959;
+        text-align: center;
+        color: #fff;
+    }
+    
+    .textarea {
+        border: none;
+        outline: none;
+        width: 100%;
+        height: 100%;
+        padding: 15px;
+    }
+    
+    #content {
+        background: #F1F1F1;
+        width: 100%;
+    }
+    
+    .div-child {
+        width: 100%;
+        background: #fff;
+        border: 0px solid #ABABAB;
+        margin-bottom: 15px;
+        border-radius: 2px;
+    }
+    
+    .btn-pink {
+        background-color: #2aabd2;
+        width: 10rem;
+        text-align: center;
+        color: #fff;
+    }
+    
+    .btn-sub {
+        background-color: #2aabd2;
+        text-align: center;
+        color: #fff;
+    }
+    
+    .btn-grey {
+        background-color: #ABACAD;
+        text-align: center;
+        color: #fff;
+    }
+    
+    .eval-unselected {
+        border: 1px solid #717171;
+        color: #717171;
+    }
+    
+    .eval-selected {
+        border: 1px solid #F38D0F;
+        color: #F38D0F;
+    }
+    
+    .eval {
+        width: 75%;
+        height: 30px;
+        line-height: 30px;
+        border-radius: 4px;
+        margin: 0 auto;
+        font-size: 13px;
+    }
+    
+    input {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .title-deal {
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        opacity: 0.77;
+        font-size: 17px;
+        float: left;
+        width: 30%;
+    }
+    
+    .quxiao {
+        height: 32px;
+        width: 21%;
+        background: #fafafa;
+        text-align: center;
+        line-height: 32px;
+        border-radius: 15px;
+        margin-top: 14px;
+        color: #a6a6a6;
+    }
+    
+    .queding {
+        height: 32px;
+        width: 21%;
+        background: #2aabd2;
+        text-align: center;
+        line-height: 32px;
+        border-radius: 15px;
+        margin-top: 14px;
+        color: #fff;
+    }
+    
+    .shoufang {
+        margin-top: 0px;
+        margin-right: -65px;
+    }
+    
+    .arrow {
+        width: 18px;
+        height: 19px;
+    }
+    
+    #text {
+        display: block;
+    }
+    
+    #menuone {
+        display: block;
+    }
+    
+    .row-content {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 15px;
+        border-bottom: 1px solid #EEEEEE;
+        font-size: 14px;
+        color: #666666;
+        background: #ffffff;
+    }
+    
+    .row-content1 {
+        height: 30px;
+        line-height: 30px;
+        padding: 0 15px;
+        font-size: 16px;
+        color: #666666;
+        background: #ffffff;
+    }
+    
+    .row-right {
+        text-align: right;
+        color: #333333;
+    }
+    
+    .new-icon-color {
+        color: #aaa;
+    }
+    
+    .new-row-tcj {
+        height: 60px;
+        line-height: 60px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+    }
+    
+    .mui-poppicker {
+        z-index: 9999;
+    }
+    
+    .transparent {
+        top: 0;
+    }
+    
+    #listSelf hr {
+        margin-top: 0px;
+        margin-bottom: -9px;
+    }
+    
+    #detailSelf hr,
+    #processRecord hr {
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+    
+    #detailSelf .col-xs-4,
+    .col-sm-4,
+    .col-md-4,
+    .col-lg-4,
+    .col-lg-8,
+    .col-md-8,
+    .col-sm-8,
+    .col-xs-8 {
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+    
+    #processRecord .col-xs-4,
+    .col-sm-4,
+    .col-md-4,
+    .col-lg-4,
+    .col-lg-8,
+    .col-md-8,
+    .col-sm-8,
+    .col-xs-8 {
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+    
+    #contentDetail {
+        background: #F1F1F1;
+        width: 100%;
+    }
+    
+    .newHeader {
+        height: 50px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        line-height: 50px;
+        font-size: 19px;
+        text-align: center;
+        background: #2aabd2;
+        color: #fff;
+    }
+    
+    #detailSelf,
+    #processRecord {
+        position: fixed;
+        top: 70px;
+        overflow: auto;
+        left: 10px;
+        right: 10px;
+        z-index: 2099;
+    }
+    
+    .diceng {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #000;
+        opacity: 0.7;
+        z-index: 2090;
+        display: none;
+    }
+    
+    .mui-toast-container {
+        top: 10% !important;
+    }
+</STYLE>
+
+<body>
+
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+    <div id="loading" class="spinner" style="position:fixed;z-index:9999;text-align:center;width:100%;">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    <div class="diceng" id="diceng"></div>
+    <div id="detailSelf" hidden="hidden" style="">
+        <div class="newHeader">
+            <div style="width: 100%;text-align: center;">
+                任务详情
+            </div>
+        </div>
+        <div id="contentDetail">
+
+            <div style="width:100%;background:#fff;border:1px solid #eee;">
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        工单号
+                    </div>
+                    <div id="taskNo" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                </div>
+                <hr style="margin-top:10px;">
+
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        紧急状态
+                    </div>
+                    <div id="impFlag" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                </div>
+                <hr style="margin-top:10px;">
+
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        工单状态
+                    </div>
+                    <div id="statusName" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                </div>
+                <hr style="margin-top:10px;">
+
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        报修人
+                    </div>
+                    <div id="name" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                </div>
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 font-grey">
+                        报修图片
+                    </div>
+                </div>
+                <!-- 报修图片 -->
+                <div class="row" style="margin-top:10px;">
+                    <div id="pictureBX" class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+                </div>
+                <hr style="margin-top:10px;">
+
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        登记时间
+                    </div>
+                    <div id="recCreateTime" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                </div>
+                <hr style="margin-top:10px;">
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        派工时间
+                    </div>
+                    <div id="dispatTime" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                </div>
+                <hr style="margin-top:10px;">
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        完工时间
+                    </div>
+                    <div id="finishTime" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                </div>
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 font-grey">
+                        完工图片
+                    </div>
+                </div>
+                <!-- 完工图片 -->
+                <div class="row" style="margin-top:10px;">
+                    <div id="pictureWG" class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+                </div>
+                <hr style="margin-top:10px;">
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        服务评价
+                    </div>
+                    <div id="taskEval" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                </div>
+                <!-- <hr style="margin-top:10px;">
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 font-grey">
+                        预约维修时间
+                    </div>
+                    <div id="orderTime" class="col-xs-7 col-sm-7 col-md-7 col-lg-7" style="text-align:right;"></div>
+                </div> -->
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        报修电话
+                    </div>
+                    <div id="reqTelNum" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                </div>
+                <hr style="margin-top:10px;">
+
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        报修科室
+                    </div>
+                    <div id="reqDeptName" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                </div>
+                <hr style="margin-top:10px;">
+
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        地点
+                    </div>
+                    <div id="reqSpotName" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                </div>
+                <hr style="margin-top:10px;">
+
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        维修科室
+                    </div>
+                    <div id="wgroupName" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                </div>
+                <hr style="margin-top:10px;">
+
+                <!-- <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        维修人
+                    </div>
+                    <div id="supportor" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                </div>
+                <hr style="margin-top:10px;"> -->
+
+                <!-- <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        维修人电话
+                    </div>
+                    <div id="supportorMobile" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                    </div>
+                </div>
+                <hr style="margin-top:10px;"> -->
+
+                <!-- <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        设备档案
+                    </div>
+                    <div id="deviceDang" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                </div> -->
+                <!-- <hr style="margin-top:10px;"> -->
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        事项分类
+                    </div>
+                    <div id="itemTypeName" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                </div>
+                <hr style="margin-top:10px;">
+
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        维修事项
+                    </div>
+                    <div id="itemName" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                </div>
+
+                <div class="gezhi">
+                    <hr style="margin-top:10px;">
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                            搁置原因
+                        </div>
+                        <div id="gezhiReason" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                        </div>
+                    </div>
+                </div>
+                <hr style="margin-top:10px;">
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        备注
+                    </div>
+                    <div id="comments" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                </div>
+                <hr style="margin-top:10px;">
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        班组备注
+                    </div>
+                    <div id="mainComments" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                </div>
+                <hr style="margin-top:10px;">
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        执行人
+                    </div>
+                    <div id="excutors" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                </div>
+                <hr style="margin-top:10px;">
+                <!-- <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 font-grey">
+                        完工图片
+                    </div>
+                </div> -->
+                <!-- 完工图片 -->
+                <!-- <div class="row" style="margin-top:10px;">
+                    <div id="pictureWG" class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+                </div>
+                <hr style="margin-top:10px;"> -->
+                <div class="row" style="margin-top:10px;">
+                    <div id='refundReasonName' class="col-xs-5 col-sm-5 col-md-5 col-lg-5 font-grey ">
+                        未处理原因
+                    </div>
+                    <div id="refundReason" class="col-xs-7 col-sm-7 col-md-7 col-lg-7" style="text-align:right;"></div>
+                </div>
+                <hr style="margin-top:10px;">
+                <!-- <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 font-grey">
+                        退单图片
+                    </div>
+                </div> -->
+                <!-- 退单图片 -->
+                <div class="row" style="margin-top:10px;">
+                    <div id="pictureRF" class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+                </div>
+                <hr style="margin-top:10px;">
+                <!-- 签字 -->
+                <!-- <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 font-grey">
+                        签字图片
+                    </div>
+                </div> -->
+                <!-- <div class="row" style="margin-top:10px;">
+                    <div id="pictureQZ" class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+                </div> -->
+                <div class="row" style="height:40px;line-height:40px;">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background:#eee;">
+                        语音
+                    </div>
+                </div>
+                <div class="row" style="min-height:100px;">
+                    <!-- <p>
+                        <button id="amr-play" disabled>播放</button>
+                        <button id="amr-stop" disabled>停止</button>
+                    </p> -->
+                    <div class="audio" hidden="true">
+                        <!-- <img id="amr-play" src="img/stop.png" style="width:75px;height:75px;position: relative;left: 50%;top: 50%;transform: translate(-50%,10%);" disabled> -->
+                        <img src="img/play.png" style="width:75px;height:75px;position: relative;left: 50%;top: 50%;transform: translate(-50%,10%);">
+                    </div>
+                </div>
+                <div class="row" style="margin-top:10px;background-color:#D1D1D1;border-radius:0px;height:40px;line-height:40px;font-size:13px;">
+                    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="color:#FFFFFF;font-weight:bold;">
+                        材料名称
+                    </div>
+                    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="color:#FFFFFF;font-weight:bold;">
+                        材料类型
+                    </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 left-nopadding right" style="color:#FFFFFF;font-weight:bold;">
+                        数量
+                    </div>
+                </div>
+                <div id="matCai" style="font-size:13px;">
+
+                </div>
+                <!-- <div id="pictureShow" class="row" hidden>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color:#D1D1D1;border-top:1px solid #FFFFFF;COLOR:#FFFFFF;border-radius:0px;height:40px;line-height:40px;font-size:13px;">
+                        签名</div>
+                    <img style="width:100%;height:250px;" />
+                </div> -->
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                    </div>
+                    <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                        <!--<button id="submit" type="botton" class="btn btn-primary btn-block" style="display:none;"></button>-->
+                    </div>
+                    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="myModalDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">
+                            图片预览
+                        </h4>
+                    </div>
+                    <div style="text-align:center;">
+                        <img id="bigPicture" class="bigPicture">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-block" data-dismiss="modal">关闭
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="processRecord" hidden="hidden">
+        <div class="newHeader">
+            <div style="width: 100%;text-align: center;">
+                过程记录
+            </div>
+        </div>
+        <div id="processDetail">
+
+            <div style="width:100%;background:#fff;border:1px solid #eee;">
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        工单号
+                    </div>
+                    <div id="taskNo1" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                </div>
+                <hr style="margin-top:10px;">
+                <ul class="mui-table-view">
+                    <li class="mui-table-view-cell mui-collapse">
+                        <a class="mui-navigate-right" href="#">退单记录</a>
+                        <div class="mui-collapse-content">
+                            <div class="row" style="margin-top:10px;">
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                                    退单原因
+                                </div>
+                                <div id="tuidanReason" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                            </div>
+                            <hr style="margin-top:10px;">
+                            <div class="row" style="margin-top:10px;">
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                                    操作员
+                                </div>
+                                <div id="tuidanName" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                            </div>
+                            <hr style="margin-top:10px;">
+                            <div class="row" style="margin-top:10px;">
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                                    退单时间
+                                </div>
+                                <div id="tuidanTime" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                            </div>
+                            <hr style="margin-top:10px;">
+                        </div>
+                    </li>
+                </ul>
+                <ul class="mui-table-view">
+                    <li class="mui-table-view-cell mui-collapse">
+                        <a class="mui-navigate-right" href="#">搁置记录</a>
+                        <div class="mui-collapse-content">
+                            <div class="row" style="margin-top:10px;">
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                                    搁置原因
+                                </div>
+                                <div id="gezhiReason" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                            </div>
+                            <hr style="margin-top:10px;">
+                            <div class="row" style="margin-top:10px;">
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                                    操作员
+                                </div>
+                                <div id="gezhiName" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                            </div>
+                            <hr style="margin-top:10px;">
+                            <div class="row" style="margin-top:10px;">
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                                    搁置时间
+                                </div>
+                                <div id="gezhiTime" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                            </div>
+                            <hr style="margin-top:10px;">
+                        </div>
+                    </li>
+                </ul>
+                <ul class="mui-table-view" style="margin-bottom: 50px;">
+                    <li class="mui-table-view-cell mui-collapse">
+                        <a class="mui-navigate-right" href="#">转单记录</a>
+                        <div class="mui-collapse-content">
+                            <div class="row" style="margin-top:10px;">
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                                    转单原因
+                                </div>
+                                <div id="zhuandanReason" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                            </div>
+                            <hr style="margin-top:10px;">
+                            <div class="row" style="margin-top:10px;">
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                                    操作员
+                                </div>
+                                <div id="zhuandanName" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                            </div>
+                            <hr style="margin-top:10px;">
+                            <div class="row" style="margin-top:10px;">
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                                    转单时间
+                                </div>
+                                <div id="zhuandanTime" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                            </div>
+                            <hr style="margin-top:10px;">
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+    <div id="listSelf">
+        <div class="selfTitle" style="position: fixed;left: 0;right: 0;height: 40px;z-index: 59;top: 50px;background: #FFFFFF;">
+            <div class="title-deal" data-name="1" style="color: #2AABD2;border-bottom: 1px solid #2AABD2;margin-left: 5%;">
+                待完工
+            </div>
+            <div class="title-deal" data-name="2" style="color: #999999;">
+                已完工
+            </div>
+            <div class="title-deal" data-name="3" style="color: #999999;">
+                我的工单
+            </div>
+        </div>
+        <!-- <div class="searchSelf" style="padding-top: 94px;">
+            <div id="menuone">
+                <div class="mui-row row-content">
+                    <div class="mui-col-sm-3 mui-col-xs-3">
+                        <span class="mui-icon   iconfont   icon-shijian new-icon-color"></span> 时间：
+                    </div>
+                    <div class="mui-col-sm-4 mui-col-xs-4 row-right ">
+                        <input type="text" id="begintime"
+                            style="width: 80%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;"
+                            placeholder="开始时间" readonly="readonly" />
+                    </div>
+                    <div class="mui-col-sm-1 mui-col-xs-1 row-right " style="text-align: center;">-
+                    </div>
+                    <div class="mui-col-sm-4 mui-col-xs-4 row-right " style="">
+                        <input type="text" id="endtime"
+                            style="width: 70%;border:0;outline:none;font-size:14px;padding:0px;text-align:left;margin-bottom:0;height:21px;"
+                            placeholder="截止时间" readonly="readonly" />
+                        <span class="mui-icon iconfont icon-youjiantou" style="color:#2aabd2;font-weight: bold;"></span>
+                    </div>
+                </div>
+
+                <div class="mui-row row-content">
+
+                    <div class="mui-col-sm-5 mui-col-xs-5">
+                        <span class="mui-icon   iconfont   icon-fenglei new-icon-color"></span> 状态：
+                    </div>
+                    <div class="mui-col-sm-7 mui-col-xs-7 row-right ">
+                        <input type="text" id="status"
+                            style="width: 80%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;"
+                            placeholder="请选择状态" readonly="readonly" />
+                        <span class="mui-icon iconfont icon-youjiantou" style="color:#2aabd2;font-weight: bold;"></span>
+                        <input hidden="hidden" type="text" id="statusCode"
+                            style="width: 80%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;"
+                            placeholder="请输入布草名称" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" />
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="mui-row row-content new-row-tcj">
+                <div class="quxiao">重置</div>
+                <div class="queding">查询</div>
+                <div id="text">
+                    <div class="shoufang"><img class="arrow" src="img/arrowup.png" /></div>
+                </div>
+            </div>
+
+        </div> -->
+        <div>
+            <nav class="navbar navbar-fixed-top navbar-inverse nav-height">
+                <div id="back" class="glyphicon-btn-left">
+                    <span class="glyphicon glyphicon-triangle-left userBtn" style="margin-left:1rem;"></span>
+                </div>
+                <div id="add" class="glyphicon-btn-right">
+                    <span class="glyphicon glyphicon-plus userBtn" style="width:50px;text-align:center;"></span>
+                </div>
+                <div>
+                    <h1 class="title-middle">任务管理</h1>
+                </div>
+            </nav>
+        </div>
+
+        <!--显示是否提交成功-->
+        <div id="upload" class="transparent" hidden>
+            <div id="waiting" class="loader loading-position">
+                <div class="loader-inner line-spin-fade-loader">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <div style="color:#fff;position:relative;width:100%;text-align:center;top:40%;">正在提交，请稍候...</div>
+
+            <div id="succeed" class="result-window" hidden>
+                <span class="glyphicon glyphicon-ok-circle" style="font-size:40px;color:#25F706;"></span>
+                <span style="color:#25F706;">提交成功</span>
+            </div>
+            <div id="failed" class="result-window" hidden>
+                <span class="glyphicon glyphicon-remove-circle" style="font-size:40px;color:#FF7C7C;"></span>
+                <span style="color:#FF7C7C;">提交失败了</span>
+            </div>
+        </div>
+
+        <div id="content" class="" style="overflow: auto;margin-top: 100px;">
+
+        </div>
+
+        <div id="loadMore" class="alert" role="alert" style="background-color:#F5F5F5;text-align:center;">
+            加载更多
+        </div>
+        <div style="height:2.3rem;">
+            <nav class="navbar navbar-fixed-bottom navbar-inverse">
+                <div class="row">
+                    <div id="home" class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="text-align:center;color:#FFFFFF;padding-top:13px;">
+                        <span class="glyphicon glyphicon-home" style="font-size:20px;"></span>
+                    </div>
+                    <!--<div id="sign" class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="text-align:center;color:#FFFFFF;padding-top:16px;">
+						<span class="iconfont icon-qiandao" style="font-size:25px;"></span>
+					</div>-->
+                    <div id="refresh" class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="text-align:center;color:#FFFFFF;padding-top:13px;">
+                        <span class="glyphicon glyphicon-refresh" style="font-size:20px;"></span>
+                    </div>
+                    <!--<div id="list" class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align:center;color:#FFFFFF;padding-top:13px;">
+							<span class="glyphicon glyphicon-list-alt" style="font-size:20px;"></span>
+						</div>-->
+                </div>
+            </nav>
+        </div>
+
+        <div id="myModal" class="child-window" hidden>
+            <div id="approvalWindow" style="position: absolute;left: 10%;top: 30%;width:80%;background:#fff;height:40%;min-height:280px;">
+                <h4 style="padding-left:15px;"></h4>
+                <hr style="margin-top:10px;margin-bottom:0px;">
+                <div style="height:65%;">
+                    <p id="taskNoBak" hidden></p>
+                    <textarea id="reason" class="textarea"></textarea>
+                </div>
+                <div style="position:absolute;bottom:0;width:100%;" class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding">
+                        <button id="submit" type="button" class="btn btn-red btn-block sure" style="border-radius: 0px;" data-loading-text="正在提交..." autocomplete="off">提交</button>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding">
+                        <button type="button" class="btn btn-gre btn-block cancel" style="border-radius: 0px;" onclick="$('#myModal').hide();">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div id="evalModal" class="child-window" hidden>
+      <div id="approvalWindow" style="position: absolute;left: 10%;top: 20%;width:80%;background:#fff;height:40%;min-height:280px;">
+        <h4 style="padding-left:15px;">
+          <span class="col-xs-3 all-nopadding" style="line-height:25px;">评价</span>
+          <div class="stars stars-example-bootstrap col-xs-9 left-nopadding">
+            <select id="evalLevel" name="rating">
+              <option value="2">2</option>
+              <option value="4">4</option>
+              <option value="6">6</option>
+              <option value="8">8</option>
+              <option value="10" selected>10</option>
+            </select>
+          </div>
+        </h4>
+        <hr style="margin-top:10px;margin-bottom:0px;">
+        <div style="height:65%;">
+            <p id="taskNoBak1" hidden></p>
+            <textarea id="evalContent" class="textarea" placeholder="写点内容评价一下吧"></textarea>
+        </div>
+        <div style="position:absolute;bottom:0;width:100%;" class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding">
+                <button id="submit1" type="button" class="btn btn-red btn-block sure" style="border-radius: 0px;" data-loading-text="正在提交..." autocomplete="off">提交</button>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding">
+                <button type="button" class="btn btn-gre btn-block cancel" style="border-radius: 0px;" onclick="$('#evalModal').hide();">取消</button>
+            </div>
+        </div>
+      </div>
+  </div> -->
+
+        <div class="modal fade" id="evalModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="margin-top:20%;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">评价</h4>
+                    </div>
+                    <div class="modal-body" style="padding:0px;">
+                        <div class="row" style="margin-top:10px;">
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 center">
+                                <div id="2" class="eval eval-unselected">很差</div>
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 center">
+                                <div id="4" class="eval eval-unselected">差</div>
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 center">
+                                <div id="6" class="eval eval-unselected">一般</div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:10px;margin-bottom:10px;">
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 center">
+                                <div id="8" class="eval eval-unselected">满意</div>
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 center">
+                                <div id="10" class="eval eval-selected">很满意</div>
+                            </div>
+                        </div>
+                        <p id="taskNoBak1" hidden></p>
+                        <textarea id="evalContent" class="textarea form-control" placeholder="写点内容评价一下吧" style="min-height:150px;"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 padding5">
+                                <button id="submit1" type='button' class='btn btn-sub btn-block addressRegister' style="border-radius: 0px;" data-loading-text="正在提交...">
+                                    提交
+                                </button>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 padding5" style="text-align:right;">
+                                <button type='button' class='btn btn-grey btn-block' style="border-radius: 0px;" data-dismiss="modal">
+                                    取消
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 模态框（Modal） -->
+        <div id="divAbove" hidden>
+            <div id="myModalsss" style="margin-top:-50px;" hidden>
+                <div class='row' id="topDiv" style='height:40px;line-height:40px;background:#ABABAB;color:#fff;font-weight:bold;border-bottom:1px solid #FFFFFF;'>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        下方签名
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="border-bottom:1px solid #B9B9B9;overflow-x:hidden;">
+                        <div class="js-signature" data-width="450%" data-height="250" style="margin-left:-20%;">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="color:#FFFFFF;">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="background:#40B5D8;border-right:1px solid #FFFFFF;height:40px;line-height:40px;text-align:center;" onclick="clearCanvas()">
+                        清除签字
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="background:#40B5D8;height:40px;line-height:40px;text-align:center;" onclick="saveSignature()">
+                        确认签字
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="width:100%;background:#fff;margin-top:15px;overflow-x:hidden;">
+                <div id="signature">
+
+                </div>
+            </div>
+            <div class="row" id="photoTake" style="height:40px;line-height:40px;" hidden>
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="background:#eee;">
+                    图片上传
+                </div>
+                <div id="btnPicture" class="col-xs-3 col-sm-3 col-md-3 col-lg-3 all-nopadding" style="text-align:center;background:#8a8a8a;color:#fff;">
+                    本地上传
+                </div>
+                <div id="btnCamera" class="col-xs-3 col-sm-3 col-md-3 col-lg-3 all-nopadding" style="text-align:center;background:#bbb;color:#fff;">
+                    相机拍摄
+                </div>
+            </div>
+            <div class="row" style="min-height:100px;">
+                <div id="pictureSign" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row" style="margin-top:10px;margin-bottom:150px;">
+                    <!-- <img src="../../img/car.png">
+						<img src="../../img/car.png"> -->
+                </div>
+            </div>
+            <button id="sureTijiao" type="button" class="btn btn-info btn-block" style="height:40px;border-radius:2px;position: fixed;bottom: 50px;background:#0090BB;z-index:999;">
+                完成任务
+            </button>
+        </div>
+
+        <div class="modal fade" id="myModalPicture" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">
+                            图片预览
+                        </h4>
+                    </div>
+                    <div style="text-align:center;">
+                        <img id="bigPicture" class="bigPicture">
+                    </div>
+                    <div class="modal-footer">
+                        <button id="delPic" type="button" class="btn btn-danger btn-block" data-dismiss="modal">删除图片
+                        </button>
+                        <button type="button" class="btn btn-primary btn-block" data-dismiss="modal">关闭
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--派工-->
+        <div class="modal" id="myModalPai" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" style="margin-top:21%;border-radius:10px;">
+                    <!--<div class="modal-header">
+            <button type="button" class="close" 
+               data-dismiss="modal" aria-hidden="true">
+                  &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+               	工单派工
+            </h4>
+         </div>-->
+                    <div style="padding-left:15px;padding-top:-6px;padding-bottom:9px;border-bottom:2px solid #E0E0E0;background:#F1F1F1;" id="addRen"><span class="glyphicon glyphicon-plus userBtn" style="color:blue;font-size:16px;margin-right:6px;margin-top:15px;"></span>添加</div>
+                    <div class="row" style="background:#F1F1F1;border-bottom:1px solid lightgray;padding-top:8px;padding-bottom:8px;">
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="padding-top:16px;">
+                            工号
+                        </div>
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="padding-top:16px;">
+                            姓名
+                        </div>
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="padding-top:16px;">
+                            科室
+                        </div>
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 center">
+                            信息发送<input type="checkbox" id="messageSend" style="margin-left:-7px;" />
+                        </div>
+                    </div>
+                    <div class="modal-body" style='height:25rem;overflow-y:scroll;'>
+                        <div id="shoeRen" style="margin-top:-8px;">
+
+                        </div>
+                    </div>
+                    <div class="modal-footer row">
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <button id="sures" type="button" class="btn btn-default" style="width:100%;">
+                                确定
+                            </button>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <button id="close" type="button" class="btn btn-info" data-dismiss="modal" style="width:100%;">
+                                关闭
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+        </div>
+        <!-- /.modal -->
+        <!--员工选择-->
+        <div class="modal" id="myModalPaiRen" tabindex="0" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" style="margin-top:21%;height:40rem;border-radius:10px;background:#FFFFFF;">
+                    <div class="row" style="border-bottom:2px solid #F0EFEE;padding-bottom:5px;position:relative;">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-top:10px;">
+                            <h4 class="modal-title" id="myModalLabel">员工选择</h4>
+                        </div>
+                    </div>
+                    <div class="row" style="background:#F1F1F1;border-bottom:1px solid lightgray;padding-top:11px;padding-bottom:4px;">
+                        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="margin-top:-4px;padding-left:19px;">
+                            <input type="checkbox" id="checkParent" name="0" />
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 right" style="margin-left:25px;padding-left:10px;">
+                            姓名
+                        </div>
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 center" style="padding:0;">
+                            工号
+                        </div>
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 right" style="margin-left:-30px;">
+                            科室
+                        </div>
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 right">
+                            服务人
+                        </div>
+                    </div>
+                    <div class="modal-body" id="contentBody" style='height:25rem;overflow-y:scroll;'>
+
+                    </div>
+                    <div class="modal-footer row" style="margin-top:30px;">
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <button id="overSure" type="button" class="btn btn-default" style="width:100%;">
+                                确定
+                            </button>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <button id="underClose" type="button" class="btn btn-info" style="width:100%;">
+                                关闭
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../../reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../../reference/bootstrap-3.3.5/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="js/jq-signature.js"></script>
+<script src="reference/mui/js/mui.min.js"></script>
+<script src="reference/mui/js/mui.picker.min.js" type="text/javascript"></script>
+<script src="../../cordova.js"></script>
+<script src="js/BenzAMRRecorder.js"></script>
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var taskNo = ""; //任务单号
+    var role = localStorage.getItem("role");
+    var hosId = localStorage.getItem("hosId");
+    var workNo = localStorage.getItem("workNo");
+    var dataGroupCode = localStorage.getItem("dataGroupCode");
+
+
+    var roles = '';
+    var telphone2 = new Array();
+    var arrY = new Array();
+    var strs = '';
+    var roleArray = new Array();
+    roleArray = role.split(',');
+    console.log(role);
+    var isCurrentTask = "1"; //是否处理
+    var timeOut = null;
+    var taskListAppend = "";
+    var collectPicker = new mui.PopPicker();
+    var collectArr = [];
+    var audioFlag = true;
+    $("#loading").hide()
+    var audioUrl = "";
+    $(document).ready(function(e) {
+        $("#text").click(function(e) {
+            $("#menuone").toggle();
+        });
+    });
+    var toggle = true;
+    $("#text").click(function() {
+        if (toggle) {
+            $("img").attr("src", "img/arrowdown.png")
+            toggle = false;
+        } else {
+            $("img").attr("src", "img/arrowup.png")
+            toggle = true;
+        }
+    });
+    $("#detailSelf").css("max-height", $(window).height() - 160 + "px");
+    $("#processRecord").css("max-height", $(window).height() - 180 + "px");
+    // $("#content").css("max-height", $(window).height() - 340 + "px");
+
+    if (roleArray.indexOf('stis_leader') >= 0) {
+        roles = 'stis_leader';
+    }
+    if (roleArray.indexOf('ADMIN') >= 0) {
+        roles = 'ADMIN';
+    }
+    if (roleArray.indexOf('MAINTAIN_WXY') >= 0) {
+        roles = 'MAINTAIN_WXY';
+    }
+    if (roleArray.indexOf('MAINTAIN_WXZZ') >= 0) {
+        roles = 'MAINTAIN_WXZZ';
+    }
+    var page = 1;
+    var test1 = 0;
+    $(function() {
+        //			if(role.indexOf("MAINTAIN_ALL") > -1) {
+        //				loadAll();
+        //			} else {
+        //				
+        //			}
+
+        if (role.indexOf('WXZZ') >= 0 || role.indexOf('WXY') >= 0) {
+            $(".title-deal[data-name=1]").text("班组待完工");
+            $(".title-deal[data-name=2]").text("班组已完工");
+        }
+        loadData();
+        // $.when(readStatus()).done(function(data) {
+        //     signature = data.attr.config.finishSign.configValueRedio;
+        //     isphoto = data.attr.config.finishImg.configValueRedio;
+        //     loadData();
+        // })
+
+
+    });
+
+    function relaodSelf() {
+        taskListAppend = "";
+        page = 1;
+        loadData();
+    }
+    // 切换状态
+    $(".title-deal").click(function() {
+        $(".title-deal").css({
+            "color": "#999999",
+            "border-bottom": "0px"
+        });
+        $(this).css({
+            "color": "#2aabd2",
+            "border-bottom": "1px solid #2aabd2"
+        });
+        isCurrentTask = $(this).attr("data-name");
+        $("#content").html("");
+        $("#loading").show();
+        clearTimeout(timeOut);
+        //			if(role.indexOf("MAINTAIN_ALL") > -1) {
+        //				timeOut = setTimeout("loadAll()", 2000);
+        //			} else {
+        //			
+        //			}
+        timeOut = setTimeout("relaodSelf()", 2000);
+    });
+
+    loadType();
+    // 获取状态
+    function loadType() {
+        var prame = {
+            dataGroupCode,
+            role,
+        };
+        prame = JSON.stringify(prame);
+        $.ajax({
+            //				url: "../json/wuzi-choose.json",
+            //				type: "get",
+            url: baseUrl + "MobileAgentService",
+            type: "post",
+            headers: {
+                "methodName": "getStatus",
+                "serviceName": "MTYD01"
+            },
+            data: {
+                prames: prame
+            },
+            success: function(data) {
+                //var data = JSON.parse(data);
+                console.log(data);
+                var list = data.attr.list;
+                console.log(list);
+                for (var i = 0; i < list.length; i++) {
+                    var aa = {
+                        text: "",
+                        value: ""
+                    }
+                    aa.value = list[i].code;
+                    aa.text = list[i].name;
+                    collectArr.push(aa);
+                }
+            }
+        });
+    }
+    /*
+     *条件查询 
+     * */
+    //确定  
+    mui("body").on("tap", ".queding", function() {
+        var beginTime = $("#begintime").val();
+        var endTime = $("#endtime").val();
+        var aa = new Date(beginTime).getTime();
+        var bb = new Date(endTime).getTime();
+
+        if (aa > bb) {
+
+            $('#warn small').html("截止时间不能早于开始时间！");
+            $("#warn").fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return;
+        } else {
+            taskListAppend = "";
+            loadData();
+        }
+        console.log(aa);
+        console.log(bb)
+
+    }); //取消	
+    mui("body").on("tap", ".quxiao", function() {
+        $("#begintime").val("");
+        $("#endtime").val("");
+        $("#status").val("");
+        $("#statusCode").val("");
+    });
+    mui("body").on('tap', '#status', function() {
+        collectPicker.setData(collectArr);
+        collectPicker.show(function(items) {
+            console.log(items);
+            $("#status").val(items[0].text);
+            $("#statusCode").val(items[0].value);
+            console.log($("#statusCode").val())
+        });
+    });
+    //选择交货日期
+    mui("body").on("tap", "#begintime", function() {
+        var options = {
+            "type": "date"
+                //,endDate: new Date() //设置结束日期 
+        };
+        var askGivepickerDate = new mui.DtPicker(options);
+        askGivepickerDate.show(function(rs) {
+            $("#begintime").val(rs.text);
+        });
+    });
+    mui("body").on("tap", "#endtime", function() {
+        var options = {
+            "type": "date"
+                //,endDate: new Date() //设置结束日期 
+        };
+        var askGivepickerDate = new mui.DtPicker(options);
+        askGivepickerDate.show(function(rs) {
+            $("#endtime").val(rs.text);
+        });
+    });
+
+    // function ajaxPai() {
+    //     alert('2222')
+    //     var prame = {
+    //         taskNo: taskNo
+    //   };
+    //     $.ajax({
+    //         url: baseUrl + 'MobileAgentService',
+    //         type: 'post',
+    //         data: { prames: prame },
+    // 		headers:{
+    // 		"methodName":"getTaskInfo",
+    // 		"serviceName":"MTRE01"
+    // 		},
+    //         timeout: 30000,
+    //         success: function(data) {
+    //             //var data = eval("(" + data + ")");
+    //             var list = data.map.obj;
+    //             var html = '';
+    //             var supportor = new Array();
+    //             var supportorMobile = new Array();
+    //             var supportorNo = new Array();
+    //             var whether = new Array();
+    //             console.log(data);
+    //             var supportor = /* repeatNum(*/ list.supportor.split(',') /*)*/ ;
+    //             var supportorMobile = /*repeatNum(*/ list.supportorMobile.split(',') /*)*/ ;
+    //             wgroupNum = list.wgroupNum;
+    //             var supportorNo = /* repeatNum(*/ list.supportorNo.split(',') /*)*/ ;
+    //             var whether = /*repeatNum(*/ list.whether.split(',') /*)*/ ;
+    //             var wgroupName = list.wgroupName;
+    //             //console.log(supportorNo,supportor);
+    //             for (var i = 0; i < supportor.length; i++) {
+    //                 for (var i = 0; i < supportorMobile.length; i++) {
+    //                     for (var i = 0; i < whether.length; i++) {
+    //                         for (var i = 0; i < supportorNo.length; i++) {
+    //                             var deptNumss = supportorNo[i];
+    //                             var supportorss = supportor[i];
+    //                             var supportorMobiless = supportorMobile[i];
+    //                             var whetherss = whether[i];
+    //                             html += paiYuan(supportorss, supportorMobiless, whetherss, deptNumss, wgroupName);
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //             $('#shoeRen').html(html);
+    //         },
+    //         complete: function(XMLHttpRequest, status) { //请求完成后最终执行参数
+    //             if (status == 'timeout') {
+    //                 $("#loading").hide();
+    //                 $('#warn small').html('加载失败！');
+    //                 $("#warn").fadeIn(500);
+    //                 setTimeout("$('#warn').fadeOut(500)", 3000);
+    //             } else if (status == 'error') {
+    //                 $("#loading").hide();
+    //                 $('#warn small').html('网络异常！');
+    //                 $("#warn").fadeIn(500);
+    //                 setTimeout("$('#warn').fadeOut(500)", 3000);
+    //             }
+    //         }
+    //     });
+    // }
+
+    function paiYuan(supportorss, supportorMobiless, whetherss, deptNumsss, wgroupName) {
+        if (supportorss != '') {
+            var html = '<div class="row" name="' + deptNumsss + '">';
+            html += '<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" id="dept" style="padding:0;padding-left:5px;margin-left:-4px;">' + deptNumsss + '</div>';
+            html += '<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" id="sup" style="padding:0;">' + supportorss + '</div>';
+            html += '<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" id="wgr" style="margin-left:-20px;">' + wgroupName + '</div>';
+            html += '<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-top:-4px;padding-left:35px;"><input type="checkbox" class="0" name="' + supportorMobiless + '" id="checkInput" onclick="inputChecked(this)"/></div>';
+            html += '</div>';
+            return html;
+        } else {
+            var html = '';
+            return html;
+        }
+    }
+
+    function inputChecked(src) {
+        if ($(src).attr('class') == '0' || $(src).attr('class') == '') {
+            $(src).attr('class', '1');
+        } else {
+            $(src).attr('class', '0');
+        }
+    }
+    /* 普通角色加载个人任务 */
+    function loadData() {
+        console.log('查询')
+            //初始化页面数据
+            // $.ajax({
+            // 	url: baseUrl + 'maintain',
+            //     type: 'post',
+            // 	headers:{
+            // 	"methodName":"getTaskOption",
+            // 	"serviceName":"AppMaintainSearch"
+            // 	},
+            // 	success: function(data) {
+            // 	var list=data.map.obj;
+            // 	localStorage.setItem('isPhoto',list[0]);
+            // 	localStorage.setItem('signature',list[1]);
+            // 	localStorage.setItem('allowBack',list[2]);
+            // 	localStorage.setItem('allowWait',list[3]);
+            // 	}
+            // 	});
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            headers: {
+                "methodName": "getConfigAll",
+                "serviceName": "MTCF04"
+            },
+            data: {},
+            success: function(data) {
+                console.log(data)
+                localStorage.setItem('signature', 'N')
+                localStorage.setItem('isPhoto', 'N')
+                    // localStorage.setItem('isPhoto', data.attr.config.finishImg.configValueRedio)
+                    // localStorage.setItem('signature', data.attr.config.finishSign.configValueRedio)
+            }
+        });
+        var prame = {
+            statusCode: $("#statusCode").val(),
+            type: isCurrentTask,
+            workNo: workNo,
+            dataGroupCode,
+            role,
+            page: page,
+            rows: '10',
+            recCreateTimeS: $("#begintime").val(),
+            recCreateTimeE: $("#endtime").val(),
+            statusCode: $("#statusCode").val()
+        };
+        prame = JSON.stringify(prame);
+        // var dataGroupCode=localStorage.getItem("dataGroupCode");
+        var ing = 0;
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            headers: {
+                "methodName": "queryTaskList",
+                "serviceName": "MTRE01"
+            },
+            data: {
+                prames: prame
+            },
+            // {
+            //     // userName: workNo,
+            //     // page: page,
+            //     // rows: '10',
+            //     statusCode: $("#statusCode").val(), //（ 查询的状态码， 默认为空）、
+            //     // recCreateTimeA: $("#begintime").val(), //（ 报修时间， 默认为空）、
+            //     // recCreateTimeB: $("#endtime").val(),
+            //     // type: isCurrentTask,
+            // 	// dataGroupCode:dataGroupCode
+            // },
+            timeout: 30000,
+            success: function(data) {
+
+                //var data = eval("(" + data + ")");
+                console.log(data);
+                var telphon = ''
+                    // var telphon = data.respCode.split('|');
+                console.log(telphon)
+                    //是否
+                if (telphon[1] != undefined && telphon[1] != 'undefined') {
+                    itemcheck = telphon[1].substring(telphon[1].length, telphon[1].length - 1);
+                } else {
+                    itemcheck = '';
+                }
+                //验证号码
+                if (telphon[0] != undefined && telphon[0] != 'undefined') {
+                    telphone2 = telphon[0];
+                } else {
+                    telphone2 = '';
+                }
+                var signature = localStorage.getItem('signature');
+                var isPhoto = localStorage.getItem('isPhoto');
+                var allowWait = localStorage.getItem('allowWait');
+                //是否签名
+                // <!-- if (telphon[2] != undefined && telphon[2] != 'undefined') { -->
+                //     <!-- signature = telphon[2].substring(telphon[2].length, telphon[2].length - 1); -->
+                // <!-- } else { -->
+                //     <!-- signature = ''; -->
+                // <!-- } -->
+                // <!-- //是否拍照 -->
+                // <!-- if (telphon[3] != undefined && telphon[3] != 'undefined') { -->
+                //     <!-- isPhoto = telphon[3].substring(telphon[3].length, telphon[3].length - 1); -->
+                // <!-- } else { -->
+                //     <!-- isPhoto = ''; -->
+                // <!-- } -->
+                //是否验收
+                if (telphon[4] != undefined && telphon[4] != 'undefined') {
+                    app_finish = telphon[4].substring(telphon[4].length, telphon[4].length - 1);
+                } else {
+                    app_finish = '';
+                }
+                //是否允许回退
+                // <!-- console.log(telphon[5]); -->
+                // <!-- if (telphon[5] != undefined && telphon[5] != 'undefined') { -->
+                //     <!-- var allowBack = telphon[5].substring(telphon[5].length, telphon[5].length - 1); -->
+                // <!-- } else { -->
+                //     <!-- var allowBack = "N"; -->
+                // <!-- } -->
+                // var allowBack=localStorage.getItem('allowBack');
+                if (telphon[11] != undefined && telphon[11] != 'undefined') {
+                    var jinJiFlag = telphon[11].substring(telphon[11].length, telphon[11].length - 1);
+                } else {
+                    var jinJiFlag = "N";
+                }
+                localStorage.setItem("jinJiFlag", jinJiFlag);
+                // <!-- if (telphon[8] != undefined && telphon[8] != 'undefined') { -->
+                //     <!-- var layBy = telphon[8].substring(telphon[8].length, telphon[8].length - 1); -->
+                // <!-- } else { -->
+                //     <!-- var layBy = "N"; -->
+                // <!-- } -->
+                //localStorage.setItem("layBy", layBy);
+                var list = new Array();
+
+                var arr = Object.keys(data.blocks);
+                if (arr.length == 0) {
+                    mui.toast('暂无更多数据！')
+                    list = []
+                } else {
+
+                    list = data.blocks.result.rows;
+                }
+                console.log(list);
+                var slip = ''
+                    //					var layBy = ''
+                if (telphon.indexOf('slip:Y') > -1) {
+                    slip = 'Y'
+
+                }
+                if (telphon.indexOf('layBy:Y') > -1) {
+                    layBy = 'Y'
+                }
+                // var list = new Array();
+                // list = data.blocks.result.rows;
+                // console.log(list);
+
+                var wgroupNum, taskNo, statusCode, statusName, summpary, impFlag, isCurrentTask, deptName;
+                var isExecutor, reqSpotName, itemName, desc, recCreateTime, recCreator, allowBack;
+                allowBack = role.indexOf('DDZX') >= 0 || role.indexOf('WXZZ') >= 0 || role.indexOf('WXY') >= 0 //是否允许退单；接单；挂单；恢复
+                var urge = "",
+                    creatorName = ""; //报修人名字
+                var str = '';
+                console.log('列表', list)
+                for (var i = 0; i < list.length; i++) {
+                    wgroupNum = list[i].wgroupNum; //维修科室编码
+                    taskNo = list[i].taskNo; //工单号
+                    deptName = list[i].reqDeptName == "" ? "&nbsp;" : list[i].reqDeptName; //报修科室
+                    recCreateTime = list[i].registerTime; //报修时间
+                    itemName = list[i].itemName; //维修事项
+                    reqSpotName = list[i].reqSpotName ? list[i].reqSpotName : ''; //维修地点
+                    desc = itemName + "-" + reqSpotName; //维修概述
+                    statusName = list[i].showStatusCode; //状态
+                    statusCode = list[i].statusCode; //状态编码
+                    creatorName = list[i].reqStaffName ? list[i].reqStaffName : '--'; //报修人
+                    summpary = list[i].summpary;
+                    impFlag = list[i].impFlag; //紧急标记
+                    currentDealer = '';
+                    // // currentDealer = list[i].currentDealer.split(',');
+                    isCurrentTask = 'Y';
+                    isExecutor = list[i].isExecutor; //是否允许
+                    recCreator = list[i].reqStaffId;
+                    taskListComments = list[i].comments;
+                    exchangeReason = list[i].exchangeReason;
+                    urge = Number(list[i].urge); //加催次数
+
+                    taskListAppend += createHtml(wgroupNum, urge, roles, app_finish, isPhoto, signature, recCreateTime, taskNo, statusCode, statusName, impFlag, isCurrentTask, isExecutor, recCreator, desc, creatorName, deptName, currentDealer, allowBack, taskListComments, exchangeReason, slip, allowWait);
+                }
+                $("#content").html(taskListAppend);
+
+                $('.detail').unbind("click").click(function() {
+                    audioFlag = true;
+                    // console.log($(this).attr("base64Str"))
+                    var taskNo = $(this).text();
+                    var sigture = $(this).attr('id');
+                    var isPhoto = $(this).attr('isPhoto');
+                    // var base64 = $(this).attr('base64Str')
+                    localStorage.setItem('sigture', sigture);
+                    localStorage.setItem('isPhoto', isPhoto);
+                    if (hosId == "0510WXSDYRMYY" || hosId == "010SDYKDXBJDXYY") {
+                        location.href = "taskDetail-specific1.html?" + taskNo;
+                    } else {
+                        //							location.href = "taskDetail.html?" + taskNo;
+                        console.log(taskNo)
+                        showDetail(taskNo);
+                        showDiceng();
+                        // playAudio(base64)
+                    }
+                    //location.href = 'taskDetail.html?' + taskNo;
+                });
+                $("#loading").hide();
+            },
+            complete: function(XMLHttpRequest, status) { //请求完成后最终执行参数
+                if (status == 'timeout') {
+                    $("#loading").hide();
+                    $('#warn small').html('加载失败！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                } else if (status == 'error') {
+                    $("#loading").hide();
+                    $('#warn small').html('请求异常！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                }
+            }
+
+        });
+    }
+
+    function createHtml(wgroupNum, urge, roles, app_finish, isPhoto, signature, recCreateTime, taskNo, statusCode, statusName, impFlag, isCurrentTask, isExecutor, recCreator, desc, creatorName, deptName, currentDealer, allowBack, comments, exchangeReason, slip, allowWait) {
+        // console.log('allowBack',allowBack);
+
+        exchangeReason = exchangeReason == null ? "" : exchangeReason;
+        var html = "";
+        if (impFlag == "Y") {
+            html = html + "<div id='div-child' class='panel panel-danger'>";
+            html = html + "<div class='panel-heading row' style='background:#F58482;border:none;font-size:15px;color:#fff;'><div class='col-xs-8 col-sm-8 col-md-8 col-lg-8 all-nopadding'>工单号：<a class='detail' id='" + signature + "' isPhoto='" + isPhoto + "' app_finish='" + app_finish + "' style='color:#fff;'>" + taskNo + "</a></div><div id='" + taskNo + "' class='col-xs-4 col-sm-4 col-md-4 col-lg-4 all-nopadding right'><a style='color:#fff;'>" + statusName + "</a></div></div>";
+            html = html + "<div class='panel-body'>";
+
+        } else {
+            html = html + "<div class='panel panel-default' style='margin-bottom:15px;border:none;'>";
+            html = html + "<div class='panel-heading row' style='background:#FFF;border:none;font-size:15px;'><div class='col-xs-8 col-sm-8 col-md-8 col-lg-8 all-nopadding'>工单号：<a id='" + signature + "' isPhoto='" + isPhoto + "' app_finish='" + app_finish + "' class='detail'>" + taskNo + "</a></div><div id='" + taskNo + "' class='col-xs-4 col-sm-4 col-md-4 col-lg-4 all-nopadding right'><a style='color:#F5A224'>" + statusName + "</a></div></div>";
+            html = html + "<div class='panel-body'>";
+
+        }
+        html += "<hr style='margin-top:-15px;margin-bottom:10px;'>";
+        html += "<div style='line-height:25px;font-size:13px;'>";
+        html = html + "<div class='col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey'>报修人</div>";
+        html = html + "<div class='col-xs-8 col-sm-8 col-md-8 col-lg-8 outPlace' style='text-align:right;'>" + creatorName + "</div>";
+        html += "</div>";
+        html += "<div style='line-height:25px;font-size:13px;'>";
+        html = html + "<div class='col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey'>报修科室</div>";
+        html = html + "<div class='col-xs-8 col-sm-8 col-md-8 col-lg-8 outPlace' style='text-align:right;'>" + deptName + "</div>";
+        html += "</div>";
+        html += "<div style='line-height:25px;font-size:13px;'>";
+        html = html + "<div class='col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey'>报修时间</div>";
+        html = html + "<div class='col-xs-8 col-sm-8 col-md-8 col-lg-8 outPlace' style='text-align:right;'>" + recCreateTime + "</div>";
+        html += "</div>";
+        html += "<div style='line-height:25px;font-size:13px;'>";
+        html = html + "<div class='col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey'>维修概述</div>";
+        html = html + "<div class='col-xs-8 col-sm-8 col-md-8 col-lg-8 outPlace' style='text-align:right;'>" + desc + "</div>";
+        html += "</div>";
+        // <!-- if (urge > 0) { -->
+        //     <!-- html += "<div style='line-height:25px;font-size:13px;color:white;'>"; -->
+        //     <!-- html = html + "<div class='col-xs-4 col-sm-4 col-md-4 col-lg-4 ' style='background-color: #F56C6C;'>加催次数</div>"; -->
+        //     <!-- html = html + "<div class='col-xs-8 col-sm-8 col-md-8 col-lg-8 outPlace' style='text-align:right;background-color: #F56C6C;'>" + urge + "</div>"; -->
+        //     <!-- html += "</div>"; -->
+        // <!-- } -->
+        html = html + "<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'><hr style='margin-top:4px;margin-bottom:10px;width:109%;margin-left:-4.5%;'></div>";
+        // if ((statusCode == "00" || statusCode == "01") && recCreator == workNo) {
+        //html = html + "<div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding' style='text-align:center;margin-top:5px;'><button value='" + taskNo + "' onclick='revise(this.value)' type='button' class='btn btn-pink btn-sm' style='width:83%'>修改</button></div><div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding' style='text-align:center;margin-top:5px;'><button value='" + taskNo + "' onclick='deleteTask(this.value)' type='button' class='btn btn-pink btn-sm' style='width:83%'>作废</button></div>";
+        // }
+        // if (role.indexOf('DDZX') >= 0||role.indexOf('WXZZ') >= 0||role.indexOf('WXY') >= 0) {
+        if ((statusCode == "01" || statusCode == "12")) {
+            if (role.indexOf('DDZX') >= 0) {
+                html = html + "<div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding' style='text-align:center;margin-top:5px;'><button value='" + taskNo + "' onclick='handle(this.value)' type='button' class='btn btn-pink btn-sm' style='width:83%'>受理</button></div><div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding' style='text-align:center;margin-top:5px;'><button value='" + taskNo + "' onclick='deleteTask(this.value)' type='button' class='btn btn-pink btn-sm' style='width:83%'>作废</button></div>";
+            } else if (recCreator == workNo) {
+
+                html = html + " <div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding' style='text-align:center;margin-top:5px;'><button value='" + taskNo + "' onclick='deleteTask(this.value)' type='button' class='btn btn-pink btn-sm' style='width:83%'>作废</button></div>"
+
+            }
+
+        }
+
+        if (allowBack == true) {
+            // debugger
+            if (statusCode == "03" || statusCode == "05") {
+                html += "<div class='col-xs-6 col-sm-6 col-md-6 col-lg-6' style='text-align:center;margin-top:5px;'><button onclick=\"handleBackTask(\'" + statusCode + "\',\'" + taskNo + "\')\" type='button' class='btn btn-pink btn-sm' style='width:100%;'>退单</button></div>"
+            }
+            if ((statusCode == '02' || statusCode == '11') && (role.indexOf('WXZZ') >= 0 || role.indexOf('DDZX') >= 0)) {
+                html += "<div class='col-xs-6 col-sm-6 col-md-6 col-lg-6' style='text-align:center;margin-top:5px;'><button onclick=\"handleBackTask(\'" + statusCode + "\',\'" + taskNo + "\')\" type='button' class='btn btn-pink btn-sm' style='width:100%;'>退单</button></div>"
+            }
+            // if(statusCode == '03' && recCreator == workNo){
+            if (statusCode == '03') {
+                html += "<div class='col-xs-6 col-sm-6 col-md-6 col-lg-6' style='text-align:center;margin-top:5px;'><button id='" + taskNo + "' name='" + statusCode + "'  signature='" + signature + "' onclick='reverseTask(this)' type='button' class='btn btn-pink btn-sm' style='width:100%;'>接受任务</button></div>"
+            }
+            if (statusCode == "05") {
+                html = html + "<div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding' style='text-align:center;margin-top:5px;'><button id='" + taskNo + "' name='" + statusCode + "' onclick='Supplies(this)' type='button' class='btn btn-pink btn-sm' style='width:80%;'>耗材情况</button></div><div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding' style='text-align:center;margin-top:5px;'><button id='" + taskNo + "' name='" + statusCode + "' signature='" + signature + "' isPhoto='" + isPhoto + "' app_finish='" + app_finish + "' onclick='reverseTask(this)' type='button' class='btn btn-pink btn-sm' style='width:80%;'>完成任务</button></div><div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding' style='text-align:center; margin-top:5px;'><button value='" + taskNo + "' onclick='geZhi(this.value,\"" + exchangeReason + "\")'  type='button' class='btn btn-pink btn-sm' style='width:80%'>挂单</button></div>";
+            }
+            if (statusCode == "08") {
+                html = html + "<div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding' style='text-align:center;margin-top:5px;'><button value='" + taskNo + "' onclick='resume(this.value)' type='button' class='btn btn-pink btn-sm' style='width:80%'>恢复工单</button></div>";
+            }
+        }
+        if ((role.indexOf('WXZZ') >= 0 || role.indexOf('DDZX') >= 0) && (statusCode == '02' || statusCode == '11')) {
+            html += "<div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding' style='text-align:center;margin-top:5px;'><button wgroupNum='" + wgroupNum + "' id='" + taskNo + "' name='" + statusCode + "' signature='" + signature + "' isPhoto='" + isPhoto + "' app_finish='" + app_finish + "' name='" + taskNo + "'  onclick='reversePai(this)' type='button' class='btn btn-pink btn-sm' style='width:80%'>派工</button></div>"
+        }
+
+        if (statusCode == "07" && recCreator == workNo) {
+            html = html + "<div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding' style='text-align:center;margin-top:5px;'><button value='" + taskNo + "' onclick='appraise(this.value)' type='button' class='btn btn-pink btn-sm' style='width:80%'>评价</button></div>";
+        }
+
+        // if (statusCode == "03" ) {
+        //     html = html + "<div class='col-xs-6 col-sm-6 col-md-6 col-lg-6' style='text-align:center;margin-top:5px;'><button onclick=\"handleBackTask(\'" + statusCode + "\',\'" + taskNo + "\')\" type='button' class='btn btn-pink btn-sm' style='width:100%;'>退单</button></div><div class='col-xs-6 col-sm-6 col-md-6 col-lg-6' style='text-align:center;margin-top:5px;'><button id='" + taskNo + "' name='" + statusCode + "'  signature='" + signature + "' onclick='reverseTask(this)' type='button' class='btn btn-pink btn-sm' style='width:100%;'>接受任务</button></div>";
+        // }
+        // if (statusCode == "05") {
+        //     html = html + "<div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding' style='text-align:center;margin-top:5px;'><button id='" + taskNo + "' name='" + statusCode + "' onclick='Supplies(this)' type='button' class='btn btn-pink btn-sm' style='width:80%;'>耗材情况</button></div><div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding' style='text-align:center;margin-top:5px;'><button id='" + taskNo + "' name='" + statusCode + "' signature='" + signature + "' isPhoto='" + isPhoto + "' app_finish='" + app_finish + "' onclick='reverseTask(this)' type='button' class='btn btn-pink btn-sm' style='width:80%;'>完成任务</button></div><div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding' style='text-align:center;margin-top:5px;'><button onclick=\"handleBackTask(\'" + statusCode + "\',\'" + taskNo + "\')\" type='button' class='btn btn-pink btn-sm' style='width:80%;'>退单</button></div>";
+        // }
+
+        // if (statusCode == '02') {
+        //         html = html + "<div class='col-xs-6 col-sm-6 col-md-6 col-lg-6' style='text-align:center;margin-top:5px;'><button onclick=\"handleBackTask(\'" + statusCode + "\',\'" + taskNo + "\')\" type='button' class='btn btn-pink btn-sm' style='width:100%;'>退单</button></div><div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding' style='text-align:center;margin-top:5px;'><button id='" + taskNo + "' name='" + statusCode + "' signature='" + signature + "' isPhoto='" + isPhoto + "' app_finish='" + app_finish + "' name='" + taskNo + "' onclick='reversePai(this)' type='button' class='btn btn-pink btn-sm' style='width:80%'>派工</button></div>";
+
+
+        // }
+        // if(statusCode == '11'){
+        //     html = html + "<div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding' style='text-align:center;margin-top:5px;'><button id='" + taskNo + "' name='" + statusCode + "' signature='" + signature + "' isPhoto='" + isPhoto + "' app_finish='" + app_finish + "' name='" + taskNo + "' onclick='reversePai(this)' type='button' class='btn btn-pink btn-sm' style='width:80%'>派工</button></div><div class='col-xs-6 col-sm-6 col-md-6 col-lg-6' style='text-align:center;margin-top:5px;'><button onclick=\"handleBackTask(\'" + statusCode + "\',\'" + taskNo + "\')\" type='button' class='btn btn-pink btn-sm' style='width:100%;'>退单</button></div>";
+        // }
+
+        // if (statusCode == "05") {
+        //     html = html + "<div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding' style='text-align:center;margin-top:5px;'><button value='" + taskNo + "' onclick='geZhi(this.value,\"" + exchangeReason + "\")' type='button' class='btn btn-pink btn-sm' style='width:80%'>挂单</button></div>";
+        // }
+
+        // if (statusCode == "08") {
+        //     html = html + "<div class='col-xs-6 col-sm-6 col-md-6 col-lg-6 all-nopadding' style='text-align:center;margin-top:5px;'><button value='" + taskNo + "' onclick='resume(this.value)' type='button' class='btn btn-pink btn-sm' style='width:80%'>恢复工单</button></div>";
+        // }
+
+
+
+        html = html + "</div></div>"
+        return html;
+    }
+
+    // 受理
+    function handle(value) {
+        location.href = "taskHandle.html?" + value;
+    }
+    // 修改备注
+    function comment(value, comments) {
+        $('#taskNoBak').html(value);
+        $('#myModal h4').html('修改备注')
+        $('#reason').val(comments)
+        if (comments == '') {
+            $('#reason').attr('placeholder', '请填写备注')
+        }
+        $('#myModal').show();
+    }
+    // 转单
+    function transfer(value, exchangeReason) {
+        $('#taskNoBak').html(value);
+        $('#myModal h4').html('转单原因')
+        $('#reason').val(exchangeReason)
+        if (exchangeReason == '') {
+            $('#reason').attr('placeholder', '请写明转单原因')
+        }
+        $('#myModal').show();
+    }
+    // 过程记录
+    function process(value) {
+        alert(value);
+        // $("#processRecord").show();
+        showDetail1(value);
+        showDiceng1();
+    }
+    // 搁置
+    function geZhi(value, exchangeReason) {
+        $('#taskNoBak').html(value);
+        $('#myModal h4').html('挂单原因')
+        $('#reason').val(exchangeReason)
+            // $('#reason').attr('placeholder','请写明搁置原因')
+        $('#myModal').show();
+    }
+
+    function resume(taskNo) {
+        var prame = {
+            taskNo: taskNo,
+            workNo: workNo,
+            dataGroupCode,
+            role,
+            statusCode: "05",
+            isCurrent: "1",
+            isActual: "1"
+        };
+        prame = JSON.stringify(prame);
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            data: {
+                prames: prame
+            },
+            headers: {
+                "methodName": "agreeTask",
+                "serviceName": "MTDP0101"
+            },
+            success: function(data) {
+                relaodSelf();
+            }
+        });
+    }
+    //派工
+    function reversePai(src) {
+        // 显示摸态框
+        taskNo = $(src).attr('id');
+        var wgroupnum = $(src).attr('wgroupnum')
+        console.log(wgroupnum)
+        var json = {
+            'taskNo': taskNo,
+            'wgroupnum': wgroupnum
+        }
+        var jsonStr = JSON.stringify(json);
+        /*ajaxPai();*/
+        location.href = "taskWorker.html?" + encodeURIComponent(jsonStr);
+    }
+
+    //加催
+    function urgePlus(src, taskNo, statusCode) {
+        console.log("加催")
+        console.log(taskNo);
+        console.log(statusCode);
+        // console.log($(this).html())
+        $.ajax({
+            type: 'post',
+            url: baseUrl + 'app_maintainController.do?urgeBill',
+            data: {
+                userId: workNo,
+                taskNo: taskNo,
+                statusCode: statusCode
+            },
+            contentType: 'application/x-www-form-urlencoded',
+            success: function(data) {
+                var data = JSON.parse(data);
+                console.log(data);
+                if (data.success == true) {
+                    mui.toast(data.msg);
+                    relaodSelf();
+                }
+            }
+        })
+    }
+    $('#addRen').unbind('click').click(function() {
+        $('#myModalPaiRen').show();
+        $.ajax({
+            url: baseUrl + 'app_maintainController.do?selectStaff',
+            type: 'post',
+            data: {
+                deptNum: wgroupNum
+            },
+            success: function(data) {
+                var data = eval("(" + data + ")");
+                var list = data.obj;
+                var html = '';
+                //console.log(list);
+                for (var i = 0; i < list.length; i++) {
+                    var contactTel = list[i].contactTel;
+                    var deptName = list[i].deptName;
+                    var deptNum = list[i].deptNum;
+                    var id = list[i].id;
+                    var jpName = list[i].jpName;
+                    var name = list[i].name;
+                    var serviceStaff = list[i].serviceStaff;
+                    var staffTypeName = list[i].staffTypeName;
+                    var workNo = list[i].workNo;
+                    var name = list[i].name;
+                    html += paiYuan222(contactTel, deptName, deptNum, serviceStaff, staffTypeName, workNo, name);
+                }
+                $('#contentBody').html(html);
+            },
+            complete: function(XMLHttpRequest, status) { //请求完成后最终执行参数  　　　　
+                if (status == 'timeout') {
+                    $("#loading").hide();
+                    $('#warn small').html('提交超时！请检查网络并重试！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                } else if (status == 'error') {
+                    $("#loading").hide();
+                    $('#warn small').html('网络异常！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                }
+            }
+        });
+    })
+
+    //新增服务人员
+    function paiYuan222(contactTel, deptName, deptNum, serviceStaff, staffTypeName, workNo, name) {
+        var html = '<div class="row" name="' + deptNum + '">';
+        html += '<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-top:-4px;padding-left:5px;"><input type="checkbox" name="0" id="checkInput" onclick="nameInput(this)"/></div>';
+        html += '<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" id="NAME" name="' + contactTel + '" style="padding:0;padding-left:5px;margin-left:-4px;">' + name + '</div>';
+        html += '<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 left" id="WORK" style="padding:0;">' + workNo + '</div>';
+        html += '<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" id="DEPT" style="margin-left:-30px;">' + deptName + '</div>';
+        html += '<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="margin-left:15px;">是</div>';
+        html += '</div>';
+        return html;
+    }
+
+    $('#overSure').click(function() {
+        $('#contentBody .row').each(function() {
+            var value = $(this).find('input').attr('name');
+            if (value == '1') {
+                var deptNumsss = $(this).find('#WORK').text();
+                var wgroupName = $(this).find('#DEPT').text();
+                var whetherss = $(this).find('input').attr('name');
+                var supportorss = $(this).find('#NAME').text();
+                var supportorMobiless = $(this).find('#NAME').attr('name');
+                /*    console.log(supportorss,supportorMobiless,whetherss,deptNumsss,wgroupName);
+                    return;*/
+                $('#shoeRen').append(paiYuan(supportorss, supportorMobiless, whetherss, deptNumsss, wgroupName));
+                $('#myModalPaiRen').hide();
+                $('#checkParent').removeAttr('checked');
+            }
+        })
+    })
+
+    //选中
+    $('#checkParent').click(function() {
+        var flag = document.getElementById("checkParent").checked;
+        /*alert(flag);*/
+        var cks = $('#contentBody .row input');
+        if (flag) {
+            for (var i = 0; i < cks.length; i++) {
+                cks[i].checked = true;
+                cks[i].name = '1';
+                console.log(cks[i].name);
+            }
+        } else {
+            for (var i = 0; i < cks.length; i++) {
+                cks[i].checked = false;
+                cks[i].name = '0';
+                console.log(cks[i].name);
+            }
+        }
+    })
+
+    //信息
+    $('#messageSend').click(function() {
+        var flag = document.getElementById("messageSend").checked;
+        /*alert(flag);*/
+        var cks = $('#shoeRen .row input');
+        if (flag) {
+            for (var i = 0; i < cks.length; i++) {
+                cks[i].checked = true;
+                $(cks[i]).attr('class', '1');
+            }
+        } else {
+            for (var i = 0; i < cks.length; i++) {
+                cks[i].checked = false;
+                $(cks[i]).attr('class', '0');
+                /*console.log(cks[i].name);*/
+            }
+        }
+    })
+
+    function nameInput(src) {
+        var value = $(src).attr('name');
+        if (value == '0') {
+            $(src).attr('name', '1');
+        } else {
+            $(src).attr('name', '0');
+        }
+    }
+    //评价
+    function appraise(value) {
+        $('#taskNoBak1').html(value);
+        $('#evalModal').modal("show");
+    }
+
+    //修改
+    function revise(value) {
+        location.href = "taskAdd.html?" + value;
+    }
+
+    //耗材情况;
+    function Supplies(SuppliesTsxt) {
+        var taskNo = $(SuppliesTsxt).attr("id");
+        location.href = "taskSupplies.html?" + taskNo;
+    }
+
+    //接受任务,完成任务;
+    function reverseTask(src) {
+
+        var taskNo = $(src).attr("id");
+        var status = $(src).attr("name");
+        var workNo = localStorage.getItem("workNo");
+        var signature = $(src).attr('signature');
+        var isPhoto = $(src).attr('isPhoto');
+        var value = '';
+        var text = $(src).text();
+        completes(taskNo, status, workNo);
+        // console.log(signature, isPhoto)
+        // if (signature == 'Y' || isPhoto == 'Y') {
+        //     if (text == '完成任务') {
+        //         $('#divAbove').show();
+        //         $('#content').hide();
+        //         $(".selfTitle").hide();
+        //         $(".searchSelf").hide();
+        //         $(".selfTitle").hide();
+        //         if (isPhoto == 'Y') {
+        //             $('#photoTake').show();
+        //         }
+        //         if (signature == 'Y') {
+        //             $('#myModalsss').show();
+        //         }
+
+        //         //确认提交
+        //         $("#sureTijiao").unbind('click').click(function() {
+        //             //签名照片上传；
+        //             var value = '';
+
+        //             $("#signature img").each(function(index, element) {
+        //                 value = getBase64Image(element);
+        //             });
+
+        //             //照片拍摄上传；
+        //             var picsbak = {
+        //                 "pic1": "",
+        //                 "pic2": "",
+        //                 "pic3": ""
+        //             };
+        //             $("#pictureSign img").each(function(index, element) {
+        //                 if (index == 0) {
+        //                     picsbak.pic1 = getBase64Image(element);
+        //                 } else if (index == 1) {
+        //                     picsbak.pic2 = getBase64Image(element);
+        //                 } else {
+        //                     picsbak.pic3 = getBase64Image(element);
+        //                 }
+        //             });
+        //             var pic = JSON.stringify(picsbak);
+        //             console.log('1')
+        //                 // completesSig(taskNo, status, workNo, value, pic);
+        //         })
+        //     } else {
+        //         console.log('2')
+        //             // completes(taskNo, status, workNo);
+        //     }
+        // } else {
+        //     console.log('3')
+        //         // location.href = 'taskFinish.html'
+        //     completes(taskNo, status, workNo);
+        // }
+        // return false;
+    }
+
+    //验收确认
+    function yanShou(src) {
+        var taskNo = $(src).attr("id");
+        var status = $(src).attr("name");
+        var workNo = localStorage.getItem("workNo");
+        //console.log(taskNo,status,workNo);
+        completes(taskNo, status, workNo);
+    }
+
+    /* return;*/
+    function completes(taskNo, status, workNo) {
+        var signature = localStorage.getItem('signature');
+        var isPhoto = localStorage.getItem('isPhoto');
+        var serviceName = ""
+        var codeNum;
+        if (status == '03' || status == '12') {
+            serviceName = "MTDP0101"
+            methodName = 'agreeTask'
+            codeNum = '05'
+        } else if (status == '05' || status == '06') {
+            if (signature == 'Y' || isPhoto == 'Y') {
+                serviceName = "MTFS0101"
+                methodName = 'finish'
+                codeNum = '07';
+                location.href = 'taskFinish.html?' + taskNo;
+                return
+            } else {
+                var coursePrame = {
+                    taskNo
+                };
+                coursePrame = JSON.stringify(coursePrame);
+                // console.log(coursePrame)
+                $.ajax({
+                    url: baseUrl + 'MobileAgentService',
+                    type: 'post',
+                    data: {
+                        prames: coursePrame
+                    },
+                    headers: {
+                        "methodName": "query",
+                        "serviceName": "MTFS0102"
+                    },
+                    success: function(data) {
+                        if (data.blocks.result != undefined) {
+                            var courseList = data.blocks.result.rows;
+                            serviceName = "MTFS0101"
+                            methodName = 'finish'
+                            codeNum = '07';
+                            var prame = {
+                                taskNo: taskNo,
+                                workNo: workNo,
+                                dataGroupCode,
+                                role,
+                                statusCode: '07',
+                                isCurrent: "1",
+                                isActual: "1",
+                                list: courseList
+                            };
+                            prame = JSON.stringify(prame);
+                            // console.log(prame)
+                            $.ajax({
+                                url: baseUrl + 'MobileAgentService',
+                                type: 'post',
+                                data: {
+                                    prames: prame
+                                },
+                                headers: {
+                                    methodName: 'finish',
+                                    serviceName: 'MTFS0101'
+                                },
+                                timeout: 30000,
+                                success: function(data) {
+                                    if (data.status != "-1") {
+                                        //location.reload();
+                                        // relaodSelf();
+                                        $("#succeed").fadeIn(1000);
+                                        setTimeout("location.href='taskList.html';", 2000);
+                                    } else {
+                                        $('#warn small').html(data.msg);
+                                        $("#warn").fadeIn(500);
+                                        setTimeout("$('#warn').fadeOut(500)", 3000);
+                                    }
+                                },
+                                complete: function(XMLHttpRequest, status) { //请求完成后最终执行参数  　　　　
+                                    if (status == 'timeout') {
+                                        $("#loading").hide();
+                                        $('#warn small').html('提交超时！请检查网络并重试！');
+                                        $("#warn").fadeIn(500);
+                                        setTimeout("$('#warn').fadeOut(500)", 3000);
+                                    } else if (status == 'error') {
+                                        $("#loading").hide();
+                                        $('#warn small').html('网络异常！');
+                                        $("#warn").fadeIn(500);
+                                        setTimeout("$('#warn').fadeOut(500)", 3000);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                })
+            }
+
+        }
+        var prame = {
+            taskNo: taskNo,
+            workNo: workNo,
+            dataGroupCode,
+            role,
+            statusCode: codeNum,
+            isCurrent: "1",
+            isActual: "1"
+        };
+        prame = JSON.stringify(prame);
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            data: {
+                prames: prame
+            },
+            headers: {
+                methodName: methodName,
+                serviceName: serviceName
+            },
+            timeout: 30000,
+            success: function(data) {
+                //var data = eval("(" + data + ")");
+                // console.log(data.status);
+                // debugger
+                if (data.status != "-1") {
+                    //location.reload();
+                    relaodSelf();
+                } else {
+                    $('#warn small').html(data.msg);
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                }
+            },
+            complete: function(XMLHttpRequest, status) { //请求完成后最终执行参数  　　　　
+                if (status == 'timeout') {
+                    $("#loading").hide();
+                    $('#warn small').html('提交超时！请检查网络并重试！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                } else if (status == 'error') {
+                    $("#loading").hide();
+                    $('#warn small').html('网络异常！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                }
+            }
+        });
+    }
+
+    //签名
+    function completesSig(taskNo, status, workNo, value, pic) {
+        //console.log(taskNo,status,workNo,value);
+        $('#upload').show();
+        //alert(pic);
+        $.ajax({
+            url: baseUrl + 'maintain',
+            type: 'post',
+            data: {
+                workNo: workNo,
+                statusCode: status,
+                taskNo: taskNo,
+                img: value,
+                pictures: pic
+            },
+            headers: {
+                "methodName": "handleTask",
+                "serviceName": "AppMaintainFinish"
+            },
+            timeout: 30000,
+            success: function(data) {
+                //var data = JSON.parse(data);
+                if (data.respCode == "200") {
+                    $('#succeed').fadeIn(1000);
+
+                    setTimeout("location.reload();", 1000)
+                } else {
+                    $("#upload").hide();
+                    $('#warn small').html(data.respMsg);
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                }
+            },
+            complete: function(XMLHttpRequest, status) { //请求完成后最终执行参数  　　　　
+                if (status == 'timeout') {
+                    $("#upload").hide();
+                    $("#loading").hide();
+                    $('#warn small').html('提交超时！请检查网络并重试！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                } else if (status == 'error') {
+                    $("#upload").hide();
+                    $("#loading").hide();
+                    $('#warn small').html('网络异常！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                }
+            }
+        });
+    }
+
+    //提交
+    $("#submit").click(function() {
+        if ($('#myModal h4').html() == '作废原因') {
+            if ($('#reason').val() == '') {
+                $('#warn small').html('请填写作废原因！');
+                $("#warn").fadeIn(500);
+                setTimeout("$('#warn').fadeOut(500)", 3000);
+                return;
+            }
+            $(this).button('loading').delay(10000).queue(function() {
+                $(this).button('reset');
+            });
+            var suspendReason = $('#reason').val();
+            var taskNo = $('#taskNoBak').text();
+            var prame = {
+                workNo: workNo,
+                taskNo: taskNo,
+                dataGroupCode,
+                role,
+                returnReason: suspendReason,
+                statusCode: "98",
+                isCurrent: "1",
+                isActual: "1"
+            };
+            prame = JSON.stringify(prame);
+            $.ajax({
+                url: baseUrl + 'MobileAgentService',
+                type: 'post',
+                data: {
+                    prames: prame
+                },
+                headers: {
+                    "methodName": "update",
+                    "serviceName": "MTAC0102"
+                },
+                success: function(data) {
+                    $('#myModal').hide();
+                    // var data = eval("(" + data + ")");
+                    if (data.status == "0") {
+                        relaodSelf();
+                    } else {
+                        $('#warn small').html('作废失败！');
+                        $("#warn").fadeIn(500);
+                        setTimeout("$('#warn').fadeOut(500)", 3000);
+                    }
+
+                }
+            });
+        } else if ($('#myModal h4').html() == '修改备注') {
+            if ($('#reason').val() == '') {
+                $('#warn small').html('请填写备注！');
+                $("#warn").fadeIn(500);
+                setTimeout("$('#warn').fadeOut(500)", 3000);
+                return;
+            }
+            $(this).button('loading').delay(10000).queue(function() {
+                $(this).button('reset');
+            });
+            var suspendReason = $('#reason').val();
+            var taskNo = $('#taskNoBak').text();
+
+            $.ajax({
+                url: baseUrl + 'app_maintainController.do?modifyComments',
+                type: 'post',
+                data: {
+                    userId: workNo,
+                    comments: suspendReason,
+                    taskNo: taskNo
+                },
+                success: function(data) {
+                    $('#myModal').hide();
+                    var data = eval("(" + data + ")");
+                    console.log(data)
+                    if (data.respCode == "200") {
+                        relaodSelf();
+                    } else {
+                        $('#warn small').html('填写备注失败！');
+                        $("#warn").fadeIn(500);
+                        setTimeout("$('#warn').fadeOut(500)", 3000);
+                    }
+                }
+            });
+        } else if ($('#myModal h4').html() == '转单原因') {
+            if ($('#reason').val() == '') {
+                $('#warn small').html('请写明转单原因！');
+                $("#warn").fadeIn(500);
+                setTimeout("$('#warn').fadeOut(500)", 3000);
+                return;
+            }
+            $(this).button('loading').delay(10000).queue(function() {
+                $(this).button('reset');
+            });
+            var suspendReason = $('#reason').val();
+            var taskNo = $('#taskNoBak').text();
+            alert(suspendReason);
+            $.ajax({
+                url: baseUrl + 'app_maintainController.do?Slip',
+                type: 'post',
+                data: {
+                    workNo: workNo,
+                    exchangeReason: suspendReason,
+                    taskNo: taskNo
+                },
+                success: function(data) {
+                    $('#myModal').hide();
+                    var data = eval("(" + data + ")");
+                    console.log(data)
+                    if (data.respCode == "200") {
+                        relaodSelf();
+                    } else {
+                        $('#warn small').html('转单失败！');
+                        $("#warn").fadeIn(500);
+                        setTimeout("$('#warn').fadeOut(500)", 3000);
+                    }
+                }
+            });
+        } else if ($('#myModal h4').html() == '挂单原因') {
+            if ($('#reason').val() == '') {
+                $('#warn small').html('请写明挂单原因！');
+                $("#warn").fadeIn(500);
+                setTimeout("$('#warn').fadeOut(500)", 3000);
+                return;
+            }
+            $(this).button('loading').delay(10000).queue(function() {
+                $(this).button('reset');
+            });
+            var suspendReason = $('#reason').val();
+            var taskNo = $('#taskNoBak').text();
+            var prame = {
+                workNo: workNo,
+                taskNo: taskNo,
+                dataGroupCode,
+                role,
+                returnReason: suspendReason,
+                statusCode: "08",
+                isCurrent: "1",
+                isActual: "1"
+            };
+            prame = JSON.stringify(prame);
+            $.ajax({
+                url: baseUrl + 'MobileAgentService',
+                type: 'post',
+                data: {
+                    prames: prame
+                },
+                headers: {
+                    "methodName": "hold",
+                    "serviceName": "MTFS0103"
+                },
+                success: function(data) {
+                    $('#myModal').hide();
+                    // <!-- var data = eval("(" + data + ")"); -->
+                    // <!-- console.log(data) -->
+                    if (data.status != "-1") {
+                        relaodSelf();
+                    } else {
+                        $('#warn small').html('挂单失败！');
+                        $("#warn").fadeIn(500);
+                        setTimeout("$('#warn').fadeOut(500)", 3000);
+                    }
+                }
+            });
+
+        }
+    });
+    /**
+     * @description 
+     * @author 
+     * @date 
+     * @lastModifiedBy wjy
+     * @lastModifiedTime  2021-5-06 
+     * @param  taskNo  工单号
+     * @param  workNo  当前登录人工号
+     * @param  evalLevel  
+     * @param  evalContent   
+     */
+
+
+    $("#submit1").click(function() {
+        $(this).button('loading').delay(10000).queue(function() {
+            $(this).button('reset');
+        });
+        var evalContent = $('#evalContent').val();
+        var taskNo = $('#taskNoBak1').text();
+        var evalLevel = $("div.eval-selected").attr("id");
+
+        // var jsonbak = {
+        //     "evalDetail": evalContent,
+        //     "taskEval": evalLevel
+        // };
+        // var json = JSON.stringify(jsonbak);
+        var prame = {
+            taskNo: taskNo,
+            workNo: workNo,
+            dataGroupCode,
+            role,
+            taskEval: evalLevel,
+            evalDetail: evalContent,
+            statusCode: '99',
+            isCurrent: '1',
+            isActual: '1'
+        };
+        prame = JSON.stringify(prame);
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            data: {
+                prames: prame
+            },
+            headers: {
+                methodName: "update",
+                serviceName: "MTAR0101"
+            },
+            success: function(data) {
+                $('#evalModal').modal("hide");
+                // var data = eval("(" + data + ")");
+                if (data.status != "-1") {
+                    relaodSelf();
+                } else {
+                    $('#warn small').html('评价失败！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                }
+            }
+        });
+    });
+
+    function deleteTask(value) {
+        $('#taskNoBak').html(value);
+        $('#myModal h4').html('作废原因')
+        $('#reason').val('');
+        $('#reason').attr('placeholder', '请写明作废原因')
+        $('#myModal').show();
+    }
+
+    //加载更多
+    $("#loadMore").click(function() {
+        page = page + 1;
+        $("#loading").show();
+
+        loadData();
+
+    });
+
+    $("div.eval").click(function() {
+        $("div.eval").removeClass("eval-selected").addClass("eval-unselected");
+        $(this).addClass("eval-selected");
+    });
+
+    //返回
+    $("#back").click(function() {
+        location.href = '../../menu.html';
+    });
+
+    //主页
+    $("#home").click(function() {
+        location.href = '../../menu.html';
+    });
+
+    //刷新
+    $("#refresh").click(function() {
+        location.reload();
+    });
+
+    //刷新
+    $("#refresh").click(function() {
+        location.reload();
+    });
+
+    //返回
+    $("#backList").click(function() {
+        location.href = "../../menu.html";
+    });
+
+    $("#diceng").click(function() {
+        hideDiceng();
+    });
+
+    function hideDiceng() {
+        amr.stop();
+        $("#detailSelf").hide();
+        $("#processRecord").hide();
+        $("#diceng").hide();
+        $("#content").css({
+            "overflow": "auto"
+        })
+    }
+
+    function showDiceng() {
+        $("#detailSelf").show();
+        $("#diceng").show();
+        $("#content").css({
+            "overflow": "hidden"
+        })
+    }
+
+    function showDiceng1() {
+        $("#processRecord").show();
+        $("#diceng").show();
+        $("#content").css({
+            "overflow": "hidden"
+        })
+    }
+
+    //新增
+    $("#add").click(function() {
+        localStorage.setItem("telphone2", telphone2);
+        localStorage.setItem('itemcheck', itemcheck);
+        location.href = "taskAdd.html";
+    });
+
+    //签名
+    $(document).on('ready', function() {
+        if ($('.js-signature').length) {
+            $('.js-signature').jqSignature();
+        }
+    });
+
+    function clearCanvas() {
+        $('.js-signature').eq(0).jqSignature('clearCanvas');
+        //$('#saveBtn').attr('disabled', true);
+    }
+
+    function saveSignature() {
+        var dataUrl = $('.js-signature').eq(0).jqSignature('getDataURL');
+        var img = $('<img>').attr('src', dataUrl);
+        $('#signature').html(img);
+    }
+
+    $('.js-signature').eq(1).on('jq.signature.changed', function() {
+        $('#saveBtn').attr('disabled', false);
+    });
+
+    //拍摄照片
+    $("#btnCamera").click(function() {
+        if ($("#pictureSign").find("img").length == 3) {
+            $("#warn small").html("最多只能上传三张图片");
+            $("#warn").fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return;
+        };
+        navigator.camera.getPicture(onSuccess, onFail, {
+            quality: 50,
+            destinationType: Camera.DestinationType.FILE_URI,
+            sourceType: Camera.PictureSourceType.CAMERA,
+            allowEdit: false,
+            encodingType: Camera.EncodingType.JPEG,
+            popoverOptions: CameraPopoverOptions,
+            saveToPhotoAlbum: false
+        });
+    })
+
+    function onSuccess(imageData) {
+        var img = $('<img class="img-circle" style="width:100%;">');
+        img.attr('src', imageData);
+        var a = $('<a href="#" class="thumbnail"></a>');
+        var div = $('<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>');
+        img.appendTo(a);
+        a.appendTo(div);
+        div.appendTo('#pictureSign');
+
+        //$("a.thumbnail:parent").width();
+        var width = $("a.thumbnail:parent").width();
+        //$("a.thumbnail:parent").css('height',width);
+        $("img.img-circle").css('height', width);
+        $('a.thumbnail').click(function() {
+            _this = $(this);
+            $(".bigPicture").removeAttr("style");
+            var image = new Image();
+            image.src = $(this).find('img').attr('src');
+            var width;
+            var height;
+            if (image.width >= image.height) {
+                $(".bigPicture").css("width", screen.width - 40);
+            } else {
+                var i;
+                height = screen.height - 200;
+                i = image.height / height;
+                width = image.width / i;
+            }
+            $(".bigPicture").css("width", '100%');
+            $(".bigPicture").css("height", '100%');
+            $(".bigPicture").attr("src", $(this).find('img').attr('src'));
+            $('#myModalPicture').modal('show');
+            return false;
+        });
+    }
+
+    //拍摄失败
+    function onFail(message) {
+        //alert('Failed because: ' + message);
+    }
+
+    //本地上传
+    $('#btnPicture').bind('touchstart', function() {
+        if ($("#pictureSign").find("img").length == 3) {
+            $("#warn small").html("最多只能上传三张图片");
+            $("#warn").fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return;
+        };
+
+        navigator.camera.getPicture(function(data) {
+            var img = $('<img class="img-circle" style="width:100%;">');
+            img.attr('src', data);
+            var a = $('<a class="thumbnail"></a>');
+            a.attr('href', data);
+            var div = $('<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>');
+            img.appendTo(a);
+            a.appendTo(div);
+            div.appendTo('#pictureSign');
+            var width = $("a.thumbnail:parent").width();
+            $("img.img-circle").css('height', width);
+
+            $('a.thumbnail').click(function() {
+                _this = $(this);
+                $(".bigPicture").removeAttr("style");
+                var image = new Image();
+                image.src = $(this).find('img').attr('src');
+                var width;
+                var height;
+                if (image.width >= image.height) {
+                    $(".bigPicture").css("width", screen.width - 40);
+                } else {
+                    var i;
+                    height = screen.height - 200;
+                    i = image.height / height;
+                    width = image.width / i;
+                }
+                $(".bigPicture").css("width", width);
+                $(".bigPicture").css("height", height);
+                $(".bigPicture").attr("src", $(this).find('img').attr('src'));
+                $('#myModalPicture').modal('show');
+                return false;
+            });
+
+        }, function(error) {}, {
+            destinationType: Camera.DestinationType.FILE_URI,
+            sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+            allowEdit: false,
+            mediaType: Camera.MediaType.PICTURE
+        });
+    });
+
+    //获取图片base64
+    function getBase64Image(img) {
+        var canvas = document.createElement("canvas");
+        var image = new Image();
+        image.src = img.src;
+        img.crossOrigin = "Anonymous";
+        var width;
+        var height;
+        width = 768;
+        height = image.height * 768 / image.width;
+        background = 'red';
+        canvas.width = width;
+        canvas.height = height;
+        canvas.background = "#FFFFFF";
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(image, 0, 0, width, height);
+        var dataURL = canvas.toDataURL("image/JPEG");
+        //data:image/jpeg;base64,
+        return dataURL.substring(23, dataURL.length);
+        // return dataURL.replace("data:image/png;base64,", "");
+    };
+
+    //删除图片
+    $("#delPic").click(function() {
+        _this.parent().remove();
+    });
+
+    $('#sures').unbind('click').click(function() {
+            var jsonbar = new Array();
+            $('#shoeRen .row').each(function(index, element) {
+                var deptNo = $(this).find('#dept').text();
+                var Name = $(this).find('#sup').text();
+                var contactNum = $(this).find('input').attr('name');
+                var whetherNum = $(this).find('input').attr('class');
+                jsonbar.push({
+                    "workNo": deptNo,
+                    "name": Name,
+                    "deptNum": wgroupNum,
+                    "contactTel": contactNum,
+                    "whether": whetherNum
+                });
+            })
+            json = JSON.stringify(jsonbar);
+            //console.log(json);
+            $.ajax({
+                url: baseUrl + 'app_maintainController.do?sendTask',
+                type: 'post',
+                data: {
+                    workNo: workNo,
+                    json: json,
+                    taskNo: taskNo
+                },
+                success: function(data) {
+                    $('#evalModal').modal("hide");
+                    var data = eval("(" + data + ")");
+                    if (data.respCode == "200") {
+                        relaodSelf();
+                    } else {
+                        $('#warn small').html('评价失败！');
+                        $("#warn").fadeIn(500);
+                        setTimeout("$('#warn').fadeOut(500)", 3000);
+                    }
+                }
+            });
+        })
+        //关闭
+    $('#underClose').click(function() {
+        $('#myModalPaiRen').hide();
+        $('#checkParent').removeAttr('checked');
+    })
+
+    var needSign = "N";
+    // <!-- $.ajax({ -->
+    //     <!-- url: baseUrl + 'app_maintainController.do?getSignFlag', -->
+    //     <!-- type: 'post', -->
+    //     <!-- success: function(data) { -->
+    //         <!-- var data = eval('(' + data + ')') -->
+    //         <!-- console.log(data); -->
+    //         <!-- if (data.respCode == "200" && data.respMsg == "Y") -->
+    //             <!-- needSign = "Y"; -->
+    //     <!-- } -->
+    // <!-- }); -->
+
+    function handleBackTask(statusCode, taskNo) {
+        var params = taskNo + "@@" + statusCode;
+        location.href = "handle-back.html?" + params;
+        // <!-- $.ajax({ -->
+        //     <!-- url: baseUrl + 'maintain', -->
+        //     <!-- type: 'post', -->
+        //     <!-- data: { -->
+        //         <!-- taskNo: taskNo, -->
+        // 		<!-- workNo,workNo, -->
+        // 		<!-- groupCode:localStorage.getItem("dataGroupCode") -->
+        //     <!-- }, -->
+        // 	<!-- headers:{ -->
+        // 	<!-- "methodName":"refund", -->
+        // 	<!-- "serviceName":"AppMaintainSend" -->
+        // 	<!-- }, -->
+        //     <!-- timeout: 3000, -->
+        //     <!-- success: function(data) { -->
+        //         <!-- relaodSelf(); -->
+        //     <!-- } -->
+        // <!-- }) -->
+    }
+
+    $('#sign').click(function() {
+        if (needSign == "Y") {
+            location.href = "sign.html";
+        } else {
+            $('#warn small').html("签到功能暂未开放");
+            $('#warn').fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+        }
+    })
+</script>
+<script type="text/javascript">
+    var sigture = localStorage.getItem('sigture');
+    var isPhoto = localStorage.getItem('isPhoto');
+    var status = "";
+    var isCurrentDealer = "";
+    var audioUrl = "";
+
+    function showDetail1(taskNo) {
+        $("#taskNo1").html(taskNo);
+        $.ajax({
+            url: baseUrl + 'maintainxController.do?getInNeedMsg',
+            type: 'get',
+            data: {
+                taskNo: taskNo
+            },
+            timeout: 3000,
+            success: function(data) {
+                var data = JSON.parse(data);
+                console.log(data);
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].operation_route == "搁置订单") {
+                        $("#gezhiReason").html(data[i].handle_advice);
+                        $("#gezhiName").html(data[i].creator_name);
+                        $("#gezhiTime").html(data[i].create_date);
+                    } else if (data[i].operation_route == "转单") {
+                        $("#zhuandanReason").html(data[i].handle_advice);
+                        $("#zhuandanName").html(data[i].creator_name);
+                        $("#zhuandanTime").html(data[i].create_date);
+                    } else if (data[i].operation_route == "退单") {
+                        $("#tuidanReason").html(data[i].handle_advice);
+                        $("#tuidanName").html(data[i].creator_name);
+                        $("#tuidanTime").html(data[i].create_date);
+                    }
+
+                }
+            }
+        })
+    }
+
+    function showDetail(taskNo1) {
+        // eiInfo.set()
+        var prame = {
+            taskNo: taskNo1,
+            dataGroupCode,
+            role,
+            needExcutor: 1
+        };
+        prame = JSON.stringify(prame);
+        if (localStorage.getItem("layBy") == "Y")
+            $(".gezhi").show();
+
+        else
+            $(".gezhi").hide();
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            data: {
+                prames: prame
+            },
+            headers: {
+                "methodName": "queryTaskInfo",
+                "serviceName": "MTRE01"
+            },
+            timeout: 30000,
+            success: function(data) {
+                //var data = JSON.parse(data);
+                console.log(data);
+                //console.log(data.pics.pic1);
+                if (data.status == "-1") {
+                    $('#warn small').html(data.respMsg);
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                }
+                data = data.attr
+                var impFlagName = "紧急";
+                if (data.impFlag != "Y") {
+                    impFlagName = "不紧急";
+                }
+                var supportorMobile = data.supportorMobile == null ? "" : data.supportorMobile;
+                var s1 = supportorMobile.replace(/,/g, ", ");
+                status = data.statusCode;
+                // $('#deviceDang').html(data.devName);
+
+                $("#taskNo").html(data.taskNo);
+                $("#impFlag").html(impFlagName);
+                $("#statusName").html(data.task);
+                $("#name").html(data.reqStaffId);
+                $("#recCreateTime").html(data.registerTime);
+                // 新增
+                $("#dispatTime").html(data.dispatchPeopleTime);
+                $("#finishTime").html(data.finishTime);
+                var taskEval = ''
+                switch (data.taskEval) {
+                    case '10':
+                        taskEval = '很满意'
+                        break;
+                    case '8':
+                        taskEval = '满意'
+                        break;
+                    case '6':
+                        taskEval = '一般'
+                        break;
+                    case '4':
+                        taskEval = '差'
+                        break;
+                    case '2':
+                        taskEval = '很差'
+                        break;
+                    default:
+                        taskEval = ''
+                }
+
+                $("#taskEval").html(taskEval);
+
+                $("#reqTelNum").html(data.reqTelNum);
+                $("#reqDeptName").html(data.reqDeptName);
+                $("#reqSpotName").html(data.reqSpotName);
+                $("#wgroupName").html(data.wgroupName);
+                // $("#supportor").html(data.supportor);
+                // $("#supportorMobile").html(s1);
+                $("#itemTypeName").html(data.itemTypeName);
+                $("#itemName").html(data.itemName);
+                $("#comments").html(data.comments);
+                $("#refundReason").html(data.refundReason);
+                // $("#refundReasonName").html(data.refundReason);
+                //$("#orderTime").html(data.appoinTime.substring(0, 16));
+                $("#gezhiReason").html(data.shelvingReason);
+                $("#mainComments").html(data.mainComments);
+                $("#excutors").html(data.excutors);
+                var returnReason = ''
+                switch (data.statusCode) {
+                    case '08':
+                        returnReason = data.returnReason8
+                        break;
+                    case '11':
+                        returnReason = data.returnReason11
+                        break;
+                    case '12':
+                        returnReason = data.returnReason12
+                        break;
+                    case '98':
+                        returnReason = data.cancelReason
+                        break;
+                    default:
+                        returnReason = ''
+                }
+                $("#refundReason").html(returnReason);
+
+                // 录音
+
+                audioUrl = baseUrl + data.audio;
+                // console.log(data.audio)
+                if (data.audio != "") {
+                    $(".audio").show();
+                } else {
+                    $(".audio").hide();
+                }
+                if (data.pic1 != "") {
+                    $('#pictureBX').html("");
+                    // 报修
+                    drawImage(data.pic1, 1);
+                    if (data.pic2 != "") {
+                        drawImage(data.pic2, 1);
+                    }
+                    if (data.pic3 != "") {
+                        drawImage(data.pic3, 1);
+                    }
+                }
+                if (data.refund1 != "") {
+                    $('#pictureRF').html("");
+                    // 退单
+                    drawImage(data.refund1, 5);
+                    if (data.pic2 != "") {
+                        drawImage(data.refund2, 5);
+                    }
+                    if (data.refund3 != "") {
+                        drawImage(data.refund3, 5);
+                    }
+                }
+                // 签字
+                if (data.signature != "") {
+                    $('#pictureQZ').html("");
+                    drawImage(data.signature, 4);
+                }
+
+                //完工签名图片
+                if (sigture == 'Y') {
+                    $('#pictureShow').show();
+                    if (data.signature == null) {
+                        $('#pictureShow img').hide()
+
+                    } else {
+                        $('#pictureShow img').show()
+                        if (data.signature != "") {
+                            $('#pictureShow img').attr('src', 'data:image/jpeg;base64,' + data.signature);
+                        } else {
+                            $('#pictureShow img').attr('src', '../../img/alipay.png');
+                        }
+                    }
+                }
+
+                //完工拍照图片
+                if (isPhoto == 'Y') {
+                    //var picturess = JSON.parse(data.pics.pictures);
+                    //if (picturess != '{}') {
+                    if (data.finish1 != "") {
+                        $('#pictureWG').html("");
+                        drawImage(data.finish1, 3);
+                    }
+                    if (data.finish2 != "") {
+                        drawImage(data.finish2, 3);
+                    }
+                    if (data.finish3 != "") {
+                        drawImage(data.finish3, 3);
+                    }
+                    // }
+                }
+                $("#loading").hide();
+
+            },
+            complete: function(XMLHttpRequest, status) { //请求完成后最终执行参数
+
+                if (status == 'timeout') {
+                    $("#loading").hide();
+                    $('#warn small').html('加载失败！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                } else if (status == 'error') {
+                    $("#loading").hide();
+                    $('#warn small').html('网络异常！');
+                    $("#warn").fadeIn(500);
+                }
+            }
+        });
+
+        //语音
+        var adu = '';
+        var pram = {
+            taskNo: taskNo1
+        };
+        adu = JSON.stringify(pram);
+        // 查询语音
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            data: {
+                prames: adu
+            },
+            headers: {
+                "methodName": "showAudio",
+                "serviceName": "MTRE01"
+            },
+            success: function(data) {
+                console.log(data)
+                var str = data.attr.base64;
+                // console.log(data.attr.base64)
+                $(".audio img").attr("base64Str", data.attr.base64)
+                onLoadAmrFile(str);
+            }
+        })
+        var pra = '';
+        var pram = {
+            taskNo: taskNo1,
+            type: 'RE'
+        };
+        pra = JSON.stringify(pram);
+        // 查询报修图片
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            data: {
+                prames: pra
+            },
+            headers: {
+                "methodName": "showPic",
+                "serviceName": "MTRE01"
+            },
+            success: function(data) {
+                var html = '';
+                //var data = eval("(" + data + ")");
+                var data = data.attr.list;
+                console.log(data);
+                for (var i = 0; i < data.length; i++) {
+                    drawImage(data[i].base64, 1);
+                }
+
+            }
+        })
+        var praa = '';
+        var pram = {
+            taskNo: taskNo1,
+            type: 'FS'
+        };
+        praa = JSON.stringify(pram);
+        // 查询完工图片
+        $.ajax({
+                url: baseUrl + 'MobileAgentService',
+                type: 'post',
+                data: {
+                    prames: praa
+                },
+                headers: {
+                    "methodName": "showPic",
+                    "serviceName": "MTRE01"
+                },
+                success: function(data) {
+                    var html = '';
+                    //var data = eval("(" + data + ")");
+                    var data = data.attr.list;
+                    console.log(data);
+                    $('#pictureWG') && $('#pictureWG').html("")
+                        // $('#pictureBX')&&$('#pictureBX').html("")
+                        // $('#pictureRF')&&$('#pictureRF').html("")
+
+                    for (var i = 0; i < data.length; i++) {
+                        drawImage(data[i].base64, 3);
+                    }
+
+                }
+            })
+            //查询工单耗材
+        var coursePrame = {
+            taskNo: taskNo1,
+        };
+        coursePrame = JSON.stringify(coursePrame);
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            data: {
+                prames: coursePrame
+            },
+            headers: {
+                "methodName": "query",
+                "serviceName": "MTFS0102"
+            },
+            success: function(data) {
+                var html = '';
+                console.log(data)
+                    //var data = eval("(" + data + ")");
+                if (data.blocks.result != undefined) {
+                    var data = data.blocks.result.rows;
+                    // console.log(data);
+                    for (var i = 0; i < data.length; i++) {
+                        var matNum = data[i].matNum;
+                        var matTypeNum = data[i].matTypeNum;
+                        var matName = data[i].matName;
+                        var matTypeName = data[i].matTypeName;
+                        var num = data[i].num
+                        html += cancelCai(num, matName, matTypeName)
+                    }
+                }
+                $("#matCai").html(html);
+            }
+        })
+    }
+    //耗材
+    function cancelCai(num, matName, matTypeName) {
+        var html = '';
+        html += '<div class="row" style="margin-top:10px;"><div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">' + matName + '</div><div id="matName" class="col-xs-5 col-sm-5 col-md-5 col-lg-5">' + matTypeName + '</div><div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 left-nopadding right">' + num + '</div></div>'
+        return html;
+    }
+
+    function drawImage(imageBase64, index) {
+
+
+        if (imageBase64 == '' || imageBase64 == null || imageBase64 == 'null') {
+            return;
+        }
+        var img = $('<img class="img-circle" style="width:100%;">');
+        img.attr('src', "data:image/jpeg;base64," + imageBase64);
+        var a = $('<a href="#" class="thumbnail"></a>');
+        var div = $('<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>');
+        img.appendTo(a);
+        a.appendTo(div);
+        // 报修
+        if (index == 1) {
+            div.appendTo('#pictureBX');
+        }
+        // 退单
+        if (index == 5) {
+            div.appendTo('#pictureRF');
+        }
+        // 完工
+        if (index == 3) {
+
+            div.appendTo('#pictureWG');
+
+        }
+        // 签字
+        if (index == 4) {
+            $('#pictureQZ').html("");
+            div.appendTo('#pictureQZ');
+        }
+        var width = $("a.thumbnail:parent").width();
+        $("img.img-circle").css('height', width);
+
+        $('a.thumbnail').click(function() {
+            _this = $(this);
+            $(".bigPicture").removeAttr("style");
+            var image = new Image();
+            image.src = $(this).find('img').attr('src');
+            var width;
+            var height;
+            if (image.width >= image.height) {
+                $(".bigPicture").css("width", screen.width - 40);
+            } else {
+                var i;
+                height = screen.height - 200;
+                i = image.height / height;
+                width = image.width / i;
+            }
+            $(".bigPicture").css("width", width);
+            $(".bigPicture").css("height", height);
+            $(".bigPicture").attr("src", $(this).find('img').attr('src'));
+            $('#myModalDetail').modal('show');
+            return false;
+        });
+    }
+
+
+    /**
+     * 播放语音
+     * @return {[type]} [description]
+     */
+    // $(".audio img").click(function() {
+
+
+    // $(this).attr("src", "img/stop.png");
+
+    //     console.log(1);
+    // var base64 = $(this).attr("base64Str")
+    // console.log(base64)
+    // playAudio(base64);
+    //         // console.log(base64Str)
+    //         // 转成.amr文件播放  
+    //     mui.plusReady(function() {
+    //         // 在这里调用plus api  
+    //         dataURL2Audio(base64Str, function(entry) {
+    //             var toURL = entry.toURL();
+    //             // 播放音频  
+    //             playAudio(toURL);
+    //         })
+    //     });
+
+    // });
+
+    // document.querySelector('.audio img').addEventListener('tap', function() {
+    //     // 语音文件Base64编码（由于编码过长影响阅读体验，请查看工程验证）  
+    //     var base64Str = $(this).attr("base64Str")
+    //         // console.log(base64Str)
+    //         // 转成.amr文件播放  
+    //     dataURL2Audio(base64Str, function(entry) {
+    //         var toURL = entry.toURL();
+    //         // 播放音频  
+    //         playAudio(toURL);
+    //     })
+    // })
+
+
+
+    // function dataURL2Audio(base64Str, callback) {
+    //     var base64Str = base64Str.replace('data:audio/amr;base64,', '');
+    //     var audioName = (new Date()).valueOf() + '.amr';
+    //     console.log(base64Str)
+    //     plus.io.requestFileSystem(plus.io.PRIVATE_DOC, function(fs) {
+    //         fs.root.getFile(audioName, {
+    //             create: true
+    //         }, function(entry) {
+    //             // 获得平台绝对路径  
+    //             var fullPath = entry.fullPath;
+    //             if (mui.os.android) {
+    //                 // 读取音频  
+    //                 var Base64 = plus.android.importClass("android.util.Base64");
+    //                 var FileOutputStream = plus.android.importClass("java.io.FileOutputStream");
+    //                 try {
+    //                     var out = new FileOutputStream(fullPath);
+    //                     var bytes = Base64.decode(base64Str, Base64.DEFAULT);
+    //                     out.write(bytes);
+    //                     out.close();
+    //                     // 回调  
+    //                     callback && callback(entry);
+    //                 } catch (e) {
+    //                     console.log(e.message);
+    //                 }
+    //             } else if (mui.os.ios) {
+    //                 var NSData = plus.ios.importClass('NSData');
+    //                 var nsData = new NSData();
+    //                 nsData = nsData.initWithBase64EncodedStringoptions(base64Str, 0);
+    //                 if (nsData) {
+    //                     nsData.plusCallMethod({
+    //                         writeToFile: fullPath,
+    //                         atomically: true
+    //                     });
+    //                     plus.ios.deleteObject(nsData);
+    //                 }
+    //                 // 回调  
+    //                 callback && callback(entry);
+    //             }
+    //         })
+    //     })
+    // }
+    // function playAudio() {
+    //     var my_media = new Media(audioUrl,
+    //         function() {
+    //             $(".audio img").attr("src", "img/play.png");
+    //         },
+    //         function(err) {
+    //             showMsg("playAudio():Audio Error: " + err);
+    //         }
+    //     );
+    //     my_media.play();
+    // }
+    // function playAudio(path) {
+    //     var player = plus.audio.createPlayer(path);
+    //     player.play(function() {
+    //         mui.toast("播放成功");
+    //     }, function(e) {
+    //         mui.toast("播放失败");
+    //     });
+    // }
+    function onLoadAmrFile(str) {
+        amr = new BenzAMRRecorder();
+        // loadDemoBtn.setAttribute('disabled', true);
+        // loadAmrFile.setAttribute('disabled', true);
+        // playBtn.setAttribute('disabled', true);
+        var base64 = str;
+
+
+        amr.initWithBlob(base64ToBlob(base64)).then(function() {
+            // loadDemoBtn.removeAttribute('disabled');
+            // loadAmrFile.removeAttribute('disabled');
+            // playBtn.removeAttribute('disabled');
+            // progressCtrl.removeAttribute('disabled');
+            // progressCtrl.setAttribute('max', amr.getDuration());
+            // duration.innerHTML = amr.getDuration().toFixed(2) + '\'';
+        });
+
+        // 绑定事件
+        amr.onPlay(function() {
+            console.log('Event: play');
+            // playBtn.innerHTML = '停止';
+            $('.audio img').attr("src", "img/stop.png");
+        });
+        amr.onPause(function() {
+            console.log('Event: stop');
+            // playBtn.innerHTML = '播放';
+            $('.audio img').attr("src", "img/play.png");
+        });
+        amr.onResume(function() {
+            console.log('Event: resume');
+            // playBtn.innerHTML = '暂停';
+            $('.audio img').attr("src", "img/stop.png");
+        });
+        amr.onEnded(function() {
+            console.log('Event: ended');
+            // playBtn.innerHTML = '播放';
+            $('.audio img').attr("src", "img/play.png");
+        });
+        amr.onAutoEnded(function() {
+            console.log('Event: autoEnded');
+        });
+        // amr.onStartRecord(function() {
+        //     console.log('Event: startRecord');
+        // });
+        // amr.onFinishRecord(function() {
+        //     console.log('Event: finishRecord');
+        // });
+        // amr.onCancelRecord(function() {
+        //     console.log('Event: cancelRecord');
+        // });
+    };
+
+    function E(selector) {
+        return document.querySelector(selector);
+    }
+
+    function base64ToBlob(base64) {
+        base64 = 'data:audio/amr;base64,' + base64
+        let arr = base64.split(",");
+        let mime = arr[0].match(/:(.*?);/)[1];
+        let bytes = window.atob(arr[1]);
+        let ab = new ArrayBuffer(bytes.length);
+        let ia = new Uint8Array(ab);
+        for (let i = 0; i < bytes.length; i++) {
+            ia[i] = bytes.charCodeAt(i);
+        }
+        return new Blob([ab], {
+            type: mime
+        });
+    }
+    var amr;
+    var playBtn = E('.audio img');
+    playBtn.onclick = function() {
+        amr.playOrPauseOrResume();
+    };
+</script>
+
+</html>

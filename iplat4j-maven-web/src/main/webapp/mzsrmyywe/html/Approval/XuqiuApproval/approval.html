@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../../reference/mui/css/mui.min.css" />
+    <!-- <link rel="stylesheet" href="" /> -->
+</head>
+<style type="text/css">
+    #app {
+        /* height: 100; */
+        background-color: #f5f5f5;
+    }
+
+    .tabbar {
+        /* margin-top: 55px; */
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+        position: fixed;
+        top: 44px;
+        left: 0;
+        right: 0;
+        z-index: 122;
+        /* margin-bottom: 32px; */
+        /* padding:0px 32px; */
+    }
+
+    .tabbar>div {
+        width: 50%;
+        height: 50px;
+        box-sizing: border-box;
+        text-align: center;
+        line-height: 34px;
+        font-size: 16px;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #fff;
+    }
+
+    .addColor {
+        font-weight: 600;
+        color: #30c37c;
+    }
+
+    .borders {
+        width: 40px;
+        height: 4px;
+        border-radius: 12px;
+        background-color: #30c37c;
+        transition: all .1s;
+    }
+
+    .content {
+        /* margin-top: 102px; */
+        position: relative;
+        top: 112px;
+        box-sizing: border-box;
+        padding: 0px 16px 16px 16px;
+        background-color: #f5f5f5;
+    }
+
+    .list {
+        box-sizing: border-box;
+        padding: 16px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px 5px #f2f2f2;
+        margin-bottom: 16px;
+    }
+
+    .list .title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-sizing: border-box;
+        padding-bottom: 14px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .bottom .item{
+        height: 28px;
+        font-size: 16px;
+        color: #333;
+    }
+    .bottom .item > span:first-child{
+        /* color: #888; */
+    }
+    
+   
+</style>
+
+<body>
+    <div id="app">
+        <header class="mui-bar mui-bar-nav">
+            <h1 class="mui-title">需求计划审批</h1>
+            <button id="back" onclick="onBackKeyDown()" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+                <span class="mui-icon mui-icon-left-nav"></span>
+                返回
+            </button>
+        </header>
+        <!-- 选项卡 -->
+        <div class="tabbar">
+            <div id="dealt" class="left">
+                <span class="addColor">待审批</span>
+                <div class="borders"></div>
+            </div>
+            <div id="mine" class="right">
+                <span>我的</span>
+            </div>
+        </div>
+        <!-- 内容 -->
+        <div class="content" id="XuqiuContent">
+            <!-- <div class="list" onclick="toDeatil()">
+                <div class="title">
+                    <div class="taskNo" style="color: #30c37c;font-size:17px;font-weight:600;">MPY22000000001</div>
+                    <div class="status" style="color: #666;font-size: 15px;">待审批</div>
+                </div>
+                <div class="bottom" style="margin-top:16px;">
+                    <div class="item"><span>科室：</span><span>物业管理科</span></div>
+                    <div class="item"><span>计划类型：</span><span>年度</span></div>
+                    <div class="item"><span>计划时间：</span><span>2022</span></div>
+                    <div class="item"><span>计划总数：</span><span>234</span></div>
+                    <div class="item"><span>计划总价(元)：</span><span>201.50</span></div>
+                    <div class="item"><span>备注：</span><span>备注一</span></div>
+                </div>
+            </div>
+            <div class="list">
+                <div class="title">
+                    <div class="taskNo" style="color: #30c37c;font-size:17px;font-weight:600;">MPY22000000001</div>
+                    <div class="status" style="color: #666;">待审批</div>
+                </div>
+                <div class="bottom" style="margin-top:16px;">
+                    <div class="item"><span>科室：</span><span>物业管理科</span></div>
+                    <div class="item"><span>计划类型：</span><span>年度</span></div>
+                    <div class="item"><span>计划时间：</span><span>2022</span></div>
+                    <div class="item"><span>计划总数：</span><span>234</span></div>
+                    <div class="item"><span>计划总价(元)：</span><span>201.50</span></div>
+                    <div class="item"><span>备注：</span><span>备注一</span></div>
+                </div>
+            </div>
+            <div class="list">
+                <div class="title">
+                    <div class="taskNo" style="color: #30c37c;font-size:17px;font-weight:600;">MPY22000000001</div>
+                    <div class="status" style="color: #666;">待审批</div>
+                </div>
+                <div class="bottom" style="margin-top:16px;">
+                    <div class="item"><span>科室：</span><span>物业管理科</span></div>
+                    <div class="item"><span>计划类型：</span><span>年度</span></div>
+                    <div class="item"><span>计划时间：</span><span>2022</span></div>
+                    <div class="item"><span>计划总数：</span><span>234</span></div>
+                    <div class="item"><span>计划总价(元)：</span><span>201.50</span></div>
+                    <div class="item"><span>备注：</span><span>备注一</span></div>
+                </div>
+            </div> -->
+        </div>
+        <!--  -->
+        <div class="content" id="mineContent" hidden>
+            <div class="list" onclick="toDeatil()">
+                <div class="title">
+                    <div class="taskNo" style="color: #30c37c;font-size:17px;font-weight:600;">MPY22000000001</div>
+                    <div class="status" style="color: #666;font-size: 15px;">已汇总</div>
+                </div>
+                <div class="bottom" style="margin-top:16px;">
+                    <div class="item"><span>科室：</span><span>物业管理科</span></div>
+                    <div class="item"><span>计划类型：</span><span>年度</span></div>
+                    <div class="item"><span>计划时间：</span><span>2022</span></div>
+                    <div class="item"><span>计划总数：</span><span>234</span></div>
+                    <div class="item"><span>计划总价(元)：</span><span>201.50</span></div>
+                    <div class="item"><span>备注：</span><span>备注一</span></div>
+                </div>
+            </div>
+            <div class="list">
+                <div class="title">
+                    <div class="taskNo" style="color: #30c37c;font-size:17px;font-weight:600;">MPY22000000001</div>
+                    <div class="status" style="color: #666;">已汇总</div>
+                </div>
+                <div class="bottom" style="margin-top:16px;">
+                    <div class="item"><span>科室：</span><span>物业管理科</span></div>
+                    <div class="item"><span>计划类型：</span><span>年度</span></div>
+                    <div class="item"><span>计划时间：</span><span>2022</span></div>
+                    <div class="item"><span>计划总数：</span><span>234</span></div>
+                    <div class="item"><span>计划总价(元)：</span><span>201.50</span></div>
+                    <div class="item"><span>备注：</span><span>备注一</span></div>
+                </div>
+            </div>
+            <div class="list">
+                <div class="title">
+                    <div class="taskNo" style="color: #30c37c;font-size:17px;font-weight:600;">MPY22000000001</div>
+                    <div class="status" style="color: #666;">已汇总</div>
+                </div>
+                <div class="bottom" style="margin-top:16px;">
+                    <div class="item"><span>科室：</span><span>物业管理科</span></div>
+                    <div class="item"><span>计划类型：</span><span>年度</span></div>
+                    <div class="item"><span>计划时间：</span><span>2022</span></div>
+                    <div class="item"><span>计划总数：</span><span>234</span></div>
+                    <div class="item"><span>计划总价(元)：</span><span>201.50</span></div>
+                    <div class="item"><span>备注：</span><span>备注一</span></div>
+                </div>
+            </div>
+        </div>
+        
+
+</body>
+<script src="../../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script type="text/javascript">
+    // ../../reference/bootstrap-3.3.5/js/jquery-2.1.4.js
+// window.onload = function(){
+    $('#dealt').click(function(){
+        $('#dealt span').addClass('addColor')
+        $('#mine span').removeClass('addColor')
+        $('#dealt div').css('transform','translateX(0px)') 
+        $('#XuqiuContent').show()
+        $('#mineContent').hide()
+    })
+    $('#mine').click(function(){
+        $('#dealt span').removeClass('addColor')
+        $('#mine span').addClass('addColor')
+        $('#dealt div').css('transform','translateX('+window.innerWidth/2+'px)') 
+        $('#XuqiuContent').hide()
+        $('#mineContent').show()
+    })
+    getContent()
+    function getContent() {
+        if (decodeURI(location.href)) {
+            console.log('1');
+            if (decodeURI(location.href).split("?")[1].split("=")[1] == 'approval') {
+                console.log('2');
+                $('#dealt span').removeClass('addColor')
+                $('#mine span').addClass('addColor')
+                $('#dealt div').css('transform', 'translateX(' + window.innerWidth / 2 + 'px)')
+                $('#XuqiuContent').hide()
+                $('#mineContent').show()
+            }
+        }
+        let content = [{ create_time: '2020-9-8', create_people: '李一', allNum: 100, price: 99 },
+        { create_time: '2020-9-8', create_people: '李一', allNum: 100, price: 99 },
+        { create_time: '2020-9-8', create_people: '李一', allNum: 100, price: 99 }]
+        for (let i = 0; i < content.length; i++) {
+            $('#XuqiuContent').append(` <div class="list listBuku">
+                <div class="title">
+                    <div class="taskNo taskNoBuko" style="color: #30c37c;font-size:17px;font-weight:600;">MPY2200000000${i}</div>
+                    <div class="status" style="color: #666;">待审批</div>
+                </div>
+                <div class="bottom" style="margin-top:16px;">
+                    <div class="item"><span>科室：</span><span>物业管理科</span></div>
+                    <div class="item"><span>计划类型：</span><span>年度</span></div>
+                    <div class="item"><span>计划时间：</span><span>2022-9-1${i}</span></div>
+                    <div class="item"><span>计划总数：</span><span>${i+1}34</span></div>
+                    <div class="item"><span>计划总价(元)：</span><span>201.50</span></div>
+                    <div class="item"><span>备注：</span><span>备注${i}</span></div>
+                </div>
+            </div>`)
+        }
+    }
+    let listBuku = document.getElementsByClassName('listBuku')
+    let taskNo = document.getElementsByClassName('taskNoBuko')
+    let status = document.getElementsByClassName('status')
+    for (let j = 0; j < listBuku.length; j++) {
+        listBuku[j].onclick = function () {
+            if(status[j].innerText == '待审批'){
+                location.href = './approvalDeatil.html?taskNo=' + taskNo[j].innerText
+            }
+            
+        }
+
+    }
+ // 返回
+ function onBackKeyDown() {
+        location.href = "../caigou.html"
+    }
+</script>
+
+</html>

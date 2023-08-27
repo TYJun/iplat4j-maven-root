@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="SSBMCpxx01">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.bm.domain.SSBMCpxx01">
+		SELECT
+		id as "id",  <!-- 主键 -->
+		menu_num as "menuNum",  <!-- 菜品编码 -->
+		menu_name as "menuName",  <!-- 菜品名称 -->
+		suit_group as "suitGroup",  <!-- 适宜人群 -->
+		not_suit_group as "notSuitGroup",  <!-- 不适宜人群 -->
+		menu_desc as "menuDesc",  <!-- 菜品备注 -->
+		menu_price as "menuPrice",  <!-- 菜品单价 -->
+		menu_pic_url as "menuPicUrl",  <!-- 菜品图片地址 -->
+		status_code as "statusCode",  <!-- 状态编码[启用(1)/停用(0)] -->
+		eval_level as "evalLevel",  <!-- 菜品评价等级 -->
+		canteen_num as "canteenNum",  <!-- 食堂编码 -->
+		menu_type_num as "menuTypeNum",  <!-- 菜品类型编码 -->
+		menu_type_name as "menuTypeName",  <!-- 菜品类型名称 -->
+		descption as "descption",  <!-- 菜品描述 -->
+		rec_create_time as "recCreateTime",  <!-- 创建时间 -->
+		rec_creator as "recCreator",  <!-- 创建人 -->
+		nutrition as "nutrition",  <!-- 营养价值 -->
+		heat as "heat",  <!-- 热量 -->
+		combo_rule_value as "comboRuleValue",  <!-- 套餐类型 -->
+		operate_code as "operateCode",
+		operate_name as "operateName",
+		menu_supply as "menuSupply",  <!-- 菜品供应量 -->
+		jp_menu_name as "jpMenuName",  <!-- 菜品名称简拼 -->
+		menu_fee as "menuFee" <!-- 打包费 -->
+		FROM sc_menu menu
+		WHERE 1=1
+        <isNotEmpty prepend=" AND " property="userId">
+            find_in_set(
+                menu.canteen_num,
+                (SELECT GROUP_CONCAT(canteen_num) 
+                FROM `sc_canteen_liaison_conf` 
+                where liaison_id like concat('%',#userId#,'%') ) 
+            ) 
+        </isNotEmpty>
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="menuName">
+            menu_name like
+            concat('%',#menuName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="canteenNum">
+            canteen_num = #canteenNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="menuTypeNum">
+            menu_type_num = #menuTypeNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="suitGroup">
+            suit_group like concat('%',#suitGroup#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="notSuitGroup">
+            not_suit_group like concat('%',#notSuitGroup#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCode"> 
+			status_code = #statusCode# 
+		</isNotEmpty>
+        order by rec_create_time desc
+	</select>
+
+<!-- 	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_menu WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select> -->
+
+	<!-- <isNotEmpty prepend=" AND " property="id"> id = #id# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="menuNum"> menu_num = #menuNum# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="menuName"> menu_name = #menuName# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="suitGroup"> suit_group = #suitGroup# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="notSuitGroup"> not_suit_group 
+		= #notSuitGroup# </isNotEmpty> <isNotEmpty prepend=" AND " property="menuDesc"> 
+		menu_desc = #menuDesc# </isNotEmpty> <isNotEmpty prepend=" AND " property="menuPrice"> 
+		menu_price = #menuPrice# </isNotEmpty> <isNotEmpty prepend=" AND " property="menuPicUrl"> 
+		menu_pic_url = #menuPicUrl# </isNotEmpty> <isNotEmpty prepend=" AND " property="statusCode"> 
+		status_code = #statusCode# </isNotEmpty> <isNotEmpty prepend=" AND " property="evalLevel"> 
+		eval_level = #evalLevel# </isNotEmpty> <isNotEmpty prepend=" AND " property="canteenNum"> 
+		canteen_num = #canteenNum# </isNotEmpty> <isNotEmpty prepend=" AND " property="menuTypeNum"> 
+		menu_type_num = #menuTypeNum# </isNotEmpty> <isNotEmpty prepend=" AND " property="menuTypeName"> 
+		menu_type_name = #menuTypeName# </isNotEmpty> <isNotEmpty prepend=" AND " 
+		property="descption"> descption = #descption# </isNotEmpty> <isNotEmpty prepend=" 
+		AND " property="recCreateTime"> rec_create_time = #recCreateTime# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="recCreator"> rec_creator = #recCreator# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="nutrition"> nutrition 
+		= #nutrition# </isNotEmpty> <isNotEmpty prepend=" AND " property="heat"> 
+		heat = #heat# </isNotEmpty> <isNotEmpty prepend=" AND " property="comboRuleValue"> 
+		combo_rule_value = #comboRuleValue# </isNotEmpty> <isNotEmpty prepend=" AND 
+		" property="operateCode"> operate_code = #operateCode# </isNotEmpty> <isNotEmpty 
+		prepend=" AND " property="operateName"> operate_name = #operateName# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="menuSupply"> menu_supply = #menuSupply# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="jpMenuName"> jp_menu_name 
+		= #jpMenuName# </isNotEmpty> <isNotEmpty prepend=" AND " property="menuFee"> 
+		menu_fee = #menuFee# </isNotEmpty> -->
+
+	<insert id="insert">
+		INSERT INTO sc_menu (id,  <!-- 主键 -->
+		menu_num,  <!-- 菜品编码 -->
+		menu_name,  <!-- 菜品名称 -->
+		suit_group,  <!-- 适宜人群 -->
+		not_suit_group,  <!-- 不适宜人群 -->
+		menu_desc,  <!-- 菜品备注 -->
+		menu_price,  <!-- 菜品单价 -->
+		menu_pic_url,  <!-- 菜品图片地址 -->
+		status_code,  <!-- 状态编码[启用(1)/停用(0)] -->
+		eval_level,  <!-- 菜品评价等级 -->
+		canteen_num,  <!-- 食堂编码 -->
+		menu_type_num,  <!-- 菜品类型编码 -->
+		menu_type_name,  <!-- 菜品类型名称 -->
+		descption,  <!-- 菜品描述 -->
+		rec_create_time,  <!-- 创建时间 -->
+		rec_creator,  <!-- 创建人 -->
+		nutrition,  <!-- 营养价值 -->
+		heat,  <!-- 热量 -->
+		combo_rule_value,  <!-- 套餐类型 -->
+		operate_code,
+		operate_name,
+		menu_supply,  <!-- 菜品供应量 -->
+		jp_menu_name,  <!-- 菜品名称简拼 -->
+		menu_fee  <!-- 打包费 -->
+		)
+		VALUES (#id#, #menuNum#, #menuName#, #suitGroup#, #notSuitGroup#,
+		#menuDesc#, #menuPrice#, #menuPicUrl#, #statusCode#, #evalLevel#,
+		#canteenNum#, #menuTypeNum#, #menuTypeName#, #descption#,
+		#recCreateTime#, #recCreator#, #nutrition#, #heat#, #comboRuleValue#,
+		#operateCode#, #operateName#, #menuSupply#, #jpMenuName#, #menuFee#)
+	</insert>
+
+	<insert id="insertByUpload">
+		INSERT INTO sc_menu (id,  <!-- 主键 -->
+		menu_num,  <!-- 菜品编码 -->
+		menu_name,  <!-- 菜品名称 -->
+		menu_price,  <!-- 菜品单价 -->
+		status_code,  <!-- 状态编码[启用(1)/停用(0)] -->
+		canteen_num,  <!-- 食堂编码 -->
+		menu_type_num,  <!-- 菜品类型编码 -->
+		menu_type_name,  <!-- 菜品类型名称 -->
+		rec_create_time,  <!-- 创建时间 -->
+		rec_creator,  <!-- 创建人 -->
+		combo_rule_value,  <!-- 套餐类型 -->
+		operate_code,
+		operate_name,
+		menu_supply,  <!-- 菜品供应量 -->
+		menu_fee  <!-- 打包费 -->
+		)
+		VALUES (#id#, #menuNum#, #menuName#,#menuPrice#,  #statusCode#,
+		#canteenNum#, #menuTypeNum#, #menuTypeName#,
+		#recCreateTime#, #recCreator#, #comboRuleValue#,#operateCode#, #operateName#,
+		 #menuSupply#, #menuFee#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM sc_menu WHERE
+		id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_menu
+		SET
+		menu_num = #menuNum#,   <!-- 菜品编码 -->
+		menu_name = #menuName#,   <!-- 菜品名称 -->
+		suit_group = #suitGroup#,   <!-- 适宜人群 -->
+		not_suit_group = #notSuitGroup#,   <!-- 不适宜人群 -->
+		menu_desc = #menuDesc#,   <!-- 菜品备注 -->
+		menu_price = #menuPrice#,   <!-- 菜品单价 -->
+		menu_pic_url = #menuPicUrl#,   <!-- 菜品图片地址 -->
+		status_code = #statusCode#,   <!-- 状态编码[启用(1)/停用(0)] -->
+		eval_level = #evalLevel#,   <!-- 菜品评价等级 -->
+		canteen_num = #canteenNum#,   <!-- 食堂编码 -->
+		menu_type_num = #menuTypeNum#,   <!-- 菜品类型编码 -->
+		menu_type_name = #menuTypeName#,   <!-- 菜品类型名称 -->
+		descption = #descption#,   <!-- 菜品描述 -->
+		rec_create_time = #recCreateTime#,   <!-- 创建时间 -->
+		rec_creator = #recCreator#,   <!-- 创建人 -->
+		nutrition = #nutrition#,   <!-- 营养价值 -->
+		heat = #heat#,   <!-- 热量 -->
+		combo_rule_value = #comboRuleValue#,   <!-- 套餐类型 -->
+		operate_code = #operateCode#,
+		operate_name = #operateName#,
+		menu_supply = #menuSupply#,   <!-- 菜品供应量 -->
+		jp_menu_name = #jpMenuName#,   <!-- 菜品名称简拼 -->
+		menu_fee = #menuFee#  <!-- 打包费 -->
+		WHERE
+		id = #id#
+	</update>
+
+</sqlMap>

@@ -1,0 +1,224 @@
+<!doctype html>
+<html class="no-js">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" href="reference/mui/css/mui.min.css">
+		<link rel="stylesheet" href="reference/css/buttom.css">
+		<link rel="stylesheet" href="reference/css/common.css" />
+	</head>
+	<STYLE TYPE="text/css">
+		body {
+			background: #f7f7f7;
+		}
+		
+		.title-div {
+			position: fixed;
+			top: 44px;
+			left: 0;
+			right: 0;
+			z-index: 999;
+		}
+		
+		.big-titles {
+			height: 36px;
+			background: #FFFFFF;
+			padding: 0px 5px;
+		}
+		
+		.big-title {
+			width: 95%;
+			height: 36px;
+			line-height: 36px;
+			text-align: center;
+			margin-left: 2.5%;
+			font-size: 14px;
+			color: #d1d1d1;
+		}
+		
+		.small-title {
+			width: 80%;
+			height: 36px;
+			line-height: 36px;
+			text-align: center;
+			margin-left: 10%;
+			font-size: 12px;
+			color: #d1d1d1;
+		}
+		
+		.list-div {
+			width: 100%;
+			margin: 15px auto;
+			padding: 15px;
+			background: #fff;
+			box-shadow: 0px 2px 5px #d6d6d6;
+			border-radius: 2px;
+		}
+		
+		.list-title {
+			width: 100%;
+		}
+		
+		.title-name {
+			height: 36px;
+			line-height: 36px;
+			font-size: 18px;
+			font-weight: bold;
+		}
+		
+		.btn-appointment-div {
+			height: 36px;
+			text-align: right;
+			padding-top: 2px;
+		}
+		
+		.btn-appointment {
+			width: 80px;
+			border-radius: 15px;
+			border: 1px solid #2aabd2;
+			color: #2aabd2;
+		}
+		
+		.less-title {
+			color: #9a9a9a;
+			padding: 2px 0 7px 0;
+		}
+	</STYLE>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">会议列表</h1>
+			<button class="mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+		<span class="mui-icon mui-icon-left-nav"></span>
+		返回
+		</button>
+		</header>
+
+		<div id="warn" class="warn" hidden>
+			<small></small>
+		</div>
+
+		<div id="loading" class="loading1" hidden>
+			<div class="loading2">
+				<span class="mui-spinner" style="width:80px;height:80px;"></span>
+			</div>
+		</div>
+
+		<div class="title-div">
+			<div class="mui-row big-titles">
+				<div class="mui-col-sm-3 mui-col-xs-3 ">
+					<div class="big-title" style="border-bottom: 1px  solid #2aabd2;">全部</div>
+				</div>
+				<div class="mui-col-sm-3 mui-col-xs-3 ">
+					<div class="big-title">大型会议室</div>
+				</div>
+				<div class="mui-col-sm-3 mui-col-xs-3 ">
+					<div class="big-title">中型会议室</div>
+				</div>
+				<div class="mui-col-sm-3 mui-col-xs-3 ">
+					<div class="big-title">小型会议室</div>
+				</div>
+			</div>
+		</div>
+		<div class="mui-content" style="padding-top:86px;">
+
+		</div>
+
+	</body>
+	<script src="reference/mui/js/mui.min.js" type="text/javascript"></script>
+	<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+	<script src="reference/js/common.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		var baseUrl = localStorage.getItem("url");
+		var meetingType = "01,02,03";
+		var url = location.search;
+		var jsonStrBack = url.substring(1, url.length);
+		var jsonBack = JSON.parse(decodeURIComponent(jsonStrBack));
+
+		// /**
+		//  * 选择会议室
+		//  */
+		mui("body").on('tap', ".big-title", function() {
+			$(".big-title").css("border-bottom", "0");
+			$(".big-title").css("color", "#D1D1D1");
+			$(this).css("border-bottom", "1px solid #2aabd2");
+			$(this).css("color", "#2aabd2");
+			if($(this).text() == "全部") {
+				meetingType = "01,02,03";
+			} else if($(this).text() == "大型会议室") {
+				meetingType = "01";
+			} else if($(this).text() == "中型会议室") {
+				meetingType = "02";
+			} else {
+				meetingType = "03";
+			}
+			loadData();
+		});
+
+		loadData();
+
+		function loadData() {
+			var meetingDate = jsonBack.meetingDate;
+			var beginTime = jsonBack.beginTime;
+			var endTime = jsonBack.endTime;
+			var loading = '<div style="width:100%;text-align:center;margin-top:100px;font-size:40px;"><span class="mui-spinner"></span></div>';
+			$(".mui-content").html(loading);
+			$.ajax({
+				url: baseUrl + 'app_MeetingController.do?getMeetingList2',
+				type: 'post',
+				data: {
+					meetingType: meetingType,
+					meetingDate: meetingDate,
+					beginTime: beginTime,
+					endTime: endTime
+				},
+				success: function(data) {
+					var data = eval('(' + data + ')');
+					//console.log(data);
+					var list = data.obj;
+					console.log(list);
+					var html = '';
+					for(var i = 0; i < list.length; i++) {
+						html += createViews(list[i].id, list[i].meetinCode, list[i].meetingName, list[i].deviceCondition, list[i].meetingNumber);
+					}
+					$('.mui-content').html(html);
+				}
+			});
+		}
+
+		function createViews(meetingId, meetingCode, meetingName, deviceCondition, meetingNum) {
+			jsonBack.meetingId = meetingId;
+			jsonBack.meetingCode = meetingCode;
+			jsonBack.meetingName = meetingName;
+			jsonBack.deviceCondition = deviceCondition;
+			jsonBack.meetingNum = meetingNum;
+			var jsonStr = JSON.stringify(jsonBack);
+
+			var html = '<div class="list-div">';
+			html += '<div class="list-title">';
+			html += '<div class="mui-row">';
+			html += '<div class="mui-col mui-col-xs-8 title-name">' + meetingName + '</div>';
+			html += '<div class="mui-col mui-col-xs-4 btn-appointment-div">';
+			html += '<button id=\'' + jsonStr + '\' type="button" class="mui-btn mui-btn-outlined btn-appointment">选择</button>';
+			html += '</div>';
+			html += '<div class="mui-col mui-col-xs-12 less-title">' + deviceCondition + "&nbsp;" + meetingNum + '人</div>';
+			html += '</div>';
+			html += '</div>';
+
+			html += '</div>';
+			return html;
+		}
+
+		//预约按钮点击事件
+		mui("body").on('tap', 'button.btn-appointment', function() {
+			//		location.href = "meeting-edit.html?" + encodeURIComponent(this.id);
+			location.href = "application-edit.html?" + encodeURIComponent(this.id);
+		});
+	</script>
+
+</html>

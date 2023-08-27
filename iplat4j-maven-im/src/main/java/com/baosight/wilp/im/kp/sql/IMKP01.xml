@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-04-19 15:36:51
+   		Version :  6.0.731.201809200158
+		tableName :.device_card_maintain 
+		 cardID  VARCHAR   NOT NULL   primarykey, 
+		 cardCode  VARCHAR, 
+		 cardName  VARCHAR, 
+		 cardType  VARCHAR, 
+		 memo  VARCHAR, 
+		 createTime  DATETIME, 
+		 createMan  VARCHAR, 
+		 createIP  VARCHAR, 
+		 modifyTime  DATETIME, 
+		 modifyMan  VARCHAR, 
+		 modifyIP  VARCHAR, 
+		 status  INTEGER, 
+		 inspType  VARCHAR
+	-->
+<sqlMap namespace="IMKP01">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.im.kp.domain.IMKP01">
+		SELECT
+				cardID	as "cardid",  
+				cardCode	as "cardcode",  
+				cardName	as "cardname",  
+				cardType	as "cardtype",  
+				memo	as "memo",  
+				createTime	as "createtime",  
+				createMan	as "createman",  
+				createIP	as "createip",  
+				modifyTime	as "modifytime",  
+				modifyMan	as "modifyman",  
+				modifyIP	as "modifyip",  
+				status	as "status",  <!-- ״̬,0=δ -->
+				inspType	as "insptype" <!-- 巡检类型 -->
+		FROM di_card WHERE 1=1
+		<isNotEmpty prepend=" AND " property="cardid">
+			cardID = #cardid#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  cardID asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+	
+	
+	<select id="queryInfo" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+				cardID	as "cardid",  
+				cardCode	as "cardcode",  
+				cardName	as "cardname",  
+				cardType	as "cardtype",  
+				memo	as "memo",  
+				date_format(createTime,'%Y-%m-%d %H:%i:%s')	as "createtime",  
+				createMan	as "createman",  
+				createIP	as "createip",  
+				date_format(modifyTime,'%Y-%m-%d %H:%i:%s')	as "modifytime",  
+				modifyMan	as "modifyman",  
+				modifyIP	as "modifyip",   
+				(case when status > 0  then "启用" when status = 0 then "新建" else "禁用" end) as  "status"
+		FROM im_card WHERE 1=1
+		<isNotEmpty prepend=" AND " property="cardid">
+			cardID = #cardid#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="cardcode">
+			cardCode like concat('%',#cardcode#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="cardname">
+			cardName like concat('%',#cardname#,'%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status">
+			status = #status# 
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  cardID asc
+		</isEmpty>
+  		</dynamic>
+		limit #offset#,#limit#	
+	</select>
+	
+
+	<select id="count" resultClass="int">
+		SELECT cardID FROM im_card WHERE 1=1
+		<isNotEmpty prepend=" AND " property="cardid">
+			cardID = #cardid#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="cardcode">
+			cardCode like concat('%',#cardcode#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="cardname">
+			cardName like concat('%',#cardname#,'%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status">
+			status = #status# 
+		</isNotEmpty>
+	</select>
+	
+	
+
+	<insert id="insert">
+		INSERT INTO im_card (cardID,
+										cardCode,
+										cardName,
+										cardType,
+										memo,
+										createTime,
+										createMan,
+										createIP,
+										modifyTime,
+										modifyMan,
+										modifyIP,
+										status,  <!-- ״̬,0=δ -->
+										inspType  <!-- 巡检类型 -->
+										)		 
+	    VALUES (#cardid#, #cardcode#, #cardname#, #cardtype#, #memo#, #createtime#, #createman#, #createip#, #modifytime#, #modifyman#, #modifyip#, #status#, #insptype#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM im_card WHERE 
+			cardID = #cardid#
+	</delete>
+
+	<update id="update">
+		UPDATE im_card 
+		SET 
+					cardCode	= #cardcode#,   
+					cardName	= #cardname#,   
+					cardType	= #cardtype#,   
+					memo	= #memo#,   
+					createTime	= #createtime#,   
+					createMan	= #createman#,   
+					createIP	= #createip#,   
+					modifyTime	= #modifytime#,   
+					modifyMan	= #modifyman#,   
+					modifyIP	= #modifyip#,   
+					status	= #status#,   <!-- ״̬,0=δ -->  
+					inspType	= #insptype#  <!-- 巡检类型 -->  
+			WHERE 	
+			cardID = #cardid#
+	</update>
+	
+	<update id="statusUpdate" parameterClass="java.util.HashMap">
+		UPDATE im_card 
+		SET 
+					status	= #status#,
+					modifyTime	= #modifytime#,   
+					modifyMan	= #modifyMan# 
+			WHERE 	
+			cardID = #cardid#
+	</update>
+  
+</sqlMap>

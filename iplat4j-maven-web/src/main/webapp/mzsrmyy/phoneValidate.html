@@ -1,0 +1,185 @@
+<!-- <!DOCTYPE html> -->
+<html lang="no-js">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="https://gw.alipayobjects.com/as/g/antui/antui/10.1.10/dpl/antui.css">
+		<link rel="stylesheet" type="text/css" href="https://gw.alipayobjects.com/as/g/antui/antui/10.1.10/dpl/widget/loading.css">
+		<link rel="stylesheet" type="text/css" href="https://gw.alipayobjects.com/as/g/antui/antui/10.1.10/dpl/util/pricefont.css">
+		<link rel="stylesheet" type="text/css" href="./css/example.css">
+		<link rel="stylesheet" type="text/css" href="./css/weui.css">
+		<link rel="stylesheet" type="text/css" href="./css/iconfont.css">
+
+		<title>手机号验证</title>
+	</head>
+	<style type="text/css">
+		* {
+			box-sizing: border-box;
+		}
+		
+		.white-div {
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			z-index: 999;
+			background: #fff;
+		}
+		
+		.btn-div {
+			width: 100%;
+			padding: 10px;
+		}
+	</style>
+
+	<body>
+		<div id="app">
+			<!-- 页面过渡div -->
+			<div v-if="whiteShow" class="white-div"></div>
+			<div id="toastMsg" style="display: none;">
+				<div class="weui-mask_transparent"></div>
+				<div class="weui-toast">
+					<i class="weui-icon-cancel weui-icon_toast" style="font-size: 35px;"></i>
+					<p class="weui-toast__content">{{toastMsg}}</p>
+				</div>
+			</div>
+			<div class="am-list am-list-form">
+				<div class="am-list-body">
+					<div class="am-list-item am-input-autoclear">
+						<div class="am-list-label">手机号</div>
+						<div class="am-list-control">
+							<input v-model="phoneNo" type="text" placeholder="手机号" value="">
+						</div>
+						<div class="am-list-clear"><i class="am-icon-clear am-icon"></i></div>
+					</div>
+				</div>
+				<div class="am-list-item am-input-autoclear">
+					<div class="am-list-label" id="list-label-22">校验码</div>
+					<div class="am-list-control">
+						<input v-model="validateNo" id="demo-input-22" type="text" placeholder="输入短信校验码" value="" aria-labelledby="list-label-22">
+					</div>
+					<div class="am-list-clear" tabindex="0" aria-label="清空输入框" aria-controls="demo-input-22">
+						<i class="am-icon-clear am-icon" aria-hidden="true"></i>
+					</div>
+					<div class="am-list-button">
+						<button v-if="seconds==0" type="button" @click="getValidateNo" style="color: #09BB07;">发送校验码</button>
+						<button v-else type="button" disabled="disabled" style="color: #09BB07;">{{seconds}}秒后重发</button>
+					</div>
+				</div>
+			</div>
+			<div class="btn-div">
+				<button @click="validatePhone" type="button" class="btn-confirm weui-btn weui-btn_primary">确认</button>
+
+			</div>
+		</div>
+	</body>
+	<script src="./js/vue.min.js"></script>
+	<script src="./js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+	<script type="text/javascript">
+		new Vue({
+			el: '#app',
+			data: {
+				whiteShow: true,
+				loadShow: false,
+				dialogShow: false,
+				dicengShow: false,
+				toastMsg: "",
+				baseUrl: '',
+				phoneNo: '',
+				validateNo: '',
+				dataGroupCode: '',
+				seconds: 0
+			},
+			methods: {
+				init: function() {
+					var _this = this;
+					_this.baseUrl = localStorage.getItem("baseUrl");
+					_this.phoneNo = localStorage.getItem("phoneNo");
+					_this.dataGroupCode = localStorage.getItem("dataGroupCode");
+				},
+				getValidateNo: function() {
+					var _this = this;
+					$.ajax({
+						url: 'http://wx.yyhq365.cn/smp_wx/invoke',
+						type: 'post',
+						data: {
+							method: 'verification',
+							phone: _this.phoneNo,
+						},
+						success: function(data) {
+							var resp = JSON.parse(data);
+							if(resp.respCode == "200") {
+								
+								_this.showMsg("获取验证码成功")
+								_this.seconds = 60;
+								_this.countdown();
+							} else {
+							
+								_this.showMsg("获取验证码失败")
+							}
+						}
+					});
+				},
+				showMsg: function(msg) {
+					var _this = this
+					_this.toastMsg = msg
+					var $toast = $("#toastMsg")
+					if($toast.css('display') != 'none') return;
+					$toast.fadeIn(100);
+					setTimeout(function() {
+						$toast.fadeOut(100);
+					}, 2000);
+
+				},
+				countdown: function() {
+					var _this = this;
+					var timer = setInterval(function() {
+						_this.seconds--;
+						if(_this.seconds == 0)
+							clearInterval(timer);
+					}, 1000);
+				},
+				validatePhone: function() {
+					var _this = this;
+					if(_this.validateNo.trim() == "") {
+						
+						_this.showMsg("验证码不能为空")
+						return;
+					}
+					$.ajax({
+						url: 'http://wx.yyhq365.cn/smp_wx/invoke',
+						type: 'post',
+						data: {
+							method: 'verificationPhone',
+							phone: _this.phoneNo,
+							code: _this.validateNo,
+						},
+						success: function(data) {
+							var resp = JSON.parse(data);
+							if(resp.respCode == "200") {
+								_this.showMsg(resp.respMsg)
+								history.back(-1)
+							} else {
+								_this.showMsg(resp.respMsg)
+							}
+						}
+					});
+				}
+			},
+			mounted: function() {
+				this.$nextTick(function() {
+					this.init()
+					this.whiteShow = false
+				})
+			}
+		})
+	</script>
+
+</html>

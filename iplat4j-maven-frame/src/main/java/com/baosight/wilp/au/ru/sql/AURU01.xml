@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="AURU01">
+
+
+	<select id="queryRolePersonList" parameterClass="java.util.HashMap" 
+	 resultClass="java.util.HashMap">
+		SELECT t.* FROM (
+				select ap.id AS "id",
+						 ap.work_no AS "workNo",        
+						 ap.name AS "name",             
+						 (CASE WHEN ap.gender = '1' 
+										THEN '男' 
+							      ELSE '女'
+							 END) AS "gender",          
+						 ap.contact_tel AS "contactTel", 
+						 ap.dept_id AS "deptId",        
+						 ad.dept_name AS "deptName",    
+						 ap.id_no AS "idNo",            
+						 ap.type AS "type",              
+						 case ap.type 
+						 	when '01' then '本院职工'
+							when '02' then '外协单位员工' 
+						 	when '03' then '医院返聘职工' 
+							when '04' then '科室返聘职工' 
+							when '05' then '进修医生'
+					     	when '06' then '进修护士' 
+					     	when '07' then '实习医生'
+					     	when '08' then '实习护士'
+					     	when '09' then '研究生'
+					     	when '10' then '临时医技人员'
+					     	when '11' then '规范会培训生'
+					     	when '12' then '院聘临时工'
+					     	when '13' then '科聘临时工'
+		                 	when '99' then '其他人员"'
+					    end as"staffType",              
+						 (CASE WHEN ap.is_service = '1' 
+										THEN '是' 
+							      ELSE '否'
+							 END) AS "isService",       
+						 ap.status AS "status",
+						 (CASE WHEN ap.status = '1' 
+										THEN '启用'
+							      ELSE '停用'
+							 END) AS "isStatus"
+				from $projectSchema$.ac_personnel ap
+				INNER JOIN $projectSchema$.ac_department ad ON ad.id = ap.dept_id
+				INNER JOIN $projectSchema$.ac_rp arp ON arp.perl_id = ap.id
+				INNER JOIN $projectSchema$.ac_role ar ON ar.id = arp.role_id
+				WHERE 1=1
+				<isNotEmpty prepend=" AND " property="roleId">
+				arp.role_id = #roleId#
+				</isNotEmpty>
+				<isNotEmpty prepend=" AND " property="workNo">
+				ap.work_no = #workNo#
+				</isNotEmpty>
+				<isNotEmpty prepend=" AND " property="name">
+				ap.name like concat('%', #name#, '%')
+				</isNotEmpty>
+				<isNotEmpty prepend=" AND " property="deptName">
+				ad.dept_name = #deptName#
+				</isNotEmpty>
+				
+				GROUP BY
+				ap.work_no
+		    ) t 
+			WHERE 1=1
+			
+		
+	</select>
+	<select id="queryRolePersonListCount" parameterClass="java.util.HashMap"  resultClass="int">
+		SELECT count(1) FROM (
+		select ap.id AS "id",
+		ap.work_no AS "workNo",
+		ap.name AS "name",
+		(CASE WHEN ap.gender = '1'
+		THEN '男'
+		ELSE '女'
+		END) AS "gender",
+		ap.contact_tel AS "contactTel",
+		ap.dept_id AS "deptId",
+		ad.dept_name AS "deptName",
+		ap.id_no AS "idNo",
+		ap.type AS "type",
+		case ap.type
+		when '01' then '本院职工'
+		when '02' then '外协单位员工'
+		when '03' then '医院返聘职工'
+		when '04' then '科室返聘职工'
+		when '05' then '进修医生'
+		when '06' then '进修护士'
+		when '07' then '实习医生'
+		when '08' then '实习护士'
+		when '09' then '研究生'
+		when '10' then '临时医技人员'
+		when '11' then '规范会培训生'
+		when '12' then '院聘临时工'
+		when '13' then '科聘临时工'
+		when '99' then '其他人员"'
+		end as"staffType",
+		(CASE WHEN ap.is_service = '1'
+		THEN '是'
+		ELSE '否'
+		END) AS "isService",
+		ap.status AS "status",
+		(CASE WHEN ap.status = '1'
+		THEN '是'
+		ELSE '否'
+		END) AS "isStatus"
+		from $projectSchema$.ac_personnel ap
+		INNER JOIN $projectSchema$.ac_department ad ON ad.id = ap.dept_id
+		INNER JOIN $projectSchema$.ac_rp arp ON arp.perl_id = ap.id
+		INNER JOIN $projectSchema$.ac_role ar ON ar.id = arp.role_id
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="roleId">
+			arp.role_id = #roleId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workNo">
+			ap.work_no = #workNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="name">
+			ap.name like concat('%', #name#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			ad.dept_name = #deptName#
+		</isNotEmpty>
+
+		GROUP BY
+		ap.work_no
+		) t
+	</select>
+	
+	<select id="queryRoleTree" resultClass="java.util.HashMap">
+			SELECT t.* from (
+				SELECT id AS "label",
+				   role_num AS "roleNum",
+				   role_name AS "roleName",
+				   "root" AS "pId"
+				FROM $projectSchema$.ac_role
+				ORDER BY id
+			) t
+			WHERE 1=1
+			<isNotEmpty prepend=" AND " property="node">
+				t.pId = #node#
+			</isNotEmpty>
+	</select>
+	
+	<select id="queryRoleListByPerson" parameterClass="java.util.HashMap" 
+	 resultClass="java.util.HashMap">
+		SELECT ar.role_name AS "roleName", ar.remark
+		FROM $projectSchema$.ac_role ar 
+		LEFT JOIN $projectSchema$.ac_rp ON ar.id = ac_rp.role_id
+		WHERE ac_rp.perl_id = #perId#
+	</select>
+	<select id="queryRoleListByPersonCount" resultClass="int">
+		SELECT count(*)
+		FROM $projectSchema$.ac_role ar 
+		LEFT JOIN $projectSchema$.ac_rp ON ar.id = ac_rp.role_id
+		WHERE ac_rp.perl_id = #perId#
+	</select>
+	
+
+	
+	<insert id="insert" parameterClass="java.util.HashMap">
+		INSERT INTO $projectSchema$.ac_rp(id, role_id, perl_id) SELECT #id#, 
+		#roleId#,#perId# FROM DUAL WHERE NOT EXISTS(SELECT 1
+		FROM $projectSchema$.ac_rp WHERE role_id = #roleId# and perl_id = #perId#)
+	</insert>
+	
+	
+	<delete id="delete" parameterClass="java.util.HashMap">
+		DELETE FROM $projectSchema$.ac_rp WHERE 
+			role_id = #roleId# and perl_id = #perId#;
+	</delete>
+</sqlMap>

@@ -1,0 +1,301 @@
+<!doctype html>
+<html class="no-js">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="../reference/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css">
+		<link rel="stylesheet" href="../reference/css/common.css" />
+		<link rel="stylesheet" href="css/custom-recharge.css">
+		<link rel="stylesheet" href="css/iconfont.css">
+
+	</head>
+	<STYLE TYPE="text/css">
+		body {
+			/*background: #eee;*/
+		}
+		
+		.mui-bar-tab .mui-tab-item.mui-active {
+			color: #209c60;
+		}
+		
+		.start-date {
+			height: 40px;
+			line-height: 40px;
+			padding: 0 15px;
+			text-align: center;
+			color: #6f6f6f;
+			border-right: 1px solid #eee;
+		}
+		
+		.end-date {
+			height: 40px;
+			line-height: 40px;
+			padding: 0 15px;
+			color: #6f6f6f;
+			text-align: center;
+		}
+		
+		.selection:after {
+			right: 15px;
+			content: '\e583';
+			font-family: Muiicons;
+			font-size: inherit;
+			line-height: 1;
+			position: absolute;
+			top: 50%;
+			display: inline-block;
+			-webkit-transform: translateY(-50%);
+			transform: translateY(-50%);
+			text-decoration: none;
+			color: #bbb;
+			-webkit-font-smoothing: antialiased;
+		}
+		
+		.selection-div {
+			border-bottom: 1px solid #eee;
+			box-shadow: 0px 1px 3px #e2e2e2;
+		}
+		
+		.history-div {
+			width: 100%;
+			padding-left: 15px;
+			overflow: scroll;
+			overflow-x: hidden;
+		}
+		
+		.operate-info-div {
+			width: 100%;
+			padding: 10px 15px 10px 0;
+			border-bottom: 1px solid #eee;
+		}
+		
+		.operate-type {
+			font-weight: bold;
+		}
+		
+		.money-span {
+			font-size: 12px;
+		}
+		
+		.money {
+			font-size: 16px;
+			font-weight: bold;
+		}
+		
+		.info-type {
+			/*font-weight: bold;*/
+		}
+		
+		.info {
+			color: #7b7b7b;
+			font-size: 13px;
+		}
+		
+		.consume {
+			color: #ff6e63;
+		}
+		
+		.charge {
+			color: #4caf50;
+		}
+		
+		.no-views {
+			text-align: center;
+			margin-top: 50px;
+			margin-left: -15px;
+		}
+		.mui-bar {
+			background: #30c37c;
+		}
+	</STYLE>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">充值记录</h1>
+			<button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+	        <span class="mui-icon mui-icon-left-nav"></span>
+	        返回
+	    </button>
+		</header>
+
+		<div id="warn" class="warn" hidden>
+			<small></small>
+		</div>
+
+		<div class="mui-content">
+			<div class="mui-row selection-div">
+				<div id="startDate" class="mui-col-xs-6 selection start-date">开始日期</div>
+				<div id="endDate" class="mui-col-xs-6 selection end-date">结束日期</div>
+			</div>
+
+			<div id="historyList" class="history-div">
+				<!-- <div class="operate-info-div mui-row">
+				<div class="mui-col-xs-6 info-type">网络订餐</div>
+				<div class="mui-col-xs-6 info consume right">
+					<span class="money-span">¥ </span><span class="money">500</span>
+				</div>
+				<div class="mui-col-xs-12 info">
+					订单详情：午餐-小炒肉
+				</div>
+				<div class="mui-col-xs-12 info">
+					送餐地点：青菜岗院区(新)3号楼1F新院办(新)医生办公室
+				</div>
+				<div class="mui-col-xs-12 info">
+					2017-10-17 09:51:25
+				</div>
+			</div>
+			<div class="operate-info-div mui-row">
+				<div class="mui-col-xs-6 info-type">管理处充值</div>
+				<div class="mui-col-xs-6 info charge right">
+					<span class="money-span">¥ </span><span class="money">500</span>
+				</div>
+				<div class="mui-col-xs-12 info">
+					2017-10-17 09:51:25
+				</div>
+			</div> -->
+			</div>
+		</div>
+
+		<nav class="mui-bar mui-bar-tab" style="background:#fff;">
+			<!--<a id="charge" class="mui-tab-item" href="javascript:void(0)">
+				<span class="mui-icon iconfont icon-recharge"></span>
+				<span class="mui-tab-label">充值</span>
+			</a>-->
+
+			<a id="customHistory" class="mui-tab-item" href="javascript:void(0)">
+				<span class="mui-icon iconfont icon-xiaofeimingxi"></span>
+				<span class="mui-tab-label">消费记录</span>
+			</a>
+
+			<a id="rechargeHistory" class="mui-tab-item  mui-active" href="javascript:void(0)">
+				<span class="mui-icon iconfont icon-chongzhi"></span>
+				<span class="mui-tab-label">充值记录</span>
+			</a>
+		</nav>
+	</body>
+	<script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+	<script src="../reference/mui/js/mui.picker.min.js" type="text/javascript"></script>
+	<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+	<script src="../reference/js/common.js" type="text/javascript"></script>
+	<!-- <script src="../../cordova.js" type="text/javascript"></script> -->
+	<script type="text/javascript">
+		var baseUrl = localStorage.getItem("url");
+		var workNo = localStorage.getItem("workNo");
+		$('#historyList').height($(window).height() - 134);
+
+		document.addEventListener("deviceready", onDeviceReady, false);
+
+		function onDeviceReady() {
+			document.addEventListener("backbutton", onBackKeyDown, false);
+		}
+
+		function onBackKeyDown() {
+			location.href = "card-recharge.html";
+		}
+
+		var startDate = dateBeforeOrAfter(-30);
+		$('#startDate').html(startDate);
+		var endDate = date_YMD();
+		$('#endDate').html(endDate);
+
+		loadData();
+
+		function loadData() {
+			var loading = '<div style="width:100%;text-align:center;margin-top:100px;font-size:40px;"><span class="mui-spinner"></span></div>';
+			$("#historyList").html(loading);
+			$.ajax({
+				//url: baseUrl + 'app_billInfoController.do?queryCardRechargeRecordByWorkNo',
+				url: baseUrl + 'cardmeal',
+                type: 'post',
+                headers:{
+                    className : 'CardWorkConsumeService',
+                    methodName : 'queryRechargeRecord'
+                },
+				data: {
+					startTime: startDate,
+					endTime: endDate,
+					cardUserCode: workNo
+				},
+				success: function(data) {
+					//var data = JSON.parse(data);
+					console.log(data);
+					if(data.success) {
+						var list = data.obj;
+						console.log(list);
+
+						if(list == null || list == "null") {
+							var aaaaa = '<p class="no-views">———&nbsp;&nbsp;暂无数据&nbsp;&nbsp;———</p>';
+							$('#historyList').html(aaaaa);
+							return;
+						}
+						var view = '';
+						for(var i = 0; i < list.length; i++) {
+							view += createViews(list[i].cardRechargeTypeName, list[i].cardRechargePrice, list[i].cardBusinessCode, list[i].optTime, list[i].type);
+                        }
+						$('#historyList').html(view);
+					} else {
+						showMsg(data.respMsg);
+					}
+				}
+			});
+		}
+
+		function createViews(cardRechargeTypeName, cardRechargePrice, cardBusinessCode, optTime, type) {
+			var html = '<div class="operate-info-div mui-row">';
+			//html += '<div class="mui-col-xs-12 info" style="line-height:30px;color:#333;font-size:15px;">' + cardBusinessCode + '</div>';
+			html += '<div class="mui-col-xs-6 info-type" style="color:#7b7b7b;">' + cardRechargeTypeName + '</div>';
+			html += '<div class="mui-col-xs-6 info charge right">';
+			//			html += '<span class="money-span">¥ </span><span class="money">' + consumeMoney + '</span>';
+			if(type != 1)
+				html += '<span class="money">+ ' + cardRechargePrice/100 + '</span>';
+			else
+				html += '<span class="money" style="color:#f5675c;">- ' + cardRechargePrice/100 + '</span>';
+
+			html += '</div>';
+			html += '<div class="mui-col-xs-12 info-type" style="color:#7b7b7b;">' + optTime + '</div>';
+			html += '</div>';
+			return html;
+		}
+
+		var startDtPicker = new mui.DtPicker({ "type": "date", "endDate": new Date() });
+		document.getElementById('startDate').addEventListener('tap', function() {
+			startDtPicker.show(function(rs) {
+				startDate = rs.text;
+				$('#startDate').html(startDate);
+				// dtPicker.dispose();
+				loadData();
+			})
+		});
+
+		var endDtPicker = new mui.DtPicker({ "type": "date", "endDate": new Date() });
+		document.getElementById('endDate').addEventListener('tap', function() {
+			endDtPicker.show(function(rs) {
+				endDate = rs.text;
+				$('#endDate').html(endDate);
+				// dtPicker.dispose();
+				loadData();
+			})
+		});
+
+		document.getElementById('back').addEventListener('tap', function() {
+			location.href = "card-recharge.html";
+		});
+		//		document.getElementById('charge').addEventListener('tap', function() {
+		//			location.href = "card-recharge.html";
+		//		});
+		document.getElementById('customHistory').addEventListener('tap', function() {
+			location.href = 'custom-history.html';
+		});
+
+		document.getElementById('rechargeHistory').addEventListener('tap', function() {
+			location.href = 'recharge-history.html';
+		});
+	</script>
+
+</html>

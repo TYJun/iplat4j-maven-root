@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFKB01">
+
+	<!-- 获取设备分类信息-->
+	<select id="getDeviceTypeList" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select id,classify_name label, parent_id parentId from df_modulebaseclassfy
+	</select>
+
+	<!-- 根据设备分类获取设备信息 -->
+	<select id="queryDeviceList" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select id,machine_code deviceCode,machine_name deviceName from df_devicemachine where 1=1
+		<isNotEmpty prepend=" and " property="deviceTypeId">
+			machine_type_id = #deviceTypeId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" and " property="deviceName">
+			machine_name like concat('%', #deviceName#, '%')
+		</isNotEmpty>
+	</select>
+
+	<!--获取设备资产信息-->
+	<select id="queryDeviceInfo" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select
+			buy_time as date0,
+		    '资产信息(购买)' as cycle0,
+		    concat('品牌: ', maker_brand) as desc0,
+		    fixed_time as date1,
+			'资产信息(安装)' as cycle1,
+		    concat('安装地点: ', fixed_place) as desc1,
+		    use_time as date2,
+		    '资产信息(使用)' as cycle2,
+			concat('使用科室: ', use_deaprt_name) as desc2
+		from df_devicemachine where id = #deviceId#
+	</select>
+
+	<!--获取设备巡检信息-->
+	<select id="queryDeviceInspect" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		SELECT
+			t.taskID id,
+			date_format(t.createTime,'%Y-%m-%d') date,
+			concat('巡检(', i.schemeName, ')') cycle,
+			concat('巡检结果: ',IF(t.exceptionFlag='-1','异常','正常')) as "desc"
+		FROM
+			di_task t
+			LEFT JOIN di_scheme i ON t.schemeID = i.schemeID
+		WHERE
+			t.machineID = #deviceId# and t.status = 2
+		<isNotEmpty prepend=" and " property="beginDate">
+			t.createTime >= #beginDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" and " property="endDate">
+			t.createTime <![CDATA[<=]]> #endDate#
+		</isNotEmpty>
+		order by t.taskCode
+	</select>
+
+	<!--获取设备保养信息-->
+	<select id="queryDeviceMaintain" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		SELECT
+			t.taskID id,
+			date_format(t.createTime,'%Y-%m-%d') date,
+			concat('保养(', i.schemeName, ')') cycle,
+			concat('保养结果: ',IF(t.exceptionFlag='-1','异常','正常')) as "desc"
+		FROM
+			dk_task t
+		LEFT JOIN dk_scheme i ON t.schemeID = i.schemeID
+		WHERE
+			t.machineID = #deviceId# and t.status = 2
+		<isNotEmpty prepend=" and " property="beginDate">
+			t.createTime >= #beginDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" and " property="endDate">
+			t.createTime <![CDATA[<=]]> #endDate#
+		</isNotEmpty>
+		order by t.taskCode
+	</select>
+
+	<!--获取设备保洁信息-->
+	<select id="queryDeviceClean" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select
+			id id,
+			clean_date date,
+		    '保洁' cycle,
+			remark as "desc"
+		from
+		     df_clean
+		WHERE
+		machine_id = #deviceId#
+		<isNotEmpty prepend=" and " property="beginDate">
+			clean_date >= #beginDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" and " property="endDate">
+			clean_date <![CDATA[<=]]> #endDate#
+		</isNotEmpty>
+		order by clean_no
+	</select>
+
+	<!--获取设备润滑信息-->
+	<select id="queryDeviceLubricate" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select
+			id id,
+		    lubricate_date date,
+		    '润滑' cycle,
+		    remark as "desc"
+		from
+			df_lubricate
+		WHERE
+		machine_id = #deviceId#
+		<isNotEmpty prepend=" and " property="beginDate">
+			lubricate_date >= #beginDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" and " property="endDate">
+			lubricate_date <![CDATA[<=]]> #endDate#
+		</isNotEmpty>
+		order by lubricate_no
+	</select>
+
+</sqlMap>

@@ -1,0 +1,702 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="reference/mui/css/mui.min.css">
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css">
+    <link rel="stylesheet" href="reference/css/buttom.css">
+    <link rel="stylesheet" href="reference/css/common.css" />
+</head>
+<STYLE TYPE="text/css">
+    body {
+        background: #f7f7f7;
+    }
+
+    .main-div {
+        width: 96%;
+        margin: 0 auto;
+        background: #fff;
+        padding: 15px;
+        margin-top: 20px;
+        box-shadow: 0px 2px 5px #b5b5b5;
+        /*border-radius: 3px;*/
+    }
+
+    .main-title {
+        width: 100%;
+        border-bottom: 1px solid #eee;
+    }
+
+    .title-name {
+        height: 36px;
+        line-height: 36px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .btn-appointment-div {
+        height: 36px;
+        text-align: right;
+        padding-top: 2px;
+    }
+
+    .btn-appointment {
+        width: 80px;
+        border-radius: 15px;
+        border: 1px solid #2aabd2;
+        color: #2aabd2;
+    }
+
+    .less-title {
+        color: #9a9a9a;
+        padding: 2px 0 7px 0;
+    }
+
+    /* .main-element{ */
+    /*height: 40px;*/
+    /*padding-top: 10px;*/
+    /* } */
+    .main-info {
+        height: 40px;
+        line-height: 40px;
+        color: #464646;
+    }
+
+    input[type=text],
+    input[type=number] {
+        width: 100%;
+        margin-bottom: 0px;
+        padding: 10px 0px;
+        border: none;
+        outline: none;
+        text-align: right;
+    }
+
+    .btn-div {
+        width: 96%;
+        margin: 15px auto;
+    }
+
+    .mui-btn-blue,
+    .mui-btn-primary,
+    input[type=submit] {
+        background-color: #2aabd2;
+        border: 1px solid #2aabd2;
+    }
+
+    /*会议设备*/
+    .meetingDeviceDiv {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .meetingDeviceImg {
+        width: 40px;
+        height: 40px;
+    }
+
+    .refreshContent {
+        height: calc(100% - 10px);
+        width: 100%;
+        overflow-y: auto;
+        position: relative;
+    }
+
+    /*遮罩*/
+    .mask {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 11;
+        display: none;
+    }
+
+    .meetingModel {
+        background-color: #fff;
+        z-index: 12;
+        position: fixed;
+        width: 80%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 10px 10px;
+    }
+
+    .mui-input-group .mui-input-row:after {
+        height: 0 !important;
+    }
+</STYLE>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">预约申请</h1>
+        <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+            <span class="mui-icon mui-icon-left-nav"></span>
+            返回
+        </button>
+    </header>
+
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div id="loading" class="loading1" hidden>
+        <div class="loading2">
+            <span class="mui-spinner" style="width:80px;height:80px;"></span>
+        </div>
+    </div>
+
+    <!--遮罩-->
+    <div class="mask"></div>
+
+    <div class="mui-content" style="padding-bottom:50px;">
+        <div class="main-div">
+            <div class="main-title">
+                <div class="mui-row">
+                    <div id="boardroom" class="mui-col mui-col-xs-8 title-name"></div>
+                    <div class="mui-col mui-col-xs-4 btn-appointment-div">
+                        <!-- <button id="timeSelect" type="button" class="mui-btn mui-btn-outlined btn-appointment">
+              选择时间
+            </button> -->
+                    </div>
+                    <div id="deviceCondition" class="mui-col mui-col-xs-12 less-title"></div>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="mui-row main-element">
+                    <div class="mui-col mui-col-xs-4 main-info">会议主题</div>
+                    <div class="mui-col mui-col-xs-8">
+                        <input id="meetingTheme" type="text" placeholder="请输入会议主题">
+                    </div>
+                </div>
+                <div class="mui-row main-element">
+                    <div class="mui-col mui-col-xs-4 main-info">参会人数</div>
+                    <div class="mui-col mui-col-xs-8">
+                        <input id="attendNum" type="number" placeholder="请输入参会人数">
+                    </div>
+                </div>
+                <div class="mui-row main-element">
+                    <div class="mui-col mui-col-xs-4 main-info">备注</div>
+                    <div class="mui-col mui-col-xs-8">
+                        <input id="desc" type="text" placeholder="请输入备注">
+                    </div>
+                </div>
+                <div class="mui-row main-element">
+                    <div class="mui-col mui-col-xs-4 main-info">联系电话</div>
+                    <div class="mui-col mui-col-xs-8">
+                        <input id="conTel" type="text" placeholder="请输入联系电话" maxlength="11"
+                            oninput="this.value=this.value.replace(/\D/g,'')" readonly>
+                    </div>
+                </div>
+                <div class="mui-row main-element">
+                    <div class="mui-col mui-col-xs-4 main-info">申请部门</div>
+                    <div class="mui-col mui-col-xs-8">
+                        <input id="appDept" type="text" readonly>
+                    </div>
+                </div>
+                <div class="mui-row main-element">
+                    <div class="mui-col mui-col-xs-4 main-info">会议日期</div>
+                    <div class="mui-col mui-col-xs-8">
+                        <!-- <input id="meetingDate" type="text" readonly> -->
+                        <input id="date" type="text" readonly>
+                    </div>
+                </div>
+                <div class="mui-row main-element">
+                    <div class="mui-col mui-col-xs-4 main-info">会议开始时间</div>
+                    <div class="mui-col mui-col-xs-8">
+                        <!-- <input id="meetingTime" type="text" readonly> -->
+                        <!-- <input id="time" type="text" placeholder="请选择日期" readonly> -->
+                        <input type="text" id="beginTime" placeholder="请选择开始时间" readonly>
+                    </div>
+                </div>
+                <div class="mui-row main-element">
+                    <div class="mui-col mui-col-xs-4 main-info">会议结束时间</div>
+                    <div class="mui-col mui-col-xs-8">
+                        <!-- <input id="meetingTime" type="text" readonly> -->
+                        <!-- <input id="time" type="text" placeholder="请选择日期" readonly> -->
+                        <input type="text" id="endTime" placeholder="请选择结束时间" readonly>
+                    </div>
+                </div>
+
+                <!--会议设备-->
+                <!-- <div class="mui-row main-element">
+          <div class="mui-col mui-col-xs-4 main-info">会议设备</div>
+          <div class="mui-col mui-col-xs-8 meetingDeviceDiv">
+            <div class="mui-col mui-col-xs-5">
+              <div class="meetingDeviceName"></div>
+              <input type="text" class="meetingDeviceCode" hidden>
+            </div>
+            <div class="mui-col mui-col-xs-3" onclick="getMeetingDeviceList()"
+              style="display: flex;justify-content: flex-end;">
+              <img src="../../img/meetingDevice.png" alt="" class="meetingDeviceImg">
+            </div>
+          </div>
+        </div> -->
+
+
+            </div>
+        </div>
+
+
+        <div class="btn-div">
+            <button id="submit" type="button" class="mui-btn mui-btn-primary mui-btn-block">预约会议室</button>
+        </div>
+    </div>
+
+    <div class="meetingModel" hidden>
+        <!--会议设备下拉框-->
+        <div class="refreshContent meetingDeviceSelect" id="pullrefresh">
+            <div class="mui-input-group mui-scroll mui-scroll-wrapper" id="checkList">
+                <!--          <div class="mui-input-row mui-checkbox mui-left person">-->
+                <!--            <label>JAVE</label>-->
+                <!--            <input type="checkbox" value="JAVE" name="jn" class="mui-checkbox"/>-->
+                <!--          </div>-->
+                <!--          <div class="mui-input-row mui-checkbox mui-left person">-->
+                <!--            <label>Web开发</label>-->
+                <!--            <input type="checkbox" value="Web开发" name="jn1" class="mui-checkbox"/>-->
+                <!--          </div>-->
+                <!--          <div class="mui-input-row mui-checkbox mui-left person">-->
+                <!--            <label>Python开发</label>-->
+                <!--            <input type="checkbox" value="Python开发" name="jn2" class="mui-checkbox"/>-->
+                <!--          </div>-->
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+<script src="reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="reference/mui/js/mui.picker.min.js" type="text/javascript"></script>
+<script src="reference/js/common.js" type="text/javascript"></script>
+<script src="../../cordova.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var deptCode = localStorage.getItem("deptCode");
+    var deptName = localStorage.getItem("deptName");
+    var telPhone = localStorage.getItem("telPhone");
+    var url = location.search;
+    var jsonStr = url.substring(1, url.length);
+    var json = JSON.parse(decodeURIComponent(jsonStr));
+    console.log(json);
+    var arr = [];
+
+    var meetingDeviceStr = "";//会议设备字符串
+    var meetingDeviceArray = [];//会议设备数组
+    var msgFlag = localStorage.getItem('msg').split(';')
+    var msg1 = msgFlag[0]
+    var msg2 = msgFlag[1]
+    console.log(msg1)
+    console.log(msg2)
+    if (msg1.indexOf('Y') > -1) {
+        var remarkFlag = msg1.substring(9, msg1.length)
+        console.log(remarkFlag)
+        $('#desc').attr({ 'placeholder': '请输入备注(' + remarkFlag + '字以内)', 'maxlength': remarkFlag })
+    }
+    // var timeFlag = msg2.substring(11, msg2.length)
+    // console.log(timeFlag)
+
+    document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady() {
+        /**
+         * 系统返回键监听
+         */
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    $('#boardroom').html(json.meetingName);
+    $('#deviceCondition').html(json.deviceCondition);
+    $('#conTel').val(telPhone);
+    $('#appDept').val(deptName);
+    if (json.meetingTheme != undefined && json.attendNum != undefined && json.desc != undefined && json.conTel != undefined) {
+        $('#meetingTheme').val(json.meetingTheme);
+        $('#attendNum').val(json.attendNum);
+        $('#desc').val(json.desc);
+        $('#conTel').val(json.conTel);
+    }
+    if (json.meetingDate != undefined && json.beginTime != undefined && json.endTime != undefined) {
+        $('#meetingDate').val(json.meetingDate);
+        $('#meetingTime').val(json.beginTime + " - " + json.endTime);
+        // console.log(getWeek(json.meetingDate));
+    }
+
+    // 选择时间
+    $("#date").val(localStorage.getItem("dateTime"))
+    // mui('body').on('tap', '#date', function () {
+    //     var options = {
+    //         "type": "date"
+    //     };
+    //     var pickerDate = new mui.DtPicker(options);
+    //     pickerDate.show(function (rs) {
+    //         $("#date").val(rs.text);
+    //     });
+    // })
+    // 选择开始时间
+    mui("body").on("tap", "#beginTime", function () {
+        // 日期选择器
+        $(this).toggleClass("mui-active");
+        dtPicker = new mui.DtPicker({
+            type: "time",
+        });
+        //selectItems为选中的 日期
+        dtPicker.show(function (selectItems) {
+            $("#beginTime").val(selectItems.text);
+        });
+    });
+    //   mui('body').on('tap', '#beginTime', function () {
+    //     $.ajax({
+    //       url: baseUrl+'app_MeetingController/selectConfig',
+    //       type: 'get',
+    //       success: function (data) {
+    //         // var data = JSON.parse(data)
+    //         var startTime = data.data.beginTime;
+    //         var endTime = data.data.endTime;
+    //         console.log(startTime)
+    //         var stnum = startTime.split(':')[0] * 1 + startTime.split(':')[1] * 1 / 60;
+    //         var endnum = endTime.split(':')[0] * 1 + endTime.split(':')[1] * 1 / 60;
+    //         while (stnum <= endnum) {
+    //           var i = stnum % 1;
+    //           var hour=stnum - i;
+    //           if(hour<10){
+    //             hour='0'+hour;
+    //           }
+    //           arr.push({ text: "" + hour + ":" + (i ? i * 60 : "00") })
+    //           stnum = stnum + 0.5;
+    //         }
+    //         var picker = new mui.PopPicker();
+    //         picker.setData(arr)
+    //         picker.show(function (getSelectedItems) {
+    //           console.log(getSelectedItems)
+    //           $("#beginTime").val(getSelectedItems[0].text);
+    //           json.beginTime = $("#beginTime").val();
+    //         })
+    //       },
+    //       error: function (XMLHttpRequest) {
+    //         var text = JSON.parse(XMLHttpRequest.responseText);
+    //         mui.toast(text.message);
+    //         return
+    //       },
+    //       complete: function (XMLHttpRequest, status) {
+    //         console.log(status)
+    //         if (status == 'timeout') {
+    //           $("#loading").hide();
+    //           mui.toast('网速不给力，请重试！');
+    //           return
+    //         } else if (status == 'error') {
+    //           $("#loading").hide();
+    //           mui.toast('当前网络不可用，请查看网络是否畅通！');
+    //           return
+    //         }
+    //       }
+    //     });
+
+    //   })
+
+    // 选择结束时间
+    mui("body").on("tap", "#endTime", function () {
+        $(this).toggleClass("mui-active");
+        dtPicker = new mui.DtPicker({
+            type: "time",
+        });
+        //selectItems为选中的 日期
+        dtPicker.show(function (selectItems) {
+            $("#endTime").val(selectItems.text);
+        });
+    });
+    // mui('body').on('tap', '#endTime', function () {
+    //     console.log(11)
+    //     $.ajax({
+    //         url: baseUrl + 'app_MeetingController/selectConfig',
+    //         type: 'get',
+    //         success: function (data) {
+    //             // var data = JSON.parse(data)
+    //             var startTime = data.data.beginTime;
+    //             var endTime = data.data.endTime;
+    //             console.log(startTime)
+    //             var stnum = startTime.split(':')[0] * 1 + startTime.split(':')[1] * 1 / 60;
+    //             var endnum = endTime.split(':')[0] * 1 + endTime.split(':')[1] * 1 / 60;
+    //             while (stnum <= endnum) {
+    //                 var i = stnum % 1;
+    //                 var hour = stnum - i;
+    //                 if (hour < 10) {
+    //                     hour = '0' + hour;
+    //                 }
+    //                 arr.push({ text: "" + hour + ":" + (i ? i * 60 : "00") })
+    //                 stnum = stnum + 0.5;
+    //             }
+    //             var picker = new mui.PopPicker();
+    //             picker.setData(arr)
+    //             picker.show(function (getSelectedItems) {
+    //                 console.log(getSelectedItems)
+    //                 $("#endTime").val(getSelectedItems[0].text);
+    //                 json.endTime = $("#endTime").val();
+    //             })
+    //         },
+    //         error: function (XMLHttpRequest) {
+    //             var text = JSON.parse(XMLHttpRequest.responseText);
+    //             mui.toast(text.message);
+    //             return
+    //         },
+    //         complete: function (XMLHttpRequest, status) {
+    //             console.log(status)
+    //             if (status == 'timeout') {
+    //                 $("#loading").hide();
+    //                 mui.toast('网速不给力，请重试！');
+    //                 return
+    //             } else if (status == 'error') {
+    //                 $("#loading").hide();
+    //                 mui.toast('当前网络不可用，请查看网络是否畅通！');
+    //                 return
+    //             }
+    //         }
+    //     });
+
+    // })
+
+
+    //预约会议室
+    document.getElementById("submit").addEventListener('tap', function () {
+        // if(json.meetingDate==undefined||json.beginTime==undefined||json.endTime==undefined){
+        //   showMsg("缺少会议时间/日期");
+        //   return;
+        // }
+        var beginTime = $("#beginTime").val()
+        var endTime = $("#endTime").val()
+        console.log(endTime);
+        json["meetingTheme"] = $('#meetingTheme').val().trim();
+        json["attendNum"] = $('#attendNum').val();
+        json["desc"] = $('#desc').val();
+        json["conTel"] = $('#conTel').val();
+
+        var now = new Date();
+        var timeLine = now.getTime();
+        json.meetingDate = $('#date').val();
+        // var da = json.meetingDate
+        var da = json.meetingDate;
+        console.log(da)
+        var date1 = Date.parse(da.replace('/-/g', '/'));
+        var date2 = date1 - timeLine;
+        result = Math.ceil(date2 / 24 / 60 / 60 / 1000)
+        console.log(result)
+        // if (result > timeFlag) {
+        //   showMsg('不可预约' + timeFlag + '天之后的会议');
+        //   return;
+        // }
+
+        var meetingSubject_S = $('#meetingTheme').val().trim();
+        if (meetingSubject_S == "") {
+            showMsg("请输入会议主题");
+            return;
+        }
+
+        var peopleNumber_S = $('#attendNum').val();
+        console.log(peopleNumber_S);
+        //  if(peopleNumber_S==""){
+        //    showMsg("参会人数不能为空");
+        //    return;
+        //  }
+        peopleNumber_S = parseInt(peopleNumber_S);
+        if (peopleNumber_S < 0 || peopleNumber_S > json.meetingNum) {
+            showMsg("请输入合理的参会人数");
+            return;
+        }
+
+        var remark_S = $('#desc').val();
+        var conTel_S = $('#conTel').val();
+        if (conTel_S == "") {
+            showMsg("联系电话不能为空");
+            return;
+        }
+
+        if (deptCode == "" || deptCode == "undefined" || deptCode == "null" || deptName == "" || deptName == "undefined" || deptName == "null") {
+            showMsg("无效科室");
+            return;
+        }
+        // var beginTime = $('#beginTime').val().split(':')[0] * 1 + $('#beginTime').val().split(':')[1] * 1 / 60;
+        // var endTime = $('#endTime').val().split(':')[0] * 1 + $('#endTime').val().split(':')[1] * 1 / 60;
+        var beginTime = $("#beginTime").val()
+        var endTime = $("#endTime").val()
+        console.log(beginTime)
+        if (beginTime > endTime) {
+            showMsg('开始时间不能晚于结束时间')
+            return;
+        }
+        $("#loading").show();
+        $.ajax({
+            url: baseUrl + 'app_MeetingController/createMeetingBill',
+            type: 'post',
+            data: {
+                meetingID: json.meetingId,
+                meetingSubject: meetingSubject_S,
+                peopleNumber: peopleNumber_S,
+                remark: remark_S,
+                applicationUser: workNo,
+                contactTel: conTel_S,
+                deptName: deptName,
+                deptNum: deptCode,
+                meetingDate: json.meetingDate,
+                beginTime: $("#beginTime").val(),
+                endTime: $("#endTime").val(),
+                week: getWeek(json.meetingDate),
+                // meetingDevice: $(".meetingDeviceName").html()//会议设备
+            },
+            success: function (data) {
+                // var data = eval('(' + data + ')');
+                console.log(data);
+                if (data.statusCode == "0") {
+                    showMsg("申请成功");
+                    setTimeout('location.href = "meeting-manage.html"', 2000);
+                } else {
+                    showMsg(data.msg);
+                    $("#loading").hide();
+                }
+            }
+        });
+
+    });
+
+    // // document.getElementById("timeSelect").addEventListener('tap', function () {
+    //   json["meetingTheme"] = $('#meetingTheme').val().trim();
+    //   json["attendNum"] = $('#attendNum').val();
+    //   json["desc"] = $('#desc').val();
+    //   json["conTel"] = $('#conTel').val();
+    // //   var params = JSON.stringify(json);
+    // //   location.href = 'time-select.html?' + encodeURIComponent(params);
+    // // });
+
+    /*
+    * 会议设备信息
+    * */
+    function getMeetingDeviceList() {
+        console.log("会议设备信息");
+        $(".mask").show();
+        $(".meetingDeviceSelect").show();
+        $(".meetingModel").show();
+        meetingDeviceStr = "";
+        //加载会议设备信息列表
+        loadMeetingDeviceList();
+
+    }
+
+    function loadMeetingDeviceList() {
+        console.log("meetingArr", meetingDeviceArray);
+        if (meetingDeviceArray.length == 0) {
+            //调用接口部分
+
+            meetingDeviceArray = [
+                {
+                    deviceName: '音响',
+                    deviceCode: 'jd0001'
+                },
+                {
+                    deviceName: '大屏',
+                    deviceCode: 'jd0002'
+                },
+                {
+                    deviceName: '电脑',
+                    deviceCode: 'jd0003'
+                },
+                {
+                    deviceName: '激光笔',
+                    deviceCode: 'jd0004'
+                },
+                {
+                    deviceName: '台牌',
+                    deviceCode: 'jd0005'
+                }
+            ]
+            meetingDeviceArray.map((item) => {
+                item.checked = false
+                return item
+            })
+        }
+        if (meetingDeviceArray.length > 0) {
+
+        }
+        meetingDeviceStr = "";
+        console.log("会议设备数组列表", meetingDeviceArray);
+        meetingDeviceArray.forEach((item) => {
+            meetingDeviceStr += createMeetingDeviceListHtml(item.deviceCode, item.deviceName, item.checked)
+        })
+        $("#checkList").html(meetingDeviceStr);
+    }
+
+    /*
+    * 创建会议设备的html
+    *
+    * */
+    function createMeetingDeviceListHtml(deviceCode, deviceName, checked) {
+        var html = '<div class="mui-input-row mui-checkbox mui-left person">'
+        html += '<label>' + deviceName + '</label>'
+        if (checked) {
+            html += ' <input type="checkbox" onclick="radioChange(this)" checked value="' + deviceName + '" name="' + deviceCode + '" class="mui-checkbox"/>'
+        } else {
+            html += ' <input type="checkbox" onclick="radioChange(this)" value="' + deviceName + '" name="' + deviceCode + '" class="mui-checkbox"/>'
+        }
+        html += '</div>'
+        return html;
+    }
+
+    /*
+    * 多选点击方法：
+    *
+    * */
+    function radioChange(that) {
+        let findIndex = meetingDeviceArray.findIndex(item => item.deviceCode == that.name);
+        if (that.checked) {
+            meetingDeviceArray[findIndex].checked = true;
+            console.log(9999999);
+            console.log("选中后的会议设备数组", meetingDeviceArray);
+        } else {
+            meetingDeviceArray[findIndex].checked = false;
+        }
+        let str = meetingDeviceArray.reduce((acc, cur) => {
+            if (cur.checked) {
+                acc.push(cur.deviceName);
+            }
+            return acc;
+        }, []).join(',');
+
+        $(".meetingDeviceName").html(str);
+
+        let str1 = meetingDeviceArray.reduce((accNo, cur) => {
+            if (cur.checked) {
+                accNo.push(cur.deviceCode);
+            }
+            return accNo;
+        }, []).join(',');
+
+        $(".meetingDeviceCode").val(str1);
+    };
+
+    /*
+     * 点击遮罩
+     * */
+    $(".mask").click(function () {
+        console.log(1111111);
+        $(".mask").hide();
+        $(".meetingModel").hide();
+    });
+
+    //返回
+    document.getElementById("back").addEventListener('tap', function () {
+        location.href = 'main.html';
+    });
+
+    function onBackKeyDown() {
+        location.href = 'main.html';
+    }
+</script>
+
+</html>

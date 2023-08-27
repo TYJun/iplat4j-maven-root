@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFCS0102">
+
+	<select id="queryParam" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			t1.id,
+			t1.module_id moduleId,
+			t1.param_name paramName,
+			t1.param_key paramKey,
+			t1.param_value paramValue,
+			t1.param_unit paramUnit,
+			t1.memo,
+			t2.classify_name classifyName
+		FROM
+			df_classfyparam t1
+			left join df_modulebaseclassfy t2 on t1.module_id = t2.id
+		WHERE
+			t1.param_key = #paramKey#
+	</select>
+	
+	<update id="update" parameterClass="java.util.HashMap">
+		update df_classfyparam set param_name = #paramName#,param_value = #paramValue#,param_unit = #paramUnit#,memo = #memo#
+		where param_key = #paramKey#
+	</update>
+
+</sqlMap>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="../reference/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../reference/css/common.css" />
+		<link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css">
+		<link rel="stylesheet" href="css/tcj-font.css" />
+
+	</head>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		
+		li {
+			height: 40px;
+			line-height: 40px;
+			text-align: center;
+			border-bottom: 1px solid #ddd;
+		}
+	</style>
+
+	<body>
+
+		<ul>
+			<li id="plan-apply.html" onclick="goBakc(this)">计划申请列表</li>
+			<li id="new-apply.html" onclick="goBakc(this)">新建申请</li>
+			<li id="wuzi-choose.html" onclick="goBakc(this)">物资选择</li>
+			<li id="plan-submit.html" onclick="goBakc(this)">计划提交列表</li>
+			<li id="back-reason.html" onclick="goBakc(this)">回退理由</li>
+			<li id="buy-plan-apply.html" onclick="goBakc(this)">采购计划申请列表</li>
+			<li id="send-task-list.html" onclick="goBakc(this)">配送任务列表</li>
+			<li id="send-task-detail.html" onclick="goBakc(this)">配送任务明细</li>
+			<li id="dept-send-eval.html" onclick="goBakc(this)">科室配送评价</li>
+			<li id="send-task-eval.html" onclick="goBakc(this)">配送任务评价</li>
+
+		</ul>
+	</body>
+	<script>
+		localStorage.setItem("url", "http://192.168.1.107:8080/smp/");
+		localStorage.setItem("workNo", "admin");
+		localStorage.setItem('deptCode', "KS000001");
+		localStorage.setItem("deptName", "测试科室");
+		localStorage.setItem("name", "天才俊");
+
+		function goBakc(aa) {
+			console.log(aa.id)
+			location.href = aa.id;
+		}
+	</script>
+
+</html>

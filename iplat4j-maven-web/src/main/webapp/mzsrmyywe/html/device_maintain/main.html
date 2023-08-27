@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="reference/mui/css/mui.css" />
+    <link rel="stylesheet" href="reference/mui/css/iconfont.css" />
+    <link rel="stylesheet" href="reference/css/common.css" />
+</head>
+<style type="text/css">
+    body {
+        /*background: #eee;*/
+    }
+    
+    .loading1 {
+        position: fixed;
+        z-index: 999;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+    
+    .loading2 {
+        margin: 0 auto;
+        margin-top: 250px;
+        text-align: center;
+        line-height: 100px;
+    }
+    
+    .main-div {
+        width: 50%;
+        height: 150px;
+        display: inline-block;
+        float: left;
+        color: #b3b3b3;
+    }
+    
+    .icon-div {
+        width: 100%;
+        height: 110px;
+    }
+    
+    .flex {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+    }
+    
+    .flex-align-center {
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+    
+    .flex-pack-justify {
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+    }
+    
+    .title-div {
+        width: 100%;
+        height: 40px;
+        text-align: center;
+        font-weight: bold;
+    }
+    
+    .odd-border {
+        border-right: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .even-border {
+        border-bottom: 1px solid #eee;
+    }
+    
+    .operate-enable {
+        color: #3a82bb;
+    }
+</style>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">设备保养</h1>
+        <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+        返回
+      </button>
+    </header>
+
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div id="loading" class="loading1" hidden>
+        <div class="loading2">
+            <span class="mui-spinner" style="width: 80px; height: 80px"></span>
+        </div>
+    </div>
+
+    <div class="mui-content">
+        <div id="all" class="main-div odd-border">
+            <div class="icon-div flex flex-align-center flex-pack-justify">
+                <span class="iconfont icon-renwuguanli" style="font-size: 60px"></span>
+            </div>
+            <div class="title-div">全部任务</div>
+        </div>
+
+        <div id="scan" class="main-div even-border">
+            <div class="icon-div flex flex-align-center flex-pack-justify">
+                <span class="iconfont icon-saoma" style="font-size: 60px"></span>
+            </div>
+            <div class="title-div">设&nbsp;&nbsp;备&nbsp;&nbsp;码</div>
+        </div>
+
+        <div id="complete" class="main-div odd-border">
+            <div class="icon-div flex flex-align-center flex-pack-justify">
+                <span class="iconfont icon-shangchuan" style="font-size: 60px"></span>
+            </div>
+            <div class="title-div">待&nbsp;&nbsp;上&nbsp;&nbsp;传</div>
+        </div>
+
+        <!-- <div id="abnormal" class="main-div even-border">
+        <div class="icon-div flex flex-align-center flex-pack-justify">
+          <span class="iconfont icon-shezhi" style="font-size:60px;"></span>
+        </div>
+        <div class="title-div">异常整改</div>
+      </div> -->
+
+        <div id="offLine" class="main-div odd-border">
+            <div class="icon-div flex flex-align-center flex-pack-justify">
+                <span class="iconfont icon-xiazai" style="font-size: 60px"></span>
+            </div>
+            <div class="title-div">离线下载</div>
+        </div>
+
+        <!-- <div id="report" class="main-div even-border">
+        <div class="icon-div flex flex-align-center flex-pack-justify">
+          <span class="iconfont icon-baobiaoxitong" style="font-size:60px;"></span>
+        </div>
+        <div class="title-div">报&nbsp;&nbsp;&nbsp;&nbsp;表</div>
+      </div> -->
+    </div>
+</body>
+<script src="reference/mui/js/mui.js" type="text/javascript"></script>
+<script src="reference/mui/js/iconfont.js" type="text/javascript"></script>
+<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="reference/js/common.js" type="text/javascript"></script>
+<!--<script src="../../cordova.js" type="text/javascript"></script>-->
+<!-- <script src="./reference/js/vconsole.min.js"></script> -->
+<script type="text/javascript">
+    // var vConsole = new VConsole();
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var nowDate = localStorage.getItem("nowDate");
+    var isLeader = "N";
+    // var isLeader = localStorage.getItem("isLeader");
+
+    if (isLeader == "Y") {
+        $("#scan").addClass("operate-enable");
+        $("#offLine").addClass("operate-enable");
+    } else if (isLeader == "N") {
+        $("#all").addClass("operate-enable");
+        $("#scan").addClass("operate-enable");
+        $("#complete").addClass("operate-enable");
+        $("#abnormal").addClass("operate-enable");
+        $("#offLine").addClass("operate-enable");
+    }
+
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        if (nowDate != date_YMD()) off_line();
+
+        /**
+         * 系统返回键监听
+         */
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function off_line() {
+        var prame = {
+            userID: workNo,
+            // userID: "YS012"
+        };
+        prame = JSON.stringify(prame);
+        showMsg("正在离线当天任务，请耐心等待离线结束");
+        $("#loading").show();
+        $.ajax({
+            url: baseUrl + "MobileAgentService",
+            type: "post",
+            headers: {
+                methodName: "getDeviceOfflineTaskDK",
+                serviceName: "DKJZApp",
+            },
+            data: {
+                prames: prame,
+            },
+            success: function(data) {
+                console.log(data);
+                // alert("00");
+                if (data.status == "0") {
+                    // if (data.inspectionLeader) {
+                    //   $("#scan").addClass("operate-enable");
+                    //   $("#offLine").addClass("operate-enable");
+                    //   localStorage.setItem("isLeader", "Y");
+                    // } else {
+                    // $("#all").addClass("operate-enable");
+                    // $("#scan").addClass("operate-enable");
+                    // $("#complete").addClass("operate-enable");
+                    // $("#abnormal").addClass("operate-enable");
+                    $("#offLine").addClass("operate-enable");
+                    // localStorage.setItem("isLeader", "N");
+                    // }
+                    var deviceTask = data.blocks.result.rows;
+                    // localStorage.setItem("places", JSON.stringify(data.spotInfo));
+                    // console.log(deviceTask);
+                    // alert("0");
+                    createSql(deviceTask);
+                } else {
+                    $("#loading").hide();
+                    showMsg(data.msg);
+                }
+            },
+        });
+    }
+
+    function createSql(deviceTask) {
+        // 创建并打开对数据库的一个连接
+        var db = window.sqlitePlugin.openDatabase({
+            name: "one-stop.db",
+            location: "default",
+        });
+        // executeSql执行sql语句
+        db.executeSql("DROP TABLE IF EXISTS device_task_listDK");
+        db.executeSql("DROP TABLE IF EXISTS device_task_detailDK");
+        db.executeSql("DROP TABLE IF EXISTS device_fileDK");
+        /**
+         * 创建设备巡检任务表
+         * task_id(taskID)：任务ID
+         * task_code(taskCode)：任务编号
+         * task_name(schemeName)：任务名称
+         * machine_id(machineID)：设备ID
+         * machine_code(machineCode)：设备编号
+         * fixed_place(fixedPlace)：任务地点
+         * task_desc(jobContent)：作业描述
+         * begin_time(createTimeView)：开始时间
+         * end_time(finishTimeView)：结束时间
+         * limit_time(limitTime):截止时间
+         * need_scan(needScan)：是否需要扫码
+         * operate_time：操作时间
+         * task_status: 是否关闭 Y:是 N:否
+         */
+        db.executeSql(
+            "CREATE TABLE device_task_listDK (task_id,task_code,task_name,machine_id,machine_code,fixed_id,fixed_code,fixed_name,task_desc,begin_time,end_time,limit_time,need_scan,operate_time,task_status)"
+        );
+        /**
+         * 创建设备巡检任务明细表
+         * task_id(taskID)：任务ID
+         * item_id(itemID)：项目ID
+         * item_code(itemCode)：项目编号
+         * item_name(jitemName)：项目名称
+         * status(successFlag)：巡检状态结果-正常／异常／停用
+         * reference_value(referenceValue)：参考值
+         * item_record(writeValue)：结果记录
+         * abnormal_reference(xunjianAbnormal)：异常描述参考值
+         * abnormal_desc(errorContent)：异常描述
+         * sort_no(sortNo)：排序字段
+         */
+        db.executeSql(
+            "CREATE TABLE device_task_detailDK (task_id,item_id  PRIMARY KEY,item_code,item_name,status,reference_value,item_record,abnormal_reference,abnormal_desc,sort_no INTEGER)"
+        );
+
+        /**
+         * 创建项目附件表
+         * task_id：任务ID
+         * item_id：项目ID
+         * file_path：图片路径
+         */
+        db.executeSql("CREATE TABLE device_fileDK (task_id,item_id,file_path)");
+        var kk = 0;
+        db.transaction(
+            function(tx) {
+                for (var i = 0; i < deviceTask.length; i++) {
+                    tx.executeSql(
+                        "INSERT INTO device_task_listDK values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [
+                            deviceTask[i].taskID,
+                            deviceTask[i].taskCode,
+                            deviceTask[i].schemeName,
+                            deviceTask[i].machineId,
+                            deviceTask[i].machineCode,
+                            deviceTask[i].fixedPlaceId,
+                            deviceTask[i].fixedPlaceCode,
+                            deviceTask[i].fixedPlaceName,
+                            deviceTask[i].jobContent,
+                            deviceTask[i].createTime,
+                            deviceTask[i].finishTime,
+                            deviceTask[i].limitTime,
+                            deviceTask[i].needScan,
+                            null,
+                            "N",
+                        ]
+                    );
+                    var taskDetail = deviceTask[i].itemList;
+                    for (var k = 0; k < taskDetail.length; k++) {
+                        tx.executeSql(
+                            "INSERT INTO device_task_detailDK values (?,?,?,?,?,?,?,?,?,?)", [
+                                taskDetail[k].taskID,
+                                taskDetail[k].itemID,
+                                null,
+                                // taskDetail[k].itemCode,
+                                taskDetail[k].jitemName,
+                                taskDetail[k].successFlag,
+                                taskDetail[k].referenceValue,
+                                taskDetail[k].writeValue,
+                                null,
+                                // taskDetail[k].xunjianAbnormal,
+                                taskDetail[k].errorContent,
+                                null,
+                                // parseInt(taskDetail[k].sortNo)
+                            ]
+                        );
+                    }
+                }
+            },
+            function(e) {
+                // alert("e:" + e);
+                showMsg("离线失败" + e);
+                $("#loading").hide();
+                db.close(successcb, errorcb);
+            },
+            function() {
+                // var tableLength = db.executeSql(
+                //   "select count(*) from device_task_listDK"
+                // );
+                // alert("tableLength:" + tableLength);
+                db.close(function(taskID) {
+                    localStorage.setItem("nowDate", date_YMD());
+                    showMsg("离线成功");
+                    $("#loading").hide();
+                }, errorcb);
+            }
+        );
+    }
+
+    function successcb() {}
+
+    function errorcb() {
+        alert("数据库关闭失败");
+    }
+
+    /**
+     * 操作事件方法
+     * @param  {[type]} )               {                              if($(this).attr("class").indexOf('operate-enable') [description]
+     * @param  {[type]} function(error) {}          [description]
+     * @return {[type]}                 [description]
+     */
+    mui(".mui-content").on("tap", "div.main-div", function() {
+        if ($(this).attr("class").indexOf("operate-enable") == -1) {
+            showMsg("此功能暂未开通或缺少权限");
+            return;
+        }
+        var operate_id = this.id;
+
+        if (operate_id == "all") {
+            //全部任务
+            location.href = "all_list.html";
+        } else if (operate_id == "scan") {
+            /**扫描二维码*/
+            // showMsg("请扫描二维码 ！");
+            // cordova.plugins.barcodeScanner.scan(
+            //     function(result) {
+            //         var result = result.text;
+            //         if (result != "") {
+            //             if (localStorage.getItem("isLeader") == "Y") {
+            //                 location.href = "scan_history.html?" + result;
+            //             } else {
+            //                 location.href = "scan_list.html?" + result;
+            //             }
+            //         }
+            //     },
+            //     function(error) {
+            //         mui.toast("扫描失败！");
+            //     }
+            // );
+            /**扫描nfc*/
+            //设备码
+            showMsg("请扫描NFC芯片 ！");
+            cordova.exec(
+                function(data) {
+                    var result = data.data.substring(0, 32);
+                    // var result = "1HL-01C20210419101437";
+                    //     alert("扫描芯片：" + result);
+
+                    if (result != "") {
+                        if (localStorage.getItem("isLeader") == "Y") {
+                            closeNFC();
+                            location.href = "scan_history.html?" + result;
+                        } else {
+                            closeNFC();
+                            location.href = "scan_list.html?" + result;
+                        }
+                    }
+                },
+                function(err) {},
+                "NFCReader",
+                "startRead", []
+            );
+        } else if (operate_id == "complete") {
+            //待上传任务
+            location.href = "been_maintained.html";
+        } else if (operate_id == "abnormal") {
+            //异常整改
+            location.href = "abnormal_task.html";
+        } else if (operate_id == "offLine") {
+            //离线任务
+            var btnArray = ["否", "是"];
+            mui.confirm(
+                "离线数据会清除本地已经处理过的任务，如果您还未进行完工提交，请先完工后再离线",
+                "离线确认",
+                btnArray,
+                function(e) {
+                    if (e.index == 1) {
+                        off_line();
+                    }
+                }
+            );
+        } else if (operate_id == "report") {
+            //报表（未开通）
+            location.href = "report.html";
+        }
+    });
+
+    //  关闭NFC扫描
+    function closeNFC() {
+        cordova.exec(
+            function(data) {
+                //				alert("关闭扫描")
+            },
+            function(err) {},
+            "NFCReader",
+            "stopRead", []
+        );
+    }
+    mui("body").on("tap", "#back", function() {
+        location.href = "../../menu.html";
+    });
+
+    function onBackKeyDown() {
+        location.href = "../../menu.html";
+    }
+</script>
+
+</html>

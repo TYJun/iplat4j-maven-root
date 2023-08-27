@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd"> 
+<!-- 职工自取餐综合查询 -->
+<sqlMap namespace="SSDCZQCX01">
+	<!--  -->
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.dc.domain.SSDCZQCX01">
+		SELECT
+        a.id as "id",
+        a.REC_CREATOR as "recCreator",  <!-- 创建人工号 -->
+        a.REC_CREATE_NAME as "recCreateName",  <!-- 创建人姓名 -->
+        a.REC_REVISE_TIME as "recReviseTime",  <!-- 修改时间 -->
+        a.REC_REVISOR as "recRevisor",  <!-- 修改人 -->
+        a.REC_CREATE_TIME as "recCreateTime",  <!-- 创建时间 -->
+        a.ARCHIVE_FLAG as "archiveFlag",  <!-- 来源：APP POS -->
+        a.bill_no as "billNo",  <!-- 订单号：ZQ12020042700005 规则 ： ZQ+年月日+5位递增 -->
+        a.open_id as "openId",  <!-- 微信的openId -->
+        a.user_name as "userName",  <!-- 用户姓名 -->
+        a.user_tel_number as "userTelNumber",  <!-- 联系电话 -->
+        a.meal_num as "mealNum",  <!-- 餐次编码：001 早餐；002 中餐；003 晚餐 -->
+        a.meal_num_name as "mealNumName",  <!-- 餐次名称 -->
+        a.address as "address",  <!-- 取餐地址，下单时选择的取餐地址 -->
+        a.req_send_time as "reqSendTime",  <!-- 取餐时间 -->
+        a.bill_total_price as "billTotalPrice",  <!-- 订单总价 -->
+        a.canteen_num as "canteenNum",  <!-- 食堂编码 -->
+        clc.canteen_name as "canteenName",  <!-- 食堂名称 -->
+        a.bill_remark as "billRemark",  <!-- 备注 -->
+        a.pay_type as "payType",  <!-- 支付方式：0000-现金支付；0101-支付宝；0201-微信 -->
+        a.pay_type_name as "payTypeName",  <!-- 支付方式名称 -->
+        a.status_code as "statusCode",  <!-- 状态：00-草稿；02-待食堂确认；03-待制作；04-待取餐；05-待评价；99-已结束 -->
+        CASE
+        WHEN ( a.reject_code = '2' AND a.status_code != '00' ) THEN
+        '已退款'
+        WHEN ( a.reject_code = '3' AND a.status_code != '00' ) THEN
+        '超时未支付，已取消!'
+        WHEN ( a.reject_code = '4' AND a.status_code != '00' ) THEN
+        '用户手动取消!'
+        WHEN ( a.reject_code IS NULL AND a.status_code = '00' ) THEN
+        '已下单，未支付'
+        WHEN ( a.reject_code IS NULL AND a.status_code = '02' ) THEN
+        '已支付，待取餐'
+        WHEN ( a.reject_code IS NULL AND a.status_code = '99' ) THEN
+        '已支付，已取餐'
+        END AS statusName,
+        a.self_code as "selfCode",  <!-- 长度4位，由0-9，A-Z，随机生成4为数 -->
+        a.current_dealer as "currentDealer",  <!-- 当前处理人 -->
+        a.process_inst_id as "processInstId",  <!-- 流程实例ID -->
+        a.print_flag as "printFlag",  <!-- 打印标记 -->
+        a.order_way as "orderWay",
+        a.need_date as "needDate",  <!-- 取餐日期 -->
+        a.reject_code as "rejectCode",  <!-- 作废状态 -->
+        a.reject_reason as "rejectReason",  <!-- 作废原因 -->
+        a.pay_no as "payNo",  <!-- 支付宝userId或微信的openId -->
+        a.card_id as "cardId",
+        a.dept_name as "deptName",  <!-- 科室 -->
+        a.dept_num as "deptNum" <!-- 科室编码 -->
+		FROM sc_work_order_bill a
+		JOIN sc_canteen_liaison_conf clc ON clc.canteen_num = a.canteen_num
+        LEFT JOIN sc_operation_status b ON a.status_Code = b.status_code
+		WHERE 1=1 
+		and self_code is not null
+		and b.pbo_code = 'MEAL'
+		AND a.status_Code <![CDATA[<]]>'99' AND a.status_Code > '00'
+		<isNotEmpty prepend=" AND " property="userId">
+               FIND_IN_SET( #userId#, clc.liaison_id ) > 0 
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="beginDate">
+            a.need_date >= #beginDate#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="selfCode">
+            self_code = #selfCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="endDate">
+            a.need_date <![CDATA[<=]]> #endDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="reqSendTime">
+            a.req_send_time LIKE CONCAT('%', #reqSendTime#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="userCode">
+            a.open_id LIKE CONCAT('%', #userCode#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="userName">
+            a.user_name LIKE CONCAT('%', #userName#, '%')
+        </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="deptName">
+                    a.dept_name LIKE CONCAT('%',#deptName#,'%')
+            </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="needDate">
+            a.need_date = #needDate#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="canteenNum">
+            a.canteen_num = #canteenNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="code">
+            clc.datagroup_code like concat('%',#code#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="mealNum">
+            a.meal_num = #mealNum#
+        </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="archiveFlag">
+                    a.ARCHIVE_FLAG = #archiveFlag#
+            </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="id">
+            a.id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="billNo">
+            a.bill_No like concat(#billNo#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="spotName">
+            a.address like concat(#spotName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="building">
+            a.building like concat(#building#,'%')
+        </isNotEmpty>
+        order by a.bill_no desc
+	</select>
+
+
+</sqlMap>

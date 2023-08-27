@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="PM0501">
+
+	<!-- 查询最大归档编号 -->
+	<select id="queryDocumentNo" parameterClass="java.lang.String" resultClass="java.lang.String">
+		select max(DOCUMENTS_CODE) from pm_calculate where DOCUMENTS_CODE like concat(#value#, '%')
+	</select>
+	
+</sqlMap>

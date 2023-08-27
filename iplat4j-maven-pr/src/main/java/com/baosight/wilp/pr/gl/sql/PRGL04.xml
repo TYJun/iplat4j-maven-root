@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="PRGL04">
+
+
+
+
+
+	<!-- 查询挂账问题 -->
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.pr.gl.domain.PRGL04">
+		SELECT
+		CASE
+		WHEN
+			tsd.status_code = '20' THEN
+			'问题被挂账'
+		END "statusCode",
+			tsd.id AS id,
+			tsd.dangerCode AS dangercode,
+			tsd.dangerWhere AS dangerwhere,
+			tsd.requireDesc AS requiredesc,
+			tsd.contentDesc AS contentdesc,
+			tsd.requiredTime AS requiredtime,
+			tsd.dangerLevel AS dangerlevel,
+			tsd.localTypeName AS typeName,
+			tsdl.rejectReason AS rejectReason,
+			tsdl.logsMan AS realName,
+			tsdl.logsTime AS logsTime,
+			tsd.createMan AS createman,
+			tsd.createTime AS createtime
+		FROM
+			pr_safty_danger tsd
+		LEFT JOIN pr_safty_danger_logs tsdl ON tsd.id = tsdl.dangerID
+		WHERE
+		tsdl.rejectStatus = '20'
+		<isNotEmpty prepend="AND" property="localTypeCode">
+			tsd.localTypeCode = #localTypeCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="beginDate">
+		<![CDATA[
+			tsd.createTime >= #beginDate#
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="endDate">
+			<![CDATA[
+			tsd.createTime <= #endDate#
+			]]>
+		</isNotEmpty>
+			GROUP BY tsd.id
+	</select>
+	
+	
+	<!-- 记录日志  -->
+	<insert id="logs" parameterClass="java.util.HashMap">
+		INSERT INTO pr_safty_danger_logs ( id, dangerID,logsNo, logsMan, logsTime, rejectStatus, rejectReason, dataGroupCode )
+		VALUES
+			( UUID(), #dangerID#,#createNo#, #createMan#, #createTime#, #rejectStatus#, #rejectReason#, #dataGroupCode# )
+	</insert>
+	
+	
+	<!-- 修改问题状态 -->
+	<update id="updateStatusCode" parameterClass="java.util.HashMap">
+		update pr_safty_danger set status_code = #statusCode# where id = #id#
+	</update>
+
+</sqlMap>

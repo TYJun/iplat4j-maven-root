@@ -1,0 +1,259 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="reference/mui/css/mui.css">
+    <link rel="stylesheet" href="reference/css/common.css" />
+</head>
+<STYLE TYPE="text/css">
+    body {
+        background: #eee;
+    }
+    
+    .mui-bar-nav~.mui-content .mui-pull-top-pocket {
+        top: 84px;
+    }
+    
+    .task {
+        width: 100%;
+        min-height: 100px;
+        background: #fff;
+        box-shadow: 2px 2px 2px #dcdcdc;
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    
+    .mui-row {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 15px;
+        padding-right: 15px;
+        color: #e87c26;
+    }
+    
+    .mui-row span {
+        color: #000;
+    }
+    
+    .task-tab {
+        width: 100%;
+        position: absolute;
+        top: 44px;
+        left: 0;
+        right: 0;
+        z-index: 9;
+        background: #eee;
+    }
+    
+    .tab-left {
+        width: 50%;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        display: inline-block;
+        float: left;
+        font-size: 16px;
+        /*font-weight: bold;*/
+        border-bottom: 1px solid #ccc;
+    }
+    
+    .tab-right {
+        width: 50%;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        display: inline-block;
+        float: left;
+        font-size: 16px;
+        /*font-weight: bold;*/
+        border-bottom: 1px solid #ccc;
+    }
+    
+    .selected {
+        color: #007aff;
+        /*background: #fff;*/
+        border-bottom: 3px solid #007aff;
+    }
+</STYLE>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">设备历史任务</h1>
+        <button class="mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+        返回
+      </button>
+    </header>
+
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div class="task-tab">
+        <div class="tab-left selected">已超时</div>
+        <div class="tab-right">已完工</div>
+    </div>
+    <div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="padding-top:84px;">
+        <div class="mui-scroll">
+            <ul class="mui-table-view mui-table-view-chevron" style="background-color:#eee;">
+
+            </ul>
+        </div>
+    </div>
+</body>
+<script src="reference/mui/js/mui.js" type="text/javascript"></script>
+<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="reference/js/common.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    //截取传递的地址？后面的数据
+    var url = location.search;
+    var deptID = url.substring(1, url.length);
+    var page = 1,
+        status = -1,
+        building = "",
+        floor = "";
+    var html = '';
+
+    loadHistory();
+
+    function loadHistory() {
+        $.ajax({
+            url: baseUrl + 'app_InspectionController.do?getDevTaskHistory',
+            type: 'post',
+            data: {
+                page: page,
+                rows: 10,
+                /*loginUser: workNo,*/
+                deptID: deptID,
+                taskType: 'inspection',
+                inspType: '',
+                status: status
+            },
+            success: function(data) {
+
+                var data = eval("(" + data + ")");
+                console.log(data);
+                console.log(data.obj);
+                if (data.respCode == "200") {
+                    var list = data.obj;
+                    for (var i = 0; i < list.length; i++) {
+                        // alert(list[i].taskID);
+                        html += createTask(list[i].taskID, list[i].taskCode, list[i].schemeName, list[i].deptID, list[i].machine_code, list[i].fixed_place, list[i].jobContent, list[i].createTime, list[i].endTime, list[i].finishTime, list[i].needScan);
+                    }
+                    $("ul").html(html);
+                } else {
+                    showMsg(data.respMsg);
+                }
+            }
+        });
+    }
+
+    mui.init({
+        pullRefresh: {
+            container: '#pullrefresh',
+            down: {
+                callback: pulldownRefresh,
+                contentrefresh: "正在刷新",
+            },
+            up: {
+                contentrefresh: "加载中，请稍后",
+                contentnomore: '暂无更多数据',
+                callback: pullupRefresh
+            }
+        }
+    });
+
+    $(".task-tab div").click(function() {
+        $(this).parent().find("div").removeClass("selected");
+        $(this).addClass("selected");
+        var statusName = $(this).text();
+        if (statusName == "已超时") {
+            html = '';
+            page = 1;
+            status = -1;
+            loadHistory();
+        } else {
+            html = '';
+            page = 1;
+            status = 2;
+            loadHistory();
+        }
+    });
+
+    /**
+     * 下滑刷新
+     * @return {[type]} [description]
+     */
+    function pulldownRefresh() {
+        setTimeout(function() {
+            html = '';
+            page = 1;
+            loadHistory();
+            mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+        }, 1500);
+    }
+
+    /**
+     * 上滑加载更多
+     * @return {[type]} [description]
+     */
+    function pullupRefresh() {
+        page++;
+        loadHistory();
+        setTimeout(function() {
+            //关闭加载框
+            mui('#pullrefresh').pullRefresh().endPullupToRefresh();
+        }, 1500);
+    }
+
+    //调试代码
+    // var html = '';
+    // html = createTask("1","2","3","4","5","6","7","8","9","0");
+    // $(".mui-content").html(html);
+    //调试代码
+
+    function createTask(task_id, task_code, task_name, machine_id, machine_code, fixed_place, task_desc, begin_time, end_time, finishTime, need_scan) {
+        var html = '<div class="task">';
+        html += '<div class="mui-row">';
+        html += '<div class="mui-col mui-col-xs-12">任务编号：<span>' + task_code + '</span></div>';
+        if (status == "2")
+        //已完工
+            html += '<div class="mui-col mui-col-xs-12">完工时间：<span>' + finishTime + '</span></div>';
+        else
+        //已超时
+            html += '<div class="mui-col mui-col-xs-12">截止时间：<span>' + end_time + '</span></div>';
+        html += '<div class="mui-col mui-col-xs-12">设备编码：<span>' + machine_code + '</span></div>';
+        html += '<div class="mui-col mui-col-xs-12">任务名称：<span>' + task_name + '</span></div>';
+        html += '<div class="mui-col mui-col-xs-12">任务地址：<span>' + fixed_place + '</span></div>';
+        html += '<div class="mui-col mui-col-xs-12">作业描述：<span>' + task_desc + '</span></div>';
+        html += '</div>';
+        html += '</div>';
+        return html;
+    }
+
+    /**
+     * mui清除按钮事件(ps:自定义的，不加此方法页面会报错，如果不需要，方法体为空就行)
+     */
+    function clearFunc() {
+
+    }
+
+    /**
+     * mui返回方法(ps:自定义的,不加会报错,不需要的话方法体定义为空)
+     * [goBack description]
+     * @return {[type]} [description]
+     */
+    function goBack() {
+        window.history.back();
+    }
+</script>
+
+</html>

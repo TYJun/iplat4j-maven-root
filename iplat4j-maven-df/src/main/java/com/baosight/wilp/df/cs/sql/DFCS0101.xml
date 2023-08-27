@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFCS0101">
+
+	<insert id="insert" parameterClass="java.util.HashMap">
+		insert into df_classfyparam
+		(
+			id,
+			module_id,
+			param_name,
+			param_key,
+			param_value,
+			param_unit,
+			memo
+		)
+		values
+		(
+			#id#,
+			#moduleId#,
+			#paramName#,
+			#paramKey#,
+			#paramValue#,
+			#paramUnit#,
+			#memo#
+		)
+	</insert>
+
+</sqlMap>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFRH01b">
+	<insert id="insert"  parameterClass="com.baosight.wilp.df.common.domain.DfLubricateDetail">
+		INSERT INTO  df_lubricate_detail
+		(
+			id,
+			lubricate_id,
+			lubricate_spot,
+			lubricate_no,
+			fill_oil,
+			waste_oil,
+			oil_type,
+			oil_water_content,
+			oil_acid_content,
+			each_element_content,
+			next_oil_time,
+			sort_no,
+			rec_creator ,
+			rec_create_time,
+			rec_revisor ,
+			rec_revise_time
+		)
+		VALUES
+		(
+			#id#,
+			#lubricateId#,
+			#lubricateSpot#,
+			#lubricateNo#,
+			#fillOil#,
+			#wasteOil#,
+			#oilType#,
+			#oilWaterContent#,
+			#oilAcidContent#,
+			#eachElementContent#,
+			#nextOilTime#,
+			#sortNo#,
+			#recCreator#,
+			#recCreateTime#,
+			#recRevisor#,
+			#recReviseTime#
+		)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM df_lubricate_detail WHERE lubricate_no  = #id#
+	</delete>
+
+
+</sqlMap>

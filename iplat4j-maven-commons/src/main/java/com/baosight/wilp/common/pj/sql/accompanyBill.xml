@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-03-23 14:36:26
+   		Version :  6.0.731.201809200158
+		tableName :iplat_v5demo_business.oi_bill 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 accompany_no  VARCHAR, 
+		 inpatient_ward  VARCHAR, 
+		 bed_no  VARCHAR, 
+		 patient  VARCHAR, 
+		 oi_project_no  VARCHAR, 
+		 oi_project  VARCHAR, 
+		 accompany_status  VARCHAR, 
+		 rec_create_no  VARCHAR, 
+		 rec_create_time  VARCHAR, 
+		 is_return  VARCHAR
+	-->
+<sqlMap namespace="accompanyBill">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.common.pj.domain.AccompanyBill">
+		SELECT
+				id	as "id",  <!-- 主键 -->
+				accompany_no	as "accompanyNo",  <!-- 陪检单号 -->
+				inpatient_ward	as "inpatientWard",  <!-- 病区 -->
+				bed_no	as "bedNo",  <!-- 床号 -->
+				patient	as "patient",  <!-- 病人 -->
+				oi_project_no	as "accompanyProjectNo",  <!-- 陪检项目编号 -->
+				oi_project	as "accompanyProject",  <!-- 陪检项目 -->
+				accompany_status	as "accompanyStatus",  <!-- 工单状态 -->
+				rec_create_no	as "recCreateNo",  <!-- 创建人 -->
+				rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+				is_return	as "isReturn" <!-- 是否自回 -->
+		FROM iplat_v5demo_business.oi_bill WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM iplat_v5demo_business.oi_bill WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="accompanyNo">
+			accompany_no = #accompanyNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="inpatientWard">
+			inpatient_ward = #inpatientWard#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="bedNo">
+			bed_no = #bedNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="patient">
+			patient = #patient#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="accompanyProjectNo">
+			oi_project_no = #accompanyProjectNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="accompanyProject">
+			oi_project = #accompanyProject#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="accompanyStatus">
+			accompany_status = #accompanyStatus#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateNo">
+			rec_create_no = #recCreateNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTime">
+			rec_create_time = #recCreateTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="isReturn">
+			is_return = #isReturn#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO iplat_v5demo_business.oi_bill (id,  <!-- 主键 -->
+										accompany_no,  <!-- 陪检单号 -->
+										inpatient_ward,  <!-- 病区 -->
+										bed_no,  <!-- 床号 -->
+										patient,  <!-- 病人 -->
+										oi_project_no,  <!-- 陪检项目编号 -->
+										oi_project,  <!-- 陪检项目 -->
+										accompany_status,  <!-- 工单状态 -->
+										rec_create_no,  <!-- 创建人 -->
+										rec_create_time,  <!-- 创建时间 -->
+										is_return  <!-- 是否自回 -->
+										)		 
+	    VALUES (#id#, #accompanyNo#, #inpatientWard#, #bedNo#, #patient#, #accompanyProjectNo#, #accompanyProject#, #accompanyStatus#, #recCreateNo#, #recCreateTime#, #isReturn#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM iplat_v5demo_business.oi_bill WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE iplat_v5demo_business.oi_bill 
+		SET 
+					accompany_no	= #accompanyNo#,   <!-- 陪检单号 -->  
+					inpatient_ward	= #inpatientWard#,   <!-- 病区 -->  
+					bed_no	= #bedNo#,   <!-- 床号 -->  
+					patient	= #patient#,   <!-- 病人 -->  
+					oi_project_no	= #accompanyProjectNo#,   <!-- 陪检项目编号 -->  
+					oi_project	= #accompanyProject#,   <!-- 陪检项目 -->  
+					accompany_status	= #accompanyStatus#,   <!-- 工单状态 -->  
+					rec_create_no	= #recCreateNo#,   <!-- 创建人 -->  
+					rec_create_time	= #recCreateTime#,   <!-- 创建时间 -->  
+					is_return	= #isReturn#  <!-- 是否自回 -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

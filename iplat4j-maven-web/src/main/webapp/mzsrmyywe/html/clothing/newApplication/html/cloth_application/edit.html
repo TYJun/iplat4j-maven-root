@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>申请修改</title>
+    <link rel="stylesheet" href="../../css/cloth_application/edit.css" />
+    <link rel="stylesheet" href="../../css/cloth_application/application.css" />
+    <link rel="stylesheet" href="../../../../../reference/mui/css/mui.min.css" />
+    <link rel="stylesheet" href="../../../../../reference/mui/css/mui.picker.css" />
+    <link rel="stylesheet" href="../../../../../reference/mui/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="../../../../../reference/mui/css/mui.dtpicker.css" />
+    <link rel="stylesheet" href="../../../reference/css/loading.css" />
+    <link rel="stylesheet" href="../../../../../reference/vant/css/index.css" />
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <!-- 顶部区域 -->
+        <header>
+            <div class="top">
+                <div id="top-bar">
+                    <span @click="back" id="icon-left-back" class="mui-icon mui-icon-arrowleft"></span>
+                    <h1 id="title">申请修改</h1>
+                </div>
+        </header>
+
+        <!-- 表格 -->
+        <table class="selecttable">
+            <thead>
+                <tr>
+                    <th>医用织物分类</th>
+                    <th>规格</th>
+                    <th>数量</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <!-- 一行 -->
+                <tr v-for="(item,index) in list_detail" :key="index">
+                    <!-- 列 -->
+                    <td>{{item.fabricName}}</td>
+                    <td>{{item.fabricModel}}</td>
+                    <td>
+                        <div class="mui-numbox" data-numbox-step="1" data-numbox-min="0" data-numbox-max="100">
+                            <button @click="redNum(index)" class="mui-btn mui-numbox-btn-minus" type="button">
+                                -
+                            </button>
+                            <input @input="changeInput(item.number,index)" class=" mui-numbox-input" v-model="item.number"
+                                type="number" />;
+                            <button @click="addNum(index)" class="mui-btn mui-numbox-btn-plus" type="button">
+                                +
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- '提交'按钮 -->
+        <div>
+            <button id="btn_submit" @click="submit" type="button">
+                <span>提交</span>
+            </button>
+        </div>
+    </div>
+</body>
+<script src="../../../../../reference/assets/js/jquery.min.js"></script>
+<script src="../../../../../html/reference/mui/js/mui.min.js"></script>
+<script src="../../../../../html/reference/mui/js/mui.picker.min.js"></script>
+<script src="../../../../../reference/vue/vue.js"></script>
+<script src="../../../../../reference/vue/vue.min.js"></script>
+<script src="../../../../../reference/vant/js/vant.min.js"></script>
+<script src="../../../../../html/reference/js/mui.loading.js"></script>
+<script src="../../../reference/mui/js/jquery-2.1.4.js"></script>
+
+<script>
+    var baseUrl = localStorage.getItem("url");
+
+    var app = new Vue({
+        el: "#app",
+        data: function () {
+            _this = this;
+            return {
+                list_detail: [], //申请医用织物列表
+                total: 0, //申请医用织物总数
+            }
+        },
+        methods: {
+            //获取历史数据卡片详情
+            get_list_detail() {
+                mui.showLoading("正在加载", "div")
+                // 在地址栏中获取applicationNo
+                var _applicationNo = _this.GetQueryString('applicationNo');
+
+                $.ajax({
+                    type: "post",
+                    url: baseUrl + "medical/fabric",
+                    data: {
+                        requestParam: '{"applicationNo":"' + _applicationNo + '"}',
+                    },
+                    headers: {
+                        methodName: "queryApplicationDetail",
+                        serviceName: "OMMFApplication",
+                    },
+                    success: function (data) {
+                        mui.hideLoading();
+                        if (data.statusCode != "0") {
+                            mui.toast(data.respMsg);
+                            return;
+                        }
+                        app.list_detail = data.data;
+                        if (app.list_detail.length == 0) {
+                            mui.toast("当前没有数据！");
+                            return;
+                        }
+                    },
+                });
+            },
+            // 计数器增减事件
+            addNum(index) {
+                var item = this.list_detail[index] //拿到index
+                item.number++
+                this.$set(this.list_detail, index, item)
+
+            },
+            changeInput(value, index) {
+                value = Number(value)
+                app.list_detail[index].number = Number(app.list_detail[index].number)
+                var _item = app.list_detail[index];
+                (value > 100 || value < 0) && mui.toast("范围为 0 - 100");
+                value > 100 && (_item.number = 100);
+                value <= 0 && (_item.number = 0);
+                app.$set(app.list_detail, index, _item);
+            },
+            redNum(index) {
+                var item = this.list_detail[index]
+                item.number > 0 ? (() => {
+                    item.number--
+                    this.$set(this.list_detail, index, item)
+                })() : mui.toast("最小值为 0 ");
+            },
+            //获取地址栏中的参数
+            GetQueryString(name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if (r != null) return unescape(r[2]); return null;
+            },
+            // 提交
+            submit() {
+                // 在地址栏中获取applicationNo
+                var _applicationNo = _this.GetQueryString('applicationNo');
+                //获取申请总数
+                $.each(app.list_detail, function (index, item) {
+                    app.total += item.number;
+                    console.log(app.total)
+                })
+                //判断其是否为0
+                if(app.total <= 0) {
+                        mui.toast('申请总数量不能为0 !');
+                        return;
+                }
+
+                mui.showLoading("正在提交", "div")
+                var _list_detail = []
+                $.each(_this.list_detail, function (index, item) {
+                    item.number == 0 || _list_detail.push(
+                        {
+                            number: item.number,
+                            fabricName: item.fabricName,
+                            fabricNo: item.fabricNo,
+                            fabricModel: item.fabricModel,
+                            fabricSpec: item.fabricSpec,
+                        }
+                    )
+                })
+
+                $.ajax({
+                    url: baseUrl + "medical/fabric",
+                    type: "post",
+                    data: {
+                        requestParam: JSON.stringify(
+                            {
+                                applicationNo: _applicationNo,
+                                deptName: localStorage.getItem('deptName'),
+                                deptNo: localStorage.getItem('deptNo'),
+                                giveOutDate: app.giveOutDate,
+                                workNo: localStorage.getItem('workNo'),
+                                userName: localStorage.getItem('userName'),
+                                isUrgent: '2',
+                                address: "",
+                                remark: "",
+                                fabricInfo: _list_detail
+                            }
+                        )
+                    },
+                    headers: {
+                        methodName: 'updateApplicationInfo',
+                        serviceName: "OMMFApplication"
+                    },
+                    success: function (data) {
+                        mui.hideLoading();
+                        if (data.statusCode != 0 && data.statusCode != 199) {
+                            mui.toast(data.msg);
+                            return;
+                        }
+                        if (data.statusCode == 0) {
+                            mui.toast('修改成功!');
+                            setTimeout(function() {
+                                location.href = "./historyList.html";
+                            }, 1000)
+                        }else if (data.respCode == 199) {
+                            mui.toast(data.respMsg + "，请补签！");
+                            setTimeout(function () {
+                                location.href = "../menuAPP.html";
+                            }, 2000);
+                        }
+                    }
+                });
+            },
+            //左上角返回事件
+            back() {
+                location.href = "./historyList.html";
+            },
+        },
+        created() {
+            _this.get_list_detail()
+        },
+    })
+
+    $("icon-left-back").click(function () {
+        location.href = "./historyList.html"
+    })
+
+
+</script>
+
+</html>

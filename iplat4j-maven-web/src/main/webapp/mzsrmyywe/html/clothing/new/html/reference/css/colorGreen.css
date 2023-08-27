@@ -1,0 +1,150 @@
+/*********************绿色系*********************/
+/*头部mui-bar-nav 登录按钮mui-btn-blue 首页模块字体颜色mui-table-view 
+列表页的箭头颜色mui-navigate-right 导航栏mui-bar-tab 字体颜色fontColor 
+设备巡检首页模块颜色operate-enable 单选按钮mui-radio bootstrap框架navbar-inverse*/
+.mui-bar-nav {
+	-webkit-box-shadow: 0 1px 6px #209c60;
+    box-shadow: 0 1px 6px #209c60;
+}
+.mui-bar {
+	background-color: #30c37c;
+}
+.mui-barColor {
+	background-color: #30c37c;
+}
+.mui-btn-blue, .mui-btn-primary, input[type=submit] {
+	border: 1px solid #30c37c;
+    background-color: #30c37c;
+}
+.mui-btn-blue:enabled:active, .mui-btn-primary:enabled:active, input[type=submit]:enabled:active {
+	border: 1px solid #30c37c;
+    background-color: #30c37c;
+}
+.mui-table-view.mui-grid-view .mui-table-view-cell .mui-media-body {
+	color: #333;
+}
+.mui-navigate-right:after {
+	color: #30c37c;
+}
+.mui-bar-tab .mui-tab-item.mui-active {
+	color: #30c37c;
+}
+.fontColor {
+	color: #30c37c !important;
+}
+.fontColor:active {
+	color: #30c37c;
+}
+.backColor {
+	background: #30c37c;
+}
+.settingBackColor {
+	background: #30c37c;
+}
+#telPhone {
+	background: #0d9a56;
+}
+.borderColor {
+	border: 1px solid #30c37c;
+}
+.shadowColor {
+	box-shadow: 1px 3px 15px #129f5b;
+}
+.operate-enable{
+  color: #0c9654;
+}
+.mui-checkbox input[type=checkbox]:checked:before, .mui-radio input[type=radio]:checked:before {
+	color: #30c37c;
+}
+.mui-popup-button {
+	color: #30c37c;
+}
+.navbar-inverse {
+	background-image: none;
+	background-color: #30c37c;
+}
+.btn-info {
+	background-image: none;
+	background-color: #30c37c;
+}
+.btn-primary {
+	background-image: none;
+	background-color: #30c37c;
+}
+.nav .open>a, .nav .open>a:focus, .nav .open>a:hover {
+	background-color: #1faf6a;
+}
+.btn-info:focus, .btn-info:hover {
+	background-color: #30c37c;
+}
+
+/*********************蓝色系*********************/
+/*.mui-bar-nav {
+	-webkit-box-shadow: 0 1px 6px #2aabd2;
+    box-shadow: 0 1px 6px #2aabd2;
+}
+.mui-bar {
+	background-color: #5bc0de;
+}
+.mui-barColor {
+	background-color: #2aabd2;
+}
+.mui-btn-blue, .mui-btn-primary, input[type=submit] {
+	border: 1px solid #2aabd2;
+    background-color: #5bc0de;
+}
+.mui-btn-blue:enabled:active, .mui-btn-primary:enabled:active, input[type=submit]:enabled:active {
+	border: 1px solid #2aabd2;
+    background-color: #5bc0de;
+}
+.mui-table-view.mui-grid-view .mui-table-view-cell .mui-media-body {
+	color: #333;
+}
+.mui-navigate-right:after {
+	color: #5bc0de;
+}
+.mui-bar-tab .mui-tab-item.mui-active {
+	color: #007aff;
+}
+.fontColor {
+	color: #337ab7 !important;
+}
+.fontColor:active {
+	color: #337ab7;
+}
+.backColor {
+	background: #2aabd2;
+}
+.borderColor {
+	border: 1px solid #337ab7;
+}
+.shadowColor {
+	box-shadow: 1px 3px 15px #58c3e3;
+} 
+.operate-enable{
+  color: #3a82bb;
+}
+.mui-checkbox input[type=checkbox]:checked:before, .mui-radio input[type=radio]:checked:before {
+	color: #007aff;
+}
+.mui-popup-button {
+	color: #337ab7;
+}
+.navbar-inverse {
+	background-image: none;
+	background-color: #2aabd2;
+}
+.btn-info {
+	background-image: none;
+	background-color: #2aabd2;
+}
+.btn-primary {
+	background-image: none;
+	background-color: #2aabd2;
+}
+.nav .open>a, .nav .open>a:focus, .nav .open>a:hover {
+	background-color: #1b95ba;
+}
+.btn-info:focus, .btn-info:hover {
+	background-color: #2aabd2;
+}*/

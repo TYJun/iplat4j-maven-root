@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="SSBMStxx01">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.bm.domain.SSBMStxx01">
+		SELECT
+		id as "id",  <!-- 主键 -->
+		canteen_num as "canteenNum",  <!-- 食堂编码 -->
+		canteen_name as "canteenName",  <!-- 食堂名称 -->
+		liaison_id as "liaisonId",  <!-- 联络员工号 -->
+		liaison_name as "liaisonName",  <!-- 联络员姓名 -->
+		canteen_type as "canteenType",  <!-- 食堂类型,(职工食堂/病员食堂，00/01） -->
+		canteen_type_num as "canteenTypeNum",  <!-- 食堂分类编码 -->
+		canteen_type_name as "canteenTypeName",  <!-- 食堂分类名 -->
+		rec_create_time as "recCreateTime",
+		rec_creator as "recCreator",
+		is_auto_sche as "isAutoSche",  <!-- 是否启动排班；0/1,不启动/启动 -->
+		operate_code as "operateCode",  <!-- 业务code -->
+		operate_name as "operateName",  <!-- 业务名称 -->
+		datagroup_code as "datagroupCode",
+		datagroup_treecode as "datagroupTreecode",
+		status_code as "statusCode",
+		telephone as "telephone",  <!-- 联系电话 -->
+		meal_num_name as "mealNumName",  <!-- 餐类名称，早餐,中餐,晚餐 -->
+		meal_num as "mealNum",  <!-- 餐类编码，001,002,003 -->
+		canteen_status as "canteenStatus",  <!-- 状态编码，1 - 启用 ； 0 - 禁用 -->
+		canteen_status_name as "canteenStatusName", <!-- 食堂状态名称 -->
+		ship_fee as shipFee,
+		dishes_number as dishesNumber
+		FROM sc_canteen_liaison_conf WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="canteenTypeNum">
+			canteen_type_num = #canteenTypeNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="canteenName">
+			canteen_name like concat('%',#canteenName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="canteenNum">
+			canteen_num = #canteenNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="userId">
+            liaison_id like concat('%',#userId#,'%')
+        </isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+            datagroup_treecode like concat('%',#dataGroupCode#,'%')
+        </isNotEmpty>
+		ORDER BY rec_create_time desc,canteen_num ASC 
+	</select>
+	
+	
+	    <select id="queryCanteenInfoGd" parameterClass="HashMap" 
+	       resultClass="com.baosight.wilp.ss.bm.domain.SSBMStxx01">
+        SELECT 
+            t.id as "id",  <!-- 主键 -->
+            t.canteen_num as "canteenNum",  <!-- 食堂编码 -->
+            t.canteen_name as "canteenName",  <!-- 食堂名称 -->
+            t.liaison_id as "liaisonId",  <!-- 联络员工号 -->
+            t.liaison_name as "liaisonName",  <!-- 联络员姓名 -->
+            t.canteen_type as "canteenType",  <!-- 食堂类型,(职工食堂/病员食堂，00/01） -->
+            t.canteen_type_num as "canteenTypeNum",  <!-- 食堂分类编码 -->
+            t.canteen_type_name as "canteenTypeName",  <!-- 食堂分类名 -->
+            t.rec_create_time as "recCreateTime",
+            t.rec_creator as "recCreator",
+            t.is_auto_sche as "isAutoSche",  <!-- 是否启动排班；0/1,不启动/启动 -->
+            t.operate_code as "operateCode",  <!-- 业务code -->
+            t.operate_name as "operateName",  <!-- 业务名称 -->
+            t.datagroup_code as "datagroupCode",
+            t.datagroup_treecode as "datagroupTreecode",
+            t.status_code as "statusCode",
+            t.telephone as "telephone",  <!-- 联系电话 -->
+            t.meal_num_name as "mealNumName",  <!-- 餐类名称，早餐,中餐,晚餐 -->
+            t.meal_num as "mealNum",  <!-- 餐类编码，001,002,003 -->
+            t.canteen_status as "canteenStatus",  <!-- 状态编码，1 - 启用 ； 0 - 禁用 -->
+            t.canteen_status_name as "canteenStatusName", <!-- 食堂状态名称 -->
+            IFNULL(e.minPrice,0) minPrice,
+            IFNULL(e.transFee,0) transFee
+        FROM 
+            `sc_canteen_liaison_conf` t
+            left JOIN(
+        SELECT c.typename canteen_num,  c.paramValue1 minPrice,
+            c.paramValue2 transFee from sc_type c 
+            LEFT JOIN sc_typegroup d on c.typegroupid=d.id WHERE d.typegroupcode='canteenMinPrice') e on t.canteen_num=e.canteen_num
+        where 
+            t.canteen_status = '1'
+            and  
+            t.`canteen_type_num`= #canteenTypeNum#
+            <!-- 院区编码录入错误,在此处去掉账套过滤 -->
+        <isNotEmpty prepend="AND" property="dataGroupCode">
+            t.`datagroup_code`= #dataGroupCode#
+        </isNotEmpty>
+    </select>
+	
+	
+	<select id="queryCanteenByCanteenNum" parameterClass="String"
+		resultClass="com.baosight.wilp.ss.bm.domain.SSBMStxx01">
+		SELECT
+		id as "id",  <!-- 主键 -->
+		canteen_num as "canteenNum",  <!-- 食堂编码 -->
+		canteen_name as "canteenName",  <!-- 食堂名称 -->
+		liaison_id as "liaisonId",  <!-- 联络员工号 -->
+		liaison_name as "liaisonName",  <!-- 联络员姓名 -->
+		canteen_type as "canteenType",  <!-- 食堂类型,(职工食堂/病员食堂，00/01） -->
+		canteen_type_num as "canteenTypeNum",  <!-- 食堂分类编码 -->
+		canteen_type_name as "canteenTypeName",  <!-- 食堂分类名 -->
+		rec_create_time as "recCreateTime",
+		rec_creator as "recCreator",
+		is_auto_sche as "isAutoSche",  <!-- 是否启动排班；0/1,不启动/启动 -->
+		operate_code as "operateCode",  <!-- 业务code -->
+		operate_name as "operateName",  <!-- 业务名称 -->
+		datagroup_code as "datagroupCode",
+		datagroup_treecode as "datagroupTreecode",
+		status_code as "statusCode",
+		telephone as "telephone",  <!-- 联系电话 -->
+		meal_num_name as "mealNumName",  <!-- 餐类名称，早餐,中餐,晚餐 -->
+		meal_num as "mealNum",  <!-- 餐类编码，001,002,003 -->
+		canteen_status as "canteenStatus",  <!-- 状态编码，1 - 启用 ； 0 - 禁用 -->
+		canteen_status_name as "canteenStatusName" <!-- 食堂状态名称 -->
+		FROM sc_canteen_liaison_conf WHERE 1=1
+		and canteen_num = #canteenNum#
+	</select>
+
+    <!-- 查询食堂配置 -->
+    <select id="queryCanteenDataGroup" parameterClass="HashMap"
+	    resultClass="HashMap">
+	    SELECT DISTINCT
+		    c.datagroup_code datagroupCode,
+		    d.typename datagroupName
+        FROM
+            `sc_canteen_liaison_conf` c
+            LEFT JOIN sc_type d ON c.datagroup_code = d.typecode
+		where 1=1 
+		<isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="canteenName">
+            canteen_name like concat('%',#canteenName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="canteenNum">
+            canteen_num = #canteenNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="userId">
+            liaison_id like concat('%',#userId#,'%')
+        </isNotEmpty>
+    </select>
+
+<!-- 	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_canteen_liaison_conf WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select> -->
+
+	<insert id="insert">
+		INSERT INTO sc_canteen_liaison_conf (id,  <!-- 主键 -->
+		canteen_num,  <!-- 食堂编码 -->
+		canteen_name,  <!-- 食堂名称 -->
+		liaison_id,  <!-- 联络员工号 -->
+		liaison_name,  <!-- 联络员姓名 -->
+		canteen_type,  <!-- 食堂类型,(职工食堂/病员食堂，00/01） -->
+		canteen_type_num,  <!-- 食堂分类编码 -->
+		canteen_type_name,  <!-- 食堂分类名 -->
+		rec_create_time,
+		rec_creator,
+		is_auto_sche,  <!-- 是否启动排班；0/1,不启动/启动 -->
+		operate_code,  <!-- 业务code -->
+		operate_name,  <!-- 业务名称 -->
+		datagroup_code,
+		datagroup_treecode,
+		status_code,
+		telephone,  <!-- 联系电话 -->
+		meal_num_name,  <!-- 餐类名称，早餐,中餐,晚餐 -->
+		meal_num,  <!-- 餐类编码，001,002,003 -->
+		canteen_status,  <!-- 状态编码，1 - 启用 ； 0 - 禁用 -->
+		canteen_status_name,  <!-- 食堂状态名称 -->
+		send_fee,<!-- 每单最低起送费(单位:分) -->
+		ship_fee,  <!-- 每单配送费(单位:分) -->
+		dishes_number	<!-- 菜品数量 -->
+		)
+		VALUES (#id#, #canteenNum#, #canteenName#, #liaisonId#, #liaisonName#,
+		#canteenType#, #canteenTypeNum#, #canteenTypeName#, #recCreateTime#,
+		#recCreator#, #isAutoSche#, #operateCode#, #operateName#,
+		#datagroupCode#, #datagroupTreecode#, #statusCode#, #telephone#,
+		#mealNumName#, #mealNum#, #canteenStatus#, #canteenStatusName#, #sendFee#, #shipFee#,#dishesNumber#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM sc_canteen_liaison_conf
+		WHERE
+		id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_canteen_liaison_conf
+		SET
+		canteen_num = #canteenNum#,   <!-- 食堂编码 -->
+		canteen_name = #canteenName#,   <!-- 食堂名称 -->
+		liaison_id = #liaisonId#,   <!-- 联络员工号 -->
+		liaison_name = #liaisonName#,   <!-- 联络员姓名 -->
+		canteen_type = #canteenType#,   <!-- 食堂类型,(职工食堂/病员食堂，00/01） -->
+		canteen_type_num = #canteenTypeNum#,   <!-- 食堂分类编码 -->
+		canteen_type_name = #canteenTypeName#,   <!-- 食堂分类名 -->
+		rec_create_time = #recCreateTime#,
+		rec_creator = #recCreator#,
+		is_auto_sche = #isAutoSche#,   <!-- 是否启动排班；0/1,不启动/启动 -->
+		operate_code = #operateCode#,   <!-- 业务code -->
+		operate_name = #operateName#,   <!-- 业务名称 -->
+		datagroup_code = #datagroupCode#,
+		datagroup_treecode = #datagroupTreecode#,
+		status_code = #statusCode#,
+		telephone = #telephone#,   <!-- 联系电话 -->
+		meal_num_name = #mealNumName#,   <!-- 餐类名称，早餐,中餐,晚餐 -->
+		meal_num = #mealNum#,   <!-- 餐类编码，001,002,003 -->
+		canteen_status = #canteenStatus#,   <!-- 状态编码，1 - 启用 ； 0 - 禁用 -->
+		canteen_status_name = #canteenStatusName# , <!-- 食堂状态名称 -->
+		send_fee = #sendFee# , <!-- 每单最低起送费(单位:分) -->
+		ship_fee = #shipFee#,<!-- 每单配送费(单位:分) -->
+		dishes_number = #dishesNumber#	<!-- 菜品数量 -->
+		WHERE
+		id = #id#
+	</update>
+
+    <!-- 获取院区hosArea：院区，mealOperate：食堂业务，canteenType：食堂类别，mealNum：餐次类型 -->
+    <select id="getMealTypeData" resultClass="HashMap" parameterClass="java.util.HashMap">
+		SELECT
+		    id,
+		    typecode typeCode,
+		    typename typeName,
+		    paramValue1
+		FROM
+		    sc_type 
+		WHERE 1=1 
+       <isNotEmpty prepend=" AND " property="mealgroupTypeCode">
+            typegroupid = ( 
+            SELECT id FROM sc_typegroup 
+            WHERE 1=1 and 
+                typegroupcode = #mealgroupTypeCode#
+            ) 
+        </isNotEmpty> 
+       <isNotEmpty prepend=" AND " property="paramValue1">
+            paramValue1 = #paramValue1#
+        </isNotEmpty> 
+        ORDER BY sortNo
+    </select>
+    
+    <!-- 获取食堂信息canteen_status:1 启用 -->
+    <select id="getCanteenData" resultClass="HashMap" parameterClass="java.util.HashMap">
+		SELECT 
+			distinct(canteen_num) typeCode,
+			canteen_name typeName ,
+			id,
+			canteen_type_num canteenTypeNum,
+			canteen_type_name canteenTypeName
+        FROM sc_canteen_liaison_conf 
+        where canteen_status = '1' 
+        <isNotEmpty prepend="and" property="userId">
+             FIND_IN_SET(#userId#,liaison_id) > 0
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="isAutoSche">
+            is_auto_sche = #isAutoSche#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="canteenTypeNum">
+            canteen_type_num = #canteenTypeNum#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="code">
+            datagroup_treecode like   concat('%',#code#,'%')
+        </isNotEmpty>
+          <isNotEmpty prepend="and" property="canteenName">
+            canteen_name like concat('%',#canteenName#,'%')
+        </isNotEmpty>
+         <isNotEmpty prepend="and" property="operateCode">
+             FIND_IN_SET(#operateCode#,operate_code) > 0
+        </isNotEmpty>
+        order by canteen_num
+    </select>
+
+	<select id="queryCanteenFromWardCode" parameterClass="string" resultClass="java.util.HashMap">
+		SELECT
+			canteen_num canteenNum,
+			canteen_name canteenName
+		FROM
+			t_ward_bind
+		WHERE
+			ward_code = #value#
+	</select>
+
+	<select id="getCanteenDailySales" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			need_date,
+			canteen_num,
+			canteen_name,
+		    count(id) cout,
+			sum( bill_total_price ) bill_total_price
+		FROM
+			sc_work_order_bill
+		WHERE
+			status_code > 00
+		  AND reject_code IS NULL
+		<isNotEmpty prepend="and" property="needDate">
+			need_date = #needDate#
+		</isNotEmpty>
+		GROUP BY need_date,canteen_num
+	</select>
+
+	<select id="getFoodSales" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			a.need_date,
+			a.canteen_num,
+			a.canteen_name,
+		    m.menu_price,
+			m.menu_name,
+			sum(b.menu_number) menu_number
+		FROM
+			sc_work_order_bill a
+			LEFT JOIN sc_work_order_bill_detail b on a.bill_no=b.bill_no
+			LEFT JOIN sc_menu m on b.menu_num = m.menu_num
+
+		WHERE
+			a.status_code > 00
+		  AND a.reject_code IS NULL
+		<isNotEmpty prepend="and" property="needDate">
+			a.need_date = #needDate#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="canteenNum">
+			a.canteen_num = #canteenNum#
+		</isNotEmpty>
+
+		GROUP BY a.need_date,a.canteen_num,m.menu_num
+	</select>
+
+	<select id="getFoodEvaluation" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		ad.*,
+		om.`menu_name` menuName
+		FROM
+		(
+		SELECT
+		t.`bill_no` AS billNo,
+		 bd.`eval_level` evalLevel,
+		bd.`eval_content` evalContent,
+		bd.`menu_num` menu_num,
+		t.need_date
+		FROM
+		sc_work_order_bill t,
+		sc_work_order_bill_detail bd
+		WHERE
+		t.`bill_no` = bd.`bill_no`
+		) ad
+		LEFT JOIN sc_menu om ON om.`menu_num` = ad.menu_num
+		where 1=1
+		<isNotEmpty prepend="and" property="needDate">
+			ad.need_date = #needDate#
+		</isNotEmpty>
+		ORDER BY
+		ad.billNo DESC
+	</select>
+
+</sqlMap>

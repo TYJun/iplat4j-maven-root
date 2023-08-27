@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="CIWH01">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.ci.wh.domain.CiWarehouse">
+		SELECT
+				ID	as "id",  <!-- 主键 -->
+				REC_CREATOR	as "recCreator",  <!-- 记录创建责任者 -->
+				REC_CREATE_TIME	as "recCreateTime",  <!-- 记录创建时间 -->
+				REC_REVISOR	as "recRevisor",  <!-- 记录修改责任者 -->
+				REC_REVISE_TIME	as "recReviseTime",  <!-- 记录修改时间 -->
+				ARCHIVE_FLAG	as "archiveFlag",  <!-- 归档标记 -->
+				WARE_HOUSE_NO	as "wareHouseNo",  <!-- 仓库号 -->
+				WARE_HOUSE_NAME	as "wareHouseName",  <!-- 仓库名称 -->
+				CASE 
+					WHEN FREEZE_FLAG = 'N' THEN '否' 
+					WHEN FREEZE_FLAG = 'Y' THEN '是'
+				END as "freezeFlag",  <!-- 冻结标记 -->
+				WARE_HOUSE_TYPE	as "wareHouseType",  <!-- 仓库类型 -->
+				price_type	as "priceType",  <!-- 计价方式 -->
+				work_no	as "workNo",  <!-- 仓库管理员（未用） -->
+				work_name	as "workName",  <!-- 仓库管理员（未用） -->
+				management_type	as "managementType",  <!-- 管理类型（未用） -->
+				mat_type_num	as "matTypeNum",  <!-- 物资分类编码（未用） -->
+				mat_type_name	as "matTypeName" <!-- 物资分类名称（未用） -->
+		FROM ci_warehouse WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id"> <!-- 主键 -->
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNo"> <!-- 仓库号 -->
+			WARE_HOUSE_NO = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseName"> <!-- 仓库名称 -->
+			WARE_HOUSE_NAME like concat('%', #wareHouseName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="freezeFlag"> <!-- 是否冻结 -->
+			FREEZE_FLAG = #freezeFlag#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			DATA_GROUP_CODE = #dataGroupCode#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  WARE_HOUSE_NO asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM ci_warehouse WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id"> <!-- 主键 -->
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNo"> <!-- 仓库号 -->
+			WARE_HOUSE_NO = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseName"> <!-- 仓库名称 -->
+			WARE_HOUSE_NAME like concat('%', #wareHouseName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="freezeFlag"> <!-- 是否冻结 -->
+			FREEZE_FLAG = #freezeFlag#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			DATA_GROUP_CODE = #dataGroupCode#
+		</isNotEmpty>
+	</select>
+	
+	
+	<insert id="insert" parameterClass="com.baosight.wilp.ci.wh.domain.CiWarehouse">
+		INSERT INTO ci_warehouse (ID,  <!-- 主键 -->
+										REC_CREATOR,  <!-- 记录创建责任者 -->
+										REC_CREATE_TIME,  <!-- 记录创建时间 -->
+										REC_REVISOR,  <!-- 记录修改责任者 -->
+										REC_REVISE_TIME,  <!-- 记录修改时间 -->
+										DATA_GROUP_CODE, <!-- 院区 -->
+										ARCHIVE_FLAG,  <!-- 归档标记 -->
+										WARE_HOUSE_NO,  <!-- 仓库号 -->
+										WARE_HOUSE_NAME,  <!-- 仓库名称 -->
+										FREEZE_FLAG,  <!-- 冻结标记 -->
+										WARE_HOUSE_TYPE,  <!-- 仓库类型 -->
+										price_type,  <!-- 计价方式 -->
+										work_no,  <!-- 仓库管理员（未用） -->
+										work_name,  <!-- 仓库管理员（未用） -->
+										management_type,  <!-- 管理类型（未用） -->
+										mat_type_num,  <!-- 物资分类编码（未用） -->
+										mat_type_name  <!-- 物资分类名称（未用） -->
+										)		 
+	    VALUES (#id#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#, #archiveFlag#, #wareHouseNo#, #wareHouseName#, #freezeFlag#, #wareHouseType#, #priceType#, #workNo#, #workName#, #managementType#, #matTypeNum#, #matTypeName#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM ci_warehouse WHERE ID = #id#
+	</delete>
+
+	<update id="update" parameterClass="com.baosight.wilp.ci.wh.domain.CiWarehouse">
+		UPDATE ci_warehouse
+		SET 
+			REC_REVISOR	= #recRevisor#,   <!-- 记录修改责任者 -->  
+			REC_REVISE_TIME	= #recReviseTime#,   <!-- 记录修改时间 -->  
+			WARE_HOUSE_NAME	= #wareHouseName#,   <!-- 仓库名称 -->  
+			WARE_HOUSE_TYPE	= #wareHouseType#,   <!-- 仓库类型 -->  
+			price_type	= #priceType#   <!-- 计价方式 -->  
+		WHERE ID = #id#
+	</update>
+	
+	<!-- 冻结/解冻 -->	
+	<update id="updateWarehouse" 
+			parameterClass="com.baosight.wilp.ci.wh.domain.CiWarehouse">
+		UPDATE ci_warehouse
+			SET REC_REVISOR = #recRevisor#,
+			REC_REVISE_TIME = #recReviseTime#,
+			FREEZE_FLAG = #freezeFlag#
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="wareHouseNo">
+			WARE_HOUSE_NO = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+	</update>
+	
+	<!-- 判断仓库中是否存在物资 -->
+	<select id="isExistMat" parameterClass="java.util.Map" resultClass="int">
+		select count(1) from ci_storge where TOTAL_NUM > 0 and WARE_HOUSE_NO = #value#
+	</select>
+	
+	<!-- 仓库号是否存在 -->
+	<select id="isExistwareHouseNo" parameterClass="string" resultClass="int">
+		SELECT count(1) FROM ci_warehouse where WARE_HOUSE_NO=#wareHouseNo#
+	</select>
+	
+	<!-- 校验仓库是否正常 -->
+	<select id="isCheckWareHouse" parameterClass="string" resultClass="int">
+		SELECT count(1) FROM ci_warehouse where WARE_HOUSE_NO=#wareHouseNo# and FREEZE_FLAG = 'N'
+	</select>
+</sqlMap>

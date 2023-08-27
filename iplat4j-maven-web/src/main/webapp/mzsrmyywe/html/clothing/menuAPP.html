@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="./reference/mui/css/mui.css" />
+    <link rel="stylesheet" href="./reference/css/iconfont.css" />
+    <link rel="stylesheet" href="./reference/mui/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="./reference/css/colorGreen.css" />
+    <link rel="stylesheet" href="./reference/css/loading.css" />
+    <!-- <link rel="stylesheet" href="./reference/css/transportCommon.css" /> -->
+    <title>Document</title>
+  </head>
+  <style type="text/css">
+    .box {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 60px;
+      height: 100%;
+      align-items: center;
+      text-align: center;
+      margin-left: 5%;
+    }
+
+    .boxBody {
+      height: 100px;
+      width: 30%;
+      padding-top: 22px;
+    }
+
+    .boxBody:hover {
+      background-color: #e3e5e5;
+    }
+  </style>
+
+  <body>
+    <header class="mui-bar mui-bar-nav backColor">
+      <h1 class="mui-title">布草模块选择</h1>
+      <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+      </button>
+    </header>
+    <!-- 主内容 -->
+    <div class="box">
+      <div class="boxBody" id="APPLICATION" style="display: none;">
+        <img src="../../img/apply.png" alt="" />
+        <div>申请</div>
+      </div>
+      <!-- <div class="boxBody" id="DEPT_RECOVERY" style="display: none;">
+        <img src="../../img/recovery.png" alt="" />
+        <div>科室回收</div>
+      </div> -->
+      <!-- <div class="boxBody" id="dirty" style="display: none;">
+        <img src="../../img/dirty.png" alt="" />
+        <div>污物清点</div>
+      </div> -->
+      <!-- <div class="boxBody" id="defe" style="display: none;">
+        <img src="../../img/defe.png" alt="" />
+        <div>次品登记</div>
+      </div> -->
+      <!-- <div class="boxBody" id="pick" style="display: none;">
+        <img src="../../img/pick.png" alt="" />
+        <div>洁物分拣</div>
+      </div> -->
+      <!-- <div class="boxBody" id="pick">
+            <img src="../../img/分拣单.png" alt="">
+            <div>洁物分拣</div>
+        </div> -->
+      <!-- <div class="boxBody" id="offer" style="display: none;"> -->
+      <!-- <div class="boxBody" id="CLEAN_GIVE" style="display: none;">
+        <img src="../../img/offer.png" alt="" />
+        <div>洁物发放</div>
+      </div>
+      <div class="boxBody" id="CLEAN_ENTER_WAREHOUSE" style="display: none;">
+        <img src="../../img/put.png" alt="" />
+        <div>洁物入库</div>
+      </div>
+      <div class="boxBody" id="search" style="display: none;">
+        <img src="../../img/search.png" alt="" />
+        <div>发放查询</div>
+      </div>
+      <div class="boxBody" id="SCARP" style="display: none;">
+        <img src="../../img/scrap.png" alt="" />
+        <div>报废管理</div>
+      </div>
+      <div class="boxBody" id="INFERIOR" style="display: none;">
+        <img src="../../img/scrap.png" alt="" />
+        <div>次品管理</div>
+      </div>
+      <div class="boxBody" id="DEFAULT" style="display: none;">
+        <img src="../../img/scrap.png" alt="" />
+        <div>拖欠管理</div>
+      </div>
+      <div class="boxBody" id="inventory" style="display: none;">
+        <img src="../../img/inventory.png" alt="" />
+        <div>盘库</div>
+      </div>
+      <div class="boxBody" id="searchAll" style="display: none;">
+        <img src="img/searchAll.png" alt="" />
+        <div>综合查询</div>
+      </div> -->
+      <!-- <div class="boxBody" id="SUPPLEMENT_SIGNATURE" style="display: none;">
+        <img src="img/signatureSupp.png" alt="" />
+        <div>补签</div>
+      </div> -->
+    </div>
+    <!-- <ul class="mui-table-view mui-grid-view mui-grid-9">
+			
+        <li id="REPAIR" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" style="display:none;">
+            <a onclick="location.href='html/repair/taskList.html';">
+                    <span><img src="img/repair.png" alt="" class="icon-logo"></span>
+                    <div class="mui-media-body">维修查询</div>
+                </a>
+        </li>
+        <li id="REPORT" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+            <a onclick="location.href='html/repair/taskAdd.html';">
+                    <span><img src="img/reporter.png" alt="" class="icon-logo"></span>
+                    <div class="mui-media-body">维修报修</div>
+                </a>
+        </li>
+        </ul> -->
+  </body>
+  <script type="text/javascript" src="./reference/mui/js/mui.min.js"></script>
+  <script
+    type="text/javascript"
+    src="./reference/mui/js/jquery-2.1.4.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="./reference/mui/js/mui.picker.min.js"
+  ></script>
+  <script type="text/javascript" src="./reference/mui/js/baseInfo.js"></script>
+  <!-- <script type="text/javascript" src="../../cordova.js"></script> -->
+  <script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    // var baseUrl = 'http://172.20.10.4:8083/iplat/'
+    // localStorage.setItem("dataGroupCode", "BONA");
+    var dataGroupCode = localStorage.getItem("dataGroupCode");
+    var page = 1;
+    var workNo = localStorage.getItem("workNo");
+    $(function() {
+      initConfig();
+    });
+
+    var loginprame= {
+        keyWord:"",
+//         "type":"1",
+        userNo:workNo,
+        userName:"",
+        deptNo:"",
+        deptName:"",
+        limit:"10", 
+        offset:"0"
+    };
+    var loginprameStr = JSON.stringify(loginprame);
+
+
+  
+    function initConfig() {
+      // var prame = {};
+      // prame = JSON.stringify(prame)
+      // $.ajax({
+      //   type: "post",
+      //   url: baseUrl + "medical/fabric",
+      //   data:{},
+      //   headers: {
+      //     methodName: 'queryMedicalFabricMenu',
+      //     serviceName: 'hhhh'
+      //   },
+      //   success: function(data) {
+      //     var data = JSON.parse(data);
+      //     var obj = data.obj;
+      //     console.log(obj);
+      //     //次品登记
+      //     if (obj.is_defective_reclaim == "Y") {
+      //       $("#defe").css("display", "");
+      //       $("#defe").click(function() {
+      //         location.href = "./defective/defeMainAPP.html";
+      //       });
+      //     }
+      //     //洁物分拣
+      //     // if (obj.is_neat_sorting == "Y") {
+      //     //   $("#pick").css("display", "");
+      //     //   $("#pick").click(function() {
+      //     //     location.href = "./cleansort/cleanMainAPP.html";
+      //     //   });
+      //     // }
+      //     //报废
+      //     if (obj.is_scrapped == "Y") {
+      //       $("#scrap").css("display", "");
+      //       $("#scrap").click(function() {
+      //         location.href = "./scrap/scrapMainAPP.html";
+      //       });
+      //     }
+      //     //盘库
+      //     if (obj.is_inventory == "Y") {
+      //       $("#inventory").css("display", "");
+      //       $("#inventory").click(function() {
+      //         location.href = "./inventory/inventMainAPP.html";
+      //       });
+      //     }
+      //     // 洁物发放
+          // if (obj.is_offer == "Y") {
+          //   $("#CLEAN_GIVE").css("display", "");
+          //   $("#CLEAN_GIVE").click(function() {
+          //     location.href = "./offer/offerMainAPP.html";
+          //   });
+          // }
+      //     //污物清点
+          // if (obj.is_dirty_reclaim == "Y") {
+          //   $("#dirty").css("display", "");
+          //   $("#dirty").click(function() {
+          //     location.href = "./dirty/dirtyMainYAPP.html";
+          //   });
+          // }
+      //     //科室回收
+      //     if (obj.is_dept_reclaim == "Y") {
+      //       $("#recovery").css("display", "");
+      //       $("#recovery").click(function() {
+      //         location.href = "./recovery/recoveryMainNAPP.html";
+      //       });
+      //     }
+      //   },
+      //   error: function(XMLHttpRequest) {
+      //     var text = JSON.parse(XMLHttpRequest.responseText);
+      //     mui.toast(text.message);
+      //     return;
+      //   }
+      // });
+      // 菜单
+      $.ajax({
+  
+        url: baseUrl + 'medical/fabric',
+        type: 'post',
+        headers:{
+            //className : 'AppUserInfoService',
+            methodName : 'queryMedicalFabricMenu',
+            serviceName:"OMMF01"
+
+        },
+        data: {
+          requestParam:'{"classisCode":"MEDICAL_FABRIC_MENU","status":"1"}'
+
+        },
+        success: function(data) {
+              // console.log(data.data)
+              var list = data.data
+              for (var i = 0; i < list.length; i++) {
+                // console.log(list[i])
+                // var a = list[i].dcode
+                $("#"+list[i].dcode).css("display", "");
+                // console.log(a)
+                // console.log($("#"+a))
+              }
+             
+          
+
+
+
+          //  $("#DEPT_RECOVERY").css("display", "");
+          //  $("#DEPT_RECOVERY").click(function() {
+          //     location.href = "./recovery/recoveryMainNAPP.html";
+          //   });
+        }
+    })
+
+    //查询当前登录人信息
+    $.ajax({
+        url: baseUrl + "medical/fabric",
+        type: "post",
+        data: {
+          requestParam: loginprameStr
+        },
+        headers: {
+            methodName: "queryUserInfo",
+            serviceName:"OMMF01"
+        },
+        success: function(data) {
+          var userName = data.data[0].userName;
+          $("#sqr").val(userName);
+          // $("#ks").val(deptName);
+          deptNo = data.data[0].deptNo;
+          localStorage.setItem("deptNo", deptNo);
+          localStorage.setItem("userName", userName);
+        //   console.log($("#sqr").val())
+        //   var data = JSON.parse(data);
+        //   deptName = data.obj.obj[0].deptName;
+        //   console.log(deptName);
+        //   localStorage.setItem("detailDeptName", deptName);
+        //   location.href = "detailListAPP.html";
+        //   $("#sqr").text("李雷");
+        },
+        error: function(XMLHttpRequest) {
+          var text = JSON.parse(XMLHttpRequest.responseText);
+          mui.toast(text.message);
+          return;
+        }
+      });
+
+    }
+    $("#APPLICATION").click(function() {
+      location.href = "./newApplication/html/cloth_application/historyList.html";
+    });
+    $("#recovery").click(function() {
+      location.href = "./recovery/recoveryMainNAPP.html";
+    });
+    $("#CLEAN_GIVE").click(function() {
+      location.href = "./offer/offerMainYAPP.html";
+    });
+    $("#DEPT_RECOVERY").click(function() {
+      location.href = "./recovery/recoveryMainNAPP.html";
+    });
+    $("#SUPPLEMENT_SIGNATURE").click(function() {
+      location.href = "./signatureSupp/suppOfferMain.html";
+    });
+    // $("put").click(function() {
+    //   // location.href = "./put/putHistory.html";
+    // });
+    $("#INFERIOR").click(function() {
+      location.href = "./new/html/defective/historyList.html";
+    });
+    $("#CLEAN_ENTER_WAREHOUSE").click(function() {
+      location.href = "./put/putHistory.html";
+    });
+    // $("#dirty").click(function() {
+    //   location.href = "./dirty/dirtyMainYAPP.html";
+    // });
+    // $("#defe").click(function() {
+    //   location.href = "./defective/defectiveHistoryAPP.html";
+    // });
+    // $("#pick").click(function() {
+    //   location.href = "./cleansort/cleanmain.html";
+    // });
+    // $("#offer").click(function() {
+    //   location.href = "./offer/offerMainYAPP.html";
+    // });
+    // $("#put").click(function() {
+    //   location.href = "./put/putHistory.html";
+    // });
+    // $("#search").click(function() {
+    //   location.href = "./offer/offerHistoryNAPP.html";
+    // });
+    $("#SCARP").click(function() {
+      location.href = "./new/html/scrap/historyList.html";
+    });
+    $("#DEFAULT").click(function() {
+      location.href = "./new/html/default/historyList.html";
+    });
+    // $("#inventory").click(function() {
+    //   location.href = "./inventory/getDept.html";
+    // });
+    // $("#searchAll").click(function() {
+    //   location.href = "./search/searchOfferMain.html";
+    // });
+    // $("#signatureSupp").click(function() {
+    //   location.href = "./signatureSupp/suppOfferMain.html";
+    // });
+
+    mui("body").on("tap", "#back", function() {
+      location.href = "../../menu.html";
+    });
+
+    /**
+     * @desc   手机系统返回键
+     */
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+      document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+      location.href = "../../menu.html";
+    }
+  </script>
+</html>

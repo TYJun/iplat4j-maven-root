@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CMGL11">
+
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			REC_CREATOR	as "recCreator",  
+			REC_CREATE_TIME	as "recCreateTime",  
+			REC_REVSIOR	as "recRevsior",  
+			REC_REVISE_TIME	as "recReviseTime",  
+			ARCHIVE_FLAG	as "archiveFlag",  <!-- 归档标记 -->
+			ID	as "id",  <!-- 主键 -->
+			CONT_NO	as "contNo",  <!-- 合同号 -->
+			SUB_NO	as "subNo",  
+			CONTENT	as "content",  
+			FILE_ID	as "fileId",  <!-- 文件ID -->
+			FILE_NAME	as "fileName",  <!-- 文件名 -->
+			FILE_SIZE	as "fileSize",  <!-- 文件大小 -->
+			FILE_TYPE	as "fileType" <!-- 文件类型 -->
+		FROM .tcmmga4 WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  ID asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .tcmmga4 WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO .tcmmga4
+		(
+			REC_CREATOR,
+			REC_CREATE_TIME,
+			REC_REVSIOR,
+			REC_REVISE_TIME,
+			ARCHIVE_FLAG,  <!-- 归档标记 -->
+			ID,  <!-- 主键 -->
+			CONT_NO,  <!-- 合同号 -->
+			SUB_NO,
+			CONTENT,
+			FILE_ID,  <!-- 文件ID -->
+			FILE_NAME,  <!-- 文件名 -->
+			FILE_SIZE,  <!-- 文件大小 -->
+			FILE_TYPE  <!-- 文件类型 -->
+		)		 
+	    VALUES
+	    (
+	    	#recCreator#,
+	    	#recCreateTime#,
+	    	#recRevsior#,
+	    	#recReviseTime#,
+	    	#archiveFlag#,
+	    	#id#,
+	    	#contNo#,
+	    	#subNo#,
+	    	#content#,
+	    	#fileId#,
+	    	#fileName#,
+	    	#fileSize#,
+	    	#fileType#
+	    ) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM .tcmmga4 WHERE ID = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE
+			.tcmmga4 
+		SET 
+			REC_CREATOR	= #recCreator#,   
+			REC_CREATE_TIME	= #recCreateTime#,   
+			REC_REVSIOR	= #recRevsior#,   
+			REC_REVISE_TIME	= #recReviseTime#,   
+			ARCHIVE_FLAG	= #archiveFlag#,   <!-- 归档标记 -->  
+			CONT_NO	= #contNo#,   <!-- 合同号 -->  
+			SUB_NO	= #subNo#,   
+			CONTENT	= #content#,   
+			FILE_ID	= #fileId#,   <!-- 文件ID -->  
+			FILE_NAME	= #fileName#,   <!-- 文件名 -->  
+			FILE_SIZE	= #fileSize#,   <!-- 文件大小 -->  
+			FILE_TYPE	= #fileType#  <!-- 文件类型 -->  
+		WHERE 	
+			ID = #id#
+	</update>
+</sqlMap>

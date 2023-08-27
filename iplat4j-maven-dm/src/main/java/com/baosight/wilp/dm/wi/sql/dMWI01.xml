@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-05-06 11:34:55
+   		Version :  6.0.731.201809200158
+		tableName :.dorms_room_man 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 room_id  VARCHAR, 
+		 man_id  VARCHAR, 
+		 bed_no  TINYINT, 
+		 degree_code  VARCHAR, 
+		 employment_nature  VARCHAR, 
+		 phone  VARCHAR, 
+		 deposit  VARCHAR, 
+		 is_network  TINYINT, 
+		 is_stay  TINYINT, 
+		 in_date  DATETIME, 
+		 out_date  DATETIME, 
+		 in_type  VARCHAR, 
+		 department_no  VARCHAR, 
+		 adjust_date  DATETIME, 
+		 first_in_date  DATETIME, 
+		 estimated_out_date  DATETIME, 
+		 send_card_date  DATETIME, 
+		 out_type  VARCHAR, 
+		 eval_level_wy  INTEGER   NOT NULL, 
+		 eval_level_ss  INTEGER   NOT NULL, 
+		 eval_content  VARCHAR, 
+		 standard_priece  DECIMAL, 
+		 elec_priece  DECIMAL, 
+		 water_priece  DECIMAL, 
+		 update_date  DATETIME, 
+		 sex  VARCHAR, 
+		 is_view  VARCHAR
+	-->
+<sqlMap namespace="dMWI01">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+				id	as "id",  <!-- 主键 -->
+				room_id	as "roomId",  <!-- 房间信息表ID -->
+				man_id	as "manId",  <!-- 人员信息表ID -->
+				bed_no	as "bedNo",  <!-- 床位号 -->
+				degree_code	as "degreeCode",  <!-- 学位 -->
+				employment_nature	as "employmentNature",  <!-- 用工性质 -->
+				phone	as "phone",  <!-- 电话 -->
+				deposit	as "deposit",  <!-- 押金编号 -->
+				is_network	as "isNetwork",  <!-- 是否联网 -->
+				is_stay	as "isStay",  <!-- 是否办暂住证 -->
+				in_date	as "inDate",  <!-- 入住日期 -->
+				out_date	as "outDate",  <!-- 退房日期 -->
+				in_type	as "inType",  <!-- 入住、调配 -->
+				department_no	as "departmentNo",  <!-- 科室部门 -->
+				adjust_date	as "adjustDate",  <!-- 调费日期 -->
+				first_in_date	as "firstInDate",  <!-- 第一次入住时间 -->
+				estimated_out_date	as "estimatedOutDate",  <!-- 预计退房时间 -->
+				send_card_date	as "sendCardDate",  <!-- 发卡时间 -->
+				out_type	as "outType",  <!-- 退宿、调配 -->
+				eval_level_wy	as "evalLevelWy",  <!-- 物业管理-评价等级(0-5) -->
+				eval_level_ss	as "evalLevelSs",  <!-- 宿舍情况-评价等级(0-5) -->
+				eval_content	as "evalContent",  <!-- 评价内容 -->
+				standard_priece	as "standardPriece",  <!-- 月租费 -->
+				elec_priece	as "elecPriece",  <!-- 水电费 -->
+				water_priece	as "waterPriece",  <!-- 管理费 -->
+				update_date	as "updateDate",  <!-- 更新时间 -->
+				sex	as "sex",  <!-- 性别 -->
+				is_view	as "isView" <!-- 是否审批（N=未审批，Y=已审批） -->
+		FROM .dorms_room_man WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .dorms_room_man WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomId">
+			room_id = #roomId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manId">
+			man_id = #manId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="bedNo">
+			bed_no = #bedNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="degreeCode">
+			degree_code = #degreeCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="employmentNature">
+			employment_nature = #employmentNature#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="phone">
+			phone = #phone#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deposit">
+			deposit = #deposit#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="isNetwork">
+			is_network = #isNetwork#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="isStay">
+			is_stay = #isStay#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="inDate">
+			in_date = #inDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outDate">
+			out_date = #outDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="inType">
+			in_type = #inType#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="departmentNo">
+			department_no = #departmentNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="adjustDate">
+			adjust_date = #adjustDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="firstInDate">
+			first_in_date = #firstInDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="estimatedOutDate">
+			estimated_out_date = #estimatedOutDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="sendCardDate">
+			send_card_date = #sendCardDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outType">
+			out_type = #outType#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="evalLevelWy">
+			eval_level_wy = #evalLevelWy#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="evalLevelSs">
+			eval_level_ss = #evalLevelSs#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="evalContent">
+			eval_content = #evalContent#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="standardPriece">
+			standard_priece = #standardPriece#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="elecPriece">
+			elec_priece = #elecPriece#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="waterPriece">
+			water_priece = #waterPriece#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="updateDate">
+			update_date = #updateDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="sex">
+			sex = #sex#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="isView">
+			is_view = #isView#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO .dorms_room_man    (id,  <!-- 主键 -->
+										room_id,  <!-- 房间信息表ID -->
+										man_id,  <!-- 人员信息表ID -->
+										bed_no,  <!-- 床位号 -->
+										degree_code,  <!-- 学位 -->
+										employment_nature,  <!-- 用工性质 -->
+										phone,  <!-- 电话 -->
+										deposit,  <!-- 押金编号 -->
+										is_network,  <!-- 是否联网 -->
+										is_stay,  <!-- 是否办暂住证 -->
+										in_date,  <!-- 入住日期 -->
+										out_date,  <!-- 退房日期 -->
+										in_type,  <!-- 入住、调配 -->
+										department_no,  <!-- 科室部门 -->
+										adjust_date,  <!-- 调费日期 -->
+										first_in_date,  <!-- 第一次入住时间 -->
+										estimated_out_date,  <!-- 预计退房时间 -->
+										send_card_date,  <!-- 发卡时间 -->
+										out_type,  <!-- 退宿、调配 -->
+										eval_level_wy,  <!-- 物业管理-评价等级(0-5) -->
+										eval_level_ss,  <!-- 宿舍情况-评价等级(0-5) -->
+										eval_content,  <!-- 评价内容 -->
+										standard_priece,  <!-- 月租费 -->
+										elec_priece,  <!-- 水电费 -->
+										water_priece,  <!-- 管理费 -->
+										update_date,  <!-- 更新时间 -->
+										sex,  <!-- 性别 -->
+										is_view  <!-- 是否审批（N=未审批，Y=已审批） -->
+										)		 
+	    VALUES (#id#, #roomId#, #manId#, #bedNo#, #degreeCode#, #employmentNature#, #phone#, #deposit#, #isNetwork#, #isStay#, #inDate#, #outDate#, #inType#, #departmentNo#, #adjustDate#, #firstInDate#, #estimatedOutDate#, #sendCardDate#, #outType#, #evalLevelWy#, #evalLevelSs#, #evalContent#, #standardPriece#, #elecPriece#, #waterPriece#, #updateDate#, #sex#, #isView#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM .dorms_room_man WHERE 
+			id = #id#
+	</delete>
+	
+	<update id="checkout">
+		UPDATE .dorms_room_man
+		SET 
+			out_type = #outType#
+		WHERE 	
+			id = #id#
+	</update>
+	
+	<update id="update">
+		UPDATE .dorms_room_man 
+		SET 
+					room_id	= #roomId#,   <!-- 房间信息表ID -->  
+					man_id	= #manId#,   <!-- 人员信息表ID -->  
+					bed_no	= #bedNo#,   <!-- 床位号 -->  
+					degree_code	= #degreeCode#,   <!-- 学位 -->  
+					employment_nature	= #employmentNature#,   <!-- 用工性质 -->  
+					phone	= #phone#,   <!-- 电话 -->  
+					deposit	= #deposit#,   <!-- 押金编号 -->  
+					is_network	= #isNetwork#,   <!-- 是否联网 -->  
+					is_stay	= #isStay#,   <!-- 是否办暂住证 -->  
+					in_date	= #inDate#,   <!-- 入住日期 -->  
+					out_date	= #outDate#,   <!-- 退房日期 -->  
+					in_type	= #inType#,   <!-- 入住、调配 -->  
+					department_no	= #departmentNo#,   <!-- 科室部门 -->  
+					adjust_date	= #adjustDate#,   <!-- 调费日期 -->  
+					first_in_date	= #firstInDate#,   <!-- 第一次入住时间 -->  
+					estimated_out_date	= #estimatedOutDate#,   <!-- 预计退房时间 -->  
+					send_card_date	= #sendCardDate#,   <!-- 发卡时间 -->  
+					out_type	= #outType#,   <!-- 退宿、调配 -->  
+					eval_level_wy	= #evalLevelWy#,   <!-- 物业管理-评价等级(0-5) -->  
+					eval_level_ss	= #evalLevelSs#,   <!-- 宿舍情况-评价等级(0-5) -->  
+					eval_content	= #evalContent#,   <!-- 评价内容 -->  
+					standard_priece	= #standardPriece#,   <!-- 月租费 -->  
+					elec_priece	= #elecPriece#,   <!-- 水电费 -->  
+					water_priece	= #waterPriece#,   <!-- 管理费 -->  
+					update_date	= #updateDate#,   <!-- 更新时间 -->  
+					sex	= #sex#,   <!-- 性别 -->  
+					is_view	= #isView#  <!-- 是否审批（N=未审批，Y=已审批） -->  
+			WHERE 	
+			id = #id#
+	</update>
+  	
+  	
+  	<update id="changeRoom">
+  		UPDATE .dorms_room_man 
+		SET 
+			room_id	= #roomId#,   <!-- 房间信息表ID -->  
+			bed_no = #bedNo#,
+			change_time = #changeTime#	<!--换房时间-->
+  		WHERE 	
+			id = #id#
+  	</update>
+	<update id="insertReasonAndReturnKey">
+		UPDATE .dorms_room_man
+		SET
+		out_date = #outDate#,
+		out_reason	= #outReason#,   <!-- 退房原因 -->
+		return_key = #returnKey#	<!--是否退还钥匙-->
+		WHERE
+		id = #id#
+	</update>
+  	
+</sqlMap>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MCFW01">
+
+	<!--  -->
+	<select id="queryTemplateList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			SELECT id AS 'templateId',  
+				   template_code AS 'templateCode',  
+				   template_name AS 'templateName',  
+				   call_module AS 'module',
+				   message AS 'message',
+				   variable_code AS 'variableCode',
+				   is_cc AS 'isCc'
+			FROM $projectSchema$.mc_template 
+			WHERE template_code = #templateCode#
+		
+	</select>
+	
+	<!--  -->
+	<select id="queryVariableList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			SELECT mvp.variable_id AS 'variableId',
+				   mv.variable_code AS 'variableCode',
+				   mv.variable_name AS 'variableName',
+				   mvp.perl_id AS 'perlId',
+				   ap.work_no AS 'workNo',
+				   ap.name AS 'perlName'
+			FROM $projectSchema$.mc_vp mvp
+			LEFT JOIN $projectSchema$.mc_variable mv  ON mv.id = mvp.variable_id
+			LEFT JOIN $projectSchema$.ac_personnel ap  ON ap.id = mvp.perl_id
+			WHERE mv.variable_code = #variableCode#
+		
+	</select>
+	
+	<insert id="insert" parameterClass="java.util.HashMap">
+	       INSERT INTO $projectSchema$.mc_message (
+	         <isNotNull  property="templateId">
+	            template_id,  <!-- 模板ID -->
+	         </isNotNull>
+	         <isNotNull  property="message">
+	            message,  <!-- 消息内容 -->
+	         </isNotNull>
+	         <isNotNull  property="isSuccess">
+	            is_success,  <!-- 是否发送成功 -->
+	         </isNotNull>
+	         <isNotNull  property="receiver">
+	            receiver,  <!-- 发送人 -->
+	         </isNotNull>
+	         <isNotNull  property="sender">
+	            sender,  <!-- 接收人 -->
+	         </isNotNull>
+	         <isNotNull  property="sendingTime">
+	            sending_time,  <!-- 发送时间 -->
+	         </isNotNull>
+	            id  <!-- 主键 -->
+	      )VALUES ( 
+	         <isNotNull  property="templateId">
+	             #templateId#, 
+	          </isNotNull>
+	         <isNotNull  property="message">
+	             #message#, 
+	          </isNotNull>
+	          <isNotNull  property="isSuccess">
+	            #isSuccess#,   
+	         </isNotNull>
+	          <isNotNull  property="receiver">
+	            #receiver#,  
+	         </isNotNull>
+	         <isNotNull  property="sender">
+	             #sender#, 
+	          </isNotNull>
+	         <isNotNull  property="sendingTime">
+	             #sendingTime#, 
+	          </isNotNull>
+	             #id#
+	       ) 
+	</insert>
+	
+	<insert id="addMessage" parameterClass="java.util.HashMap">
+		INSERT INTO $projectSchema$.mc_message 
+			(
+			<isNotNull  property="templateId">
+				template_id,  <!-- 模板ID -->
+			</isNotNull>
+			<isNotNull  property="message">
+				message,  <!-- 消息内容 -->
+			</isNotNull>
+			<isNotNull  property="isSuccess">
+				is_success,  <!-- 是否发送成功 -->
+			</isNotNull>
+			<isNotNull  property="list">
+				receiver,  <!-- 发送人 -->
+			</isNotNull>
+			<isNotNull  property="sender">
+				sender,  <!-- 接收人 -->
+			</isNotNull>
+			<isNotNull  property="sendingTime">
+				sending_time,  <!-- 发送时间 -->
+			</isNotNull>
+				id  <!-- 主键 -->
+			)
+		VALUES
+		<iterate property="list" conjunction=",">
+			(
+			<isNotNull  property="templateId">
+		    	#templateId#, 
+		    </isNotNull>
+			<isNotNull  property="message">
+		    	#message#, 
+		    </isNotNull>
+		    <isNotNull  property="isSuccess">
+				#isSuccess#,   
+			</isNotNull>
+		    <isNotNull  property="list">
+				#list[]#,  
+			</isNotNull>
+			<isNotNull  property="sender">
+		    	#sender#, 
+		    </isNotNull>
+			<isNotNull  property="sendingTime">
+		    	#sendingTime#, 
+		    </isNotNull>
+		    	UUID()
+			)
+		</iterate>
+	</insert>
+	
+	<!--  -->
+	<select id="queryApp" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			select id,
+				   app_code as "appCode",
+				   app_name as "appName",
+				   app_key as "appKey",
+				   app_id as "appId",
+				   master_secret as "mastersecret",
+				   token
+			from  $projectSchema$.mc_app 
+			where 1=1
+			and app_code = #appCode#
+		
+	</select>
+	
+	<select id="queryToken" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			select id,
+				   app_code as "appCode",
+				   app_name as "appName",
+				   app_key as "appKey",
+				   app_id as "appId",
+				   master_secret as "mastersecret",
+				   token
+			from  $projectSchema$.mc_app 
+			where token is not null
+			and token != ""
+			and TIMESTAMPDIFF(MINUTE,rec_revise_time,now()) &lt; 100 
+			and app_code = #appCode#
+		
+	</select>
+	
+	<update id="updateToken"  parameterClass="java.util.HashMap" >
+			UPDATE $projectSchema$.mc_app
+			SET token	= #token# ,
+				rec_revisor	= #recRevisor#,  
+				rec_revise_time	= #recReviseTime#   
+			WHERE app_code = #appCode#
+	</update>
+	
+	<select id="queryCid" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			select cid 
+			from $projectSchema$.ac_personnel
+		    WHERE 1 = 1
+		    AND
+			<iterate property="list"  conjunction="OR" open="(" close=")">
+			     work_no = #list[]#
+			</iterate>
+	</select>
+	
+	<select id="queryUserId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			select user_id as id
+			from $projectSchema$.ac_personnel
+		    WHERE 1 = 1
+		    AND
+			<iterate property="list"  conjunction="OR" open="(" close=")">
+			     work_no = #list[]#
+			</iterate>
+	</select>
+	
+</sqlMap>

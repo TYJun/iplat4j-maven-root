@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MSDC03">
+
+    <select id="query" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.ms.dc.domain.MSDC03">
+        SELECT
+        id, parent_id "parentId", classify_code "classifyCode", classify_name "classifyName", classify_type
+        "classifyType", classify_sort "classifySort", group_id "groupId"
+        FROM
+        `t_area_classify`
+        where 1=1
+        <isNotEmpty prepend="and" property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="parentId">
+            parent_id = #parentId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="classifyname">
+            classify_name like concat('%',#classifyname#,'%')
+        </isNotEmpty>
+        order by
+        classify_code +0 desc
+    </select>
+    <select id="queryById" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        SELECT
+        id, parent_id "parentId", classify_code "classifyCode", classify_name "classifyName", classify_type
+        "classifyType", classify_sort "classifySort", group_id "groupId"
+        FROM
+        `t_area_classify`
+        where 1=1
+        <isNotEmpty prepend="and" property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="parentId">
+            parent_id = #parentId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="classifyName">
+            classify_name = #classifyName#
+        </isNotEmpty>
+    </select>
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM t_area_classify WHERE 1=1
+        <isNotEmpty prepend="and" property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="parentId">
+            parent_id = #parentId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="classifyName">
+            classify_name like concat('%',#classify_name#,'%')
+        </isNotEmpty>
+    </select>
+    <insert id="insert">
+        insert into t_area_classify (id, parent_id, classify_code, classify_name,
+                                     classify_type, classify_sort, group_id, user_group_id)
+        values (#id#, #parentId#, #classifyCode#, #classifyName#, #classifyType#, #classifySort#, #groupId#, #id#)
+    </insert>
+    <update id="update">
+        update t_area_classify
+        set parent_id     = #parentId#,
+            classify_code = #classifyCode#,
+            classify_name = #classifyName#,
+            classify_type = #classifyType#,
+            classify_sort = #classifySort#,
+            group_id      = #groupId#
+        where id = #id#
+    </update>
+    <delete id="delete">
+        DELETE
+        FROM t_area_classify
+        WHERE id =
+              #id#
+    </delete>
+    <select id="queryTree" resultClass="java.util.HashMap">
+        SELECT
+        id as "label",
+        classify_name as "text",
+        parent_id as "pId",
+        "" as
+        "leaf"
+        FROM t_area_classify
+        <dynamic prepend="WHERE">
+            <isNotEmpty prepend="and" property="node">
+                parent_id = #node#
+            </isNotEmpty>
+        </dynamic>
+        order by
+        classify_code +0 desc
+    </select>
+
+    <select id="queryRelevance"
+            resultClass="java.util.HashMap">
+        select
+        id "Reid",
+        name_ "ReName",
+        tag "Retag",
+        tmsdc01_id "RetDCid"
+        from tmspl01
+        where tmsdc01_id IS NULL
+        <isNotEmpty prepend="AND" property="param">
+            tag like concat('%',#param#,'%')
+        </isNotEmpty>
+
+    </select>
+
+    <!--    通过分组查询区域 -->
+    <select id="relevance23" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        select DISTINCT GROUP_CNAME "groupCname",
+        ID "groupId",
+        t_param_id
+        from
+        ${platSchema}.xs_user_group c
+        LEFT JOIN
+        ( SELECT user_group_id,t_param_id FROM grouptable
+        ) d ON d.user_group_id = c.ID
+        LEFT JOIN
+        ( SELECT user_group_id FROM t_area_classify
+        ) e ON e.user_group_id = d.t_param_id
+        WHERE 1=1
+        <isNotEmpty prepend="and" property="id">
+            t_param_id = #id#
+        </isNotEmpty>
+        order by
+        ID desc
+    </select>
+
+</sqlMap>

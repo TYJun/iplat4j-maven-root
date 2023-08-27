@@ -1,0 +1,504 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="reference/mui/css/mui.min.css">
+    <link rel="stylesheet" href="reference/mui/css/mui.picker.min.css">
+    <link rel="stylesheet" href="reference/css/common.css" />
+    <!-- <link rel="stylesheet" href="reference/css/choose.css"> -->
+</head>
+<STYLE TYPE="text/css">
+    .row {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+    
+    .navbar {
+        margin-bottom: 0px;
+    }
+    
+    .badge {
+        color: #222;
+    }
+    
+    .dropdown-menu {
+        min-width: 150px;
+    }
+    
+    .col-lg-4,
+    .col-md-4,
+    .col-sm-4,
+    .col-xs-4,
+    .col-lg-6,
+    .col-md-6,
+    .col-sm-6,
+    .col-xs-6 {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+    
+    .dropdown-menu>li>a {
+        padding: 6px 20px;
+    }
+    
+    #type>div {
+        border-radius: 2px;
+        height: 2.8rem;
+        line-height: 2.8rem;
+        text-align: center;
+        border-bottom: 2px solid #DDD;
+    }
+    
+    .tab {
+        height: 40px;
+        line-height: 40px;
+        font-weight: bold;
+        /*background: #1bb2d8;*/
+        color: #787464;
+        border-top: 1px solid #787464;
+        border-bottom: 1px solid #787464;
+    }
+    
+    .list-tab {
+        height: 40px;
+        line-height: 40px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    table {
+        width: 100%;
+        margin-top: 10px;
+    }
+    
+    tr {
+        border-bottom: 1px solid #c8c7cc;
+    }
+    
+    td {
+        width: 20%;
+        text-align: center;
+    }
+    
+    .search-div>>>.mui-input-group .mui-input-row {
+        overflow: visible;
+    }
+    
+    #organId {
+        width: 65%;
+        height: 40px;
+        line-height: 40px;
+        float: left;
+    }
+    
+    .yq {
+        margin-top: 0px;
+        box-shadow: 4px 4px 4px #ddd;
+        z-index: 100;
+        position: absolute;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        width: 100%;
+        display: none;
+    }
+</STYLE>
+
+<body>
+
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">陪检工作量汇总</h1>
+        <button class="mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+        <a href="javascript:back();" style="color:#FFFFFF;">返回</a>
+    </button>
+    </header>
+
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div id="loading" class="spinner" style="position:fixed;z-index:9999;text-align:center;width:100%;">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+
+    <div class="mui-content">
+        <div class="search-div">
+            <form class="mui-input-group">
+                <div class="mui-input-row">
+                    <label>开始日期</label>
+                    <input id="startDate" type="text" placeholder="请选择日期" readonly>
+                </div>
+                <div class="mui-input-row">
+                    <label>结束日期</label>
+                    <input id="stopDate" type="text" placeholder="请选择日期" readonly>
+                </div>
+                <div class="mui-input-row">
+                    <label>选择院区</label>
+                    <!-- <select id="organId" name="organId" multiple="multiple">
+                        <option value="zjxc">珠江新城</option>
+                        <option value="etyq">儿童院区</option>
+                        <option value="fyyq">妇婴院区</option>
+                      </select> -->
+                    <div id="organId" name="organId" multiple="multiple" class="select">
+                        <div class="choose">请选择院区</div>
+                        <div class="yq">
+                            <div value="FY01/FY0101"><input type="checkbox" name="新城院区" value="FY01/FY0101">新城院区</div>
+                            <div value="FY01/FY0102"><input type="checkbox" name="禅城院区" value="FY01/FY0102">禅城院区</div>
+                            <!-- <div value="fyyq"><input type="checkbox" name="妇婴院区" value="fyyq">妇婴院区</div> -->
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- <div class="mui-row tab">
+            <div class="mui-col-xs-4 center">院区</div>
+            <div class="mui-col-xs-2 center">姓名</div>
+            <div class="mui-col-xs-2 center">取件量</div>
+            <div class="mui-col-xs-2 center">派件量</div>
+            <div class="mui-col-xs-2 center">合计</div>
+        </div>
+        <div id="list">
+
+        </div> -->
+        <table>
+            <thead>
+                <tr>
+                    <th>院区</th>
+                    <th>姓名</th>
+                    <th>接单数量</th>
+                    <th>完工数量</th>
+                    <th>完工率</th>
+                </tr>
+            </thead>
+            <tbody class="list">
+                <!-- <tr>
+                    <td rowspan="2">珠江新城</td>
+                    <td>小明</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>5</td>
+                </tr>
+                <tr>
+                    <td>小李</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>5</td>
+                </tr> -->
+            </tbody>
+            <tfoot class="foot">
+                <!-- <tr>
+                    <td>合计</td>
+                    <td></td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                </tr> -->
+            </tfoot>
+        </table>
+        <div id="statusChart" style="width:100%;height:280px;margin:20px auto; "></div>
+
+    </div>
+
+</body>
+<script src="reference/mui/js/mui.min.js " type="text/javascript "></script>
+<script src="reference/mui/js/mui.picker.min.js " type="text/javascript "></script>
+<script src="reference/js/jquery-2.1.4.js " type="text/javascript "></script>
+<script src="reference/echarts/echarts.min.js " type="text/javascript "></script>
+<script src="reference/js/common.js " type="text/javascript "></script>
+<!-- <script src="reference/js/choose.js"></script> -->
+<script type="text/javascript" type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var date = new Date();
+    var year = date.getFullYear();
+    var areaCode = '';
+    var str = '';
+    var beginDate = date_YM() + '-01';
+    var endDate = date_YMD();
+    $('#startDate').val(beginDate);
+    $('#stopDate').val(endDate);
+    loadData();
+    $(function() {
+        // $("#organId").fSelect();
+    });
+    $('.choose').click(function(e) {
+            e.stopPropagation()
+            $('.yq').toggle();
+        })
+        // 点击选择院区
+    $('.yq input').click(function(e) {
+        e.stopPropagation()
+        areaCode = '';
+        var checkedName = '';
+        var arr = $('.yq input[type="checkbox"]:checked ');
+        for (var i = 0; i < arr.length; i++) {
+            console.log($(arr[i]).attr('name'))
+            checkedName += $(arr[i]).attr('name');
+            // areaCode.push($(arr[i]).attr('value'))
+            areaCode += ($(arr[i]).attr('value') + ',')
+        }
+        if (checkedName != '') {
+            $('.choose').text(checkedName)
+        } else {
+            $('.choose').text('请选择院区')
+        }
+        console.log(areaCode)
+    })
+    $('.mui-content').click(function(e) {
+            e.stopPropagation()
+            $('.yq').toggle();
+            loadData()
+        })
+        //起始日期选择
+    document.getElementById("startDate").addEventListener('tap', function() {
+        var options = {
+            "type": "date"
+        };
+        var picker = new mui.DtPicker(options);
+        picker.show(function(rs) {
+            console.log(rs);
+            month = rs.text;
+            $('#startDate').val(month);
+            //alert();
+            //console.log("开始时间："+month);
+            loadData();
+
+        });
+    });
+
+    //截止日期选择
+    document.getElementById("stopDate").addEventListener('tap', function() {
+        var options = {
+            "type": "date"
+        };
+        var picker = new mui.DtPicker(options);
+        picker.show(function(rs) {
+            console.log(rs);
+            month = rs.text;
+            $('#stopDate').val(month);
+            //alert();
+            loadData();
+
+        });
+    });
+
+    function loadData() {
+        console.log('进来了', areaCode)
+        beginDate = $('#startDate').val();
+        endDate = $("#stopDate ").val();
+        $.ajax({
+            // url: baseUrl + 'app_carriageReportController.do?collectPIe',
+            // url: 'http://yapi.bonawise.com/mock/91/app_carriageReportController.do?collectPIe',
+            url: baseUrl + 'accompany',
+            type: 'post',
+            headers: {
+                methodName: "getAccompamyReport",
+                className: "AppAccompany"
+            },
+            data: {
+                areaCode: areaCode,
+                startTime: beginDate,
+                endTime: endDate
+            },
+            success: function(data) {
+                // console.log(endDate);
+                // var data = eval('(' + data + ')');
+                // console.log(JSON.parse(data).total)
+                console.log('1', data);
+                var data = data;
+                if (data.respCode == "200") {
+                    $('#statusChart').css('display', 'block')
+                    console.log('kkk')
+                    var html = ''
+                    var hjhtml = '';
+                    var list = data.obj.obj;
+                    console.log('22', list)
+                        // var total = data.total;
+                        // if (total != null) {
+                        //     hjhtml += ` <tr>
+                        //         <td>合计</td>
+                        //         <td></td>
+                        //         <td>${total['collect']}</td>
+                        //         <td>${total['pie']}</td>
+                        //         <td>${total['all']}</td>
+                        //     </tr>`;
+                        // }
+                        // $('.foot').html(hjhtml)
+                    if (list.length == 0 || list == null) {
+                        mui.toast("未能查询到数据 ");
+                    }
+                    var nameList = [];
+                    var numList = [];
+                    var item = [];
+                    for (var i = 0; i < list.length; i++) {
+                        console.log('llll');
+                        var area = list[i].areaCode;
+                        if (area == 'FY01/FY0101') {
+                            area = '新城院区'
+                        } else if (area == 'FY01/FY0102') {
+                            area = '禅城院区'
+                        }
+                        var length = list.length;
+                        var execute = list[i].EXECUTE;
+                        var finish = list[i].finish;
+                        var name = list[i].NAME;
+                        if (name == null) {
+                            name = ''
+                        }
+                        var num = finish / execute;
+                        var all = ((finish / execute).toFixed(2) * 100) + '%';
+                        if (execute == 0) {
+                            all = 0;
+                            num = 0
+                        }
+                        if (i == 0) {
+                            html += createFirst(name, execute, finish, all, area, length);
+                        } else {
+                            html += createList(name, execute, finish, all, area);
+                        }
+                        nameList.push(name)
+                        numList.push(finish)
+                        item.push({
+                            name: name,
+                            value: finish
+                        })
+                    }
+                    taskTime(nameList, numList, item);
+                    $('.list').html(html)
+                    $("#loading ").hide();
+                } else if (data.respCode == '199') {
+                    $('.list').html('暂无数据');
+                    $('#statusChart').css('display', 'none')
+                }
+            },
+            complete: function(XMLHttpRequest, status) { //请求完成后最终执行参数　　　
+                if (status == 'timeout') {
+                    $("#loading ").hide();
+                    $('#warn small').html('请求超时！');
+                    $("#warn ").fadeIn(500);
+                    setTimeout("$( '#warn').fadeOut(500) ", 3000);
+                } else if (status == 'error') {
+                    $("#loading ").hide();
+                    $('#warn small').html('网络异常！');
+                    $("#warn ").fadeIn(500);
+                    setTimeout("$( '#warn').fadeOut(500) ", 3000);
+                }
+            }
+        });
+    };
+
+    // 渲染饼图
+    function taskTime(nameList, numList, item) {
+        var myChart = echarts.init($("#statusChart")[0]);
+        var option = {
+            color: ['#3399CC', '#FFCC99', '#FF6633', '#66CCFF'],
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+
+            // legend: {
+            //     type: 'scroll',
+            //     orient: 'vertical',
+            //     right: 150,
+            //     top: 0,
+            //     // bottom: 20,
+            //     data: nameList,
+            //     color: ['#3399CC', '#FF6633', '#FFCC99', '#66CCFF'],
+            //     textStyle: {
+            //         color: '#fff'
+            //     },
+            //     formatter: function(name) {
+            //         var index = 0;
+            //         var clientlabels = nameList;
+            //         var clientcounts = numList;
+            //         clientlabels.forEach(function(value, i) {
+            //             if (value == name) {
+            //                 index = i;
+            //             }
+            //         });
+            //         return name + "\n" + clientcounts[index] + "  " + "条";
+            //     }
+            // },
+            series: [{
+                type: 'pie',
+                radius: '60%',
+                center: ['47%', '40%'],
+                data: item.sort(function(a, b) {
+                    return a.value - b.value;
+                }),
+                // roseType: 'radius',
+                label: {
+                    color: '#fff'
+                },
+                labelLine: {
+                    lineStyle: {
+                        color: '#fff'
+                    },
+                    smooth: 0.2,
+                    length: 10,
+                    length2: 20
+                },
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    },
+                    normal: {
+                        label: {
+                            show: true,
+                            formatter: '{b}({d}%)'
+                        },
+                        labelLine: {
+                            show: true
+                        }
+                    }
+                },
+                animationType: 'scale',
+                animationEasing: 'elasticOut',
+                animationDelay: function(idx) {
+                    return Math.random() * 200;
+                }
+            }]
+        }
+        myChart.setOption(option);
+    }
+
+    function createFirst(name, execute, finish, all, area, length) {
+        var html = '';
+        html += ` <tr>
+                    <td rowspan=${length}>${area}</td>
+                    <td>${name}</td>
+                    <td>${execute}</td>
+                    <td>${finish}</td>
+                    <td>${all}</td>
+                </tr>`
+        return html;
+    }
+
+    function createList(name, execute, finish, all, area) {
+        var html = '';
+        html += ` <tr>
+                    <td>${name}</td>
+                    <td>${execute}</td>
+                    <td>${finish}</td>
+                    <td>${all}</td>
+                </tr>`
+
+        return html;
+
+    }
+
+    function back() {
+        location.href = './transport_menu.html?';
+    }
+</script>
+
+</html>

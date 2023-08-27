@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>com.baosight.ApplicationBoot</param-value>
+  </context-param>
+  <servlet>
+    <servlet-name>appServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextAttribute</param-name>
+      <param-value>org.springframework.web.context.WebApplicationContext.ROOT</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>appServlet</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>captcha</servlet-name>
+    <servlet-class>com.google.code.kaptcha.servlet.KaptchaServlet</servlet-class>
+
+    <init-param>
+      <param-name>kaptcha.image.width</param-name>
+      <param-value>76</param-value>
+    </init-param>
+    <init-param>
+      <param-name>kaptcha.image.height</param-name>
+      <param-value>40</param-value>
+    </init-param>
+    <init-param>
+      <param-name>kaptcha.textproducer.font.size</param-name>
+      <param-value>28</param-value>
+    </init-param>
+    <init-param>
+      <param-name>kaptcha.textproducer.char.string</param-name>
+      <param-value>0123456789</param-value>
+    </init-param>
+    <init-param>
+      <param-name>kaptcha.textproducer.char.length</param-name>
+      <param-value>4</param-value>
+    </init-param>
+    <init-param>
+      <param-name>kaptcha.noise.impl</param-name>
+      <param-value>com.google.code.kaptcha.impl.NoNoise</param-value>
+    </init-param>
+    <load-on-startup>0</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>captcha</servlet-name>
+    <url-pattern>/captcha.jpg</url-pattern>
+  </servlet-mapping>
+
+
+
+
+</web-app>

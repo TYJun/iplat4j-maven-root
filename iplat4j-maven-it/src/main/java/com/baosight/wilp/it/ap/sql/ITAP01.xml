@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="ITAP01">
+    <select id="queryItTaskInfo" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+        select
+            id itTaskId,
+            task_no taskNo,
+            req_staff_no reqStaffNo,
+            req_staff_name reqStaffName,
+            req_tel_num reqTelNum,
+            req_dept_num reqDeptNum,
+            req_dept_name reqDeptName,
+            classify_id classifyId,
+            classify_name classifyName,
+            serve_content serveContent,
+            serve_dept_num serveDeptNum,
+            serve_dept_name serveDeptName,
+            building,
+            floor,
+            spot_num spotNum,
+            spot_name spotName,
+            finish_man_no finishManNo,
+            finish_man_name finishManName,
+            DATE_FORMAT( finish_time, '%Y-%m-%d' ) finishTime,
+            remark,
+            impFlag,
+            status,
+            case status
+            when "00" then "待提交"
+            when "01" then "待完工"
+            when "02" then "待评价"
+            when "03" then "已结束"
+            when "10" then "作废"
+            end statusMean,
+            archive_flag archiveFlag,
+            DATE_FORMAT( rec_create_time, '%Y-%m-%d' ) recCreateTime
+        from
+            it_task
+        <dynamic prepend="where">
+            <isEqual prepend="and" property="status" compareValue="no">
+                status in ("01")
+            </isEqual>
+            <isEqual prepend="and" property="status" compareValue="yes">
+                status in ("02","03")
+            </isEqual>
+            <isNotEmpty prepend="and" property="dataGroupCode" open="(">
+                data_group_code in
+                <iterate open="(" close=")" conjunction="," property="dataGroupCode">
+                    #dataGroupCode[]#
+                </iterate>
+            </isNotEmpty>
+            <isPropertyAvailable prepend="or" property="dataGroupCodeAll" close=")">
+                data_group_code = #dataGroupCodeAll#
+            </isPropertyAvailable>
+            <isNotPropertyAvailable prepend="and" property="dataGroupCode" open="(">
+                data_group_code is NULL
+            </isNotPropertyAvailable>
+            <isNotPropertyAvailable prepend="or" property="dataGroupCodeAll" close=")">
+                0
+            </isNotPropertyAvailable>
+            <isNotEmpty prepend="and" property="itTaskId">
+                id = #itTaskId#
+            </isNotEmpty>
+        </dynamic>
+        order by task_no desc
+    </select>
+
+    <update id="completion" parameterClass="java.util.HashMap">
+        update it_task set
+            finish_man_no = #finishManNo#,
+            finish_man_name = #finishManName#,
+            finish_time = #finishTime#,
+            status = #status#
+        where id = #itTaskId#
+    </update>
+</sqlMap>

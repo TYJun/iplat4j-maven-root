@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DIYC01">
+
+	
+	<!-- 查询异常信息 -->
+	<select id="queryException" parameterClass="java.util.Map" resultClass="com.baosight.wilp.di.yc.domain.DIYC01">
+		SELECT
+		dt.taskID as taskid,
+		dt.schemeID as schemeid,
+		CASE
+		WHEN dtt.exception_status = "0" THEN "待处理"
+		WHEN dtt.exception_status = "1" THEN "已处理"
+		END "exceptionStatus",
+		dtt.itemID as itemID,
+		dt.taskCode as taskCode,
+		dt.jobContent as jobContent,
+		dtt.solution_type as solutionType,
+		dtt.finish_man as finishMan,
+		date_format(dtt.finish_time,'%Y-%m-%d %H:%i:%s') finishTime,
+		dtt.exception_result as exceptionResult,
+		st.schemeName as taskNameType,
+		dtt.jitemName as jitemName,
+		case dtt.errorContent when '"null"' then '无' end as errorContent,
+		dtt.writeValue as writeValue
+		FROM
+		di_task dt
+		LEFT JOIN di_taskitem dtt ON dt.taskID = dtt.taskID
+		LEFT JOIN di_scheme st on st.schemeID = dt.schemeID
+		where
+		dtt.successFlag = -1
+		<isNotEmpty prepend=" AND " property="taskCode">
+			dt.taskCode like concat('%',#taskCode#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dt.departName like concat('%',#deptName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="jitemName">
+			dtt.jitemName like concat('%',#jitemName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="taskNameType">
+			st.schemeName like concat('%',#taskNameType#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="startTime">
+			dt.recCreateTime <![CDATA[ >= ]]> #startTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">
+			dt.recCreateTime <![CDATA[ <= ]]> #endTime#
+		</isNotEmpty>
+	</select>
+	
+	
+</sqlMap>

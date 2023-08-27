@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="IRSY0201">
+
+    <insert id="insertNoticeRecord" parameterClass="java.util.HashMap">
+        insert into ${platSchema}.tirsy02
+                      (
+                       notice_title,
+                       notice_content,
+                       create_time,
+                       creator,
+                       status
+                      )
+                      values
+                      (
+                        #noticeTitle#,
+                        #noticeContent#,
+                        now(),
+                        #creator#,
+                        '1'
+                      )
+    </insert>
+</sqlMap>

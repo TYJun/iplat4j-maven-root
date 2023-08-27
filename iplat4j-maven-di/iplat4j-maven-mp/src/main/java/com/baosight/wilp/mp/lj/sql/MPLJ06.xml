@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!-- 需求计划汇总 -->
+<sqlMap namespace="MPLJ06">
+
+    <select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.mp.lj.domain.MpRequireCollect">
+        SELECT
+            id	as "id",  <!-- 主键 -->
+            collect_no	as "collectNo",  <!-- 需求计划汇总单号 -->
+            collect_type	as "collectType",  <!-- 0=年度，1=临时 -->
+            status_code	as "statusCode",  <!-- 状态编码 -->
+            status_name	as "statusName",  <!-- 状态名称 -->
+            collect_num	as "collectNum",  <!-- 物资汇总总数 -->
+            collect_cost	as "collectCost",  <!-- 汇总总金额 -->
+            dept_num as "deptNum", <!-- 科室编码 -->
+            dept_name as "deptName", <!-- 科室名称 -->
+            rec_creator	as "recCreator",  <!-- 创建（汇总）人 -->
+            rec_creator_name	as "recCreatorName",  <!-- 创建（汇总）人姓名 -->
+            date_format(rec_create_time, '%Y-%m-%d %H:%i:%s') as "recCreateTimeStr",  <!-- 创建时间 -->
+            rec_create_time	as "recCreateTime",  <!-- 创建(汇总)时间 -->
+            rec_revisor	as "recRevisor",  <!-- 修改人 -->
+            rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+            data_group_code	as "dataGroupCode",  <!-- 账套 -->
+            archive_flag	as "archiveFlag", <!-- 归档标记 -->
+            purchase_type as "purchaseType"
+        FROM mp_require_collect WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="collectNo">
+            collect_no like concat('%', #collectNo#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="collectType">
+            collect_type = #collectType#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCode">
+            status_code = #statusCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCodes">
+            status_code in
+            <iterate property="statusCodes" open="(" conjunction="," close=")">
+                #statusCodes[]#
+            </iterate>
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptNum">
+            dept_num = #deptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="beginTime">
+            rec_create_time >= concat(#beginTime#,' 00:00:00')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="endTime">
+            rec_create_time <![CDATA[<=]]> concat(#endTime#, ' 23:59:59')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="dataGroupCode">
+            data_group_code = #dataGroupCode#
+        </isNotEmpty>
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                collectNo desc
+            </isEmpty>
+        </dynamic>
+    </select>
+
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM mp_require_collect WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="collectNo">
+            collect_no like concat('%', #collectNo#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="collectType">
+            collect_type = #collectType#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCode">
+            status_code = #statusCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptNum">
+            dept_num = #deptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="beginTime">
+            rec_create_time >= concat(#beginTime#,' 00:00:00')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="endTime">
+            rec_create_time <![CDATA[<=]]> concat(#endTime#, ' 23:59:59')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="dataGroupCode">
+            data_group_code = #dataGroupCode#
+        </isNotEmpty>
+    </select>
+
+    <insert id="insert" parameterClass="com.baosight.wilp.mp.lj.domain.MpRequireCollect">
+        INSERT INTO mp_require_collect (
+            id,  <!-- 主键 -->
+            collect_no,  <!-- 需求计划汇总单号 -->
+            collect_type,  <!-- 0=年度，1=临时 -->
+            status_code,  <!-- 状态编码 -->
+            status_name,  <!-- 状态名称 -->
+            collect_num,  <!-- 物资汇总总数 -->
+            collect_cost,  <!-- 汇总总金额 -->
+            dept_num, <!-- 科室编码 -->
+            dept_name, <!-- 科室名称 -->
+            rec_creator,  <!-- 创建（汇总）人 -->
+            rec_creator_name,  <!-- 创建（汇总）人姓名 -->
+            rec_create_time,  <!-- 创建(汇总)时间 -->
+            rec_revisor,  <!-- 修改人 -->
+            rec_revise_time,  <!-- 修改时间 -->
+            data_group_code,  <!-- 账套 -->
+            archive_flag,  <!-- 归档标记 -->
+            purchase_type
+        )
+        VALUES (#id#, #collectNo#, #collectType#, #statusCode#, #statusName#, #collectNum#, #collectCost#, #deptNum#, #deptName#, #recCreator#, #recCreatorName#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#, #archiveFlag#, #purchaseType#)
+    </insert>
+
+    <delete id="delete" parameterClass="string">
+        DELETE FROM mp_require_collect WHERE id = #id#
+    </delete>
+
+    <update id="update" parameterClass="com.baosight.wilp.mp.lj.domain.MpRequireCollect">
+        UPDATE mp_require_collect
+        SET
+            <isNotEmpty property="statusCode"> status_code = #statusCode#,</isNotEmpty>   <!-- 状态编码 -->
+            <isNotEmpty property="statusName"> status_name = #statusName#,</isNotEmpty>   <!-- 状态名称 -->
+            <isGreaterThan property="collectNum" compareValue="0">collect_num	= #collectNum#,</isGreaterThan>   <!-- 物资汇总总数 -->
+            <isGreaterThan property="collectCost" compareValue="0">collect_cost	= #collectCost#,</isGreaterThan>   <!-- 汇总总金额 -->
+            rec_revisor	= #recRevisor#,   <!-- 修改人 -->
+            rec_revise_time	= #recReviseTime#,   <!-- 修改时间 -->
+            purchase_type = #purchaseType#
+        WHERE id = #id#
+    </update>
+
+    <select id="queryDetail" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.mp.lj.domain.MpRequireCollectDetail">
+        SELECT
+            id	as "id",  <!-- 主键 -->
+            collect_id	as "collectId",  <!-- 月度计划汇总表ID -->
+            mat_num	as "matNum",  <!-- 物资编码 -->
+            mat_name	as "matName",  <!-- 物资名称 -->
+            mat_type_id	as "matTypeId",  <!-- 物资分类ID -->
+            mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+            mat_spec	as "matSpec",  <!-- 物资规格 -->
+            mat_model	as "matModel",  <!-- 物资型号 -->
+            unit	as "unit",  <!-- 计量单位 -->
+            unit_name	as "unitName",  <!-- 计量单位 -->
+            price	as "price",  <!-- 单价 -->
+            num	as "num", <!-- 汇总数量 -->
+            picture_uri as "pictureUri" <!-- 图片地址 -->
+        FROM mp_require_collect_detail WHERE collect_id = #collectId#
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                mat_num asc
+            </isEmpty>
+        </dynamic>
+    </select>
+
+    <select id="countDetail" resultClass="int">
+        SELECT COUNT(*) FROM mp_require_collect_detail WHERE collect_id = #collectId#
+    </select>
+
+
+    <insert id="insertDetail" parameterClass="java.util.List">
+        INSERT INTO mp_require_collect_detail (
+            id,  <!-- 主键 -->
+            collect_id,  <!-- 月度计划汇总表ID -->
+            mat_num,  <!-- 物资编码 -->
+            mat_name,  <!-- 物资名称 -->
+            mat_type_id,  <!-- 物资分类ID -->
+            mat_type_name,  <!-- 物资分类名称 -->
+            mat_spec,  <!-- 物资规格 -->
+            mat_model,  <!-- 物资型号 -->
+            unit,  <!-- 计量单位 -->
+            unit_name,  <!-- 计量单位 -->
+            price,  <!-- 单价 -->
+            num,  <!-- 汇总数量 -->
+            picture_uri      <!-- 图片地址 -->
+        )
+        VALUES
+        <iterate conjunction=",">
+        (
+            #list[].id#,
+            #list[].collectId#,
+            #list[].matNum#,
+            #list[].matName#,
+            #list[].matTypeId#,
+            #list[].matTypeName#,
+            #list[].matSpec#,
+            #list[].matModel#,
+            #list[].unit#,
+            #list[].unitName#,
+            #list[].price#,
+            #list[].num#,
+            #list[].pictureUri#
+        )
+        </iterate>
+    </insert>
+
+    <delete id="deleteDetail" parameterClass="string">
+        DELETE FROM mp_require_collect_detail WHERE collect_id = #value#
+    </delete>
+
+    <insert id="insertRelation" parameterClass="java.util.List">
+        INSERT INTO mp_require_relation (
+            id,  <!-- 主键 -->
+            require_id,  <!-- 需求计划ID -->
+            require_detail_id,  <!-- 需求计划明细ID -->
+            require_collect_id  <!-- 需求计划汇总ID -->
+        )
+        VALUES
+        <iterate conjunction=",">
+        (
+            #list[].id#,
+            #list[].requireId#,
+            #list[].requireDetailId#,
+            #list[].requireCollectId#
+        )
+        </iterate>
+    </insert>
+
+    <delete id="deleteRelation" parameterClass="string">
+        DELETE FROM mp_require_relation WHERE require_collect_id = #value#
+    </delete>
+
+    <select id="queryRequireIds" parameterClass="string" resultClass="string">
+        select require_id from mp_require_relation where require_collect_id = #value#
+    </select>
+
+    <select id="queryRequireDetailIds" parameterClass="string" resultClass="string">
+        select require_detail_id from mp_require_relation where require_collect_id = #value#
+    </select>
+    
+</sqlMap>

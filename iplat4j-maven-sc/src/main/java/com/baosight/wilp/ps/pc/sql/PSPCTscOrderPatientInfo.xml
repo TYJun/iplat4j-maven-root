@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!-- 病员下单记录表 -->
+<sqlMap namespace="PSPCTscOrderPatientInfo">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ps.pc.domain.PSPCTscOrderPatientInfo">
+		SELECT
+		id as "id",
+		create_time as "createTime",
+		creator as "creator",
+		revise_time as "reviseTime",
+		resvisor as "resvisor",
+		patient_num as "patientNum",  <!-- 住院号 -->
+		patient_code as "patientCode",
+		patient_name as "patientName",  <!-- 病人姓名 -->
+		patient_tel as "patientTel",  <!-- 病人电话 -->
+		hospital_time as "hospitalTime",  <!-- 入院时间 -->
+		building_num as "buildingNum",  <!-- 楼号 -->
+		building as "building",  <!-- 楼 -->
+		floor_num as "floorNum",  <!-- 层号 -->
+		floor as "floor",  <!-- 层 -->
+		ward_code as "wardCode",  <!-- 病区编码 -->
+		ward_name as "wardName",  <!-- 病区名称 -->
+		dept_num as "deptNum",  <!-- 科室编码 -->
+		dept_name as "deptName",  <!-- 科室名称 -->
+		bed_no as "bedNo",  <!-- 床号 -->
+		data_group_code as "dataGroupCode",
+		data_group_code_tree as "dataGroupCodeTree",
+		register_type as "registerType",
+		yizhu as "yizhu",  <!-- 医嘱信息 -->
+		active_status as "activeStatus",  <!-- 卡片激活状态 -->
+		iden_no as "idenNo",  <!-- 身份证号 -->
+		hospital_no as "hospitalNo",  <!-- 院区编号 -->
+		hospital_name as "hospitalName" <!-- 院区名称 -->
+		FROM sc_order_patient_info WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	
+    <!-- 根据地点编码获取病员信息 -->
+    <select id="queryPatientInfoByAddNum" parameterClass="HashMap"
+        resultClass="com.baosight.wilp.ps.pc.domain.PSPCTscOrderPatientInfo">
+        select
+        ta.id,
+        ta.create_time createTime,
+        ta.creator,
+        ta.patient_num patientNum,
+        ta.patient_code patientCode,
+        ta.patient_name patientName,
+        ta.patient_tel patientTel,
+        ta.hospital_time hospitalTime,
+        if(length(ta.`building`)<![CDATA[<]]>1,qc.`building_name`,ta.`building`) building,
+        if(length(ta.`building_num`)<![CDATA[<]]>1,qc.`building_name`,ta.`building_num`) buildingNum,
+        if(length(ta.`floor_num`)<![CDATA[<]]>1,qc.`floor_name`,ta.`floor_num`) floorNum,
+        if(length(ta.`floor`)<![CDATA[<]]>1,qc.`floor_name`,ta.`floor`) floor,
+        ta.dept_num deptNum,
+        ta.dept_name deptName,
+        ta.ward_code wardCode,
+        ta.ward_name wardName,
+        ta.bed_no bedNo,
+        ta.data_group_code dataGroupCode,
+        CONCAT(ta.building,',',ta.floor,',',ta.dept_name) address,
+        ta.yizhu yiZhu,
+        ta.iden_no idenNo,
+        qc.area_code hospitalNo,
+        ta.hospital_name hospitalName
+        from
+        sc_order_patient_info ta
+        LEFT JOIN `sc_qrcode_address` qc on ta.`dept_num` = qc.`dept_code`
+        where 1=1
+		<isNotEmpty prepend=" AND " property="addNum">
+			ta.ward_code =#addNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="bedNo">
+			ta.bed_no =#bedNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="patientCode">
+			ta.patient_code =#patientCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="registerType">
+			ta.register_type =#registerType#
+		</isNotEmpty>
+    </select>
+	
+    <!-- 根据地点编码获取病员信息 -->
+    <select id="queryQrAddresByAddNum" parameterClass="String"
+        resultClass="com.baosight.wilp.ps.pc.domain.PSPCTscOrderPatientInfo">
+        select
+        ta.id,
+        ta.create_time createTime,
+        ta.creator,
+        ta.patient_num patientNum,
+        ta.patient_name patientName,
+        ta.patient_tel patientTel,
+        ta.hospital_time hospitalTime,
+        if(length(ta.`building`)<![CDATA[<]]>1,qc.`building_name`,ta.`building`) building,
+        if(length(ta.`building_num`)<![CDATA[<]]>1,qc.`building_name`,ta.`building_num`) buildingNum,
+        if(length(ta.`floor_num`)<![CDATA[<]]>1,qc.`floor_name`,ta.`floor_num`) floorNum,
+        if(length(ta.`floor`)<![CDATA[<]]>1,qc.`floor_name`,ta.`floor`) floor,
+        ta.dept_num deptNum,
+        ta.dept_name deptName,
+        ta.ward_code wardCode,
+        ta.ward_name wardName,
+        ta.bed_no bedNo,
+        ta.data_group_code dataGroupCode,
+        CONCAT(ta.building,',',ta.floor,',',ta.dept_name) address,
+        ta.yizhu yiZhu,
+        ta.iden_no idenNo,
+        qc.area_code hospitalNo,
+        ta.hospital_name hospitalName
+        from
+        sc_order_patient_info ta
+        LEFT JOIN `sc_qrcode_address` qc on ta.`dept_num` = qc.`dept_code`
+        where 1=1
+        and ta.ward_code = #addNum# 
+    </select>
+
+
+	<insert id="insert">
+		INSERT INTO sc_order_patient_info (id,
+		create_time,
+		creator,
+		revise_time,
+		resvisor,
+		patient_num,  <!-- 住院号 -->
+		patient_code,
+		patient_name,  <!-- 病人姓名 -->
+		patient_tel,  <!-- 病人电话 -->
+		hospital_time,  <!-- 入院时间 -->
+		building_num,  <!-- 楼号 -->
+		building,  <!-- 楼 -->
+		floor_num,  <!-- 层号 -->
+		floor,  <!-- 层 -->
+		ward_code,  <!-- 病区编码 -->
+		ward_name,  <!-- 病区名称 -->
+		dept_num,  <!-- 科室编码 -->
+		dept_name,  <!-- 科室名称 -->
+		bed_no,  <!-- 床号 -->
+		data_group_code,
+		data_group_code_tree,
+		register_type,
+		yizhu,  <!-- 医嘱信息 -->
+		active_status,  <!-- 卡片激活状态 -->
+		iden_no,  <!-- 身份证号 -->
+		hospital_no,  <!-- 院区编号 -->
+		hospital_name,  <!-- 院区名称 -->
+		role_num
+		)
+		VALUES (#id#, #createTime#, #creator#, #reviseTime#, #resvisor#,
+		#patientNum#, #patientCode#, #patientName#, #patientTel#,
+		#hospitalTime#, #buildingNum#, #building#, #floorNum#, #floor#,
+		#wardCode#, #wardName#, #deptNum#, #deptName#, #bedNo#,
+		#dataGroupCode#, #dataGroupCodeTree#, #registerType#, #yizhu#,
+		#activeStatus#, #idenNo#, #hospitalNo#, #hospitalName#,#roleNum#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM sc_order_patient_info WHERE
+		id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_order_patient_info
+		SET
+		revise_time = #reviseTime#,
+		resvisor = #resvisor#,
+		patient_num = #patientNum#,   <!-- 住院号 -->
+		patient_code = #patientCode#,
+		patient_name = #patientName#,   <!-- 病人姓名 -->
+		patient_tel = #patientTel#,   <!-- 病人电话 -->
+		hospital_time = #hospitalTime#,   <!-- 入院时间 -->
+		building_num = #buildingNum#,   <!-- 楼号 -->
+		building = #building#,   <!-- 楼 -->
+		floor_num = #floorNum#,   <!-- 层号 -->
+		floor = #floor#,   <!-- 层 -->
+		ward_code = #wardCode#,   <!-- 病区编码 -->
+		ward_name = #wardName#,   <!-- 病区名称 -->
+		dept_num = #deptNum#,   <!-- 科室编码 -->
+		dept_name = #deptName#,   <!-- 科室名称 -->
+		bed_no = #bedNo#,   <!-- 床号 -->
+		data_group_code = #dataGroupCode#,
+		data_group_code_tree = #dataGroupCodeTree#,
+		register_type = #registerType#,
+		yizhu = #yizhu#,   <!-- 医嘱信息 -->
+		active_status = #activeStatus#,   <!-- 卡片激活状态 -->
+		iden_no = #idenNo#,   <!-- 身份证号 -->
+		hospital_no = #hospitalNo#,   <!-- 院区编号 -->
+		hospital_name = #hospitalName#  <!-- 院区名称 -->
+		WHERE
+		ward_code = #wardCode#
+	</update>
+
+</sqlMap>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+	<!--      table information
+		Generate time : 2019-06-29 9:32:59
+   		Version :  6.0.731.201709180824
+		table comment : 审计日志_HTTP请求
+		tableName :IPLAT.TEPLG03 
+		 OPERATION_ID  VARCHAR   NOT NULL   primarykey, 
+		 OPERATION_TRACE_ID  VARCHAR   NOT NULL, 
+		 OPERATION_SPAN_ID  VARCHAR   NOT NULL, 
+		 OPERATION_TYPE_ENAME  VARCHAR   NOT NULL, 
+		 OPERATION_TYPE_CNAME  VARCHAR   NOT NULL, 
+		 OPERATOR  VARCHAR   NOT NULL, 
+		 OPERATION_DESC  VARCHAR   NOT NULL, 
+		 OPERATION_TIME  VARCHAR   NOT NULL, 
+		 OPERATION_INVOKE_KEY  VARCHAR   NOT NULL, 
+		 CLIENT_IP  VARCHAR   NOT NULL, 
+		 REC_CREATOR  VARCHAR   NOT NULL, 
+		 REC_CREATE_TIME  VARCHAR   NOT NULL, 
+		 REC_REVISOR  VARCHAR   NOT NULL, 
+		 REC_REVISE_TIME  VARCHAR   NOT NULL, 
+		 ARCHIVE_FLAG  VARCHAR   NOT NULL
+	-->
+<sqlMap namespace="LCLG03">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.iplat4j.ep.lg.domain.EPLG03">
+		SELECT
+				OPERATION_ID	as "operationId",  <!-- 操作ID -->
+				OPERATION_TRACE_ID	as "operationTraceId",  <!-- 操作行为ID -->
+				OPERATION_SPAN_ID	as "operationSpanId",  <!-- 层级ID -->
+				OPERATION_TYPE_ENAME	as "operationTypeEname",  <!-- 操作分类 -->
+				OPERATION_TYPE_CNAME	as "operationTypeCname",  <!-- 操作分类名称 -->
+				OPERATOR	as "operator",  <!-- 操作人 -->
+				OPERATION_DESC	as "operationDesc",  <!-- 操作描述 -->
+				OPERATION_TIME	as "operationTime",  <!-- 操作时间 -->
+				OPERATION_INVOKE_KEY	as "operationInvokeKey",  <!-- 关键字 -->
+				CLIENT_IP	as "clientIp",  <!-- 客户端IP -->
+				REC_CREATOR	as "recCreator",  <!-- 记录创建责任者 -->
+				REC_CREATE_TIME	as "recCreateTime",  <!-- 记录创建时刻 -->
+				REC_REVISOR	as "recRevisor",  <!-- 记录修改责任者 -->
+				REC_REVISE_TIME	as "recReviseTime",  <!-- 记录修改时刻 -->
+				ARCHIVE_FLAG	as "archiveFlag",  <!-- 归档标记 -->
+				EXT1	as "ext1",  <!-- 扩展字段1 -->
+				EXT2	as "ext2",  <!-- 扩展字段2 -->
+				EXT3	as "ext3",  <!-- 扩展字段3 -->
+				EXT4	as "ext4",  <!-- 扩展字段4 -->
+				EXT5	as "ext5",<!-- 扩展字段5 -->
+				MODULE_NAME as "moduleName"
+		FROM ${platSchema}.TEPLG03 WHERE 1=1
+		<isNotEmpty prepend=" AND " property="operationTime">
+			OPERATION_TIME <![CDATA[<=]]> #operationTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="operationId">
+			OPERATION_ID = #operationId#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  OPERATION_ID asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="operationId">
+			OPERATION_ID = #operationId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="operationTraceId">
+			OPERATION_TRACE_ID = #operationTraceId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="operationSpanId">
+			OPERATION_SPAN_ID = #operationSpanId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="operationTypeEname">
+			OPERATION_TYPE_ENAME = #operationTypeEname#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="operationTypeCname">
+			OPERATION_TYPE_CNAME = #operationTypeCname#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="operator">
+			OPERATOR = #operator#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="operationDesc">
+			OPERATION_DESC = #operationDesc#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="operationTime">
+			OPERATION_TIME = #operationTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="operationInvokeKey">
+			OPERATION_INVOKE_KEY = #operationInvokeKey#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="clientIp">
+			CLIENT_IP = #clientIp#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreator">
+			REC_CREATOR = #recCreator#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTime">
+			REC_CREATE_TIME = #recCreateTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recRevisor">
+			REC_REVISOR = #recRevisor#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recReviseTime">
+			REC_REVISE_TIME = #recReviseTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="archiveFlag">
+			ARCHIVE_FLAG = #archiveFlag#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO ${platSchema}.TEPLG03
+		(
+		OPERATION_ID,  <!-- 操作ID -->
+		OPERATION_TRACE_ID,  <!-- 操作行为ID -->
+		OPERATION_SPAN_ID,  <!-- 层级ID -->
+		OPERATION_TYPE_ENAME,  <!-- 操作分类 -->
+		OPERATION_TYPE_CNAME,  <!-- 操作分类名称 -->
+		OPERATOR,  <!-- 操作人 -->
+		OPERATION_DESC,  <!-- 操作描述 -->
+		OPERATION_TIME,  <!-- 操作时间 -->
+		OPERATION_INVOKE_KEY,  <!-- 关键字 -->
+		CLIENT_IP,  <!-- 客户端IP -->
+		REC_CREATOR,  <!-- 记录创建责任者 -->
+		REC_CREATE_TIME,  <!-- 记录创建时刻 -->
+		REC_REVISOR,  <!-- 记录修改责任者 -->
+		REC_REVISE_TIME,  <!-- 记录修改时刻 -->
+		ARCHIVE_FLAG,  <!-- 归档标记 -->
+		EXT1,  <!-- 扩展字段1 -->
+		EXT2,  <!-- 扩展字段2 -->
+		EXT3,  <!-- 扩展字段3 -->
+		EXT4,  <!-- 扩展字段4 -->
+		EXT5,  <!-- 扩展字段5 -->
+		MODULE_NAME
+		)
+		VALUES (#operationId:VARCHAR#, #operationTraceId:VARCHAR#,
+		#operationSpanId:VARCHAR#, #operationTypeEname:VARCHAR#,
+		#operationTypeCname:VARCHAR#, #operator:VARCHAR#,
+		#operationDesc:VARCHAR#, #operationTime:VARCHAR#,
+		#operationInvokeKey:VARCHAR#,#clientIp:VARCHAR#, #recCreator:VARCHAR#,
+		#recCreateTime:VARCHAR#, #recRevisor:VARCHAR#,
+		#recReviseTime:VARCHAR#, #archiveFlag:VARCHAR#,
+		#ext1:VARCHAR#, #ext2:VARCHAR#, #ext3:VARCHAR#,
+		#ext4:VARCHAR#, #ext5:VARCHAR#, #moduleName:VARCHAR#)
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM ${platSchema}.TEPLG03 WHERE
+			OPERATION_ID = #operationId#
+	</delete>
+
+	<update id="update">
+		UPDATE ${platSchema}.TEPLG03
+		SET 
+					OPERATION_TRACE_ID	= #operationTraceId#,   <!-- 操作行为ID -->
+					OPERATION_SPAN_ID	= #operationSpanId#,   <!-- 层级ID -->
+					OPERATION_TYPE_ENAME	= #operationTypeEname#,   <!-- 操作分类 -->
+					OPERATION_TYPE_CNAME	= #operationTypeCname#,   <!-- 操作分类名称 -->
+					OPERATOR	= #operator#,   <!-- 操作人 -->
+					OPERATION_DESC	= #operationDesc#,   <!-- 操作描述 -->
+					OPERATION_TIME	= #operationTime#,   <!-- 操作时间 -->
+					OPERATION_INVOKE_KEY	= #operationInvokeKey#,   <!-- 关键字 -->
+					CLIENT_IP	= #clientIp#,   <!-- 客户端IP -->
+					REC_CREATOR	= #recCreator#,   <!-- 记录创建责任者 -->
+					REC_CREATE_TIME	= #recCreateTime#,   <!-- 记录创建时刻 -->
+					REC_REVISOR	= #recRevisor#,   <!-- 记录修改责任者 -->
+					REC_REVISE_TIME	= #recReviseTime#,   <!-- 记录修改时刻 -->
+					ARCHIVE_FLAG	= #archiveFlag#  <!-- 归档标记 -->
+			WHERE 	
+			OPERATION_ID = #operationId#
+	</update>
+  
+</sqlMap>

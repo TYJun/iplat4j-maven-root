@@ -1,0 +1,549 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="reference/mui/css/mui.min.css">
+    <link rel="stylesheet" href="reference/mui/css/iconfont.css">
+    <link rel="stylesheet" href="reference/css/common.css" />
+    <link rel="stylesheet" href="../../css/colorGreen.css" />
+    <!-- <link rel="stylesheet" href="../../css/colorBlue.css" /> -->
+</head>
+<STYLE TYPE="text/css">
+    body {
+        background: #eee;
+    }
+    
+    .task {
+        width: 96%;
+        background: #fff;
+        margin: 0 auto;
+        box-shadow: 1px 1px 10px #b9b9b9;
+        margin-bottom: 10px;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        border-bottom-left-radius: 4px;
+        margin-top: 5px;
+    }
+    
+    .task-title {
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 15px;
+        padding-right: 15px;
+        /*background: #607d8b;*/
+        border-bottom: 1px solid #eee;
+        color: #209c60;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        font-weight: bold;
+    }
+    
+    .task-info {
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-bottom-right-radius: 4px;
+        border-bottom-left-radius: 4px;
+        color: #5a5a5a;
+    }
+    
+    .task-status {
+        color: #f39e22;
+    }
+    
+    .task-btn {
+        width: 100%;
+        height: 50px;
+        border-top: 1px solid #eee;
+        text-align: right;
+        padding-left: 15px;
+        padding-right: 15px;
+        /*padding-top: 8px;*/
+    }
+    
+    .task-btn button {
+        margin: 8px 0 0 10px;
+    }
+    
+    .mui-table-view:before {
+        height: 0;
+    }
+    
+    .mui-table-view:after {
+        height: 0;
+    }
+    
+    .loading1 {
+        position: fixed;
+        z-index: 999;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+    
+    .loading2 {
+        margin: 0 auto;
+        margin-top: 200px;
+        text-align: center;
+        line-height: 100px;
+    }
+    
+    .nothing {
+        position: relative;
+        top: 25%;
+        text-align: center;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 20px;
+        display: none;
+    }
+    /**顶部（外卖配送和到店自取）*/
+    
+    .head-tab {
+        margin-top: 44px;
+        height: 44px;
+        display: flex;
+        border-bottom: 1px solid #c3c8cd;
+        position: relative;
+        z-index: 3;
+        background-color: #f7f7f7;
+    }
+    /* lxy修改 */
+    
+    .head-item {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .text-color {
+        color: #209c60;
+        font-weight: bold;
+    }
+    
+    .mui-bar-nav~.mui-content {
+        padding-top: 44px;
+    }
+    
+    .mui-scroll-wrapper {
+        position: absolute;
+        z-index: 2;
+        top: 44px;
+        bottom: 0;
+        left: 0;
+        overflow: hidden;
+        width: 100%;
+    }
+    /*遮罩样式*/
+    
+    .mask {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #000;
+        opacity: 0.7;
+        z-index: 2090;
+        display: none;
+    }
+    
+    .code-dialog {
+        width: 80%;
+        height: 45%;
+        position: fixed;
+        z-index: 3000;
+        background: #fff;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 4px;
+        display: none;
+    }
+    
+    .code-dialog-title {
+        height: 46px;
+        line-height: 46px;
+        text-align: center;
+        font-size: 15px;
+        background-color: #2aabd2;
+        color: #fff;
+    }
+    
+    .code-dialog-content {
+        width: 100%;
+        height: calc(100% - 46px);
+    }
+    
+    #qrCode {
+        /*display: flex;*/
+        /*justify-content: center;*/
+        /*align-items: center;*/
+        /* flex-direction: column; */
+        height: calc(100% - 46px);
+    }
+    
+    .qrCodeText {
+        text-align: center;
+        font-size: 20px;
+        height: 46px;
+        line-height: 46px;
+    }
+</STYLE>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">订单列表</h1>
+        <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+          <span class="mui-icon mui-icon-left-nav"></span>
+          返回
+        </button>
+    </header>
+
+    <div id="loading" class="loading1" hidden>
+        <div class="loading2">
+            <span class="mui-spinner" style="width:80px;height:80px;"></span>
+        </div>
+    </div>
+
+    <!--遮罩-->
+    <div class="mask"></div>
+
+    <div class="code-dialog">
+        <div class="code-dialog-title">取货码</div>
+        <div class="code-dialog-content">
+            <div class="qrCodeText"></div>
+            <div id="qrCode" align="center"></div>
+        </div>
+    </div>
+
+    <!-- lxy修改 -->
+    <div class="head-tab">
+        <div class="head-item delivery" style="display:none">外卖配送</div>
+        <div class="head-item text-color">到店自取</div>
+    </div>
+
+    <div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="padding-bottom:50px;overflow-y: auto;margin-bottom: 50px;">
+        <p class="nothing">-- 暂无数据 --</p>
+        <div class="mui-scroll">
+            <ul class="mui-table-view mui-table-view-chevron" style="background-color:#eee;">
+                <div style="width:100%;text-align:center;margin-top:100px;font-size:40px;"><span class="mui-spinner"></span>
+                </div>
+            </ul>
+        </div>
+    </div>
+
+    <nav class="mui-bar mui-bar-tab" style="background:#fff;">
+        <a id="main" class="mui-tab-item menu" href="javascript:void(0)">
+            <span class="mui-icon mui-icon-home"></span>
+            <span class="mui-tab-label">食堂</span>
+        </a>
+        <a id="notice" class="mui-tab-item notice" href="javascript:void(0)">
+            <span class="mui-icon mui-icon-email"></span>
+            <span class="mui-tab-label">消息</span>
+        </a>
+        <a id="order" class="mui-tab-item mui-active order" href="javascript:void(0)">
+            <span class="mui-icon mui-icon-compose"></span>
+            <span class="mui-tab-label">订单</span>
+        </a>
+    </nav>
+
+</body>
+<script src="reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="reference/js/common.js" type="text/javascript"></script>
+<script src="reference/js/qrcode.min.js" type="text/javascript"></script>
+<!-- <script src="../../reference/js/jquery.qrcode.js"></script> -->
+<script src="../../cordova.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem('workNo');
+    var deptName = localStorage.getItem("deptName");
+    var page = 1,
+        html = '';
+    // //外卖配送还是自取餐
+    // var typePay = localStorage.getItem("typePay");
+    // console.log(typePay)
+
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+        location.href = "main.html";
+    }
+
+
+    // lxy修改
+    //跳转至外卖配送页面
+    $(".delivery").click(function() {
+        location.href = 'meal_order.html';
+    })
+
+    // mui.init({
+    //   pullRefresh: {
+    //     container: '#pullrefresh',
+    //     down: {
+    //       callback: pulldownRefresh,
+    //       contentrefresh: "正在加载",
+    //     },
+    //     up: {
+    //       contentrefresh: "加载中，请稍后",
+    //       contentnomore: '暂无更多数据',
+    //       callback: pullupRefresh
+    //     }
+    //   }
+    // });
+
+    loadData();
+
+    function loadData() {
+        $.ajax({
+            url: baseUrl + 'app_selfOrder.do?list',
+            type: 'get',
+            data: {
+                openId: workNo
+            },
+            dataType: 'json',
+            success: function(data) {
+
+                if (data.respCode == '200') {
+                    var list = data.obj;
+                    console.log("打印信息", list);
+                    if (list.length == 0) {
+                        $('.nothing').show()
+                    } else {
+                        $('.nothing').hide()
+                        for (var i = 0; i < list.length; i++) {
+                            html += createTask(list[i].billNo, list[i].userName, list[i].statusCode, list[i].statusName, list[i].deptName, list[i].billTotalPrice, list[i].reqSendTime, list[i].comboNum, list[i].payType, list[i].selfCode);
+                        }
+                    }
+                    $('ul').html(html);
+
+                } else {
+                    mui.toast("获取订单列表失败");
+                }
+            }
+        });
+    }
+
+    function createTask(bill_no, user_name, status_code, status_name, dept_name, total_price, send_time, combo_no, pay_type, selfCode) {
+        var times = getMinute(send_time);
+        var htmls = '<div class="task">';
+        htmls += '<div class="task-title">订单编号：<span class="task_code">' + bill_no + '</span></div>';
+        htmls += '<div class="mui-row task-info">';
+        htmls += '<div class="mui-col mui-col-xs-12">单据状态：<span class="task-status">' + status_name + '</span></div>';
+        htmls += '<div class="mui-col mui-col-xs-12">订餐人：<span>' + user_name + '</span></div>';
+        htmls += '<div class="mui-col mui-col-xs-12">科室名称：<span class="abnormal">' + dept_name + '</span></div>';
+        htmls += '<div class="mui-col mui-col-xs-12">订单总价：<span>' + parseFloat(total_price).toFixed(2) + '元</span></div>';
+        htmls += '<div class="mui-col mui-col-xs-12 selfCode">取货码：<span class="abnormal">' + selfCode + '</span></div>';
+        htmls += '</div>';
+
+        htmls += '<div class="task-btn">';
+        htmls += '<button id="' + bill_no + '" type="button" class="mui-btn mui-btn-outlined info">查看详情</button>';
+        if (status_code == '00' || status_code == '02') {
+            htmls += '<button id="' + bill_no + '" type="button" class="mui-btn mui-btn-primary mui-btn-outlined cancel">取消订单</button>';
+        }
+        if (status_code == '05') {
+            htmls += '<button id="' + bill_no + '"  send_time ="' + send_time + '" name="' + combo_no + '" type="button" class="mui-btn mui-btn-primary mui-btn-outlined eval">评价</button>';
+        }
+        htmls += '</div>';
+
+        htmls += '</div>';
+        return htmls;
+    }
+
+    function getMinute(times) {
+        var str = times.replace(/-/g, "/");
+        var time = new Date(str);
+        var now = new Date();
+        var s1 = time.getTime();
+        var s2 = now.getTime();
+        var s3 = s1 - s2;
+        return s3;
+    }
+
+    /*
+     * 查看详情：
+     * @param billNo:订单号
+     *
+     * */
+    mui("body").on('tap', 'button.info', function() {
+        var billNo = $(this).attr("id");
+        console.log("订单编号", billNo);
+        $.ajax({
+            url: baseUrl + 'app_selfOrder.do?view',
+            type: 'get',
+            data: {
+                billNo: billNo
+            },
+            dataType: 'json',
+            success: function(data) {
+                if (data.respCode == '200') {
+                    console.log("查看详情接口中的数据", data);
+                    location.href = "meal_PC/orderInfoNew.html?" + billNo;
+                } else {
+                    mui.toast(data.msg);
+                }
+            }
+        })
+    });
+
+    //取消订单
+    mui("body").on('tap', 'button.cancel', function() {
+        var bill_no = $(this).attr("id");
+        var btnArray = ['取消', '确定'];
+        mui.prompt('请输入取消原因', '', '取消订单', btnArray, function(e) {
+            if (e.index == 1) {
+                cancel(e.value, bill_no);
+            }
+        });
+    });
+
+
+    /*
+     * 订单取消接口
+     * @param billNo:订单号
+     * @param openId:工号
+     * @param rejectReason:作废原因
+     * */
+    function cancel(reason, bill_no) {
+        if (reason == "") {
+            mui.toast("取消原因不能为空");
+            return;
+        }
+        $('#loading').show();
+        $.ajax({
+            url: baseUrl + 'app_selfOrder.do?delete',
+            type: 'post',
+            data: {
+                billNo: bill_no,
+                openId: workNo,
+                rejectReason: reason,
+            },
+            dataType: 'json',
+            success: function(data) {
+                console.log("订单取消接口中的数据", data);
+                if (data.respCode == '200') {
+                    mui.toast("操作成功");
+                    location.reload();
+                    $('#loading').hide();
+                    // mui('#pullrefresh').pullRefresh().pulldownLoading();
+                } else {
+                    mui.toast(data.respMsg);
+                    $('#loading').hide();
+                }
+            }
+        });
+    }
+
+    // lxy修改 QRCode未定义 这一块有问题
+
+    var qrcode = new QRCode(document.getElementById("qrCode"), {
+        width: 150,
+        height: 150
+    });
+
+    //点击取货码
+    $("body").on('tap', '.selfCode', function() {
+
+        $(".mask").show();
+        $(".code-dialog").show();
+        var code = $(this).find(".abnormal").text();
+        $(".qrCodeText").html(code);
+        makeCode(code);
+        console.log("取货码的值为:", $(this).find(".abnormal").text());
+    })
+
+    //生成二维码
+    function makeCode(code) {
+        if (!code) {
+            alert("Input a text");
+            elText.focus();
+            return;
+        }
+        qrcode.makeCode(code);
+    }
+
+    //点击遮罩
+    $(".mask").click(function() {
+        $(".mask").hide();
+        $(".code-dialog").hide();
+    })
+
+    //评价
+    mui("body").on('tap', 'button.eval', function() {
+        var billNo = $(this).attr("id");
+        console.log("评价的工号", billNo);
+        var send_time = $(this).attr("send_time");
+        console.log("自取时间", send_time);
+        localStorage.setItem("send_time", send_time);
+        location.href = "meal_PC/canteenMeal/eval.html?" + billNo;
+    });
+
+    // //下拉刷新
+    // function pulldownRefresh() {
+    //   setTimeout(function () {
+    //     html = '';
+    //     page = 1;
+    //     loadData();
+    //     mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+    //   }, 1500);
+    // }
+
+    //上拉加载更多
+    // function pullupRefresh() {
+    //   page++;
+    //   $('ul').html("");
+    //   loadData();
+    //   setTimeout(function () {
+    //     //关闭加载框
+    //     mui('#pullrefresh').pullRefresh().endPullupToRefresh();
+    //   }, 1500);
+    // }
+
+    document.getElementById("main").addEventListener('tap', function() {
+        location.href = "main.html";
+    });
+
+    document.getElementById("order").addEventListener('tap', function() {
+        location.reload();
+    });
+
+    document.getElementById("notice").addEventListener('tap', function() {
+        location.href = "notice.html";
+    });
+
+    document.getElementById("back").addEventListener('tap', function() {
+        location.href = "main.html";
+    });
+
+    // APP系统键回退
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        /**
+         * 系统返回键监听
+         */
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    //返回
+    function onBackKeyDown() {
+        location.href = "../../menu.html";
+    }
+</script>
+
+</html>

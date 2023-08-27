@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="PRGL02">
+	
+	
+	
+	<!-- 查询日志问题 -->
+	<select id="queryLog" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select rejectReason from pr_safty_danger_logs where dangerID = #dangerID# and rejectStatus = #statusCode#
+	</select>
+	
+	
+	<!-- 删除问题信息 -->
+	<delete id="deleteDanger" parameterClass="String">
+		delete from pr_safty_danger where id = #value#
+	</delete>
+
+	<!-- 删除日志信息 -->
+	<delete id="deleteDangerLogs" parameterClass="String">
+		delete from pr_safty_danger_logs where dangerID = #value#
+	</delete>
+
+	<!-- 删除关联图片信息 -->
+	<delete id="deleteDangerAndPic" parameterClass="String">
+		delete from pr_safty_danger_pic where dangerID = #value#
+	</delete>
+
+	<!-- 删除图片表对应图片信息 -->
+	<delete id="deleteDangerPic" parameterClass="String">
+		delete from pr_common_file where fileID = #value#
+	</delete>
+
+	<!-- 查询dangerID -->
+	<select id="queryDangerID" parameterClass="String" resultClass="java.util.HashMap">
+		select dangerID from pr_safty_danger where id= #value#
+	</select>
+	
+	<!-- 查询图片id和图片信息 -->
+	<select id="queryFileID" parameterClass="String" resultClass="java.util.HashMap">
+		SELECT
+			prfile.fileID as fileID,
+			prfile.storagePath as storagePath
+		FROM
+			pr_safty_danger_pic prPic
+			LEFT JOIN pr_common_file prfile ON prPic.fileID = prfile.fileID
+		WHERE
+			dangerID = #value#
+	</select>
+
+
+	<!-- 记录日志  -->
+	<insert id="logs" parameterClass="java.util.HashMap">
+		INSERT INTO pr_safty_danger_logs ( id, dangerID, logsNo, logsMan, logsTime, rejectStatus, rejectReason,dataGroupCode )
+		VALUES
+			( UUID(), #dangerID#, #logsNo#, #logsMan#, #logsTime#, #rejectStatus#, #rejectReason#,#dataGroupCode# )
+	</insert>
+		
+	<!-- 修改问题状态 -->
+	<update id="updateStatusCode" parameterClass="java.util.HashMap">
+		update pr_safty_danger set status_code = #statusCode# where id = #id#
+	</update>
+	
+
+	<!-- 查询方法 -->
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.pr.gl.domain.PRGL02">
+		SELECT
+		CASE
+			WHEN tsd.status_code = '00' THEN '待认领'
+			WHEN tsd.status_code = '10' THEN '已认领'
+			WHEN tsd.status_code = '09' THEN '认领被驳回'
+			WHEN tsd.status_code = '19' THEN '挂账待认领'
+			WHEN tsd.status_code = '01' THEN '整改被驳回' 
+		END "contentType",
+			tsd.status_code as statusCode,
+			tsd.id as id,
+			tsd.dangerCode as dangercode,
+			tsd.localTypeName as typename,
+			tsd.contentDesc as contentdesc,
+			tsd.createMan as creatorName,
+			tsd.createTime as createtime,
+			tsd.requiredTime as requiredtime,
+			tsd.requireDesc as requiredesc,
+			log.rejectReason AS rejectReason,
+		CASE
+			WHEN tsd.dangerLevel = 'jj' THEN '紧急'
+			WHEN tsd.dangerLevel = 'pt' THEN '普通'
+			END "dangerlevel"
+		FROM
+			pr_safty_danger tsd left join pr_safty_danger_logs log
+			on tsd.id = log.dangerID
+		where
+		tsd.status_code <![CDATA[ < ]]> 30
+		and
+		tsd.status_code <![CDATA[ != ]]> 20
+		<isNotEmpty prepend=" AND " property="beginDate">
+			tsd.createTime <![CDATA[ >= ]]> #beginDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endDate">
+			tsd.createTime <![CDATA[ <= ]]> #endDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="localTypeCode">
+			tsd.localTypeCode = #localTypeCode#
+		</isNotEmpty>
+		<isNotEmpty property="start">
+			<isNotEmpty property="rows">
+				LIMIT #start#,#rows#
+			</isNotEmpty>
+		</isNotEmpty>
+		GROUP BY tsd.id
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM pr_safty_danger WHERE 1=1
+		<isNotEmpty prepend=" AND " property="dangerid">
+			dangerID = #dangerid#
+		</isNotEmpty>
+	</select>
+	
+
+	<insert id="insert">
+		INSERT INTO pr_safty_danger (dangerID,  <!--  主键 -->
+										dangerCode,  <!--  隐患代码  -->
+										dnagerName,  <!--  隐患标题 -->
+										dangerWhere,  <!--  隐患位置 -->
+										dangerLevel,  <!--  隐患等级 -->
+										requireDesc,  <!--  整改要求 -->
+										dangerClassID,  <!--  隐患类型 -->
+										taskClass,  <!--  计划类型(表名) -->
+										taskCode,  <!--  计划的代码 -->
+										contentDesc,  <!--  隐患的内容描 -->
+										requiredTime,  <!--  要求完成整改的时间 -->
+										hospitalID,  <!--  相关医院 -->
+										dangerName,  <!--  隐患类型 -->
+										departName,  <!--  部门 -->
+										taskDepartName,  <!--  责任部门 -->
+										status,  <!--  隐患情况 -->
+										status2,  <!--  整改情况 -->
+										createTime,  <!--  创建时间 -->
+										createMan,  <!--  创建人  -->
+										createIP,  <!--  创建IP -->
+										modifyTime,  <!--  修改时间 -->
+										modifyMan,  <!--  修改人 -->
+										modifyIP,  <!--  修改IP -->
+										auditTime,  <!--  审核时间 -->
+										auditMan,  <!--  审核人 -->
+										auditIP,  <!--  审核IP -->
+										globalID,
+										addFromID,
+										taskDepartId,
+										dangerType,
+										fromBillID,
+										answerMan,  <!-- 任务接受人 -->
+										answerIP,  <!-- 任务接受IP -->
+										answerTime,  <!-- 任务接受时间 -->
+										answerType,  <!-- 接收状态 -->
+										addID,  <!-- 移动端增加的ID号 -->
+										bakCreateTime,
+										bakRequriedTime,
+										fromSouceClass,
+										fromSouceObject,
+										dangerClassFullName,
+										dangerClassName,
+										previousDangerGlobalID,
+										activitiKey,
+										dispatchMan,
+										selfFlag,
+										id,
+										current_dealer,
+										status_code,
+										rec_revisor,
+										rec_revise_time,
+										create_date,
+										creator_id,
+										creator_name,
+										creator_phone,
+										update_date,
+										updator_id,
+										updator_name,
+										operate_type,
+										dangerClassTypeCode,
+										dangerClassTypeName,
+										createType,  <!-- 登记来源：PC/PAD/APP -->
+										localTypeCode,
+										warningTime,  <!-- 超期时间 -->
+										warning2Time,  <!-- 超期时间,7天通知院长的 -->
+										source,  <!-- 数据来源 -->
+										accept_type,  <!-- 0 正常认领; 3 核查; 2 派发 -->
+										msgStatus  <!-- 发送成功状态标记:0: 未发送消息 1-待认领超过12小时; 2-待认领超过24小时; 3-已认领未整改超过12小时; 4-已认领未整改超过24小时 -->
+										)		 
+	    VALUES (#dangerid#, #dangercode#, #dnagername#, #dangerwhere#, #dangerlevel#, #requiredesc#, #dangerclassid#, #taskclass#, #taskcode#, #contentdesc#, #requiredtime#, #hospitalid#, #dangername#, #departname#, #taskdepartname#, #status#, #status2#, #createtime#, #createman#, #createip#, #modifytime#, #modifyman#, #modifyip#, #audittime#, #auditman#, #auditip#, #globalid#, #addfromid#, #taskdepartid#, #dangertype#, #frombillid#, #answerman#, #answerip#, #answertime#, #answertype#, #addid#, #bakcreatetime#, #bakrequriedtime#, #fromsouceclass#, #fromsouceobject#, #dangerclassfullname#, #dangerclassname#, #previousdangerglobalid#, #activitikey#, #dispatchman#, #selfflag#, #id#, #currentDealer#, #statusCode#, #processInstId#, #recRevisor#, #recReviseTime#, #createDate#, #creatorId#, #creatorName#, #creatorPhone#, #updateDate#, #updatorId#, #updatorName#, #operateType#, #dangerclasstypecode#, #dangerclasstypename#, #createtype#, #localtypecode#, #warningtime#, #warning2time#, #source#, #acceptType#, #msgstatus#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM pr_safty_danger WHERE 
+			dangerID = #dangerid#
+	</delete>
+
+	<update id="update">
+		UPDATE pr_safty_danger 
+		SET 
+					dangerCode	= #dangercode#,   <!--  隐患代码  -->  
+					dnagerName	= #dnagername#,   <!--  隐患标题 -->  
+					dangerWhere	= #dangerwhere#,   <!--  隐患位置 -->  
+					dangerLevel	= #dangerlevel#,   <!--  隐患等级 -->  
+					requireDesc	= #requiredesc#,   <!--  整改要求 -->  
+					dangerClassID	= #dangerclassid#,   <!--  隐患类型 -->  
+					taskClass	= #taskclass#,   <!--  计划类型(表名) -->  
+					taskCode	= #taskcode#,   <!--  计划的代码 -->  
+					contentDesc	= #contentdesc#,   <!--  隐患的内容描 -->  
+					requiredTime	= #requiredtime#,   <!--  要求完成整改的时间 -->  
+					hospitalID	= #hospitalid#,   <!--  相关医院 -->  
+					dangerName	= #dangername#,   <!--  隐患类型 -->  
+					departName	= #departname#,   <!--  部门 -->  
+					taskDepartName	= #taskdepartname#,   <!--  责任部门 -->  
+					status	= #status#,   <!--  隐患情况 -->  
+					status2	= #status2#,   <!--  整改情况 -->  
+					createTime	= #createtime#,   <!--  创建时间 -->  
+					createMan	= #createman#,   <!--  创建人  -->  
+					createIP	= #createip#,   <!--  创建IP -->  
+					modifyTime	= #modifytime#,   <!--  修改时间 -->  
+					modifyMan	= #modifyman#,   <!--  修改人 -->  
+					modifyIP	= #modifyip#,   <!--  修改IP -->  
+					auditTime	= #audittime#,   <!--  审核时间 -->  
+					auditMan	= #auditman#,   <!--  审核人 -->  
+					auditIP	= #auditip#,   <!--  审核IP -->  
+					globalID	= #globalid#,   
+					addFromID	= #addfromid#,   
+					taskDepartId	= #taskdepartid#,   
+					dangerType	= #dangertype#,   
+					fromBillID	= #frombillid#,   
+					answerMan	= #answerman#,   <!-- 任务接受人 -->  
+					answerIP	= #answerip#,   <!-- 任务接受IP -->  
+					answerTime	= #answertime#,   <!-- 任务接受时间 -->  
+					answerType	= #answertype#,   <!-- 接收状态 -->  
+					addID	= #addid#,   <!-- 移动端增加的ID号 -->  
+					bakCreateTime	= #bakcreatetime#,   
+					bakRequriedTime	= #bakrequriedtime#,   
+					fromSouceClass	= #fromsouceclass#,   
+					fromSouceObject	= #fromsouceobject#,   
+					dangerClassFullName	= #dangerclassfullname#,   
+					dangerClassName	= #dangerclassname#,   
+					previousDangerGlobalID	= #previousdangerglobalid#,   
+					activitiKey	= #activitikey#,   
+					dispatchMan	= #dispatchman#,   
+					selfFlag	= #selfflag#,   
+					id	= #id#,   
+					current_dealer	= #currentDealer#,   
+					status_code	= #statusCode#,   
+					rec_revisor	= #recRevisor#,   
+					rec_revise_time	= #recReviseTime#,   
+					create_date	= #createDate#,   
+					creator_id	= #creatorId#,   
+					creator_name	= #creatorName#,   
+					creator_phone	= #creatorPhone#,   
+					update_date	= #updateDate#,   
+					updator_id	= #updatorId#,   
+					updator_name	= #updatorName#,   
+					operate_type	= #operateType#,   
+					dangerClassTypeCode	= #dangerclasstypecode#,   
+					dangerClassTypeName	= #dangerclasstypename#,   
+					createType	= #createtype#,   <!-- 登记来源：PC/PAD/APP -->  
+					localTypeCode	= #localtypecode#,   
+					warningTime	= #warningtime#,   <!-- 超期时间 -->  
+					warning2Time	= #warning2time#,   <!-- 超期时间,7天通知院长的 -->  
+					source	= #source#,   <!-- 数据来源 -->  
+					accept_type	= #acceptType#,   <!-- 0 正常认领; 3 核查; 2 派发 -->  
+					msgStatus	= #msgstatus#  <!-- 发送成功状态标记:0: 未发送消息 1-待认领超过12小时; 2-待认领超过24小时; 3-已认领未整改超过12小时; 4-已认领未整改超过24小时 -->  
+			WHERE 	
+			dangerID = #dangerid#
+	</update>
+  
+</sqlMap>

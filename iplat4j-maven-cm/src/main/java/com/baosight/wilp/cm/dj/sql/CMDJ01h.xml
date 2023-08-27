@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CMDJ01h">
+	<insert id="insert" parameterClass="com.baosight.wilp.cm.domain.CmContractBillNode">
+		INSERT INTO cm_contract_bill_node
+			(
+				id,
+				cont_pk,
+				node_auto_no,
+				node_name,
+				node_remark,
+				no,
+				node_time,
+				remark,
+				rec_creator_no,
+				rec_creator,
+				rec_create_time
+			)		 
+	    VALUES
+	    	(
+	    		#id#,
+				#contPk#,
+				#nodeAutoNo#,
+				#nodeName#,
+				#nodeRemark#,
+				#no#,
+				#nodeTime#,
+				#remark#,
+				#recCreatorNo#,
+				#recCreator#,
+				#recCreateTime#
+	    	) 
+	</insert>
+  
+	<delete id="delete" parameterClass="java.lang.String">
+		DELETE FROM cm_contract_bill_node WHERE cont_pk = #value#
+	</delete>
+
+</sqlMap>

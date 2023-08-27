@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="IMJK01">
+
+
+		<!-- 查询安全巡查表信息 -->
+	<select id="queryInfo1" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		substr(a.createTime, 1, 10) AS date,
+		k.spot_id as spotId,
+		a.`status`,
+		a.createTime,
+		a.finishTime,
+		c.jitemName,
+		g.schemeName,
+		if(c.writeValue='', if(c.successFlag = '1' or c.successFlag = '2', '正常', ''), '异常') writeValue,
+		c.successFlag,
+		a.finishManName as name,
+		a.managerName as zname
+		FROM
+		im_task a
+		LEFT JOIN bona_frame_mzsrmyy.ac_department b ON a.departNo = b.dept_num
+		LEFT JOIN im_taskitem c ON c.taskID = a.taskID
+		LEFT JOIN df_devicemachine e on a.machineID = e.id
+		LEFT JOIN bona_frame_mzsrmyy.ac_personnel f ON a.finishMan = f.work_no
+		LEFT JOIN im_scheme g on a.schemeID = g.schemeID
+		LEFT JOIN im_object_spot k on k.id = g.objectID
+		WHERE  1=1
+		and  a.`status` != '1'
+		and a.`status` != '3'
+		and k.spot_id = #spotId#
+		<isNotEmpty prepend=" AND " property="createTime">
+			a.finishTime <![CDATA[ >= ]]>  #createTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="createTime">
+			a.finishTime <![CDATA[ <= ]]>  S#createTime#
+		</isNotEmpty>
+		ORDER BY a.createTime ASC
+	</select>
+</sqlMap>

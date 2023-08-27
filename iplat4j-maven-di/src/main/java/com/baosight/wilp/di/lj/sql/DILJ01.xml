@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DILJ01">
+
+	<!-- 现场处理 -->
+	<update id="sceneDeal" parameterClass="java.util.HashMap">
+		update  di_taskitem
+        set
+			exception_result = #workAround#,
+			finish_time = #finishTime#,
+			process_type = #processType#,
+			finish_man = #dealMan#,
+			solution_type = #solutionType#,
+			itemDesc = #jobDescription#,
+			errorContent = #abnormalFailure#,
+			exception_status =  '1'
+        where itemID = #itemId#
+	</update>
+	
+	<update id="reportDeal" parameterClass="java.util.HashMap">
+		update di_taskitem
+        set
+			process_type = #processType#,
+			itemDesc = #jobDescription#,
+			errorContent = #abnormalFailure#,
+			exception_status = '0'
+        where itemID = #itemId#
+	</update>
+	
+  
+  
+</sqlMap>

@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.min.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../reference/mui/css/mui.picker.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="css/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="css/loading.css" />
+  </head>
+  <style type="text/css">
+    body {
+      background: #f5f5f5;
+    }
+
+    .tab {
+      width: 100%;
+      padding: 8px 15px;
+      color: #ff9800;
+      font-size: 13px;
+    }
+
+    .selection-div {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 99;
+      background: #f5f5f5;
+    }
+
+    .addItemBtn {
+      position: fixed;
+      bottom: 65px;
+      right: 15px;
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      z-index: 98;
+    }
+
+    .selection-content {
+      width: 100%;
+      height: 100%;
+      padding-top: 44px;
+      overflow: scroll;
+      overflow-x: hidden;
+    }
+
+    .item-div {
+      width: 100%;
+    }
+
+    .item {
+      width: 100%;
+      height: 160px;
+      margin-bottom: 10px;
+      background: #fff;
+      padding: 10px 15px 5px 15px;
+      border-left: 4px solid #31c37b;
+    }
+
+    .border-shadows {
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+    }
+
+    .item1 {
+      width: 100%;
+      height: 20px;
+      font-size: 15px;
+      color: #303133;
+    }
+
+    .item2 {
+      width: 100%;
+      height: 33px;
+      font-size: 14px;
+      color: #909399;
+    }
+
+    .mui-numbox {
+      border: none;
+      height: 31px;
+      padding: 0 31px;
+      width: 100px;
+    }
+
+    .mui-numbox [class*="btn-numbox"],
+    .mui-numbox [class*="numbox-btn"] {
+      background-color: #31c37b;
+      color: #fff;
+      width: 31px;
+      border-radius: 3px;
+    }
+
+    .operation-div {
+      padding: 5px 0;
+    }
+
+    .selection-tab {
+      width: 100%;
+      height: 43px;
+      padding: 11px 15px;
+      position: relative;
+      background: #fff;
+      color: #ff9800;
+      font-size: 13px;
+      border-bottom: 1px solid #ebeef5;
+    }
+
+    .selection-tab:after {
+      right: 15px;
+      content: "\e581";
+      font-family: Muiicons;
+      font-size: inherit;
+      line-height: 1;
+      position: absolute;
+      top: 50%;
+      display: inline-block;
+      -webkit-transform: translateY(-50%);
+      transform: translateY(-50%);
+      text-decoration: none;
+      color: #ff9800;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .selection-active {
+      background: #f5f5f5;
+      border: none;
+    }
+
+    .selection-active:after {
+      content: "\e580";
+    }
+
+    .hideForm {
+      display: none;
+    }
+
+    .mui-input-group .mui-input-row:last-child {
+      background: #fff;
+    }
+
+    label {
+      color: #606266;
+    }
+
+    .btn-div {
+      width: 100%;
+      padding: 15px;
+    }
+
+    .btn-sub {
+      width: 100%;
+      height: 40px;
+      background: #30c37c;
+      border: none;
+      color: #fff;
+    }
+    .toBuilding {
+      color: #000;
+    }
+
+    .mui-switch.mui-active:before {
+      content: "是";
+    }
+
+    .mui-switch:before {
+      content: "否";
+    }
+    #getCont {
+      position: absolute;
+      border: 1px solid #0aa239;
+      border-radius: 15px;
+      height: 200px;
+      width: 200px;
+      background-color: #fff;
+      overflow-x: hidden;
+      overflow-y: scroll;
+    }
+    #getCont .getCont {
+      list-style: none;
+    }
+    #getCont .getCont a {
+      color: #0e3671;
+    }
+  </style>
+
+  <body>
+    <header id="header" class="mui-bar mui-bar-nav">
+      <h1 class="mui-title">运送登记</h1>
+      <button class="menu mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>返回
+      </button>
+    </header>
+
+    <div id="loading" class="loading-div" style="z-index:99;" hidden>
+      <div class="loading-center">
+        <div class="loading-center-absolute">
+          <div class="object" id="object_one"></div>
+          <div class="object" id="object_two"></div>
+          <div class="object" id="object_three"></div>
+          <div class="object" id="object_four"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mui-content" style="margin-bottom: 50px;">
+      <div class="tab">基础信息</div>
+      <form class="mui-input-group">
+        <div class="mui-input-row">
+          <label>登记人</label>
+          <input id="worker" type="text" placeholder="请输入登记人" readonly />
+        </div>
+        <div class="mui-input-row">
+          <label>科室</label>
+          <input
+            id="dept"
+            type="text"
+            class="deptName"
+            placeholder="请选择科室"
+            readonly
+          />
+        </div>
+        <div class="mui-input-row">
+          <label>运送时间</label>
+          <input
+            id="applyTime"
+            type="text"
+            class="applyTime"
+            placeholder="请选择运送时间"
+            readonly
+          />
+        </div>
+        <div class="mui-input-row">
+          <label>联系电话</label>
+          <input
+            id="applyPhone"
+            type="text"
+            class="applyPhone"
+            placeholder="请选择输入电话"
+            readonly
+          />
+        </div>
+      </form>
+      <div class="tab">运送项目</div>
+      <form class="mui-input-group">
+        <div class="mui-input-row" id="addItemBtn">
+          <label>运送类型</label>
+          <input
+            id="typeClass"
+            type="text"
+            class=""
+            style="text-align: right;"
+            placeholder=">"
+            readonly="readonly"
+          />
+        </div>
+      </form>
+      <div class="tab">运送项目明细</div>
+      <div id="ITEM_LIST" class="item-div">
+      </div>
+      <div class="btn-div">
+        <button type="button" class="btn-sub">登记</button>
+      </div>
+    </div>
+    <!-- 选择检查项目 -->
+    <div id="selection" class="selection-div" hidden>
+      <header id="header" class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">运送项目</h1>
+        <button class="back mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+          <span class="mui-icon mui-icon-left-nav"></span>返回
+        </button>
+        <button class="save mui-btn mui-btn-link mui-pull-right">保存</button>
+      </header>
+      <div id="ITEM_SELECTION" class="selection-content">
+      </div>
+    </div>
+    <div id="getCont" class="round" hidden>
+      <ul class="nav nav-pills nav-justified getCont"></ul>
+    </div>
+  </body>
+  <script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/mui.picker.min.js"
+  ></script>
+  <script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var workName = localStorage.getItem("name");
+    var phone = localStorage.getItem("telPhone");
+    var datagroupCode = localStorage.getItem("dataGroupCode");
+    var myDate = new Date();
+    var year = myDate.getFullYear();
+    var month =
+      myDate.getMonth() + 1 < 10
+        ? "0" + (myDate.getMonth() + 1)
+        : myDate.getMonth() + 1;
+    var day = myDate.getDate() < 10 ? "0" + myDate.getDate() : myDate.getDate();
+
+    var hour =
+      myDate.getHours() < 10 ? "0" + myDate.getHours() : myDate.getHours();
+    var minute =
+      myDate.getMinutes() < 10
+        ? "0" + myDate.getMinutes()
+        : myDate.getMinutes();
+    var second =
+      myDate.getSeconds() < 10
+        ? "0" + myDate.getSeconds()
+        : myDate.getSeconds();
+    var nowTime =
+      year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+    console.log(nowTime);
+    $("#applyTime").val(nowTime);
+
+    var lists = [];
+    var params = {
+      workNo: workNo
+    };
+    $(function() {
+      getBaseInfo(params); //获取基础信息
+      getTypeInfo(); //获取运送类型
+    });
+    console.log(phone);
+
+    $(".mui-content").css("min-height", $(window).height());
+
+    /**
+     * @desc   获取基础信息
+     * @author wjy
+     */
+    function getBaseInfo(params) {
+      $.ajax({
+        url: baseUrl + "carriage",
+        type: "post",
+        headers: {
+          methodName: "getUserInformation",
+          className: "AppCarriage"
+        },
+        data: params,
+        success: function(data) {
+        	console.log(data);
+          var infoList = data.map.obj[0];
+          var loginName = infoList.name;
+          var fromDeptName = infoList.deptName;
+          var fromDeptNo = infoList.deptNo;
+          var concatTel = infoList.contactTel;
+
+          $("#worker").val(loginName);
+          $("#dept").val(fromDeptName);
+          if (concatTel) {
+            $("#applyPhone").val(concatTel);
+          }
+          $("#dept").attr("deptNo", fromDeptNo);
+        },
+        error: function(XMLHttpRequest) {
+          mui.toast("获取基础信息失败");
+        },
+        complete: function(XMLHttpRequest, status) {
+          if (status == "timeout") {
+            $("#loading").hide();
+            mui.toast("网速不给力，请重试！");
+            return;
+          } else if (status == "error") {
+            $("#loading").hide();
+            mui.toast("当前网络不可用，请查看网络是否畅通！");
+            return;
+          }
+        }
+      });
+    }
+
+    /**
+     * @desc   获取楼信息
+     * @author wjy
+     */
+    $("#build").on("click", function() {
+      getBuildInfo("from");
+    });
+    $("#ITEM_LIST").on("click", ".toBuilding", function() {
+      getBuildInfo("to", this);
+    });
+
+    function getBuildInfo(param, element) {
+      $.ajax({
+        url: baseUrl + "carriage",
+        type: "post",
+        headers: {
+          methodName: "getBuilding",
+          className: "AppCarriage"
+        },
+        success: function(data) {
+          var list = data.map.obj;
+          var newList = [];
+          list.forEach((item, index) => {
+            newList[index] = {
+              text: item.building,
+              value: index
+            };
+          });
+          var picker = new mui.PopPicker({
+            layer: 1
+          });
+          picker.setData(newList);
+          picker.show(function(rs) {
+            console.log(rs);
+            if (param == "from") {
+              console.log("from");
+
+              $("#build").val(rs[0].text);
+              $("#floor").val("");
+            } else {
+              $(element).val(rs[0].text);
+              $(element)
+                .parent()
+                .siblings()
+                .find(".toFloor")
+                .val("");
+            }
+          });
+        },
+        error: function(XMLHttpRequest) {
+          mui.toast("网速不给力，请重试！");
+        },
+        complete: function(XMLHttpRequest, status) {
+          if (status == "timeout") {
+            $("#loading").hide();
+            mui.toast("网速不给力，请重试！");
+            return;
+          } else if (status == "error") {
+            $("#loading").hide();
+            mui.toast("当前网络不可用，请查看网络是否畅通！");
+            return;
+          }
+        }
+      });
+    }
+    /**
+     * @desc   获取层信息
+     * @author wjy
+     */
+    $("#floor").on("click", function() {
+      var building = $("#build").val();
+      getFloorInfo(building, "from");
+    });
+    $("#ITEM_LIST").on("click", ".toFloor", function() {
+      console.log(this);
+
+      var building = $(this)
+        .parent()
+        .siblings()
+        .find(".toBuilding")
+        .val();
+      console.log("building:", building);
+
+      getFloorInfo(building, "to", this);
+    });
+    function getFloorInfo(building, param, element) {
+      if (!building) {
+        mui.toast("请选择楼信息");
+        return;
+      }
+      $.ajax({
+        url: baseUrl + "carriage",
+        type: "post",
+        headers: {
+          methodName: "getFloor",
+          className: "AppCarriage"
+        },
+        data: {
+          building
+        },
+        success: function(data) {
+          var list = data.map.obj;
+          var newList = [];
+          list.forEach((item, index) => {
+            newList[index] = {
+              text: item.floor,
+              value: index
+            };
+          });
+          var picker = new mui.PopPicker({
+            layer: 1
+          });
+          picker.setData(newList);
+          picker.show(function(rs) {
+            if (param == "from") {
+              $("#floor").val(rs[0].text);
+            } else {
+              $(element).val(rs[0].text);
+            }
+          });
+        },
+        error: function(XMLHttpRequest) {},
+        complete: function(XMLHttpRequest, status) {
+          if (status == "timeout") {
+            $("#loading").hide();
+            mui.toast("网速不给力，请重试！");
+            return;
+          } else if (status == "error") {
+            $("#loading").hide();
+            mui.toast("当前网络不可用，请查看网络是否畅通！");
+            return;
+          }
+        }
+      });
+    }
+
+    /**
+     * @desc   获取科室信息
+     * @author wjy
+     */
+    $("#ITEM_LIST").on("click", ".toDept", function() {
+      getDeptInfo(this);
+    });
+    var _this;
+    var timeId = null;
+
+    function getDeptInfo(ele) {
+      clearTimeout(timeId);
+      timeId = setTimeout(function() {
+        classId = ele.closest(".item").id;
+        $.ajax({
+          url: baseUrl + "carriage",
+          type: "post",
+          headers: {
+            methodName: "queryCarriageClassItem",
+            className: "AppCarriage"
+          },
+          data: {
+        	  classId : classId
+          },
+          success: function(data) {
+            if (data.respCode == "200") {
+              $("#getCont").css("right", 0);
+              $("#getCont").css("top", $(ele).offset().top + 30);
+              var list = data.map.obj;
+              if (list.length == 0) {
+                $("ul.getCont").html("");
+                return;
+              }
+              var html = "";
+              for (var i = 0; i < list.length; i++) {
+                var deptNum = list[i].dept_no;
+                var deptName = list[i].dept_name;
+                html += createCont(list[i].class_id,deptNum, deptName);
+              }
+              $("ul.getCont").html(html);
+              $("#getCont").show();
+            } else {
+              $("#getCont").hide();
+            }
+          },
+          error: function(XMLHttpRequest) {},
+          complete: function(XMLHttpRequest, status) {
+            if (status == "timeout") {
+              $("#loading").hide();
+              mui.toast("网速不给力，请重试！");
+              return;
+            } else if (status == "error") {
+              $("#loading").hide();
+              mui.toast("当前网络不可用，请查看网络是否畅通！");
+              return;
+            }
+          }
+        });
+      }, 100);
+    }
+    function createCont(id,deptNum, deptName) {
+      var html =
+        "<li onclick='getCont1(\"" + deptNum + '"\,"' + deptName + "\"\,\"" + id + "\")' >"
+        +"<a href='#'>" + deptName + "</a>"
+        +"</li>";
+      return html;
+    }
+    function getCont1(deptNum, deptName,id) {
+      $("#" + id + " .toDept").attr("deptNum", deptNum);
+      $("#" + id + " .toDept").val(deptName);
+      $("#getCont").hide();
+    }
+    /**
+     *@desc   获取预约时间
+     *@author wjy
+     */
+
+    (function($) {
+      $("#applyTime")[0].addEventListener(
+        "tap",
+        function() {
+          var optionsJson = this.getAttribute("data-options") || "{}";
+          var options = JSON.parse(optionsJson);
+          var picker = new $.DtPicker(options);
+          picker.show(function(rs) {
+            $("#applyTime")[0].value = rs.text + ":00";
+            appointmentTime = rs.text + ":00";
+            picker.dispose();
+          });
+        },
+        false
+      );
+    })(mui);
+    /**
+     * @desc   获取运送类型信息
+     * @author wjy
+     */
+    $("#addItemBtn").on("click", function() {
+      $("#selection").show();
+    });
+    function getTypeInfo(buildingInfo, floorInfo, param) {
+      $.ajax({
+        url: baseUrl + "carriage",
+        type: "post",
+        headers: {
+          methodName: "queryCarriageClass",
+          className: "AppCarriage"
+        },
+        success: function(data) {
+          console.log(data);
+          var items = data.map.obj;
+          var itemList = "";
+          var html;
+          for (var i = 0; i < items.length; i++) {
+            itemList += createItems(items[i]);
+          }
+          $("#ITEM_SELECTION").html(itemList);
+        },
+        error: function(XMLHttpRequest) {},
+        complete: function(XMLHttpRequest, status) {
+          if (status == "timeout") {
+            $("#loading").hide();
+            mui.toast("网速不给力，请重试！");
+            return;
+          } else if (status == "error") {
+            $("#loading").hide();
+            mui.toast("当前网络不可用，请查看网络是否畅通！");
+            return;
+          }
+        }
+      });
+    }
+    /**
+     * 创建类型列表
+     */
+
+    function createItems(items) {
+      var html = "";
+      lists.push(items);
+
+      html += '<div class="mui-input-row mui-checkbox">';
+      html += "<label>" + items.nodeName + "</label>";
+      html +=
+        '<input name="items" value="' + items.id + '" type="checkbox">';
+      html += "</div>";
+      return html;
+    }
+    
+    /**
+     * 保存
+     */
+    mui("body").on("tap", "button.save", function() {
+      var items = $("input[name=items]:checked");
+      var itemSelected = "";
+      var itemTime = getOneHourLater();
+      for (var i = 0; i < items.length; i++) {
+        var text = items.eq(i).prev().text();
+        var value = items.eq(i).val();
+        //这里循环运送类型获取地址
+        var addressCode = "";
+        var addressName = "";
+        for (var k = 0; k < lists.length; k++) {
+          //如果为当前运送类型并且有地点则默认第一个
+          if (lists[k].value == value && lists[k].address.length > 0) {
+            addressCode = lists[k].address[0].address_no;
+            addressName = lists[k].address[0].address;
+          }
+        }
+        itemSelected += createItemSelected(
+          text,
+          value,
+          addressCode,
+          addressName,
+          itemTime
+        );
+      }
+      $("#ITEM_LIST").html(itemSelected);
+      $("#selection").hide();
+      $("html").attr("style", "overflow:auto;");
+      $("body").attr("style", "overflow:auto;");
+    });
+
+    /**
+     * 创建已选项目
+     */
+    function createItemSelected( text, value, addressCode, addressName, itemTime ) {
+      var html = '<div id="' + value + '" value="'+text+'" class="item">';
+      // html += '<div class="item1">' + text + "</div>";
+      html += '<div class="item1  mui-row">';
+      html += '<div class="mui-col-xs-10">' + text + "</div>";
+      html += '<div class="mui-col-xs-2">';
+      html +=
+        '<button type="button" class="itemDelete mui-btn mui-btn-link" style="padding: 6px 0;color: #F56C6C;">删除 <span class="mui-icon mui-icon-forward"></span> </button>';
+      html += "</div>";
+      html += "</div>";
+
+      html += '<div class="item4  mui-input-row">';
+      html += "<label>科室</label>";
+      html +=
+        '<input  type="text" class="toDept" placeholder="请选择科室"  oninput="getDeptInfo(this)" />';
+      html += "</div>";
+      html += '<div class="item5  mui-input-row">';
+      html += "<label>备注</label>";
+      // html += '<input  type="text" class="remark"/>';
+      html += '<textarea rows="3" cols="20"></textarea>';
+      html += "</div>";
+      html += "</div>";
+      html += "</div>";
+      return html;
+    }
+
+//获取时间函数
+    function getOneHourLater() {
+      var date1 = new Date();
+      var date2 = new Date(date1.getTime() + 3600 * 1000);
+      var year = date2.getFullYear(); //年
+      var month = date2.getMonth() + 1; //月
+      var day = date2.getDate(); //日
+      var hh = date2.getHours(); //时
+      var mm = date2.getMinutes(); //分
+      var clock = year + "-";
+      if (month < 10) clock += "0";
+      clock += month + "-";
+      if (day < 10) clock += "0";
+      clock += day + " ";
+      if (hh < 10) clock += "0";
+      clock += hh + ":";
+      if (mm < 10) clock += "0";
+      clock += mm;
+      return clock;
+    }
+
+    /**
+     * 删除项目
+     */
+    mui("body").on("tap", "button.itemDelete", function() {
+      $(this)
+        .parent()
+        .parent()
+        .parent()
+        .remove();
+    });
+
+    /**
+     * 修改地点
+     */
+    var _this = null;
+    mui("body").on("tap", "button.placeChange", function() {
+      _this = $(this).parent().parent().parent();
+      var picker1 = new mui.PopPicker();
+      for (var i = 0; i < lists.length; i++) {
+        if (lists[i].value == _this.attr("id")) {
+          picker1.setData(lists[i].address);
+        }
+      }
+      picker1.show(function(data) {
+        _this.find("div.itemPlace").html(data[0].text);
+        _this.find("div.item3").html(data[0].value);
+        picker1.dispose();
+      });
+    });
+
+    /**
+     * 登记
+     * @method
+     * @param  {[type]}   ) {               } [description]
+     * @return {[type]}     [description]
+     * @author JiangPing
+     * @date   2018-04-12
+     */
+    mui("body").on("tap", "button.btn-sub", function() {
+      $("input").blur();
+      var itemList = $("#ITEM_LIST .item");
+      if (itemList.length == 0) {
+        mui.toast("请选择检查项目");
+        return;
+      }
+      var btnArray = ["否", "是"];
+      mui.confirm("确认提交?", "登记", btnArray, function(e) {
+        if (e.index == 1) {
+          doSubmit();
+        }
+      });
+    });
+
+    /**
+     * 登记
+     * @method doSubmit
+     */
+    function doSubmit() {
+      var appointmentTime = $("#applyTime").val();
+      var fromDeptName = $("#dept").val();
+      var fromDeptNo = $("#dept").attr("deptNo");
+      var fromDeptTel = $("#applyPhone").val();
+      var itemList = $("#ITEM_LIST .item");
+      var items = "";
+      for (var i = 0; i < itemList.length; i++) {
+        items += itemList.eq(i).attr("value") + ",";
+        items += itemList.eq(i).find("div.item4 .toDept").val() + ",";
+        items += itemList.eq(i).find("div.item4 .toDept").attr("deptnum") + ",";
+        items += itemList.eq(i).find("div.item5 textarea").val() + ";";
+      }
+      console.log("items", items);
+      // return;
+
+      $("#loading").show();
+
+      // 获取备注内容
+      var billDesc = $("#remark").val();
+      $.ajax({
+        url: baseUrl + "carriage",
+        type: "post",
+        headers: {
+          methodName: "addBillNo",
+          className: "AppCarriage"
+        },
+        data: {
+        	loginName: workNo,
+        	loginCName: $("#worker").val(),
+          fromDeptNo,
+          fromDeptName,
+          appointmentTime,
+          fromDeptTel,
+          datagroupCode,
+          dectedClass: items
+        },
+        success: function(data) {
+          $("#loading").hide();
+          if (data.respCode == "200") {
+            mui.toast("保存成功");
+            setTimeout(function() {
+              location.href = "main.html";
+            }, 2000);
+          } else {
+            mui.toast("保存失败");
+          }
+        }
+      });
+    }
+
+    /**
+     * 关闭选择项目界面
+     */
+    mui("body").on("tap", "button.back", function() {
+      $("#selection").hide();
+      
+    });
+
+    /**
+     * 首页
+     */
+    mui("body").on("tap", "button.menu", function() {
+      location.href = "main.html";
+    });
+  </script>
+</html>

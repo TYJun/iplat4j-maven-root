@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.min.css" />
+    <link rel="stylesheet" href="../reference/css/common.css" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="css/tcj-font.css" />
+</head>
+<style type="text/css">
+    * {
+        touch-action: pan-y;
+    }
+    
+    body,
+    html {
+        height: 100%;
+        background: #f7f7f7;
+    }
+    
+    .row-content {
+        /*height: 40px;*/
+        line-height: 40px;
+        padding: 5px 15px;
+        border-bottom: 1px solid #eeeeee;
+        font-size: 14px;
+        color: #333333;
+        background: #ffffff;
+    }
+    
+    .row-content1 {
+        height: 30px;
+        line-height: 30px;
+        padding: 0 15px;
+        font-size: 16px;
+        color: #333333;
+        background: #ffffff;
+    }
+    
+    .row-left {
+        text-align: left;
+        color: #333333;
+    }
+    
+    .new-icon-color {
+        color: #aaa;
+    }
+    
+    .new-row-tcj {
+        height: 75px;
+        /*line-height: 60px;*/
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+    }
+    
+    .start-send {
+        height: 32px;
+        width: 21%;
+        background: #fafafa;
+        text-align: center;
+        line-height: 32px;
+        border-radius: 15px;
+        margin-top: 14px;
+        color: #666666;
+        font-size: 12px;
+        border: 1px solid #eee;
+    }
+    
+    .finish-send {
+        height: 32px;
+        width: 21%;
+        background: #41bde2;
+        text-align: center;
+        line-height: 32px;
+        border-radius: 15px;
+        margin-top: 14px;
+        color: #fff;
+        font-size: 12px;
+        box-shadow: 0 0 7px #2aabd2;
+    }
+    
+    .new-list-content {
+        margin: 10px 0px;
+    }
+    
+    .no-views {
+        text-align: center;
+        margin-top: 50px;
+        margin-left: -15px;
+    }
+</style>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title" id="beforeTitle">配送任务列表</h1>
+        <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+        返回
+      </button>
+    </header>
+
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div id="loading" class="loading1" hidden>
+        <div class="loading2">
+            <span class="mui-spinner" style="width: 80px; height: 80px"></span>
+        </div>
+    </div>
+    <div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="overflow-y: auto">
+        <div class="mui-scroll">
+            <ul class="mui-table-view mui-table-view-chevron" style="background-color: #eee">
+                <!--<div class="new-list-content">
+						<div class="mui-row row-content">
+							<div class="mui-col-sm-12 mui-col-xs-12">
+								<span class="mui-icon   iconfont   icon-wuziguanli new-icon-color"></span> 单号： 2017-11-11
+							</div>
+						</div>
+						<div class="mui-row row-content">
+
+							<div class="mui-col-sm-12 mui-col-xs-12">
+								<span class="mui-icon   iconfont  icon-apply-keshi new-icon-color"></span> 科室： 神经科
+							</div>
+						</div>
+						<div class="mui-row row-content">
+
+							<div class="mui-col-sm-12 mui-col-xs-12">
+								<span class="mui-icon   iconfont   icon-jiaohuo-date new-icon-color"></span> 日期： 2017-11-11
+							</div>
+
+						</div>
+
+						<div class="mui-row row-content new-row-tcj">
+
+							<div class="start-send">开始配送</div>
+							<div class="finish-send">完成配送</div>
+						</div>
+					</div>
+					<div class="new-list-content">
+						<div class="mui-row row-content">
+							<div class="mui-col-sm-12 mui-col-xs-12">
+								<span class="mui-icon   iconfont   icon-wuziguanli new-icon-color"></span> 单号： 2017-11-11
+							</div>
+						</div>
+						<div class="mui-row row-content">
+
+							<div class="mui-col-sm-12 mui-col-xs-12">
+								<span class="mui-icon   iconfont  icon-apply-keshi new-icon-color"></span> 科室： 神经科
+							</div>
+						</div>
+						<div class="mui-row row-content">
+
+							<div class="mui-col-sm-12 mui-col-xs-12">
+								<span class="mui-icon   iconfont   icon-jiaohuo-date new-icon-color"></span> 日期： 2017-11-11
+							</div>
+
+						</div>
+
+						<div class="mui-row row-content new-row-tcj">
+
+							<div class="start-send">开始配送</div>
+							<div class="finish-send">完成配送</div>
+						</div>
+					</div>-->
+            </ul>
+        </div>
+    </div>
+    <nav class="mui-bar mui-bar-tab" style="background-color: #fff">
+        <a class="mui-tab-item class-icon dai-tijiao">
+            <span class="mui-icon iconfont icon-dai-tijiao"></span>
+            <span class="mui-tab-label">待处理工单</span>
+        </a>
+
+        <!-- <a class="mui-tab-item select-icon new-project mui-active">
+            <span class="mui-icon iconfont icon-new-project"></span>
+            <span class="mui-tab-label">新建项目</span>
+        </a> -->
+        <a class="mui-tab-item index-icon my-plan">
+            <span class="mui-icon iconfont icon-my-plan"></span>
+            <span class="mui-tab-label">全部工单</span>
+        </a>
+    </nav>
+    <p class="no-views" style="display: none">
+        ———&nbsp;&nbsp;暂无数据&nbsp;&nbsp;———
+    </p>
+</body>
+<script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../reference/js/common.js" type="text/javascript"></script>
+<script src="../reference/mui/js/mui.picker.min.js" type="text/javascript"></script>
+<script src="../../cordova.js" type="text/javascript"></script>
+<script src="js/$ajax.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var deptNum = localStorage.getItem("deptCode");
+    var tasklist = "";
+    var page = 1;
+    loadView(1);
+
+    function loadView(flag) {
+        var prames = {
+            workNo: workNo,
+            flag: flag,
+        };
+        prames = JSON.stringify(prames);
+        $ajax("query", "MDPSAPP", prames, (res) => {
+            // console.log(res);
+            var list = res.blocks.result.rows;
+            var tasklist = "";
+            if (list.length == "") {
+                $("ul").html(tasklist);
+                $(".no-views").css("display", "");
+            } else {
+                list.map((item) => {
+                    tasklist += creatView(
+                        item.statusCode == "待配送" ?
+                        "1" :
+                        item.statusCode == "配送中" && "2",
+                        item.deliveryNo,
+                        item.deliveryDeptName,
+                        item.deliveryDate,
+                        item.id
+                    );
+                });
+                $("ul").html(tasklist);
+            }
+        });
+    }
+    // document.addEventListener("deviceready", onDeviceReady, false);
+    mui("body").on("tap", ".dai-tijiao", function() {
+        loadView(1);
+    });
+    mui("body").on("tap", ".my-plan", function() {
+        loadView(0);
+    });
+
+    function creatView(
+        statusCode,
+        deliveryNo,
+        deliveryDeptName,
+        deliveryDate,
+        id
+    ) {
+        var jsonobj = {
+            status: statusCode,
+            transportBillNo: deliveryNo,
+            transportDeptName: deliveryDeptName,
+            transportTime: deliveryDate,
+            id: id,
+        };
+        var jsonString = JSON.stringify(jsonobj);
+        var html = "";
+        html += '<div class="new-list-content">';
+        html +=
+            "<div id='" +
+            jsonString +
+            '\' class="mui-row row-content send-task-detail">';
+        html += '<div class="mui-col-sm-12 mui-col-xs-12">';
+        html +=
+            '<span class="mui-icon   iconfont   icon-wuziguanli new-icon-color"></span> 单号： ' +
+            deliveryNo +
+            "</div>";
+        html += "</div>";
+        html += '<div class="mui-row row-content">';
+        html += '<div class="mui-col-sm-12 mui-col-xs-12">';
+        html +=
+            '<span class="mui-icon   iconfont  icon-apply-keshi new-icon-color"></span> 科室： ' +
+            deliveryDeptName +
+            "</div>";
+        html += "</div>";
+        html += '<div class="mui-row row-content">';
+        html += '<div class="mui-col-sm-12 mui-col-xs-12">';
+        html +=
+            '<span class="mui-icon   iconfont   icon-jiaohuo-date new-icon-color"></span> 日期： ' +
+            deliveryDate +
+            "</div>";
+        html += "</div>";
+
+        if (statusCode == "1") {
+            html += '<div class="mui-row row-content new-row-tcj">';
+            html +=
+                "<div id='" + jsonString + '\' class="start-send">开始配送</div>';
+            //				html += '<div id=\'' + jsonString + '\' class="finish-send">完成配送</div>';
+            html += "</div>";
+        } else if (statusCode == "2") {
+            html += '<div class="mui-row row-content new-row-tcj">';
+            //				html += '<div id=\'' + jsonString + '\' class="start-send">开始配送</div>';
+            html +=
+                "<div id='" + jsonString + '\' class="finish-send">完成配送</div>';
+            html += "</div>";
+        }
+
+        html += "</div>";
+
+        return html;
+    }
+    document.getElementById("back").addEventListener("tap", function() {
+        location.href = "choose-main.html";
+    });
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+        location.href = "choose-main.html";
+    }
+
+    //详情
+    mui("body").on("tap", ".send-task-detail", function() {
+        var _this = this;
+        location.href = "send-task-detail.html?" + encodeURIComponent(_this.id);
+    });
+    //开始配送
+    mui("body").on("tap", ".start-send", function() {
+        $("#loading").show();
+        let deliveryNo = JSON.parse(this.id).transportBillNo;
+        let statusCode = JSON.parse(this.id).status;
+        var prames = {
+            deliveryNo: deliveryNo,
+            statusCode: statusCode,
+        };
+        prames = JSON.stringify(prames);
+        $ajax("updateStatus", "MDPSAPP", prames, (res) => {
+            // console.log(res);
+            if (res.status == "0") {
+                setTimeout("location.reload();", 2000);
+            } else {
+                $("#loading").hide();
+                showMsg(res.respMsg);
+            }
+        });
+    });
+    //完成配送
+    mui("body").on("tap", ".finish-send", function() {
+        $("#loading").show();
+        let deliveryNo = JSON.parse(this.id).transportBillNo;
+        let statusCode = JSON.parse(this.id).status;
+        var prames = {
+            deliveryNo: deliveryNo,
+            statusCode: statusCode,
+        };
+        prames = JSON.stringify(prames);
+        $ajax("updateStatus", "MDPSAPP", prames, (res) => {
+            console.log(res);
+            if (res.status == "0") {
+                setTimeout("location.reload();", 2000);
+            } else {
+                $("#loading").hide();
+                showMsg(res.respMsg);
+            }
+        });
+    });
+    /**
+     * 下滑刷新
+     * @return {[type]} [description]
+     */
+    function pulldownRefresh() {
+        setTimeout(function() {
+            tasklist = "";
+            page = 1;
+            loadView();
+            mui("#pullrefresh").pullRefresh().endPulldownToRefresh();
+        }, 1500);
+    }
+
+    /**
+     * 上滑加载更多
+     * @return {[type]} [description]
+     */
+    function pullupRefresh() {
+        page++;
+        loadView();
+        setTimeout(function() {
+            //关闭加载框
+            mui("#pullrefresh").pullRefresh().endPullupToRefresh();
+        }, 1500);
+    }
+
+    mui.init({
+        pullRefresh: {
+            container: "#pullrefresh",
+            down: {
+                callback: pulldownRefresh,
+                contentrefresh: "正在刷新",
+            },
+            up: {
+                contentrefresh: "加载中，请稍后",
+                contentnomore: "暂无更多数据",
+                callback: pullupRefresh,
+            },
+        },
+    });
+</script>
+
+</html>

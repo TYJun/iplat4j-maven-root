@@ -1,0 +1,32 @@
+@font-face {
+	font-family: "iconfont";
+	src: url('../fonts/buttom.ttf') format('truetype');
+}
+
+.iconfont {
+	font-family: "iconfont" !important;
+	font-size: 16px;
+	font-style: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-shangjiantou:before {
+	content: "\e600";
+}
+
+.icon-hengxian:before {
+	content: "\e637";
+}
+
+.icon-iconfontright:before {
+	content: "\e646";
+}
+
+.icon-xiayiji:before {
+	content: "\e635";
+}
+
+.icon-xiajiantou:before {
+	content: "\e624";
+}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>宿舍菜单</title>
+  <link rel="stylesheet" href="../../reference/vant/css/index.css" />
+</head>
+<style>
+  #app {
+    display: flex;
+    flex-direction: column;
+  }
+
+  [v-cloak] {
+    display: none !important;
+  }
+
+  .bed-header {
+    width: 100%;
+    height: 50px;
+    padding: 15px;
+  }
+
+  .back {
+    float: left;
+    color: #3eacdb;
+    font-size: 14px;
+    line-height: 30px;
+  }
+
+  .title {
+    text-align: center;
+    color: black;
+    font-size: 20px;
+    width: 200px;
+    margin: 0 auto;
+    line-height: 30px;
+    font-weight: 600;
+  }
+
+  .bed-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .bed-content-block {
+    width: 150px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 15px;
+    border: 1px solid rgb(51, 51, 51);
+  }
+</style>
+
+<body>
+  <div id="app" v-cloak>
+    <div class="bed-header">
+      <span class="back" @click="back()">返回</span>
+      <div class="title">宿舍管理</div>
+    </div>
+    <div class="bed-content">
+      <van-button class="bed-content-block" v-for="(item, index) in bed_choice_list" :key="index"
+        @click="bedroom_choice_click(index)">{{item}}</van-button>
+    </div>
+  </div>
+</body>
+<script src="../../reference/vue/vue.js"></script>
+<script src="../../reference/vant/js/vant.min.js"></script>
+<script src="../../reference/js/jquery-2.1.4.js"></script>
+<script>
+  var app = new Vue({
+    el: "#app",
+    data() {
+      return {
+        // bed_choice_list: ["入住申请", "调宿申请", "在线选房", "退房申请"],
+        bed_choice_list: ["入住申请", "在线选房"],
+        jump_list: {
+          '0': () => { location.href = "./bedroom_checkin_apply.html" },
+          // '1': () => { location.href = "./bedroom_change_apply.html" },
+          '1': () => { location.href = "./bedroom_online_apply.html" },
+          // '3': () => { location.href = "./bedroom_checkout_apply.html" },
+        }
+      }
+    },
+    methods: {
+      //点击事项
+      bedroom_choice_click(index) {
+        this.jump_list[index]();
+      },
+      //左上角返回事件
+      back() {
+        location.href = "../../menu.html"
+      }
+    },
+  })
+</script>
+
+</html>

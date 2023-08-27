@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DIFK01">
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+		SELECT
+		t6.id,
+		t6.spot_num spotNum,
+		t6.spot_name spotName,
+		<!-- count(dm.spot_code)  用下一行count(t6.spot_num)替换 -->
+		count(dm.fixed_place)
+		machineNum
+		FROM
+		tbmbd06 t6
+		LEFT JOIN df_devicemachine dm ON dm.fixed_place
+		=t6.spot_num
+		where 1=1
+		<isNotEmpty prepend="and" property="spotNum">
+			t6.spot_num like
+			concat('%',#spotNum#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="spotName">
+			t6.spot_name like
+			concat('%',#spotName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="NFCCode">
+			t6.nfcCardNo like
+			concat('%',#NFCCode#,'%')
+		</isNotEmpty>
+			GROUP BY
+			t6.spot_num
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+	<select id="count" resultClass="int">
+		SELECT
+			t6.id
+		FROM
+		tbmbd06 t6
+		LEFT JOIN df_devicemachine dm ON
+		dm.fixed_place= t6.spot_num
+		where 1=1
+		<isNotEmpty prepend="and" property="spotNum">
+			t6.spot_num like
+			concat('%',#spotNum#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="spotName">
+			t6.spot_name like
+			concat('%',#spotName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="NFCCode">
+			t6.nfcCardNo like
+			concat('%',#NFCCode#,'%')
+		</isNotEmpty>
+		GROUP BY
+		t6.spot_num
+	</select>
+	
+	<!-- 新发卡功能 -->
+	<select id="queryCard" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+		SELECT
+		spot_id id,
+		spot_code spotNum,
+		spot_name spotName,
+		nfc_code NFCCode,
+		device_count machineNum
+		FROM df_machine_spot
+		where 1=1
+		<isNotEmpty prepend="and" property="spotNum">
+			spot_code like
+			concat('%',#spotNum#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="spotName">
+			spot_name like
+			concat('%',#spotName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="NFCCode">
+			nfc_code like
+			concat('%',#NFCCode#,'%')
+		</isNotEmpty>
+			GROUP BY
+			spot_code
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+	<select id="countCard" resultClass="int">
+		SELECT
+			id
+		FROM
+		df_machine_spot
+		where 1=1
+		<isNotEmpty prepend="and" property="spotNum">
+			spot_code like
+			concat('%',#spotNum#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="spotName">
+			spot_name like
+			concat('%',#spotName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="NFCCode">
+			nfc_code like
+			concat('%',#NFCCode#,'%')
+		</isNotEmpty>
+		GROUP BY
+		spot_code
+	</select>
+
+
+	<select id="querySpotName" parameterClass="java.lang.String"
+		resultClass="java.util.HashMap">
+		select spot_code spotNum,spot_name spotName from df_machine_spot
+		where
+		nfc_code=#value#
+
+	</select>
+
+	<update id="updateOld" parameterClass="java.lang.String">
+		update df_machine_spot set nfc_code="" where spot_id=#value#
+	</update>
+	<update id="updateNew" parameterClass="java.util.HashMap">
+		update df_machine_spot set nfc_code=#cardCode# where spot_id=#spotId#
+	</update>
+</sqlMap>

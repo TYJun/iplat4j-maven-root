@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选择科室</title>
+    <link rel="stylesheet" href="../css/chooseDept.css">
+    <link rel="stylesheet" href="../../../../html\reference\mui\css\mui.min.css">
+    <link rel="stylesheet" href="../../reference/css/loading.css" />
+</head>
+
+<body>
+    <div id="app" ref="apps" v-cloak>
+        <div >
+            <!-- 顶部区域 -->
+            <input class='top' placeholder="输入科室关键字" v-model="deptMessage"></input>
+
+            <!-- 科室列表区域(实现区域滚动) -->
+            <div class="content" :style="{
+                height:_this.contentHeight+'px'  
+            }">
+                <ul>
+                    <li class="dept" @click="chooseDept(index)" v-for="(item, index) in dept_list" :key="index">
+                        <div class="deptname">{{item.deptName}}</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</body>
+<script src="../../../../js/lodash.min.js"></script>
+<script src="../../../../reference/assets/js/jquery.min.js"></script>
+<script src="../../../../html/reference/mui/js/mui.min.js"></script>
+<script src="../../../../js/vue.js"></script>
+<script src="../../../../html/reference/js/mui.loading.js"></script>
+<script src="../../reference/mui/js/jquery-2.1.4.js"></script>
+<script>
+    var baseUrl = "http://v5mealtest.yyhq365.cn/v5meal/";
+    var app = new Vue({
+        el: "#app",
+        data: function () {
+            _this = this
+            return {
+                dept_list: [], //科室列表
+                deptMessage: "", //搜索框输入的科室关键字
+                contentHeight: 0,
+            }
+        },
+        methods: {
+            //获取列表(防抖)
+            get_dept_list:_.debounce(function(){
+                this.deptMessage = this.deptMessage ? this.deptMessage : ""
+                $.ajax({
+                    url: baseUrl + "medical/fabric",
+                    type: "post",
+                    data: {
+                        requestParam: JSON.stringify({
+                            keyWorld: this.deptMessage,
+                            limit: "100",
+                            offset: "0"
+                        })
+                    },
+                    headers: {
+                        methodName: "queryDeptInfo",
+                        serviceName: "OMMF01"
+                    },
+                    success: function (data) {
+                        if (data.statusCode != "0") {
+                            mui.toast(data.msg);
+                            return;
+                        }
+                        app.dept_list = data.data;
+
+                        if (app.dept_list.length == 0) {
+                            mui.toast('暂无数据！');
+                            return
+                        }
+                    }
+                });
+            },200),
+          
+            //点击选择科室
+            chooseDept(index) {
+                var _item = _this.dept_list[index];
+                var _deptName = _item.deptName;
+            },
+        },
+        created() {
+            _this.get_dept_list();  //获取科室列表数据
+        },
+        mounted() {
+            _this.contentHeight = _this.$refs.apps.clientHeight - 40 
+        },
+        watch: {
+            //如果输入框中发生改变,则调用以下函数
+            deptMessage: function() {
+                app.get_dept_list()
+            }
+        }
+    })
+</script>
+
+</html>

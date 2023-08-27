@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFDA02">
+
+	<!-- 根据地点id查询设备地点表 -->
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			spot_id spotId,
+			device_count deviceCount
+		from
+			df_machine_spot
+		where 1=1
+		<isNotEmpty prepend="and" property="spotId">
+			spot_id = #spotId#
+		</isNotEmpty>
+		group by spot_id
+	</select>
+	
+	<update id="update" parameterClass="java.util.HashMap">
+		UPDATE
+			df_devicemachine
+		SET
+			spot_id = #spotId#,
+			spot_code = #spotCode#,
+			machine_code = #machineCode#,
+			machine_name = #machineName#,
+			models = #models#,
+			machine_type_id = #machineTypeId#,
+			status = #status#,
+			need_scan = #needScan#,
+			buy_time = #buyTime#,
+			fixed_time = #fixedTime#,
+			use_time = #useTime#,
+			fixed_place = #fixedPlace#,
+			building = #building#,
+			floor = #floor#,
+			warranty_date = #warrantyDate#,
+			maker_brand = #makerBrand#,
+			supplier_id = #supplierId#,
+			supplier_name = #supplierName#,
+			manufacturer_name = #manufacturerName#,
+			maint_unit = #maintUnit#,
+			last_maintain_time = #lastMaintainTime#,
+			maintain_round = #maintainRound#,
+			manager_man = #managerMan#,
+			manager_man_id = #managerManId#,
+			manager_depart_id = #managerDepartId#,
+			manager_depart_name = #managerDepartName#,
+			use_deaprt_id = #useDeaprtId#,
+			use_deaprt_name = #useDeaprtName#,
+			mat_num = #matNum#,
+			mat_name = #matName#,
+			out_factory_no = #outFactoryNo#,
+			use_limit = #useLimit#,
+			use_for = #useFor#,
+			machine_folder_id = #machineFolderId#,
+			buy_mode = #buyMode#,
+			asset_price = #assetPrice#,
+			memo = #memo#,
+			energy_form = #energyForm#,
+			factory_tel = #factoryTel#,
+			in_storage_time = #inStorageTime#,
+			goods_code  = #goodsCode#,
+			goods_name = #goodsName#,
+			goods_no = #goodsNo#,
+			asset_belongs = #assetBelongs#,
+			out_storage_time = #outStorageTime#
+		WHERE
+			id = #id#
+	</update>
+
+	<!-- 更新设备地点表 -->
+	<update id="updateMachineSpot" parameterClass="java.util.HashMap">
+		UPDATE
+			df_machine_spot
+		SET
+			device_count = #deviceCount#
+		WHERE
+			spot_id = #spotId#
+	</update>
+
+	<!-- 插入设备地点表 -->
+	<insert id="insertMachineSpot" parameterClass="java.util.HashMap">
+		insert into
+			df_machine_spot
+		(
+			id,
+			spot_id,
+			spot_code,
+			spot_name,
+			building,
+			floor,
+			device_count,
+			rec_creator,
+			rec_create_time,
+			data_group_code
+		)
+		values
+		(
+			#id#,
+			#spotId#,
+			#spotCode#,
+			#spotName#,
+			#building#,
+			#floor#,
+			#deviceCount#,
+			#recRevisor#,
+			#recReviseTime#,
+			#datagroupCode#
+		)
+	</insert>
+
+	<select id="queryDeviceTree" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			t1.id,
+			t1.module_code moduleCode,
+			t1.classify_code classifyCode,
+			t1.classify_name classifyName,
+			t1.parent_id parentId,
+			t1.memo,
+			(
+				CASE t1.parent_id
+					WHEN 'root' THEN
+						'分类信息'
+					ELSE
+						(SELECT classify_name
+						 FROM df_modulebaseclassfy
+						 WHERE id = t1.parent_id)
+					END
+				) AS parentName,
+			CASE COUNT(t2.id)
+				WHEN 0 THEN
+					TRUE
+				ELSE
+					FALSE
+				END AS isLeaf
+		FROM
+			df_modulebaseclassfy t1
+				LEFT JOIN df_modulebaseclassfy t2 ON t1.id = t2.parent_id
+		GROUP BY
+			t1.id
+	</select>
+
+
+	<select id="getDeviceProfile" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			t1.id,
+			t1.machine_code deviceId,
+			t1.machine_name deviceName
+		FROM
+			df_devicemachine t1
+		GROUP BY
+			t1.id
+	</select>
+
+
+	<!-- 查询设备 -->
+	<select id="queryDeviceList" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select
+		dm.id machineId,
+		dm.machine_code machineCode,
+		dm.machine_name machineName,
+		mbc.classify_code machineTypeCode,
+		mbc.classify_name machineTypeName
+		from df_devicemachine dm
+		left join df_modulebaseclassfy mbc on dm.machine_type_id = mbc.id
+		where 1=1
+		<isNotEmpty prepend=" AND " property="deviceName">
+			dm.machine_name like concat('%',#deviceName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineTypeId">
+			dm.machine_type_id = #machineTypeId#
+		</isNotEmpty>
+		order by machine_code asc
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+
+
+	<select id="queryGetDevice" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		SELECT
+			dd.id,
+			dd.machine_code machineCode,
+			dd.machine_name machineName,
+			dd.machine_type_id machineTypeId
+		FROM
+			df_devicemachine dd
+				LEFT JOIN
+			df_modulebaseclassfy dm ON dd.machine_type_id = dm.id
+		WHERE
+			dd.machine_type_id = #machineTypeId#
+	</select>
+
+	<select id="deviceMachineCode" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		id  machineId
+		FROM df_devicemachine
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="machineCode">
+			machine_code = #machineCode#
+		</isNotEmpty>
+	</select>
+</sqlMap>

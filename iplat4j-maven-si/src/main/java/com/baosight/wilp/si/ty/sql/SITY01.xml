@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SITY01">
+
+	<!-- 查询之前最大任务号 -->
+	<select id="querySerialNo" parameterClass="java.lang.String" resultClass="java.lang.String">
+		select type_num from cu_model_number where type=#value#
+	</select>
+
+	<update id="insertSerialNo" parameterClass="java.util.HashMap">
+		insert into cu_model_number(model_id,type,type_num,create_time,update_time)
+			value (UUID(),#type#,#serialNo#,#createTime#,#updateTime#)
+	</update>
+
+	<update id="updateSerialNo" parameterClass="java.util.HashMap">
+		update cu_model_number set type_num=#serialNo#,update_time=#updateTime# where type=#type#
+	</update>
+
+
+</sqlMap>

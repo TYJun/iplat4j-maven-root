@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="PM02">
+
+	<!--  -->
+	<update id="updateProjectStatus" parameterClass="java.util.HashMap">
+		update pm01 set PROJECT_STATUS = #projectStatus#
+		<isNotEmpty prepend="," property="finishDate">
+			ACT_FINISTH_DATE = #finishDate# 
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="ysTime">
+			YSTIME = #ysTime# 
+		</isNotEmpty> 
+		 where 1=1
+		 <isNotEmpty prepend="and" property="id">
+		 	id = #id#
+		 </isNotEmpty>
+		 <isNotEmpty prepend="and" property="projectNo">
+		 	PROJECT_NO = #projectNo#
+		 </isNotEmpty>
+	</update>
+  
+</sqlMap>

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html class="no-js">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" href="reference/mui/css/mui.min.css">
+		<link rel="stylesheet" href="reference/mui/css/iconfont.css">
+		<link rel="stylesheet" href="reference/css/common.css" />
+		<link rel="stylesheet" href="reference/mui/css/mui.picker.min.css">
+		<link rel="stylesheet" href="css/colorGreen.css"/>
+  		<link rel="stylesheet" href="css/colorBlue.css"/>
+	</head>
+	<STYLE TYPE="text/css">
+		body {
+			background: #eee;
+			font-weight: bold;
+		}
+		
+		.task {
+			width: 96%;
+			background: #fff;
+			margin: 0 auto;
+			box-shadow: 1px 1px 10px #b9b9b9;
+			margin-bottom: 10px;
+			border-top-left-radius: 4px;
+			border-top-right-radius: 4px;
+			border-bottom-right-radius: 4px;
+			border-bottom-left-radius: 4px;
+			margin-top: 5px;
+		}
+		
+		.task-title {
+			width: 100%;
+			height: 40px;
+			line-height: 40px;
+			padding-left: 15px;
+			padding-right: 15px;
+			/*background: #607d8b;*/
+			border-bottom: 1px solid #eee;
+			border-top-left-radius: 4px;
+			border-top-right-radius: 4px;
+			font-weight: bold;
+		}
+		
+		.task-info {
+			padding-left: 15px;
+			padding-right: 15px;
+			padding-top: 10px;
+			padding-bottom: 10px;
+			border-bottom-right-radius: 4px;
+			border-bottom-left-radius: 4px;
+			color: #5a5a5a;
+		}
+		
+		.task-status {
+			color: #f39e22;
+		}
+		
+		.task-btn {
+			width: 100%;
+			height: 50px;
+			border-top: 1px solid #eee;
+			text-align: right;
+			padding-left: 15px;
+			padding-right: 15px;
+			/*padding-top: 8px;*/
+		}
+		
+		.task-btn button {
+			margin: 8px 0 0 10px;
+		}
+		
+		.mui-table-view:before {
+			height: 0;
+		}
+		
+		.mui-table-view:after {
+			height: 0;
+		}
+		
+		.loading1 {
+			position: fixed;
+			z-index: 999;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+		}
+		
+		.loading2 {
+			margin: 0 auto;
+			margin-top: 200px;
+			text-align: center;
+			line-height: 100px;
+		}
+		/*.row-content {*/
+		/*	position: relative;*/
+		/*	height: 40px;*/
+		/*	line-height: 40px;*/
+		/*	padding: 0 15px;*/
+		/*	border-bottom: 1px solid #EEEEEE;*/
+		/*	font-size: 14px;*/
+		/*	color: #666666;*/
+		/*	background: #ffffff;*/
+		/*	top: 40px;*/
+		/*}*/
+		.mui-icon-search {
+			color: #fff;
+		}
+		/*模糊查询*/
+
+		.mask {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: 10;
+			display: none;
+		}
+		.self-select {
+			position: fixed;
+			top: 40%;
+			left: 50%;
+			transform: translate(-50%, -40%);
+			height: 210px;
+			width: 90%;
+			background: #fff;
+			border-radius: 2px;
+			z-index: 50;
+			display: none;
+			border-radius: 4px;
+		}
+
+		.row-content {
+			height: 50px;
+			line-height: 50px;
+			padding: 0 15px;
+			border-bottom: 1px solid #EEEEEE;
+			font-size: 16px;
+			color: #666666;
+			background: #ffffff;
+			font-weight: normal;
+		}
+
+		.mui-icon-arrowright {
+			color: #11539b;
+			font-size: 20px;
+		}
+
+		.new-row-tcj {
+			height: 60px;
+			line-height: 60px;
+			display: flex;
+			justify-content: space-between;
+			font-size: 14px;
+		}
+
+		.queding {
+			height: 32px;
+			width: 40%;
+			background: #5bc0de;
+			text-align: center;
+			line-height: 32px;
+			border-radius: 15px;
+			margin-top: 14px;
+			color: #fff;
+			box-shadow: 0 0 7px #11539b;
+		}
+
+		.mui-poppicker {
+			z-index: 1000;
+		}
+
+		.mui-backdrop {
+			z-index: 999;
+		}
+
+		.no-views {
+			text-align: center;
+			margin-top: 180px;
+			margin-left: -15px;
+		}
+
+		.mui-popup-input input {
+			height: 40px;
+		}
+	</STYLE>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">安全巡查记录表</h1>
+			<span class="mui-icon mui-icon mui-icon-search mui-pull-right">查询历史年份</span>
+		</header>
+
+		
+		<div id="loading" class="loading1" hidden>
+			<div class="loading2">
+				<span class="mui-spinner" style="width:80px;height:80px;"></span>
+			</div>
+		</div>
+			<div class="mui-col-sm-1 mui-col-xs-1 row-right " style="text-align: center;">-
+			</div>
+
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="padding-bottom:50px;">
+			<div class="mui-scroll">
+				<ul class="mui-table-view mui-table-view-chevron" style="background-color:#eee;">
+					<div style="width:100%;text-align:center;margin-top:100px;font-size:40px;"><span class="mui-spinner"></span></div>
+				</ul>
+			</div>
+		</div>
+
+<!--		<div class="mui-content" style="padding-top:34px;margin-bottom:100px;"> </div>>-->
+		<!-- 蒙版 -->
+		<div class="mask"></div>
+
+		<!-- 查询列表 -->
+		<div class="self-select">
+			<div class="mui-row row-content">
+				<div class="mui-col-sm-4 mui-col-xs-4">往期日期：
+				</div>
+				<div class="mui-col-sm-8 mui-col-xs-8 row-right time">
+					<input type="text" id="time" style="width: 86%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;" placeholder="请选择日期" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" readonly="readonly" />
+					<span class="mui-icon mui-icon-arrowright"></span>
+				</div>
+			</div>
+
+			<div class="mui-row row-content new-row-tcj">
+				<div class="queding">查询</div>
+			</div>
+		</div>
+		<p class="no-views" hidden>———&nbsp;&nbsp;暂无数据&nbsp;&nbsp;———</p>
+	</body>
+	<script type="text/javascript" src="js/color.js"></script>
+	<script src="reference/mui/js/mui.min.js" type="text/javascript"></script>
+	<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+	<script src="reference/mui/js/mui.picker.min.js" type="text/javascript"></script>
+	<script src="reference/js/common.js" type="text/javascript"></script>
+	<!-- <script src="../../cordova.js" type="text/javascript"></script> -->
+	<script type="text/javascript">
+		var page = 1,
+			html = '';
+
+		// $(function() {
+		// 	loadData();
+		// });
+
+		mui.init({
+			pullRefresh: {
+				container: '#pullrefresh',
+				down: {
+					callback: pulldownRefresh,
+					contentrefresh: "正在加载",
+				},
+				up: {
+					contentrefresh: "加载中，请稍后",
+					contentnomore: '暂无更多数据',
+					callback: pullupRefresh
+				}
+			}
+		});
+		// baseUrl='http://lch520.nat200.top/';
+		loadData();
+		function loadData(needDate) {
+			// $.ajax({
+				//url: baseUrl + 'app_comboMealRuleController.do?getWorkBillList',
+				// url: baseUrl + 'workmeal',
+				// type: 'post',
+		  //       headers:{
+		  //           className : 'AppWorkBaseInfoService',
+		  //           methodName : 'queryPaginationWorkBillInfo'
+		  //       },
+				var data = {
+					obj:[
+						{
+							name:"消防栓",
+							itemName:"水带",
+							recTime:"2022-09-23",
+							userName:"张三",
+							statusCode:"99",
+							statusName:"完工",
+							deptName:"消防科",
+							needDate:"2022-09-23",
+							ifok:"正常"
+							
+						},
+						{
+							name:"消防栓",
+							itemName:"水枪",
+							recTime:"2022-09-23",
+							userName:"张三",
+							statusCode:"99",
+							statusName:"完工",
+							deptName:"消防科",
+							needDate:"2022-09-23",
+							ifok:"正常"
+							
+						},
+						{
+							name:"消防栓",
+							itemName:"卷盘",
+							recTime:"2022-09-23",
+							userName:"张三",
+							statusCode:"99",
+							statusName:"完工",
+							deptName:"消防科",
+							needDate:"2022-09-23",
+							ifok:"正常"
+							
+						},
+						{
+							name:"消防栓",
+							itemName:"开关",
+							recTime:"2022-09-23",
+							userName:"张三",
+							statusCode:"99",
+							statusName:"完工",
+							deptName:"消防科",
+							needDate:"2022-09-23",
+							ifok:"正常"
+							
+						},
+						{
+							name:"消防栓",
+							itemName:"外观",
+							recTime:"2022-09-23",
+							userName:"张三",
+							statusCode:"99",
+							statusName:"完工",
+							deptName:"消防科",
+							needDate:"2022-09-23",
+							ifok:"正常"
+							
+						},
+						{
+							name:"消防栓",
+							itemName:"按钮",
+							recTime:"2022-09-23",
+							userName:"张三",
+							statusCode:"99",
+							statusName:"完工",
+							deptName:"消防科",
+							needDate:"2022-09-23",
+							ifok:"正常"
+							
+						},
+					]
+					
+				}
+				// success: function(data) {
+					//var data = JSON.parse(data);
+					console.log(data);
+					// if(data.success) {
+						var list = data.obj;
+						if (list.length == 0) {
+							$('.no-views').show();
+						} else {
+							$('.no-views').hide();
+						}
+						for(var i = 0; i < list.length; i++) {
+							html += createTask(list[i].name,list[i].itemName,list[i].recTime,list[i].userName,list[i].statusCode, list[i].statusName,list[i].deptName, list[i].needDate,list[i].ifok);
+						}
+
+						$('ul').html(html);
+						// $(".mui-content").append(html);
+					// } else {
+					// 	mui.toast("获取订单列表失败");
+					// }
+				// }
+			// });
+		}
+
+		function createTask(name,item_name,rec_time,user_name,status_code, status_name,dept_name,need_date,if_ok,send_time) {
+			// var times = getMinute(send_time);
+			var htmls = '<div class="task">';
+			htmls += '<div class="task-title fontColor">设备名称：<span class="task_code">' + name + '</span></div>';
+			htmls += '<div class="task-title fontColor">巡查项目：<span class="task_code">' + item_name + '</span></div>';
+			htmls += '<div class="task-title fontColor">责任人：<span class="task_code">' + user_name + '</span></div>';
+			htmls += '<div class="task-title fontColor">巡查时间：<span class="task_code">' + rec_time + '</span></div>';
+			htmls += '<div class="mui-row task-info">';
+			htmls += '<div class="mui-col mui-col-xs-12">完工人员：<span class="abnormal">' + user_name + '</span></div>';
+			htmls += '<div class="mui-col mui-col-xs-12">巡查状态：<span class="task-status">' + status_name + '</span></div>';
+			htmls += '<div class="mui-col mui-col-xs-12">是否正常：<span class="task-status">' + if_ok + '</span></div>';
+			// htmls += '<div class="mui-col mui-col-xs-12">用餐时间：<span class="need_date">' + need_date + '</span></div>';
+			htmls += '<div class="mui-col mui-col-xs-12">完工时间：<span class="abnormal">' + need_date + '</span></div>';
+			htmls += '</div>';
+			//&& (pay_type == "0000" || pay_type == "0401" || pay_type == "0001")
+			htmls += '</div>';
+			htmls += '</div>';
+			return htmls;
+		}
+
+		function getMinute(times) {
+			var str = times.replace(/-/g, "/");
+			var time = new Date(str);
+			var now = new Date();
+			var s1 = time.getTime();
+			var s2 = now.getTime();
+			var s3 = s1 - s2;
+			return s3;
+		}
+
+		//查看详情
+		mui("body").on('tap', 'button.info', function() {
+			var difference = this.id.substring(0, 2);
+			// var bill_no = this.id;
+			// var methodName = "";
+			// if(difference == "CC")
+			// 	location.href = "meal_TC/order_info.html?" + this.id;
+			// else
+				location.href = "meal_PC/orderInfo.html?" + this.id;
+		});
+
+		/**
+		 * 模糊查询
+		 */
+		mui('body').on('tap', '.mui-icon-search', function() {
+			$('.mask').show();
+			$('.self-select').show();
+			$('#meal').val('');
+			$('#time').val('');
+		})
+
+		mui('body').on('tap', '.mask', function() {
+			$('.mask').hide();
+			$('.self-select').hide();
+		})
+
+		/**
+		 * 查询日期
+		 */
+		mui('body').on('tap', '.time', function() {
+			var options = {
+				"type": "date"
+			}
+			var timePicker = new mui.DtPicker(options);
+			timePicker.show(function(item) {
+				$('#time').val(item.text);
+			})
+		})
+
+		mui('body').on('tap', '.queding', function() {
+			// $(".mui-content").html('');
+			$('ul').html('');
+			$('.mask').hide();
+			$('.self-select').hide();
+			// alert($('#time').val());
+			// alert(JSON.stringify($('#time').val()));
+			html='';
+			loadData($('#time').val());
+
+			// $('ul').html('');
+		})
+		
+		//下拉刷新
+		function pulldownRefresh() {
+			setTimeout(function() {
+				html = '';
+				page = 1;
+				loadData($('#time').val());
+				mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+			}, 1500);
+		}
+
+		//上拉加载更多
+		function pullupRefresh() {
+			page++;
+			loadData($('#time').val());
+			setTimeout(function() {
+				//关闭加载框
+				mui('#pullrefresh').pullRefresh().endPullupToRefresh();
+			}, 1500);
+		}
+
+		function startTime(){      //获取当前时间的函数
+			var today=new Date()
+			var h=today.getHours()    //时
+			var m=today.getMinutes()  //分
+			var s=today.getSeconds()  //秒
+			m=checkTime(m)
+			s=checkTime(s)
+			var txt = document.getElementById('txt').innerHTML=h+":"+m+":"+s
+			t=setTimeout('startTime()',500)  //每隔500就触发一次函数
+		}
+
+		function checkTime(i){   //检查分和秒，如果小于10，则在数字前加上0
+			if (i<10)
+			{i="0" + i}
+			return i
+		}
+
+		/**
+		 * mui清除按钮事件(ps:自定义的，不加此方法页面会报错，如果不需要，方法体为空就行)
+		 */
+		function clearFunc() {}
+	    
+	</script>
+
+
+</html>

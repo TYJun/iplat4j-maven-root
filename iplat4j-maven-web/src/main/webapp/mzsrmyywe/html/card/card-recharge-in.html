@@ -1,0 +1,563 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../reference/mui/css/mui.min.css">
+    <link rel="stylesheet" href="../reference/css/common.css" />
+    <link rel="stylesheet" href="css/iconfont.css">
+    <link rel="stylesheet" href="css/loading.css">
+    <link rel="stylesheet" href="css/custom-recharge.css">
+</head>
+<style type="text/css">
+    body {
+        /*background: #eee;*/
+    }
+    
+    .mui-bar-tab .mui-tab-item.mui-active {
+        color: #209c60;
+    }
+    
+    .card-info-div {
+        width: 100%;
+        padding: 10px 15px;
+        border-radius: 3px;
+        background: #fff;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .card-title {
+        width: 100%;
+        height: 24px;
+        line-height: 24px;
+        margin: 10px 0;
+        padding-left: 10px;
+        border-left: 3px solid #209c60;
+        font-weight: bold;
+        color: #209c60;
+    }
+    
+    .user-info {
+        font-size: 16px;
+        font-weight: bold;
+        height: 40px;
+        line-height: 40px;
+    }
+    
+    .user-info span.iconfont {
+        font-size: 30px;
+        color: #969696;
+    }
+    
+    .card-no {
+        height: 40px;
+        line-height: 40px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    
+    .card-no span.iconfont {
+        font-size: 30px;
+        color: #969696;
+    }
+    
+    .balance-info,
+    .charge-info {
+        height: 40px;
+        line-height: 40px;
+        color: #6f6f6f;
+    }
+    
+    .money-span {
+        font-size: 12px;
+    }
+    
+    .money {
+        font-size: 16px;
+        font-weight: bold;
+    }
+    
+    .red-money {
+        color: #f44336;
+    }
+    
+    .green-money {
+        color: #4caf50;
+    }
+    
+    .charge-info-div {
+        width: 100%;
+        padding: 10px 15px;
+        border-radius: 3px;
+        background: #fff;
+    }
+    
+    .charge-money-div {
+        padding: 5px;
+    }
+    
+    .charge-money {
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+        border-radius: 3px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #209c60;
+        border: 1px solid #209c60;
+    }
+    
+    .btn-div {
+        width: 100%;
+        padding: 5px 5px;
+    }
+    
+    .btn-charge {
+        width: 100%;
+        height: 45px;
+        background: #209c60;
+        color: #fff;
+        border: 1px solid #209c60;
+    }
+    
+    .charge-money-active {
+        background: #209c60;
+        color: #fff;
+    }
+    
+    .input-div {
+        width: 100%;
+        padding: 10px 5px;
+    }
+    
+    input[type=number] {
+        width: 100%;
+        height: 40px;
+        margin-bottom: 0px;
+        border: none;
+        outline: none;
+        padding: 10px 15px 10px 30px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #209c60;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .money-icon {
+        position: absolute;
+        left: 15px;
+        top: 21px;
+        font-size: 16px;
+        color: #209c60;
+    }
+    
+    .mui-bar {
+        background: #30c37c;
+    }
+    
+    .wx-confirm-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 99;
+        background: rgba(0, 0, 0, 0.3);
+        /*display: none;*/
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .confirm-div {
+        width: 300px;
+        height: 200px;
+        background: #fff;
+        border-radius: 3px;
+        box-sizing: border-box;
+    }
+    
+    .confirm-title {
+        width: 100%;
+        height: 80px;
+        line-height: 80px;
+        text-align: center;
+        font-size: 16px;
+        color: #303133;
+        font-weight: bold;
+        border-bottom: 1px solid #EBEEF5;
+    }
+    
+    .confirm-ok {
+        width: 100%;
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+        font-size: 14px;
+        color: #67C23A;
+        border-bottom: 1px solid #EBEEF5;
+    }
+    
+    .confirm-not-ok {
+        width: 100%;
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+        font-size: 14px;
+        color: #909399;
+    }
+</style>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">卡片信息</h1>
+        <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+            <span class="mui-icon mui-icon-left-nav"></span>
+            返回
+        </button>
+    </header>
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+    <div id="loading" class="loading-div" style="z-index: 999;" hidden>
+        <div class="loading-center">
+            <div class="loading-center-absolute">
+                <div class="object" id="object_one"></div>
+                <div class="object" id="object_two"></div>
+                <div class="object" id="object_three"></div>
+                <div class="object" id="object_four"></div>
+            </div>
+        </div>
+    </div>
+    <div class="mui-content">
+        <div class="card-info-div">
+            <div class="card-title">卡片信息</div>
+            <div class="mui-row">
+                <div class="mui-col-xs-6 user-info">
+                    <span class="iconfont icon-profile_light"></span>&nbsp;&nbsp;
+                    <span id="userName"></span>
+                </div>
+                <div class="mui-col-xs-6 card-no right">
+                    余额 &nbsp;&nbsp;
+                    <span class="money-span red-money">¥ </span>
+                    <span id="Kye" class="money red-money">0</span>
+                </div>
+                <div class="mui-col-xs-12 balance-info" style="display: flex;justify-content: space-between;">
+                    <!--余额 &nbsp;&nbsp;
+						<span class="money-span red-money">¥ </span>
+						<span id="Kye" class="money red-money">0</span>-->
+                </div>
+                <!-- <div class="mui-col-xs-12 charge-info right"> -->
+                <!-- 本月剩余可充金额 &nbsp;&nbsp; -->
+                <!-- <span class="money-span green-money">¥ </span> -->
+                <!-- <span id="ReChargeYe" class="money green-money">0</span> -->
+                <!-- </div> -->
+            </div>
+        </div>
+        <div class="charge-info-div">
+            <div class="card-title">卡片充值</div>
+            <div class="mui-row">
+                <div class="mui-col-xs-4 charge-money-div">
+                    <div id="50" class="charge-money">50元</div>
+                </div>
+                <div class="mui-col-xs-4 charge-money-div">
+                    <div id="100" class="charge-money">100元</div>
+                </div>
+                <div class="mui-col-xs-4 charge-money-div">
+                    <div id="200" class="charge-money">200元</div>
+                </div>
+                <div class="mui-col-xs-4 charge-money-div">
+                    <div id="300" class="charge-money">300元</div>
+                </div>
+                <div class="mui-col-xs-4 charge-money-div">
+                    <div id="400" class="charge-money">400元</div>
+                </div>
+                <div class="mui-col-xs-4 charge-money-div">
+                    <div id="600" class="charge-money">600元</div>
+                </div>
+                <div class="mui-col-xs-12 input-div" style="">
+                    <span class="money-icon">¥ </span>
+                    <input id="money" type="number" placeholder="0.00">
+                </div>
+            </div>
+            <div class="btn-div">
+                <button id="pay" type="button" class="btn-charge">充值</button>
+            </div>
+        </div>
+    </div>
+    <div id="payType" class="mui-popover mui-popover-action mui-popover-bottom">
+        <ul class="mui-table-view">
+            <li class="mui-table-view-cell">
+                <a name="wxpay" href="#payType" style="color: #30c37c;">
+                   <img src="./img/wxpay.png" style="width: 34px;vertical-align: middle;padding-right: 6px"/>
+                                                    微信支付
+                </a>
+            </li>
+            <li class="mui-table-view-cell">
+                <a name="alipay" href="#payType">
+                    <img src="./img/alipay.png" style="width: 34px;vertical-align: middle;padding-right: 6px"/>
+                                                        支付宝支付
+                </a>
+            </li>
+        </ul>
+        <ul class="mui-table-view">
+            <li class="mui-table-view-cell">
+                <a href="#payType" style="color: #909399;"><b>取消</b></a>
+            </li>
+        </ul>
+    </div>
+    <div class="wx-confirm-container">
+        <div class="confirm-div">
+            <div class="confirm-title">请确认微信支付是否已完成</div>
+            <div class="confirm-ok">支付已完成</div>
+            <div class="confirm-not-ok">支付遇到问题，需重新支付</div>
+        </div>
+    </div>
+</body>
+<script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../reference/js/common.js" type="text/javascript"></script>
+<script src="../../cordova.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var userName = localStorage.getItem("name");
+    if (localStorage.getItem("name") != null)
+        $("#userName").text(localStorage.getItem("name"))
+
+
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+        location.href = "card-recharge.html";
+    }
+
+    var cardNo = '';
+    var userIdCard = '';
+    var userName = '';
+    var rechargeLeft = 0;
+    showMoney();
+
+    function showMoney() {
+        $.ajax({
+            //url: baseUrl + 'app_basicInfoController.do?queryCardWorkInfo',
+            url: baseUrl + 'cardmeal',
+            type: 'post',
+            headers:{
+                className : 'CardWorkConsumeService',
+                methodName : 'queryCardWorkInfo'
+            },
+            data: {
+                workNo: workNo,
+                dataGroupCode: localStorage.getItem("dataGroupCode")
+            },
+            success: function(data) {
+                //var data = JSON.parse(data);
+                if (data.success) {
+                    $("#Kye").text(Number(data.obj[0].cardBalance/100).toFixed(2) + "元");
+                    //loadViews();
+                    // rechargeLimit();
+                } else {
+                    $("#warn small").html(data.respMsg);
+                    $("#warn").fadeIn(500);
+                    setTimeout('$("#warn").fadeOut(500)', 3000);
+                }
+            }
+        });
+    }
+    //获取本月可充余额
+    function rechargeLimit() {
+        $.ajax({
+            url: baseUrl + 'app_basicInfoController.do?queryCardInfo',
+            type: 'post',
+            data: {
+                workNo: workNo
+            },
+            success: function(data) {
+                var data = JSON.parse(data);
+                if (data.success) {
+                    $("#ReChargeYe").text(Number(data.obj.rechargeLimit).toFixed(2) + "元");
+                    rechargeLeft = Number(data.obj.rechargeLimit).toFixed(2);
+                } else {
+                    $("#warn small").html(data.msg);
+                    $("#warn").fadeIn(500);
+                    setTimeout('$("#warn").fadeOut(500)', 3000);
+                }
+            }
+        });
+    }
+
+    function loadViews() {
+        $.ajax({
+            url: baseUrl + 'app_basicInfoController.do?queryMoneyRecordsByUserCode',
+            type: 'post',
+            data: {
+                workNo: workNo
+            },
+            success: function(data) {
+                $("#loading").hide();
+                var data = JSON.parse(data);
+                var taskListAppend = "";
+                if (data.success) {
+                    var list = data.obj;
+                    for (var i = 0; i < list.length; i++) {
+
+                        for (var name in list[i]) {
+                            taskListAppend += createView1(name, list[i][name]);
+                        }
+                    }
+                    $(".balance-info").html(taskListAppend);
+                } else {
+                    //						showMsg(data.respMsg);
+                }
+            }
+        });
+
+    }
+
+    function createView1(name, money) {
+        var html = "";
+        html += '<div class="moneySelf">' + name + '&nbsp;&nbsp;';
+        html += '<span class="money-span red-money">¥ </span>';
+        html += '<span id="Kye" class="money red-money">' + money + '</span></div>';
+
+        return html;
+    }
+
+
+    $("#money").keyup(function() {
+        var valid = /^\d{0,8}(\.\d{0,2})?$/.test(this.value);
+        var _value = this.value;
+
+        if (!valid) {
+            this.value = _value.substring(0, _value.length - 1);
+        }
+    });
+
+    mui("body").on('tap', 'div.charge-money', function() {
+        var _this = $(this);
+        $('#money').val(this.id);
+        _this.parent().parent().find('div.charge-money').removeClass('charge-money-active');
+        _this.addClass('charge-money-active');
+    })
+
+    mui("body").on('tap', '#pay', function() {
+        $('#money').blur();
+        var payNum = $('#money').val();
+        var userNameSelf = "";
+        userNameSelf = encodeURI(encodeURI(userName));
+
+        if (payNum == "" || payNum == "0" || payNum == "0.0" || payNum == "0.00") {
+            showMsg("请选择或填写充值金额");
+            return;
+        }
+        // if (payNum > rechargeLeft) {
+        //   showMsg("已超过额度限制,请重新选择."); 
+        //   return; 
+        // }
+        mui('#payType').popover('toggle');
+    })
+
+    mui('body').on('tap', '#payType li>a', function() {
+        let payType = this.getAttribute('name');
+        switch (payType) {
+            case 'wxpay':
+                wxpay();
+                break;
+            case 'alipay':
+                alipay();
+                break;
+        }
+    })
+
+    // lxy
+    function wxpay() {
+        var payNum = $('#money').val();
+        var payUrl = 'http://wxpaytest.yyhq365.cn/testPay/Rechargev5meal.html?workNo=' + workNo + '&consumeMoney=' + payNum + '&payType=0201&baseUrl='+baseUrl;
+        // var payUrl = 'https://pacs.czey.com:8100/yycx/testPay/Paying.html?workNo=' + workNo + '&consumeMoney=' + payNum + '&payType=wechat';
+        cordova.exec(function(data) {
+            $('.wx-confirm-container').css('display', 'flex');
+        }, function(error) {
+
+        }, "WeChat", "H5Pay", [{
+            "url": payUrl,
+            'referer': 'http://wxpaytest.yyhq365.cn/'
+        }]);
+    }
+
+    mui("body").on('tap', '.confirm-ok', function() {
+        location.href = "card-recharge.html"
+    })
+
+    mui("body").on('tap', '.confirm-not-ok', function() {
+        $('.wx-confirm-container').css('display', 'none');
+    })
+
+    function alipay() {
+        var payNum = $('#money').val();
+        //var payUrl = baseUrl + 'app_basicInfoController.do?workCardReCharge&workNo=' + workNo + '&consumeMoney=' + payNum + '&payType=alipay';
+        var payUrl = baseUrl + 'workmealGet?className=AppWorkPayService&methodName=workAppRecharge&workNo=' + workNo + '&consumeMoney=' + payNum + '&payType=0101';
+        cordova.exec(function(data) {
+
+        }, function(error) {}, "AliPay", "H5Pay", [{
+            "payUrl": payUrl
+        }]);
+        payResult();
+    }
+
+    var timeID = null;
+
+    function payResult() {
+        clearTimeout(timeID);
+        $("#loading").hide();
+        cordova.exec(function(data) {
+            switch (data) {
+                case "0":
+                    timeID = setTimeout("payResult()", 1000);
+                    break;
+                case "9000":
+                    showMsg("订单支付成功，若金额未到账请稍后再查询余额");
+                    setTimeout("location.reload()", 3000);
+                    break;
+                case "8000":
+                    showMsg("订单正在处理中，请稍后自行查询余额");
+                    break;
+                case "4000":
+                    showMsg("订单支付失败");
+                    break;
+                case "5000":
+                    showMsg("重复请求");
+                    break;
+                case "6001":
+                    showMsg("用户中途取消");
+                    break;
+                case "6002":
+                    showMsg("网络连接出错");
+                    break;
+                case "6004":
+                    showMsg("支付结果未知");
+                    break;
+                default:
+                    showMsg("其它支付错误");
+                    break;
+            }
+        }, function(error) {
+
+        }, "AliPay", "PayResult", []);
+    }
+
+    document.getElementById('back').addEventListener('tap', function() {
+        location.href = "card-recharge.html";
+    });
+</script>
+
+</html>

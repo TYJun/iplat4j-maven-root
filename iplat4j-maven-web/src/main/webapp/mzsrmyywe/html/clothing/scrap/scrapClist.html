@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.css" />
+    <link rel="stylesheet" href="../reference/css/iconfont.css" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="../reference/css/colorGreen.css" />
+    <link rel="stylesheet" href="../reference/css/loading.css" />
+    <link rel="stylesheet" href="../reference/css/clothCommon.css" />
+  </head>
+  <style type="text/css">
+    .scan {
+      position: fixed;
+      /*bottom: 15px;*/
+      left: 15px;
+      width: 60px;
+      z-index: 11;
+    }
+
+    .round {
+      border: 1px solid #bbb;
+      width: 60px;
+      height: 60px;
+      line-height: 26px;
+      text-align: center;
+      color: #fff;
+      background-color: #666666;
+      filter: alpha(opacity=80);
+      /* 用于IE浏览器－透明度为20%*/
+      -moz-opacity: 0.8;
+      /*  用于Moz + Firefox－透明度为20%*/
+      opacity: 0.8;
+      -webkit-border-radius: 60px;
+      -moz-border-radius: 60px;
+      -o-border-radius: 60px;
+      border-radius: 60px;
+    }
+
+    .shopping_result {
+      position: fixed;
+      z-index: 999;
+      top: 0px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      padding: 15px;
+    }
+    /* 确认取件 */
+
+    #doCollect {
+      position: fixed;
+      bottom: 15px;
+      margin-left: 2%;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      width: 90%;
+    }
+
+    #doCollect button {
+      color: #fff;
+      border: 1px solid #30c37c;
+      background-color: #30c37c;
+      width: 130px;
+      font-size: 20px;
+      border-radius: 10px;
+      margin-left: 30%;
+    }
+  </style>
+
+  <body>
+    <header class="mui-bar mui-bar-nav backColor">
+      <h1 class="mui-title">芯片扫描结果</h1>
+      <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+      </button>
+    </header>
+    <!-- loading -->
+    <div id="loading" class="spinner">
+      <div class="bounce1"></div>
+      <div class="bounce2"></div>
+      <div class="bounce3"></div>
+    </div>
+    <!-- 主内容 -->
+    <div
+      id="pullrefresh"
+      class="mui-content mui-scroll-wrapper"
+      style="top: 66px;"
+    >
+      <div class="mui-scroll" id="content">
+        <ul class="list-ul" id="list"></ul>
+      </div>
+      <!-- 确认 -->
+      <div id="doCollect">
+        <button onclick="toSign()">保存</button>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript" src="../reference/mui/js/mui.min.js"></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/jquery-2.1.4.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/mui.picker.min.js"
+  ></script>
+  <script type="text/javascript" src="../reference/mui/js/baseInfo.js"></script>
+  <!-- <script type="text/javascript" src="../../../cordova.js"></script> -->
+  <script type="text/javascript">
+    //localStorage.setItem("url", "http://yapi.bonawise.com/mock/132/");
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var dataGroupCode = localStorage.getItem("dataGroupCode");
+    var rfidListStr = localStorage.getItem("recoveChipNum");
+
+    var scrapDeptName = localStorage.getItem("scrapDeptName");
+    var scrapDeptNum = localStorage.getItem("scrapDeptNum");
+    var page = 1;
+    var url = location.search;
+    var number = url.substring(1, url.length).split("&")[0];
+    var listHtml = "";
+    var clothType = ""; //布草分类编码
+    var clothTypeName = ""; //布草分类名称
+    var clothModel = ""; //布草种类
+    var num = ""; //数量
+    var objArray = [];
+    var inputAray = [];
+    var deptRecycleNo = "";
+    var configItem = "is_scan_edit";
+    var submitList = "";
+    var isCanSao = "";
+    $(function() {
+      console.log(rfidListStr);
+      isCanSao = getPeizhi(dataGroupCode, configItem);
+      init(dataGroupCode, rfidListStr);
+    });
+
+    /**
+     * @desc  获取扫描芯片结果
+     * @param {Object} params 查询参数
+     * @author huoke
+     */
+    function init(dataGroupCode, rfidListStr) {
+      $("#loading").show();
+
+      var params = {
+        dataGroupCode: dataGroupCode,
+        rfidListStr: rfidListStr
+      };
+      $.get(
+        baseUrl + "app_clothCommomQuery.do?queryClothByRfid",
+        params,
+        function(data) {
+          var data = JSON.parse(data);
+          $("#loading").hide();
+          if (data.respCode !== "200") {
+            mui.toast(data.respMsg);
+            return;
+          }
+          console.log(isCanSao);
+          var list = data.obj.obj;
+          for (var i = 0; i < list.length; i++) {
+            var element = list[i];
+            // list.forEach(element => {
+            var objObj = {
+              clothType: "",
+              clothTypeName: "",
+              clothModel: "",
+              num: ""
+            };
+            clothType = element.clothType;
+            clothTypeName = element.clothTypeName;
+            clothModel = element.clothModel;
+            num = element.clothNum;
+            objObj.clothType = clothType;
+            objObj.clothTypeName = clothTypeName;
+            objObj.clothModel = clothModel;
+            objObj.num = num;
+            objArray.push(objObj);
+            if (isCanSao == "Y") {
+              listHtml += createList(clothTypeName, clothModel, num);
+            } else {
+              listHtml += create(clothTypeName, clothModel, num);
+            }
+            // mui(".mui-numbox").numbox();
+            // });
+          }
+          mui.toast(data.respMsg, {
+            duration: "long"
+          });
+          console.log(objArray);
+          $("#list").html(listHtml);
+          mui(".mui-numbox").numbox();
+          getInput();
+        }
+      )
+        .fail(function(XMLHttpRequest) {
+          var text = JSON.parse(XMLHttpRequest.responseText);
+          mui.toast(text.message);
+          return;
+        })
+        .complete(function(XMLHttpRequest, status) {
+          if (status == "timeout") {
+            $("#loading").hide();
+            mui.toast("网速不给力，请重试！");
+            return;
+          } else if (status == "error") {
+            $("#loading").hide();
+            mui.toast("当前网络不可用，请查看网络是否畅通！");
+            return;
+          }
+        });
+    }
+
+    //获取配置项结果
+    function getPeizhi(dataGroupCode, configItem) {
+      console.log(dataGroupCode, configItem);
+      $.ajax({
+        url: baseUrl + "app_clothCommomQuery.do?queryClothConfig",
+        type: "get",
+        data: {
+          dataGroupCode: dataGroupCode,
+          configItem: configItem
+        },
+        success: function(data) {
+          var data = JSON.parse(data);
+          isCanSao = data.obj.obj;
+          //console.log(isCanSao);
+        }
+      });
+      return isCanSao;
+    }
+    /**
+     * @desc   写入列表 可修改数量
+     * @author huoke
+     */
+    function createList(clothTypeName, clothModel, num) {
+      var html = "";
+      html =
+        '<li><ul class="list-part"> <li class="first"> 布草分类名称：<span class="taskNo">' +
+        clothTypeName +
+        '</span></li><li> <span class="left-name">布草种类</span> <span class="status">' +
+        clothModel +
+        '</span></li><li><span class="left-name">数量</span>  <div class="mui-numbox status" data-numbox-step="1" data-numbox-min="0" > <button class="mui-btn mui-numbox-btn-minus" type="button">-</button>  <input  class="mui-numbox-input" type="number" value="' +
+        num +
+        '"/> <button class="mui-btn mui-numbox-btn-plus" type="button">+</button> </div> </li></ul> </li>';
+      return html;
+    }
+
+    function create(clothTypeName, clothModel, num) {
+      var html = "";
+      html =
+        '<li> <ul class="list-part"><li class="first"> 布草分类名称：<span class="taskNo">' +
+        clothTypeName +
+        '</span> </li> <li>  <span class="left-name">布草种类</span> <span class="status">' +
+        clothModel +
+        '</span> </li> <li> <span class="left-name">数量</span>  <span class="status">' +
+        num +
+        "</span> </li> </ul> </li>";
+      return html;
+    }
+    /**
+     * @desc   获取输入值
+     * @author huoke
+     */
+    function getInput() {
+      inputAray = [];
+      $("#list")
+        .find("input")
+        .each(function() {
+          inputAray.push($(this).val());
+          // console.log(inputAray);
+        });
+    }
+    /**
+     * @desc  保存
+     * @author huoke
+     */
+    function toSign() {
+      if (isCanSao == "Y") {
+        getInput();
+        for (var i = 0; i < objArray.length; i++) {
+          objArray[i].num = inputAray[i];
+        }
+      }
+      console.log(objArray);
+      var commitData = {
+        dataGroupCode: dataGroupCode,
+        recCreator: workNo,
+        scrappedType: "0",
+        deptNum: scrapDeptNum,
+        deptName: scrapDeptName,
+        rfidListStr: rfidListStr,
+        clothListStr: JSON.stringify(objArray)
+      };
+      $.ajax({
+        url: baseUrl + "app_clothBizController.do?countScrapped",
+        type: "post",
+        data: JSON.stringify(commitData),
+        contentType: "application/json",
+        success: function(data) {
+          // var deptRecycleNo = data.obj.deptRecycleNo;
+          // localStorage.setItem('deptRecycleNo', deptRecycleNo);
+          // location.href = 'signature.html';
+          var data = JSON.parse(data);
+          mui.toast(data.respMsg);
+          console.log(data);
+          location.href = "../clothing_menu.html";
+        },
+        error: function(XMLHttpRequest) {
+          var text = JSON.parse(XMLHttpRequest.responseText);
+          mui.toast(text.message);
+          return;
+        },
+        complete: function(XMLHttpRequest, status) {
+          if (status == "timeout") {
+            $("#loading").hide();
+            mui.toast("网速不给力，请重试！");
+            return;
+          } else if (status == "error") {
+            $("#loading").hide();
+            mui.toast("当前网络不可用，请查看网络是否畅通！");
+            return;
+          }
+        }
+      });
+    }
+
+    /**
+     * @desc   mui上拉刷新，下拉加载
+     * @author huoke
+     */
+    mui.init({
+      pullRefresh: {
+        container: "#pullrefresh",
+        down: {
+          callback: pulldownRefresh,
+          contentrefresh: "正在刷新"
+        },
+        up: {
+          contentrefresh: "加载中，请稍后...",
+          contentnomore: "暂无更多数据",
+          callback: pullupRefresh
+        }
+      }
+    });
+
+    /**
+     * @desc   下滑刷新
+     * @author huoke
+     */
+    function pulldownRefresh() {
+      page = 1;
+      listHtml = "";
+      objArray = [];
+      init(dataGroupCode, rfidListStr);
+      setTimeout(function() {
+        mui("#pullrefresh")
+          .pullRefresh()
+          .endPulldownToRefresh();
+      }, 1500);
+    }
+
+    /**
+     * @desc   上滑加载更多
+     * @author huoke
+     */
+    function pullupRefresh() {
+      page++;
+      init();
+      setTimeout(function() {
+        mui("#pullrefresh")
+          .pullRefresh()
+          .endPullupToRefresh();
+      }, 1500);
+    }
+
+    /**
+     * @desc   点击返回按钮
+     * @author huoke
+     */
+    mui("body").on("tap", "#back", function() {
+      location.href = "scrapXp.html?" + number;
+    });
+
+    /**
+     * @desc   手机系统返回键
+     * @author huoke
+     */
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+      document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+      location.href = "scrapXp.html?" + number;
+    }
+  </script>
+</html>

@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFSB01">
+
+	<!--查询设备分类-->
+	<select id="queryModule" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			dc.id AS id,
+			dc.module_id AS "moduleId",
+			dc.param_key AS "paramKey",
+			dc.param_name AS "paramName",
+			dc.param_value AS "paramValue",
+			dc.param_unit AS "paramUnit",
+			dc.memo
+		FROM
+			df_special_device dd
+				LEFT JOIN df_classfyparam dc ON dc.module_id = dd.machine_type_id
+		WHERE
+			dd.machine_type_id = #moduleId#
+		GROUP BY dc.param_key
+	</select>
+
+	<!-- 插入特种设备方法-->
+	<insert id="insert" parameterClass="java.util.HashMap">
+		insert into df_devicemachine(id,machine_code,machine_name,models,machine_type_id,status,need_scan,buy_time,fixed_time,use_time,fixed_place,building,floor,warranty_date,maker_brand,supplier_id,manufacturer_name,maint_unit,last_maintain_time,maintain_round,manager_man_id,manager_depart_id,use_deaprt_id,mat_num,mat_name,out_factory_no,use_limit,use_for,machine_folder_id,buy_mode,asset_price,memo)
+		values(#id#,#machineCode#,#machineName#,#models#,#machineTypeId#,#status#,#needScan#,#buyTime#,#fixedTime#,#useTime#,#fixedPlace#,#building#,#floor#,#warrantyDate#,#makerBrand#,#supplierId#,#manufacturerName#,#maintUnit#,#lastMaintainTime#,#maintainRound#,#managerManId#,#managerDepartId#,#useDeaprtId#,#matNum#,#matName#,#outFactoryNo#,#useLimit#,#useFor#,#machineFolderId#,#buyMode#,#assetPrice#,#memo#)
+	</insert>
+<!--插入地点表-->
+	<insert id="insertMachineSpot" parameterClass="java.util.HashMap">
+		insert into
+			df_machine_spot
+		(
+			id,
+			spot_id,
+			spot_code,
+			spot_name,
+			building,
+			floor,
+			device_count,
+			rec_creator,
+			rec_create_time,
+			data_group_code
+		)
+		values
+			(
+				#id#,
+				#spotId#,
+				#spotCode#,
+				#spotName#,
+				#building#,
+				#floor#,
+				#deviceCount#,
+				#recCreator#,
+				#recCreateTime#,
+				#dategroupCode#
+			)
+	</insert>
+<!--查询设备地点-->
+	<select id="querySpotId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+		spot_id spotId,
+		device_count deviceCount
+		from
+		df_machine_spot
+		where spot_id = #fixedId#
+		group by spot_id
+	</select>
+<!--更新设备地点-->
+	<update id="updateMachineSpot" parameterClass="java.util.HashMap">
+		UPDATE
+			df_machine_spot
+		SET
+			device_count = #deviceCount#
+		WHERE
+			spot_id = #fixedId#
+	</update>
+	<!-- 查询设备基准 -->
+		<select id="queryDeviceScheme" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+			SELECT
+				schemeID
+			FROM
+				di_scheme
+			WHERE
+				machineID = #value#
+		</select>
+	<!-- 查询特种设备 -->
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			df.id,
+			df.machine_code machineCode,
+			df.machine_name machineName,
+			df.machine_type_id machineTypeId,
+			dm.classify_name classifyName,
+			df.status_code statusCode,
+			df.models,
+			df.fixed_id fixedId,
+			df.fixed_place fixedPlace,
+			df.inner_machine_code innerMachineCode,
+			df.document_no documentNo,
+			df.work_media workMedia,
+			df.use_cert_no useCertNo,
+			df.use_area useArea,
+			df.register_code registerCode,
+			df.register_date registerDate,
+		 	df.out_factory_date outFactoryDate,
+			df.fixed_time fixedTime,
+			df.use_time useTime,
+			<!-- df.thisExpiredDate -->
+			df.nonuse_date nonuseDate,
+			df.manager_dept_id managerDeptId,
+			df.manager_dept_name managerDeptName,
+			df.manager_man_id managerManId,
+			df.manager_man_name managerManName,
+			df.charge_user_id  chargeUserId,
+			df.charge_user_name chargeUserName,
+			df.use_deaprt_id useDeaprtId,
+			df.use_deaprt_name useDeaprtName,
+			df.related_device relatedDevice,
+			df.use_for useFor,
+			df.memo,
+			df.need_scan needScan,
+			df.manufacturer_name manufacturerName,
+			df.manufacturer_certno manufacturerCertno,
+			df.fixed_unit fixedUnit,
+			df.fixed_certno fixedCertno,
+			df.maint_unit maintUnit,
+			df.maint_certno maintCertno,
+			df.check_unit checkUnit,
+			df.check_certno checkCertno,
+			df.this_check_date thisCheckDate,
+			df.this_finish_date thisFinishDate,
+			df.next_check_date nextCheckDate,
+			<!-- df.out_factory_no outFactoryNo, -->
+			df.annualInspCycle,
+			df.this_expired_date thisExpiredDate,
+			df.this_chexpired_date thisChexpiredDate,
+			df.next_expired_date nextExpiredDate,
+			df.regularInspCycle,
+			df.rec_creator recCreator,
+			df.rec_create_time recCreateTime,
+			df.rec_revisor recRevisor,
+			df.rec_revise_time recReviseTime,
+			df.data_group_code dataGroupCode
+		FROM
+			df_special_device df 
+		LEFT JOIN df_modulebaseclassfy dm ON df.machine_type_id = dm.id
+		WHERE 1 = 1 
+		<isNotEmpty prepend=" AND " property="machineCode">
+			df.machine_code like concat('%', #machineCode#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineName">
+			df.machine_name like concat('%', #machineName#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="classifyName">
+			dm.classify_name like concat('%', #classifyName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="models">
+			df.models like concat('%', #models#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="needScan">
+			df.need_scan = #needScan#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="managerManId">
+			df.manager_man_id in (#managerManId#) 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="thisCheckDateS">
+			date_format(df.this_check_date,'%Y-%m-%d') >= #thisCheckDateS# 	
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="thisCheckDateE">
+			date_format(df.this_check_date,'%Y-%m-%d') <![CDATA[<=]]> #thisCheckDateE#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="useDeaprtId">
+			df.use_deaprt_id in (#useDeaprtId#) 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			df.status_code = #statusCode#
+		</isNotEmpty>
+		order by df.rec_create_time desc
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+	
+	<!-- 计数 -->
+	<select id="count" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT
+			df.id
+		FROM
+			df_special_device df 
+		LEFT JOIN df_modulebaseclassfy dm ON df.machine_type_id = dm.id
+		/*LEFT JOIN tbmbd06 t6 ON df.fixed_place = t6.spot_num*/
+		LEFT JOIN df_machine_spot dms ON df.fixed_id = dms.spot_id
+		WHERE 1 = 1 
+		<isNotEmpty prepend=" AND " property="machineCode">
+			df.machine_code like concat('%', #machineCode#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineName">
+			df.machine_name like concat('%', #machineName#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineTypeId">
+			df.machine_type_id = #machineTypeId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="models">
+			df.models like concat('%', #models#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="needScan">
+			df.need_scan = #needScan#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="managerManId">
+			df.manager_man_id in (#managerManId#) 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="warrantyDateS">
+			date_format(df.invalid_time,'%Y-%m-%d') >= #warrantyDateS# 	
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="warrantyDateE">
+			date_format(df.invalid_time,'%Y-%m-%d') <![CDATA[<=]]> #warrantyDateS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="buyMode">
+			df.buy_mode = #buyModes#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="useDeaprtId">
+			df.use_deaprt_id in (#useDeaprtId#) 
+		</isNotEmpty>
+	</select>
+	<!-- 查询设备分类 -->
+	<select id="queryId" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		SELECT
+				sb.id	as "id",  <!-- 设备ID -->
+				sb.machine_code	as "machineCode",  <!-- 设备编码 -->
+				sb.machine_name	as "machineName",  <!-- 设备名称 -->
+				sb.machine_type_id	as "machineTypeId",  <!-- 设备分类ID -->
+				dm.classify_name classifyName,
+				sb.models	as "models",  <!-- 规格型号 -->
+				sb.status_code	as "statusCode",  <!-- 状态代码（0=新建 1=启用，-1=停用） -->
+				sb.fixed_id	as "fixedId",  <!-- 安装地点id -->
+				sb.fixed_place	as "fixedPlace",  <!-- 安装地点 -->
+				sb.inner_machine_code	as "innerMachineCode",  <!-- 内部设备编码 -->
+				sb.document_no	as "documentNo",  <!-- 档案号 -->
+				sb.work_media	as "workMedia",  <!-- 工作介质 -->
+				sb.use_cert_no	as "useCertNo",  <!-- 使用证编号 -->
+				sb.use_area	as "useArea",  <!-- 使用范围 -->
+				sb.register_code	as "registerCode",  <!-- 注册代码 -->
+				sb.register_date	as "registerDate",  <!-- 注册登记日期 -->
+				sb.out_factory_date	as "outFactoryDate",  <!-- 出厂日期 -->
+				sb.fixed_time	as "fixedTime",  <!-- 安装日期 -->
+				sb.use_time	as "useTime",  <!-- 使用日期 -->
+				sb.nonuse_date	as "nonuseDate",  <!-- 停用日期 -->
+				sb.manager_dept_id	as "managerDeptId",  <!-- 管理科室ID -->
+				sb.manager_dept_name	as "managerDeptName",  <!-- 管理科室名称 -->
+				sb.manager_man_id	as "managerManId",  <!-- 管理员ID -->
+				sb.manager_man_name	as "managerManName",  <!-- 管理员名称 -->
+				sb.charge_user_id	as "chargeUserId",  <!-- 负责人ID -->
+				sb.charge_user_name	as "chargeUserName",  <!-- 负责人名称 -->
+				sb.use_deaprt_id	as "useDeaprtId",  <!-- 使用科室ID -->
+				sb.use_deaprt_name	as "useDeaprtName",  <!-- 使用科室名称 -->
+				sb.related_device	as "relatedDevice",  <!-- 关联设备 -->
+				sb.use_for	as "useFor",  <!-- 用途 -->
+				sb.memo	as "memo",  <!-- 备注 -->
+				sb.need_scan	as "needScan",  <!-- 是否扫二维码（N=否，Y=是） -->
+				sb.manufacturer_name	as "manufacturerName",  <!-- 制造单位 -->
+				sb.manufacturer_certno	as "manufacturerCertno",  <!-- 制造单位资格证号 -->
+				sb.fixed_unit	as "fixedUnit",  <!-- 安装单位 -->
+				sb.fixed_certno	as "fixedCertno",  <!-- 安装单位资格证号 -->
+				sb.maint_unit	as "maintUnit",  <!-- 维保单位 -->
+				sb.maint_certno	as "maintCertno",  <!-- 维保单位资格证号 -->
+				sb.check_unit	as "checkUnit",  <!-- 检验单位 -->
+				sb.check_certno	as "checkCertno",  <!-- 检验单位资格证号 -->
+				sb.this_check_date	as "thisCheckDate",  <!-- 本次年度检验日 -->
+				sb.this_finish_date	as "thisFinishDate",  <!-- 本次年度检验完工日 -->
+				sb.next_check_date	as "nextCheckDate",  <!-- 下次年度检验日 -->
+				sb.annualInspCycle	as "annualinspcycle",  <!-- 周期(月)-年检 -->
+				sb.this_expired_date	as "thisExpiredDate",  <!-- 本次到期检验日 -->
+				sb.this_chexpired_date	as "thisChexpiredDate",  <!-- 本次到期检验完工日 -->
+				sb.next_expired_date	as "nextExpiredDate",  <!-- 下次到期检验日 -->
+				sb.regularInspCycle	as "regularinspcycle",  <!-- 周期(月)-定检 -->
+				sb.rec_creator	as "recCreator",  <!-- 创建人 -->
+				sb.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+				sb.rec_revisor	as "recRevisor",  <!-- 修改人 -->
+				sb.rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+				sb.data_group_code	as "dataGroupCode" <!-- 账套 -->
+		FROM
+			df_special_device sb
+		LEFT JOIN df_modulebaseclassfy dm ON sb.machine_type_id = dm.id
+		WHERE
+			sb.id = #value#
+	</select>
+	
+	<!--删除按钮 -->
+	<delete id="deleteItem" parameterClass="java.util.List">
+		DELETE FROM df_special_device WHERE id IN 
+		<iterate conjunction="," open="(" close=")">
+			#[]#
+		</iterate>
+	</delete>
+	
+		<!-- 启动按钮 -->
+	  <update id="start"  parameterClass="java.util.List">
+	   update df_special_device set status_code="1" where id IN
+	   <iterate conjunction="," open="(" close=")">
+	    #[]#
+	  </iterate>
+ 	 </update>
+  
+	  <!-- 停用按钮 -->
+	  <update id="stop" parameterClass="java.util.List">
+	   update df_special_device set status_code="-1" where id IN
+	   <iterate conjunction="," open="(" close=")">
+	    #[]#
+	    </iterate>
+	  </update>
+	
+	<!-- 查询人员list -->
+	<select id="queryPersonList" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select t2.work_no workNo,t2.name,t2.contact_tel phone,t1.DEPT_NUM deptNum,t1.DEPT_NAME deptName 
+		from tbmbd02 t2 left join tbmbd01 t1 on t2.dept_num = t1.DEPT_NUM
+		where 1=1
+		<isNotEmpty prepend=" AND " property="workNo">
+			t2.work_no like concat('%', #workNo#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="name">
+			t2.name like concat('%', #name#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			t1.DEPT_NUM like concat('%', #deptNum#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			t1.DEPT_NAME like concat('%', #deptName#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			t2.DATAGROUP_CODE = #dataGroupCode# 
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+         	<isNotEmpty property="orderBy">
+    		  	$orderBy$
+   		 	</isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  t2.work_no asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+	
+	<!-- 查询人员count -->
+	<select id="queryPersonCount" parameterClass="java.util.Map" resultClass="int">
+		select t2.work_no workNo,t2.name,t2.contact_tel phone,t1.DEPT_NUM deptNum,t1.DEPT_NAME deptName 
+		from tbmbd02 t2 left join tbmbd01 t1 on t2.dept_num = t1.DEPT_NUM
+		where 1=1
+		<isNotEmpty prepend=" AND " property="workNo">
+			t2.work_no like concat('%', #workNo#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="name">
+			t2.name like concat('%', #name#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			t1.DEPT_NUM like concat('%', #deptNum#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			t1.DEPT_NAME like concat('%', #deptName#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			t2.DATAGROUP_CODE = #dataGroupCode# 
+		</isNotEmpty>
+	</select>
+	
+	<!-- 查询科室和人员 -->
+	<select id="queryDeptAndWork" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select t1.DEPT_NUM deptNum,t1.DEPT_NAME deptName,t2.name workName,t2.work_no workNum
+		from tbmbd01 t1 left join tbmbd02 t2 on t1.DEPT_NUM = t2.dept_num 
+		where 1=1
+		<isNotEmpty prepend=" AND " property="deptNum">
+			t1.DEPT_NUM like concat('%', #deptNum#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			t1.DEPT_NAME like concat('%', #deptName#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workName">
+			t2.name like concat('%', #workName#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workNum">
+			t2.work_no  like concat('%', #workNum#, '%') 
+		</isNotEmpty>
+		
+	</select>
+	
+	<!-- 查询人员count -->
+	<select id="queryDeptAndWorkCount" parameterClass="java.util.Map" resultClass="int">
+		select t1.DEPT_NUM deptNum,t1.DEPT_NAME deptName,t2.name workName,t2.work_no workNum
+		from tbmbd01 t1 left join tbmbd02 t2 on t1.DEPT_NUM = t2.dept_num 
+		where 1=1
+		<isNotEmpty prepend=" AND " property="deptNum">
+			t1.DEPT_NUM like concat('%', #deptNum#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			t1.DEPT_NAME like concat('%', #deptName#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workName">
+			t2.name like concat('%', #workName#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workNum">
+			t2.work_no  like concat('%', #workNum#, '%') 
+		</isNotEmpty>
+	</select>
+	
+
+</sqlMap>

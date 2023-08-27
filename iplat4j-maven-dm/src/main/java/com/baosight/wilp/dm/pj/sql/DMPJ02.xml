@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DMPJ02">
+
+	<!-- 查询最大的宿舍满意度评价项目分类单号 -->
+	<select id="getMaxItemClass" parameterClass="String" resultClass="String">
+		select 
+			max(classify_code) 
+		from
+			dorms_satisfaction_itemclass
+		where 
+			classify_code like concat('%',#value#,'%') 
+	</select>
+	
+	<!-- 查询最大的宿舍满意度评价项目的单号  -->
+	<select id="getMaxItem" parameterClass="String" resultClass="String">
+		select 
+			max(code) 
+		from
+			dorms_satisfaction_item
+		where 
+			code like concat('%',#value#,'%') 
+	</select>
+
+	<select id="queryClass" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+		SELECT
+			p.id AS "id",
+			p.classify_code AS "classifyCode",
+			p.classify_name AS "classifyName",
+			p.parent_id AS "parentId",
+			p.memo AS "memo",
+		CASE
+				count( c.id ) 
+				WHEN 0 THEN
+				true ELSE false
+			END AS hasChildren 
+		FROM
+			dorms_satisfaction_itemclass p
+			LEFT JOIN dorms_satisfaction_itemclass c ON c.parent_id = p.id
+		WHERE
+			1 = 1 
+		AND p.PARENT_ID = #node#
+		GROUP BY
+			p.id
+	</select>
+
+	<select id="countClass" resultClass="int">
+		SELECT COUNT(*) FROM dorms_satisfaction_itemclass WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insertClass"
+		parameterClass="java.util.HashMap">
+		INSERT INTO dorms_satisfaction_itemclass
+		(
+		id,
+		classify_code,  <!-- 分类CODE -->
+		classify_name,  <!-- 分类名称 -->
+		parent_id,  <!-- 父id -->
+		memo  <!-- 备注 -->
+		)
+		VALUES (#id#, #classifyCode#, #classifyName#, #parentId#, #memo#)
+	</insert>
+
+	<delete id="deleteClass" parameterClass="java.util.List">
+		DELETE FROM
+			dorms_satisfaction_itemclass
+		WHERE
+			id
+		IN
+		<iterate conjunction="," open="(" close=")">
+			#value[]#
+		</iterate>
+	</delete>
+	
+	<select id="getChildId" parameterClass="java.lang.String"
+		resultClass="java.lang.String">
+		select id from dorms_satisfaction_itemclass  where parent_id=#value#
+	</select>
+
+	<update id="updateClass"
+		parameterClass="java.util.HashMap">
+		UPDATE dorms_satisfaction_itemclass
+		SET
+		<isNotNull property="classifyCode">
+			classify_code = #classifyCode#,
+		</isNotNull>
+		<isNotNull property="classifyName">
+			classify_name = #classifyName#,
+		</isNotNull>
+		<isNotNull property="parentId">
+			parent_id = #parentId#,
+		</isNotNull>
+		<isNotNull property="memo">
+			memo = #memo#,
+		</isNotNull>
+		id = #id#
+		WHERE
+		id = #id#
+	</update>
+
+
+	<select id="isExistItem" parameterClass="java.util.List" resultClass="int">
+		SELECT count(1) FROM dorms_satisfaction_item WHERE module_id IN
+		<iterate conjunction="," open="(" close=")">
+			#value[]#
+		</iterate>
+	</select>
+
+	<select id="queryItem" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+		SELECT
+			c.id as "id",
+			c.id as itemId,
+			c.code as "code",  <!-- 项目编码 -->
+			c.content as "content",  <!-- 项目内容 -->
+			c.memo as "memo",  <!-- 备注 -->
+			c.module_id as moduleId,
+			p.classify_name as "typeName"
+		FROM dorms_satisfaction_item c
+		left join
+		dorms_satisfaction_itemclass p on c.module_id = p.id
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="typeName">
+			p.classify_name like concat('%',#typeName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="itemName">
+			c.content like concat('%',#itemName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="typeId">
+			p.id = #typeId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="id">
+			c.id = #id#
+		</isNotEmpty>
+	</select>
+
+	<select id="countItem" resultClass="int" parameterClass="java.util.HashMap">
+		SELECT 
+			count(c.id)
+		FROM dorms_satisfaction_item c
+		left join
+		dorms_satisfaction_itemclass p on c.module_id = p.id
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="typeName">
+			p.classify_name like concat('%',#typeName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="itemName">
+			c.content like concat('%',#itemName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="typeId">
+			p.id = #typeId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="id">
+			c.id = #id#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insertItem" parameterClass="java.util.HashMap">
+		INSERT INTO dorms_satisfaction_item (
+		id,
+		code,  <!-- 项目编码sss -->
+		content,  <!-- 项目内容 -->
+		memo,  <!-- 备注 -->
+		module_id
+		)
+		VALUES (#id#, #code#, #content#, #memo#, #moduleId#)
+	</insert>
+
+	<delete id="deleteItem" parameterClass="java.util.ArrayList">
+		DELETE FROM dorms_satisfaction_item WHERE ID IN
+		<iterate conjunction="," open="(" close=")">
+			#[]#
+		</iterate>
+	</delete>
+
+	<update id="updateItem" parameterClass="java.util.HashMap">
+		UPDATE dorms_satisfaction_item
+		SET
+		<isNotNull property="code">
+			code = #code#,
+		</isNotNull>
+		<isNotNull property="content">
+			content = #content#,
+		</isNotNull>
+		<isNotNull property="memo">
+			memo = #memo#,
+		</isNotNull>
+		<isNotNull property="moduleId">
+			module_id = #moduleId#,
+		</isNotNull>
+		id = #id#
+		WHERE
+		id = #id#
+	</update>
+
+
+	<select id="queryAllItemClass" resultClass="java.util.HashMap">
+		SELECT
+		id as classId,
+		classify_code as classifyCode,
+		classify_name as classifyName,
+		parent_id as parentId,
+		memo as memo
+		FROM dorms_satisfaction_itemclass
+	</select>
+
+	<select id="queryAllItem" parameterClass="String" resultClass="java.util.HashMap">
+		SELECT
+			id as itemId,
+			code as code,
+			content as content,
+			module_id as moduleId,
+			memo as memo
+		FROM dorms_satisfaction_item
+		where module_id = #moduleId#
+	</select>
+
+	<select id="queryAllItemCode" resultClass="java.util.HashMap">
+		SELECT
+			code as code
+		FROM dorms_satisfaction_item
+	</select>
+	
+</sqlMap>

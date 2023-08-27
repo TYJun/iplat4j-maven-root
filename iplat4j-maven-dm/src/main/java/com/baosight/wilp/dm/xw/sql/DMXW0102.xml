@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="DMXW0102">
+
+    <!-- 更新人员入住信息表的相关信息 -->
+    <update id="updateXWApplyInfo" parameterClass="java.util.HashMap">
+        update dorms_outsider
+        set
+        <isNotNull property="manNo">
+            man_no = #manNo#,  <!-- 工号 -->
+        </isNotNull>
+        <isNotNull property="manName">
+            man_name = #manName#,  <!-- 姓名 -->
+        </isNotNull>
+        <isNotNull property="sex">
+            sex = #sex#,  <!-- 性别 -->
+        </isNotNull>
+        <isNotNull property="age">
+            age = #age#,  <!-- 员工年龄 -->
+        </isNotNull>
+        <isNotNull property="phone">
+            phone = #phone#,  <!-- 电话 -->
+        </isNotNull>
+        <isNotNull property="note">
+            nowAddress = #note#,  <!-- 当前住址 -->
+        </isNotNull>
+        <isNotNull property="recRevisor">
+            rec_revisor = #recRevisor#,  <!-- 修改人工号 -->
+        </isNotNull>
+        <isNotNull property="recRevisorName">
+            rec_revise_name = #recRevisorName#,  <!-- 修改人 -->
+        </isNotNull>
+        <isNotNull property="recReviseTime">
+            rec_revise_time = #recReviseTime#,  <!-- 修改时间 -->
+        </isNotNull>
+        id=#manId# <!-- 主键 -->
+        where id=#manId#
+    </update>
+  
+</sqlMap>

@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ACPE01">
+
+    <!-- 查询人员列表 -->
+	<select id="queryPerlList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			SELECT t.* FROM (
+				select ap.id AS "id",
+						 ap.work_no AS "workNo",        
+						 ap.name AS "name",             
+						 (CASE WHEN ap.gender = '1' THEN '男' 
+							   WHEN ap.gender = '0' THEN '女' 
+							   ELSE ''
+						  END) AS "gender",          
+						 ap.contact_tel AS "contactTel", 
+						 ap.dept_id AS "deptId",        
+						 ad.dept_name AS "deptName",    
+						 ap.id_no AS "idNo",            
+						 ap.type AS "type",
+						 ap.user_id as userId,
+						 ap.source AS "source",  
+						 (CASE WHEN ap.source = '1'  THEN '钉钉' 
+						 	   WHEN ap.source = '2'  THEN '企业微信' 
+							   ELSE '平台'
+						  END) AS "sourceName",       
+						 ap.rec_create_time AS "recCreateTime",
+						 ap.type as "staffType",
+						 (CASE WHEN ap.is_service = '1' 
+										THEN '是' 
+							      ELSE '否'
+							 END) AS "isService",
+						(CASE WHEN ap.status = '0'
+						THEN '停用'
+						else '启用'
+						END) AS "status"
+				from $projectSchema$.ac_personnel ap
+				LEFT JOIN $projectSchema$.ac_department ad ON ad.id = ap.dept_id
+		    ) t
+			WHERE 1=1
+			<isNotEmpty prepend="and" property="id">
+				t.id = #id#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="source">
+				t.source = #source#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="status">
+				t.status = #status#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="workNo">
+				t.workNo like concat('%', #workNo#, '%')
+			</isNotEmpty>
+			
+			<isNotEmpty prepend="and" property="name">
+				t.name like concat('%', #name#, '%')
+			</isNotEmpty>
+			
+			<isNotEmpty prepend="and" property="deptName">
+				t.deptName like concat('%', #deptName#, '%')
+			</isNotEmpty>
+			
+			<isNotEmpty prepend="and" property="parentId">
+				t.deptId =#parentId#
+			</isNotEmpty>
+			
+			<isNotEmpty prepend="and" property="list">
+         	 	 t.deptId in  
+       		   <iterate  open="("  close=")"  conjunction="," property="list">
+                       #list[].dept_id#
+               </iterate>   
+          	</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+				<isNotEmpty property="orderBy">
+					$orderBy$
+				</isNotEmpty>
+				<isEmpty property="orderBy">
+					t.recCreateTime desc
+				</isEmpty>
+			</dynamic>
+	</select>
+						
+	<!-- 查询人员列数量 -->			
+	<select id="queryPerlListCount" resultClass="int">
+			SELECT COUNT(1) FROM (
+				select ap.id AS "id",
+				ap.work_no AS "workNo",
+				ap.name AS "name",
+				(CASE WHEN ap.gender = '1'
+				THEN '男'
+				ELSE '女'
+				END) AS "gender",
+				ap.contact_tel AS "contactTel",
+				ap.dept_id AS "deptId",
+				ad.dept_name AS "deptName",
+				ap.id_no AS "idNo",
+				ap.type AS "type",
+				ap.rec_create_time AS "recCreateTime",
+				ap.type as "staffType",
+				(CASE WHEN ap.is_service = '1'
+				THEN '是'
+				ELSE '否'
+				END) AS "isService",
+				(CASE WHEN ap.status = '0'
+				THEN '停用'
+				else '启用'
+				END) AS "status"
+				from $projectSchema$.ac_personnel ap
+				LEFT JOIN $projectSchema$.ac_department ad ON ad.id = ap.dept_id
+			) t
+			WHERE 1=1
+			<isNotEmpty prepend=" AND " property="status">
+				t.status = #status#
+			</isNotEmpty>
+			
+			<isNotEmpty prepend="and" property="workNo">
+				t.workNo =#workNo#
+			</isNotEmpty>
+			
+			<isNotEmpty prepend="and" property="name">
+				t.name like concat('%', #name#, '%')
+			</isNotEmpty>
+			
+			<isNotEmpty prepend="and" property="deptName">
+				t.deptName like concat('%', #deptName#, '%')
+			</isNotEmpty>
+			
+			<isNotEmpty prepend="and" property="parentId">
+				t.deptId =#parentId#
+			</isNotEmpty>
+			
+			<isNotEmpty prepend="and" property="list">
+         	 	 t.deptId in  
+       		   <iterate  open="("  close=")"  conjunction="," property="list">
+                       #list[].dept_id#
+               </iterate>   
+          	</isNotEmpty>
+	</select>
+	
+	<delete id="delete" parameterClass="java.util.List">
+		DELETE FROM $projectSchema$.ac_personnel WHERE id IN 
+		<iterate conjunction="," open="(" close=")">
+			#[]#
+		</iterate>
+	</delete>
+
+	<update id="updateStatus" parameterClass="java.util.HashMap">
+		UPDATE $projectSchema$.ac_personnel
+		SET
+			status=#status#
+		WHERE work_no IN
+		<iterate property="list" open="(" close=")" conjunction=",">
+			#list[]#
+		</iterate>
+	</update>
+	
+	<update id="updateStatus1" parameterClass="java.util.HashMap">
+		UPDATE $platSchema$.xs_user
+		SET
+			status=#status#,
+			is_locked=#status#
+		WHERE LOGIN_NAME IN
+		<iterate property="list" open="(" close=")" conjunction=",">
+			#list[]#
+		</iterate>
+	</update>
+
+	<insert id="importPersFromExcel" parameterClass="java.util.HashMap">
+
+		INSERT INTO $projectSchema$.ac_personnel (
+		id,
+		work_no,
+		`name`,
+		gender,
+		contact_tel,
+		dept_id,
+		id_no,
+		`type`,
+		is_service,
+		status,
+		rec_creater,
+		rec_create_time
+		)VALUES
+		<iterate open="" close="" conjunction="," property="list">
+			(#list[].id#,
+			#list[].workNo#,
+			#list[].name#,
+			#list[].gender#,
+			#list[].contactTel#,
+			(select id from $projectSchema$.ac_department where dept_num = #list[].deptId#),
+			#list[].idNo#,
+			#list[].type#,
+			#list[].isService#,
+			#list[].status#,
+			#list[].recCreater#,
+			#list[].recCreateTime#)
+		</iterate>
+	</insert>
+
+	<select id="countWorkNo" parameterClass="java.util.HashMap" resultClass="int">
+		select count(1) from $projectSchema$.ac_personnel
+		where
+		1 = 1
+		<isNotEmpty prepend=" AND " property="workNo">
+			work_no = #workNo#
+		</isNotEmpty>
+	</select>
+	<select id="queryAllWorkNo"  parameterClass="java.util.HashMap" resultClass="java.lang.String">
+		SELECT work_no FROM $projectSchema$.ac_personnel
+	</select>
+
+	<select id="queryPerlInfoByNum" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select work_no workNo, `name`
+		from $projectSchema$.ac_personnel
+		where
+		work_no in
+		<iterate  open="("  close=")"  conjunction="," property="list">
+			#list[]#
+		</iterate>
+	</select>
+
+	<select id="queryPerlInfoByNumCount" parameterClass="java.util.HashMap" resultClass="int">
+		select count(1)
+		from $projectSchema$.ac_personnel
+		where
+		work_no in
+		<iterate  open="("  close=")"  conjunction="," property="list">
+			#list[]#
+		</iterate>
+	</select>
+	
+	<update id="stopUser" parameterClass="java.util.HashMap">
+		UPDATE $projectSchema$.ac_personnel SET status = 0 WHERE id IN
+		<iterate conjunction="," open="(" close=")" property="list">
+			#list[].id#
+		</iterate>
+	</update>
+	
+	<insert id="insertDingUser" parameterClass="java.util.HashMap">
+		INSERT INTO $projectSchema$.ac_personnel (
+			work_no,  
+			name,  
+			dept_id,  
+			`type`,  
+			contact_tel,
+			is_service,  
+			status,  
+			source,
+			rec_creater,  <!-- 创建人 -->
+			rec_create_time,  <!-- 创建时间 -->
+			id  <!-- 主键 -->
+		)VALUES
+		<iterate open="" close="" conjunction="," property="list">
+			(#list[].workNo#,
+			 #list[].name#,
+			 #list[].deptId#,
+			 #list[].type#,
+			 #list[].contactTel#,
+			 #list[].isService#,
+			 #list[].status#,
+			 #list[].source#,
+			 #list[].recCreater#,
+			 #list[].recCreateTime#,
+			 #list[].id#)
+		</iterate>
+	</insert>
+	
+	<update id="updateDingUser" parameterClass="java.util.HashMap">
+			UPDATE $projectSchema$.ac_personnel 
+			SET 
+			    work_no = #workNo#,
+				name = #name#,
+				dept_id = #deptId#,
+				status = #status#,
+				source = #source#,
+				rec_revisor = #recRevisor#,
+				rec_revise_time = #recReviseTime#
+			WHERE id = #id#
+	</update>
+
+</sqlMap>

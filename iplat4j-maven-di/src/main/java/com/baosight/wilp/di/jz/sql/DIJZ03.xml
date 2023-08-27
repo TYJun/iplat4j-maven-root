@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DIJZ03">
+
+	<select id="query" parameterClass="java.util.Map" resultClass="com.baosight.wilp.di.jz.domain.DIJZ03">
+		SELECT
+		id,
+		configure_num as configureNum,
+		configure_name as configureName,
+		configure_time as configureTime,
+		create_time as createTime
+		FROM di_configure_time
+        where 1=1
+		<isNotEmpty prepend=" AND " property="configureName">
+			configure_name = #configureName#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insertGroup">
+		INSERT INTO `di_configure_time` (
+			`id`,
+			`configure_num`,
+			`configure_name`,
+			`configure_time`,
+			`create_time`
+		)
+		VALUES
+			(
+				#id#,
+				#configureNum#,
+				#configureName#,
+				#configureTime#,
+				now()
+			) ;
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM di_configure_time
+		WHERE
+			id = #id#
+	</delete>
+
+	<select id="queryconfigureTime" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		SELECT
+			configure_time as configureTime
+		FROM di_configure_time
+        where configure_name  = #configureName#
+	</select>
+  
+</sqlMap>

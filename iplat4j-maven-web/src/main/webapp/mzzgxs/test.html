@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+    <head>
+    <!--网站编码格式，UTF-8 国际编码，GBK或 gb2312 中文编码-->
+        <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+        <meta name="Keywords" content="关键词一，关键词二">
+        <meta name="Description" content="网站描述内容">
+        <meta name="Author" content="Yvette Lau">
+        <title>Document</title>
+        <!--css js 文件的引入-->
+        <style>
+            #leftFrame{display:block;}
+        </style>
+    </head>
+    <body>          
+        <div><img src = "img/photo1.jpg" width="500px"/></div>      
+        <iframe src="http://127.0.0.1:809/login.jsp" height= "80%" name="leftFrame" scrolling="No"  noresize="noresize"  id="leftFrame"></iframe>
+        <div><img src = "img/photo2.jpg"  width="500px"/></div>
+        <div><img src = "img/photo3.jpg" width="500px" /></div>
+        <p id = "buttom">detail</p>
+    </body>
+</html>
+<script>
+    window.onload = function(){
+        var iframe = document.querySelector("#leftFrame");
+        var bot = iframe.contentWindow.document.querySelector("#bot");
+        var top = iframe.contentWindow.document.querySelector("#top");
+        bot.onclick = function(){
+            document.body.scrollTop = document.body.offsetHeight;
+        };
+        top.onclick = function(){
+            document.body.scrollTop = 0;
+        };
+    };
+</script>

@@ -1,0 +1,234 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.css">
+    <link rel="stylesheet" href="../reference/mui/css/iconfont.css">
+    <link rel="stylesheet" href="../css/common.css" />
+    <link rel="stylesheet" href="../css/colorGreen.css">
+    <link rel="stylesheet" href="../css/colorBlue.css">
+</head>
+<STYLE TYPE="text/css">
+body{
+  background: #eee;
+}
+body,html{
+    width: 100%;
+    height: 100%;
+}
+.mui-content > .mui-table-view:first-child {
+  margin-top: 0;
+}
+.mui-table-view-chevron .mui-table-view-cell {
+  padding-right: 45px;
+}
+.btn-gs{
+    width: 200px;
+    height: 130px;
+    padding: 20px;
+    background: #4ad08d;
+    color: #fff;
+    text-align: center;
+    font-size: 16px;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.15);
+    border-radius: 10px;
+}
+.btn-jg{
+    width: 200px;
+    height: 130px;
+    padding: 20px;
+    background: #feb852;
+    color: #fff;
+    text-align: center;
+    font-size: 16px;
+    margin-top: 50px;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.15);
+    border-radius: 10px;
+}
+.flex-center{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 50px;
+    margin-top: 15%;
+}
+.logo-div{
+    height: 64px;
+}
+.name-div{
+    height: 26px;
+    line-height: 26px;
+}
+img {
+  width: 58px;
+}
+.bgColor {
+  background: #b7b7b7
+}
+</STYLE>
+<body>
+  <header id="header" class="mui-bar mui-bar-nav">
+      <h1 class="mui-title">卡片管理</h1>
+      <button id="closeCard" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left" style="height: 40px;">
+        <span class="mui-icon mui-icon-left-nav"></span>
+      </button>
+  </header>
+  <div id="warn" class="warn" hidden>
+      <small></small>
+  </div>
+  <div class="mui-content">
+    <ul class="mui-table-view mui-table-view-chevron">
+       <li class="mui-table-view-cell">
+          <a>卡主工号<i id="workNo" class="mui-pull-right"></i></a>
+      </li>
+      <li class="mui-table-view-cell">
+          <a>卡主姓名<i id="name" class="mui-pull-right"></i></a>
+      </li>
+      <li class="mui-table-view-cell">
+          <a>卡片状态<i id="status" class="mui-pull-right"></i></a>
+      </li>
+    </ul>
+      <div class="cardDiv  flex-center">
+        <div>
+            <div class="btn-gs">
+                <div class="logo-div">
+                    <img src="../img/card_gs.png">
+                </div>
+                <div class="name-div">卡片挂失</div>
+            </div>
+            <div class="btn-jg">
+                <div class="logo-div">
+                    <img src="../img/card_jg.png" style="width: 76px">
+                </div>
+                <div class="name-div">卡片解挂</div>
+            </div>
+        </div>
+      </div>
+  </div>
+</body>
+<script type="text/javascript" src="../js/color.js"></script>
+<script src="../reference/mui/js/mui.js" type="text/javascript"></script>
+<script src="../reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<!-- <script src="../cordova.js" type="text/javascript"></script> -->
+<script type="text/javascript">
+var baseUrl = localStorage.getItem("url");
+var workNo = localStorage.getItem("workNo");
+$('#workNo').html(localStorage.getItem("workNo"));
+$('#name').html(localStorage.getItem("name"));
+var cardStatus = ''
+$(function() {
+    $.ajax({
+      //url: baseUrl + 'app_basicInfoController.do?queryCardInfo',
+      url: baseUrl + 'cardmeal',
+      type: 'post',
+      headers:{
+          className : 'CardWorkConsumeService',
+          methodName : 'queryCardWorkInfo'
+      },
+      data: {
+        workNo: workNo
+      },
+      success: function(data){
+        //var data = JSON.parse(data)
+        console.log(data)
+        if(data.success){
+          if(data.obj == null){
+            mui.toast('未开通卡片')
+            $('.btn-jg').addClass('bgColor')
+            $('.btn-gs').addClass('bgColor')
+            $('.mui-table-view').hide()
+          }else {
+            $('.mui-table-view').show()
+            cardStatus = data.obj[0].statusName
+            console.log(cardStatus)
+            $('#status').html(cardStatus)
+            if(cardStatus == '使用中'){
+              $('.btn-jg').addClass('bgColor').siblings().removeClass('bgColor')
+              $('.btn-jg').prop('disabled',true).siblings().prop('disabled',false)
+            }else if(cardStatus == '已冻结'){
+              $('.btn-gs').addClass('bgColor').siblings().removeClass('bgColor')
+              $('.btn-gs').prop('disabled',true).siblings().prop('disabled',false)
+            }
+          }
+        }else {
+          mui.toast(data.respMsg)
+        }
+      }
+    })
+});
+
+mui('body').on('tap','.btn-gs',function(){
+  if(cardStatus == '使用中'){
+      $.ajax({
+          url: baseUrl + 'cardmeal',
+          type: 'post',
+          headers:{
+              className : 'CardWorkConsumeService',
+              methodName : 'lossCardInfo'
+          },
+        data: {
+          workNo: workNo
+        },
+        success: function(data){
+          //var data = JSON.parse(data)
+          console.log(data)
+          if(data.success){
+            mui.toast(data.respMsg)
+            setTimeout('location.reload()',1500)
+          }else {
+            mui.toast(data.respMsg)
+          }
+        }
+      })
+    }
+})
+
+mui('body').on('tap','.btn-jg',function(){
+  if(cardStatus == '已冻结'){
+      $.ajax({
+          url: baseUrl + 'cardmeal',
+          type: 'post',
+          headers:{
+              className : 'CardWorkConsumeService',
+              methodName : 'enableCardInfo'
+          },
+          data: {
+            workNo: workNo
+          },
+          success: function(data){
+            //var data = JSON.parse(data)
+            console.log(data)
+            if(data.success){
+              mui.toast(data.respMsg)
+              setTimeout('location.reload()',1500)
+            }else {
+              mui.toast(data.respMsg)
+            }
+          }
+    })
+  }
+})
+
+//公告点击事件
+document.getElementById('closeCard').addEventListener('tap', function() {
+    location.href = '../setting.html'
+})
+
+ /**
+ * 系统返回键监听
+ */
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady() {
+  document.addEventListener("backbutton", onBackKeyDown, false);
+}
+function onBackKeyDown() {
+  location.href = '../setting.html'
+}
+</script>
+</html>

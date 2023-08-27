@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="DMSH01">
+
+    <!-- 查询当前申请中包含的全日制学生，提取出给前端做提醒 -->
+    <select id="selectStudent" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        SELECT
+        dm.id as "id",  <!-- 主键 -->
+        dm.id as "manId",  <!-- 主键 -->
+        dm.man_no	as "manNo",  <!-- 工号 -->
+        dm.man_name	as "manName",  <!-- 姓名 -->
+        dm.status_code	as "statusCode",  <!-- 工单状态(00待审核，01待分配，02待选房，03待入住，04已入住，10申请换宿，98申请退宿，99流程结束) -->
+        CASE dm.status_code
+        WHEN 00 THEN '待审核'
+        WHEN 01 THEN '待分配'
+        WHEN 02 THEN '待选房'
+        WHEN 03 THEN '待入住'
+        WHEN 04 THEN '已入住'
+        WHEN 10 THEN '申请换宿'
+        WHEN 98 THEN '申请退宿'
+        WHEN 99 THEN '流程结束'
+        END AS "statusCodeMeaning" ,
+        dm.sex	as "sex",  <!-- 性别 -->
+        CASE dm.sex
+        WHEN '1' THEN '男'
+        ELSE '女'
+        END AS "sexMeaning",
+        dm.age	as "age",  <!-- 员工年龄 -->
+        dm.phone	as "phone",  <!-- 电话 -->
+        dm.identity_card	as "identityCard",  <!-- 身份证 -->
+        dm.education_background	as "educationBackground",  <!-- 学历 -->
+        dm.academic_year	as "academicYear",  <!-- 学年 -->
+        dm.marital_status	as "maritalStatus",  <!-- 婚否:是，否 -->
+        dm.dept_num	as "deptNum",  <!-- 部门科室编码 -->
+        dm.dept_name	as "deptName",  <!-- 部门科室名称 -->
+        dm.employment_nature	as "employmentNature",  <!-- 职工性质 -->
+        dm.cash_pledge	as "cashPledge",  <!-- 押金编号 -->
+        dm.is_network	as "isNetwork",  <!-- 是否联网 -->
+        dm.is_stay	as "isStay",  <!-- 是否办暂住证 -->
+        dm.permanent_residence	as "permanentResidence",  <!-- 户口所在地 -->
+        dm.note	as "note",  <!-- 备注信息 -->
+        dm.hiredate	as "hiredate",  <!-- 入职时间 -->
+        dm.estimated_in_date	as "estimatedInDate",  <!-- 预计入住时间 -->
+        dm.estimated_out_date	as "estimatedOutDate",  <!-- 预计退房时间 -->
+        dm.eval_status	as "evalStatus",  <!-- 是否已经进行过评价(0为未评价，1已评价) -->
+        CASE dm.eval_status
+        WHEN '1' THEN '已评价'
+        ELSE '未评价'
+        END AS "evalStatusMeaning",
+        dm.rec_creator	as "recCreator",  <!-- 创建人工号 -->
+        dm.rec_create_name	as "recCreateName",  <!-- 创建人姓名 -->
+        dm.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+        dm.rec_revisor	as "recRevisor",  <!-- 修改人工号 -->
+        dm.rec_revise_name	as "recReviseName",  <!-- 修改人姓名 -->
+        dm.rec_revise_time	as "recReviseTime", <!-- 修改时间 -->
+        dm.archive_flag as "archiveFlag", <!-- 归档标记(0：未归档，1：已归档) -->
+        CASE dm.archive_flag
+        WHEN '0' THEN '未归档'
+        ELSE '已归档'
+        END AS "archiveFlagMean"
+        FROM dorms_man dm
+        WHERE 1=1
+          AND dm.employment_nature in
+        <iterate property="studentNatureList" conjunction="," open="(" close=")">
+            #studentNatureList[]#
+        </iterate>
+          AND dm.id in
+        <iterate property="manIdList" conjunction="," open="(" close=")">
+            #manIdList[].manId#
+        </iterate>
+    </select>
+  
+</sqlMap>

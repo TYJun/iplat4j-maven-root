@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>被服申请</title>
+    <link rel="stylesheet" href="../../css/cloth_declare/declare.css" />
+    <link
+      rel="stylesheet"
+      href="../../../../../html/reference/mui/css/mui.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../../../html/reference/mui/css/mui.picker.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../../../html/reference/mui/css/mui.picker.min.css"
+    />
+
+    <!-- <script src="../../../../html/reference/mui/js/mui.dtpicker.js"></script> -->
+    <!-- <script src="../../../../html/reference/mui/js/mui.min.js"></script> -->
+    <link
+      rel="stylesheet"
+      href="../../../../../html/reference/mui/css/mui.dtpicker.css"
+    />
+  </head>
+  <body>
+    <div id="app">
+      <!-- 顶部区域 -->
+      <header>
+        <div class="top">
+          <div id="top-bar">
+            <span
+              id="icon-left-back"
+              class="mui-icon mui-icon-arrowleft"
+            ></span>
+            <h1 id="title">被服申请</h1>
+            <span id="select_class" @click="select_class">分类选择</span>
+          </div>
+        </div>
+      </header>
+      <!-- 申请填写内容 -->
+      <div class="occontent">
+        <div class="content">
+          <div class="dept">
+            <div class="left">申请科室</div>
+            <div class="right">东院门诊</div>
+          </div>
+          <div class="applicant">
+            <div class="left">申请人</div>
+            <div class="right">贺朝夫斯基</div>
+          </div>
+          <div class="giveout_time">
+            <div class="left">发放时间</div>
+            <div class="right">2021-06-12</div>
+          </div>
+        </div>
+        <!-- 展开与收起 -->
+        <div class="openclose">
+          <span id="toggle" title="点击关闭" href="javascript:void(0);">收起</span>
+        </div>
+      </div>
+      <!-- 表格部分 -->
+      <div class="text">可申请被服列表</div>
+      <!-- 分类表格 -->
+      <table class="selecttable">
+        <thead>
+          <tr>
+            <th>医用织物分类</th>
+            <th>规格</th>
+            <th>数量</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <!-- 一行 -->
+          <tr v-for="(item,index) in declare_list" :key="index">
+            <!-- 列 -->
+            <td>{{item.a}}</td>
+            <td>{{item.b}}</td>
+            <td>
+              <div
+                class="mui-numbox"
+                data-numbox-step="1"
+                data-numbox-min="0"
+                data-numbox-max="100"
+              >
+                <button class="mui-btn mui-numbox-btn-minus" type="button">
+                  -
+                </button>
+                <input
+                  class="mui-numbox-input"
+                  v-model="item.c"
+                  type="number"
+                />
+                <button class="mui-btn mui-numbox-btn-plus" type="button">
+                  +
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- '提交'按钮 -->
+      <div>
+        <button id="btn_submit" type="button">
+          <span>提交</span>
+        </button>
+      </div>
+    </div>
+  </body>
+  <script src="../../../../../reference/assets/js/jquery.min.js"></script>
+  <script src="../../../../../html/reference/mui/js/mui.min.js"></script>
+  <script src="../../../../../html/reference/mui/js/mui.picker.min.js"></script>
+  <script src="../../../../../js/vue.js"></script>
+  <script>
+    var app = new Vue({
+      el: "#app",
+      data: {
+        declare_list: [],
+      },
+      methods: {
+        select_class() {
+          // “分类选择”按钮单击事件
+          this.declare_list.push({
+            a: "a1111",
+            b: "b1111",
+            c: 1,
+          });
+        },
+        get_declare_list() {
+          // 获取表格中的list数据
+          this.declare_list = [
+            {
+              a: "大枕头",
+              b: "均码",
+              c: 1,
+            },
+            {
+              a: " 床笠（白）",
+              b: "均码",
+              c: 2,
+            },
+            {
+              a: "大单",
+              b: "均码",
+              c: 3,
+            },
+          ];
+          //   setInterval(() => {
+          //     this.declare_list.push({
+          //       a: 1111,
+          //       b: 2222,
+          //       c: 3333,
+          //     });
+          //   }, 5000);
+        },
+      },
+      created() {
+        this.get_declare_list();
+      },
+    });
+
+    //单击展示或收起申请内容表单
+    $(function () {
+      $("#toggle").click(function () {
+        $(this).text($(".content").is(":hidden") ? "收起" : "展开");
+        $(".content").slideToggle();
+      });
+    });
+  </script>
+</html>

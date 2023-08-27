@@ -1,0 +1,484 @@
+<!doctype html>
+<html class="no-js">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="../reference/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../reference/css/common.css" />
+		<link rel="stylesheet" href="css/tcj-font.css" />
+
+	</head>
+	<STYLE TYPE="text/css">
+		body {
+			background: #eee;
+		}
+		
+		.mui-scroll-wrapper {
+			position: absolute;
+			z-index: 2;
+			top: 0;
+			bottom: 0;
+			left: 5px;
+			overflow: hidden;
+			width: auto;
+			right: 5px;
+		}
+		
+		.new-row {
+			background: #FFF;
+			padding: 0px 10px;
+			margin: 10px 0px;
+		}
+		
+		.apply-name {
+			font-size: 15px;
+			color: #000;
+			/*font-weight: bold;*/
+		}
+		
+		.status-div {
+			width: 40%;
+			height: 30px;
+			line-height: 30px;
+			text-align: center;
+			color: #fff;
+			border-bottom-left-radius: 7px;
+			border-bottom-right-radius: 7px;
+		}
+		
+		.lanse {
+			background: #66ff66;
+		}
+		
+		.huangse {
+			background: #f2ae3d;
+		}
+		
+		.hongse {
+			background: #ff7171;
+		}
+		
+		.apply-date-icon {
+			text-align: center;
+			height: 35px;
+			line-height: 40px;
+			font-size: 13px;
+		}
+		
+		.apply-date-text {
+			text-align: center;
+			height: 35px;
+			font-size: 15px;
+		}
+		
+		.apply-content1 {
+			text-align: left;
+			height: 35px;
+			line-height: 47px;
+			/*font-weight: lighter;*/
+		}
+		
+		.apply-content2 {
+			text-align: left;
+			height: 35px;
+			/*font-weight: lighter;*/
+			font-size: 11px;
+		}
+		
+		.apply-bottom {
+			border-bottom: 1px solid #eee;
+		}
+		
+		.apply-bottom:last-child {
+			border-bottom: 0;
+		}
+		
+		.icon-ln_xiangyoujiaohuan {
+			margin-top: 15px;
+			font-size: 55px;
+			color: #ddd;
+		}
+		
+		.new-row-tcj {
+			height: 60px;
+			line-height: 60px;
+			display: flex;
+			justify-content: space-between;
+			font-size: 14px;
+		}
+		
+		.quxiao {
+			height: 32px;
+			width: 21%;
+			background: #fafafa;
+			text-align: center;
+			line-height: 32px;
+			border-radius: 15px;
+			margin-top: 14px;
+			color: #333333;
+		}
+		
+		.queding {
+			height: 32px;
+			width: 21%;
+			background: #41bde2;
+			text-align: center;
+			line-height: 32px;
+			border-radius: 15px;
+			margin-top: 14px;
+			color: #fff;
+		}
+		
+		.no-views {
+			text-align: center;
+			margin-top: 50px;
+			margin-left: -15px;
+		}
+	</STYLE>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">任务处理列表</h1>
+			<button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+       返回
+      </button>
+		</header>
+
+		<div id="warn" class="warn" hidden>
+			<small></small>
+		</div>
+		<div id="loading" class="loading1" hidden>
+			<div class="loading2">
+				<span class="mui-spinner" style="width:80px;height:80px;"></span>
+			</div>
+		</div>
+
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="margin-bottom: 50px;">
+			<div class="mui-scroll">
+				<ul class="mui-table-view mui-table-view-chevron" style="background-color:#eee;">
+
+					<!--<div class="new-row">
+						<div class="mui-row ">
+							<div class="mui-col-sm-6 mui-col-xs-6" style="line-height: 40px;color: #666;font-size: 12px;">
+								申请人&nbsp;&nbsp;<span class="apply-name">王丽</span>
+							</div>
+							<div class="mui-col-sm-6 mui-col-xs-6" style="height: 40px;display: flex;justify-content: flex-end;">
+								<div class="status-div lanse"> 已审批</div>
+							</div>
+						</div>
+						<div class="mui-row ">
+							<div class="mui-col-sm-5 mui-col-xs-5">
+								<div class="apply-date-icon">
+									<span class="mui-icon iconfont  icon-apply-date"></span> 申请日
+								</div>
+								<div class="apply-date-text">
+									2月23日(周二)
+								</div>
+							</div>
+							<div class="mui-col-sm-2 mui-col-xs-2">
+
+								<span class="mui-icon iconfont icon-ln_xiangyoujiaohuan"></span>
+
+							</div>
+							<div class="mui-col-sm-5 mui-col-xs-5">
+								<div class="apply-date-icon">
+									<span class="mui-icon iconfont  icon-jiaohuo-date"></span> 交货日
+								</div>
+								<div class="apply-date-text" style="color:#58d0f2 ;">
+									2月23日(周二)
+								</div>
+							</div>
+						</div>
+						<div>
+							<div class="mui-row apply-bottom ">
+								<div class="mui-col-sm-1 mui-col-xs-1" style="line-height: 70px;">
+									1.
+								</div>
+								<div class="mui-col-sm-6 mui-col-xs-6">
+									<div class="apply-content1">
+										菲尔普斯防水剂
+									</div>
+									<div class="apply-content2">
+										型号&nbsp;&nbsp;1000w
+									</div>
+								</div>
+								<div class="mui-col-sm-5 mui-col-xs-5">
+									<div class="apply-content1" style="text-align: right;">
+										23减
+									</div>
+									<div class="apply-content2">
+									</div>
+								</div>
+							</div>
+							<div class="mui-row apply-bottom ">
+								<div class="mui-col-sm-1 mui-col-xs-1" style="line-height: 70px;">
+									1.
+								</div>
+								<div class="mui-col-sm-6 mui-col-xs-6">
+									<div class="apply-content1">
+										菲尔普斯防水剂
+									</div>
+									<div class="apply-content2">
+										型号&nbsp;&nbsp;1000w
+									</div>
+								</div>
+								<div class="mui-col-sm-5 mui-col-xs-5">
+									<div class="apply-content1" style="text-align: right;">
+										23减
+									</div>
+									<div class="apply-content2">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="mui-row  new-row-tcj">
+
+							<div class="quxiao">取消</div>
+							<div class="queding">确认</div>
+						</div>
+					</div>-->
+
+				</ul>
+			</div>
+		</div>
+		<nav class="mui-bar mui-bar-tab" style="background-color:#fff;">
+			<a class="mui-tab-item class-icon dai-tijiao  mui-active">
+				<span class="mui-icon iconfont icon-dai-tijiao"></span>
+				<span class="mui-tab-label">待处理项</span>
+			</a>
+
+			<a class="mui-tab-item select-icon  new-project">
+				<span class="mui-icon iconfont icon-new-project"></span>
+				<span class="mui-tab-label">新建项目</span>
+			</a>
+			<a class="mui-tab-item index-icon  my-plan ">
+				<span class="mui-icon iconfont icon-my-plan"></span>
+				<span class="mui-tab-label">我的计划</span>
+			</a>
+
+		</nav>
+		<p class="no-views" style="display: none;">———&nbsp;&nbsp;暂无数据&nbsp;&nbsp;———</p>
+
+	</body>
+	<script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+	<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+	<script src="../reference/js/common.js" type="text/javascript"></script>
+	<script src="../../cordova.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		var baseUrl = localStorage.getItem("url");
+		var workNo = localStorage.getItem('workNo');
+		var deptNum = localStorage.getItem('deptCode');
+		var tasklist = "";
+		var page = 1;
+		var flag = "submit";
+		loadView();
+
+		function loadView() {
+
+			$.ajax({ //				url: "../json/buy-plan-apply.json",
+				//				type: "get",
+				url: baseUrl + "app_DeliveryController.do?queryDeliveryMatApplyList",
+				type: "post",
+				data: {
+					page: page,
+					row: 10,
+					flag: flag,
+					deptNum: deptNum,
+					workNo: workNo
+				},
+				success: function(data) {
+					var data = eval("(" + data + ")");
+					console.log(data)
+					var list = data.obj.data;
+					if(page == 1 && list.length == 0) {
+						$(".no-views").css("display", "");
+					} else {
+						$(".no-views").css("display", "none");
+					}
+					for(var i = 0; i < list.length; i++) {
+						tasklist += createView(list[i].applyDate, list[i].applyStaffName, list[i].matApplyBillNo, list[i].requireDeliveryDate, list[i].status, list[i].statusName, list[i].matData);
+					}
+					$("ul").html(tasklist);
+				}
+			});
+
+		}
+
+		function createView(applyDate, applyStaffName, matApplyBillNo, requireDeliveryDate, status, statusName, matData) {
+			var jsonSelf = {
+				"applyDate": applyDate,
+				"applyStaffName": applyStaffName,
+				"matApplyBillNo": matApplyBillNo,
+				"requireDeliveryDate": requireDeliveryDate,
+				"status": status,
+				"statusName": statusName,
+				"matData": JSON.stringify(matData)
+			}
+			var jsonString = JSON.stringify(jsonSelf)
+			var html = "";
+			html += ' <div class="new-row">';
+			html += '<div class="mui-row ">';
+			html += '<div class="mui-col-sm-6 mui-col-xs-6" style="line-height: 40px;color: #666;font-size: 12px;">申请人&nbsp;&nbsp;<span class="apply-name">' + applyStaffName + '</span></div>';
+			html += '<div class="mui-col-sm-6 mui-col-xs-6" style="height: 40px;display: flex;justify-content: flex-end;">';
+			//新增:1待审批:2进行中:3已完成:99
+			if(status == "99")
+				html += '<div class="status-div lanse"> ' + statusName + '</div>';
+			else if(status == "3")
+				html += '<div class="status-div huangse"> ' + statusName + '</div>';
+			else
+				html += '<div class="status-div hongse"> ' + statusName + '</div>';
+
+			html += '</div>';
+			html += '</div>';
+			html += '<div class="mui-row ">';
+			html += '<div class="mui-col-sm-12 mui-col-xs-12">';
+			html += '<div class="apply-date-icon">';
+			html += '<span class="mui-icon iconfont  icon-apply-date"></span> 申请日';
+			html += '</div>';
+			html += '<div class="apply-date-text">' + applyDate + '</div>';
+			html += '</div>';
+//			html += '<div class="mui-col-sm-2 mui-col-xs-2">';
+//			html += '	<span class="mui-icon iconfont icon-ln_xiangyoujiaohuan"></span>';
+//			html += '</div>';
+//			html += '<div class="mui-col-sm-5 mui-col-xs-5">';
+//			html += '<div class="apply-date-icon">';
+//			html += '	<span class="mui-icon iconfont  icon-jiaohuo-date"></span>交货日</div>';
+//			html += '<div class="apply-date-text" style="color:#58d0f2 ;">' + requireDeliveryDate + '</div>';
+//			html += '</div>';
+//			html += '</div>';
+
+			for(var a = 0; a < matData.length; a++) {
+				html += '<div class="mui-row apply-bottom ">';
+				html += '<div class="mui-col-sm-1 mui-col-xs-1" style="line-height: 70px;">' + (a + 1) + '.</div>';
+				html += '<div class="mui-col-sm-6 mui-col-xs-6">';
+				html += '<div class="apply-content1">' + matData[a].matName + '</div>';
+				html += '<div class="apply-content2">型号&nbsp;&nbsp;' + matData[a].matModel + '</div>';
+				html += '</div>';
+				html += '<div class="mui-col-sm-5 mui-col-xs-5">';
+				html += '<div class="apply-content1" style="text-align: right;">' + matData[a].applyNum + matData[a].unit + '</div>';
+				html += '<div class="apply-content2">';
+				html += '	</div>';
+				html += '</div>';
+				html += '</div>';
+			}
+			if(status == "2") {
+				html += '<div class="mui-row  new-row-tcj">';
+				html += '<div id=\'' + jsonString + '\' class="quxiao">回退</div>';
+				html += '<div id=\'' + jsonString + '\'  class="queding">确认</div>';
+				html += '</div>';
+			}
+			html += '</div>';
+			return html;
+
+		}
+		//取消按钮
+		mui("body").on("tap", ".quxiao", function() {
+			var _this = this;
+			var matApplyBillNo = JSON.parse(_this.id).matApplyBillNo;
+
+			location.href = "back-reason.html?" + matApplyBillNo;
+		});
+		//确定按钮
+		mui("body").on("tap", ".queding", function() {
+			var _this = this;
+			var matApplyBillNo = JSON.parse(_this.id).matApplyBillNo;
+
+			console.log(matApplyBillNo);
+			$("#loading").show();
+			$.ajax({ //				url: "../json/buy-plan-apply.json",
+				//				type: "get",
+				url: baseUrl + "app_DeliveryController.do?approveMatApply",
+				type: "post",
+				data: {
+					matApplyBillNo: matApplyBillNo,
+					flag: 1,
+					reason: "",
+					workNo: workNo
+				},
+				success: function(data) {
+					var data = eval("(" + data + ")");
+					console.log(data)
+
+					if(data.respCode == "200") {
+
+						setTimeout('location.reload();', 2000);
+
+					} else {
+						$("#loading").hide();
+						showMsg(data.respMsg);
+					}
+				}
+			});
+		});
+
+		mui("body").on("tap", "#back", function() {
+			location.href = "choose-main.html";
+		});
+		document.addEventListener("deviceready", onDeviceReady, false);
+
+		function onDeviceReady() {
+			document.addEventListener("backbutton", onBackKeyDown, false);
+		}
+
+		function onBackKeyDown() {
+			location.href = "choose-main.html";
+		}
+		mui("body").on("tap", ".my-plan", function() {
+			location.href = "plan-apply.html";
+		});
+		mui("body").on("tap", ".new-project", function() {
+			location.href = "new-apply.html";
+		});
+		mui("body").on("tap", ".dai-tijiao", function() {
+			location.href = "plan-submit.html";
+		})
+
+		/**
+		 * 下滑刷新
+		 * @return {[type]} [description]
+		 */
+		function pulldownRefresh() {
+			setTimeout(function() {
+				tasklist = "";
+				page = 1;
+				loadView();
+				mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+			}, 1500);
+		}
+
+		/**
+		 * 上滑加载更多
+		 * @return {[type]} [description]
+		 */
+		function pullupRefresh() {
+			page++;
+			loadView();
+			setTimeout(function() {
+				//关闭加载框
+				mui('#pullrefresh').pullRefresh().endPullupToRefresh();
+			}, 1500);
+		}
+
+		mui.init({
+			pullRefresh: {
+				container: '#pullrefresh',
+				down: {
+					callback: pulldownRefresh,
+					contentrefresh: "正在刷新",
+				},
+				up: {
+					contentrefresh: "加载中，请稍后",
+					contentnomore: '暂无更多数据',
+					callback: pullupRefresh
+				}
+			}
+		});
+	</script>
+
+</html>

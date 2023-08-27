@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+	
+<sqlMap namespace="AUAR0102">
+
+	<select id="queryResourceInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			
+			SELECT id,
+				resource_ename AS resourceEname,
+				resource_name AS resourceName,
+				type,
+				status,
+				rec_creator AS recCreator,
+				rec_create_time AS recCreateTime,
+				rec_revisor,
+				rec_revise_time 
+			FROM $projectSchema$.ac_resource
+			WHERE status='1'
+			<isNotEmpty prepend=" AND " property="id">
+				id = #id#
+			</isNotEmpty>
+			
+			
+	</select>
+
+  	<update id="update"  parameterClass="java.util.HashMap" >
+		UPDATE $projectSchema$.ac_resource
+		SET 
+				resource_ename	= #resourceEname#,   
+				resource_name	= #resourceName#,   
+				type	= #type#, 
+				rec_revisor	= #recRevisor#,   <!-- 修改人 -->  
+				rec_revise_time	= #recReviseTime#  <!-- 修改时间 -->  
+		WHERE 	
+		id = #id#
+	</update>
+</sqlMap>

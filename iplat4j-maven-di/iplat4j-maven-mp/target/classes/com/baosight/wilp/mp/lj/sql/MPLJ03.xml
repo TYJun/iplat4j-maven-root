@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!-- 采购订单 -->
+<sqlMap namespace="MPLJ03">
+
+    <select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.mp.lj.domain.MpPurchaseOrder">
+        SELECT
+            id	as "id",  <!-- 主键 -->
+            order_no	as "orderNo",  <!-- 订单号 -->
+            order_num	as "orderNum",  <!-- 物资总数 -->
+            order_cost	as "orderCost",  <!-- 总金额 -->
+            cont_id  as "contId",
+            cont_no as "contNo",
+            cont_name as "contName",
+            status_code	as "statusCode",  <!-- 状态编码 -->
+            status_name	as "statusName",  <!-- 状态名称 -->
+            supplier_num	as "supplierNum",  <!-- 供应商编码 -->
+            supplier_name	as "supplierName",  <!-- 供应商名称 -->
+            dept_num as "deptNum", <!-- 科室编码 -->
+            dept_name as "deptName", <!-- 科室名称 -->
+            rec_creator	as "recCreator",  <!-- 创建人 -->
+            rec_creator_name	as "recCreatorName",  <!-- 创建人姓名 -->
+            rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+            date_format(rec_create_time, '%Y-%m-%d %H:%i:%s') as "recCreateTimeStr",  <!-- 创建时间 -->
+            rec_revisor	as "recRevisor",  <!-- 修改人 -->
+            rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+            data_group_code	as "dataGroupCode",  <!-- 账套 -->
+            archive_flag	as "archiveFlag" <!-- 归档标记 -->
+        FROM mp_purchase_order WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="contId">
+            cont_id = #contId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="orderNo">
+            order_no like concat('%', #orderNo#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCode">
+            status_code = #statusCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCodes">
+            status_code in
+            <iterate property="statusCodes" open="(" conjunction="," close=")">
+                #statusCodes[]#
+            </iterate>
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="supplierName">
+            supplier_name like concat('%', #supplierName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptNum">
+            dept_num = #deptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptName">
+            dept_name like concat('%', #deptName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="dataGroupCode">
+            data_group_code = #dataGroupCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="beginTime">
+            rec_create_time >= concat(#beginTime#,' 00:00:00')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="endTime">
+            rec_create_time <![CDATA[<=]]> concat(#endTime#, ' 23:59:59')
+        </isNotEmpty>
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                order_no desc
+            </isEmpty>
+        </dynamic>
+
+    </select>
+
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM .mp_purchase_order WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="contId">
+            cont_id = #contId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="orderNo">
+            order_no like concat('%', #orderNo#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCode">
+            status_code = #statusCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCodes">
+            status_code in
+            <iterate property="statusCodes" open="(" conjunction="," close=")">
+                #statusCodes[]#
+            </iterate>
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="supplierName">
+            supplier_name like concat('%', #supplierName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptNum">
+            dept_num = #deptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptName">
+            dept_name like concat('%', #deptName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="dataGroupCode">
+            data_group_code = #dataGroupCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="beginTime">
+            rec_create_time >= concat(#beginTime#,' 00:00:00')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="endTime">
+            rec_create_time <![CDATA[<=]]> concat(#endTime#, ' 23:59:59')
+        </isNotEmpty>
+    </select>
+
+
+    <insert id="insert" parameterClass="com.baosight.wilp.mp.lj.domain.MpPurchaseOrder">
+        INSERT INTO mp_purchase_order (
+            id,  <!-- 主键 -->
+            order_no,  <!-- 订单号 -->
+            order_num,  <!-- 物资总数 -->
+            order_cost,  <!-- 总金额 -->
+            cont_id,
+            cont_no,
+            cont_name,
+            status_code,  <!-- 状态编码 -->
+            status_name,  <!-- 状态名称 -->
+            supplier_num,  <!-- 供应商编码 -->
+            supplier_name,  <!-- 供应商名称 -->
+            dept_num, <!-- 科室编码 -->
+            dept_name, <!-- 科室名称 -->
+            rec_creator,  <!-- 创建人 -->
+            rec_creator_name,  <!-- 创建人姓名 -->
+            rec_create_time,  <!-- 创建时间 -->
+            rec_revisor,  <!-- 修改人 -->
+            rec_revise_time,  <!-- 修改时间 -->
+            data_group_code,  <!-- 账套 -->
+            archive_flag  <!-- 归档标记 -->
+        )
+        VALUES (#id#, #orderNo#, #orderNum#, #orderCost#, #contId#, #contNo#, #contName#, #statusCode#, #statusName#, #supplierNum#, #supplierName#, #deptNum#, #deptName#, #recCreator#, #recCreatorName#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#, #archiveFlag#)
+    </insert>
+
+    <delete id="delete" parameterClass="string">
+        DELETE FROM mp_purchase_order WHERE id = #id# and status_code = '01'
+    </delete>
+
+    <update id="update" parameterClass="com.baosight.wilp.mp.lj.domain.MpPurchaseOrder">
+        UPDATE mp_purchase_order
+        SET
+            <isGreaterThan property="orderNum" compareValue="0">order_num = #orderNum#,</isGreaterThan>   <!-- 物资总数 -->
+            <isGreaterThan property="orderCost" compareValue="0">order_cost	= #orderCost#,</isGreaterThan>   <!-- 总金额 -->
+            <isNotEmpty property="statusCode">status_code = #statusCode#, </isNotEmpty>  <!-- 状态编码 -->
+            <isNotEmpty property="statusName">status_name = #statusName#, </isNotEmpty>  <!-- 状态名称 -->
+            rec_revisor	= #recRevisor#,   <!-- 修改人 -->
+            rec_revise_time	= #recReviseTime#   <!-- 修改时间 -->
+        WHERE id = #id#
+    </update>
+
+    <select id="queryDetail" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.mp.lj.domain.MpPurchaseOrderDetail">
+        SELECT
+            od.id	as "id",  <!-- 主键 -->
+            o.order_no  as "orderNo",  <!-- 采购订单号 -->
+            od.order_id	as "orderId",  <!-- 采购订单ID -->
+            od.cont_no	as "contNo",  <!-- 合同号 -->
+            od.mat_num	as "matNum",  <!-- 物资编码 -->
+            od.mat_name	as "matName",  <!-- 物资名称 -->
+            od.mat_type_id	as "matTypeId",  <!-- 物资分类ID -->
+            od.mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+            od.mat_spec	as "matSpec",  <!-- 物资规格 -->
+            od.mat_model	as "matModel",  <!-- 物资型号 -->
+            od.unit	as "unit",  <!-- 计量单位 -->
+            od.unit_name	as "unitName",  <!-- 计量单位 -->
+            od.price	as "price",  <!-- 单价 -->
+            od.num	as "num",  <!-- 订单数量 -->
+            od.enter_num	as "enterNum", <!-- 已入库数量 -->
+            od.picture_uri as "pictureUri", <!-- 图片地址 -->
+            od.has_invoice as "hasInvoice"  <!-- 是否已开票 -->
+        FROM mp_purchase_order o
+        left join mp_purchase_order_detail od on o.id = od.order_id
+        WHERE order_id = #orderId#
+        <isNotEmpty prepend=" AND " property="hasInvoice">
+            od.has_invoice = #hasInvoice#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="isNoAllEnter">
+            od.num > od.enter_num
+        </isNotEmpty>
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                od.mat_num, od.cont_no asc
+            </isEmpty>
+        </dynamic>
+    </select>
+
+    <select id="countDetail" parameterClass="java.util.HashMap" resultClass="int">
+        SELECT COUNT(*) FROM mp_purchase_order_detail WHERE order_id = #orderId#
+        <isNotEmpty prepend=" AND " property="hasInvoice">
+            od.has_invoice = #hasInvoice#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="isNoAllEnter">
+            od.num > od.enter_num
+        </isNotEmpty>
+    </select>
+
+    <select id="queryDetailNum" parameterClass="com.baosight.wilp.mp.lj.domain.MpPurchaseOrderDetail" resultClass="com.baosight.wilp.mp.lj.domain.MpPurchaseOrderDetail">
+        SELECT
+            price	as "price",  <!-- 单价 -->
+            num	as "num",  <!-- 订单数量 -->
+            enter_num	as "enterNum" <!-- 已入库数量 -->
+        FROM mp_purchase_order_detail WHERE order_id = #orderId# and mat_num = #matNum# and mat_type_id = #matTypeId#
+    </select>
+
+    <insert id="insertDetail" parameterClass="java.util.List">
+        INSERT INTO mp_purchase_order_detail (
+            id,  <!-- 主键 -->
+            order_id,  <!-- 采购订单ID -->
+            cont_no,  <!-- 合同号 -->
+            mat_num,  <!-- 物资编码 -->
+            mat_name,  <!-- 物资名称 -->
+            mat_type_id,  <!-- 物资分类ID -->
+            mat_type_name,  <!-- 物资分类名称 -->
+            mat_spec,  <!-- 物资规格 -->
+            mat_model,  <!-- 物资型号 -->
+            unit,  <!-- 计量单位 -->
+            unit_name,  <!-- 计量单位 -->
+            price,  <!-- 单价 -->
+            num,  <!-- 订单数量 -->
+            enter_num,  <!-- 已入库数量 -->
+            picture_uri,      <!-- 图片地址 -->
+            has_invoice        <!-- 是否已开票 -->
+        )
+        VALUES
+       <iterate conjunction=",">
+       (
+            #list[].id#,
+            #list[].orderId#,
+            #list[].contNo#,
+            #list[].matNum#,
+            #list[].matName#,
+            #list[].matTypeId#,
+            #list[].matTypeName#,
+            #list[].matSpec#,
+            #list[].matModel#,
+            #list[].unit#,
+            #list[].unitName#,
+            #list[].price#,
+            #list[].num#,
+            #list[].enterNum#,
+            #list[].pictureUri#,
+            #list[].hasInvoice#
+        )
+       </iterate>
+    </insert>
+
+    <delete id="deleteDetail" parameterClass="string">
+        DELETE FROM mp_purchase_order_detail WHERE order_id = #value#
+    </delete>
+
+    <update id="addHasInvoice" parameterClass="com.baosight.wilp.mp.lj.domain.MpInvoiceDetail">
+        UPDATE mp_purchase_order_detail SET has_invoice = 1  WHERE order_id = #orderId# and mat_num = #matNum# and mat_type_id	= #matTypeId#
+    </update>
+
+    <update id="removeHasInvoice" parameterClass="com.baosight.wilp.mp.lj.domain.MpInvoiceDetail">
+        UPDATE mp_purchase_order_detail SET has_invoice = 0  WHERE order_id = #orderId# and mat_num = #matNum# and mat_type_id	= #matTypeId#
+    </update>
+
+    <update id="updateDetail" parameterClass="com.baosight.wilp.mp.lj.domain.MpPurchaseOrderDetail">
+        UPDATE mp_purchase_order_detail SET enter_num = enter_num + #curEnterNum#
+        WHERE order_id = #orderId# and mat_num = #matNum# and mat_type_id	= #matTypeId#
+    </update>
+
+    <select id="hasAllEnter" parameterClass="string" resultClass="int">
+        select id from mp_purchase_order_detail where order_id = #value# and num > enter_num
+    </select>
+
+</sqlMap>

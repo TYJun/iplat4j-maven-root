@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="PM09">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.pm.domain.TpmSmsConfig">
+		SELECT
+			ID	as id,  
+			CONFIG_TYPE	as configType,  <!-- 配置类型 -->
+			CONFIG_TYPE_NAME	as configTypeName,  <!-- 配置类型名称 -->
+			SMS_TEMP	as smsTemp,  <!-- 短信模板 -->
+			STATUS_CODE	as statusCode,  <!-- 状态 -->
+			LATE_DAYS	as lateDays,  <!-- 超期天数 -->
+			IS_RUNING	as isRuning,  <!-- 是否启用: 1-启用，0-未启用 -->
+			SMS_RECV_CODE	as smsRecvCode <!-- 短信接收人代码 -->
+		FROM pm_sms_config WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="configType">
+			CONFIG_TYPE = #configType#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  ID asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<insert id="insert" parameterClass="com.baosight.wilp.pm.domain.TpmSmsConfig">
+		INSERT INTO pm_sms_config (ID,
+									CONFIG_TYPE,  <!-- 配置类型 -->
+									CONFIG_TYPE_NAME,  <!-- 配置类型名称 -->
+									SMS_TEMP,  <!-- 短信模板 -->
+									STATUS_CODE,  <!-- 状态 -->
+									LATE_DAYS,  <!-- 超期天数 -->
+									IS_RUNING,  <!-- 是否启用: 1-启用，0-未启用 -->
+									SMS_RECV_CODE  <!-- 短信接收人代码 -->
+									)		 
+	    VALUES (#id#, #configType#, #configTypeName#, #smsTemp#, #statusCode#, #lateDays#, #isRuning#, #smsRecvCode#) 
+	</insert>
+  
+	<delete id="delete" parameterClass="java.lang.String">
+	    delete from pm_sms_config where id = #id#
+	</delete>	
+	
+	
+	<!-- ====================================================生成短信开始================================================= -->
+	<select id="queryCalculateListByPrid" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		SELECT
+				tt.ID	as id,  <!-- 主键 -->
+				tt.DOCUMENTS_CODE	as documentsCode,  <!-- 文档编码 -->
+				tt.DOCUMENTS_NAME	as documentsName,  <!-- 文档名称 -->
+				tt.SUBMITTER_CODE	as submitterCode,  <!-- 提交人工号 -->
+				tt.SUBMITTER_NAME as submitter,
+				tt.RECIPIENT_CODE	as recipientCode,  <!-- 审核人工号 -->
+				tt.RECIPIENT_NAME	as recipient,  <!-- 审核人名称 -->
+				tt.CHARGE	as charge,  <!-- 结算费用 -->
+				tt.MATERIAL_STATUS_CODE	as materialStatusCode,  <!-- 决算材料 -->
+				tt.STATUS_CODE	as statusCode,  <!-- 施工确认 -->
+				tt.DATA_SUBMITTER_CODE	as dataSubmitterCode,  <!-- 资料提交人员 -->
+				tt.DATA_SUBMITTER_NAME as dataSubmitter,
+				tt.DATA_RECIPIENT_CODE	as dataRecipientCode,  <!-- 审计接受人员 -->
+				tt.DATA_RECIPIENT_NAME as dataRecipient,
+				tt.CAL_CHARGE	as calCharge,  <!-- 审计确认金额 -->
+				tt.DATA_CODE	as dataCode,  <!-- 提交资料编码 -->
+				tt.DATA_SUBMITTER_CODE_BACK	as dataSubmitterCodeBack,  <!-- 报告交付人员 -->
+				tt.DATA_SUBMITTER_CODE_BACK_NAME as dataSubmitterCodeBackName,
+				tt.DATA_RECIPIENT_CODE_BACK	as dataRecipientCodeBack,  <!-- 报告接收人员 -->
+				tt.DATA_RECIPIENT_CODE_BACK_NAME as dataRecipientCodeBackName,
+				tt.DATAGROUP_CODE	as dataGroupCode,  <!-- 账套 -->
+				tt.DOC_STATUS_CODE	as docStatusCode,  <!-- 归档文件状态编码 -->
+				tt.ARCHIVE_FLAG	as archiveFlag,  <!-- 归档标记 -->
+				tt.REC_CREATOR	as recCreator,  <!-- 记录创建责任者 -->
+				tt.REC_CREATE_TIME	as recCreateTime,  <!-- 记录创建时间 -->
+				tt.REC_REVISOR	as recRevisor,  <!-- 记录修改责任者 -->
+				tt.REC_REVISE_TIME	as recReviseTime <!-- 记录修改时间 -->
+		FROM pm_calculate tt
+		left join pm_calculate_del ttl on tt.DOCUMENTS_CODE = ttl.DOCUMENTS_CODE
+		WHERE ttl.PROJ_CODE = #id#
+	</select>
+	
+	<!-- =======================================短信发送人查询开始================================================= -->
+	<!-- 查询项目负责人 -->
+	<select id="queryReceiverForPrincipal" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		select CONTOR_ID workNo,CONTOR_NAME "name" from pm01 where id = #id#
+	</select>
+	
+	<!-- 查询项目联络人-->
+	<select id="queryReceiverForCons" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		select PROJECT_OBJECT_CONS workNo,PROJECT_OBJECT_CONS_NAME "name" from pm01 where id = #id#
+	</select>
+	
+	<!-- 查询执行人 -->
+	<select id="queryReceiverForStaff" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		select t1.EXEC_STAFF_ID workNo,t1.EXEC_STAFF_NAME "name",t1.NUMBER phone from pm_staff t1
+		where t1.PROJECT_PK = #id#
+	</select>
+	
+	<!-- 查询知会人 -->
+	<select id="queryReceiverForKnow" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		select t1.NOTIFY_STAFF_ID workNo,t1.NOTIFY_STAFF_NAME "name",t1.NUMBER phone from pm_know t1
+		where t1.PROJECT_PK = #id#
+	</select>
+	
+	<!-- 查询督办人 -->
+	<select id="queryReceiverForVia" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		select t1.SUPERVISE_MAKER workNo,t1.SUPERVISE_MAKER_NAME "name" from pm_via t1
+		where t1.PROJECT_PK = #id#
+	</select>
+	
+	<!-- 查询验收人 -->
+	<select id="queryReceiverForAccept" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		select TEST_STAFF_ID workNo,TEST_STAFF_NAME name,CONTACTTEL phone from pm_accept_staff where PROJECT_PK = #id#
+	</select>
+	
+	<!-- 查询乙方提交人 -->
+	<select id="queryReceiverForSubmitter" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		select tt.SUBMITTER_CODE workNo,tt.SUBMITTER_NAME "name" from pm_calculate tt
+		left join pm_calculate_del ttl on tt.DOCUMENTS_CODE = ttl.DOCUMENTS_CODE
+		left join pm01 pr on pr.PROJECT_NO = ttl.PROJ_CODE where pr.id = #id#
+	</select>
+	
+	<!-- 查询甲方收件人-->
+	<select id="queryReceiverForRecipient" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		select tt.RECIPIENT_CODE workNo,tt.RECIPIENT_NAME "name" from pm_calculate tt
+		left join pm_calculate_del ttl on tt.DOCUMENTS_CODE = ttl.DOCUMENTS_CODE
+		left join pm01 pr on pr.PROJECT_NO = ttl.PROJ_CODE where pr.id = #id#
+	</select>
+	
+	<!-- 查询资料提交人 -->
+	<select id="queryReceiverForDataSubmitter" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		select tt.DATA_SUBMITTER_CODE workNo,tt.DATA_SUBMITTER_NAME "name" from pm_calculate tt
+		left join pm_calculate_del ttl on tt.DOCUMENTS_CODE = ttl.DOCUMENTS_CODE
+		left join pm01 pr on pr.PROJECT_NO = ttl.PROJ_CODE where pr.id = #id#
+	</select>
+	
+	<!-- 查询审计接受人 -->
+	<select id="queryReceiverForDataRecipient" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		select tt.DATA_RECIPIENT_CODE,tt.DATA_RECIPIENT_NAME "name" from pm_calculate tt
+		left join pm_calculate_del ttl on tt.DOCUMENTS_CODE = ttl.DOCUMENTS_CODE
+		left join pm01 pr on pr.PROJECT_NO = ttl.PROJ_CODE where pr.id = #id#
+	</select>
+	
+	<!-- 查询报告交付人 -->
+	<select id="queryReceiverForDataSubmitterBack" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		select tt.DATA_SUBMITTER_CODE_BACK workNo,tt.DATA_SUBMITTER_CODE_BACK_NAME "name" from pm_calculate tt
+		left join pm_calculate_del ttl on tt.DOCUMENTS_CODE = ttl.DOCUMENTS_CODE
+		left join pm01 pr on pr.PROJECT_NO = ttl.PROJ_CODE where pr.id = #id#
+	</select>
+	
+	<!-- 查询报告接受人 -->
+	<select id="queryReceiverForDataRecipientBack" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		select tt.DATA_RECIPIENT_CODE_BACK workNo,tt.DATA_RECIPIENT_CODE_BACK_NAME "name" from pm_calculate tt
+		left join pm_calculate_del ttl on tt.DOCUMENTS_CODE = ttl.DOCUMENTS_CODE
+		left join pm01 pr on pr.PROJECT_NO = ttl.PROJ_CODE where pr.id = #id#
+	</select>
+	<!-- =======================================短信发送人查询结束================================================= -->
+	
+	<!-- 获取超期项目 -->
+	<select id="queryExpireProject" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			pr.ID as id,  
+			pr.PARENT_PROJECT_PK	as parentProjectPk, 
+			pr.PROJECT_NO	as projectNo, 
+			pr.PROJECT_NAME	as projectName,  
+			pr.PROJECT_PROP	as projectProp,  
+			pr.PROJECT_TYPE_NUM	as projectTypeNum, 
+			pr.PROJECT_CONTENT	as projectContent,  
+			pr.PROJECT_STATUS	as projectStatus, 
+			pr.PROJECT_OBJECT_CONS	as projectObjectCons,
+			pr.PROJECT_OBJECT_DEPT_NUM	as projectObjectDeptNum,  
+			pr.CONTOR_ID	as contorId,  
+			pr.UNDERTAKE_DEPT_NUM	as undertakeDeptNum, 
+			pr.START_DATE	as startDate,  
+			pr.FINISH_DEADLINE	as finishDeadline,  
+			pr.ACT_FINISTH_DATE	as actFinisthDate,  
+			pr.PROJECT_REMARK	as projectRemark,  
+			pr.YSTIME	as ystime,  
+			pr.DATAGROUP_CODE	as dataGroupCode
+		FROM pm01 pr
+		where pr.PROJECT_STATUS <![CDATA[<]]> '06' and pr.FINISH_DEADLINE = DATE_SUB(CURRENT_DATE(),INTERVAL #expireDay# DAY)
+		<isNotEmpty prepend="and" property="dataGroupCode">
+			pr.DATAGROUP_CODE = #dataGroupCode#
+		</isNotEmpty>
+	</select>
+	
+	<!-- 根据工号查询姓名 -->
+	<select id="queryNameByWorkNos" parameterClass="java.lang.String" resultClass="java.lang.String">
+		select GROUP_CONCAT(name) from tbmbd02 where FIND_IN_SET(work_no, #workNos#) 
+	</select>
+	<!-- ====================================================生成短信结束================================================= -->
+	
+</sqlMap>

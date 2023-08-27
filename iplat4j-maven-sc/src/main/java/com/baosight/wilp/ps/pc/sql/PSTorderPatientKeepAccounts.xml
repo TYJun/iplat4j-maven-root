@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="PSTorderPatientKeepAccounts">
+
+    <select id="query" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.ps.pc.domain.PSTorderPatientKeepAccounts">
+        SELECT
+        id as "id",  <!-- 主键 -->
+        REC_CREATOR as "recCreator",  <!-- 记录创建责任者 -->
+        REC_REVISE_TIME as "recReviseTime",  <!-- 记录修改时间 -->
+        REC_REVISOR as "recRevisor",  <!-- 记录修改责任者 -->
+        REC_CREATE_TIME as "recCreateTime",  <!-- 记录创建时间 -->
+        ARCHIVE_FLAG as "archiveFlag",  <!-- 归档标记 -->
+        fee_fn as "feeFn",  <!-- 费用结算流水号 -->
+        open_id as "openId",  <!-- 住院号 -->
+        user_name as "userName",  <!-- 用户姓名 -->
+        user_tel_number as "userTelNumber",  <!-- 用户电话 -->
+        building as "building",  <!-- 楼号 -->
+        building_name as "buildingName",  <!-- 楼 -->
+        floor as "floor",  <!-- 层号 -->
+        floor_name as "floorName",  <!-- 层 -->
+        dept_num as "deptNum",  <!-- 病区编码 -->
+        dept_name as "deptName",  <!-- 病区名称 -->
+        ward_code as "wardCode",  <!-- 病区编码 -->
+        ward_name as "wardName",  <!-- 病区名称 -->
+        bed_no as "bedNo",  <!-- 床位号 -->
+        bill_total_price as "billTotalPrice",  <!-- 订单总价 -->
+        pay_type as "payType",  <!-- 支付类型 -->
+        print_flag as "printFlag",  <!-- 打印标记[已打印()Y/未打印(N)] -->
+        reject_code as "rejectCode",  <!-- 作废标记。null/1/2，正常/审核作废/确定作废 -->
+        reject_reason as "rejectReason" <!-- 作废原因 -->
+        FROM sc_order_patient_keep_accounts WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+
+    </select>
+
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM sc_order_patient_keep_accounts WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+    </select>
+
+
+    <insert id="insert" >
+        INSERT INTO sc_order_patient_keep_accounts (id,  <!-- 主键 -->
+        REC_CREATOR,  <!-- 记录创建责任者 -->
+        REC_REVISE_TIME,  <!-- 记录修改时间 -->
+        REC_REVISOR,  <!-- 记录修改责任者 -->
+        REC_CREATE_TIME,  <!-- 记录创建时间 -->
+        ARCHIVE_FLAG,  <!-- 归档标记 -->
+        fee_fn,  <!-- 费用结算流水号 -->
+        open_id,  <!-- 住院号 -->
+        user_name,  <!-- 用户姓名 -->
+        user_tel_number,  <!-- 用户电话 -->
+        building,  <!-- 楼号 -->
+        building_name,  <!-- 楼 -->
+        floor,  <!-- 层号 -->
+        floor_name,  <!-- 层 -->
+        dept_num,  <!-- 病区编码 -->
+        dept_name,  <!-- 病区名称 -->
+        ward_code,  <!-- 病区编码 -->
+        ward_name,  <!-- 病区名称 -->
+        bed_no,  <!-- 床位号 -->
+        bill_total_price,  <!-- 订单总价 -->
+        pay_type,  <!-- 支付类型 -->
+        print_flag,  <!-- 打印标记[已打印()Y/未打印(N)] -->
+        reject_code,  <!-- 作废标记。null/1/2，正常/审核作废/确定作废 -->
+        reject_reason  <!-- 作废原因 -->
+        )
+        VALUES (#id#, #recCreator#, #recReviseTime#, #recRevisor#, #recCreateTime#, #archiveFlag#, #feeFn#, #openId#,
+        #userName#, #userTelNumber#, #building#, #buildingName#, #floor#, #floorName#, #deptNum#, #deptName#,
+        #wardCode#, #wardName#, #bedNo#, #billTotalPrice#, #payType#, #printFlag#, #rejectCode#, #rejectReason#)
+    </insert>
+
+    <delete id="delete">
+        DELETE
+        FROM sc_order_patient_keep_accounts
+        WHERE id = #id#
+    </delete>
+
+    <update id="update">
+        UPDATE sc_order_patient_keep_accounts
+        SET
+        REC_CREATOR = #recCreator#,   <!-- 记录创建责任者 -->
+        REC_REVISE_TIME = #recReviseTime#,   <!-- 记录修改时间 -->
+        REC_REVISOR = #recRevisor#,   <!-- 记录修改责任者 -->
+        REC_CREATE_TIME = #recCreateTime#,   <!-- 记录创建时间 -->
+        ARCHIVE_FLAG = #archiveFlag#,   <!-- 归档标记 -->
+        fee_fn = #feeFn#,   <!-- 费用结算流水号 -->
+        open_id = #openId#,   <!-- 住院号 -->
+        user_name = #userName#,   <!-- 用户姓名 -->
+        user_tel_number = #userTelNumber#,   <!-- 用户电话 -->
+        building = #building#,   <!-- 楼号 -->
+        building_name = #buildingName#,   <!-- 楼 -->
+        floor = #floor#,   <!-- 层号 -->
+        floor_name = #floorName#,   <!-- 层 -->
+        dept_num = #deptNum#,   <!-- 病区编码 -->
+        dept_name = #deptName#,   <!-- 病区名称 -->
+        ward_code = #wardCode#,   <!-- 病区编码 -->
+        ward_name = #wardName#,   <!-- 病区名称 -->
+        bed_no = #bedNo#,   <!-- 床位号 -->
+        bill_total_price = #billTotalPrice#,   <!-- 订单总价 -->
+        pay_type = #payType#,   <!-- 支付类型 -->
+        print_flag = #printFlag#,   <!-- 打印标记[已打印()Y/未打印(N)] -->
+        reject_code = #rejectCode#,   <!-- 作废标记。null/1/2，正常/审核作废/确定作废 -->
+        reject_reason = #rejectReason#  <!-- 作废原因 -->
+        WHERE
+        id = #id#
+    </update>
+
+</sqlMap>

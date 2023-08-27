@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="SIPK0101">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.si.pk.domain.SiInvenDetail">
+		SELECT
+				REC_CREATOR	as "recCreator",  <!-- 记录创建责任者 -->
+				REC_CREATE_TIME	as "recCreateTime",  <!-- 记录创建时间 -->
+				REC_REVISOR	as "recRevisor",  <!-- 记录修改责任者 -->
+				REC_REVISE_TIME	as "recReviseTime",  <!-- 记录修改时间 -->
+				ARCHIVE_FLAG	as "archiveFlag",  <!-- 归档标记 -->
+				ID	as "id",  <!-- 主键 -->
+				INVEN_BILL_DETAIL_NO	as "invenBillDetailNo",  <!-- 盘点单明细号 -->
+				INVEN_BILL_NO	as "invenBillNo",  <!-- 盘点单号 -->
+		        mat_type_num  as "matTypeNum",   <!-- 物资分类编码 -->
+		        mat_type_name as "matTypeName",   <!-- 物资分类名称 -->
+				MAT_NUM	as "matNum",  <!-- 物资编码 -->
+				MAT_NAME	as "matName",  <!-- 物资名称 -->
+				MAT_MODEL	as "matModel",  <!-- 物资型号 -->
+				MAT_SPEC	as "matSpec",  <!-- 物资规格 -->
+				UNIT	as "unit",  <!-- 计量单位编码 -->
+				UNIT_NAME	as "unitName",  <!-- 计量单位名称 -->
+				BEFORE_INVEN_NUM	as "beforeInvenNum",  <!-- 盘点前数量 -->
+				BEFORE_INVEN_AMOUNT	as "beforeInvenAmount",  <!-- 盘点前金额 -->
+				AFTER_INVEN_NUM	as "afterInvenNum",  <!-- 盘点后数量 -->
+				AFTER_INVEN_AMOUNT	as "afterInvenAmount",  <!-- 盘点后金额 -->
+				INVEN_DATE	as "invenDate",  <!-- 盘点日期 -->
+				INVEN_TIME	as "invenTime",  <!-- 盘点时间 -->
+				price	as "price" <!-- 单价 -->
+		FROM si_inven_detail WHERE 1=1
+		<isNotEmpty prepend=" AND " property="invenBillNo">
+			INVEN_BILL_NO = #invenBillNo#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+         	<isNotEmpty property="orderBy">
+    		  	$orderBy$
+   		 	</isNotEmpty>
+   			<isEmpty property="orderBy">
+    		  	MAT_NUM asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<insert id="insert" parameterClass="com.baosight.wilp.si.pk.domain.SiInvenDetail">
+		INSERT INTO si_inven_detail (REC_CREATOR,  <!-- 记录创建责任者 -->
+										REC_CREATE_TIME,  <!-- 记录创建时间 -->
+										REC_REVISOR,  <!-- 记录修改责任者 -->
+										REC_REVISE_TIME,  <!-- 记录修改时间 -->
+										ARCHIVE_FLAG,  <!-- 归档标记 -->
+										ID,  <!-- 主键 -->
+										INVEN_BILL_DETAIL_NO,  <!-- 盘点单明细号 -->
+										INVEN_BILL_NO,  <!-- 盘点单号 -->
+										mat_type_num,   <!-- 物资分类编码 -->
+										mat_type_name,   <!-- 物资分类名称 -->
+										MAT_NUM,  <!-- 物资编码 -->
+										MAT_NAME,  <!-- 物资名称 -->
+										MAT_MODEL,  <!-- 物资型号 -->
+										MAT_SPEC,  <!-- 物资规格 -->
+										UNIT,  <!-- 计量单位编码 -->
+										UNIT_NAME,  <!-- 计量单位名称 -->
+										BEFORE_INVEN_NUM,  <!-- 盘点前数量 -->
+										BEFORE_INVEN_AMOUNT,  <!-- 盘点前金额 -->
+										AFTER_INVEN_NUM,  <!-- 盘点后数量 -->
+										AFTER_INVEN_AMOUNT,  <!-- 盘点后金额 -->
+										INVEN_DATE,  <!-- 盘点日期 -->
+										INVEN_TIME,  <!-- 盘点时间 -->
+										price  <!-- 单价 -->
+										)		 
+	    VALUES (#recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #archiveFlag#, #id#, #invenBillDetailNo#, #invenBillNo#, #matTypeNum#, #matTypeName#, #matNum#, #matName#, #matModel#, #matSpec#, #unit#, #unitName#, #beforeInvenNum#, #beforeInvenAmount#, #afterInvenNum#, #afterInvenAmount#, #invenDate#, #invenTime#, #price#)
+	</insert>
+  
+	<delete id="delete" parameterClass="string">
+		DELETE FROM si_inven_detail WHERE INVEN_BILL_NO = #invenBillNo#
+	</delete>
+	
+	<update id="update" parameterClass="com.baosight.wilp.si.pk.domain.SiInvenDetail">
+ 		UPDATE si_inven_detail 
+ 			<dynamic prepend="set">
+ 				<isNotNull prepend="," property="recRevisor">            
+               		rec_revisor = #recRevisor#
+				</isNotNull>
+				<isNotNull prepend="," property="recReviseTime">
+               		rec_revise_time = #recReviseTime#
+				</isNotNull>
+				<isNotNull prepend="," property="afterInvenNum">
+               		AFTER_INVEN_NUM = #afterInvenNum#
+				</isNotNull>
+				<isNotNull prepend="," property="afterInvenAmount">
+               		AFTER_INVEN_AMOUNT = #afterInvenAmount#
+				</isNotNull>
+				<isNotNull prepend="," property="price">
+               		price = #price#
+				</isNotNull>
+				<isNotNull prepend="," property="invenDate">
+               		INVEN_DATE	= #invenDate#
+				</isNotNull>
+				<isNotNull prepend="," property="invenTime">
+               		INVEN_TIME	= #invenTime#
+				</isNotNull>
+ 			</dynamic>
+ 		WHERE 1=1
+ 		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="invenBillDetailNo">
+			INVEN_BILL_DETAIL_NO = #invenBillDetailNo#
+		</isNotEmpty>
+	</update>
+
+	<!-- 查询物资列表 -->
+	<select id="queryMatInformationByInven" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT t.* FROM (
+		SELECT am.id AS "id",
+		am.mat_code AS "matNum",
+		am.mat_name AS "matName",
+		am.mat_class_id AS "matClassId",
+		amc.mat_class_code AS "matTypeNum",
+		amc.mat_class_name AS "matTypeName",
+		am.mat_spec AS "matSpec",
+		am.mat_model AS "matModel",
+		am.unit AS "unit",
+		b.ITEM_CNAME AS "unitName",
+		am.price AS "price",
+		acs.supplier_name AS "supplier",
+		am.manufacturer AS "manufacturer",
+		am.mat_type_code AS "matTypeCode",
+		am.remark AS "remark",
+		am.status AS "status",
+		am.rec_create_time AS "recCreateTime",
+		am.picture_uri AS pictureUri
+		FROM $projectSchema$.ac_material am
+		LEFT JOIN $projectSchema$.ac_material_class amc ON amc.id = am.mat_class_id
+		LEFT JOIN $projectSchema$.ac_supplier acs ON acs.supplier_code = am.supplier
+		LEFT JOIN $platSchema$.tedcm01 b ON b.ITEM_CODE = am.unit AND b.CODESET_CODE = 'wilp.ac.gm.unit'
+		) t
+		WHERE 1=1 AND NOT EXISTS(SELECT a.mat_num FROM si_inven_detail a WHERE a.inven_bill_no = #invenBillNo# AND a.mat_num = t.matNum)
+		and t.status = '1'
+		<isNotEmpty prepend="and" property="matTypeNum">
+			t.matTypeNum = #matTypeNum#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matNum">
+			t.matNum = #matNum#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matName">
+			t.matName like concat('%',#matName#,'%')
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				t.matTypeNum,t.matName desc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<insert id="batchInsertInvenDetail" parameterClass="java.util.List">
+		INSERT INTO si_inven_detail (REC_CREATOR,  <!-- 记录创建责任者 -->
+		REC_CREATE_TIME,  <!-- 记录创建时间 -->
+		ID,  <!-- 主键 -->
+		INVEN_BILL_DETAIL_NO,  <!-- 盘点单明细号 -->
+		INVEN_BILL_NO,  <!-- 盘点单号 -->
+		mat_type_num,   <!-- 物资分类编码 -->
+		mat_type_name,   <!-- 物资分类名称 -->
+		MAT_NUM,  <!-- 物资编码 -->
+		MAT_NAME,  <!-- 物资名称 -->
+		MAT_MODEL,  <!-- 物资型号 -->
+		MAT_SPEC,  <!-- 物资规格 -->
+		UNIT,  <!-- 计量单位编码 -->
+		UNIT_NAME,  <!-- 计量单位名称 -->
+		price,  <!-- 单价 -->
+		BEFORE_INVEN_NUM,  <!-- 盘点前数量 -->
+		BEFORE_INVEN_AMOUNT,  <!-- 盘点前金额 -->
+		AFTER_INVEN_NUM,  <!-- 盘点后数量 -->
+		AFTER_INVEN_AMOUNT,  <!-- 盘点后金额 -->
+		INVEN_DATE,  <!-- 盘点日期 -->
+		INVEN_TIME  <!-- 盘点时间 -->
+		)
+		VALUES
+		<iterate conjunction=",">
+		(#list[].recCreator#,
+		 #list[].recCreateTime#,
+		 #list[].id#,
+		 #list[].invenBillDetailNo#,
+		 #list[].invenBillNo#,
+		 #list[].matTypeNum#,
+		 #list[].matTypeName#,
+		 #list[].matNum#,
+		 #list[].matName#,
+		 #list[].matModel#,
+		 #list[].matSpec#,
+		 #list[].unit#,
+		 #list[].unitName#,
+		 #list[].price#,
+		 #list[].num#,
+		 #list[].totalAmount#,
+		 #list[].afterInvenNum#,
+		 #list[].afterInvenAmount#,
+		 #list[].invenDate#,
+		 #list[].invenTime#)
+		</iterate>
+	</insert>
+  
+</sqlMap>

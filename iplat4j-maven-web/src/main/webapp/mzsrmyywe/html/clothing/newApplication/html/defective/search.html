@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>次品查询</title>
+    <link rel="stylesheet" href="../../css/defective/search.css">
+    <link rel="stylesheet" href="../../../../../html/reference/mui/css/mui.min.css">
+    <link rel="stylesheet" href="../../../../../html/reference/mui/css/mui.picker.css">
+    <link rel="stylesheet" href="../../../../../html/reference/mui/css/mui.picker.min.css">
+
+    <!-- <script src="../../../../html/reference/mui/js/mui.dtpicker.js"></script> -->
+    <!-- <script src="../../../../html/reference/mui/js/mui.min.js"></script> -->
+    <link rel="stylesheet" href="../../../../../html/reference/mui/css/mui.dtpicker.css">
+</head>
+<body>
+    <!-- 顶部区域 -->
+    <header>
+        <div class='top'>
+            <div id="top-bar">
+                <h1 id="title">次品查询</h1>
+                <span id="icon-left-back" class="mui-icon mui-icon-arrowleft"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 下拉栏 -->
+    <div class="pulldown">
+        <ul class="mui-table-view" > 
+            <li class="mui-table-view-cell " id="selectdate">
+                <a class="mui-navigate-right" href="#">选择日期</a>
+                <!-- <div class="mui-collapse-content" id="dates">
+                    <p>面板1子内容</p>
+                </div> -->
+            </li>
+        </ul> 
+        <ul class="mui-table-view"> 
+            <li class="mui-table-view-cell mui-collapse">
+                <a class="mui-navigate-right" href="#">选择科室名/洁物库</a>
+                <div class="mui-collapse-content">
+                    <p>面板1子内容</p>
+                </div>
+            </li>
+        </ul> 
+        <ul class="mui-table-view"> 
+            <li class="mui-table-view-cell mui-collapse">
+                <a class="mui-navigate-right" href="#">选择医用织物名称</a>
+                <div class="mui-collapse-content">
+                    <p>面板1子内容</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 按钮 -->
+        <button type="button" class="mui-btn" id="searchbtn">查询</button>
+        <button type="button" class="mui-btn" id="resetbtn">重置</button>
+    <!-- 查询结果 -->
+    <div class="searchresult">
+        <ul class="list_card">
+            <li>
+                <div class="card">
+                    <div id="top">
+                        <span class="mui-icon mui-icon-list"></span>
+                        <span class="ordNum">A20211314038</span>
+                    </div>
+                    <div id="bto">
+                        <ul>
+                            <li>
+                                <span class="Name">申报时间</span>
+                                <span class="value">2021-06-20</span>
+                            </li>
+                            <li>
+                                <span class="Name">申报地点</span>
+                                <span class="value">东苑仓库</span>
+                            </li>
+                            <li>
+                                <span class="Name">申报数量</span>
+                                <span class="value">共1件</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+
+            <li>
+                <div class="card">
+                    <div id="top">
+                        <span class="mui-icon mui-icon-list"></span>
+                        <span class="ordNum">A20211314038</span>
+                    </div>
+                    <div id="bto">
+                        <ul>
+                            <li>
+                                <span class="Name">申报时间</span>
+                                <span class="value">2021-06-20</span>
+                            </li>
+                            <li>
+                                <span class="Name">申报地点</span>
+                                <span class="value">东苑仓库</span>
+                            </li>
+                            <li>
+                                <span class="Name">申报数量</span>
+                                <span class="value">共1件</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <script src="../../../../../reference/assets/js/jquery.min.js"></script>
+    <script src="../../../../../html/reference/mui/js/mui.min.js"></script>
+    <script src="../../../../../html/reference/mui/js/mui.picker.min.js"></script>
+    <script>
+        // 日期选择器
+        console.log( $("#selectdate"));
+        $("#selectdate").click(function(){
+            $("#selectdate").text("");
+            $(this).toggleClass('mui-active')
+            var dtPicker = new mui.DtPicker({
+                type: 'date'
+            }); 
+            dtPicker.show(function (selectItems) { 
+            //点击确定后执行下列
+            $("#selectdate").text(selectItems.value);
+            console.log(selectItems.value)
+        })
+        });
+        //返回历史列表页面
+        $("#icon-left-back").click(function(){
+            location.href = './historyList.html';
+        });
+    </script>
+</body>
+</html>

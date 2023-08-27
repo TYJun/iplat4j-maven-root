@@ -1,0 +1,1693 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <!--   <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'"> -->
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../../reference/bootstrap-3.3.5/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../reference/bootstrap-3.3.5/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../reference/loading/loaders.min.css">
+    <link rel="stylesheet" href="../../reference/mobiscroll-2.5.2/css/mobiscroll.custom-2.5.2.min.css">
+    <link rel="stylesheet" href="../../css/android-ios.css">
+    <link rel="stylesheet" href="../../css/loading.css" />
+    <!-- <link rel="stylesheet" href="../../reference/mui/css/mui.css" /> -->
+</head>
+<STYLE TYPE="text/css">
+    body {
+        background: #F1F1F1;
+    }
+    
+    hr {
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+    
+    h3 {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .round {
+        border: 1px solid #2aabd2;
+        -moz-box-shadow: 3px 3px 4px #2aabd2;
+        -webkit-box-shadow: 3px 3px 4px #2aabd2;
+        box-shadow: 3px 3px 4px #2aabd2;
+        width: 70%;
+        height: 175px;
+        position: absolute;
+        overflow: scroll;
+        overflow-x: hidden;
+        background-color: #FFFFFF;
+        border-radius: 3px;
+    }
+    
+    .btn-sb {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background: #2aabd2;
+        text-align: center;
+        height: 50px;
+        line-height: 50px;
+        color: #fff;
+        font-size: 18px;
+    }
+    
+    .navbar {
+        margin-bottom: 0px;
+    }
+    
+    .nav>li>a {
+        padding: 5px 5px;
+    }
+    
+    h1 {
+        margin: 0 0 0rem;
+    }
+    
+    .row {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+</STYLE>
+
+<body>
+    <div>
+        <nav class="navbar navbar-fixed-top navbar-inverse nav-height">
+            <div id="back" class="glyphicon-btn-left">
+                <span class="glyphicon glyphicon-triangle-left userBtn" style="margin-left:1rem;"></span>
+            </div>
+            <div>
+                <h1 class="title-right">润滑登记</h1>
+            </div>
+
+        </nav>
+    </div>
+    <!-- 警告 -->
+    <div id="warn" class="warn" hidden>
+        <!-- hidden标签表示对元素进行隐藏 -->
+        <!-- small标签：定义小型文本(和旁注)-->
+        <small></small>
+    </div>
+    <!-- 加载 -->
+    <div id="loading" class="spinner" style="position:fixed;z-index:9999;text-align:center;width:100%;">
+        <!-- position:标签表示定位   fiexed表示相对浏览器窗口固定位置-->
+        <!-- z-index：表示一个元素的堆叠顺序 -->
+        <!-- text-align:文本对齐发方式 center:表示居中 -->
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    <!-- 上传 -->
+    <div id="upload" class="transparent" hidden>
+        <div id="waiting" class="loader loading-position">
+            <div class="loader-inner line-spin-fade-loader">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        <!-- 正在提交，请稍候... -->
+        <div style="color:#fff;position:relative;width:100%;text-align:center;top:40%;">正在提交，请稍候...</div>
+        <!-- 提交成功 -->
+        <div id="succeed" class="result-window" hidden>
+            <span class="glyphicon glyphicon-ok-circle" style="font-size:40px;color:#25F706;"></span>
+            <span style="color:#25F706;">提交成功</span>
+        </div>
+        <!-- 提交失败 -->
+        <div id="failed" class="result-window" hidden>
+            <span class="glyphicon glyphicon-remove-circle" style="font-size:40px;color:#FF7C7C;"></span>
+            <span style="color:#FF7C7C;">提交失败了</span>
+        </div>
+    </div>
+    <!-- 内容区  -->
+    <div id="content" class="top50">
+        <div style="width:100%;background:#fff;border:1px solid #eee;margin-bottom:0px;">
+            <!--<div class="row" style="margin-top:10px;">
+					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+						工单号
+					</div>
+					<div id="taskNo" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+
+					</div>
+				</div>
+				<hr style="margin-top:10px;">-->
+
+
+            <div class="row" id="lubricateNo" style="margin-top:10px;position: relative;" hidden>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    润滑单号
+                </div>
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" id="departIcon" style="text-align:right;">
+                    <input type="text" id="lubricateNo" style="border:none;outline:none;text-align:right;font-size:12px;width:100%;" placeholder="点击选择维修科室" readonly>
+                    <p id="departCode" hidden></p>
+                </div>
+            </div>
+
+            <div class="row" id="machineCode" style="margin-top:10px;position: relative;" hidden>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    设备编码
+                </div>
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" id="departIcon" style="text-align:right;">
+                    <input type="text" id="machineCode" style="border:none;outline:none;text-align:right;font-size:12px;width:100%;" placeholder="" readonly>
+                    <p id="departCode" hidden></p>
+                </div>
+            </div>
+
+
+
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    设备
+                </div>
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                    <input id="machineName" type="text" style="border:none;outline:none;text-align:right;font-size: 12px;" placeholder="请输入设备名称">
+                </div>
+            </div>
+            <hr style="margin-top:10px;">
+            <!-- <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    设备名称
+                </div>
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                    <input id="machineName" style="border:none;outline:none;text-align:right;" readonly="readonly" />
+                </div>
+            </div> -->
+
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    安装地点
+                </div>
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                    <input id="fixedPlace" type="text" style="border:none;outline:none;text-align:right;font-size: 12px;" placeholder="请输入安装地点">
+                </div>
+            </div>
+            <hr style="margin-top:10px;">
+
+
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    润滑单位
+                </div>
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                    <input id="lubricateDeptName" type="text" style="border:none;outline:none;text-align:right;font-size: 12px;" placeholder="请输入润滑单位">
+                </div>
+            </div>
+            <hr style="margin-top:10px;">
+
+
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    负责人
+                </div>
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                    <input id="lubricateManageName" type="text" style="border:none;outline:none;text-align:right;font-size: 12px;" placeholder="请输入负责人">
+                </div>
+            </div>
+            <hr style="margin-top:10px;">
+
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 font-grey">
+                    润滑日期
+                </div>
+                <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7" style="text-align:right;">
+                    <input class="newInput" id="lubricateDate" type="text" style="border:none;outline:none;text-align:right;font-size:12px;width:100%;" placeholder="选择保洁日期">
+                </div>
+            </div>
+
+
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    作业说明
+                </div>
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                    <input id="remark" type="text" style="border:none;outline:none;text-align:right;font-size: 12px;" placeholder="请输入作业说明">
+                </div>
+            </div>
+
+
+            <!-- <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    设备编码
+                </div>
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                    <input id="machineCode" style="border:none;outline:none;text-align:right;" readonly="readonly" />
+                </div>
+            </div>
+            <hr style="margin-top:10px;">
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    报修人
+                </div>
+                <div id="name" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+
+                </div>
+            </div>
+            <hr style="margin-top:10px;"> -->
+            <!-- <div class="row">
+                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 font-grey" style="padding-top: 10px">
+                    任务是否紧急
+                </div>
+                <div id="YorN" class="col-xs-7 col-sm-7 col-md-7 col-lg-7" style="text-align:right;display: flex;height: 40px">
+                    <div class="mui-input-row mui-radio">
+                        <label style="font-weight: normal">是</label>
+                        <input name="radio1" type="radio" id="Y" style="top: 2px">
+                    </div>
+                    <div class="mui-input-row mui-radio">
+                        <label style="font-weight: normal">否</label>
+                        <input name="radio1" type="radio" id="N" style="top: 2px">
+                    </div>
+                </div>
+            </div> -->
+            <!-- <hr style="margin-top:10px;">
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    报修电话
+                </div>
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                    <input id="phoneNum" style="border:none;outline:none;text-align:right;" placeholder="请输入报修电话" maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')">
+                </div>
+            </div>
+            <hr style="margin-top:10px;"> -->
+
+            <!-- <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    报修来源
+                </div>
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;color:#3EC521;">
+                    请选择报修来源
+                    <p id="repairSource" hidden>01</p>
+                </div>
+
+            </div> -->
+            <!-- <div id="yang" class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 center">
+                    <button type='button' value="01" id="butOne" class='status btn btn-sm  btn-info' style='width:70px;text-align:center;text-shadow: none;width:100%;'>医务报修</button>
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 center">
+                    <button type='button' value="02" id="butTwo" class='status btn btn-sm btn-default' style='width:70px;text-align:center;text-shadow: none;width:100%;'>班组自查</button>
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 center">
+                    <button type='button' value="03" id="butThree" class='status btn btn-sm btn-default' style='width:70px;text-align:center;text-shadow: none;width:100%;'>领导巡查</button>
+                </div>
+            </div>
+            <hr style="margin-top:10px;"> -->
+
+            <!-- <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    报修科室
+                </div>
+                <div id="reqDeptName" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+
+                </div>
+            </div>
+            <hr style="margin-top:10px;"> -->
+
+            <!-- <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    楼
+                </div>
+                <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7" style="text-align:right;">
+                    <input type="text" id="building" style="border:none;outline:none;text-align:right;font-size:12px;width:100%;" placeholder="选择楼" readonly>
+                </div>
+                <div id="addIcon1" class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding:0px;">
+                    <span class="glyphicon glyphicon-map-marker" style="color:#EF8915;"></span>
+                </div>
+            </div>
+            <hr style="margin-top:10px;"> -->
+            <!-- <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    楼
+                </div>
+                <div id="building" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+
+                </div>
+            </div> -->
+            <!-- <hr style="margin-top:10px;"> 
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    层
+                </div>
+                <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7" style="text-align:right;">
+                    <input type="text" id="floor" style="border:none;outline:none;text-align:right;font-size:12px;width:100%;" placeholder="选择层" readonly>
+                </div>
+                <div id="addIcon2" class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding:0px;">
+                    <span class="glyphicon glyphicon-map-marker" style="color:#EF8915;"></span>
+                </div>
+            </div>
+            <hr style="margin-top:10px;">
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    层
+                </div>
+                <div id="floor" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                </div>
+            </div>
+            <hr style="margin-top:10px;">
+
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    地点
+                </div>
+                <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7" style="text-align:right;">
+                    <input type="text" id="reqSpotName" style="border:none;outline:none;text-align:right;font-size:12px;width:100%;" placeholder="选择或输入查询地点">
+                </div>
+                <div id="addIcon3" class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding:0px;">
+                    <span class="glyphicon glyphicon-map-marker" style="color:#EF8915;"></span>
+                </div>
+            </div>
+            <hr style="margin-top:10px;"> -->
+            <!-- <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    地点
+                </div>
+                <div id="reqSpotName" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                </div>
+            </div> -->
+            <!-- <hr style="margin-top:10px;"> -->
+            <!-- <div class="row" style="margin-top:10px;position: relative;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    维修事项
+                </div>
+                <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7" style="text-align:right;">
+                    <input type="text" id="itemName" style="border:none;outline:none;text-align:right;font-size:12px;width:100%;" placeholder="选择或输入维修事项" oninput="getItemByName(this.value)">
+                    <p id="itemCode" hidden></p>
+                </div>
+                <div id="itemIcon" class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="padding:0px;">
+                    <span class="glyphicon glyphicon-tags" style="color:#EF8915;"></span>
+                </div>
+                <div id="closeSpanss" style="position:absolute;z-index:200;top:42px;right:3px;width:55px;height:25px;text-align: center;" hidden>
+                    关闭
+                </div>
+            </div> -->
+            <!-- <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    故障描述
+                </div>
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                    <input id="itemName" type="text" style="border:none;outline:none;text-align:right;font-size: 12px;" placeholder="请输入故障描述">
+                </div>
+            </div>
+            <hr style="margin-top:10px;">
+
+            <div class="row" id="departParent" style="margin-top:10px;position: relative;" hidden>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    维修科室
+                </div>
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" id="departIcon" style="text-align:right;">
+                    <input type="text" id="departName" style="border:none;outline:none;text-align:right;font-size:12px;width:100%;" placeholder="点击选择维修科室" readonly>
+                    <p id="departCode" hidden></p>
+                </div>
+            </div> -->
+            <!-- <hr id="departHr" style="margin-top:10px;" hidden>
+
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 font-grey">
+                    预约维修时间
+                </div>
+                <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7" style="text-align:right;">
+                    <input class="newInput" id="reOrderTime" type="text" style="border:none;outline:none;text-align:right;font-size:12px;width:100%;" placeholder="选择预约维修时间">
+                </div>
+            </div>
+            <hr style="margin-top:10px;">
+
+            <div class="row" style="margin-top:10px;">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+          设备档案
+        </div>
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+          <input id="deviceSelect" type="text" style="border:none;outline:none;text-align:right;font-size:12px;width:100%;" data-toggle="modal"
+   				data-target="#myModalWaste" placeholder="选择设备档案">
+        </div>
+        <p id="itemTypeCode" hidden></p> -->
+            <!-- </div>
+      <hr style="margin-top:10px;"> -->
+            <!-- <div class="row" style="margin-top:10px;">
+					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+						事项分类
+					</div>
+					<div id="itemTypeName" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;font-size:12px;line-height:20px;">
+					</div>
+					<p id="itemTypeCode" hidden></p>
+				</div>
+				<hr style="margin-top:10px;"> 
+
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    备注
+                </div>
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                    <input id="comments" type="text" style="border:none;outline:none;text-align:right;font-size: 12px;" placeholder="请输入备注">
+                </div>
+            </div>  -->
+            <!-- <hr style="margin-top:10px;">
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    图片上传
+                </div>
+                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                    <button type="button" id="btnPicture" class="btn btn-info btn-sm">本地上传</button>
+                    <button type="button" id="btnCamera" class="btn btn-info btn-sm">相机拍摄</button>
+                </div>
+            </div>
+            <hr style="margin-top:10px;">
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 font-grey">
+                    图片
+                </div>
+            </div>
+            <hr style="margin-top:10px;">
+            <div class="row" style="margin-top:10px;">
+                <div id="picture" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row">
+                </div>
+            </div> -->
+            <!-- <hr style="margin-top:10px;">  -->
+            <!-- <div class="row" style="margin-top:10px;">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+            录音
+        </div>
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+            <button type="button" class="btn btn-info btn-sm" onclick="audioCapture()">录音</button>
+        </div>
+      </div>-->
+            <hr style="margin-top:10px;">
+
+            <div class="row" style="margin-top:10px;margin-bottom:70px;">
+                <div id="luyin" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row">
+                </div>
+            </div>
+        </div>
+
+        <button id="submit" type="button" class="btn btn-info btn-block" style="height:40px;border-radius:2px;position: fixed;bottom: 0px;">
+           提交
+    </button>
+
+    </div>
+
+    <!-- <div id="submit" class="btn-sb">
+    提交
+  </div>  -->
+
+    <!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">
+                        图片预览
+                    </h4>
+                </div>
+                <div style="text-align:center;">
+                    <img id="bigPicture">
+                </div>
+                <div class="modal-footer">
+                    <button id="delPic" type="button" class="btn btn-danger btn-block" data-dismiss="modal">删除图片
+          </button>
+                    <button type="button" class="btn btn-primary btn-block" data-dismiss="modal">
+          </button>
+                </div>
+            </div>
+        </div>
+    </div>  -->
+
+    <!--报废原因-->
+    <!-- <div class="modal fade" id="myModalWaste" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="margin-top:15%;">
+			<div class="modal-dialog">
+				<div class="modal-content" style="margin-top:100px;padding-top:15px;height:350px;overflow-y:auto;">
+					<div class="modal-header" style="position:fixed;z-index:2000;background:#FFFFFF;TOP:0;">
+						<div class="row">
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align:">
+								<input id="shebei" type="text" style="width:130%;border:1px solid #D0D6D6;outline:none;text-align:center;height:30px;" placeholder="输入设备名称" />
+							</div>
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align:left;">
+								<input id="place" type="text" style="width:130%;border:1px solid #D0D6D6;outline:none;text-align:center;height:30px;" placeholder="输入安装地点" />
+							</div>
+							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="text-align:left;">
+								<button id="searchIn" type="button" class="btn btn-sm" style="height:30px;width:100%;background:#43B6D8;color:#FFFFFF;">搜索</button>
+							</div>
+						</div>
+					</div>
+					<div class="row" style="margin-top:50px;">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="text-align:center;overflow-y:auto;">
+							<ul id="ddUl" class="nav nav-pills nav-justified">
+
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div> -->
+
+    <!-- <div id="getItemByName" class="round" hidden>
+        <ul class="nav nav-pills nav-justified getItemByName" style="clear:both;position: relative;padding-top: 20px;">
+        </ul>
+    </div> -->
+
+    <!-- <div id="getAddByName" class="round" hidden>
+        <ul class="nav nav-pills nav-justified getAddByName" style="clear:both;position: relative;padding-top: 20px;">
+        </ul>
+    </div> -->
+
+    <!-- <div class="modal fade" id="addIconModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="margin-top:15%;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">
+                        地点选择
+                    </h4>
+                </div>
+                <div class="row">
+                    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="text-align:right;height:300px;overflow-y:auto;">
+                        <ul id="ks" class="nav nav-pills nav-justified">
+
+                        </ul>
+                    </div>
+                    <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7" style="text-align:left;height:300px;overflow-y:auto;">
+                        <ul id="dd" class="nav nav-pills nav-justified">
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-block" data-dismiss="modal">
+          	关闭
+          </button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- <div class="modal fade" id="itemIconModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="margin-top:15%;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">
+                        事项选择
+                    </h4>
+                </div>
+                <div class="row">
+                    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="text-align:right;height:300px;overflow-y:auto;">
+                        <ul id="sx1" class="nav nav-pills nav-justified">
+
+                        </ul>
+                    </div>
+                    <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7" style="text-align:left;height:300px;overflow-y:auto;">
+                        <ul id="sx2" class="nav nav-pills nav-justified">
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-block" data-dismiss="modal">
+          	关闭
+          </button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!-- 
+    <div class="modal fade" id="departIconModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="margin-top:15%;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">
+                        科室选择
+                    </h4>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="text-align:right;height:300px;overflow-y:auto;">
+                        <ul id="departX1" class="nav nav-pills nav-justified">
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-block" data-dismiss="modal">
+          	关闭
+          </button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!-- <div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="margin-top:15%;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="addressTitle">
+
+                    </h4>
+                </div>
+                <div class="row">
+                    <ul id="address" class="nav nav-pills nav-justified" style="max-height:300px;overflow-x:hidden;">
+
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-block" data-dismiss="modal">关闭
+          </button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!-- <div class="modal fade" id="itemIconModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="margin-top:15%;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">
+                        事项选择
+                    </h4>
+                </div>
+                <div class="row">
+                    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="text-align:right;height:300px;overflow-y:auto;">
+                        <ul id="sx1" class="nav nav-pills nav-justified">
+
+                        </ul>
+                    </div>
+                    <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7" style="text-align:left;height:300px;overflow-y:auto;">
+                        <ul id="sx2" class="nav nav-pills nav-justified">
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-block" data-dismiss="modal">关闭
+          </button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+</body>
+<script src="../../reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../../reference/bootstrap-3.3.5/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../../reference/loading/loaders.css.js" type="text/javascript"></script>
+<script src="../../reference/mobiscroll-2.5.2/js/mobiscroll.custom-2.5.2.min.js" type="text/javascript"></script>
+<script src="../../reference/mobiscroll-2.5.2/dev/js/mobiscroll.core-2.5.2-zh.js" type="text/javascript"></script>
+<script src="../../reference/mobiscroll-2.5.2/dev/js/mobiscroll.datetime-2.5.1-zh.js" type="text/javascript"></script>
+<!-- <script type="text/javascript" src="../../cordova.js"></script> -->
+<script type="text/javascript">
+    // 读取localStorage项，储存在浏览器，属性是只读，用于长久保存整个网站的数据，保存的数据没有过期时间，直到手动去删除
+    var baseUrl = localStorage.getItem("url");
+    var reqStaffName = localStorage.getItem("name");
+    //var baseUrl = "http://localhost:8099/iplat/";
+    var workNo = localStorage.getItem("workNo"); //工号
+    //console.log(workNo,baseUrl);
+    var deptCode = localStorage.getItem("deptCode"); //科室代码
+    var sendUrl = baseUrl + "app_maintainController.do?saveTask";
+    var itemcheck = localStorage.getItem('itemcheck');
+    /*console.log(telphone2);*/
+    // 初始化定义
+    var testNumber = 0;
+    var deviceCode = '',
+        wgroupCode = '',
+        roless = '';
+    var _this = "";
+    var roles = localStorage.getItem('role');
+    var arrays = new Array(); //创建一个空的数组
+    // arrays = roles.split(',');
+    //维修地点   楼层
+    var reqSpotNum = "",
+        buildingName = "",
+        floorName = "",
+        buildingName = "";
+    //获取前面传来的设备编码和设备名称
+    //假设URL是http://www.runoob.com/submit.htm?email=someone@example.com。返回的是?email=someone@example.com
+    var url = location.search;
+    // substring(from,to):用于提取字符串中介于两个指定下标之间的字符
+    var serviceAdd = url.substring(1, url.length);
+    // JSON.parse()将数据转换为js对象
+    // decodeURIComponent函数：对encodeURIComponent() 函数编码的url进行解码
+    var jsonBack = JSON.parse(decodeURIComponent(serviceAdd));
+    // var machineId = jsonBack.machineId;
+    var machineId = jsonBack.machineCode;
+
+    console.log(jsonBack);
+
+    //		$('#reqSpotName').val(data.obj.spot_name);
+    //角色
+    if (arrays.indexOf('stis_leader') >= 0) {
+        roless = 'stis_leader';
+    }
+    if (arrays.indexOf('ADMIN') >= 0) {
+        roless = 'ADMIN';
+    }
+    if (arrays.indexOf('MAINTAIN_WXY') >= 0) {
+        roless = 'MAINTAIN_WXY';
+    }
+    if (arrays.indexOf('MAINTAIN_WXZZ') >= 0) {
+        roless = 'MAINTAIN_WXZZ';
+    }
+    if (arrays.indexOf('MAINTAIN_DDZX') >= 0) {
+        roless = 'MAINTAIN_DDZX';
+        /*$('#departParent').show();
+        $('#departHr').show();*/
+    }
+
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        console.log(navigator.camera);
+    }
+
+    //任务修改页面
+    // function init() {
+    // 	$.ajax({
+    // 		url: baseUrl + 'app_maintainController.do?getUserSpot',
+    // 		type: 'post',
+    // 		data: {
+    // 			userName: workNo
+    // 		},
+    // 		success: function(data) {
+    // 			var data = eval("(" + data + ")");
+    // 			console.log(data);
+    // 			if(data.respCode == "200") {
+    // 				buildingCode = data.obj.building_code;
+    // 				buildingName = data.obj.building_name;
+    // 				floorName = data.obj.floor_name;
+    // 				reqSpotNum = data.obj.spot_num;
+    // 				reqSpotName = data.obj.spot_name;
+    // 				$('#building').val(data.obj.building_name);
+    // 				$('#floor').val(data.obj.floor_name);
+    // 				$('#reqSpotName').val(data.obj.spot_name);
+    // 			} else {
+    // 				$("warn small").html(data.respMsg);
+    // 				$("#warn").fadeIn(500);
+    // 				setTimeout('$("warn").fadeOut(500)', 3000);
+    // 			}
+    // 		}
+    // 	});
+    // 	var telNum = localStorage.getItem("telPhone");
+    // 	if(telNum == null || telNum == "null") telNum = "";
+    // 	$("#phoneNum").val(telNum);
+    // 	$("#loading").hide();
+    // }
+    //添加消息提示
+    function showMsg(msg) {
+        $("#warn small").html(msg);
+        $("#warn").fadeIn(500);
+        setTimeout('$("#warn").fadeOut(500)', 3000);
+    }
+
+    function drawImage(imageBase64) {
+        var img = $('<img class="img-circle" style="width:100%;">');
+        img.attr('src', "data:image/jpeg;base64," + imageBase64);
+        var a = $('<a href="#" class="thumbnail"></a>');
+        var div = $('<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>');
+        img.appendTo(a);
+        a.appendTo(div);
+        div.appendTo('#picture');
+        var width = $("a.thumbnail:parent").width();
+        $("img.img-circle").css('height', width);
+
+        $('a.thumbnail').click(function() {
+            _this = $(this);
+            $("#bigPicture").removeAttr("style");
+            var image = new Image();
+            image.src = $(this).find('img').attr('src');
+            var width;
+            var height;
+            if (image.width >= image.height) {
+                $("#bigPicture").css("width", screen.width - 40);
+            } else {
+                var i;
+                height = screen.height - 200;
+                i = image.height / height;
+                width = image.width / i;
+            }
+            $("#bigPicture").css("width", width);
+            $("#bigPicture").css("height", height);
+            $("#bigPicture").attr("src", $(this).find('img').attr('src'));
+            $('#myModal').modal('show');
+            return false;
+        });
+
+    }
+
+    //初始化
+    $(function() {
+        // init();
+        $("#machineCode").val(jsonBack.machineCode);
+        $("#machineName").val(jsonBack.machineName);
+        $("#fixedPlace").val(jsonBack.fixedPlace);
+        $('#lubricateDeptName').html(jsonBack.lubricateDeptName);
+        $('#lubricateManageName').html(jsonBack.lubricateManageName);
+        $('#lubricateDate').html(jsonBack.lubricateDate);
+        $('#remark').html(jsonBack.remark);
+
+        // var spotCode = jsonBack.spotCode;
+        $("#loading").hide();
+        // $('#name').html(localStorage.getItem("name"));
+        //console.log(localStorage.getItem("deptName"))
+        // if (localStorage.getItem("deptName") == "undefined" || localStorage.getItem("deptName") == undefined)
+        //     $('#reqDeptName').html("");
+        // else
+        //     $('#reqDeptName').html(localStorage.getItem("deptName"));
+        // $('#phoneNum').html(localStorage.getItem("telPhone"));
+    });
+
+    $("#back").click(function() {
+        // location.href = "equipment-list.html?" + machineId;
+        location.href = "main.html";
+    });
+
+    //提交按钮
+    $("#submit").click(function() {
+        //判断
+        // if (reqSpotNum == "") {
+        //     console.log("第二个" + reqSpotNum);
+        //     $("#upload").hide();
+        //     $('#warn small').html("维修地点不能为空！");
+        //     $("#warn").fadeIn(500);
+        //     setTimeout("$('#warn').fadeOut(500)", 3000);
+        //     return false;
+        // }
+        // if ($('#YorN input:checked').attr('id') == undefined) {
+        //     $("#warn").fadeIn(500);
+        //     $("#warn small").html("请判断任务是否紧急！");
+        //     setTimeout('$("#warn").fadeOut(500)', 1500);
+        //     return;
+        // }
+        // var phoneNum = $("#phoneNum").val();
+        // if (phoneNum == "" || phoneNum.length == 0) {
+        //     $("#upload").hide();
+        //     $('#warn small').html("报修电话不能为空！");
+        //     $("#warn").fadeIn(500);
+        //     setTimeout("$('#warn').fadeOut(500)", 3000);
+        //     return false;
+        // }
+        if ($('#itemName').val() == '') {
+            $("#warn").fadeIn(500);
+            //     //警告
+            $("#warn small").html("请输入故障描述！");
+            // setTimeout():方法用于在指定的毫秒数后调用函数或计算表达式
+            // fadeOut()：方法逐渐改变被选元素的不透明度，从可见到隐藏（褪色效果）。500毫秒的褪色效果速度
+            setTimeout('$("#warn").fadeOut(500)', 1500); //1500毫秒弹出提醒
+            return;
+        }
+        ajaxTest();
+    });
+
+
+    //点击楼
+    // $("#addIcon1").click(function() {
+    //     $("#addressTitle").html("楼");
+    //     $.ajax({
+    //         url: baseUrl + 'app_maintainController.do?getBuilding',
+    //         type: 'post',
+    //         data: {
+    //             dataGroupCode: localStorage.getItem("dataGroupCode")
+    //         },
+    //         success: function(data) {
+    //             var data = eval("(" + data + ")");
+    //             //console.log(data);
+    //             var html = '',
+    //                 list = data.obj;
+    //             for (var i = 0; i < list.length; i++) {
+    //                 html += "<li onclick='buildingClick(\"" + list[i].typecode + "\",\"" + list[i].typename + "\",\"building\")'><a href='#'>" + list[i].typename + "</a></li>";
+    //             }
+    //             $("#address").html(html);
+    //             $('#addressModal').modal("show");
+    //         }
+    //     });
+    // });
+
+    //点击地点点的时候查看楼是否选择
+
+    // $("#addIcon1").click(function() {
+    //     $("#addressTitle").html("楼");
+    //     $.ajax({
+    //         url: baseUrl + 'app_maintainController.do?getBuilding',
+    //         type: 'post',
+    //         data: {
+    //             dataGroupCode: localStorage.getItem("dataGroupCode")
+    //         },
+    //         success: function(data) {
+    //             var data = eval("(" + data + ")");
+    //             //console.log(data);
+    //             var html = '',
+    //                 list = data.obj;
+    //             for (var i = 0; i < list.length; i++) {
+    //                 html += "<li onclick='buildingClick(\"" + list[i].typecode + "\",\"" + list[i].typename + "\",\"building\")'><a href='#'>" + list[i].typename + "</a></li>";
+    //             }
+    //             $("#address").html(html);
+    //             $('#addressModal').modal("show");
+    //         }
+    //     });
+    // });
+
+    // $("#addIcon2").click(function() {
+    //     if ($("#building").val() == "") {
+    //         showMsg("请先选择楼");
+    //         return;
+    //     }
+    //     $("#addressTitle").html("层");
+    //     $.ajax({
+    //         url: baseUrl + 'app_maintainController.do?getFloor',
+    //         type: 'post',
+    //         data: {
+    //             building: buildingCode,
+    //             dataGroupCode: localStorage.getItem("dataGroupCode")
+    //         },
+    //         success: function(data) {
+    //             var data = eval("(" + data + ")");
+    //             //	console.log(data);
+    //             var html = '',
+    //                 list = data.obj;
+    //             for (var i = 0; i < list.length; i++) {
+    //                 html += "<li onclick='buildingClick(\"" + list[i].typecode + "\",\"" + list[i].name + "\",\"floor\")'><a href='#'>" + list[i].name + "</a></li>";
+    //             }
+    //             $("#address").html(html);
+    //             $('#addressModal').modal("show");
+    //         }
+    //     });
+    // });
+    // $("#addIcon3").click(function() {
+    //     if ($("#building").val() == "") {
+    //         showMsg("请先选择楼");
+    //         return;
+
+    //     }
+    //     if ($("#floor").val() == "") {
+    //         showMsg("请先选择层");
+    //         return;
+    //     }
+    //     $("#addressTitle").html("地点");
+    //     $.ajax({
+    //         url: baseUrl + 'app_maintainController.do?getSpotName',
+    //         type: 'post',
+    //         data: {
+    //             building: $("#building").val(),
+    //             floor: $("#floor").val()
+    //         },
+    //         success: function(data) {
+    //             var data = eval("(" + data + ")");
+    //             //console.log(data);
+    //             var html = '',
+    //                 list = data.obj;
+    //             console.log("点击地点");
+    //             console.log(list);
+
+    //             for (var i = 0; i < list.length; i++) {
+    //                 html += "<li onclick='buildingClick(\"" + list[i].spotNum + "\",\"" + list[i].spotName + "\",\"place\",\"" + list[i].deptNum + "\",\"" + list[i].deptName + "\")'><a href='#'>" + list[i].spotName;
+    //                 if (list[i].remark != "" && list[i].remark != null && list[i].remark != "null") {
+    //                     html += " <span style='color:#777;'> ( 备注:" + list[i].remark + ") </span>";
+    //                 }
+
+    //                 html += "</a></li>";
+    //                 //console.log(list[i].remark);
+    //             }
+    //             $("#address").html(html);
+    //             $('#addressModal').modal("show");
+    //         }
+    //     });
+    // });
+
+    //  点击楼层后的选项
+
+    // function buildingClick(code, name, type, deptCodes, deptNames) {
+    //     if (type == "building") {
+    //         buildingCode = code;
+    //         buildingName = name;
+    //         $("#building").val(name);
+    //         floorName = "";
+    //         $("#floor").val("");
+    //         reqSpotNum = "";
+    //         reqSpotName = "";
+    //         $("#reqSpotName").val("");
+    //         $("#addressModal").modal("hide");
+    //     } else if (type == "floor") {
+    //         floorName = name;
+    //         $("#floor").val(name);
+    //         reqSpotNum = "";
+    //         reqSpotName = "";
+    //         $("#reqSpotName").val("");
+    //         $("#addressModal").modal("hide");
+    //     } else if (type == "place") {
+
+    //         if (deptCodes != null && deptCodes != "null" && deptCodes != "" && deptNames != null && deptNames != "null" && deptNames != "") {
+    //             $('#reqDeptName').html(deptName);
+    //             deptCode = deptCodes
+    //                 //deptCode = deptNum;
+    //                 //deptCode = deptCodes;
+    //         }
+    //         reqSpotNum = code;
+    //         reqSpotName = name;
+
+    //         $("#reqSpotName").val(reqSpotName);
+
+    //         $("#addressModal").modal("hide");
+    //     }
+    // console.log(code);
+    // console.log(name);
+    // console.log(type);
+    // console.log(deptCodes);
+    // console.log(deptNames);
+    // }
+
+    function ajaxTest() {
+        /*if($("#deviceSelect").val() == '' || $("#deviceSelect").val() == null){
+     		$("#warn").fadeIn(500);
+    		$("#warn small").html("选择设备档案！");
+    		setTimeout('$("#warn").fadeOut(500)',1500);
+    		return;
+     	}*/
+        //
+        //			if($("#phoneNum").val()=="") {
+        //				$("#warn").fadeIn(500);
+        //				$("#warn small").html("请输入报修电话");
+        //				setTimeout('$("#warn").fadeOut(500)', 1500);
+        //				return;
+        //			}
+        $("#upload").show();
+        //显示出来数据
+        //var phoneNum = $('#phoneNum').val(); //报修电话文本框
+        //var reqDeptName = $("#reqDeptName").html();
+        // var cleanNo = $("#cleanNo").val();
+        var lubricateNo = $("#lubricateNo").val();
+        var machineCode = $("#machineCode").val();
+        var machineName = $("#machineName").val();
+        var fixedPlace = $('#fixedPlace').val();
+        var lubricateDeptName = $('#lubricateDeptName').val();
+        var lubricateManageName = $('#lubricateManageName').val();
+        var lubricateDate = $('#lubricateDate').val();
+        var remark = $('#remark').val();
+        //传到后台的数据
+        var jsonbak = {
+            "lubricateNo": lubricateNo,
+            "machineCode": machineCode,
+            "machineName": machineName,
+            "fixedPlace": fixedPlace,
+            "lubricateDeptName": lubricateDeptName,
+            "lubricateManageName": lubricateManageName,
+            "lubricateDate": lubricateDate,
+            "remark": remark
+        };
+        var prame = JSON.stringify(jsonbak);
+        //alert(prame);
+
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            headers: {
+                methodName: 'saveLubricatCheck',
+                serviceName: 'DFDAApp'
+            },
+            data: {
+                //taskNo: taskNo,
+                prames: prame,
+            },
+            success: function(data) {
+
+                $("#loading").hide();
+                // var data = eval("(" + data + ")");
+                //alert(data);
+                if (data.status != '-1') {
+
+                    $("#waiting").hide();
+                    $("#succeed").fadeIn(1000);
+                    // location.href = 'equipment-lubrication-registration.html?' + machineId;
+                    location.href = 'equipment-lubrication-registration.html?';
+                } else {
+                    $("#upload").hide();
+                    $('#warn small').html(data.respMsg);
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                    $("#loading").hide();
+                }
+            },
+            complete: function(XMLHttpRequest, status) { //请求完成后最终执行参数
+                if (status == 'timeout') {
+                    $("#upload").hide();
+                    $('#warn small').html('提交超时！请检查网络并重试！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                    $("#loading").hide();
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                } else if (status == 'error') {
+                    $("#upload").hide();
+                    $('#warn small').html('网络异常！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                    $("#loading").hide();
+                }
+            }
+        });
+
+    }
+    //获取图片base64
+    function getBase64Image(img) {
+        var canvas = document.createElement("canvas");
+        var image = new Image();
+        image.src = img.src;
+        var width;
+        var height;
+        width = 768;
+        height = image.height * 768 / image.width;
+        canvas.width = width;
+        canvas.height = height;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(image, 0, 0, width, height);
+        var dataURL = canvas.toDataURL("image/JPEG");
+        //data:image/jpeg;base64,
+        return dataURL.substring(23, dataURL.length)
+
+        // return dataURL.replace("data:image/png;base64,", "");
+    }
+
+    //维修地点
+    function getAddByName(value) {
+        if (value == '') {
+            $('#reqDeptName').html(localStorage.getItem("deptName"));
+        }
+        $.ajax({
+            url: baseUrl + 'app_maintainController.do?getPlaceByName',
+            //url:'http://module.yyhq365.cn/app_maintainController.do?getPlaceByName',
+            type: 'post',
+            data: {
+                placeName: value
+            },
+            success: function(data) {
+                var data = eval("(" + data + ")");
+                if (data.respCode == "200") {
+                    $("#getAddByName").css("right", 0);
+                    $("#getAddByName").css("top", $("#reqSpotName").offset().top + 35);
+                    $('#closeSpan').show();
+                    var list = new Array();
+                    list = data.obj;
+                    var liList = "";
+                    for (var i = 0; i < list.length; i++) {
+                        liList += "<li id='" + list[i].addressCode + "' deptNum='" + list[i].deptNum + "' deptName='" + list[i].deptName + "'><a href='#'>" + list[i].addressName + "</a></li>"
+                    }
+                    $("ul.getAddByName").html(liList);
+                    $("#getAddByName").show();
+
+                    $("ul.getAddByName li").click(function() {
+                        var deptName = $(this).attr('deptName');
+                        var deptNum = $(this).attr('deptNum');
+                        $('#reqSpotCode').html($(this).attr("id"));
+                        $('#reqSpotName').val($(this).find("a").text());
+
+                        if (deptName != null && deptNum != "null") {
+                            $('#reqDeptName').html(deptName);
+                            deptCode = deptNum;
+                        }
+                        $("#getAddByName").hide();
+                        $('#closeSpan').hide();
+                    });
+                    $('#reqSpotName').focus(function() {
+                        if ($(this).val() != '') {
+                            $("#getAddByName").show();
+                        }
+                    })
+                } else {
+                    $("#addTypeName").html("");
+                    $("#reqSpotTypeCode").html("");
+                    $("#getAddByName").hide();
+                    $('#closeSpan').hide();
+                }
+            },
+            error: function(data) {}
+        });
+    }
+
+    $('#closeSpan').click(function() {
+        $('#getAddByName').hide();
+        $('#reqSpotName').val('');
+        $('#closeSpan').hide();
+    })
+
+    $('#closeSpanss').click(function() {
+            $('#getItemByName').hide();
+            $('#itemName').val('');
+            $('#closeSpanss').hide();
+        })
+        //维修事项
+    function getItemByName(value) {
+        $.ajax({
+            url: baseUrl + 'app_maintainController.do?getItemByName',
+            //url:'http://module.yyhq365.cn/app_maintainController.do?getItemByName',
+            type: 'post',
+            data: {
+                itemName: value
+            },
+            success: function(data) {
+                //alert(data);
+                var data = eval("(" + data + ")");
+                console.log(data);
+                if (data.respCode == "200") {
+                    $("#getItemByName").css("right", 0);
+                    $("#getItemByName").css("top", $("#itemName").offset().top + 35);
+                    $('#closeSpanss').show();
+                    var list = new Array();
+                    list = data.obj;
+                    var liList = "";
+                    for (var i = 0; i < list.length; i++) {
+                        liList += "<li id='" + list[i].parentCode + "' value='" + list[i].parentName + "'><a id='" + list[i].itemCode + "' href='#'>" + list[i].itemName + "</a></li>"
+                    }
+                    $("ul.getItemByName").html(liList);
+                    $("#getItemByName").show();
+                    $("ul.getItemByName li").click(function() {
+                        /*alert('123');*/
+                        $('#itemCode').html($(this).find("a").attr("id"));
+                        $('#itemName').val($(this).find("a").text());
+                        $('#itemTypeName').html($(this).attr("value"));
+                        $('#itemTypeCode').html($(this).attr("id"));
+                        $("#getItemByName").hide();
+                        $('#closeSpanss').hide();
+                    });
+                    $('#itemName').focus(function() {
+                            if ($(this).val() != '') {
+                                $("#getItemByName").show();
+                            }
+                        })
+                        /*alert('4567890');*/
+                } else {
+                    $("#itemTypeName").html("");
+                    $("#itemTypeCode").html("");
+                    $("#getItemByName").hide();
+                    $('#closeSpanss').hide();
+                }
+            },
+            error: function(data) {}
+        });
+    }
+
+    //删除图片
+    $("#delPic").click(function() {
+        _this.parent().remove();
+    });
+
+    //地点模态框
+    $("#addIcon").click(function() {
+        $('#warn').fadeOut(500);
+        $('#addIconModal').modal('show');
+        //加载地点
+        $.ajax({
+            url: baseUrl + 'app_maintainController.do?getAddress',
+            type: 'post',
+            success: function(data) {
+                    var firstLi = "";
+                    var data = eval("(" + data + ")");
+                    var list = new Array();
+                    list = data.obj;
+                    for (var i = 0; i < list.length; i++) {
+                        firstLi += "<li value='" + list[i].addressCode + "'><a href='#'>" + list[i].addressName + "</a></li>"
+                    }
+                    $('#ks').html(firstLi);
+
+                    //console.log(data);
+
+                    $("#ks li").click(function() {
+                        var addressCode = $(this).attr('value');
+                        //alert(addressCode);
+                        //获取子节点
+                        $.ajax({
+                            url: baseUrl + 'app_maintainController.do?getAddress',
+                            type: 'post',
+                            data: {
+                                deptCode: addressCode
+                            },
+                            success: function(databak) {
+                                    var secLi = "";
+                                    var databak = eval("(" + databak + ")");
+                                    var listbak = new Array();
+                                    listbak = databak.obj;
+                                    //console.log(listbak);
+
+                                    for (var i = 0; i < listbak.length; i++) {
+                                        secLi += "<li value='" + listbak[i].addressCode + "' deptName='" + listbak[i].deptName + "' deptNum='" + listbak[i].deptNum + "'><a href='#'>" + listbak[i].addressName + "</a></li>";
+                                    }
+
+                                    $('#dd').html(secLi);
+
+                                    //子节点点击事件
+                                    $("#dd li").click(function() {
+                                        var addressCode = $(this).attr('value');
+                                        var addressName = $(this).find('a').text();
+                                        var deptName = $(this).attr('deptName');
+                                        var deptNum = $(this).attr('deptNum');
+                                        $('#reqSpotName').val(addressName);
+                                        $('#reqSpotCode').html(addressCode);
+                                        if (deptName != null && 　deptNum != null) {
+                                            $('#reqDeptName').html(deptName);
+                                            deptCode = deptNum;
+                                        }
+                                        $('#addIconModal').modal('hide');
+                                    });
+
+                                } //子节点success
+                        }); //获取子节点
+                    });
+                } //加载地点success
+        }); //加载地点
+
+        //默认子节点
+        $.ajax({
+            url: baseUrl + 'app_maintainController.do?getAddress',
+            type: 'post',
+            data: {
+                deptCode: deptCode
+            },
+            success: function(databak) {
+                    var secLi = "";
+                    var databak = eval("(" + databak + ")");
+                    var listbak = new Array();
+                    listbak = databak.obj;
+                    for (var i = 0; i < listbak.length; i++) {
+                        secLi += "<li value='" + listbak[i].addressCode + "'><a href='#'>" + listbak[i].addressName + "</a></li>"
+                    }
+                    $('#dd').html(secLi);
+
+                    //子节点点击事件
+                    $("#dd li").click(function() {
+                        var addressCode = $(this).attr('value');
+                        var addressName = $(this).find('a').text();
+                        $('#reqSpotName').val(addressName);
+                        $('#reqSpotCode').html(addressCode);
+                        $('#addIconModal').modal('hide');
+                    });
+                } //子节点success
+        }); //默认子节点
+
+        return false;
+    });
+
+    //事项分类模态框
+    $("#itemIcon").click(function() {
+        $('#warn').fadeOut(500)
+        $('#itemIconModal').modal('show');
+
+        $.ajax({
+            url: baseUrl + 'app_maintainController.do?getRootItem',
+            type: 'post',
+            success: function(data) {
+                    var firstLi = "";
+                    var data = eval("(" + data + ")");
+                    var list = new Array();
+                    list = data.obj;
+                    for (var i = 0; i < list.length; i++) {
+                        firstLi += "<li value='" + list[i].id + "'><a value='" + list[i].itemCode + "' href='#'>" + list[i].itemName + "</a></li>"
+                    }
+                    $('#sx1').html(firstLi);
+
+                    $("#sx1 li").click(function() {
+                        var itemNameP = $(this).find('a').text();
+                        var itemCodeP = $(this).find('a').attr('value');
+                        var itemTypeNum = $(this).attr('value');
+
+                        //获取子节点
+                        $.ajax({
+                            url: baseUrl + 'app_maintainController.do?getItemsByRoot',
+                            type: 'post',
+                            data: {
+                                itemTypeNum: itemTypeNum
+                            },
+                            success: function(databak) {
+                                    var secLi = "";
+                                    var databak = eval("(" + databak + ")");
+                                    var listbak = new Array();
+                                    listbak = databak.obj;
+                                    for (var i = 0; i < listbak.length; i++) {
+                                        secLi += "<li value='" + listbak[i].itemCode + "'><a href='#'>" + listbak[i].itemName + "</a></li>"
+                                    }
+                                    $('#sx2').html(secLi);
+                                    //子节点点击事件
+                                    $("#sx2 li").click(function() {
+                                        itemCode = $(this).attr('value');
+                                        itemName = $(this).find('a').text();
+                                        $('#itemCode').html(itemCode);
+                                        $('#itemName').val(itemName);
+                                        $('#itemTypeName').html(itemNameP);
+                                        $('#itemTypeCode').html(itemCodeP);
+                                        $('#itemIconModal').modal('hide');
+                                    });
+                                } //子节点success
+                        }); //获取子节点
+                    });
+
+                } //加载类别success
+        }); //加载类别
+
+        return false;
+    });
+
+    //事项分类模态框
+    $("#departIcon").click(function() {
+        $('#warn').fadeOut(500);
+        $('#departIconModal').modal('show');
+        $.ajax({
+            url: baseUrl + 'app_maintainController.do?getWgroupCode',
+            type: 'GET',
+            success: function(data) {
+                var departHtml = '';
+                var data = eval('(' + data + ')');
+                var listDepart = new Array();
+                listDepart = data.obj;
+                //console.log(listDepart);
+
+                for (var i = 0; i < listDepart.length; i++) {
+                    departHtml += "<li value='" + listDepart[i].dept_num + "'><a href='#'>" + listDepart[i].dept_name + "</a></li>"
+                }
+                $('#departX1').html(departHtml);
+                $('#departX1').on('click', 'li', function(e) {
+                    wgroupCode = $(this).attr('value');
+                    var depatName = $(this).find('a').text();
+                    //$('#departName').val(depatName);
+                    $('#departIconModal').modal('hide');
+                })
+            }
+        });
+    });
+
+    //拍摄照片
+    $("#btnCamera").click(function() {
+        if ($("#picture").find("img").length == 3) {
+            $("#warn small").html("最多只能上传三张图片");
+            $("#warn").fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return;
+        };
+        //$('#myModal').modal('hide');
+        navigator.camera.getPicture(onSuccess, onFail, {
+            quality: 50,
+            destinationType: Camera.DestinationType.FILE_URI,
+            sourceType: Camera.PictureSourceType.CAMERA,
+            allowEdit: false,
+            encodingType: Camera.EncodingType.JPEG,
+            popoverOptions: CameraPopoverOptions,
+            saveToPhotoAlbum: false
+        });
+    });
+
+    function onSuccess(imageData) {
+        var img = $('<img class="img-circle" style="width:100%;">');
+        img.attr('src', imageData);
+        var a = $('<a href="#" class="thumbnail"></a>');
+        var div = $('<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>');
+        img.appendTo(a);
+        a.appendTo(div);
+        div.appendTo('#picture');
+
+        //$("a.thumbnail:parent").width();
+        var width = $("a.thumbnail:parent").width();
+        //$("a.thumbnail:parent").css('height',width);
+        $("img.img-circle").css('height', width);
+        $('a.thumbnail').click(function() {
+            _this = $(this);
+            $("#bigPicture").removeAttr("style");
+            var image = new Image();
+            image.src = $(this).find('img').attr('src');
+            var width;
+            var height;
+            if (image.width >= image.height) {
+                $("#bigPicture").css("width", screen.width - 40);
+            } else {
+                var i;
+                height = screen.height - 200;
+                i = image.height / height;
+                width = image.width / i;
+            }
+            $("#bigPicture").css("width", width);
+            $("#bigPicture").css("height", height);
+            $("#bigPicture").attr("src", $(this).find('img').attr('src'));
+            $('#myModal').modal('show');
+            return false;
+        });
+    }
+
+    function onFail(message) {
+        //alert('Failed because: ' + message);
+    }
+
+    //本地上传
+    $('#btnPicture').bind('touchstart', function() {
+        if ($("#picture").find("img").length == 3) {
+            $("#warn small").html("最多只能上传三张图片");
+            $("#warn").fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return;
+        };
+        navigator.camera.getPicture(function(data) {
+            var img = $('<img class="img-circle" style="width:100%;">');
+            img.attr('src', data);
+            var a = $('<a class="thumbnail"></a>');
+            a.attr('href', data);
+            var div = $('<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>');
+            img.appendTo(a);
+            a.appendTo(div);
+            div.appendTo('#picture');
+            //alert($("a.thumbnail:parent").width());
+            var width = $("a.thumbnail:parent").width();
+            //$("a.thumbnail:parent").css('height',width);
+            $("img.img-circle").css('height', width);
+
+            $('a.thumbnail').click(function() {
+                _this = $(this);
+                $("#bigPicture").removeAttr("style");
+                var image = new Image();
+                image.src = $(this).find('img').attr('src');
+                var width;
+                var height;
+                if (image.width >= image.height) {
+                    $("#bigPicture").css("width", screen.width - 40);
+                } else {
+                    var i;
+                    height = screen.height - 200;
+                    i = image.height / height;
+                    width = image.width / i;
+                }
+                $("#bigPicture").css("width", width);
+                $("#bigPicture").css("height", height);
+                $("#bigPicture").attr("src", $(this).find('img').attr('src'));
+                $('#myModal').modal('show');
+                return false;
+            });
+
+        }, function(error) {
+            //console.log('Error');
+        }, {
+            destinationType: Camera.DestinationType.FILE_URI,
+            sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+            allowEdit: false,
+            mediaType: Camera.MediaType.PICTURE
+        });
+    });
+
+    //报修来源(点击选中报修来源触发事件)
+    $('button.status').click(function() {
+        $(this).parent().parent().find('button').removeClass("btn-info").addClass("btn-default");
+        $("#repairSource").html($(this).attr("value"));
+        $(this).removeClass("btn-default").addClass("btn-info");
+    });
+
+    //预约维修时间
+    var currYear = (new Date()).getFullYear();
+    var now = new Date();
+    var opt = {};
+    var currDate = (new Date()).getDate();
+    opt.date = {
+        preset: 'date'
+    };
+    //opt.datetime = { preset : 'datetime', minDate: new Date(2012,3,10,9,22), maxDate: new Date(2014,7,30,15,44), stepMinute: 5  };
+    opt.datetime = {
+        preset: 'datetime'
+    };
+    opt.time = {
+        preset: 'time'
+    };
+    opt.default = {
+        theme: 'android-ics ics', //皮肤样式
+        display: 'modal', //显示方式
+        mode: 'scroller', //日期选择模式
+        lang: 'zh',
+        startYear: currYear, //开始年份
+        endYear: currYear + 10 //结束年份
+    };
+    var optDateTime = $.extend(opt['datetime'], opt['default']);
+    $("#lubricateDatee").mobiscroll(optDateTime).datetime(optDateTime);
+
+    //最小时间
+    opt.defaultDate = {
+        //minDate: new Date(now.getFullYear(), now.getMonth(), now.getDate()+1)//最小日期
+        minDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds()), //最小时间
+    };
+    var optDefaultDateTime = $.extend(opt['datetime'], opt['default'], opt['defaultDate']);
+    $("#lubricateDate").mobiscroll(optDefaultDateTime).datetime(optDefaultDateTime);
+
+    /*$("#itemName").floc(function(){
+      		if(itemcheck == 'N'){
+      			$("#getItemByName").hide();
+      		};
+        })*/
+
+    //录音
+    function audioCapture() {
+        navigator.device.capture.captureAudio(onSuccess, onError, {
+            duration: 15
+        });
+        //录制成功
+        function onSuccess(mediaFiles) {
+            var i, path, len;
+            for (i = 0; i < mediaFiles.length; i++) {
+                path = mediaFiles[i].fullPath;
+                alert("文件名：" + mediaFiles[i].name + "\n" +
+                    "localURL：" + mediaFiles[i].localURL + "\n\n" +
+                    "fullPath：" + path
+                );
+            }
+        }
+        //录制失败
+        function onError(error) {
+            alert('录制失败！错误码：' + error.code);
+        }
+    }
+    //设备档案
+    $('#searchIn').bind('click', function() {
+            $.ajax({
+                url: baseUrl + 'app_maintainController.do?getTaskDevice',
+                type: 'post',
+                data: {
+                    deviceName: $('#shebei').val(),
+                    fixedPlace: $('#place').val()
+                },
+                success: function(data) {
+                        var data = eval("(" + data + ")");
+                        var list = data.obj;
+                        var html = '';
+                        console.log(list);
+                        if (data.respCode == '200') {
+                            for (var i = 0; i < list.length; i++) {
+                                var deviceCode = list[i].deviceCode;
+                                var deviceName = list[i].deviceName;
+                                var fixedPlace = list[i].fixedPlace;
+                                html += deviceHtml(deviceCode, deviceName, fixedPlace);
+                            }
+                            $('#ddUl').html(html);
+                        }
+                    } //子节点succes
+            });
+        })
+        //HTML
+    function deviceHtml(deviceCode, deviceName, fixedPlace) {
+        //alert('12')
+        var html = '';
+        html += '<li class="' + deviceCode + '" onclick="hideDevice(this)"><a href="#">' + deviceName + '</a></li>';
+        return html;
+    }
+    //hide
+    function hideDevice(src) {
+        deviceCode = $(src).attr('class');
+        $('#deviceSelect').val($(src).find('a').text());
+        $('#myModalWaste').modal('toggle');
+    }
+</script>
+
+</html>

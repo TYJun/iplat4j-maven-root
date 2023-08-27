@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-02-20 10:09:38
+   		Version :  6.0.731.201809200158
+		tableName :iplat_v5demo_business.ot_address_tree 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 parent_id  VARCHAR, 
+		 node_name  VARCHAR, 
+		 sort_no  VARCHAR, 
+		 has_children  VARCHAR
+	-->
+<sqlMap namespace="carriageAddressTree">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.common.ys.domain.CarriageAddressTree">
+		SELECT
+				id	as "id",  <!-- 地址分类树结构主键（UUID） -->
+				parent_id	as "parentId",  <!-- 父节点 -->
+				node_name	as "nodeName",  <!-- 树节点名称 -->
+				sort_no	as "sortNo",  <!-- 排序 -->
+				has_children	as "hasChildren" <!-- 是否有子节点（有\无） -->
+		FROM iplat_v5demo_business.ot_address_tree WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM iplat_v5demo_business.ot_address_tree WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="parentId">
+			parent_id = #parentId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="nodeName">
+			node_name = #nodeName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="sortNo">
+			sort_no = #sortNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="hasChildren">
+			has_children = #hasChildren#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO iplat_v5demo_business.ot_address_tree (id,  <!-- 地址分类树结构主键（UUID） -->
+										parent_id,  <!-- 父节点 -->
+										node_name,  <!-- 树节点名称 -->
+										sort_no,  <!-- 排序 -->
+										has_children  <!-- 是否有子节点（有\无） -->
+										)		 
+	    VALUES (#id#, #parentId#, #nodeName#, #sortNo#, #hasChildren#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM iplat_v5demo_business.ot_address_tree WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE iplat_v5demo_business.ot_address_tree 
+		SET 
+					parent_id	= #parentId#,   <!-- 父节点 -->  
+					node_name	= #nodeName#,   <!-- 树节点名称 -->  
+					sort_no	= #sortNo#,   <!-- 排序 -->  
+					has_children	= #hasChildren#  <!-- 是否有子节点（有\无） -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

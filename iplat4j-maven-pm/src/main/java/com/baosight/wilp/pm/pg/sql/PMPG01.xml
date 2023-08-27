@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PMPG01">
+    <select id="queryPmStageMsg" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            id stageId,
+            stage_code stageCode,
+            stage_name stageName,
+            stage_remark stageRemark,
+            create_name createName,
+            DATE_FORMAT(create_time,'%Y-%m%-%d') createTime,
+            update_name updateName,
+            DATE_FORMAT(update_time,'%Y-%m%-%d') updateTime
+        from
+            pm_stage_config
+        where
+            1 = 1
+        <isNotEmpty prepend="and" property="stageCode">
+            stage_code like concat ("%",#stageCode#,"%")
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="stageName">
+            stage_name like concat ("%",#stageName#,"%")
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="id">
+            id = #id#
+        </isNotEmpty>
+        order by
+            stage_code DESC
+    </select>
+
+    <select id="queryStageCodeMax" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+        select
+            stage_code stageCode
+        from
+            pm_stage_config
+        WHERE
+            stage_code like concat ("%",#value#,"%")
+        order by
+            stage_code DESC
+    </select>
+
+    <insert id="insertPmStageMsg" parameterClass="java.util.HashMap">
+        insert into pm_stage_config(id,stage_code,stage_name,stage_remark,create_no,create_name,create_time)
+        values (#id#,#stageCode#,#stageName#,#stageRemark#,#createNo#,#createName#,#createTime#)
+    </insert>
+
+    <update id="editPmStageMsg" parameterClass="java.util.HashMap">
+        update
+            pm_stage_config
+        set
+            stage_name = #stageName#,
+            stage_remark = #stageRemark#,
+            update_no = #updateNo#,
+            update_name = #updateName#,
+            update_time = #updateTime#
+        where
+            id = #id#
+    </update>
+
+    <delete id="deletePmStageMsg" parameterClass="java.util.HashMap">
+        delete from pm_stage_config where id = #id#
+    </delete>
+</sqlMap>

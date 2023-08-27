@@ -1,0 +1,340 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../../reference/mui/css/mui.min.css">
+    <link rel="stylesheet" href="../reference/css/loading.css" />
+    <link rel="stylesheet" href="../reference/css/iconfont.css">
+    <link rel="stylesheet" href="../reference/css/jquery.signature.css">
+    <title>签字交接</title>
+</head>
+<STYLE TYPE="text/css">
+    body,
+    html {
+        height: 100%;
+    }
+    
+    .mui-content {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+    }
+    
+    .mui-bar-nav {
+        top: 0;
+        -webkit-box-shadow: 0 1px 6px #ccc;
+        box-shadow: 0 1px 6px #ccc;
+        background: #30c37c;
+    }
+    
+    .mui-bar .mui-btn-link {
+        font-size: 16px;
+        line-height: 44px;
+        top: 0;
+        padding: 0;
+        color: #fff;
+        border: 0;
+    }
+    
+    .mui-title {
+        font-size: 17px;
+        font-weight: 500;
+        line-height: 44px;
+        position: absolute;
+        display: block;
+        width: 100%;
+        margin: 0 -10px;
+        padding: 0;
+        text-align: center;
+        white-space: nowrap;
+        color: #fff;
+    }
+    /*签名*/
+    
+    .signArea {
+        width: 95%;
+        background: #fff;
+        margin: 0 auto;
+        border-radius: 10px;
+        box-shadow: 0 0 4px #e2e2e2;
+        position: relative;
+        margin-top: 65px;
+        height: calc(100% - 75px);
+    }
+    
+    .signTitle {
+        height: 50px;
+        line-height: 50px;
+        padding-left: 20px;
+        color: #696969;
+        letter-spacing: 1px;
+        font-size: 16px;
+    }
+    
+    .icon-qianzi {
+        font-size: 38px;
+        color: #959595;
+        float: right;
+        margin: 0 10px 0 10px;
+    }
+    
+    .signArea .js-signature {
+        width: 100%;
+        height: calc(100% - 140px);
+        border-bottom: 1px dashed #bdbdbd;
+        border-top: 1px dashed #bdbdbd;
+        border-left: none;
+        border-right: none;
+    }
+    
+    .signArea .signBtn {
+        width: 100%;
+        height: 60px;
+        display: flex;
+        justify-content: space-around;
+        position: absolute;
+        bottom: 15px;
+    }
+    
+    .signArea .signBtn span {
+        width: 45%;
+        text-align: center;
+        line-height: 60px;
+        font-size: 19px;
+        letter-spacing: 2px;
+        margin: 0 2%;
+        border-radius: 4px;
+    }
+    
+    .signBtn .clearBtn {
+        border: 1px solid #bfbfbf;
+        color: #8b8b8b;
+    }
+    
+    .signBtn .saveBtn {
+        background: #30c37c;
+        color: #fff;
+    }
+</STYLE>
+
+<body>
+    <!-- loading -->
+    <div id="loading" class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+
+    <div class="mui-content" id="app">
+        <header class="mui-bar mui-bar-nav">
+            <h1 class="mui-title">物业签字交接</h1>
+            <button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left" id="back">
+                <span class="mui-icon mui-icon-left-nav"></span>
+            </button>
+        </header>
+        <div class="signArea">
+            <div class="signTitle"><i class="iconfont icon-qianzi"></i>请在下方签名</div>
+            <!--        <div class="alreadyHave"-->
+            <!--             style="width: 100%;height: calc(100% - 90px);justify-content: center;align-items: center" hidden>-->
+            <!--            <img src="" alt="" style="width: 80%;height:80%;">-->
+            <!--        </div>-->
+            <div class="js-signature"></div>
+            <div class="signBtn">
+                <span class="clearBtn">清除签名</span>
+                <span class="saveBtn">确认签名</span>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../../reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="../reference/mui/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../reference/mui/js/jquery-ui.min.js" type="text/javascript"></script>
+<script src="../reference/mui/js/jquery.ui.touch-punch.min.js" type="text/javascript"></script>
+<script src="../reference/mui/js/jquery.signature.js" type="text/javascript"></script>
+<!-- <script type="text/javascript" src="../../../cordova.js"></script> -->
+<script>
+    var baseUrl = localStorage.getItem("url");
+    var dataGroupCode = localStorage.getItem('dataGroupCode'); //账套
+    var confirmFlag = 0; //选中的送达方式----签字方式
+    var workNo = localStorage.getItem("workNo"); //登录人工号
+    var rfidListStr = localStorage.getItem("recoveChipNum");
+    var url = decodeURI(window.location.href.split("?")[1]);
+    var issueNo = url.split("&")[1];
+    var flag = false;
+    var userName = localStorage.getItem("userName");
+    var billNo = localStorage.getItem("billNo");
+    $(function() {
+        $('.js-signature').signature(); //签名初始化
+        initSign(); //初始化签字
+        // isComfirm(issueNo);
+        console.log(rfidListStr);
+        console.log(issueNo);
+    })
+
+    /*
+     * 初始化签名
+     * @author huoke
+     * */
+    function initSign() {}
+
+    function isComfirm(num, signImg) {
+        var para = {
+            dataGroupCode: dataGroupCode,
+            issueNo: num
+        };
+        $.get(baseUrl + 'app_clothIssueQuery.do?isComfirm', para, function(data) {
+            var data = JSON.parse(data);
+            flag = data.obj.comfirmFlag;
+            if (flag) {
+                saveSignature(signImg)
+            } else {
+                mui.toast("请签字确认！");
+                return;
+            }
+
+        }).fail(function(XMLHttpRequest) {
+            var text = XMLHttpRequest.responseText;
+            mui.toast(text.message);
+            return;
+        }).complete(function(XMLHttpRequest, status) {
+            if (status == 'timeout') {
+                mui.toast("网速不给力，请重试！");
+                return;
+            } else if (status == 'error') {
+                mui.toast('当前网络不可用，请查看网络是否畅通！');
+                return
+            }
+        })
+    }
+    //清除签名
+    mui('.signBtn').on('tap', '.clearBtn', function() {
+        console.log("清除签名");
+        $('.alreadyHave').css("display", "");
+        $('.js-signature').css("display", "")
+        $('.js-signature').signature('clear');
+    })
+
+
+    //保存签名
+    mui('.signBtn').on('tap', '.saveBtn', function() {
+
+        var signImg = $('canvas')[0].toDataURL("image/png").substring(22, $('canvas')[0].toDataURL("image/png").length);
+        console.log("签名内容", signImg);
+
+        if (!($('.js-signature').signature("isEmpty"))) {
+            console.log(flag);
+            saveSignature(signImg)
+
+        } else {
+            // isComfirm(issueNo, signImg);
+            location.href = './suppOfferMain.html';
+        }
+    })
+
+    // 跳转 查看签字图片 弹框
+    function signpic() {
+      mui.confirm('是否查看签字图片？', '签字完成！', btnArray, function(e){
+        console.log(e.index)
+        if (e.index == 1) {
+               location.href = "./signatureofferShow.html?" + "&" + billNo;
+						} else {
+							location.href = "./suppOfferMain.html";
+						}
+      })
+      var btnArray = ['确认', '取消'];
+		
+    ;
+    }
+
+
+    /*
+     * @desc 完成派件任务(签字交接进行确认签名)
+     * @param {Array}  issueNo 单号
+     * @param {String} recCreator 操作人工号
+     * @param {String} confirmFlag  判断交接方式的标志
+     * @param {String} deptSign 签名图片base64格式
+     * @author huoke
+     * */
+    function saveSignature(signImg) {
+        // console.log(flag);
+        // var params = {
+        //     dataGroupCode: dataGroupCode,
+        //     issueNo: issueNo,
+        //     recCreator: workNo,
+        //     confirmFlag: 0,
+        //     deptSign: '',
+        //     thirdpartySign: signImg
+        // }
+
+        $.ajax({
+            url: baseUrl + 'medical/fabric',
+            type: 'post',
+            data: {
+              requestParam:'{"workNo":"'+workNo+'","userName":"'+userName+'","billNo":"'+billNo+'","signAddr":"'+signImg+'"}' 
+            },
+            headers: {
+              methodName: "saveSupplementSignatureDetail",
+              serviceName:"OMMFSignature"
+
+            },
+            // data: JSON.stringify(params),
+            // contentType: 'application/json',
+            success: function(data) {
+                // var data = JSON.parse(data);
+                if (data.statusCode !== '0') {
+                    mui.toast(data.msg)
+                    return
+                } else {
+                    //成功执行下列
+                    mui.toast(data.msg);
+                    deptSign = signImg;
+                    signpic();  //是否查看签字完成的图片
+                    // location.href = './signatureofferShow.html';
+                }
+            },
+            error: function(XMLHttpRequest) {
+                var text = JSON.parse(XMLHttpRequest.responseText);
+                mui.toast(text.message);
+                return
+            },
+            complete: function(XMLHttpRequest, status) {
+                if (status == 'timeout') {
+                    $("#loading").hide();
+                    mui.toast('网速不给力，请重试！');
+                    return
+                } else if (status == 'error') {
+                    $("#loading").hide();
+                    mui.toast('当前网络不可用，请查看网络是否畅通！');
+                    return
+                }
+            }
+        });
+    }
+
+    //头部返回按钮
+    mui('header').on('tap', '#back', function() {
+        window.history.back(-1);
+    })
+
+
+    /**
+     * 系统返回键监听
+     */
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+        window.history.back(-1);
+    }
+</script>
+
+</html>

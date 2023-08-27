@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+
+
+    <script>
+        alert("lxy");
+        $.ajax({
+            // url: baseUrl + 'app_patientBillInfoController.do?getWeChatPayInfo',
+            url: 'http://zszltest.yyhq365.cn/app_patientBillInfoController.do?getWeChatPayInfoH5',
+            type: 'post',
+            data: {
+                billNo: 'AP20210100000073'
+            },
+            success: function(data) {
+                var data = JSON.parse(data);
+                alert(JOSN.stringify(data));
+            },
+            error: function(data) {
+                alert("lxy");
+                var data = JSON.parse(data);
+                alert(JSON.stringify(data));
+            },
+            complete: function(XMLHttpRequest, status) {
+                alert(status);
+            }
+        });
+    </script>
+</body>
+
+</html>

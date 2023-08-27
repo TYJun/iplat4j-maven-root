@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在线选房</title>
+  <link rel="stylesheet" href="../../reference/vant/css/index.css" />
+</head>
+<style>
+  #app {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  [v-cloak] {
+    display: none !important;
+  }
+
+  .bed-header {
+    width: 100%;
+    height: 50px;
+    padding: 15px 0;
+  }
+
+  .back {
+    float: left;
+    color: #3eacdb;
+    padding: 0 15px;
+    font-size: 14px;
+    line-height: 30px;
+  }
+
+  .title {
+    text-align: center;
+    color: black;
+    font-size: 20px;
+    width: 200px;
+    margin: 0 auto;
+    line-height: 30px;
+    font-weight: 600;
+  }
+
+  .bed-content-center {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+  }
+
+  .bed-content-center>div:nth-child(1) {
+    color: black;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .bed-content-center>div:nth-child(2) {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 20px;
+  }
+
+  .bed-content-center>div:nth-child(2)>div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+</style>
+
+<body>
+  <div id="app" v-cloak>
+    <!-- 选择楼层房号弹出层 -->
+    <van-popup v-model="building_floor_site_show" round position="bottom">
+      <div class="popup-box">
+        <van-loading size="30px" vertical style="top: 250px;" v-show="building_floor_site_loading_ifShow">加载中...
+        </van-loading>
+        <van-cascader v-model="cascaderValue" title="请选择楼/层/房号" :options="building_select_list"
+          @close="building_floor_site_show = false" @finish="onFinish" />
+      </div>
+    </van-popup>
+    <div class="bed-header">
+      <span class="back" @click="back()">返回</span>
+      <div class="title">在线选房</div>
+    </div>
+    <div class="bed-content">
+      <van-cell-group>
+        <van-field v-model="choose_building" name="choose_building" @click="select_building_floor_site()" label="楼/层/房号"
+          placeholder="请选择楼/层/房号" readonly clickable />
+        </van-field>
+      </van-cell-group>
+      <div class="bed-content-center">
+        <div>房间情况</div>
+        <div>
+          <div>
+            <div>已入住情况</div>
+            <div class="">{{current_checkin_num}}/{{total_num}}</div>
+            <div>人</div>
+          </div>
+          <div>
+            <div>已入住情况</div>
+            <div>{{current_checkin_num}}/{{total_num}}</div>
+            <div>人</div>
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+<script src="../../reference/vue/vue.js"></script>
+<script src="../../reference/vant/js/vant.min.js"></script>
+<script src="../../reference/js/jquery-2.1.4.js"></script>
+<script>
+  var app = new Vue({
+    el: "#app",
+    data() {
+      return {
+        choose_building: "",
+        building_floor_site_show: false, //楼层房号弹出层是否展示
+        cascaderValue: '', //楼层房号选择的最后一项
+        building_select_list: [
+          {
+            text: "一号楼",
+            value: "010000",
+            children: [
+              {
+                text: "一层",
+                value: "010100",
+                children: [
+                  {
+                    text: "101房",
+                    value: "010101",
+                  },
+                  {
+                    text: "102房",
+                    value: "010102",
+                  },
+                ]
+              },
+            ]
+          }
+        ],  // 楼层房号选项列表，children 代表子选项，支持多级嵌套
+        building_floor_site_loading_ifShow: false, //控制楼层房号选择loading是否显示
+        building_name: "", //选择的楼名称
+        floor_name: "", //选择的层名称
+        site_name: "", //选择的房号名称
+        site_value: "", //选择的房号value
+        current_checkin_num: 2,
+        total_num: 10
+      }
+    },
+    methods: {
+      //点击选择楼层房号
+      select_building_floor_site() {
+        // this.building_select_list = []
+        this.building_floor_site_show = true
+        // this.building_floor_site_loading_ifShow = true
+        // $.ajax({
+        //   url: this.baseUrl + "cleanService",
+        //   type: "post",
+        //   headers: {
+        //     methodName: "getSoptInfo",
+        //     serviceName: "AppLinkService"
+        //   },
+        //   data: {
+        //     dataGroupCode: this.dataGroupCode
+        //   },
+        //   success: function (data) {
+        //     _this.building_floor_site_loading_ifShow = false
+        //     _this.building_select_list = data.obj
+        //   }
+        // })
+      },
+      // 选择楼层房号 全部选项选择完毕后，会触发 finish 事件
+      onFinish({ selectedOptions }) {
+        this.building_floor_site_show = false;
+        this.choose_building = selectedOptions.map((item) => item.text).join('/');
+        this.building_name = selectedOptions[0].text
+        this.floor_name = selectedOptions[1].text
+        this.site_name = selectedOptions[2].text
+        this.site_value = selectedOptions[2].value
+        console.log(this.site_value);
+      },
+      //左上角返回事件
+      back() {
+        location.href = "../../menu.html"
+      }
+    },
+  })
+</script>
+
+</html>

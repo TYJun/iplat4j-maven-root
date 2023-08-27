@@ -1,0 +1,412 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="reference/mui/css/mui.min.css">
+  <link rel="stylesheet" href="reference/mui/css/mui.picker.min.css">
+  <link rel="stylesheet" href="reference/css/buttom.css">
+  <link rel="stylesheet" href="reference/css/common.css"/>
+</head>
+<STYLE TYPE="text/css">
+body{
+  background: #f7f7f7;
+}
+.tab-div{
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+}
+.tab-selected{
+  color: #2196f3;
+  border-bottom: 1px solid #2196f3;
+}
+.main-div{
+  margin-top: 20px;
+  background: #fff;
+  padding: 5px;
+  height: 500px;
+  box-shadow: 0px 2px 5px #c1c1c1;
+}
+.title-div{
+  width: 100%;
+  height: 40px;
+  margin-top: 10px;
+}
+.title-name{
+  width: 20%;
+  height: 40px;
+  line-height: 40px;
+  display: inline-block;
+  float: left;
+  text-align: center;
+}
+.time-list{
+  width: 100%;
+  height: 240px;
+  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+.time-value{
+  width: 20%;
+  height: 80px;
+  line-height: 80px;
+  display: inline-block;
+  float: left;
+  text-align: center;
+}
+.time-element{
+  width: 20%;
+  height: 80px;
+  line-height: 80px;
+  display: inline-block;
+  float: left;
+  text-align: center;
+  padding: 5px;
+}
+.time-div{
+  width: 100%;
+  height: 70px;
+  line-height: 70px;
+  border: 1px solid #dcdcdc;
+}
+.time-overtime{
+  background: #cccccc;
+  color: #fff;
+}
+.time-had-selected{
+  background: #ff8177;
+  color: #fff;
+}
+.time-selected{
+  background: #2aabd2;
+  color: #fff;
+}
+.btn-div{
+  width: 100%;
+  padding: 15px;
+}
+.mui-btn-blue, .mui-btn-primary, input[type=submit]{
+  background-color: #2aabd2;
+  border: 1px solid #2aabd2;
+}
+</STYLE>
+<body>
+    <header class="mui-bar mui-bar-nav">
+      <h1 class="mui-title">选择时间</h1>
+      <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+        返回
+      </button>
+    </header>
+
+    <div id="warn" class="warn" hidden>
+      <small></small>
+    </div>
+    
+    <div id="loading" class="loading1" hidden>
+      <div class="loading2">
+        <span class="mui-spinner" style="width:80px;height:80px;"></span>
+      </div>
+    </div>
+
+    <div class="mui-content" style="padding-left:15px;padding-right:15px;padding-bottom:50px;">
+      <div class="main-div">
+        <div class="mui-row">
+          <div class="mui-col mui-col-xs-3 tab-div tab-selected">今天</div>
+          <div class="mui-col mui-col-xs-3 tab-div">明天</div>
+          <div class="mui-col mui-col-xs-3 tab-div">后天</div>
+          <div id="datePicker" class="mui-col mui-col-xs-3 tab-div">选择日期</div>
+        </div>
+        <div class="title-div">
+          <div class="title-div">
+            <div class="title-name arrowup">
+              <span class="mui-icon mui-icon-arrowup"></span>
+            </div>
+            <div class="title-name">0-15</div>
+            <div class="title-name">15-30</div>
+            <div class="title-name">30-45</div>
+            <div class="title-name">45-60</div>
+          </div>
+          <div class="time-list">
+            <div id="timeList"></div>
+          </div>
+          <div class="title-div">
+            <div class="title-name arrowdown">
+              <span class="mui-icon mui-icon-arrowdown"></span>
+            </div>
+          </div>
+          <div class="btn-div">
+            <button id="confirm" type="button" class="mui-btn mui-btn-primary mui-btn-block">确认</button>
+          </div>
+
+        </div>
+      </div>
+      
+    </div>
+  
+</body>
+<script src="reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="reference/mui/js/mui.picker.min.js" type="text/javascript"></script>
+<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="reference/js/common.js" type="text/javascript"></script>
+<script src="../../cordova.js" type="text/javascript"></script>
+<script type="text/javascript">
+  var baseUrl = localStorage.getItem("url");
+  var url = location.search;
+  var jsonStr = decodeURIComponent(url.substring(1,url.length));
+  var json = JSON.parse(jsonStr);
+  // console.log(json);
+  var dateTime = date_YMD();
+  var futureDay = 100;
+  var endDate = new Date();
+  var meetingRoles = localStorage.getItem("meetingRoles");
+  if(meetingRoles!=undefined && meetingRoles!=""){
+    meetingRoles = JSON.parse(meetingRoles);
+    futureDay = parseInt(meetingRoles.interval);
+  }
+  endDate.setDate(endDate.getDate()+futureDay);
+
+  document.addEventListener("deviceready", onDeviceReady, false);
+  function onDeviceReady() {
+    /**
+     * 系统返回键监听
+     */
+    document.addEventListener("backbutton", onBackKeyDown, false);
+  }
+
+  /**
+   * 获取当前时间
+   * 用于判断今日已超时时间，仅以手机为准，需要服务端同样验证
+   */
+  var date = new Date();
+  var hour = date.getHours();
+  var minute = date.getMinutes();
+  //获取当前时间对应的规则数字，分钟向上取整
+  var nowNum = hour*4 + Math.ceil(minute/15) - 28;
+  
+  loadViews();
+
+  function loadViews(){
+    var loading = '<div style="width:100%;text-align:center;margin-top:100px;font-size:40px;"><span class="mui-spinner"></span></div>';
+    $("#timeList").html(loading);
+    $.ajax({
+      url:baseUrl+'app_MeetingController.do?appointedTime',
+      type:'post',
+      data:{
+        meetingID:json.meetingId,
+        meetingDate:dateTime
+      },
+      success:function(data){
+        var data = eval('('+data+')');
+        // console.log(data);
+        if(data.success){
+          var list = data.obj;
+          if(list==undefined||list==null)
+            list = [];
+          var timeHadSelected = [];
+          for(var i=0;i<list.length;i++){
+            var hour = list[i].split(":")[0];
+            var minute = list[i].split(":")[1];
+            var roles = parseInt(hour)*4 + parseInt(minute)/15 - 28;
+            timeHadSelected.push(roles);
+          }
+          timeHadSelected.sort(function(a, b){
+              return a - b;
+          });
+          createViews(timeHadSelected);
+        }else{
+          showMsg("获取已预约信息失败");
+        }
+      }
+    });
+    
+  }
+
+  function createViews(timeHadSelected){
+    console.log(timeHadSelected);
+    /**
+     * 由于每15分钟一个div，所以在与时间对应时存在问题
+     * 如07:00-08:00，时间数组为["07:00","07:15","07:30","07:45","08:00"]
+     * 而对应的块只有4个，所以将处理结果放到viewList中
+     */
+    var viewList = [];
+    var lastNum = timeHadSelected[0];
+    for(var i=0;i<timeHadSelected.length;i++){
+      viewList.push(timeHadSelected[i]);
+      var separation = timeHadSelected[i] - lastNum;
+      if(separation>1){
+        viewList.splice(viewList.length-2,1);
+      }else if(i==timeHadSelected.length-1){
+        viewList.splice(viewList.length-1,1);
+      }
+      lastNum = timeHadSelected[i];
+    }
+    // console.log(viewList);
+    var timeHtml = '';
+    for(var i=0;i<48;i++){
+      if(i%4==0){
+        var time = i/4 + 7;
+        if(time<10)
+          time = "0" + time + ":00";
+        else
+          time = time + ":00";
+        timeHtml += '<div class="time-value">'+time+'</div>';
+      }
+      timeHtml += '<div class="time-element">';
+      if($.inArray(i,viewList)!= -1){
+        timeHtml += '<div id="'+i+'" class="time-div time-had-selected">已预约</div>';
+      }else if(i<nowNum && dateTime == date_YMD()){
+        timeHtml += '<div id="'+i+'" class="time-div time-overtime">已超时</div>';
+      }else{
+        timeHtml += '<div id="'+i+'" class="time-div time-unselect">空闲</div>';
+      }
+      timeHtml += '</div>';
+    }
+    $('#timeList').html(timeHtml);
+  }
+
+  //控制移动变量
+  var arrowIndex = 0;
+  //上移
+  mui("body").on('tap','div.arrowup',function(){
+    if(arrowIndex==0)
+      return;
+    arrowIndex++;
+    $('#timeList').css("margin-top", arrowIndex*80 + "px");
+    // console.log(arrowIndex);
+  });
+
+  //下移
+  mui("body").on('tap','div.arrowdown',function(){
+    if(arrowIndex==-9)
+      return;
+      arrowIndex--;
+    $('#timeList').css("margin-top", arrowIndex*80 + "px");
+  });
+
+  //页签选择
+  mui("body").on('tap','div.tab-div',function(){
+    $(this).parent().find("div.tab-div").removeClass("tab-selected");
+    $(this).addClass("tab-selected");
+    if($(this).text()=="今天"){
+      dateTime = date_YMD();
+      $('#datePicker').html("选择日期");
+      loadViews();
+    }else if($(this).text()=="明天"){
+      dateTime = dateBeforeOrAfter(1);
+      $('#datePicker').html("选择日期");
+      loadViews();
+    }else if($(this).text()=="后天"){
+      dateTime = dateBeforeOrAfter(2);
+      $('#datePicker').html("选择日期");
+      loadViews();
+    }else{
+      var dtPicker = new mui.DtPicker({"type":"date","beginDate":new Date(),"endDate": endDate}); 
+      dtPicker.show(function (rs) { 
+          dateTime = rs.text;
+          $('#datePicker').html(rs.text);
+          dtPicker.dispose();
+          loadViews();
+      })
+    }
+  });
+
+  //选择预约时间
+  var FIRST_NUM=null,LAST_NUM=null;
+  mui("body").on('tap','div.time-unselect',function(){
+    var NUM_S = parseInt($(this).attr("id"));
+    if(FIRST_NUM==null||(FIRST_NUM!=null&&LAST_NUM!=null)||NUM_S<=FIRST_NUM){
+      console.log("FIRST_NUM");
+      $("#timeList").find("div.time-selected").removeClass("time-selected");
+      $(this).addClass("time-selected");
+      FIRST_NUM = NUM_S;
+      LAST_NUM = null;
+      showMsg("请选择结束时间");
+    }else if(FIRST_NUM!=null&&LAST_NUM==null){
+      console.log("LAST_NUM");
+      LAST_NUM = NUM_S;
+      var ALL_TIME = $('#timeList .time-div');
+      for(var i=FIRST_NUM;i<LAST_NUM;i++){
+        if(ALL_TIME.eq(i).attr("class").indexOf("time-had-selected")==-1)
+          ALL_TIME.eq(i).addClass("time-selected");
+      }
+      $(this).addClass("time-selected");
+    }
+  });
+
+  //确认时间
+  document.getElementById("confirm").addEventListener('tap', function() {
+    //遍历选中的时间
+    var timeSelected = $('#timeList .time-selected');
+    if(timeSelected.length==0){
+      showMsg("请选择预约时间");
+      return;
+    }
+    var timeList = [],isAllowSubmit = true;
+    for(var i=0;i<timeSelected.length;i++){
+      var timeNum = parseInt(timeSelected.eq(i).attr("id"));
+      if(i>0){
+        var separation = timeNum - parseInt(timeSelected.eq(i-1).attr("id"));
+        if(separation>1)
+          isAllowSubmit = false;
+      }
+      timeList.push(timeNum);
+    }
+    //选择时间时对应的数字比实际时间小15分钟，所以需要再往后加一位
+    timeList.push(timeList[timeList.length-1]+1);
+
+    if(isAllowSubmit){
+      var btnArray = ['否', '是'];
+      var dateString = dateTime.split("-")[0] + "年" + dateTime.split("-")[1] + "月" + dateTime.split("-")[2] + "日";
+      var timeString = timeView(timeList[0]) + " - " + timeView(timeList[timeList.length-1]);
+      var promptInfo = '您将要预约'+ json.meetingName + " " + dateString+" " + timeString + '的会议，是否确定？';
+      mui.confirm(promptInfo, "提交确认", btnArray, function(e) {
+          if (e.index == 1) {
+            json["meetingDate"] = dateTime;
+            json["beginTime"] = timeView(timeList[0]);
+            json["endTime"] = timeView(timeList[timeList.length-1]);
+            var params = JSON.stringify(json);
+            location.href = "meeting-application.html?"+ encodeURIComponent(params);
+          } 
+      })
+    }else{
+      showMsg("预约时间必须是连续的");
+    }
+  });
+  
+  //将规则数字转换为时间
+  function timeView(timeNum){
+    var hour = Math.floor(timeNum / 4) + 7;
+    var minute = (timeNum % 4) * 15;
+    if(hour<10)
+      hour = "0" + hour;
+    if(minute<10)
+      minute = "0" + minute;
+    return hour + ":" + minute;
+  }
+
+  //将时间转换为数字
+  function numView(time){
+    var hour = time.split(":")[0];
+    var minute = time.split(":")[1];
+    return parseInt(hour)*4 + parseInt(minute)/15 - 28;
+  }
+
+  //返回
+  document.getElementById("back").addEventListener('tap', function() {
+    var params = JSON.stringify(json);
+    location.href = "meeting-application.html?"+ encodeURIComponent(params);
+  });
+
+  function onBackKeyDown(){
+    var params = JSON.stringify(json);
+    location.href = "meeting-application.html?"+ encodeURIComponent(params);
+  }
+
+</script>
+</html>

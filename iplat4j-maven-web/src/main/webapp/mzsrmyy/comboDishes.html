@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="no-js">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+		<link rel="stylesheet" type="text/css" href="./css/example.css">
+		<link rel="stylesheet" type="text/css" href="./css/weui.css">
+		<link rel="stylesheet" type="text/css" href="./css/iconfont.css">
+
+		<title>选择套餐</title>
+	</head>
+	<style type="text/css">
+		* {
+			box-sizing: border-box;
+		}
+		
+		body,
+		#app {
+			/*background: #fff;*/
+			width: 100%;
+			height: 100%;
+		}
+		
+		.meal-date,
+		.meal-time {
+			padding: 10px 15px;
+			text-align: center;
+			background: url("./img/meal/more.png") no-repeat scroll right center transparent;
+			background-size: 14px 14px;
+			font-size: 13px;
+		}
+		
+		.btn-div {
+			width: 100%;
+			padding: 15px;
+			display: flex;
+			justify-content: space-around;
+			border-top: 1px solid #eee;
+		}
+		
+		.btn-cancel {
+			width: 40%;
+			height: 40px;
+			border: 1px solid #DCDFE6;
+			background: #fff;
+			color: #606266;
+			border-radius: 2px;
+		}
+		
+		.btn-confirm {
+			width: 40%;
+			height: 40px;
+			background: #09bb07;
+			border: 1px solid #09bb07;
+			color: #fff;
+			border-radius: 2px;
+		}
+		
+		.dish-list-div {
+			overflow: scroll;
+			overflow-x: hidden;
+		}
+		
+		.bottom-div {
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			height: 50px;
+			/*border-top: 1px solid #E4E7ED;*/
+			background: #fff;
+			z-index: 9;
+		}
+		
+		.shop-div {
+			width: 80px;
+			height: 50px;
+		}
+		
+		.total-price {
+			color: #ff5722;
+			line-height: 50px;
+		}
+		
+		.total-price span {
+			font-size: 16px;
+			font-weight: normal;
+		}
+		
+		.unable-confirm-div {
+			width: 120px;
+			height: 50px;
+			line-height: 50px;
+			background: #8a8a8a;
+			color: #fff;
+		}
+		
+		.confirm-div {
+			width: 120px;
+			height: 50px;
+			line-height: 50px;
+			background: #09bb07;
+			color: #fff;
+		}
+		
+		.white-div {
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			z-index: 999;
+			background: #fff;
+		}
+		
+		.am-filter-class-title {
+			color: #aaa;
+			margin: 10px;
+			font-size: 13px;
+		}
+		
+		.am-flexbox {
+			display: flex;
+			justify-content: space-between;
+		}
+		
+		.am-ft-center {
+			text-align: center;
+		}
+		
+		.chooseItem {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			background: #fff;
+			z-index: 99;
+		}
+		
+		.diceng {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: #000;
+			z-index: 98;
+			opacity: 0.6;
+		}
+		
+		.mealTypeSelf-title {
+			font-size: 15px;
+			color: #aaa;
+			padding: 11px;
+			padding-bottom: 0px;
+		}
+		
+		.mealTypeSelf {
+			display: flex;
+			/*justify-content: space-around;*/
+			flex-wrap: wrap;
+		}
+		
+		.mealTypeSelf li {
+			width: 30%;
+			height: 35px;
+			line-height: 35px;
+			text-align: center;
+			font-size: 15px;
+			background: #eee;
+			color: #666;
+			margin-left: 2.5%;
+			margin-top: 10px;
+		}
+		
+		.mealTypeSelf a {
+			display: block;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+		
+		.choose-selected {
+			color: #09bb07;
+			background: #09bb0745;
+		}
+	</style>
+
+	<body ref="body">
+		<div id="app">
+			<!-- 页面过渡div -->
+			<div v-if="whiteShow" class="white-div"></div>
+			<div id="toastMsg" style="display: none;">
+				<div class="weui-mask_transparent"></div>
+				<div class="weui-toast">
+					<i class="weui-icon-cancel weui-icon_toast" style="font-size: 35px;"></i>
+					<p class="weui-toast__content">{{toastMsg}}</p>
+				</div>
+			</div>
+			<div id="loadingToast" v-if="loadShow">
+				<div class="weui-mask_transparent"></div>
+				<div class="weui-toast">
+					<i class="weui-loading weui-icon_toast"></i>
+					<p class="weui-toast__content">正在加载</p>
+				</div>
+			</div>
+			<div class="diceng" v-if="isShow"></div>
+			<div class="chooseItem" v-if="isShow">
+				<div class="mealTypeSelf-title">日期</div>
+				<ul class="mealTypeSelf">
+					<li v-for="item in options.mealDate" class="am-filter-item-wrap">
+						<a v-if="item == optionDate" class="choose-selected">
+							{{item}}
+						</a>
+						<a @click="dateChange(item)" v-else>
+							{{item}}
+						</a>
+					</li>
+				</ul>
+				<div class="mealTypeSelf-title">餐次</div>
+				<ul class="mealTypeSelf">
+					<li v-for="item in options.mealTime" class="am-filter-item-wrap">
+						<a v-if="item.code==optionTimeCode" class="choose-selected">
+							{{item.name}}
+						</a>
+						<a @click="timeChange(item)" v-else>
+							{{item.name}}
+						</a>
+					</li>
+				</ul>
+
+				<div class="btn-div">
+					<button type="button" @click="filterCancel" class="btn-cancel">取消</button>
+					<button type="button" @click="filterCommit" class="btn-confirm">确定</button>
+				</div>
+			</div>
+			<div class="weui-flex" style="border-bottom: 1px solid #E4E7ED;padding: 0 15px;background: #fff;">
+				<div @click="showFilter" class="weui-flex__item meal-date">{{realDate}}</div>
+				<div @click="showFilter" class="weui-flex__item meal-time">{{realTimeName}}</div>
+			</div>
+			<div class="weui-cells__title">主菜（限{{mainMenuRuleNum}}份）</div>
+			<div v-for="(item,index) in mainMenu" :key="item.id" v-bind:for="'mainMenu'+index" class="weui-cells weui-cells_checkbox" style="margin-top: 0;">
+				<label class="weui-cell weui-check__label">
+                <div class="weui-cell__hd" style="display: flex;align-items: center;">
+                    <input v-bind:name="'mainMenu'+index" v-bind:id="'mainMenu'+index" v-bind:value="item" v-model="mainMenus" type="checkbox" name="checkbox1" class="weui-check" />
+                    <i class="weui-icon-checked"></i>
+                    <img style="height: 22px;"  v-if="item.menuPicUrl != ''" v-bind:src="baseUrl+item.menuPicUrl" alt="图片描述" />
+                    <img style="height: 22px;"  v-else src="./img/meal/no-img.png" alt="图片描述" />
+                </div>
+                <div class="weui-cell__bd">
+                    <p>{{item.menuName}}</p>
+                </div>
+            </label>
+			</div>
+
+			<div class="weui-cells__title">辅菜（限{{auxiliaryMenuRuleNum}}份）</div>
+			<div class="weui-cells weui-cells_checkbox" style="margin-top: 0;">
+				<label v-for="(item,index) in auxiliaryMenu" v-bind:for="'auxiliaryMenu'+index" class="weui-cell weui-check__label">
+                <div class="weui-cell__hd" style="display: flex;align-items: center;">
+                    <input v-bind:name="'auxiliaryMenu'+index" v-bind:id="'auxiliaryMenu'+index" v-bind:value="item" v-model="auxiliaryMenus" type="checkbox" name="checkbox1" class="weui-check" />
+                    <i class="weui-icon-checked"></i>
+                    <img style="height: 22px;"  v-if="item.menuPicUrl != ''" v-bind:src="baseUrl+item.menuPicUrl" alt="图片描述" />
+                    <img style="height: 22px;"  v-else src="./img/meal/no-img.png" alt="图片描述" />
+                </div>
+                <div class="weui-cell__bd">
+                    <p>{{item.menuName}}</p>
+                </div>
+            </label>
+			</div>
+
+			<div class="am-flexbox bottom-div">
+				<div class="am-ft-center shop-div">
+					<img src="./img/meal/shop.png" style="width: 55px;margin-top: -10px;">
+				</div>
+				<div class="am-flexbox-item total-price">
+					<div class="am-ft-20 am-ft-price">
+						<span>¥</span> {{packagePrice}}
+					</div>
+				</div>
+				<div v-if="ruleMatch" @click="confirm" class="am-ft-center confirm-div">确认下单</div>
+				<div v-else class="am-ft-center unable-confirm-div">确认下单</div>
+			</div>
+		</div>
+	</body>
+	<script src="./js/vue.min.js"></script>
+	<script src="./js/jquery-2.1.4.min.js"></script>
+	<script src="./js/zepto.min.js"></script>
+	<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+	<script type="text/javascript" src="./js/big.min.js"></script>
+
+	<script type="text/javascript">
+		new Vue({
+			el: '#app',
+			data: {
+				whiteShow: true,
+				loadShow: false,
+				dialogShow: false,
+				dicengShow: false,
+				toastMsg: "",
+				baseUrl: localStorage.getItem("baseUrl"),
+				canteenCode: '',
+				canteenName: '',
+				dataGroupCode: localStorage.getItem("dataGroupCode"),
+				isShow: '',
+				//套餐信息
+				packagePrice: '0',
+				packageName: '',
+				//主菜
+				mainMenu: [],
+				//选中的主菜数组
+				mainMenus: [],
+				//主菜限定数量
+				mainMenuRuleNum: '未知',
+				//辅菜
+				auxiliaryMenu: [],
+				//选中的辅菜
+				auxiliaryMenus: [],
+				//辅菜限定数量
+				auxiliaryMenuRuleNum: '未知',
+				showSelection: false,
+				listHeight: 200,
+				options: {
+					mealDate: [],
+					mealTime: []
+				},
+				//选择的值
+				optionDate: '',
+				optionTimeCode: '',
+				optionTimeName: '',
+				//实际的值
+				realDate: '',
+				realTimeCode: '',
+				realTimeName: '',
+				/**
+				 * 规则字段
+				 * nowTime: 当前时间戳
+				 * ruleTime1: 今日上午10:00的时间戳，用于限定今日午餐
+				 * ruleTime2: 今日下午4:00的时间戳，用于限定今日晚餐
+				 * ruleTime3: 今日下午3:30的时间戳，用于限定点明日餐
+				 * @type {Object}
+				 */
+				rules: {
+					nowTime: '',
+					ruleTime1: '',
+					ruleTime2: '',
+					ruleTime3: ''
+				}
+			},
+			methods: {
+				init: function() {
+					var _this = this;
+
+					var mealTime = [{
+						code: '002',
+						name: '午餐'
+					}, {
+						code: '003',
+						name: '晚餐'
+					}]
+					_this.rules.nowTime = _this.timestampFormat(_this.getNowTime());
+					_this.canteenCode = localStorage.getItem("canteenCode");
+					_this.canteenName = localStorage.getItem("canteenName");
+					_this.options.mealDate = localStorage.getItem("mealDate").split(',');
+					_this.options.mealTime = mealTime;
+					var packageJson = JSON.parse(localStorage.getItem("package"));
+					_this.packagePrice = packageJson.package_price;
+					_this.packageName = packageJson.package_name;
+					var packageRule = packageJson.rules;
+					for(var i = 0; i < packageRule.length; i++) {
+						if(packageRule[i].comboRuleValue == "mainMenu")
+							_this.mainMenuRuleNum = packageRule[i].comboRuleNum;
+						else if(packageRule[i].comboRuleValue == "auxiliaryMenu")
+							_this.auxiliaryMenuRuleNum = packageRule[i].comboRuleNum;
+					}
+					/**
+					 * 这里处理一些规则时间
+					 * @type {[type]}
+					 */
+					//今日午餐
+					var ruleTime1 = _this.options.mealDate[0] + ' 10:00:00';
+					_this.rules.ruleTime1 = _this.timestampFormat(ruleTime1);
+					//今日晚餐
+					var ruleTime2 = _this.options.mealDate[0] + ' 16:00:00';
+					_this.rules.ruleTime2 = _this.timestampFormat(ruleTime2);
+					//明日餐
+					var ruleTime3 = _this.options.mealDate[0] + ' 15:30:00';
+					_this.rules.ruleTime3 = _this.timestampFormat(ruleTime3);
+					if(_this.rules.nowTime < _this.rules.ruleTime1) {
+						_this.optionTimeCode = mealTime[0].code;
+						_this.optionTimeName = mealTime[0].name;
+						_this.realTimeCode = mealTime[0].code;
+						_this.realTimeName = mealTime[0].name;
+						_this.optionDate = _this.options.mealDate[0];
+						_this.realDate = _this.options.mealDate[0];
+					} else if(_this.rules.nowTime < _this.rules.ruleTime2) {
+						_this.optionTimeCode = mealTime[1].code;
+						_this.optionTimeName = mealTime[1].name;
+						_this.realTimeCode = mealTime[1].code;
+						_this.realTimeName = mealTime[1].name;
+						_this.optionDate = _this.options.mealDate[0];
+						_this.realDate = _this.options.mealDate[0];
+					} else {
+						_this.optionTimeCode = mealTime[0].code;
+						_this.optionTimeName = mealTime[0].name;
+						_this.realTimeCode = mealTime[0].code;
+						_this.realTimeName = mealTime[0].name;
+						_this.optionDate = _this.options.mealDate[2];
+						_this.realDate = _this.options.mealDate[2];
+					}
+
+					_this.loadDishes()
+				},
+				showMsg: function(msg) {
+					var _this = this
+					_this.toastMsg = msg
+					var $toast = $("#toastMsg")
+					if($toast.css('display') != 'none') return;
+
+					$toast.fadeIn(100);
+					setTimeout(function() {
+						$toast.fadeOut(100);
+					}, 2000);
+
+				},
+				getNowTime: function() {
+
+					var now = new Date();
+					var year = now.getFullYear(); //年  
+					var month = now.getMonth() + 1; //月  
+					var day = now.getDate(); //日  
+					var hh = now.getHours(); //时  
+					var mm = now.getMinutes(); //分  
+					var ss = now.getSeconds(); //秒
+					var clock = year + "-";
+					if(month < 10)
+						clock += "0";
+					clock += month + "-";
+					if(day < 10)
+						clock += "0";
+					clock += day + " ";
+					if(hh < 10)
+						clock += "0";
+					clock += hh + ":";
+					if(mm < 10) clock += '0';
+					clock += mm + ":";
+					if(ss < 10) clock += '0';
+					clock += ss;
+					return(clock);
+
+				},
+				//将时间字符串转换为时间戳
+				timestampFormat: function(time) {
+					return(new Date(Date.parse(time.replace(/-/g, "/")))).getTime();
+				},
+				showFilter: function() {
+					this.isShow = 'show'
+				},
+				filterCancel: function() {
+					this.optionDate = this.realDate
+					this.optionTimeCode = this.realTimeCode
+					this.optionTimeName = this.realTimeName
+					this.isShow = ''
+				},
+				filterCommit: function() {
+					var _this = this;
+					_this.rules.nowTime = _this.timestampFormat(_this.getNowTime());
+
+					if(!_this.filterRules())
+
+						return;
+					if(_this.realDate != _this.optionDate || _this.realTimeCode != _this.optionTimeCode) {
+						_this.realDate = _this.optionDate
+						_this.realTimeCode = _this.optionTimeCode
+						_this.realTimeName = _this.optionTimeName
+						_this.loadDishes()
+					}
+					_this.isShow = ''
+				},
+				filterRules: function() {
+					var _this = this
+
+					if(this.optionDate == this.options.mealDate[0]) {
+						//超过16:00的情况
+						if(this.rules.nowTime > this.rules.ruleTime2) {
+
+							_this.showMsg("已超出今日及明日订餐时间限制");
+							return false;
+						}
+						//超过10:00并小于16:00的情况
+						if(this.rules.nowTime > this.rules.ruleTime1 && this.optionTimeCode != '003') {
+
+							_this.showMsg("已超出今日午餐时间限制");
+							return false;
+						}
+					} else if(this.optionDate == this.options.mealDate[1]) {
+						if(this.rules.nowTime > this.rules.ruleTime3) {
+
+							_this.showMsg("已超出明日订餐时间限制");
+							return false;
+						}
+					}
+					return true;
+				},
+				dateChange: function(item) {
+					this.optionDate = item;
+				},
+				timeChange: function(item) {
+					this.optionTimeCode = item.code
+					this.optionTimeName = item.name
+				},
+				GetQueryString: function(paramKey) {
+
+					var reg = new RegExp("(^|&)" + paramKey + "=([^&]*)(&|$)");
+					var r = window.location.search.substr(1).match(reg);
+					if(r != null)
+						return unescape(r[2]);
+					else
+						return null;
+
+				},
+				getOppenId: function(code) {
+					var _this = this;
+					_this.loadShow = true
+					$.ajax({
+						url: _this.baseUrl + 'app_patientBillInfoController.do?getWeChatOpenId',
+						type: 'post',
+						data: {
+							canteenNum: _this.canteenCode,
+							canteenName: _this.canteenName,
+							dataGroupCode: _this.dataGroupCode,
+							code: code
+						},
+						success: function(data) {
+							_this.loadShow = false
+							var resp = JSON.parse(data);
+							if(resp.success) {
+								// alert(resp.obj);
+								localStorage.setItem("userId", resp.obj);
+
+							} else {
+								_this.showMsg("openId获取失败")
+							}
+						}
+					});
+
+				},
+				loadDishes: function() {
+					var _this = this;
+					_this.loadShow = true
+
+					$.ajax({
+						url: _this.baseUrl + 'app_basicInfoController.do?getPatientComboMenu',
+						type: 'post',
+						data: {
+							canteenNum: _this.canteenCode,
+							dayFlag: _this.realDate,
+							mealNum: _this.realTimeCode
+						},
+						success: function(data) {
+
+							_this.loadShow = false
+							var resp = JSON.parse(data);
+							console.log(resp);
+							if(resp.respCode == "200") {
+								_this.mainMenus = []
+								_this.auxiliaryMenus = []
+								_this.mainMenu = resp.obj.mainMenu
+								_this.auxiliaryMenu = resp.obj.auxiliaryMenu
+							} else {
+								_this.showMsg(resp.respMsg);
+							}
+						}
+					});
+				},
+				confirm: function() {
+					var _this = this;
+
+					_this.rules.nowTime = _this.timestampFormat(_this.getNowTime());
+
+					if(!_this.filterRules())
+						return;
+
+					var params = {
+						mealDate: _this.realDate,
+						mealTimeCode: _this.realTimeCode,
+						mealTimeName: _this.realTimeName,
+						dishes: _this.mainMenus.concat(_this.auxiliaryMenus)
+					}
+
+					localStorage.setItem("params", JSON.stringify(params));
+					location.href = "comboConfirm.html";
+
+				}
+			},
+			computed: {
+				ruleMatch: function() {
+					if(this.mainMenus.length == this.mainMenuRuleNum && this.auxiliaryMenus.length == this.auxiliaryMenuRuleNum)
+						return true
+					else
+						return false
+				}
+			},
+			mounted: function() {
+				this.$nextTick(function() {
+					var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+					this.listHeight = h - 89
+					this.init()
+					this.whiteShow = false
+					this.getOppenId(this.GetQueryString("code"))
+
+				})
+			}
+		});
+	</script>
+
+</html>

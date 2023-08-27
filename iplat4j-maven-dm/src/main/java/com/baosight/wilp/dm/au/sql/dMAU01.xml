@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="dMAU01">
+	
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			dm.id	AS "id",  
+			dm.employee_id	AS "employeeId",  
+			dm.man_name	AS "manName",  
+			dm.sex_code	AS "sexCode",  
+			dm.degree_code	AS "degreeCode",  
+			dm.department_no	AS "deptNum",  
+			dm.department_name AS "departmentName",
+			dm.employment_nature	AS "employmentNature", 
+			dm.phone	AS "phone",  
+			dm.deposit	AS "deposit",  
+			dm.is_network	AS "isNetworkCode",  
+			CASE dm.is_network
+					WHEN '1' THEN '是'
+					ELSE '否'
+			    END AS "isNetwork",
+			dm.is_stay	AS "isStayCode", 
+			CASE  dm.is_stay
+					WHEN '1' THEN '是'
+					ELSE '否'
+				END AS "isStay",
+			dm.create_name	AS "createName",  
+			dm.create_date	AS "createDate", 
+			dm.update_name	AS "updateName", 
+			dm.update_date	AS "updateDate", 
+			dm.operator_type	AS "operatorType",  
+			dm.note	AS "note", 
+			dm.age	AS "age",  
+			dm.if_married	AS "ifMarried",  
+			dm.permanent_residence	AS "permanentResidence",  
+			dm.work_time	AS "workTime", 
+			dm.if_review	AS "ifReviewCode", 
+			CASE dm.if_review
+					WHEN -2 THEN '等待审核'
+					WHEN 1 THEN '待分配' 
+					WHEN 2 THEN '已分配' 
+					WHEN -3 THEN '申请被驳回' 
+					ELSE '态未知状'
+			    END AS "ifReview" ,
+			dm.id_no AS "idNo"
+FROM dorms_man dm
+		WHERE
+		    if_review = -2
+		<isNotEmpty prepend=" AND " property="id">
+			dm.id = #id#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="employeeId">
+			dm.employee_id LIKE CONCAT ("%",#employeeId#,"%")
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="manName">
+			dm.man_name LIKE CONCAT ("%",#manName#,"%")
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="deptNum">
+			dm.department_no LIKE CONCAT ("%",#deptNum#,"%")
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="departmentName">
+			dm.department_name LIKE CONCAT ("%",#departmentName#,"%")
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="employmentNature">
+			dm.employment_nature LIKE CONCAT ("%",#employmentNature#,"%")
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="ifReview">
+			dm.if_review LIKE CONCAT ("%",#ifReview#,"%")
+		</isNotEmpty>
+		
+		 <dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		    dm.create_date DESC
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+	<select id="queryView" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		dm.id	AS "id",
+		dm.employee_id	AS "workNo",
+		dm.man_name	AS "name",
+		dm.sex_code	AS "gender",
+		dm.degree_code	AS "degreeCode",
+		dm.department_no	AS "deptNum",
+		dm.department_name	AS "departmentName",
+		/*t1.dept_name AS "departmentName",*/
+		dm.employment_nature	AS "employmentNature",
+		dm.phone	AS "contactTel",
+		dm.deposit	AS "deposit",
+		dm.is_network	AS "isNetworkCode",
+		CASE dm.is_network
+		WHEN '1' THEN '是'
+		ELSE '否'
+		END AS "isNetwork",
+		dm.is_stay	AS "isStayCode",
+		CASE  dm.is_stay
+		WHEN '1' THEN '是'
+		ELSE '否'
+		END AS "isStay",
+		dm.create_name	AS "createName",
+		dm.create_date	AS "createDate",
+		dm.update_name	AS "updateName",
+		dm.update_date	AS "updateDate",
+		dm.operator_type	AS "operatorType",
+		dm.note	AS "note",
+		dm.age	AS "age",
+		dm.if_married	AS "ifMarried",
+		dm.permanent_residence	AS "permanentResidence",
+		dm.work_time	AS "workTime",
+		dm.if_review	AS "ifReviewCode",
+		CASE dm.if_review
+		WHEN -2 THEN '等待审核'
+		WHEN 1 THEN '待分配'
+		WHEN 2 THEN '已分配'
+		WHEN -3 THEN '申请被驳回'
+		WHEN 3  THEN '已退房'
+		ELSE '态未知状'
+		END AS "ifReview" ,
+		dm.id_no AS "idNo"
+		FROM dorms_man dm
+		WHERE
+		1=1
+		<isNotEmpty prepend=" AND " property="id">
+			dm.id = #id#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="employeeId">
+			dm.employee_id LIKE CONCAT ("%",#employeeId#,"%")
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="manName">
+			dm.man_name LIKE CONCAT ("%",#manName#,"%")
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="deptNum">
+			dm.department_no LIKE CONCAT ("%",#deptNum#,"%")
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="employmentNature">
+			dm.employment_nature LIKE CONCAT ("%",#employmentNature#,"%")
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="ifReview">
+			dm.if_review LIKE CONCAT ("%",#ifReview#,"%")
+		</isNotEmpty>
+
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				dm.create_date DESC
+			</isEmpty>
+		</dynamic>
+
+	</select>
+</sqlMap>

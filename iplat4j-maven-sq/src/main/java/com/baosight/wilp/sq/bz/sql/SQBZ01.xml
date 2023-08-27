@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SQBZ01">
+
+	<!-- 删除标准 -->
+	<delete id="deleteStandard" parameterClass="java.util.HashMap">
+		DELETE FROM sq_register_standard WHERE id = #standardId#
+	</delete>
+	
+	<!-- 删除项目 -->
+	<delete id="deleteProject" parameterClass="String">
+		DELETE FROM sq_register_project WHERE standard_id = #value#
+	</delete>
+	
+	<!-- 删除项目标准 -->
+	<delete id="deleteProjectInstance" parameterClass="java.util.HashMap">
+		DELETE FROM sq_register_instance WHERE project_id = #id#
+	</delete>
+	
+	<!-- 查询标准编码 -->
+	<select id="queryStandardCode" parameterClass="String" resultClass="java.util.HashMap">
+		select count(1) from sq_manage where standard_code = 
+		(select standard_code from sq_register_standard where id = #value#)
+		and status_code != "99"
+	</select>
+		
+	
+	<!-- 查询考核项目id -->
+	<select id="queryProjectID" parameterClass="String" resultClass="java.util.HashMap">
+		select id from sq_register_project where standard_id = #value#
+	</select>
+		
+	
+	<!-- 查询考核主题 -->
+	<select id="queryStandardName" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.sq.bz.domain.SQBZ01">
+		SELECT
+			standard_code AS standardCode,
+			standard_name AS standardName
+		FROM
+			sq_register_standard
+		<dynamic prepend="where">
+			<isNotEmpty prepend=" AND " property="dataGroupCode">
+				data_group_code = #dataGroupCode#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+
+
+	<!-- 查询方法 -->
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			id as "standardId",  <!-- 主键，UUID -->
+			standard_code as "standardCode",
+			standard_name as "standardName",  <!-- 标准名称 -->
+			remark as "remark",  <!-- 备注 -->
+			creator as "creator",  <!-- 记录创建人 -->
+			create_time as "createTime",  <!-- 创建时间 -->
+			modifier as "modifier",  <!-- 记录修改人 -->
+			modify_time as "modifyTime",  <!-- 记录修改时间 -->
+			assess_type_code as "assessTypeCode",  <!-- 问卷类型编码 -->
+			assess_type_name as "assessTypeName" <!-- 问卷类型名 -->
+		FROM
+		    sq_register_standard
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="sqType">
+				assess_type_code = #sqType#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="standardName">
+				standard_name like concat('%', #standardName#, '%')
+			</isNotEmpty>
+		</dynamic>
+			order by standard_code
+	</select>
+
+
+	<!-- 查询行数 -->
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sq_register_standard WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+	</select>
+
+
+
+	<!-- 查询当天生成的编码数量 -->
+	<select id="dangerCodeCount" parameterClass="String" resultClass="int">
+		select count(1) from sq_register_standard where standard_code like concat(#value#,'%')
+	</select>
+
+	<select id="queryMaxStandardCode" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			standard_code standardCode
+		from
+			sq_register_standard
+		ORDER BY
+			standard_code DESC
+	</select>
+
+</sqlMap>

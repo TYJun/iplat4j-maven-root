@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="SIJK02">
+
+	<select id="queryStock" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		MAT_TYPE_NUM	as "matTypeNum",  <!-- 物资分类编码 -->
+		mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+		MAT_NUM	as "matNum",  <!-- 物资编码 -->
+		MAT_NAME	as "matName",  <!-- 物资名称 -->
+		MAT_MODEL	as "matModel",  <!-- 物资型号 -->
+		MAT_SPEC	as "matSpec",  <!-- 物资规格 -->
+		UNIT	as "unit",  <!-- 计量单位名称 -->
+		UNIT_NAME	as "unitName",  <!-- 计量单位名称 -->
+		sum(TOTAL_NUM)	as "stockNum",  <!-- 库存总量 -->
+		PRICE	as "price"  <!-- 单价 -->
+		FROM si_storge WHERE 1=1
+		<isNotEmpty property="wareHouseNo" prepend=" AND ">
+			WARE_HOUSE_NO = #wareHouseNo#  <!-- 仓库号 -->
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNum"> <!-- 物资编码 -->
+			MAT_NUM like concat('%', #matNum#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matName"> <!-- 物资名称 -->
+			MAT_NAME like concat('%', #matName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeName"> <!-- 物资分类名称 -->
+			MAT_TYPE_NAME like concat('%', #matTypeName#, '%')
+		</isNotEmpty>
+		<isEqual prepend=" AND " property="isShowZero" compareValue="N">
+			TOTAL_NUM > 0
+		</isEqual>
+		<isNotEmpty prepend=" AND " property="matNumList">
+			MAT_NUM in
+			<iterate conjunction="," open="(" close=")" property="matNumList">
+				#matNumList[]#
+			</iterate>
+		</isNotEmpty>
+
+		group by MAT_NUM
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+			    MAT_NUM ASC
+			</isEmpty>
+		</dynamic>
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+
+	<select id="countStock" resultClass="int">
+		SELECT id FROM si_storge WHERE 1=1
+		<isNotEmpty property="wareHouseNo" prepend=" AND ">
+			WARE_HOUSE_NO = #wareHouseNo#  <!-- 仓库号 -->
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNum"> <!-- 物资编码 -->
+			MAT_NUM like concat('%', #matNum#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matName"> <!-- 物资名称 -->
+			MAT_NAME like concat('%', #matName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeName"> <!-- 物资分类名称 -->
+			MAT_TYPE_NAME like concat('%', #matTypeName#, '%')
+		</isNotEmpty>
+		<isEqual prepend=" AND " property="isShowZero" compareValue="N">
+			TOTAL_NUM > 0
+		</isEqual>
+		<isNotEmpty prepend=" AND " property="matNumList">
+			MAT_NUM in
+			<iterate conjunction="," open="(" close=")" property="matNumList">
+				#matNumList[]#
+			</iterate>
+		</isNotEmpty>
+		group by MAT_NUM
+	</select>
+
+	<update id="updateEnterDetail" parameterClass="java.util.Map">
+		update si_enter_detail set ENTER_PRICE = #price#, ENTER_AMOUNT = ENTER_NUM * #price#
+		where MAT_NUM = #matNum# and ENTER_BILL_NO = (select e.ENTER_BILL_NO from si_enter e where ORIGIN_BILL_NO = #purchaseOrderNo#)
+	</update>
+
+	<update id="updateStorageDetail" parameterClass="java.util.Map">
+		update si_storge_detail set ENTER_PRICE = #price#, ENTER_AMOUNT = ENTER_NUM * #price#
+		where MAT_NUM = #matNum# and ENTER_BILL_NO = (select e.ENTER_BILL_NO from si_enter e where ORIGIN_BILL_NO = #purchaseOrderNo#)
+	</update>
+
+	<update id="updateEnterStorageRecord" parameterClass="java.util.Map">
+		update si_storge_record set PRICE = #price#, AFTER_AMOUNT = AFTER_NUM * #price#
+		where MAT_NUM = #matNum# and ORIGIN_BILL_NO = (select e.ENTER_BILL_NO from si_enter e where ORIGIN_BILL_NO = #purchaseOrderNo#)
+	</update>
+
+	<select id="queryOutStockByOriginBillNo" parameterClass="string" resultClass="com.baosight.wilp.si.ck.domain.SiOut">
+		SELECT
+			id	as "id",  <!-- 主键 -->
+			out_bill_no	as "outBillNo",  <!-- 出库单号 -->
+			origin_bill_no	as "originBillNo",  <!-- 来源单据号 -->
+			origin_bill_type	as "originBillType",  <!-- 来源单据类型 -->
+			ware_house_no	as "wareHouseNo",  <!-- 仓库号 -->
+			ware_house_name	as "wareHouseName",  <!-- 仓库名称 -->
+			user_dept_num	as "userDeptNum",  <!-- 领用科室 -->
+			user_dept_name	as "userDeptName",  <!-- 领用科室名称 -->
+			user_worker_no	as "userWorkerNo",  <!-- 领用人 -->
+			user_worker_name	as "userWorkerName"  <!-- 领用人名称 -->
+		FROM si_out WHERE origin_bill_no = #value#
+	</select>
+
+	<select id="queryOutDetailByOriginBillNo" parameterClass="string" resultClass="com.baosight.wilp.si.ck.domain.SiOutDetail">
+		SELECT
+			sod.id	as "id",  <!-- 主键 -->
+			sod.out_bill_no	as "outBillNo",  <!-- 出库单号 -->
+			sod.out_type	as "outType",  <!-- 出库类别 -->
+			sod.out_type_name	as "outTypeName",  <!-- 出库类型名称 -->
+			sod.mat_num	as "matNum",  <!-- 物资编码 -->
+			sod.mat_name	as "matName",  <!-- 物资名称 -->
+			sod.mat_model	as "matModel",  <!-- 物资型号 -->
+			sod.mat_spec	as "matSpec",  <!-- 物资规格 -->
+			sod.unit	as "unit",  <!-- 计量单位编码 -->
+			sod.unit_name	as "unitName",  <!-- 计量单位名称 -->
+			sod.out_num	as "outNum",  <!-- 出库数量 -->
+			sod.out_price	as "outPrice",  <!-- 出库单价 -->
+			sod.out_amount	as "outAmount"  <!-- 出库明细 -->
+		FROM si_out so
+		left join si_out_detail sod on so.out_bill_no =sod.out_bill_no
+		WHERE so.origin_bill_no = #value#
+		order by sod.out_bill_no desc
+	</select>
+
+	<update id="updateInvoiceNo" parameterClass="java.util.HashMap">
+		update si_enter_detail set invoice_no = #invoiceNo# where mat_type_num = #matTypeNum#
+		and mat_num = #matNum# and ENTER_BILL_NO in (select si_enter.enter_bill_no from si_enter where origin_bill_no = #originBillNo#)
+	</update>
+  
+</sqlMap>

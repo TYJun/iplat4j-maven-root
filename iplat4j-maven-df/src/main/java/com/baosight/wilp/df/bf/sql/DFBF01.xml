@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFBF01">
+
+	<!-- 设备档案查询 -->
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		dd.id,
+		dd.scrap_no scrapNo,
+		dd.machine_code machineCode,
+		dd.machine_name machineName,
+		dd.machine_id machineID,
+		dd.fixed_place fixedPlace,
+		dd.scrap_date scrapDate,
+		dd.scrap_reason scrapReason,
+		dd.rec_creator recCreator,
+		dd.rec_create_time recCreateTime,
+		dd.rec_revisor recRevisor,
+		dd.rec_revise_time recReviseTime,
+		data_group_code dataGroupCode,
+		dd.scrap_way scrapWay,
+		CASE  dd.status
+		WHEN '0'THEN '新建'
+		WHEN '1'THEN '确定'
+		END  AS  "status"
+		FROM
+		df_scrap dd
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="scrapNo">
+			dd.scrap_no like concat('%', #scrapNo#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineName">
+			dd.machine_name like concat('%', #machineName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status">
+			dd.status like concat('%', #status#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="scrapWay">
+			dd.scrap_way like concat('%', #scrapWay#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="scrapDateS">
+			date_format(dd.scrap_date,'%Y-%m-%d') <![CDATA[>=]]> #scrapDateS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="scrapDateE">
+		    date_format(dd.scrap_date,'%Y-%m-%d') <![CDATA[<=]]> #scrapDateE#
+		</isNotEmpty>
+	</select>
+
+	<!-- 设备档案查询 -->
+	<select id="count" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT
+		dd.id
+		FROM
+		df_devicemachine dd
+		LEFT JOIN df_modulebaseclassfy dm ON dd.machine_type_id = dm.id
+		LEFT JOIN df_machine_spot dms ON dd.spot_id = dms.spot_id
+		WHERE 1 = 1
+		<isNotEmpty prepend=" AND " property="machineCode">
+			dd.machine_code like concat('%', #machineCode#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineName">
+			dd.machine_name like concat('%', #machineName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="classifyName">
+			dm.classify_name like concat('%', #classifyName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="models">
+			dd.models like concat('%', #models#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="warrantyDateS">
+			date_format(dd.warranty_date,'%Y-%m-%d') >= #warrantyDateS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="warrantyDateE">
+			date_format(dd.warranty_date,'%Y-%m-%d') <![CDATA[<=]]> #warrantyDateE#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="buyMode">
+			dd.buy_mode = #buyMode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="useDeaprtName">
+			dd.use_deaprt_name like concat('%', #useDeaprtName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="managerDepartName">
+			dd.manager_depart_name like concat('%', #managerDepartName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineId">
+			dd.id = #machineId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spotId">
+			dd.spot_id = #spotId#
+		</isNotEmpty>
+		GROUP BY dd.id
+	</select>
+
+	<!-- 查询指定设备信息 -->
+	<select id="queryId" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+	SELECT
+			dd.id,
+			dd.scrap_no scrapNo,
+			dd.machine_code machineCode,
+			dd.machine_name machineName,
+			dd.machine_id machineID,
+			dd.fixed_place fixedPlace,
+			dd.scrap_date scrapDate,
+			dd.scrap_reason scrapReason,
+			dd.rec_creator recCreator,
+			dd.rec_create_time recCreateTime,
+			dd.rec_revisor recRevisor,
+			dd.rec_revise_time recReviseTime,
+			data_group_code dataGroupCode,
+			dd.scrap_way scrapWay,
+			CASE  dd.status
+				WHEN '0'THEN '新建'
+				WHEN '1'THEN '确定'
+				END  AS  "status"
+		FROM
+			df_scrap dd
+		WHERE
+			dd.id = #id#
+	</select>
+
+	<!-- 设备档案插入 -->
+	<insert id="insert" parameterClass="java.util.HashMap">
+		insert into df_scrap
+		(
+			id,
+			scrap_no,
+			machine_id,
+			machine_code,
+			machine_name,
+			fixed_place,
+			status,
+			scrap_way,
+			scrap_date,
+			scrap_reason,
+			rec_creator,
+			rec_create_time,
+			rec_revisor,
+			rec_revise_time,
+			data_group_code
+		)
+		values
+		(
+			#id#,
+			#scrapNo#,
+			#machineId#,
+			#machineCode#,
+			#machineName#,
+			#fixedPlace#,
+			'0',
+			#scrapWay#,
+		    #scrapDate#,
+			#scrapReason#,
+			#recCreator#,
+			#recCreateTime#,
+			#recRevisor#,
+			#recReviseTime#,
+			#dataGroupCode#
+		)
+	</insert>
+	<select id="createScrapNo" parameterClass="java.lang.String" resultClass="java.lang.String">
+		select
+			max(scrap_no)
+		from
+			df_scrap
+	</select>
+
+	<!-- 删除设备 -->
+	<delete id="deleteDevicemachine" parameterClass="java.util.List">
+		DELETE FROM df_scrap WHERE id IN
+		<iterate conjunction="," open="(" close=")">
+			#[]#
+		</iterate>
+	</delete>
+
+	<!-- 提交 -->
+	<update id="examine" parameterClass="java.util.HashMap">
+		UPDATE
+			df_scrap
+		SET
+			status = '1'
+		WHERE
+			id = #id#
+	</update>
+
+	<!-- 是否存在设备档案编号 -->
+	<select id="isExist" parameterClass="java.lang.String" resultClass="int">
+		select id from df_devicemachine where machine_code=#value#
+	</select>
+
+
+	<!-- 查询人员count -->
+	<select id="queryDeptAndWorkCount" parameterClass="java.util.Map" resultClass="int">
+      select
+        t1.id
+		FROM
+		df_devicemachine t1
+		WHERE
+		1 =1
+		<isNotEmpty prepend=" AND " property="machineCode">
+			t1.machine_code like concat('%', #machineCode#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineName">
+			t1.machine_name like concat('%', #machineName#, '%')
+		</isNotEmpty>
+	</select>
+
+	<!-- 查询科室和人员 -->
+	<select id="queryDeptAndWork" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+    SELECT
+        t1.id ID,
+		t1.machine_code machineCode,
+		t1.machine_name machineName
+		FROM
+		df_devicemachine t1
+		WHERE
+		1 =1
+		<isNotEmpty prepend=" AND " property="machineCode">
+			t1.machine_code like concat('%', #machineCode#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineName">
+			t1.machine_name like concat('%', #machineName#, '%')
+		</isNotEmpty>
+		limit #offset#,#limit#
+	</select>
+
+
+
+
+</sqlMap>

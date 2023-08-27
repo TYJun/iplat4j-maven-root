@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+	<!-- 订单作废 -->
+<sqlMap namespace="PSBMDdzf01">
+
+<!-- 待处理 -->
+    <select id="query" parameterClass="java.util.HashMap"
+        resultClass="com.baosight.wilp.ps.bm.domain.PSBMDdzf01">
+        SELECT
+            a.*,
+            b.status_name AS "statusName"
+        FROM (
+            SELECT
+                a.id AS "id",
+                a.bill_no AS "billNo",
+                ( CASE WHEN e.NAME IS NULL THEN a.user_name ELSE e.NAME END ) AS "userName",
+                a.open_id AS "openId",
+                a.user_tel_number AS "userTelNumber",
+                a.dept_name AS "deptName",
+                a.bed_no AS "bedNo",
+                a.address AS "address",
+                a.need_date AS "needDate",
+                a.building AS "building",
+                a.building_name AS buildingName,
+                a.req_send_time AS "reqSendTime",
+                a.bill_total_price AS "billTotalPrice",
+                a.bill_remark AS "billRemark",
+                a.status_code AS "statusCode",
+                a.reject_code AS "rejectCode",
+                oo.operation_time AS operationTime,
+                pp.operation_time AS confirmTime,
+                clc.canteen_name AS canteenName,
+                a.pay_type AS "payType",
+                a.print_flag,
+                a.rec_revise_time,
+                a.reject_reason AS "rejectReason",
+            IF
+                ( f.`name` IS NULL, IF ( t1.patient_name IS NULL, a.REC_CREATOR, t1.patient_name ), f.`name` ) AS "recCreator",
+                a.REC_CREATE_TIME AS "recCreateTime",
+                c.meal_Name AS "mealName" 
+            FROM
+                sc_order_bill_patient a
+                LEFT JOIN ( SELECT meal_num, meal_name FROM sc_order_time UNION SELECT meal_Type_num AS meal_num, meal_type_name AS meal_name FROM sc_order_type ) c ON a.meal_num = c.meal_num
+                LEFT JOIN v_frame_ac_personnel e ON e.work_no = a.user_name
+                LEFT JOIN v_frame_ac_personnel f ON f.work_no = a.REC_CREATOR
+                JOIN sc_canteen_liaison_conf clc ON clc.canteen_num = a.canteen_num
+                LEFT JOIN `sc_patient_card` t1 ON t1.`patient_num` = a.`open_id`
+                LEFT JOIN ( SELECT bill_no, operation_time FROM sc_operation WHERE operation_route = '06' ) oo ON oo.bill_no = a.bill_no
+                LEFT JOIN ( SELECT bill_no, operation_time FROM sc_operation WHERE operation_route = '07' ) pp ON pp.bill_no = a.bill_no 
+               
+            WHERE
+                1 = 1 
+            AND a.ARCHIVE_FLAG <![CDATA[<>]]>'POS'
+            <isNotEmpty prepend=" AND " property="userId">
+                FIND_IN_SET(#userId#,clc.liaison_id) > 0
+            </isNotEmpty>
+            and a.reject_code = '1'
+            <isNotEmpty prepend=" AND " property="beginDate">
+                a.need_date >=
+                #beginDate#
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="endDate">
+                a.need_date <![CDATA[<=]]>
+                #endDate#
+            </isNotEmpty>
+            <isNotEmpty prepend="AND" property="patientCode">
+                a.open_id LIKE
+                CONCAT('%', #patientCode#, '%')
+            </isNotEmpty>
+            <isNotEmpty prepend="AND" property="patientName">
+                a.user_name LIKE
+                CONCAT('%', #patientName#, '%')
+            </isNotEmpty>
+    
+            <isNotEmpty prepend="AND" property="rejectCode">
+                a.reject_code =
+                #rejectCode#
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="code">
+                clc.datagroup_treecode LIKE CONCAT('%',#code#,'%')
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="needDate">
+                a.need_date =
+                #needDate#
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="canteenNum">
+                a.canteen_num =
+                #canteenNum#
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="mealNum">
+                a.meal_num = #mealNum#
+            </isNotEmpty>
+            ) a
+            LEFT JOIN sc_operation_status b ON a.statusCode = b.status_code WHERE
+            b.pbo_code = 'PATIENT_MEAL'
+            <isNotEmpty prepend=" AND " property="id">
+                a.id = #id#
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="userName">
+                a.userName =
+                #userName#
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="billNo">
+                a.billNo like
+                concat('%',#billNo#,'%')
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="address">
+                a.address like
+                concat('%',#address#,'%')
+            </isNotEmpty>
+            <isNotEmpty prepend=" AND " property="building">
+                a.building like
+                concat('%',#building#,'%')
+            </isNotEmpty>
+            ORDER BY a.billNo DESC 
+    </select>
+	
+	<!-- 已处理 -->
+	<select id="query2" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ps.bm.domain.PSBMDdzf01">
+		SELECT
+	        a.*,
+	        b.status_name AS "statusName"
+	    FROM (
+	        SELECT
+	            a.id AS "id",
+	            a.bill_no AS "billNo",
+	            ( CASE WHEN e.NAME IS NULL THEN a.user_name ELSE e.NAME END ) AS "userName",
+	            a.open_id AS "openId",
+	            a.user_tel_number AS "userTelNumber",
+	            a.dept_name AS "deptName",
+	            a.bed_no AS "bedNo",
+	            a.address AS "address",
+	            a.need_date AS "needDate",
+	            a.building AS "building",
+	            a.building_name AS buildingName,
+	            a.req_send_time AS "reqSendTime",
+	            a.bill_total_price AS "billTotalPrice",
+	            a.bill_remark AS "billRemark",
+	            a.status_code AS "statusCode",
+	            a.reject_code AS "rejectCode",
+	            oo.operation_time AS operationTime,
+	            pp.operation_time AS confirmTime,
+	            clc.canteen_name AS canteenName,
+	            a.pay_type AS "payType",
+	            a.print_flag,
+	            a.rec_revise_time,
+	            a.reject_reason AS "rejectReason",
+	        IF
+	            ( f.`name` IS NULL, IF ( t1.patient_name IS NULL, a.REC_CREATOR, t1.patient_name ), f.`name` ) AS "recCreator",
+	            a.REC_CREATE_TIME AS "recCreateTime",
+	            c.meal_Name AS "mealName" 
+	        FROM
+	            sc_order_bill_patient a
+	            LEFT JOIN ( SELECT meal_num, meal_name FROM sc_order_time UNION SELECT meal_Type_num AS meal_num, meal_type_name AS meal_name FROM sc_order_type ) c ON a.meal_num = c.meal_num
+	            LEFT JOIN v_frame_ac_personnel e ON e.work_no = a.user_name
+	            LEFT JOIN v_frame_ac_personnel f ON f.work_no = a.REC_CREATOR
+	            JOIN sc_canteen_liaison_conf clc ON clc.canteen_num = a.canteen_num
+	            LEFT JOIN `sc_patient_card` t1 ON t1.`patient_num` = a.`open_id`
+	            LEFT JOIN ( SELECT bill_no, operation_time FROM sc_operation WHERE operation_route = '06' ) oo ON oo.bill_no = a.bill_no
+	            LEFT JOIN ( SELECT bill_no, operation_time FROM sc_operation WHERE operation_route = '07' ) pp ON pp.bill_no = a.bill_no 
+	        WHERE
+	            1 = 1 
+			AND a.ARCHIVE_FLAG <![CDATA[<>]]>'POS'
+			and a.reject_code = '2'
+			<isNotEmpty prepend=" AND " property="beginDate">
+				a.need_date >=
+				#beginDate#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="endDate">
+				a.need_date <![CDATA[<=]]>
+				#endDate#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="patientCode">
+				a.open_id LIKE
+				CONCAT('%', #patientCode#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="patientName">
+				a.user_name LIKE
+				CONCAT('%', #patientName#, '%')
+			</isNotEmpty>
+	
+			<isNotEmpty prepend="AND" property="rejectCode">
+				a.reject_code =
+				#rejectCode#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="code">
+				clc.datagroup_treecode LIKE CONCAT('%',#code#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="needDate">
+				a.need_date =
+				#needDate#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="canteenNum">
+				a.canteen_num =
+				#canteenNum#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="mealNum">
+				a.meal_num = #mealNum#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="userId">
+				FIND_IN_SET(#userId#,
+				clc.liaison_id) > 0
+			</isNotEmpty>
+			) a
+			LEFT JOIN sc_operation_status b ON a.statusCode = b.status_code WHERE
+			b.pbo_code = 'PATIENT_MEAL'
+			<isNotEmpty prepend=" AND " property="id">
+				a.id = #id#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="userName">
+				a.userName =
+				#userName#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="billNo">
+				a.billNo like
+				concat('%',#billNo#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="address">
+				a.address like
+				concat('%',#address#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="building">
+				a.building like
+				concat('%',#building#,'%')
+			</isNotEmpty>
+            ORDER BY a.billNo DESC 
+	</select>
+
+<!-- 	<select id="count" resultClass="int">
+		SELECT COUNT(0) FROM sc_order_bill_patient WHERE 1=1 AND ARCHIVE_FLAG != 'POS' and a.reject_code = '1'
+	</select>
+
+	<select id="count2" resultClass="int">
+		SELECT COUNT(0) FROM sc_order_bill_patient WHERE 1=1 AND ARCHIVE_FLAG != 'POS' and a.reject_code = '2'
+	</select> -->
+
+</sqlMap>

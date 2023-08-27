@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CMType">
+    <select id="queryHTNo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT DISTINCT
+            CONT_NO cmNo
+        FROM
+            cm_contract_bill
+        WHERE
+        trim( CONT_NO ) != ""
+        <isNotEmpty prepend="and" property="today">
+            CONT_NO like concat('%',#today#,'%')
+        </isNotEmpty>
+        ORDER BY
+            CONT_NO DESC
+    </select>
+
+    <select id="queryFPNo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT DISTINCT
+        invoice_auto_no cmNo
+        FROM
+        cm_invoice
+        WHERE
+        trim( invoice_auto_no ) != ""
+        <isNotEmpty prepend="and" property="today">
+            invoice_auto_no like concat('%',#today#,'%')
+        </isNotEmpty>
+        ORDER BY
+        invoice_auto_no DESC
+    </select>
+
+    <select id="queryFKNo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT DISTINCT
+        payment_auto_no cmNo
+        FROM
+        cm_payment
+        WHERE
+        trim( payment_auto_no ) != ""
+        <isNotEmpty prepend="and" property="today">
+            payment_auto_no like concat('%',#today#,'%')
+        </isNotEmpty>
+        ORDER BY
+        payment_auto_no DESC
+    </select>
+
+    <select id="queryJDNo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT DISTINCT
+        node_auto_no cmNo
+        FROM
+        cm_node
+        WHERE
+        trim( node_auto_no ) != ""
+        <isNotEmpty prepend="and" property="today">
+            node_auto_no like concat('%',#today#,'%')
+        </isNotEmpty>
+        ORDER BY
+        node_auto_no DESC
+    </select>
+
+    <select id="querySCNo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT DISTINCT
+        schedule_auto_no cmNo
+        FROM
+        cm_schedule
+        WHERE
+        trim( schedule_auto_no ) != ""
+        <isNotEmpty prepend="and" property="today">
+            schedule_auto_no like concat('%',#today#,'%')
+        </isNotEmpty>
+        ORDER BY
+        schedule_auto_no DESC
+    </select>
+
+    <select id="queryZBNo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT DISTINCT
+        bid_no cmNo
+        FROM
+        cm_bid
+        WHERE
+        trim( bid_no ) != ""
+        <isNotEmpty prepend="and" property="today">
+            bid_no like concat('%',#today#,'%')
+        </isNotEmpty>
+        ORDER BY
+        bid_no DESC
+    </select>
+</sqlMap>

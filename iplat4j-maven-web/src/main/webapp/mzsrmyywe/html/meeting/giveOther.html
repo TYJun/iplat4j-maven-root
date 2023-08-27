@@ -1,0 +1,552 @@
+<!doctype html>
+<html class="no-js">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="../reference/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../reference/css/common.css" />
+		<link rel="stylesheet" href="css/tcj-font.css" />
+		<link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css">
+
+	</head>
+	<STYLE TYPE="text/css">
+		body {
+			background: #eee;
+		}
+		
+		.row-content {
+			height: 40px;
+			line-height: 40px;
+			padding: 0 15px;
+			border-bottom: 1px solid #EEEEEE;
+			font-size: 14px;
+			color: #666666;
+			background: #ffffff;
+		}
+		
+		.row-content1 {
+			height: 30px;
+			line-height: 30px;
+			padding: 0 15px;
+			font-size: 16px;
+			color: #666666;
+			background: #ffffff;
+		}
+		
+		.row-right {
+			text-align: right;
+			color: #333333;
+		}
+		
+		.new-icon-color {
+			color: #aaa;
+		}
+		
+		.mui-scroll-wrapper {
+			position: absolute;
+			z-index: 2;
+			top: 0;
+			bottom: 0;
+			left: 5px;
+			overflow: hidden;
+			width: auto;
+			right: 5px;
+		}
+		
+		.new-row {
+			background: #FFF;
+			padding: 0px 10px;
+			margin: 2px 0px;
+		}
+		
+		.apply-name {
+			font-size: 15px;
+			color: #000;
+			/*font-weight: bold;*/
+		}
+		
+		.status-div {
+			width: 55%;
+			height: 30px;
+			line-height: 30px;
+			text-align: center;
+			color: #fff;
+			border-bottom-left-radius: 7px;
+			border-bottom-right-radius: 7px;
+		}
+		
+		.lanse {
+			background: #58d0f2;
+		}
+		
+		.huangse {
+			background: #f2ae3d;
+		}
+		
+		.hongse {
+			background: #ff7171;
+		}
+		
+		.lvse {
+			background: #66ff66;
+		}
+		
+		.apply-date-icon {
+			text-align: center;
+			height: 35px;
+			line-height: 40px;
+			font-size: 13px;
+		}
+		
+		.apply-date-text {
+			text-align: center;
+			height: 35px;
+			font-size: 15px;
+		}
+		
+		.apply-content1 {
+			text-align: left;
+			height: 35px;
+			line-height: 47px;
+			font-weight: lighter;
+		}
+		
+		.apply-content2 {
+			text-align: left;
+			height: 35px;
+			font-weight: lighter;
+			font-size: 11px;
+			display: none;
+		}
+		
+		.apply-bottom {
+			border-bottom: 1px solid #eee;
+		}
+		
+		.apply-bottom:last-child {
+			border-bottom: 0;
+		}
+		
+		.icon-ln_xiangyoujiaohuan {
+			margin-top: 15px;
+			font-size: 55px;
+			color: #ddd;
+		}
+		
+		.new-row-tcj {
+			height: 60px;
+			line-height: 60px;
+			display: flex;
+			justify-content: space-between;
+			font-size: 14px;
+		}
+		
+		.quxiao {
+			height: 32px;
+			width: 21%;
+			background: #fafafa;
+			text-align: center;
+			line-height: 32px;
+			border-radius: 15px;
+			margin-top: 14px;
+			color: #a6a6a6;
+			border: 1px solid #eee;
+		}
+		
+		.queding {
+			height: 32px;
+			width: 21%;
+			background: #2aabd2;
+			text-align: center;
+			line-height: 32px;
+			border-radius: 15px;
+			margin-top: 14px;
+			color: #fff;
+			box-shadow: 0 0 7px #2aabd2;
+		}
+		
+		.print {
+			height: 32px;
+			width: 27%;
+			background: #2aabd2;
+			text-align: center;
+			line-height: 32px;
+			border-radius: 10px;
+			margin-top: 14px;
+			color: #fff;
+			box-shadow: 0 0 7px #2aabd2;
+		}
+		
+		.printDetail {
+			height: 32px;
+			width: 27%;
+			background: #2aabd2;
+			text-align: center;
+			line-height: 32px;
+			border-radius: 10px;
+			margin-top: 14px;
+			color: #fff;
+			box-shadow: 0 0 7px #2aabd2;
+		}
+		
+		.choose-checkBox {
+			height: 40px;
+			width: 15%;
+		}
+		
+		.piliang-agree {
+			/*display: none;*/
+			position: fixed;
+			width: 50px;
+			height: 50px;
+			z-index: 99;
+			bottom: 160px;
+			right: 30px;
+			text-align: center;
+			background: #2aabd2;
+			color: #fff;
+			border-radius: 50%;
+			padding: 5px 10px;
+			font-size: 12px;
+			box-shadow: 0 0 20px #2aabd2;
+		}
+		
+		.mui-checkbox input[type=checkbox]:checked:before,
+		.mui-radio input[type=radio]:checked:before {
+			color: #4ebde2;
+		}
+		
+		.sureandcancel {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			height: 50px;
+			z-index: 99;
+			/*display: none;*/
+		}
+		
+		.choose-quxiao {
+			width: 50%;
+			height: 50px;
+			line-height: 50px;
+			background: #ddd;
+			color: #fff;
+			text-align: center;
+			font-size: 17px;
+			float: left;
+		}
+		
+		.choose-huitui {
+			width: 33%;
+			height: 50px;
+			line-height: 50px;
+			background: #FF0000;
+			color: #fff;
+			text-align: center;
+			font-size: 17px;
+			float: left;
+			border-right: 1px solid #fff;
+		}
+		
+		.choose-queding {
+			width: 50%;
+			height: 50px;
+			line-height: 50px;
+			background: #FF0000;
+			color: #fff;
+			text-align: center;
+			font-size: 17px;
+			float: left;
+		}
+		
+		.no-views {
+			text-align: center;
+			margin-top: 280px;
+			margin-left: -15px;
+		}
+		
+		.mui-content-self {
+			position: fixed;
+			left: 5px;
+			right: 5px;
+			top: 44px;
+			z-index: 9;
+		}
+	</STYLE>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">会议人员派工</h1>
+			<button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+       返回
+      </button>
+			<button data-name="all" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-right  all-choose" style="margin-right: 0px; ">
+       全选
+      </button>
+		</header>
+
+		<div id="warn" class="warn" hidden>
+			<small></small>
+		</div>
+		<div id="loading" class="loading1" hidden>
+			<div class="loading2">
+				<span class="mui-spinner" style="width:80px;height:80px;"></span>
+			</div>
+		</div>
+		<!--<div class="mui-content-self" style="">
+
+			<div class="mui-row row-content">
+
+				<div class="mui-col-sm-5 mui-col-xs-5">
+					<span class="mui-icon  iconfont icon-zhuangtai new-icon-color"></span> 工号查询：
+				</div>
+				<div class="mui-col-sm-7 mui-col-xs-7 row-right ">
+					<input type="text" id="xinghao" style="width: 80%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;" placeholder="请输入工号" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" />
+					<span class="mui-icon iconfont icon-youjiantou" style="color:#55cbeb;font-weight: bold;"></span>
+				</div>
+			</div>
+			<div class="mui-row row-content">
+
+				<div class="mui-col-sm-5 mui-col-xs-5">
+					<span class="mui-icon   iconfont   icon-riqi1 new-icon-color"></span> 姓名查询：
+				</div>
+				<div class="mui-col-sm-7 mui-col-xs-7 row-right ">
+					<input type="text" id="askGive" style="width: 80%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;" placeholder="请输入姓名" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" />
+					<span class="mui-icon iconfont icon-youjiantou" style="color:#55cbeb;font-weight: bold;"></span>
+				</div>
+			</div>
+
+			<div class="mui-row row-content new-row-tcj">
+
+				<div class="quxiao">重置</div>
+				<div class="queding">确认</div>
+			</div>
+
+		</div>-->
+
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="overflow-y: auto; margin-top:5px;margin-bottom: 55px;">
+			<div class="mui-scroll">
+				<ul class="mui-table-view mui-table-view-chevron" style="background-color:#eee;">
+
+					<!--<div class="new-row">
+						<div class="mui-row go-datail">
+							<div class="mui-col-sm-8 mui-col-xs-8" style="line-height: 40px;color: #666;font-size: 12px;display:flex;">
+								<div class="mui-input-row mui-checkbox choose-checkBox">
+									<input style="right: 10px;top:5px;" name="checkbox" value="Item 1" type="checkbox">
+
+								</div>
+								<span class="apply-name">workNo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NAME </span></div>
+							<div class="mui-col-sm-4 mui-col-xs-4" style="height: 40px;display: flex;justify-content: flex-end;">
+
+								<div class="status-div lanse">status</div>
+
+							</div>
+						</div>
+
+					</div>-->
+
+				</ul>
+			</div>
+		</div>
+
+		<p class="no-views" style="">———&nbsp;&nbsp;暂无数据&nbsp;&nbsp;———</p>
+		<!--<div class="piliang-agree">批量选择</div>-->
+		<div class="sureandcancel">
+			<div class="choose-quxiao">重置</div>
+			<!--<div class="choose-huitui">回退</div>-->
+			<div class="choose-queding">确定</div>
+		</div>
+	</body>
+	<script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+	<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+	<script src="../reference/js/common.js" type="text/javascript"></script>
+	<script src="../reference/mui/js/mui.picker.min.js" type="text/javascript"></script>
+	<script src="../../cordova.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		var baseUrl = localStorage.getItem("url");
+		var workNo = localStorage.getItem('workNo');
+		var deptNum = localStorage.getItem('deptCode');
+		var url = location.search;
+		var jsonStr = decodeURIComponent(url.substring(1, url.length));
+		var jsonObj = JSON.parse(jsonStr)
+		console.log(jsonObj)
+		var page = 1;
+		loadView();
+
+		function loadView() {
+			$("#loading").show();
+
+			$.ajax({
+				//				url: "buy-plan-apply.json",
+				//				type: "get",
+				url: baseUrl + "app_MeetingController.do?getMeetingPeopleList",
+				type: "post",
+				data: {},
+				success: function(data) {
+					$("#loading").hide();
+					var data = JSON.parse(data);
+					console.log(data)
+					var list = data.obj;
+					var tasklist = "";
+					if(list.length == 0) {
+						$(".no-views").css("display", "");
+						$(".all-choose").hide();
+						$(".piliang-agree").hide();
+					} else {
+						$(".no-views").css("display", "none");
+					}
+					for(var i = 0; i < list.length; i++) {
+						tasklist += createView(list[i].name, list[i].deptName, list[i].workNo, list[i].tel, list[i].deptNum);
+					}
+					$("ul").html(tasklist);
+				}
+			});
+
+		}
+
+		function createView(name, deptName, workNo, tel, deptNum) {
+
+			var jsonSelf = {
+				"name": name,
+				"deptName": deptName,
+				"workNo": workNo,
+				"contactTel": tel,
+				"deptNum": deptNum
+			}
+
+			tel = tel == null ? "" : tel;
+			var jsonString = JSON.stringify(jsonSelf)
+			var html = "";
+			html += ' <div class="new-row">';
+			html += '<div id=\'' + jsonString + '\' class="mui-row go-datail">';
+			html += '<div class="mui-col-sm-12 mui-col-xs-12" style="line-height: 40px;color: #666;font-size: 12px;display:flex;">';
+			html += '<div class="mui-input-row mui-checkbox choose-checkBox">';
+			//			if(flag == 0)
+			html += '<input id=\'' + jsonString + '\' style="left: 10px;top:5px;" name="checkbox" value="Item 1" type="checkbox" >';
+			//			else if(flag == 1)
+			//				html += '<input checked id=\'' + jsonString + '\' style="left: 10px;top:5px;" name="checkbox" value="Item 1" type="checkbox" >';
+
+			html += '</div>';
+
+			if(tel == "" || tel == undefined || tel == "undefined")
+				html += '<span class="apply-name">' + deptName + "&nbsp;&nbsp;&nbsp;&nbsp;" + name + '</span></div>';
+			else
+				html += '<span class="apply-name">' + deptName + "&nbsp;&nbsp;&nbsp;&nbsp;" + name + '<span style="color:#2aabd2;">(' + tel + ')</span></span></div>';
+
+			html += '</div>';
+
+			html += '</div>';
+
+			return html;
+
+		}
+		/*
+		 *1.单独单子的回退和同意
+		 *2.批量单子的 回退和同意
+		 * 
+		 * */
+
+		function indirectFunc(value) {}
+
+		mui("body").on("tap", ".choose-queding", function() {
+			var mlgbArr = [];
+			var mlaaa = {};
+			var submitLen = $("input[type='checkbox']:checked");
+
+			for(var a = 0; a < submitLen.length; a++) {
+				mlaaa = JSON.parse(submitLen[a].id);
+				//				mlaaa.flag = "1"
+				mlgbArr.push(mlaaa);
+
+			}
+
+			console.log(mlgbArr)
+
+			$("#loading").show();
+			//			return;
+			getNameNum(mlgbArr);
+		});
+
+		//批量确定按钮
+		var clearTime = null;
+
+		function getNameNum(value) {
+			clearTimeout(clearTime);
+
+			clearTime = setTimeout("indirectFunc(\'" + JSON.stringify(value) + "\')", 1500)
+		}
+
+		function indirectFunc(value) {
+			$.ajax({ //				url: "../json/buy-plan-apply.json",
+				//				type: "get",
+				url: baseUrl + "app_MeetingController.do?sendMeeting",
+				type: "post",
+				data: {
+					billNo: jsonObj.billNo,
+					//					deptWorkNo: workNo,
+					MeetingPeopleList: value
+				},
+				success: function(data) {
+					var data = JSON.parse(data)
+					console.log(data)
+					if(data.success) {
+						showMsg("操作成功");
+						setTimeout('location.href="meeting-manage.html";', 2000);
+
+					} else {
+						$("#loading").hide();
+						showMsg(data.msg);
+					}
+				}
+			});
+		}
+		/*
+		 * 1.全选：所有的选择框默认选中，底部的取消选择按钮显示
+		 * 2。批量选择：所有的选择框默认不选中，底部的取消选择按钮显示
+		 * 3.确定：each遍历所有选中的单据
+		 * 4.取消：所有的选择框默认不选中且消失，底部的取消选择按钮小时
+		 * 
+		 * */
+		mui("body").on("tap", ".all-choose", function() {
+			var _this = $(this);
+			$("input[type='checkbox']").prop("checked", true);
+			$(".choose-checkBox").show();
+			$("#pullrefresh").height($(window).height() - 104 + "px");
+			$(".sureandcancel").show();
+			//			$("input[type='checkbox']").each(function() { //循环checkbox选择或取消
+			//
+			//				console.log($(this).prop("checked"));
+			//
+			//			});
+		});
+
+		mui("body").on("tap", ".choose-quxiao", function() {
+			var _this = $(this);
+			$("input[type='checkbox']").prop("checked", false);
+			$(".choose-checkBox").show();
+			$("#pullrefresh").height($(window).height() - 54 + "px");
+			$(".sureandcancel").show();
+		});
+
+		document.getElementById('back').addEventListener('tap', function() {
+			location.href = "main.html";
+		});
+		document.addEventListener("deviceready", onDeviceReady, false);
+
+		function onDeviceReady() {
+			document.addEventListener("backbutton", onBackKeyDown, false);
+		}
+
+		function onBackKeyDown() {
+			location.href = "meeting-manage.html";
+		}
+	</script>
+
+</html>

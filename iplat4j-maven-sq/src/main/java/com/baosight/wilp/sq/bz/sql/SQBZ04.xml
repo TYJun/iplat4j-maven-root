@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SQBZ04">
+	
+	
+	<!-- 按id查询标准信息 -->
+	<select id="queryStandard" parameterClass="String" resultClass="java.util.HashMap">
+		SELECT
+			ID as id,
+			standard_name as standardName,
+			assess_dept_name as assessDeptName,
+			assess_type_code as assessTypeCode,
+			assess_type_name as assessTypeName,
+			assess_work_name_leader as assessWorkNameLeader,
+			assess_mail as assess_Mail,
+			remark as remark
+		FROM
+			sq_register_standard
+		WHERE
+			id = #value#
+	</select>
+	
+	
+	<!-- 查询问卷类型 -->
+	<select id="querySqObjectType" resultClass="java.util.HashMap">
+		SELECT
+			typeName,
+			typeCode 
+		FROM
+			sq_s_type 
+		WHERE
+			typegroupid IN (
+		SELECT
+			id 
+		FROM
+			sq_s_typegroup 
+		WHERE
+			typegroupcode = 'sqObjectType'
+			<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+			</isNotEmpty>
+			)
+	</select>
+	
+	
+	<!-- 保存新的标准 -->
+	<insert id="insetStandard" parameterClass="java.util.HashMap">
+		INSERT INTO sq_register_standard (
+			`ID`,
+			`standard_code`,
+			`standard_name`,
+			`remark`,
+			`creator`,
+			`create_time`,
+			`assess_dept_name`,
+			`assess_work_name_leader`,
+			`assess_mail`,
+			`assess_type_code`,
+			`assess_type_name`,
+			`data_group_code` 
+			)
+			VALUES
+				(
+				UUID(),
+				#standardCode#,
+				#standardName#,
+				#remark#,
+				#creator#,
+				#createTime#,
+				#asseccDeptName#,
+				#assessWorkNameleader#,
+				#assessMail#,
+				#assessTypeCode#,
+				#assessTypeName#,
+				#datagroupcode#
+				);
+	</insert>
+	
+	
+	<!-- 更新标准 -->
+	<update id="updateStandard" parameterClass="java.util.HashMap">
+		UPDATE `sq_register_standard`
+			SET `standard_code` = #standardCode#,
+			`standard_name` = #standardName#,
+			`remark` = #remark#,
+			`modifier` = #creator#,
+			`modify_time` = #createTime#,
+			`assess_dept_name` = #asseccDeptName#,
+			`assess_work_name_leader` = #assessWorkNameleader#,
+			`assess_mail` = #assessMail#,
+			`assess_type_code` = #assessTypeCode#,
+			`assess_type_name` = #assessTypeName#
+			WHERE
+		`ID` = #id#;
+	</update>
+  
+</sqlMap>

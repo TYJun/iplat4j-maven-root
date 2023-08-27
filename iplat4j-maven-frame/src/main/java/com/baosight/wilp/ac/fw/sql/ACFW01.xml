@@ -1,0 +1,711 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ACFW01">
+
+    <!-- 查询人员列表 -->
+    <select id="queryStaffList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT t.* FROM (
+        select ap.id AS "id",
+        ap.work_no AS "workNo",         <!-- 工号 -->
+        ap.name AS "name",              <!-- 姓名 -->
+        (CASE WHEN ap.gender = '1' THEN '男'
+        WHEN ap.gender = '0' THEN '女'
+        ELSE ''
+        END) AS "gender",             <!-- 性别 -->
+        ap.contact_tel AS "contactTel", <!-- 联系电话-->
+        ap.dept_id AS "deptId",         <!-- 所属科室ID-->
+        ad.dept_num AS "deptNum",       <!-- 所属科室编码-->
+        ad.dept_name AS "deptName",     <!-- 所属科室名称-->
+        ap.id_no AS "idNo",             <!-- 身份证号-->
+        ap.type AS "type",              <!-- 员工类型code-->
+        case ap.type
+        when '01' then '本院职工'
+        when '02' then '外协单位员工'
+        when '03' then '医院返聘职工'
+        when '04' then '科室返聘职工'
+        when '05' then '进修医生'
+        when '06' then '进修护士'
+        when '07' then '实习医生'
+        when '08' then '实习护士'
+        when '09' then '研究生'
+        when '10' then '临时医技人员'
+        when '11' then '规范会培训生'
+        when '12' then '院聘临时工'
+        when '13' then '科聘临时工'
+        when '99' then '其他人员"'
+        end as"staffType",               <!-- 员工类型 -->
+        (CASE WHEN ap.is_service = '1'
+        THEN '是'
+        ELSE '否'
+        END) AS "isService",        <!-- 服务人员 -->
+        ap.status AS "status",
+        (CASE WHEN ap.status = '1'
+        THEN '是'
+        ELSE '否'
+        END) AS "isStatus"
+        from $projectSchema$.ac_personnel ap
+        LEFT JOIN $projectSchema$.ac_department ad ON ad.id = ap.dept_id
+        ) t
+        WHERE 1=1
+        and t.status = '1'
+        <isNotEmpty prepend="and" property="userId">
+            t.id = #userId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="workNo1">
+            t.workNo = #workNo1#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="workNo">
+            t.workNo like concat('%',#workNo#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="userName">
+            t.name like concat('%',#userName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="deptId">
+            t.deptId = #deptId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="deptNum">
+            t.deptNum like concat('%',#deptNum#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="deptName">
+            t.deptName like concat('%',#deptName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="datagroupCode">
+            t.deptId in (select id from $projectSchema$.ac_department where hospital_district = #datagroupCode#)
+        </isNotEmpty>
+
+    </select>
+
+    <!-- 查询人员列数量 -->
+    <select id="queryStaffCount" resultClass="int">
+        SELECT t.id FROM (
+        select ap.id AS "id",
+        ap.work_no AS "workNo",         <!-- 工号 -->
+        ap.name AS "name",              <!-- 姓名 -->
+        (CASE WHEN ap.gender = '1'
+        THEN '男'
+        ELSE '女'
+        END) AS "gender",           <!-- 性别 -->
+        ap.contact_tel AS "contactTel", <!-- 联系电话-->
+        ap.dept_id AS "deptId",         <!-- 所属科室ID-->
+        ad.dept_num AS "deptNum",       <!-- 所属科室编码-->
+        ad.dept_name AS "deptName",     <!-- 所属科室名称-->
+        ap.id_no AS "idNo",             <!-- 身份证号-->
+        ap.type AS "type",              <!-- 员工类型code-->
+        case ap.type
+        when '01' then '本院职工'
+        when '02' then '外协单位员工'
+        when '03' then '医院返聘职工'
+        when '04' then '科室返聘职工'
+        when '05' then '进修医生'
+        when '06' then '进修护士'
+        when '07' then '实习医生'
+        when '08' then '实习护士'
+        when '09' then '研究生'
+        when '10' then '临时医技人员'
+        when '11' then '规范会培训生'
+        when '12' then '院聘临时工'
+        when '13' then '科聘临时工'
+        when '99' then '其他人员"'
+        end as"staffType",               <!-- 员工类型 -->
+        (CASE WHEN ap.is_service = '1'
+        THEN '是'
+        ELSE '否'
+        END) AS "isService",        <!-- 服务人员 -->
+        ap.status AS "status",
+        (CASE WHEN ap.status = '1'
+        THEN '是'
+        ELSE '否'
+        END) AS "isStatus"
+        from $projectSchema$.ac_personnel ap
+        LEFT JOIN $projectSchema$.ac_department ad ON ad.id = ap.dept_id
+        ) t
+        WHERE 1=1
+        and t.status = '1'
+        <isNotEmpty prepend="and" property="userId">
+            t.id = #userId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="workNo1">
+            t.workNo = #workNo1#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="workNo">
+            t.workNo like concat('%',#workNo#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="userName">
+            t.name like concat('%',#userName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="deptId">
+            t.deptId = #deptId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="deptNum">
+            t.deptNum like concat('%',#deptNum#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="deptName">
+            t.deptName like concat('%',#deptName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="datagroupCode">
+            t.deptId in (select id from $projectSchema$.ac_department where hospital_district = #datagroupCode#)
+        </isNotEmpty>
+
+    </select>
+
+    <!-- 查询科室列表 -->
+    <select id="queryDeptList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT t.* FROM (
+        SELECT ad.id AS "id",
+        ad.dept_num AS "deptNum",
+        ad.dept_name AS "deptName",
+        ad.parent_id AS "parentId",
+        ade.dept_name AS "parentDeptName",
+        ad.fina_code AS "finaCode",
+        ad.erp_code AS "erpCode",
+        ad.dept_describe AS "deptDescribe",
+        ad.hospital_district AS "hospitalDistrict",
+        ad.type AS "type",
+        (CASE WHEN ad.type = '1'
+        THEN '是'
+        ELSE '否'
+        END) AS "isService",
+        ad.status AS "status",
+        (CASE WHEN ad.status = '1'
+        THEN '是'
+        else '否'
+        END) AS "isStop"
+        FROM $projectSchema$.ac_department ad
+        LEFT JOIN $projectSchema$.ac_department ade ON ade.id = ad.parent_id
+        ) t
+        WHERE 1=1
+        and t.status = '1'
+        <isNotEmpty prepend="and" property="deptId">
+            t.id =#deptId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="deptNum">
+            t.deptNum =#deptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="deptName">
+            t.deptName like concat('%',#deptName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="userId">
+            t.id = (select dept_id from $projectSchema$.ac_personnel where id = #userId#)
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="workNo">
+            t.id = (select dept_id from $projectSchema$.ac_personnel where work_no = #workNo#)
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="spotId">
+            t.id = (select dept_id from $projectSchema$.ac_spot where id = #spotId#)
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="spotNum">
+            t.id = (select dept_id from $projectSchema$.ac_spot where spot_num = #spotNum#)
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="spotName">
+            t.id = (select dept_id from $projectSchema$.ac_spot where spot_name = #spotName#)
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="type">
+            t.type = #type#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="datagroupCode">
+            t.hospitalDistrict = #datagroupCode#
+        </isNotEmpty>
+
+        order by CONVERT( t.deptName USING gbk ) COLLATE gbk_chinese_ci ASC
+
+
+    </select>
+
+    <!-- 查询科室列数量 -->
+    <select id="queryDeptCount" resultClass="int">
+        select t.id from (
+        select ad.id AS "id",
+        ad.dept_num AS "deptNum",
+        ad.dept_name AS "deptName",
+        ad.parent_id AS "parentId",
+        ade.dept_name AS "parentDeptName",
+        ad.fina_code AS "finaCode",
+        ad.erp_code AS "erpCode",
+        ad.dept_describe AS "deptDescribe",
+        ad.type AS "type",
+        ad.hospital_district AS "hospitalDistrict",
+        (CASE WHEN ad.type = '1'
+        THEN '是'
+        ELSE '否'
+        END) AS "isService",
+        ad.status AS "status",
+        (CASE WHEN ad.status = '1'
+        THEN '是'
+        else '否'
+        END) AS "isStop"
+        from $projectSchema$.ac_department ad
+        LEFT JOIN $projectSchema$.ac_department ade on ade.id = ad.parent_id
+        ) t
+        WHERE 1=1
+        and t.status = '1'
+        <isNotEmpty prepend="and" property="deptId">
+            t.id =#deptId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="deptNum">
+            t.deptNum =#deptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="deptName">
+            t.deptName like concat('%',#deptName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="userId">
+            t.id = (select dept_id from $projectSchema$.ac_personnel where id = #userId#)
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="workNo">
+            t.id = (select dept_id from $projectSchema$.ac_personnel where work_no = #workNo#)
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="spotId">
+            t.id = (select dept_id from $projectSchema$.ac_spot where id = #spotId#)
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="spotNum">
+            t.id = (select dept_id from $projectSchema$.ac_spot where spot_num = #spotNum#)
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="spotName">
+            t.id = (select dept_id from $projectSchema$.ac_spot where spot_name = #spotName#)
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="type">
+            t.type = #type#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="datagroupCode">
+            t.hospitalDistrict = #datagroupCode#
+        </isNotEmpty>
+    </select>
+
+    <!-- 通过科室查询地点信息 -->
+    <select id="querySpotByDept" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT t.* FROM (
+        SELECT asp.id AS 'id',
+        asp.spot_num AS 'spotNum',
+        asp.spot_name AS 'spotName',
+        asp.dept_id AS 'deptId',
+        ad.dept_num AS 'deptNum',
+        ad.dept_name AS 'deptName',
+        asp.building AS 'building',
+        asp.floor AS 'floor',
+        asp.room AS 'room',
+        asp.status AS 'status',
+        asp.remark AS 'remark'
+        FROM $projectSchema$.ac_spot asp
+        LEFT JOIN $projectSchema$.ac_department ad ON ad.id = asp.dept_id
+        ) t
+        WHERE 1=1
+        and t.status = '1'
+        <isNotEmpty prepend="and" property="deptId">
+            t.deptId =#deptId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="deptNum">
+            t.deptNum =#deptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="id">
+            t.id =#id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="spotNum">
+            t.spotNum =#spotNum#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="spotName">
+            t.spotName like concat('%',#spotName#,'%')
+        </isNotEmpty>
+
+    </select>
+
+    <!-- 查询数量 -->
+    <select id="querySpotByDeptCount" resultClass="int">
+        SELECT t.id FROM (
+        SELECT asp.id AS 'id',
+        asp.spot_num AS 'spotNum',
+        asp.spot_name AS 'spotName',
+        asp.dept_id AS 'deptId',
+        ad.dept_num AS 'deptNum',
+        ad.dept_name AS 'deptName',
+        asp.building AS 'building',
+        asp.floor AS 'floor',
+        asp.room AS 'room',
+        asp.status AS 'status',
+        asp.remark AS 'remark'
+        FROM $projectSchema$.ac_spot asp
+        LEFT JOIN $projectSchema$.ac_department ad ON ad.id = asp.dept_id
+        ) t
+        WHERE 1=1
+        and t.status = '1'
+        <isNotEmpty prepend="and" property="deptId">
+            t.deptId =#deptId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="deptNum">
+            t.deptNum =#deptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="id">
+            t.id =#id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="spotNum">
+            t.spotNum =#spotNum#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="spotName">
+            t.spotName like concat('%',#spotName#,'%')
+        </isNotEmpty>
+
+    </select>
+
+    <!-- 通过电话获取科室和地点信息 -->
+    <select id="querySpotByTel" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT t.* FROM (
+        SELECT ate.id AS 'id',
+        ate.tel_num AS 'telNum',
+        ate.dept_id AS 'deptId',
+        ad.dept_num AS 'deptNum',
+        ad.dept_name AS 'deptName',
+        ate.spot_id AS 'spotId',
+        asp.spot_num AS 'spotNum',
+        asp.spot_name AS 'spotName',
+        asp.building AS 'building',
+        asp.floor AS 'floor',
+        asp.room AS 'room',
+        asp.remark AS 'remark',
+        asp.status AS 'status',
+        ate.remark AS 'telTemark'
+        FROM $projectSchema$.ac_telephone ate
+        LEFT JOIN $projectSchema$.ac_department ad ON ad.id = ate.dept_id
+        LEFT JOIN $projectSchema$.ac_spot asp ON asp.id = ate.spot_id
+        ) t
+        WHERE 1=1
+        and t.status = '1'
+        <isNotEmpty prepend="and" property="telNum">
+            t.telNum like concat('%',#telNum#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="spotId">
+            t.spotId = #spotId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="spotNum">
+            t.spotNum = #spotNum#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="spotName">
+            t.spotName like concat('%',#spotName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="datagroupCode">
+            t.deptId IN (SELECT id FROM $projectSchema$.ac_department WHERE hospital_district = #datagroupCode#)
+        </isNotEmpty>
+    </select>
+
+    <!--  -->
+    <select id="getBuilding" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select t.building
+        from (
+        select building ,dept_id
+        from $projectSchema$.ac_spot
+        where status = '1'
+        <isNotEmpty prepend="and" property="building">
+            building like concat('%',#building#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="datagroupCode">
+            dept_id in (select id from $projectSchema$.ac_department where hospital_district = #datagroupCode#)
+        </isNotEmpty>
+        GROUP BY building
+        ) t
+    </select>
+
+    <!--  -->
+    <select id="getFloor" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select floor
+        from $projectSchema$.ac_spot
+        where building = #building#
+        and status = '1'
+        <isNotEmpty prepend="and" property="floor">
+            floor like concat('%',#floor#,'%')
+        </isNotEmpty>
+        GROUP BY floor
+    </select>
+
+    <!--  -->
+    <select id="getRoom" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select room , spot_num , spot_name
+        from $projectSchema$.ac_spot
+        where building = #building#
+        and floor = #floor#
+        and status = '1'
+        <isNotEmpty prepend="and" property="room">
+            room like concat('%',#room#,'%')
+        </isNotEmpty>
+        GROUP BY room
+    </select>
+
+    <update id="updateCid" parameterClass="java.util.HashMap">
+        UPDATE $projectSchema$.ac_personnel
+        SET cid = #cid#
+        WHERE work_no = #workNo#
+    </update>
+
+    <!-- 查询物资列表 -->
+    <select id="queryMaterialList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT t.* FROM (
+        SELECT am.id AS "id",
+        am.mat_code AS "matCode",
+        am.mat_name AS "matName",
+        am.mat_class_id AS "matClassId",
+        amc.mat_class_code AS "matClassCode",
+        amc.mat_class_name AS "matClassName",
+        am.mat_spec AS "matSpec",
+        am.mat_model AS "matModel",
+        am.unit AS "unit",
+        am.price AS "price",
+        acs.supplier_name AS "supplier",
+        am.manufacturer AS "manufacturer",
+        am.mat_type_code AS "matTypeCode",
+        am.remark AS "remark",
+        am.status AS "status",
+        am.rec_create_time AS "recCreateTime",
+        am.picture_uri AS pictureUri,
+        am.pack_factor AS packfactor
+        FROM $projectSchema$.ac_material am
+        LEFT JOIN $projectSchema$.ac_material_class amc ON amc.id = am.mat_class_id
+        LEFT JOIN $projectSchema$.ac_supplier acs ON acs.supplier_code = am.supplier
+        ) t
+        WHERE 1=1
+        and t.status = '1'
+        <isNotEmpty prepend="and" property="matClassCode">
+            t.matClassCode = #matClassCode#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="matClassName">
+            t.matClassName like concat('%',#matClassName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="matClassId">
+            t.matClassId = #matClassId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="id">
+            t.id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="matCode">
+            t.matCode = #matCode#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="matTypeCode">
+            t.matTypeCode = #matTypeCode#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="matName">
+            t.matName like concat('%',#matName#,'%')
+        </isNotEmpty>
+		<isNotEmpty prepend="and" property="matTypeCodeArray">  
+            t.matTypeCode in  
+            <iterate  property="matTypeCodeArray" conjunction="," close=")" open="(" >  
+                #matTypeCodeArray[]#  
+            </iterate>  
+        </isNotEmpty>  
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                t.recCreateTime desc
+            </isEmpty>
+        </dynamic>
+    </select>
+
+    <!-- 查询物资列数量 -->
+    <select id="queryMaterialListCount" parameterClass="java.util.HashMap" resultClass="int">
+        SELECT t.id FROM (
+        SELECT am.id AS "id",
+        am.mat_code AS "matCode",
+        am.mat_name AS "matName",
+        am.mat_class_id AS "matClassId",
+        amc.mat_class_code AS "matClassCode",
+        amc.mat_class_name AS "matClassName",
+        am.mat_spec AS "matSpec",
+        am.mat_model AS "matModel",
+        am.unit AS "unit",
+        am.price AS "price",
+        acs.supplier_name AS "supplier",
+        am.manufacturer AS "manufacturer",
+        am.mat_type_code AS "matTypeCode",
+        am.remark AS "remark",
+        am.status AS "status",
+        am.rec_create_time AS "recCreateTime"
+        FROM $projectSchema$.ac_material am
+        LEFT JOIN $projectSchema$.ac_material_class amc ON amc.id = am.mat_class_id
+        LEFT JOIN $projectSchema$.ac_supplier acs ON acs.supplier_code = am.supplier
+        ) t
+        WHERE 1=1
+        and t.status = '1'
+        <isNotEmpty prepend="and" property="matClassCode">
+            t.matClassCode = #matClassCode#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="matClassName">
+            t.matClassName like concat('%',#matClassName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="matClassId">
+            t.matClassId = #matClassId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="id">
+            t.id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="matCode">
+            t.matCode = #matCode#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="matTypeCode">
+            t.matTypeCode = #matTypeCode#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="matName">
+            t.matName like concat('%',#matName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and"  property="matTypeCodeArray">  
+            t.matTypeCode in  
+            <iterate  property="matTypeCodeArray" conjunction="," close=")" open="(" >  
+                #matTypeCodeArray[]#  
+            </iterate>  
+        </isNotEmpty>  
+    </select>
+
+    <!-- -->
+    <select id="getMaterialClass" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT t.* FROM (
+        SELECT amc.id,
+        amc.mat_class_code AS "matClassCode",
+        amc.mat_class_name AS "matClassName",
+        amc.parent_id AS "parentId",
+        acmc.mat_class_name AS "parentName"
+        FROM $projectSchema$.ac_material_class amc
+        LEFT JOIN $projectSchema$.ac_material_class acmc ON acmc.id = amc.parent_id
+        WHERE amc.status = '1'
+        ) t
+        WHERE 1=1
+        <isNotEmpty prepend="and" property="id">
+            t.id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="parentId">
+            t.parentId = #parentId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="matClassCode">
+            t.matClassCode = #matClassCode#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="matClassName">
+            t.matClassName like concat('%',#matClassName#,'%')
+        </isNotEmpty>
+    </select>
+
+    <!--  -->
+    <select id="getChildrenList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select id        as deptId,
+               dept_num  as deptNum,
+               dept_name as deptName
+        from $projectSchema$.ac_department
+        where FIND_IN_SET(id, $projectSchema$.getChildrenList(#id#))
+    </select>
+
+    <select id="getSupplierList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+        `id`,
+        `supplier_code` AS supplierCode,
+        `supplier_name` AS supplierName,
+        `supplier_type` AS supplierType,
+        `contacts` AS contacts,
+        `contact_number` AS contactNumber,
+        `contact_address` AS contactAddress,
+        `contact_email` AS contactEmail,
+        `zip_code` AS zipCode,
+        `legal_representative` AS legalRepresentative,
+        `icr_no` AS icrNo,
+        `business_scope` AS businessScope,
+        `abbreviation` AS abbreviation,
+        `hrp_code` AS hrpCode,
+        `status` AS status,
+        (CASE `status`
+        WHEN '1' THEN '启用'
+        ELSE '停用'
+        END) AS statusText,
+        `rec_creator` AS recCreator,
+        `rec_create_time` AS recCreateTime,
+        `rec_revisor` AS recRevisor,
+        `rec_revise_time` AS recReviseTime
+        FROM $projectSchema$.ac_supplier
+        WHERE status = '1'
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="supplierCode">
+            supplier_code = #supplierCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="supplierName">
+            supplier_name LIKE concat('%',#supplierName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="supplierType">
+            supplier_type = #supplierType#
+        </isNotEmpty>
+    </select>
+
+    <!-- 数量 -->
+    <select id="getSupplierCount" resultClass="int">
+        SELECT t.id FROM (
+        SELECT
+        `id`,
+        `supplier_code` AS supplierCode,
+        `supplier_name` AS supplierName,
+        `supplier_type` AS supplierType,
+        `contacts` AS contacts,
+        `contact_number` AS contactNumber,
+        `contact_address` AS contactAddress,
+        `contact_email` AS contactEmail,
+        `zip_code` AS zipCode,
+        `legal_representative` AS legalRepresentative,
+        `icr_no` AS icrNo,
+        `business_scope` AS businessScope,
+        `abbreviation` AS abbreviation,
+        `hrp_code` AS hrpCode,
+        `status` AS status,
+        (CASE `status`
+        WHEN '1' THEN '启用'
+        ELSE '停用'
+        END) AS statusText,
+        `rec_creator` AS recCreator,
+        `rec_create_time` AS recCreateTime,
+        `rec_revisor` AS recRevisor,
+        `rec_revise_time` AS recReviseTime
+        FROM $projectSchema$.ac_supplier
+        WHERE status = '1'
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="supplierCode">
+            supplier_code = #supplierCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="supplierName">
+            supplier_name LIKE concat('%',#supplierName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="supplierType">
+            supplier_type = #supplierType#
+        </isNotEmpty>
+        ) t
+
+
+    </select>
+
+    <!--  -->
+    <select id="getHospitalSetting" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT FKEY, FVALUE, CONFIG_DESC
+        FROM $platSchema$.TEDCC03
+        WHERE FKEY = 'bona.wilp.multiHospitalArea'
+    </select>
+
+    <!--  -->
+    <select id="getEdcc03" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT FKEY, FVALUE, CONFIG_DESC
+        FROM $platSchema$.TEDCC03
+        WHERE FKEY = #fkey#
+    </select>
+
+
+    <update id="updateUserPassword" parameterClass="java.util.HashMap">
+        update $platSchema$.xs_user
+        set
+        <isNotNull property="password">
+            password = #password#,
+        </isNotNull>
+        <isNotNull property="recRevisor">
+            rec_revisor = #recRevisor#,
+        </isNotNull>
+        <isNotNull property="recReviseTime">
+            rec_revise_time = #recReviseTime#
+        </isNotNull>
+        where login_name=#workNo#
+    </update>
+
+    <select id="queryPhoneNumber" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT mobile
+        FROM $platSchema$.xs_user
+        WHERE login_name=#workNo#
+    </select>
+</sqlMap>

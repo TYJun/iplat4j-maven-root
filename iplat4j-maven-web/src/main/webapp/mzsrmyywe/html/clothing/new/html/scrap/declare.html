@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>报废申报</title>
+    <link rel="stylesheet" href="../../css/scrap/declare.css" />
+    <link
+      rel="stylesheet"
+      href="../../../../../html/reference/mui/css/mui.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../../../html/reference/mui/css/mui.picker.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../../../html/reference/mui/css/mui.picker.min.css"
+    />
+
+    <!-- <script src="../../../../html/reference/mui/js/mui.dtpicker.js"></script> -->
+    <!-- <script src="../../../../html/reference/mui/js/mui.min.js"></script> -->
+    <link
+      rel="stylesheet"
+      href="../../../../../html/reference/mui/css/mui.dtpicker.css"
+    />
+  </head>
+  <body>
+    <div id="app" v-clock>
+      <!-- 顶部区域 -->
+      <header>
+        <div class="top">
+          <div id="top-bar">
+            <h1 id="title">次品申报</h1>
+            <span
+              id="icon-left-back"
+              class="mui-icon mui-icon-arrowleft"
+            ></span>
+            
+            <span id="select_class" @click="select_class">分类选择</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- 下拉栏 -->
+      <div class="pulldown">
+        <!-- <ul class="mui-table-view" > 
+            <li class="mui-table-view-cell " id="selectdate">
+                <a class="mui-navigate-right" href="#">选择日期</a> -->
+        <!-- <div class="mui-collapse-content" id="dates">
+                    <p>面板1子内容</p>
+                </div> -->
+        <!-- </li>
+        </ul>  -->
+        <ul class="mui-table-view">
+          <li class="mui-table-view-cell mui-collapse">
+            <a class="mui-navigate-right" href="#" id="choose"
+              >选择报废地点 (污物库/洁物库/各科室)</a
+            >
+            <div class="mui-collapse-content">
+              <p>面板1子内容</p>
+            </div>
+          </li>
+        </ul>
+        <ul class="mui-table-view">
+          <li class="mui-table-view-cell mui-collapse">
+            <a class="mui-navigate-right" href="#" >选择报废原因</a>
+            <div class="mui-collapse-content">
+              <p>面板1子内容</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 分类表格 -->
+      <!-- <table class="selecttable">
+        <thead>
+          <tr>
+            <th>医用织物分类</th>
+            <th>规格</th>
+            <th>数量</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          
+          <tr v-for="(item,index) in declare_list" :key="index">
+            
+            <td>{{item.a}}</td>
+            <td>{{item.b}}</td>
+            <td>
+              <div
+                class="mui-numbox"
+                data-numbox-step="1"
+                data-numbox-min="0"
+                data-numbox-max="100"
+              >
+                <button class="mui-btn mui-numbox-btn-minus" type="button">
+                  -
+                </button>
+                <input
+                  class="mui-numbox-input"
+                  v-model="item.c"
+                  type="number"
+                />
+                <button class="mui-btn mui-numbox-btn-plus" type="button">
+                  +
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table> -->
+      <!-- '提交'按钮 -->
+      <div>
+        <button id="btn_submit" type="button">
+          <span>提交</span>
+        </button>
+      </div>
+    </div>
+
+    <script src="../../../../../reference/assets/js/jquery.min.js"></script>
+    <script src="../../../../../html/reference/mui/js/mui.min.js"></script>
+    <script src="../../../../../html/reference/mui/js/mui.picker.min.js"></script>
+    <script src="../../../../../js/vue.js"></script>
+    <script>
+       var deptName = localStorage.getItem("deptName");
+      $("#choose").val(deptName);
+      document.getElementById("choose").innerHTML = deptName;
+      // 日期选择器
+      // console.log( $("#selectdate"));
+      // $("#selectdate").click(function(){
+      //     $("#selectdate").text("");
+      //     $(this).toggleClass('mui-active')
+      //     var dtPicker = new mui.DtPicker({
+      //         type: 'date'
+      //     });
+      //     dtPicker.show(function (selectItems) {
+      //     //点击确定后执行下列
+      //     $("#selectdate").text(selectItems.value);
+      //     console.log(selectItems.value)
+      // })
+      // });
+      //返回历史列表页面
+      $("#icon-left-back").click(function(){
+            console.log(1);
+            location.href = './historyList.html';
+        });
+      $("#select_class").click(function(){
+        location.href='./categoryAPP.html'
+      })
+
+      $("#choose").click(function(){
+            location.href='./chooseDept2.html';
+        })
+    </script>
+  </body>
+</html>

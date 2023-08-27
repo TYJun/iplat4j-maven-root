@@ -1,0 +1,36 @@
+@font-face {
+	font-family: "iconfont";
+	src: url('../fonts/choose.ttf');
+}
+
+.iconfont {
+	font-family: "iconfont" !important;
+	font-size: 16px;
+	font-style: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-qianshou:before {
+	content: "\e676";
+}
+
+.icon-xidi:before {
+	content: "\e62c";
+}
+
+.icon-shenqing:before {
+	content: "\e62e";
+}
+
+.icon-tidai:before {
+	content: "\e6e1";
+}
+
+.icon-my:before {
+	content: "\e64b";
+}
+
+.icon-beizi:before {
+	content: "\e629";
+}

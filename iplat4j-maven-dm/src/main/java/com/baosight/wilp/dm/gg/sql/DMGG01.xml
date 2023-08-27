@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2022-01-19 11:28:07
+   		Version :  6.0.731.201809200158
+		tableName :.dorms_room_notice 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 notice  VARCHAR, 
+		 rec_creator  VARCHAR, 
+		 rec_create_time  VARCHAR
+	-->
+<sqlMap namespace="DMGG01">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.dm.gg.domain.DMGG01">
+		SELECT
+				id	as "id",  <!-- 主键 -->
+				notice_no	as "noticeNo",  <!-- 公告序号 -->
+				notice_type	as "noticeType",  <!-- 公告类别 -->
+				notice	as "notice",  <!-- 公告内容 -->
+				rec_creator	as "recCreator",  <!-- 创建人 -->
+				rec_create_time	as "recCreateTime" <!-- 创建时间 -->
+		FROM .dorms_room_notice WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+			notice_no asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="queryHoldnotice"
+			resultClass="com.baosight.wilp.dm.gg.domain.DMGG01">
+		SELECT
+		id as "id",  <!-- 主键 -->
+		notice_no as "noticeNo", <!-- 公告序号 -->
+		notice as "notice"  <!-- 公告内容-->
+		FROM .dorms_room_notice
+		WHERE notice_type = #noticeType#
+		order by notice_no asc
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .dorms_room_notice WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="notice">
+			notice = #notice#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreator">
+			rec_creator = #recCreator#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTime">
+			rec_create_time = #recCreateTime#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO .dorms_room_notice (id,  <!-- 主键 -->
+										notice_no,  <!-- 公告序号 -->
+										notice_type,  <!-- 公告分类 -->
+										notice,  <!-- 公告内容 -->
+										rec_creator,  <!-- 创建人 -->
+										rec_create_time  <!-- 创建时间 -->
+										)		 
+	    VALUES (#id#, #noticeNo#, #noticeType#, #notice#, #recCreator#, #recCreateTime#)
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM .dorms_room_notice WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE .dorms_room_notice 
+		SET
+					notice_no	= #noticeNo#,   <!-- 公告序号 -->
+					notice_type	= #noticeType#,   <!-- 公告内容 -->
+					notice	= #notice#,   <!-- 公告内容 -->
+					rec_creator	= #recCreator#,   <!-- 创建人 -->  
+					rec_create_time	= #recCreateTime#  <!-- 创建时间 -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

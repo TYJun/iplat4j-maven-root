@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="PRGL0301">
+	
+	<!-- 查询整改详细信息 -->
+	<select id="query" parameterClass="String" resultClass="com.baosight.wilp.pr.gl.domain.PRGL0301">
+		SELECT
+			d.dangerWhere AS dangerWhere,
+			d.localTypeName AS paramValue1,
+			d.requiredTime AS requiredTime,
+			d.contentDesc AS contentdesc,
+			d.requireDesc AS requireDesc,
+			r.writeMan AS writeman,
+			r.finishTime AS finishtime,
+			r.contentDesc AS contentdesc2,
+			r.id AS id,
+			d.id AS dangerid
+		FROM
+			pr_safty_danger d
+			LEFT JOIN pr_safty_danger_result r ON d.id = r.dangerID
+		WHERE
+			d.id = #id#
+	</select>
+
+	<!--通过问题id查询整改后图片路径-->
+	<select id="afterQueryPic" parameterClass="String" resultClass="com.baosight.wilp.pr.gl.domain.PRGL0201">
+		SELECT
+			tf.storagePath as storagePath,
+		    tf.fileID as id
+		FROM
+			pr_common_file tf
+				LEFT JOIN pr_safty_danger_result_pic pp ON tf.fileID = pp.fileID
+				LEFT JOIN pr_safty_danger_result pr ON pr.id = pp.dangerResultID
+		WHERE
+			pr.dangerID = #value#
+	</select>
+
+	<!-- 查询整改前图片信息 -->
+	<select id="queryPic" parameterClass="String" resultClass="com.baosight.wilp.pr.gl.domain.PRGL0301">
+	SELECT
+		tf.fileName AS fileName
+	FROM
+		pr_common_file tf
+			LEFT JOIN pr_safty_danger_pic pp ON tf.fileID = pp.fileID
+	WHERE
+		pp.dangerID = #value#
+	</select>
+	
+	
+	<!-- 查询整改后图片信息 -->
+	<select id="queryRectifyPic" parameterClass="String" resultClass="com.baosight.wilp.pr.gl.domain.PRGL0301">
+		SELECT
+			tf.fileName AS fileName
+		FROM
+			pr_common_file tf
+				LEFT JOIN pr_safty_danger_result_pic pp ON tf.fileID = pp.fileID
+				LEFT JOIN pr_safty_danger_result pr ON pr.id = pp.dangerResultID
+		WHERE
+			pr.dangerID = #value#
+	</select>
+	
+	<!-- 同意整改 -->
+	<update id="agree" parameterClass="String">
+		update pr_safty_danger set status_code = "99" where id = #value#
+	</update>	
+	
+	<!-- 保存整改评价 -->
+	<update id="evaluation" parameterClass="java.util.HashMap">
+		update pr_safty_danger_result set auditContent = #opinion# where id = #dangerresultid#
+	</update>
+	
+	<!-- 驳回整改 -->
+	<update id="turnDownAgree" parameterClass="String">
+		update pr_safty_danger set status_code = "01" where id = #value#
+	</update>	
+	
+
+	<!-- 记录日志  -->
+	<insert id="logs" parameterClass="java.util.HashMap">
+			INSERT INTO pr_safty_danger_logs ( id, dangerID,logsNo, logsMan, logsTime, rejectStatus, rejectReason, dataGroupCode )
+		VALUES
+			( UUID(), #dangerID#,#logsNo#, #logsMan#, #logsTime#, #rejectStatus#, #rejectReason#, #dataGroupCode# )
+	</insert>
+	
+	
+	<!-- 查询整改表自增 -->
+	<select id="queryDangerResultID" parameterClass="String" resultClass="com.baosight.wilp.pr.gl.domain.PRGL0301">
+		select dangerResultID as dangerresultid from pr_safty_danger_result where dangerID = #value#
+	</select>
+	
+	
+	<!-- 按整改表自增删除整改信息 -->
+	<delete id="deleteDangerResult" parameterClass="String">
+		delete from pr_safty_danger_result where id = #value#
+	</delete>
+
+	
+	<!-- 查询整改图片关联表 -->
+	<select id="queryFileID" parameterClass="String" resultClass="com.baosight.wilp.pr.gl.domain.PRGL0301">
+		SELECT 
+			cf.fileID as fileID,
+			cf.fileName as fileName,
+			cf.storagePath as storagePath
+		FROM
+			pr_common_file cf
+			LEFT JOIN pr_safty_danger_result_pic pic ON pic.fileID = cf.fileID 
+		WHERE
+			dangerResultID = #value#
+	</select>
+	
+	<!-- 删除关联表图片信息 -->
+	<delete id="deleteResultPic" parameterClass="String">
+		delete from pr_safty_danger_result_pic where fileID = #value#
+	</delete>
+	
+	
+	<!-- 删除图片表信息 -->
+	<delete id="deleteCommonPic" parameterClass="String">
+		delete from pr_common_file where fileID = #value#
+	</delete>
+
+	<!--查询图片-->
+	<select id="queryPic2" parameterClass="String" resultClass="java.util.HashMap">
+		SELECT
+			tf.storagePath as storagePath,
+			tf.fileID as id
+		FROM
+			pr_common_file tf
+				LEFT JOIN pr_safty_danger_result_pic pp ON tf.fileID = pp.fileID
+				LEFT JOIN pr_safty_danger_result pr ON pr.id = pp.dangerResultID
+		WHERE
+			pr.dangerID = #value#
+	</select>
+	
+	
+</sqlMap>

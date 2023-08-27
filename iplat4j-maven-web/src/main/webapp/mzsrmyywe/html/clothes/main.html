@@ -1,0 +1,201 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="../reference/mui/css/mui.min.css">
+  <link rel="stylesheet" href="css/choose.css">
+  <link rel="stylesheet" href="../reference/css/common.css" />
+</head>
+<style>
+  body,
+  html {
+    background: #F7F7F7;
+  }
+
+  .chosee-order-send {
+    width: 80%;
+    height: 140px;
+    margin: 30px auto;
+    background: #FFFFFF;
+    line-height: 140px;
+    box-shadow: 0px 2px 20px #d4d4d4;
+    border-radius: 10px;
+  }
+
+  .round {
+    width: 60px;
+    height: 60px;
+    margin: 40px auto;
+    text-align: center;
+    line-height: 80px;
+    background: blue;
+    color: #FFFFFF;
+    border-radius: 50%;
+  }
+
+  .choose-word {
+    font-size: 24px;
+    color: #666666;
+    text-align: left;
+  }
+
+  .diceng {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 250;
+    background: black;
+    opacity: 0.5;
+  }
+
+  .realMoney {
+    position: fixed;
+    z-index: 251;
+    width: 90%;
+    left: 5%;
+    top: 100px;
+    /*bottom: 260px;*/
+    background: #FFFFFF;
+  }
+
+  .setInput {
+    color: #333333;
+    width: 100%;
+    border: 0;
+    outline: none;
+    text-align: left;
+    font-size: 15px;
+  }
+
+  .editButtons {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 19px;
+    width: 90%;
+    margin-left: 5%;
+    margin-bottom: 30px;
+    border-radius: 10px;
+  }
+
+  .applyTitle {
+    height: 50px;
+    line-height: 50px;
+    border-bottom: 1px solid #e1e1e1;
+    text-align: center;
+    font-size: 20px;
+    color: #666666;
+  }
+
+  .applyInput {
+    padding: 8px 15px;
+  }
+
+  .row-content1 {
+    height: 30px;
+    line-height: 30px;
+    padding: 0 15px;
+    font-size: 16px;
+    color: #666666;
+    background: #ffffff;
+  }
+</style>
+
+<body>
+  <div id="warn" class="warn" hidden>
+    <small></small>
+  </div>
+  <div id="loading" class="loading1" hidden>
+    <div class="loading2">
+      <span class="mui-spinner" style="width:80px;height:80px;"></span>
+    </div>
+  </div>
+  <header class="mui-bar mui-bar-nav" style="background-color: #2AABD2;">
+    <h1 class="mui-title">申请选择</h1>
+    <button onclick="location.href='../../menu.html'"
+      class=" mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+      返回
+    </button>
+  </header>
+  <div class="mui-content" style="padding-bottom:50px;">
+
+    <div class="chosee-order-send">
+      <div class="mui-row cloth">
+        <div class="mui-col mui-col-xs-5">
+          <div class="round" style="background: #f39700;">
+            <span class="mui-icon iconfont icon-beizi"
+              style="width: 60px;height: 60px;line-height: 50px;font-size: 43px;"></span>
+          </div>
+
+        </div>
+        <div class="mui-col mui-col-xs-7">
+          <div class="choose-word"> 工作服申请</div>
+        </div>
+      </div>
+    </div>
+    <div class="chosee-order-send aaa" hidden>
+      <div class="mui-row xidi">
+        <div class="mui-col mui-col-xs-5">
+          <div class="round" style="background: #02d08a;">
+            <span class="mui-icon iconfont icon-xidi"
+              style="width: 60px;height: 60px;line-height:50px;font-size: 43px;"></span>
+          </div>
+        </div>
+        <div class="mui-col mui-col-xs-7">
+          <div class="choose-word"> 工作服洗涤</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+<script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../reference/js/common.js" type="text/javascript"></script>
+<script src="../../cordova.js" type="text/javascript"></script>
+<script type="text/javascript">
+  var baseUrl = localStorage.getItem("url");
+  var workNo = localStorage.getItem("workNo");
+  //工作服
+  mui("body").on("tap", ".cloth", function () {
+    location.href = "cloth-main.html";
+  });
+  //洗涤
+  mui("body").on("tap", ".xidi", function () {
+    location.href = "wish-main.html";
+  });
+
+  var role = localStorage.getItem("role");
+  if (role.indexOf("ADMIN") > -1) {
+    $(".aaa").show();
+  }
+
+  //系统返回监听
+  document.addEventListener("deviceready", onDeviceReady, false);
+
+  function onDeviceReady() {
+    /**
+     * 系统返回键监听
+     */
+    document.addEventListener("backbutton", onBackKeyDown, false);
+  }
+
+  /**
+   * 系统返回键方法
+   * @return {[type]} [description]
+   */
+  function onBackKeyDown() {
+    location.href = "../../menu.html";
+  }
+</script>
+
+</html>

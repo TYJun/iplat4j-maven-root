@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.css" />
+    <link rel="stylesheet" href="../reference/css/iconfont.css" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="../reference/css/colorGreen.css" />
+    <link rel="stylesheet" href="../reference/css/loading.css" />
+    <link rel="stylesheet" href="../../reference/css/common.css" />
+    <link rel="stylesheet" href="../reference/css/clothCommon.css" />
+  </head>
+  <style>
+    .main {
+      margin-top: 55px;
+      background-color: white;
+    }
+
+    .total {
+      float: right;
+      margin-right: 10%;
+    }
+
+    .scan {
+      position: fixed;
+      bottom: 120px;
+      right: 15px;
+      width: 60px;
+      z-index: 11;
+    }
+
+    .round {
+      border: 1px solid #8ca498;
+      width: 60px;
+      height: 60px;
+      line-height: 29px;
+      text-align: center;
+      color: #fff;
+      background-color: #636b67;
+      filter: alpha(opacity=80);
+      /* 用于IE浏览器－透明度为20%*/
+      -moz-opacity: 0.8;
+      /*  用于Moz + Firefox－透明度为20%*/
+      opacity: 0.8;
+      -webkit-border-radius: 60px;
+      -moz-border-radius: 60px;
+      -o-border-radius: 60px;
+      border-radius: 60px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .round img {
+      margin-top: 4px;
+      margin-left: 2px;
+    }
+
+    .mui-card {
+      background-color: #30c37c;
+      color: white;
+    }
+
+    .mui-card-content {
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 18px;
+    }
+
+    .mui-numbox {
+      width: 160px;
+      height: 38px;
+    }
+
+    .mask {
+      height: 50%;
+    }
+
+    .hideBody {
+      position: fixed;
+      bottom: 0;
+      background-color: white;
+      width: 100%;
+      height: 50%;
+    }
+
+    .hideHtml {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      align-items: center;
+    }
+
+    .sureBtn button {
+      position: fixed;
+      bottom: 40px;
+      font-size: 18px;
+      color: white;
+      background-color: #30c37c;
+    }
+
+    .save {
+      margin-left: 37%;
+      width: 50%;
+    }
+
+    .add {
+      margin-left: 14%;
+    }
+
+    #chipResult {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 35%;
+      background-color: white;
+      padding: 10px;
+      width: 200px;
+      height: 160px;
+      box-shadow: 0px 0px 10px #30c37c;
+    }
+
+    #chipNum {
+      font-size: 60px;
+      margin-top: 40px;
+      font-weight: 600;
+      width: 100%;
+      text-align: center;
+    }
+
+    #scanStop {
+      margin-left: 34px;
+      margin-top: 40px;
+      font-size: 20px;
+      box-shadow: 0px 0px 10px #30c37c;
+    }
+
+    .ulForward li {
+      text-align: center;
+      border-bottom: 1px solid #999;
+      font-size: 18px;
+      line-height: 50px;
+      width: 33%;
+      float: left;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    input.mui-input-clear.deptSearch {
+      margin-bottom: 0;
+    }
+  </style>
+
+  <body>
+    <header class="mui-bar mui-bar-nav backColor">
+      <h1 class="mui-title">科室回收</h1>
+      <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+      </button>
+      <!-- <button id="search" class="mui-btn mui-btn-link mui-btn-nav mui-pull-right">
+            <span class="mui-icon mui-icon-search"></span>
+        </button> -->
+    </header>
+    <div class="main">
+      <div id="chooseDept">
+        <input type="text" placeholder="输入科室" readonly id="initDept" />
+      </div>
+      <div class="list">
+        <ul id="list">
+          <!-- <li class="mui-table-view-cell">
+                    <div class="mui-card">
+                        <div class="mui-card-content">
+                            <span class="clothType">布草上装（<span class="clothSize">均码</span>）</span>
+                            <span>回收数量：<span class="num" id="1">20</span></span>
+                        </div>
+                    </div>
+                </li>
+                <li class="mui-table-view-cell">
+                    <div class="mui-card">
+                        <div class="mui-card-content">
+                            <span class="clothType">布草上装（<span class="clothSize">X</span>）</span>
+                            <span>回收数量：<span class="num" id="2">10</span></span>
+                        </div>
+                    </div>
+                </li>
+                <li class="mui-table-view-cell">
+                    <div class="mui-card">
+                        <div class="mui-card-content">
+                            <span class="clothType"> 布草下装（<span class="clothSize">均码</span>）</span>
+                            <span>回收数量：<span class="num" id="3">30</span></span>
+                        </div>
+                    </div>
+                </li> -->
+        </ul>
+      </div>
+      <!-- 扫芯片 -->
+      <div class="scan" id="scan" hidden>
+        <div class="round" id="round">
+          <!-- <span>扫描</span>
+            <span>科室</span> -->
+          <img src="../img/chip.png" alt="" />
+        </div>
+      </div>
+      <div id="chipResult" hidden>
+        <div id="chipNum">
+          <span>0</span>
+        </div>
+        <button id="scanStop">
+          停止扫描
+        </button>
+      </div>
+      <div id="update" class="hideBody" hidden>
+        <div class="hideHtml">
+          <span id="updateType" style="margin: 10px;font-size: 24px;">
+            <span id="updateName">被单</span> （
+            <span id="updateSize">均码</span>）</span
+          >
+          <div class="mui-numbox" data-numbox-min="0" style="margin: 10px;">
+            <button class="mui-btn mui-numbox-btn-minus" type="button">
+              -
+            </button>
+            <input class="mui-numbox-input" type="number" id="updateNum" />
+            <button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
+          </div>
+          <div
+            style="display: flex;justify-content: space-between; width: 68%;margin-top: 30px;"
+          >
+            <button
+              style="background-color: #30c37c;color: white;"
+              onclick="cancel()"
+            >
+              取消
+            </button>
+            <button
+              style="background-color: #30c37c;color: white;"
+              onclick="sure()"
+            >
+              确认
+            </button>
+          </div>
+        </div>
+      </div>
+      <div id="newCloth" class="hideBody" hidden>
+        <div class="hideHtml">
+          <!-- <div id="addCloth">选择布草</div> -->
+          <span
+            id="newType"
+            style="margin: 10px;font-size: 24px;border: 1px #999 solid; padding: 9px;border-radius: 6px;"
+          >
+            <span id="clothTypeName">布草类型</span> （
+            <span id="newSize">布草规格</span>）
+          </span>
+          <div class="mui-numbox" data-numbox-min="0" style="margin: 10px;">
+            <button class="mui-btn mui-numbox-btn-minus" type="button">
+              -
+            </button>
+            <input class="mui-numbox-input" type="number" id="newNum" />
+            <button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
+          </div>
+          <div
+            style="display: flex;justify-content: space-between; width: 68%;margin-top: 10px;"
+          >
+            <button
+              style="background-color: #30c37c;color: white;"
+              onclick="cancel()"
+            >
+              取消
+            </button>
+            <button
+              style="background-color: #30c37c;color: white;"
+              onclick="addSure()"
+            >
+              确认
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- 模糊查询弹框 -->
+      <div
+        id="ulForward"
+        style="position: fixed;z-index: 4200;width: 100%;bottom: -10px;"
+        hidden
+      >
+        <div class="mui-input-row mui-search">
+          <input
+            type="search"
+            class="mui-input-clear deptSearch"
+            placeholder="请输入布草名称进行查询"
+            oninput="search(this.value)"
+            style="border:#E1E1E1;width: 100%;background: #E1E1E1;border-radius: 0px;border-bottom: 1px solid #999;"
+          />
+        </div>
+        <ul
+          class="ulForward"
+          style="background:#E1E1E1;width: 100%;height:0px;overflow-y: auto;padding: 0;"
+        >
+          <span
+            id="roundWait"
+            class="mui-spinner"
+            style="height: 60px;width: 60px;"
+          ></span>
+        </ul>
+      </div>
+      <div class="sureBtn">
+        <button class="add" onclick="add()">增加</button>
+        <button class="save">保存</button>
+      </div>
+    </div>
+
+    <!-- 遮罩 -->
+    <div class="mask"></div>
+  </body>
+  <script type="text/javascript" src="../reference/mui/js/mui.min.js"></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/jquery-2.1.4.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/mui.picker.min.js"
+  ></script>
+  <script type="text/javascript" src="../reference/mui/js/baseInfo.js"></script>
+  <script
+    type="text/javascript"
+    src="../../reference/js/mui.loading.js"
+  ></script>
+  <!-- <script type="text/javascript" src="../../../cordova.js"></script> -->
+  <script>
+    
+  
+    // localStorage.setItem("initdeptName", "信息科")
+    var url = decodeURI(window.location.href.split("?")[1]);
+    // alert(url);
+    var initDeptName = url.split("&")[0];
+    var initDeptNum = url.split("&")[1];
+    var deptRecycleNo = url.split("&")[2];
+    var dataGroupCode = localStorage.getItem("dataGroupCode");
+    // var initDeptRecycleNo = localStorage.getItem('detailDeptRecycleNo');
+    var workNo = localStorage.getItem("workNo");
+    var userName = localStorage.getItem("userName");
+    var recycleStatus = 1;
+    // var config = "is_ signature";
+    var config = "is_signature_reclaim";
+    var isSignature = "Y";
+    // var isSignature = "N";
+    var submitArray = [];
+    var tempClothType = "";
+    var totalIndex = 0;
+    var baseUrl = localStorage.getItem("url");
+    var Flag = localStorage.getItem("flag");
+
+    $(function() {
+      // init();
+      isSign(config);
+      initNum(0);
+    });
+    //选择科室
+    // $("#chooseDept").click(function() {
+    //     location.href = "chooseDept.html"
+    // })
+
+    //移动扫码框
+    if (Flag == "N") {
+      $("#scan").show();
+    }
+    // touchMove("scan");
+    //初始化
+    function initNum(num) {
+      $("#chipNum span").html(num);
+    }
+    // alert(deptRecycleNo);
+
+    if (
+      deptRecycleNo != "" &&
+      deptRecycleNo != undefined &&
+      deptRecycleNo != "undefined" &&
+      deptRecycleNo != "null"
+    ) {
+      // alert('1')
+      console.log("222222222");
+
+      init1();
+    } else {
+      console.log("66666666666666");
+
+      // alert('2')
+      init2();
+    }
+    // 已确认=》点击卡片获取详细信息调用的
+    function init1() {
+      // alert("1");
+      mui.showLoading("正在加载", "div");
+      // alert("2");
+      $("#initDept").val(initDeptName);
+
+      var listHtml = "";
+      var param = {
+        recoveryNo: deptRecycleNo
+      };
+      param = JSON.stringify(param);
+      $.ajax({
+        type: "post",
+        //   url: baseUrl + "app_ManualController.do?getRecycleDetail",
+        url: baseUrl + "medical/fabric",
+        data: {
+          requestParam: param
+          // dataGroupCode: dataGroupCode,
+          // deptNum: initDeptNum,
+          // deptRecycleNo: deptRecycleNo
+        },
+        headers: {
+          methodName: "queryFilthRecoveryDetail",
+          serviceName: ""
+        },
+        success: function(data) {
+          // alert("3");
+          mui.hideLoading();
+
+          if (data.statusCode != "0") {
+            mui.toast(data.msg);
+            return;
+          }
+          var list = data.data;
+          if (list.length == 0) {
+            mui.toast("当前没有数据！");
+            return;
+          }
+          for (var i = 0; i < list.length; i++) {
+            var objObj = {
+              clothType: "",
+              clothTypeName: "",
+              clothModel: "",
+              num: "",
+              beforeNum: ""
+            };
+            objObj.clothType = list[i].fabricNo;
+            objObj.clothTypeName = list[i].fabricName;
+            objObj.clothModel = list[i].fabricModel;
+            objObj.fabricSpec = list[i].fabricSpec;
+            objObj.num = list[i].number + "";
+            objObj.beforeNum = list[i].number + "";
+            submitArray.push(objObj);
+            // var index = ;
+            if (objObj.num != "0") {
+              listHtml += createHtml(
+                objObj.clothTypeName,
+                objObj.clothModel,
+                objObj.fabricSpec,
+                objObj.num,
+                i
+              );
+            }
+          }
+          // list.forEach((element, index) => {
+          // });
+          $("#list").html(listHtml);
+        }
+      });
+    }
+    //
+    function init2() {
+      // mui.showLoading("正在加载", "div");
+      $("#initDept").val(initDeptName);
+      // var listHtml = "";
+      // $.ajax({
+      //   type: "get",
+      //   // url: baseUrl + "app_ManualController.do?reclaimCloths",
+      //   url: baseUrl + "app_ManualController.do?clothTypeNameAndModel",
+      //   data: {
+      //     dataGroupCode: dataGroupCode,
+      //     recycleStatus: recycleStatus,
+      //     beginTime: "",
+      //     endTime: "",
+      //     deptNum: initDeptNum,
+      //     flag: "1"
+      //   },
+      //   success: function(data) {
+      //     mui.hideLoading();
+      //     var data = JSON.parse(data);
+      //     console.log(data);
+      //     if (data.respCode != "200") {
+      //       mui.toast(data.respMsg);
+      //       return;
+      //     }
+      //     var list = data.obj;
+      //     if (list.length == 0) {
+      //       //   mui.toast("当前没有数据！");
+      //       return;
+      //     }
+      //     // var deptDiryItemBills = list[0].deptDiryItemBills;
+      //     // deptDiryItemBills.forEach((element, index) => {
+
+      //     for (var i = 0; i < list.length; i++) {
+      //       var objObj = {
+      //         clothType: "",
+      //         clothTypeName: "",
+      //         clothModel: "",
+      //         num: "",
+      //         beforeNum: ""
+      //       };
+      //       objObj.clothType = list[i].clothType;
+      //       objObj.clothTypeName = list[i].clothTypeName;
+      //       objObj.clothModel = list[i].clothModel;
+      //       if (list[i].issueNum) {
+      //         objObj.num = list[i].issueNum + "";
+      //       } else {
+      //         objObj.num = 0;
+      //       }
+      //       if (objObj.beforeNum) {
+      //         objObj.beforeNum = list[i].issueNum + "";
+      //       } else {
+      //         objObj.beforeNum = 0;
+      //       }
+      //       // objObj.num = list[i].issueNum ? list[i].issueNum + "" : 0;
+      //       // objObj.beforeNum = list[i].issueNum ? list[i].issueNum + "" : 0;
+      //       submitArray.push(objObj);
+      //       var index = i;
+      //       listHtml += createHtml(
+      //         objObj.clothTypeName,
+      //         objObj.clothModel,
+      //         objObj.num,
+      //         index
+      //       );
+      //     }
+      //     // alert(listHtml);
+      //     // objObj.clothType = element.clothType;
+      //     // objObj.clothTypeName = element.clothTypeName;
+      //     // objObj.clothModel = element.clothModel;
+      //     // objObj.num = element.recycleNum + "";
+      //     // objObj.beforeNum = 0;
+
+      //     // });
+      //     $("#list").html(listHtml);
+      //   }
+      // });
+    }
+
+    //listHTML
+    function createHtml(
+      clothTypeName,
+      clothModel,
+      fabricSpec,
+      clothnum,
+      index
+    ) {
+      totalIndex++;
+      var html = "";
+      html =
+        '<li class="mui-table-view-cell"><div class="mui-card"> <div class="mui-card-content"> <span class="clothType" fabricSpec="' +
+        fabricSpec +
+        '"> <span class ="clothTypeName">' +
+        clothTypeName +
+        '</span>（<span class="clothSize">' +
+        clothModel +
+        '</span>）</span> <span>回收数量：<span class="num" id=' +
+        index +
+        ">" +
+        clothnum +
+        "</span></span></div> </div></li>";
+      return html;
+    }
+
+    if (Flag == "N") {
+      $("#list").on("click", ".mui-table-view-cell", function() {
+        $(".mask").show();
+        $("#update").show();
+        $(".sureBtn").hide();
+        var index = $(this)
+          .find(".num")
+          .attr("id");
+        console.log(index);
+        localStorage.setItem("numIndex", index);
+        $("#updateName").html(
+          $(this)
+            .find(".clothTypeName")
+            .html()
+        );
+        $("#updateSize").val(
+          $(this)
+            .find(".clothSize")
+            .html()
+        );
+        $("#updateNum").val(
+          $(this)
+            .find(".num")
+            .html()
+        );
+        // mui.toast($(this).find(".num").html())
+      });
+    }
+
+    if (Flag == "Y") {
+      $(".sureBtn").hide();
+    }
+
+    $(".mask").click(function() {
+      $(".mask").hide();
+      $("#update").hide();
+      $("#newCloth").hide();
+      $(".sureBtn").show();
+      $("#ulForward").hide();
+    });
+
+    //修改确定
+    function sure() {
+      var num = $("#updateNum").val();
+      var index = localStorage.getItem("numIndex");
+      $("#" + index).html(num);
+      submitArray[index].num = num + "";
+      // console.log(submitArray);
+      // console.log($("#" + index).html());
+      if (num == "0") {
+        $("#" + index)
+          .parent()
+          .parent()
+          .parent()
+          .parent()
+          .remove();
+      }
+      // console.log(submitArray);
+
+      // for (var i = 0; i < submitArray.length; i++) {
+      //     console.log(submitArray[i]);
+      //     if (submitArray[i].num != "0") {
+      //         submitArray1.push(submitArray[i]);
+      //     }
+      // }
+      console.log(submitArray);
+      $(".mask").hide();
+      $("#update").hide();
+      $(".sureBtn").show();
+    }
+
+    //取消
+    function cancel() {
+      $(".mask").hide();
+      $("#update").hide();
+      $(".sureBtn").show();
+      $("#newCloth").hide();
+    }
+    var toSave = 0;
+    //保存
+    //防止重复点击
+    $(".save").on("click", function() {
+      console.log("toSave", toSave);
+
+      if (toSave == 0) {
+        toSave = 1;
+        save();
+        setTimeout(function() {
+          toSave = 0;
+        }, 3000);
+      } else {
+        mui.toast("请勿频繁操作！");
+      }
+    });
+    function save() {
+      var rfidListStr = [];
+      rfidListStr = chipIDArray;
+      mui.showLoading("正在保存", "div");
+      console.log(isSignature);
+      // alert(isSignature)
+      console.log(totalIndex);
+      for (var i = 0; i < submitArray.length; i++) {
+        if (submitArray[i].num == "0" || submitArray[i].num == 0) {
+          submitArray.splice(i, 1);
+          i--;
+        }
+      }
+      // alert(JSON.stringify(submitArray));
+      // alert(initDeptRecycleNo);
+      // var submitData = {
+      //   // deptRecycleNo: initDeptRecycleNo,
+      //   deptRecycleNo: deptRecycleNo,
+      //   dataGroupCode: dataGroupCode,
+      //   isDefective: false,
+      //   recCreator: workNo,
+      //   deptNum: initDeptNum,
+      //   deptName: initDeptName,
+      //   rfidListStr: rfidListStr.toString(),
+      //   clothListStr: JSON.stringify(submitArray)
+      // };
+      // console.log(submitArray);
+
+      var subArr = [];
+      // var
+      for (var i = 0; i < submitArray.length; i++) {
+        var obj = {
+          workNo:workNo,
+          userName:userName,
+          deptName: initDeptName,
+          deptNo: initDeptNum,
+          fabricNo: submitArray[i].clothType,
+          fabricName: submitArray[i].clothTypeName,
+          fabricModel: submitArray[i].clothModel,
+          fabricSpec: submitArray[i].fabricSpec,
+          rfidNoListStr: rfidListStr.toString(),
+          number: submitArray[i].num
+        };
+        subArr.push(obj);
+      }
+      console.log(subArr);
+
+      subArr = JSON.stringify(subArr);
+      $.ajax({
+        type: "post",
+        url: baseUrl + "medical/fabric",
+        data: {
+          requestParam: subArr
+        },
+        headers: {
+          methodName: "saveFilthRecoveryInfo",
+          serviceName: "OMMFFilteRecovery"
+        },
+        success: function(data) {
+          mui.hideLoading();
+          // var data = JSON.parse(data);
+          if (data.statusCode != '0') {
+            mui.toast(data.msg);
+            return;
+          }
+          location.href = "recoveryMainNAPP.html";
+          // if (isSignature == "Y") {
+          //   var deptRecycleNo = data.obj.deptRecycleNo;
+          //   localStorage.setItem("deptRecycleNo", deptRecycleNo);
+          //   setTimeout(function() {
+          //     location.href = "signature.html";
+          //   }, 1000);
+          // } else if (isSignature == "N") {
+          //   // 修改状态
+          //   updateStatus();
+          // } else if (data.statusCode == 199) {
+          //   mui.toast(data.msg + "，请补签！");
+          //   setTimeout(function() {
+          //     location.href = "../menuAPP.html";
+          //   }, 2000);
+          // }
+        },
+        error: function(XMLHttpRequest) {
+          var text = JSON.parse(XMLHttpRequest.responseText);
+          mui.toast(text.message);
+          return;
+        }
+      });
+    }
+
+    function updateStatus() {
+      var deptRecycleNo = localStorage.getItem("deptRecycleNo");
+      var submitData = {
+        dataGroupCode: dataGroupCode,
+        deptRecycleNo: deptRecycleNo,
+        confirmFlag: "1",
+        recCreator: workNo,
+        deptSign: ""
+      };
+      $.ajax({
+        type: "post",
+        url: baseUrl + "app_clothBizController.do?reclaimComfirm",
+        data: JSON.stringify(submitData),
+        contentType: "application/json",
+        success: function(data) {
+          setTimeout(function() {
+            location.href = "recoveryMainNAPP.html";
+          }, 1000);
+        }
+      });
+    }
+
+    //查询是否需要签字
+    function isSign(config) {
+      // var param = {
+      //   dataGroupCode: dataGroupCode,
+      //   configItem: config
+      // };
+      // $.get(
+      //   baseUrl + "app_clothCommomQuery.do?queryClothConfig",
+      //   param,
+      //   function(data) {
+      //     var data = JSON.parse(data);
+      //     if (data.respCode != 200) {
+      //       mui.toast(data.respMsg);
+      //       return;
+      //     }
+      //     isSignature = data.obj.obj;
+      //     console.log(isSignature);
+      //   }
+      // )
+      //   .fail(function(XMLHttpRequest) {
+      //     var text = JSON.parse(XMLHttpRequest.responseText);
+      //     mui.toast(text.message);
+      //     return;
+      //   })
+      //   .complete(function(XMLHttpRequest, status) {
+      //     if (status == "timeout") {
+      //       mui.toast("网速不给力，请重试！");
+      //       return;
+      //     } else if (status == "error") {
+      //       mui.toast("当前网络不可用，请查看网络状态！");
+      //       return;
+      //     }
+      //   });
+    }
+
+    //增加
+    function add() {
+      $(".sureBtn").hide();
+      $(".mask").show();
+      $("#newCloth").show();
+    }
+
+    //选择科室布草
+    // mui("body").on("tap", "#newType", function() {
+    //     var picker = new mui.PopPicker({
+    //         layer: 2
+    //     });
+    //     $.ajax({
+    //         type: "get",
+    //         url: baseUrl + "app_ManualController.do?getNeatIssueCloth",
+    //         data: {
+    //             dataGroupCode: dataGroupCode,
+    //             deptNum: initDeptNum
+    //         },
+    //         success: function(data) {
+    //             var data = JSON.parse(data);
+    //             var list = data.obj.obj;
+    //             console.log(list);
+    //             picker.setData(list);
+    //         },
+    //         error: function(XMLHttpRequest) {
+    //             var text = JSON.parse(XMLHttpRequest.responseText);
+    //             mui.toast(text.message);
+    //             return;
+    //         }
+    //     })
+
+    //     picker.show(function(rs) {
+    //         console.log(rs)
+    //         $("#clothTypeName").html(rs[0].text);
+    //         tempClothType = rs[0].value;
+    //         console.log(rs[0].text)
+    //         $("#newSize").html(rs[1].text);
+    //     });
+    // });
+
+    // 模糊查询科室布草类型
+    mui("body").on("tap", "#newType", function() {
+      $(".deptSearch").val("");
+      getCloth(name);
+      $("#ulForward").show();
+      $(".ulForward").animate(
+        {
+          height: "200px"
+        },
+        200
+      );
+    });
+
+    var timeId = null;
+
+    function search(name) {
+      clearTimeout(timeId);
+      timeId = setTimeout(function() {
+        getCloth(name);
+      }, 1000);
+    }
+    // 待改
+    function getCloth(name) {
+      $.ajax({
+        type: "post",
+        url: baseUrl + "medical/fabric",
+        data: {
+          // dataGroupCode: dataGroupCode,
+          // clothTypeName: name
+          requestParam: '{"keyWord":"","limit":"10", "offset":"0"}'
+        },
+        headers: {
+          methodName: "querytFabricBaseInfo",
+          serviceName: "OMMF01"
+        },
+        success: function(data) {
+          // var data = JSON.parse(data);
+          var list = data.data;
+          console.log("*", list);
+          var html = "";
+          for (var i = 0; i < list.length; i++) {
+            var typeName = list[i].fabricName;
+            var type = list[i].fabricModel;
+            var typeCode = list[i].fabricNo;
+            var fabricSpec = list[i].fabricSpec;
+            html +=
+              '<li class="mui-table-view-cells"><a href="#" fabricSpec = "' +
+              fabricSpec +
+              '"  name="' +
+              typeCode +
+              '">' +
+              '<span class="name">' +
+              typeName +
+              "</span>" +
+              " " +
+              '<span class="type">' +
+              type +
+              "</span>" +
+              "</a></li>";
+          }
+          $(".ulForward").html(html);
+        },
+        error: function(XMLHttpRequest) {
+          var text = JSON.parse(XMLHttpRequest.responseText);
+          mui.toast(text.message);
+          return;
+        }
+      });
+    }
+
+    // 选择布草类型
+    $("#ulForward").on("click", "li", function() {
+      var name = $(this)
+        .find("a .name")
+        .html();
+      var fabricspec = $(this)
+        .find("a")
+        .attr("fabricspec");
+      var type = $(this)
+        .find("a .type")
+        .html();
+      var clothType = $(this)
+        .find("a")
+        .attr("name");
+      console.log(fabricspec);
+      // console.log(type);
+      $("#clothTypeName").html(name);
+      $("#clothTypeName").attr("fabricspec", fabricspec);
+      $("#clothTypeName").attr("clothType", clothType);
+      $("#newSize").html(type);
+      $("#ulForward").hide();
+      $(".ulForward").css({
+        height: "0px"
+      });
+    });
+
+    //增加确认
+
+    function addSure() {
+      var newHtml = "";
+      var objObj = {
+        clothType: "",
+        clothTypeName: "",
+        clothModel: "",
+        num: "",
+        beforeNum: "0"
+      };
+      objObj.clothType = $("#clothTypeName").attr("clothType");
+      objObj.clothTypeName = $("#clothTypeName").html();
+      objObj.clothModel = $("#newSize").html();
+      objObj.num = $("#newNum").val();
+      objObj.fabricSpec = $("#clothTypeName").attr("fabricspec");
+      if (objObj.num == "" || objObj.num == "0") {
+        mui.toast("不可为0！");
+        return;
+      }
+      console.log(objObj);
+      submitArray.push(objObj);
+      newHtml = createHtml(
+        objObj.clothTypeName,
+        objObj.clothModel,
+        objObj.fabricSpec,
+        objObj.num,
+        totalIndex
+      );
+      $("#list").append(newHtml);
+      $(".sureBtn").show();
+      $(".mask").hide();
+      $("#newCloth").hide();
+    }
+
+    /**
+     * @desc   扫描芯片
+     */
+    var chipIDArray = [];
+
+    function scanChip() {
+      chipIDArray = [];
+      parent.rovinj.rfidReader.on("inventory", function(epcTid) {
+        console.log(epcTid);
+        if (chipIDArray.indexOf(epcTid) == -1) {
+          chipIDArray.push(epcTid);
+          initNum(chipIDArray.length);
+        }
+      });
+      parent.rovinj.rfidReader
+        .startInventory()
+        .then(function(res) {
+          mui.toast(res);
+        })
+        .catch(function(err) {
+          mui.toast(err);
+        });
+    }
+    //开始扫描
+    mui("body").on("tap", "#round", function() {
+      $("#chipResult").show();
+      // for (var i = 0; i < 1000; i++) {
+      //     initNum(i)
+      // }
+      scanChip();
+    });
+    // 按钮扫描芯片
+    $(document).keydown(function(event) {
+      // alert("你按下了Enter" + event.keyCode);
+      if (event.keyCode == 0) {
+        $("#chipResult").show();
+        scanChip();
+      }
+    });
+    //停止扫描
+    $("#scanStop").click(function() {
+      $("#chipResult").hide();
+      stop();
+    });
+
+    function stop() {
+      parent.rovinj.rfidReader.stopInventory();
+      parent.rovinj.rfidReader.off("inventory");
+      loadChipData(chipIDArray.toString());
+    }
+
+    function loadChipData(rfidListStr) {
+      mui.showLoading("正在加载", "div");
+      var listHtml = "";
+      var initArray = [];
+      initArray = submitArray;
+      var temp = [];
+      for (var j = 0; j < initArray.length; j++) {
+        temp[j] = initArray[j].clothType;
+      }
+      submitArray = [];
+      var param = {
+        // rfidListStr: "RFID1,RFID2,RFID3"
+        rfidListStr
+      };
+      param = JSON.stringify(param);
+      $.ajax({
+        type: "post",
+        url: baseUrl + "medical/fabric",
+        data: {
+          // dataGroupCode: dataGroupCode,
+          // rfidListStr: rfidListStr,
+          requestParam: param
+        },
+        headers: {
+          methodName: "queryFabricInfoByRfid",
+          serviceName: ""
+        },
+        success: function(data) {
+          mui.hideLoading();
+          // var data = JSON.parse(data);
+          var list = data.data;
+          for (var i = 0; i < list.length; i++) {
+            var objObj = {
+              clothType: "",
+              clothTypeName: "",
+              clothModel: "",
+              num: "",
+              beforeNum: ""
+            };
+            objObj.clothType = list[i].fabricNo;
+            objObj.clothTypeName = list[i].fabricName;
+            objObj.clothModel = list[i].fabricModel;
+            objObj.fabricSpec = list[i].fabricSpec;
+            objObj.num = list[i].useTimes;
+            if (temp.indexOf(list[i].clothType) > -1) {
+              objObj.beforeNum =
+                initArray[temp.indexOf(list[i].clothType)].beforeNum;
+            } else {
+              objObj.beforeNum = "0";
+            }
+            submitArray.push(objObj);
+            listHtml += createHtml(
+              objObj.clothTypeName,
+              objObj.clothModel,
+              objObj.fabricSpec,
+              objObj.num,
+              i
+            );
+          }
+          // console.log(listHtml);
+
+          $("#list").html(listHtml);
+        }
+      });
+    }
+
+    /**
+     * @desc   点击返回按钮
+     * @author huoke
+     */
+    mui("body").on("tap", "#back", function() {
+      // location.href = '../clothing_menu.html'
+      location.href = "./recoveryMainNAPP.html";
+    });
+
+    /**
+     * @desc   手机系统返回键
+     * @author huoke
+     */
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+      document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+      // window.history.back(-1)
+      location.href = "recoveryMainNAPP.html";
+    }
+   
+  </script>
+</html>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+	
+<sqlMap namespace="AUAR0101">
+	
+	<insert id="insertResource" parameterClass="java.util.HashMap">
+		INSERT INTO $projectSchema$.ac_resource (id,  <!-- 主键 -->
+										resource_ename,  
+										resource_name, 
+										type, 
+										status,  
+										rec_creator,  <!-- 创建人 -->
+										rec_create_time,  <!-- 创建时间 -->
+										rec_revisor,  <!-- 修改人 -->
+										rec_revise_time  <!-- 修改时间 -->
+										)		 
+	    VALUES (#id#, #resourceEname#, #resourceName#,#type#, #status#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#) 
+	</insert>
+	
+	
+</sqlMap>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MPTY02">
+
+	<select id="queryParentGroupsByLoginName" resultClass="java.util.HashMap">
+		SELECT
+			t.ID AS "groupId",
+			t.GROUP_ENAME AS "groupEname",
+			t.GROUP_CNAME AS "groupCname",
+			t.GROUP_TYPE AS "groupType"
+		FROM
+			(
+				SELECT DISTINCT
+					PARENT_ID
+				FROM
+					${platSchema}.XS_USER_GROUP_MEMBER,
+					( SELECT ${platSchema}.queryParentInfo ( ( SELECT USER_ID FROM ${platSchema}.XS_USER T2 WHERE T2.LOGIN_NAME = #loginName# ) ) AS ID_SET FROM DUAL ) tset
+				WHERE
+					find_in_set( parent_id, ID_SET )
+			) TEMP,
+			${platSchema}.XS_USER_GROUP t
+		WHERE
+			t.ID = TEMP.PARENT_ID
+		  AND t.GROUP_TYPE = #groupType#
+	</select>
+
+</sqlMap>

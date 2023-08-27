@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="SSBMCppb02">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.ss.bm.domain.SSBMCppb02">
+		SELECT
+            t.id,
+            t.menu_num menuNum,
+            t.menu_name menuName,
+            t.menu_desc menuDesc,
+            t.menu_price menuPrice,
+            t.menu_type_num menuTypeNum,
+            t.menu_type_name menuTypeName,
+            t.suit_group suitGroup,
+            t.not_suit_group notSuitGroup,
+            lc.canteen_name canteenName,
+            t.menu_supply menuSupply 
+        FROM
+            sc_menu t
+            LEFT JOIN sc_canteen_liaison_conf lc ON t.canteen_num = lc.canteen_num 
+        WHERE
+            t.status_code = '1' 
+            <isNotEmpty prepend="and" property="canteenNum">
+                t.canteen_num = #canteenNum# 
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="menuTypeNum">
+                t.menu_type_num = #menuTypeNum# 
+            </isNotEmpty>
+            AND t.menu_num NOT IN ( 
+              SELECT ms.menu_num 
+              FROM sc_menu_sche ms 
+              WHERE 1=1 
+              <isNotEmpty prepend="and" property="mealDate">
+                  ms.meal_date = #mealDate# 
+              </isNotEmpty>
+              <isNotEmpty prepend="and" property="mealNum">
+                  ms.meal_num = #mealNum#
+              </isNotEmpty>
+              <isNotEmpty prepend="and" property="canteenNum">
+                  ms.canteen_num = #canteenNum#
+              </isNotEmpty>
+              ) 
+          <isNotEmpty prepend="and" property="menuName">
+            t.menu_name like concat('%',#menuName#,'%')
+          </isNotEmpty>
+        ORDER BY
+            CONVERT ( t.menu_name USING gbk ) ASC
+	</select>
+
+	<select id="count" resultClass="int" parameterClass="java.util.HashMap" >
+		SELECT COUNT(1) FROM sc_menu 
+		WHERE
+            t.status_code = '1' 
+            <isNotEmpty prepend="and" property="canteenNum">
+                t.canteen_num = #canteenNum# 
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="menuTypeNum">
+                t.menu_type_num = #menuTypeNum# 
+            </isNotEmpty>
+            AND t.menu_num NOT IN ( 
+              SELECT ms.menu_num 
+              FROM sc_menu_sche ms 
+              WHERE 1=1 
+              <isNotEmpty prepend="and" property="mealDate">
+                  ms.meal_date = #mealDate# 
+              </isNotEmpty>
+              <isNotEmpty prepend="and" property="mealNum">
+                  ms.meal_num = #mealNum#
+              </isNotEmpty>
+              <isNotEmpty prepend="and" property="canteenNum">
+                  ms.canteen_num = #canteenNum#
+              </isNotEmpty>
+              ) 
+          <isNotEmpty prepend="and" property="menuName">
+            t.menu_name like concat('%',#menuName#,'%')
+          </isNotEmpty>
+        ORDER BY
+            CONVERT ( t.menu_name USING gbk ) ASC
+	</select>
+
+
+	<insert id="insert">
+		INSERT INTO sc_menu (id,  <!-- 主键 -->
+										menu_num,  <!-- 菜品编码 -->
+										menu_name,  <!-- 菜品名称 -->
+										menu_desc,  <!-- 菜品备注 -->
+										menu_price,  <!-- 菜品单价 -->
+										menu_type_num,  <!-- 菜品类型编码 -->
+										menu_type_name,  <!-- 菜品类型名称 -->
+										suit_group,  <!-- 适宜人群 -->
+										not_suit_group,  <!-- 不适宜人群 -->
+										
+										menu_supply  <!-- 菜品供应量 -->
+										)		 
+	    VALUES (#id#, #menuNum#, #menuName#, #menuDesc#, #menuPrice#, #menuTypeNum#, #menuTypeName#, #suitGroup#, #notSuitGroup#, #menuSupply#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM sc_menu WHERE 
+	</delete>
+
+	<update id="update">
+		UPDATE sc_menu 
+		SET 
+		id	= #id#,   <!-- 主键 -->  
+					menu_num	= #menuNum#,   <!-- 菜品编码 -->  
+					menu_name	= #menuName#,   <!-- 菜品名称 -->  
+					menu_desc	= #menuDesc#,   <!-- 菜品备注 -->  
+					menu_price	= #menuPrice#,   <!-- 菜品单价 -->  
+					menu_type_num	= #menuTypeNum#,   <!-- 菜品类型编码 -->  
+					menu_type_name	= #menuTypeName#,   <!-- 菜品类型名称 -->  
+					suit_group	= #suitGroup#,   <!-- 适宜人群 -->  
+					not_suit_group	= #notSuitGroup#,   <!-- 不适宜人群 -->  
+					menu_supply	= #menuSupply#  <!-- 菜品供应量 -->  
+			WHERE 	
+	</update>
+  
+</sqlMap>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-02-09 9:14:56
+   		Version :  6.0.731.201809200158
+		tableName :iplat_v5demo_business.ot_user 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 work_no  VARCHAR, 
+		 name  VARCHAR, 
+		 status_code  VARCHAR, 
+		 role_code  VARCHAR, 
+		 phone  VARCHAR
+	-->
+<sqlMap namespace="carriageUser">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.common.ys.domain.CarriageUser">
+		SELECT
+				id	as "id",  <!-- 运送人员主键（UUID） -->
+				work_no	as "workNo",  <!-- 人员工号 -->
+				name	as "name",  <!-- 人员姓名 -->
+				status_code	as "statusCode",  <!-- 人员状态 -->
+				role_code	as "roleCode",  <!-- 角色编码 -->
+				phone	as "phone" <!-- 联系方式 -->
+		FROM iplat_v5demo_business.ot_user WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM iplat_v5demo_business.ot_user WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workNo">
+			work_no = #workNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="name">
+			name = #name#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			status_code = #statusCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roleCode">
+			role_code = #roleCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="phone">
+			phone = #phone#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO iplat_v5demo_business.ot_user (id,  <!-- 运送人员主键（UUID） -->
+										work_no,  <!-- 人员工号 -->
+										name,  <!-- 人员姓名 -->
+										status_code,  <!-- 人员状态 -->
+										role_code,  <!-- 角色编码 -->
+										phone  <!-- 联系方式 -->
+										)		 
+	    VALUES (#id#, #workNo#, #name#, #statusCode#, #roleCode#, #phone#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM iplat_v5demo_business.ot_user WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE iplat_v5demo_business.ot_user 
+		SET 
+					work_no	= #workNo#,   <!-- 人员工号 -->  
+					name	= #name#,   <!-- 人员姓名 -->  
+					status_code	= #statusCode#,   <!-- 人员状态 -->  
+					role_code	= #roleCode#,   <!-- 角色编码 -->  
+					phone	= #phone#  <!-- 联系方式 -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

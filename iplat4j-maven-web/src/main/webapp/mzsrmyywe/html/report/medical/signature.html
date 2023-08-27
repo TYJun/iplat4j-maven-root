@@ -1,0 +1,275 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="reference/mui/css/mui.min.css">
+  <link rel="stylesheet" href="reference/mui/css/iconfont.css">
+  <link rel="stylesheet" href="reference/css/jquery.signature.css" />
+  <link rel="stylesheet" href="reference/css/common.css" />
+</head>
+<STYLE TYPE="text/css">
+  body {
+    background: #f7f7f7;
+  }
+
+  .mui-input-group .mui-input-row {
+    height: 100px;
+  }
+
+  .sign-div {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 99;
+    background: #fff;
+    height: 100%;
+  }
+
+  .sign-area {
+    width: 100%;
+    height: 450px;
+    margin-top: 44px;
+  }
+
+  .canvas-area {
+    width: 100%;
+    height: 450px;
+    border-top: 1px dashed #eee;
+    border-bottom: 1px dashed #eee;
+    background: #f7f7f7;
+    border-right: none;
+    border-left: none;
+  }
+
+  .sign-tab {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    font-weight: bold;
+    color: #4988a7;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .mui-btn-primary {
+    color: #fff;
+    border: 1px solid #4988a7;
+    background-color: #4988a7;
+  }
+</STYLE>
+
+<body>
+  <header class="mui-bar mui-bar-nav">
+    <h1 class="mui-title">医废</h1>
+    <button class="mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+      返回
+    </button>
+    <button id="sign" class="mui-btn mui-btn-blue mui-btn-link mui-pull-right">签名</button>
+  </header>
+
+  <div class="mui-content">
+    <div class="mui-card">
+      <form id="batch" class="mui-input-group">
+      </form>
+    </div>
+  </div>
+
+  <div class="sign-div" hidden>
+    <header class="mui-bar mui-bar-nav">
+      <h1 class="mui-title">签字</h1>
+      <button id="signBack" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+        返回
+      </button>
+    </header>
+    <div class="sign-area">
+      <div class="sign-tab">请在下方区域签名并点击'提交'按钮</div>
+      <div id="signature" class="canvas-area"></div>
+      <div class="mui-row">
+        <div class="mui-col-xs-6 center" style="padding:15px;">
+          <button id="reset" type="button" class="mui-btn mui-btn-block mui-btn-outlined">重置</button>
+        </div>
+        <div class="mui-col-xs-6 center" style="padding:15px;">
+          <button id="submit" type="button" class="mui-btn mui-btn-primary mui-btn-block">提交</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="reference/js/jquery-ui.min.js" type="text/javascript"></script>
+<script src="reference/js/jquery.ui.touch-punch.min.js" type="text/javascript"></script>
+<script src="reference/js/jquery.signature.js" type="text/javascript"></script>
+<script src="reference/js/common.js" type="text/javascript"></script>
+<script type="text/javascript">
+  var baseUrl = localStorage.getItem("saasUrl");
+  var workNo = localStorage.getItem('workNo');
+  var name = localStorage.getItem('name');
+  var deptName = localStorage.getItem("deptName");
+  var deptCode = localStorage.getItem("deptCode");
+  var timeLimit = localStorage.getItem("timeLimit")
+  $('.canvas-area').width($('.sign-div').width());
+
+  $.ajax({
+    url: baseUrl + 'app/trashCollect.do?getUnHandoverTrashListNew',
+    type: 'post',
+    data: {
+      dataGroupCode: '020GZYKDXFSDEYY-TRASH',
+      deptNum: deptCode
+    },
+    success: function (data) {
+      var data = JSON.parse(data);
+      console.log(data);
+      if (data.respCode == "200") {
+        console.log(data.obj)
+        var html = '';
+        if (data.obj != null && data.obj != undefined && data.obj != "") {
+          var list = data.obj.data;
+          if (list.length == 0 || list == null) {
+            mui.toast("没有需要签名的医废扎带");
+            return;
+          }
+
+          for (var i = 0; i < list.length; i++) {
+            var date = list[i].createTime;
+            var createTime = new Date(date).getTime();
+            var today = new Date().getTime();
+            var time = today - createTime;
+
+            html += '<div class="mui-input-row mui-checkbox">';
+            html += '<label style="color:#4988a7;font-weight:bold;" createTime="' + list[i].createTime + '">扎 带： <span style="color:#2196f3;">' + list[i].ribbonCode + '</span><br>重 量： <span style="color:#4988a7">' + list[i].weight + 'kg</span>';
+            // html +=  '<br>数 量： <span style="color:#4988a7;">' + list[i].num + '</span>';
+            html += '<br>医废类型： <span style="color:#4988a7;">' + list[i].trashTypeName + '</span>';
+            html += '<br>收集时间： <span style="color:#4988a7;">' + list[i].createTime + '</span>';
+            html += '</label>';
+            if (time < timeLimit) {
+              html += '<input name="batch" value="' + list[i].ribbonCode + '" type="checkbox" createTime="' + list[i].createTime + '" >';
+            }
+
+            html += '</div>';
+          }
+        } else {
+          mui.toast('没有需要签名的扎带')
+        }
+
+        $('#batch').html(html);
+      } else {
+        mui.toast("查询医废扎带失败!");
+      }
+    }
+  });
+
+  //签字按钮：首先判断是否选中扎带
+  document.getElementById("sign").addEventListener('tap', function () {
+    var batchList = [];
+    $('input[name="batch"]:checked').each(function () {
+      batchList.push($(this).val());
+    });
+    console.log(batchList);
+    if (batchList.length == 0 || batchList == null)
+      mui.toast('请先选择需要签名的扎带');
+    else
+      $('.sign-div').show();
+  });
+
+  //签字返回按钮
+  document.getElementById("signBack").addEventListener('tap', function () {
+    $('.sign-div').hide();
+  });
+
+  //签字区域
+  $('#signature').signature();
+  $('#signature').signature({ color: '#000' });
+
+  //重置签名
+  document.getElementById("reset").addEventListener('tap', function () {
+    $('#signature').signature('clear');
+  });
+
+  //提交前校验
+  document.getElementById("submit").addEventListener('tap', function () {
+    var isNotSign = $('#signature').signature('isEmpty');
+    if (isNotSign) {
+      mui.toast("您还未签名");
+      return;
+    }
+
+    var signatureBatch = [];
+    var signatureBatchMap = new Map();
+    $('input[name="batch"]:checked').each(function (index, element) {
+      if (index == 0)
+        signatureBatch += $(this).val();
+      else
+        signatureBatch += ',' + $(this).val();
+      var obj = {
+        ribbonCode: "",
+        createTime: ""
+      };
+      // obj.ribbonCode = $(this).val();
+      // obj.createTime = $(this).attr("createTime");
+      // signatureBatch.push(obj)
+      // signatureBatchMap.set($(this).val(),$(this).attr("createTime"))
+    });
+    doSubmit(signatureBatch);
+  });
+
+  function doSubmit(signatureBatch) {
+    var imgData = getBase64();
+    imgData = imgData.substring(22, imgData.length);
+    var param = {
+      dataGroupCode: '020GZYKDXFSDEYY-TRASH',
+      deptNum: deptCode,
+      imgBase64: imgData,
+      // ribbonCode: JSON.stringify(signatureBatch),
+      ribbonCode: signatureBatch,
+      signFlag: '0'
+    }
+    $.ajax({
+      url: baseUrl + 'app/trashCollect.do?signConfirm',
+      type: 'post',
+      contentType: 'application/json',
+      data: JSON.stringify(param),
+      //data:param,
+      success: function (data) {
+        var data = JSON.parse(data);
+        console.log(data);
+        if (data.respCode == 200) {
+          mui.toast('签名成功');
+          setTimeout('location.reload()', 1500);
+        } else {
+          mui.toast('签名失败，请重试');
+        }
+      }
+    });
+  }
+
+  //获取签名base64
+  function getBase64() {
+    var imageData = $('canvas')[0].toDataURL("image/png");
+    // console.log(imageData);
+    return imageData;
+  }
+
+  $("#batch").on("click", ".mui-checkbox", function () {
+    var date = $(this).find("label").attr("createTime");
+    console.log(date)
+    var createTime = new Date(date).getTime();
+    var today = new Date().getTime();
+    var time = today - createTime;
+    if (time > timeLimit) {
+      mui.toast("这条记录已经超出补签时间");
+      return
+    }
+  })
+</script>
+
+</html>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PRGL0302">
+
+	<!-- 查询问题流程 -->
+	<select id="queryLogs" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.pr.gl.domain.PRGL0302">
+	SELECT
+	CASE
+		WHEN tsdl.rejectStatus = '00' THEN '待认领'
+		WHEN tsdl.rejectStatus = '01' THEN '整改被驳回'
+		WHEN tsdl.rejectStatus = '10' THEN '已认领'
+		WHEN tsdl.rejectStatus = '09' THEN '认领被驳回'
+		WHEN tsdl.rejectStatus = '20' THEN '问题被挂账'
+		WHEN tsdl.rejectStatus = '30' THEN '已整改'
+		WHEN tsdl.rejectStatus = '40' THEN '整改待确认'
+		WHEN tsdl.rejectStatus = '39' THEN '整改被驳回'
+		WHEN tsdl.rejectStatus = '99' THEN '结束'
+	END "contentType",
+		tsdl.logsMan as name,
+		tsdl.logsTime as time,
+		tsdl.rejectReason as param
+	FROM
+		pr_safty_danger_logs tsdl
+	WHERE
+		dangerID = #id#
+	ORDER BY
+		tsdl.	logsTime
+	<isNotEmpty property="offset">
+		limit #offset#,#limit#
+	</isNotEmpty>
+	</select>
+
+
+  
+</sqlMap>

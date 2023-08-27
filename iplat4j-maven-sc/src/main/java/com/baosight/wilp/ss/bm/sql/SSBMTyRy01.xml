@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd"> 
+<!-- 人员信息查询 -->
+<sqlMap namespace="SSBMTyRy01">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.bm.domain.SSBMTyRy01">
+		SELECT
+		    p.id,
+		    p.rec_creater AS "recCreater",
+		    p.rec_create_time AS "recCreateTime",
+		    p.rec_revisor AS "recRevisor",
+		    p.rec_revise_time AS "recReviseTime",
+		    p.work_no AS "workNo",
+		    p.NAME AS "name",
+		    p.gender AS "gender",
+		    p.contact_tel AS "contactTel",
+		    p.dept_id "deptId",
+		    p.mailbox,
+		    p.id_no AS "idNo",
+		    p.pic_url AS "picUrl",
+		    p.type AS "type",
+		    p.is_service AS "isService",
+		    p.`status`,
+		    p.cancellation,
+		    d.dept_num AS "deptNum",
+		    d.dept_name "deptName",
+		    d.hospital_district hospitalDistrict,
+		    p.cancellation AS "cancellation" 
+		FROM
+		    v_frame_ac_personnel p
+		    LEFT JOIN v_frame_ac_department d ON p.dept_id = d.id
+        WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workNo">
+            work_no like concat('%',#workNo#,'%')
+        </isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workNos">
+            work_no in $workNos$
+        </isNotEmpty>
+		<isNotEmpty prepend=" AND " property="name">
+            name like concat('%',#name#,'%')
+        </isNotEmpty>
+		order by work_no
+	</select>
+	
+	<!-- <select id="count" resultClass="int">
+		SELECT COUNT(*) FROM v_frame_ac_personnel WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select> -->
+
+
+</sqlMap>

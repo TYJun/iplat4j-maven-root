@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!-- 卡片消费记录表 -->
+<sqlMap namespace="PSPCTcardConsumeRecordInfo">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ps.pc.domain.PSPCTcardConsumeRecordInfo">
+		SELECT
+		id as "id",
+		consume_bill_id as "consumeBillId",  <!-- 消费品编码 -->
+		bill_no as "billNo",
+		canteen_num as "canteenNum",
+		canteen_name as "canteenName",
+		card_code as "cardCode",  <!-- 卡片编码 -->
+		patient_code as "patientCode",  <!-- 病人住院号/员工号 -->
+		consume_device_code as "consumeDeviceCode",  <!-- 消费设备编码 -->
+		consume_money as "consumeMoney",  <!-- 消费金额 -->
+		back_money as "backMoney",  <!-- 退款金额 -->
+		consume_type as "consumeType",  <!-- 0/1,消费/退款 -->
+		consume_time as "consumeTime",  <!-- 消费时间 -->
+		back_time as "backTime",  <!-- 退卡时间 -->
+		bill_type as "billType",  <!-- bh/病患 yw/医务 -->
+		status_code as "statusCode",  <!-- 00-待付款/ 01-付款成功/02-付款失败/03-待退款/04-退款成功/05-退款失败/90-付款处理中/91-退款处理中/99-返回明确的错误信息时，终结消息发送 -->
+		message as "message",
+		branchno as "branchno",  <!-- 00-待付款/ 01-付款成功/02-付款失败/03-待退款/04-退款成功/05-退款失败-/90付款处理中/91退款处理中 -->
+		operid as "operid",
+		flag as "flag",  <!-- 01代表未更新订单表，99代表更新订单表，98代表工作流提交失败手动修改 -->
+		activiti_type as "activitiType" <!-- 工作流类型标记 -->
+		FROM ae_patient_card_consume_record_info WHERE 1=1
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+		</dynamic>
+
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM
+		card_consume_record_info WHERE 1=1
+	</select>
+
+    <!-- =========== 查询订单卡片消费记录 =========== -->
+    <select id="comboMealBackMoneyToCard" parameterClass="String" 
+        resultClass="com.baosight.wilp.ps.pc.domain.PSPCTcardConsumeRecordInfo">
+        select 
+            id,
+            consume_bill_id AS consumeBillId, 
+            bill_no AS billNo , 
+            canteen_num AS canteenNum, 
+            canteen_name AS canteenName, 
+            card_code AS cardCode, 
+            patient_code AS patientCode, 
+            consume_device_code AS consumeDeviceCode, 
+            consume_money AS consumeMoney,  
+            back_money AS backMoney,
+            consume_type AS consumeType,
+            consume_time AS consumeTime,
+            back_time AS backTime,
+            bill_type AS billType,
+            status_code AS statusCode,
+            message,
+            branchno,
+            operid,
+            flag,
+            activiti_type AS activitiType
+        from 
+            card_consume_record_info 
+        where 
+            consume_bill_id = #value#
+    </select>
+
+	<insert id="insert">
+		INSERT INTO ae_patient_card_consume_record_info (id,
+		consume_bill_id,  <!-- 消费品编码 -->
+		bill_no,
+		canteen_num,
+		canteen_name,
+		card_code,  <!-- 卡片编码 -->
+		patient_code,  <!-- 病人住院号/员工号 -->
+		consume_device_code,  <!-- 消费设备编码 -->
+		consume_money,  <!-- 消费金额 -->
+		back_money,  <!-- 退款金额 -->
+		consume_type,  <!-- 0/1,消费/退款 -->
+		consume_time,  <!-- 消费时间 -->
+		back_time,  <!-- 退卡时间 -->
+		bill_type,  <!-- bh/病患 yw/医务 -->
+		status_code,  <!-- 00-待付款/ 01-付款成功/02-付款失败/03-待退款/04-退款成功/05-退款失败/90-付款处理中/91-退款处理中/99-返回明确的错误信息时，终结消息发送 -->
+		message,
+		branchno,  <!-- 00-待付款/ 01-付款成功/02-付款失败/03-待退款/04-退款成功/05-退款失败-/90付款处理中/91退款处理中 -->
+		operid,
+		flag,  <!-- 01代表未更新订单表，99代表更新订单表，98代表工作流提交失败手动修改 -->
+		activiti_type  <!-- 工作流类型标记 -->
+		)
+		VALUES (#id#, #consumeBillId#, #billNo#, #canteenNum#, #canteenName#,
+		#cardCode#, #patientCode#, #consumeDeviceCode#, #consumeMoney#,
+		#backMoney#, #consumeType#, #consumeTime#, #backTime#, #billType#,
+		#statusCode#, #message#, #branchno#, #operid#, #flag#, #activitiType#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM ae_patient_card_consume_record_info WHERE
+	</delete>
+
+	<update id="update">
+		UPDATE ae_patient_card_consume_record_info
+		SET
+		id = #id#,
+		consume_bill_id = #consumeBillId#,   <!-- 消费品编码 -->
+		bill_no = #billNo#,
+		canteen_num = #canteenNum#,
+		canteen_name = #canteenName#,
+		card_code = #cardCode#,   <!-- 卡片编码 -->
+		patient_code = #patientCode#,   <!-- 病人住院号/员工号 -->
+		consume_device_code = #consumeDeviceCode#,   <!-- 消费设备编码 -->
+		consume_money = #consumeMoney#,   <!-- 消费金额 -->
+		back_money = #backMoney#,   <!-- 退款金额 -->
+		consume_type = #consumeType#,   <!-- 0/1,消费/退款 -->
+		consume_time = #consumeTime#,   <!-- 消费时间 -->
+		back_time = #backTime#,   <!-- 退卡时间 -->
+		bill_type = #billType#,   <!-- bh/病患 yw/医务 -->
+		status_code = #statusCode#,   <!-- 00-待付款/ 01-付款成功/02-付款失败/03-待退款/04-退款成功/05-退款失败/90-付款处理中/91-退款处理中/99-返回明确的错误信息时，终结消息发送 -->
+		message = #message#,
+		branchno = #branchno#,   <!-- 00-待付款/ 01-付款成功/02-付款失败/03-待退款/04-退款成功/05-退款失败-/90付款处理中/91退款处理中 -->
+		operid = #operid#,
+		flag = #flag#,   <!-- 01代表未更新订单表，99代表更新订单表，98代表工作流提交失败手动修改 -->
+		activiti_type = #activitiType#  <!-- 工作流类型标记 -->
+		WHERE
+	</update>
+
+</sqlMap>

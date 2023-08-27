@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CMFP01">
+    <select id="queryCmMsg" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            t1.ID contPk,
+            t1.CONT_NO contNo,
+            t1.CONT_NAME contName,
+            t01.CONT_TYPE_NAME contTypeNum,
+            t1.CONT_SIGN_TIME contSignTime,
+            t1.PLAN_TAKEEF_TIME planTakeefTime,
+            t1.PLAN_FINISH_TIME planFinishTime,
+            t1.CURR_TYPE currType,
+            t1.BUDGET budget,
+            t1.CONT_TAX_INCLUDE_AMOUNT contTaxIncludeAmount,
+            t1.QUAR_PERIOD quarPeriod,
+            case
+                t1.CONT_STATUS
+            when "1"
+            then "执行" end
+            as contStatus,
+            t1.CONT_ADMIN_NAME contAdminName,
+            DATE_FORMAT(t1.BILL_MAKE_TIME,'%Y-%m-%d') billMakeTime,
+            t1.BILL_MAKER billMaker,
+            DATE_FORMAT(t1.CHECK_TIME,'%Y-%m-%d') checkTime,
+            t1.CHECK_MAKER checkMaker
+        from
+            cm_contract_bill t1
+        LEFT JOIN cm_contract_type t01 on t1.CONT_TYPE_NUM = t01.CONT_TYPE_NUM
+        where
+            t1.CONT_STATUS = "1"
+        <isNotEmpty property="contNo" prepend="and">
+            t1.CONT_NO like concat('%',#contNo#,'%')
+        </isNotEmpty>
+        <isNotEmpty property="contName" prepend="and">
+            t1.CONT_NAME like concat('%',#contName#,'%')
+        </isNotEmpty>
+    </select>
+
+    <select id="queryCmFPMsg" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            ci.invoice_auto_no invoiceAutoNo,
+            ci.invoice_no invoiceNo,
+            ci.surp_num surpNum,
+            ci.surp_name surpName,
+            ci.surp_link_man surpLinkMan,
+            ci.surp_tel surpTel,
+        case ci.invoice_type
+        when "ZZSPTFP" then "增值税普通发票"
+        when "PTFP" then "普通发票"
+        when "ZZSZYFP" then "增值税专用发票"
+        end invoiceType,
+        case ci.curr_type when "RMB" then "人民币" end currType ,
+            ci.invoice_tax_exclude_amount invoiceTaxExcludeAmount,
+            ci.invoice_tax_amount invoiceTaxAmount,
+            ci.invoice_issuing_time invoiceIssuingTime,
+            ci.cont_no contNo,
+            ccb.CONT_NAME contName,
+            ci.cont_pk contPk,
+            ci.remark,
+        case ci.invoice_status
+        when "0" then "发票登记"
+        when "1" then "申请付款"
+        when "2" then "付款完成"
+        end invoiceStatus,
+            ci.rec_creator recCreator,
+            ci.rec_creator_no recCreatorNo,
+            ci.rec_create_time recCreateTime,
+            ci.rec_revisor recRevisor,
+            ci.rec_revisor_no recRevisorNo,
+            ci.rec_revise_time recReviseTime
+        from
+            cm_invoice ci
+        left join cm_contract_bill ccb on ci.cont_pk = ccb.id
+        where
+            ci.invoice_status = "1"
+        <isNotEmpty property="invoiceAutoNo" prepend="and">
+            ci.invoice_auto_no like concat('%',#invoiceAutoNo#,'%')
+        </isNotEmpty>
+        <isNotEmpty property="invoiceNo" prepend="and">
+            ci.invoice_no like concat('%',#invoiceNo#,'%')
+        </isNotEmpty>
+    </select>
+
+    <select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            id,
+            invoice_auto_no invoiceAutoNo,
+            invoice_no invoiceNo,
+            surp_num surpNum,
+            surp_name surpName,
+            surp_link_man surpLinkMan,
+            surp_tel surpTel,
+            case invoice_type
+            when "ZZSPTFP" then "增值税普通发票"
+            when "PTFP" then "普通发票"
+            when "ZZSZYFP" then "增值税专用发票"
+            end invoiceType,
+            case curr_type when "RMB" then "人民币" end currType ,
+            invoice_tax_exclude_amount invoiceTaxExcludeAmount,
+            invoice_tax_amount invoiceTaxAmount,
+            invoice_issuing_time invoiceIssuingTime,
+            cont_no contNo,
+            cont_pk contPk,
+            remark,
+            case invoice_status
+            when "0" then "发票登记"
+            when "1" then "申请付款"
+            when "2" then "付款完成"
+            end invoiceStatus,
+            rec_creator recCreator,
+            rec_creator_no recCreatorNo,
+            rec_create_time recCreateTime,
+            rec_revisor recRevisor,
+            rec_revisor_no recRevisorNo,
+            rec_revise_time recReviseTime
+        from
+            cm_invoice
+        where
+            1 = 1
+        <isNotEmpty property="invoiceAutoNo" prepend="and">
+            invoice_auto_no like concat('%',#invoiceAutoNo#,'%')
+        </isNotEmpty>
+        <isNotEmpty property="invoiceNo" prepend="and">
+            invoice_no like concat('%',#invoiceNo#,'%')
+        </isNotEmpty>
+        <isNotEmpty property="invoiceStatus" prepend="and">
+            invoice_status = #invoiceStatus#
+        </isNotEmpty>
+        ORDER BY
+            rec_create_time DESC
+    </select>
+
+    <insert id="save" parameterClass="com.baosight.wilp.cm.domain.CmInvoice">
+        insert into cm_invoice(
+            id,
+            invoice_auto_no,
+            invoice_no,
+            surp_num,
+            surp_name,
+            surp_link_man,
+            surp_tel,
+            invoice_type,
+            curr_type,
+            invoice_tax_exclude_amount,
+            invoice_tax_amount,
+            invoice_issuing_time,
+            cont_no,
+            cont_pk,
+            remark,
+            invoice_status,
+            rec_creator,
+            rec_creator_no,
+            rec_create_time
+        )values (
+            #id#,
+            #invoiceAutoNo#,
+            #invoiceNo#,
+            #surpNum#,
+            #surpName#,
+            #surpLinkMan#,
+            #surpTel#,
+            #invoiceType#,
+            #currType#,
+            #invoiceTaxExcludeAmount#,
+            #invoiceTaxAmount#,
+            #invoiceIssuingTime#,
+            #contNo#,
+            #contPk#,
+            #remark#,
+            #invoiceStatus#,
+            #recCreator#,
+            #recCreatorNo#,
+            #recCreateTime#
+        )
+    </insert>
+
+    <update id="update" parameterClass="com.baosight.wilp.cm.domain.CmInvoice">
+        update cm_invoice set
+            invoice_no=#invoiceNo#,
+            surp_num=#surpNum#,
+            surp_name=#surpName#,
+            surp_link_man=#surpLinkMan#,
+            surp_tel=#surpTel#,
+            invoice_type=#invoiceType#,
+            curr_type=#currType#,
+            invoice_tax_exclude_amount=#invoiceTaxExcludeAmount#,
+            invoice_tax_amount=#invoiceTaxAmount#,
+            invoice_issuing_time=#invoiceIssuingTime#,
+            cont_no=#contNo#,
+            cont_pk=#contPk#,
+            remark=#remark#,
+            invoice_status=#invoiceStatus#,
+            rec_revisor=#recRevisor#,
+            rec_revisor_no=#recRevisorNo#,
+            rec_revise_time=#recReviseTime#
+        where
+            invoice_auto_no = #invoiceAutoNo#
+    </update>
+
+    <select id="queryInvoiceMsgByInvoiceAutoNo" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+        select
+            ci.invoice_no invoiceNo,
+            ci.invoice_auto_no invoiceAutoNo,
+            ci.cont_no contNo,
+            ci.cont_pk contPk,
+            ccb.CONT_NAME contName,
+            ci.surp_num surpNum,
+            ci.surp_name surpName,
+            ci.invoice_type invoiceType,
+            ci.invoice_issuing_time invoiceIssuingTime,
+            ci.curr_type currType,
+            ci.invoice_tax_exclude_amount invoiceTaxExcludeAmount,
+            ci.invoice_tax_amount invoiceTaxAmount,
+            ci.remark
+        from
+            cm_invoice ci
+        left join cm_contract_bill ccb on ci.cont_pk = ccb.ID
+        where
+            invoice_auto_no = #value#
+    </select>
+
+    <delete id="deleter" parameterClass="java.lang.String">
+        delete from cm_invoice where invoice_auto_no = #value#
+    </delete>
+
+    <update id="reqPayment" parameterClass="java.lang.String">
+        update cm_invoice set invoice_status = "1" where invoice_auto_no = #value#
+    </update>
+</sqlMap>

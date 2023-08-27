@@ -1,0 +1,235 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <!-- <title>Layui</title> -->
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../reference/layui/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../reference/mui/css/mui.css">
+    <link rel="stylesheet" href="../reference/css/iconfont.css">
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css">
+    <link rel="stylesheet" href="../reference/css/colorGreen.css" />
+    <link rel="stylesheet" href="../reference/css/loading.css" />
+    <!-- <link rel="stylesheet" href="../reference/css/transportCommon.css" /> -->
+</head>
+<style type="text/css">
+    .backColor {
+        background: #30c37c;
+    }
+    
+    .layui-timeline {
+        padding-left: 130px;
+        margin-top: 100px;
+    }
+    
+    .layui-timeline-title-time {
+        position: relative;
+        margin-bottom: 10px;
+        left: -88px;
+    }
+    
+    .layui-timeline-title-date {
+        position: relative;
+        margin-bottom: 10px;
+        left: -105px;
+    }
+    
+    .layui-timeline-item:before {
+        background-color: #19d168;
+    }
+    
+    p {
+        font-size: 14px;
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: #1e1e27;
+        position: relative;
+        top: -44px;
+    }
+    
+    .mui-toast-message {
+        font-size: 20px;
+    }
+</style>
+
+<body>
+    <header class="mui-bar mui-bar-nav backColor">
+        <h1 class="mui-title">物资流转信息</h1>
+        <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+    </button>
+        <!-- <button id="search" class="mui-btn mui-btn-link mui-btn-nav mui-pull-right">
+      <span class="mui-icon mui-icon-search"></span>
+    </button> -->
+    </header>
+    <!-- loading -->
+    <div id="loading" class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    <!-- 主内容 -->
+    <div style="margin-top: 52px;">
+        <!-- <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>常规时间线</legend>
+      </fieldset> -->
+        <ul class="layui-timeline" id="timeline">
+            <!-- <li class="layui-timeline-item">
+        <i class="layui-icon layui-timeline-axis"></i>
+        <div class="layui-timeline-content layui-text">
+          <span class="layui-timeline-title-time">14:54:33</span><br>
+          <span class="layui-timeline-title-date">2020-05-02</span>
+          <p>
+            已到达B科室
+            <br><span style="color: red;">工单号：123456。</span>
+          </p>
+        </div>
+      </li>
+      <li class="layui-timeline-item">
+        <i class="layui-icon layui-timeline-axis"></i>
+        <div class="layui-timeline-content layui-text">
+          <span class="layui-timeline-title-time">12:00</span><br>
+          <span class="layui-timeline-title-date">2020-04-02</span>
+          <p>经过A科室</p>
+        </div>
+      </li>
+      <li class="layui-timeline-item">
+        <i class="layui-icon layui-timeline-axis"></i>
+        <div class="layui-timeline-content layui-text">
+          <span class="layui-timeline-title-time">12:00</span><br>
+          <span class="layui-timeline-title-date">2020-03-02</span>
+          <p>运送员运送中 </p>
+        </div>
+      </li>
+      <li class="layui-timeline-item">
+        <i class="layui-icon layui-timeline-axis"></i>
+        <div class="layui-timeline-content layui-text">
+          <span class="layui-timeline-title-time">12:00</span><br>
+          <span class="layui-timeline-title-date">2020-2-02</span>
+          <p>信息科发起取件单，张三运送员取件</p>
+        </div>
+      </li>
+      <li class="layui-timeline-item">
+
+        <div class="layui-timeline-content layui-text">
+        </div>
+      </li> -->
+        </ul>
+    </div>
+</body>
+<script type="text/javascript" src="../reference/mui/js/mui.js"></script>
+<script type="text/javascript" src="../reference/mui/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="../reference/mui/js/mui.picker.min.js"></script>
+<script type="text/javascript" src="../reference/mui/js/baseInfo.js"></script>
+<script type="text/javascript" src="../../../cordova.js"></script>
+<script type="text/javascript" src="../../reference/layui/layui/layui.js"></script>
+<script type="text/javascript" src="../../reference/js/time.js"></script>
+<script type="text/javascript">
+    // localStorage.setItem("url", "http://yapi.bonawise.com/mock/91/");
+    var baseUrl = localStorage.getItem("url");
+    // var itemNum = localStorage.getItem("initItemNum");
+    var url = location.search;
+    var itemNum = url.substring(1, url.length).split('&')[0];
+    var beginStatus = '';
+    var beginStatusName = '' //当前状态
+    var createTime = '' //操作时间
+    var endStatusName = '' //下一步状态
+    var actionName = '' //操作名称
+    var timelineHtml = '';
+    var workName = ''
+    console.log('itemNum')
+    $(function() {
+        init(itemNum);
+    })
+
+    /**
+     * @desc  获取流程信息
+     * @param {Object} params 查询参数
+     * @author chenjing
+     */
+    function init(num) {
+        $("#loading").show();
+        var params = {
+            itemNum: num
+        }
+        $.get(baseUrl + "app_carriageCollectController.do?getCollectItem4Detail", params, function(data) {
+            var data = JSON.parse(data);
+            $("#loading").hide();
+            if (data.respCode !== "200") {
+                mui.toast(data.respMsg, {
+                    duration: 4000,
+                    type: 'div'
+                })
+                return;
+            }
+            var date = '';
+            var time = '';
+            var list = data.obj;
+            console.log('1', list)
+            for (var i = list.length - 1; i >= 0; i--) {
+                itemNum = list[i].itemNum;
+                beginStatus = list[i].beginStatus;
+                beginStatusName = list[i].beginStatusName;
+                createTime = formatDate(list[i].createTime);
+                date = createTime.split(' ')[0];
+                time = createTime.split(' ')[1];
+                endStatusName = list[i].endStatusName;
+                actionName = list[i].actionName;
+                workName = list[i].workName;
+                timelineHtml += createHtml(beginStatusName, date, time, endStatusName, actionName, itemNum, beginStatus, workName);
+            }
+            $("#timeline").html(timelineHtml);
+            // $("#timeline").html(timelineHtml);
+
+        })
+    }
+    /**
+     * @desc   添加时间线
+     * @author huoke
+     */
+    function createHtml(beginStatusName, date, time, endStatusName, actionName, itemNum, beginStatus, workName) {
+        var html = '';
+
+        html += "<li class='layui-timeline-item'>";
+        html += "<i class='layui-icon layui-timeline-axis'></i>";
+        html += "<div class='layui-timeline-content layui-text'>";
+        html += "<span class='layui-timeline-title-time'>" + time + "</span><br>";
+        html += "<span class='layui-timeline-title-date'>" + date + "</span>"
+        html += "<p>" + beginStatusName;
+        html += "<br><span>" + workName + actionName + "</span>";
+        if (beginStatus == '02') {
+            html += "<br><span style='color: red;''>物资编码：" + itemNum + "</span>"
+        }
+        html += "</p>";
+        // html += "<span>"+endStatusName+"</span>";
+        html += "</div>";
+        html += "</li>";
+        return html;
+    }
+    /**
+     * @desc   点击返回按钮
+     * @author chenjing
+     */
+    mui("body").on("tap", "#back", function() {
+        location.href = './registerDetail.html'
+    })
+
+    /**
+     * @desc   手机系统返回键
+     * @author chenjing
+     */
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+        location.href = './registerDetail.html';
+    }
+</script>
+
+</html>

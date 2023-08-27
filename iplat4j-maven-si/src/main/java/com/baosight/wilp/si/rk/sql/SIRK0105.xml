@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="SIRK0105">
+
+	<select id="printEnterBill" parameterClass="string" resultClass="java.util.HashMap">
+		select
+			se.enter_bill_no enterBillNo,
+		    se.ware_house_name wareHouseName,
+			sed.surp_name supplierName,
+			date_format(se.bill_make_time, '%Y-%m-%d') enterDate,
+			se.invoice_num invoiceNo,
+			se.bill_maker_name recCreateName,
+		    se.check_sign as approvalMan,
+			se.approval_sign as manager
+		from si_enter se
+		left join si_enter_detail sed on se.enter_bill_no = sed.enter_bill_no
+		where se.enter_bill_no = #value#
+	</select>
+  
+</sqlMap>

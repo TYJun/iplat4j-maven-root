@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFTZ01">
+	<!-- 设备台账 -->
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			t.machine_code AS machineCode,
+			t.id AS machineId,
+			t.machine_name AS machineName,
+			t.machine_type_id AS machineTypeId,
+			t.type_flag,
+			t.spot_code AS spotCode,
+			t.fixed_place AS fixedPlace,
+			t.models,
+			t.STATUS,
+			t.manager_depart_id AS managerDepartId,
+			t.use_deaprt_id AS useDeaprtId,
+			t.use_deaprt_name AS deptName,
+			t.manager_depart_name AS manageDeptName
+		FROM
+			df_devicemachine t
+		WHERE 1 = 1
+		<isNotEmpty prepend="and" property="machineTypeId">
+			t.id = #machineTypeId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="machineCode">
+			t.machine_code like concat('%',#machineCode#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="machineName">
+			t.machine_name like concat('%',#machineName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="deptName">
+			t.use_deaprt_name = #deptName#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="manageDeptName">
+			t.manager_depart_name = #manageDeptName#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="status">
+			t.STATUS = #status#
+		</isNotEmpty>
+		GROUP BY t.id
+		limit #offset#,#limit#
+	</select>
+	
+	<!-- 设备档案count -->
+	<select id="count" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			t.id AS machineId
+		FROM
+			df_devicemachine t
+		WHERE 1 = 1
+		<isNotEmpty prepend="and" property="machineTypeId">
+			t.id = #machineTypeId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="machineCode">
+			t.machine_code like concat('%',#machineCode#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="machineName">
+			t.machine_name like concat('%',#machineName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="deptName">
+			t.use_deaprt_name = #deptName#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="manageDeptName">
+			t.manager_depart_name = #manageDeptName#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="status">
+			t.STATUS = #status#
+		</isNotEmpty>
+		GROUP BY t.id
+	</select>
+
+	<!-- 查询巡检基准数量 -->
+	<select id="queryDiSchemaCount" parameterClass="string" resultClass="int">
+		select count(1) from di_scheme where machineID = #value#
+	</select>
+
+	<!-- 查询巡检任务数量 -->
+	<select id="queryDiTaskCount" parameterClass="string" resultClass="int">
+		select count(1) from di_task where machineID = #value#
+	</select>
+
+	<!-- 查询保养基准数量 -->
+	<select id="queryDkSchemaCount" parameterClass="string" resultClass="int">
+		select count(1) from dk_scheme where machineID = #value#
+	</select>
+
+	<!-- 查询保养任务数量 -->
+	<select id="queryDkTaskCount" parameterClass="string" resultClass="int">
+		select count(1) from dk_task where machineID = #value#
+	</select>
+
+	<!-- 查询维修任务数量 -->
+	<select id="queryMtCount" parameterClass="string" resultClass="int">
+		select count(1) from mt_gd where device_num = #value#
+	</select>
+
+
+	<!-- 查询保洁次数 -->
+	<select id="queryBjCount" parameterClass="string" resultClass="int">
+		select count(1) from df_clean where machine_code = #value#
+	</select>
+
+	<!-- 查询润滑次数 -->
+	<select id="queryRhCount" parameterClass="string" resultClass="int">
+		select count(1) from df_lubricate where machine_code = #value#
+	</select>
+
+</sqlMap>

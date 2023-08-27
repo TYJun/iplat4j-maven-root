@@ -1,0 +1,234 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../../../reference/bootstrap-3.3.5/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../../reference/bootstrap-3.3.5/css/bootstrap-stars.css" />
+    <link rel="stylesheet" href="../../../css/android-ios.css">
+    <link rel="stylesheet" href="../../../css/colorGreen.css"/>
+    <link rel="stylesheet" href="../../../css/colorBlue.css"/>
+    <link rel="stylesheet" href="../../../css/loading.css" />
+</head>
+<STYLE TYPE="text/css">
+hr {
+  margin-top: 0px;
+  margin-bottom: -9px;
+}
+h3 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.navbar {
+    margin-bottom: 0px;
+}
+.panel {
+    border-radius: 0px;
+}
+.panel-heading {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+h1 {
+    margin: 0 0 0rem;
+}
+.col-lg-3,
+.col-md-3,
+.col-sm-3,
+.col-xs-3,
+.col-lg-9,
+.col-md-9,
+.col-sm-9,
+.col-xs-9 {
+    padding-right: 4px;
+    padding-left: 4px;
+}
+.row {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+.panel-body{
+  padding-top: 0px;
+}
+</STYLE>
+
+<body>
+    <div>
+        <nav class="navbar navbar-fixed-top navbar-inverse nav-height">
+            <div id="back" class="glyphicon-btn-left">
+                <span class="glyphicon glyphicon-triangle-left userBtn" style="margin-left:1rem;"></span>
+            </div>
+            <div>
+                <h1 class="title-right">重复任务列表</h1>
+            </div>
+        </nav>
+    </div>
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+    <div id="loading" class="spinner" style="position:fixed;z-index:9999;text-align:center;width:100%;">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    <div id="content" class="top50">
+    </div>
+    <div id="loadMore" class="alert" role="alert" style="background-color:#DDDDDD;text-align:center;">
+        加载更多
+    </div>
+    <div style="height:2.3rem;">
+        <nav class="navbar navbar-fixed-bottom navbar-inverse">
+            <div class="row">
+                <div id="home" class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="text-align:center;color:#FFFFFF;">
+                    <span class="glyphicon glyphicon-home userBtn"></span>
+                </div>
+                <div id="refresh" class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="text-align:center;color:#FFFFFF;">
+                    <span class="glyphicon glyphicon-refresh userBtn"></span>
+                </div>
+            </div>
+        </nav>
+    </div>
+</body>
+<script type="text/javascript" src="../../../js/color.js"></script>
+<script src="../../../reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../../../reference/bootstrap-3.3.5/js/jquery.barrating.js" type="text/javascript"></script>
+<script src="../../../reference/bootstrap-3.3.5/js/bootstrap.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var page = 1;
+
+    $(function() {
+      //初始化页面数据
+      loadData(page);
+    });
+
+    function loadData(page) {
+      $.ajax({
+        url: baseUrl + 'app_maintainReportController.do?getUnDuplicateTask',
+        type: 'post',
+        data: {
+          page: page,
+          rows: '5'
+        },
+        success: function(res) {
+          $('#loading').hide();
+          var res = eval("(" + res + ")");
+          console.log(res);
+          if (res.respCode == "200") {
+            var total = res.obj.total;
+            var list = res.obj.data;
+            if (list.length < 5) {
+              $('#loadMore').text("暂无更多数据");
+            }
+            if (page == 1) {
+              $("#content").empty();
+            }
+            // initDom();
+            var taskNo, statusCode, summpary, wgroupName, comments, impFlag, rec_create_time, taskList = "";
+            for (var i = 0; i < list.length; i++) {
+              taskNo = list[i].task_no;
+              statusCode = list[i].status_code;
+              //statusName = list[i].status_name;
+              rec_create_time = list[i].rec_create_time;
+              summpary = list[i].summary == null ? "无" : list[i].summary;
+              wgroupName = list[i].wgroup_name == null ? "无" : list[i].wgroup_name;
+              comments = list[i].comments == "" ? "无" : list[i].comments;
+              impFlag = list[i].imp_flag;
+              taskList += createHtml(taskNo, statusCode, summpary, wgroupName, comments, impFlag ,rec_create_time);
+
+            }
+            $("#content").append(taskList);
+
+          } else {
+            $('#warn small').html(res.respMsg);
+            $("#warn").fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+          }
+        },
+        complete: function(XMLHttpRequest, status) { //请求完成后最终执行参数    　　　　
+          if (status == 'timeout') {
+            $("#loading").hide();
+            $('#warn small').html('加载失败！');
+            $("#warn").fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);　　　　
+          } else if (status == 'error') {
+            $("#loading").hide();
+            $('#warn small').html('请求异常！');
+            $("#warn").fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+          }　
+        }
+
+      });
+    }
+
+    function createHtml(taskNo, statusCode, summpary, wgroupName, comments, impFlag, rec_create_time) {
+      var html = "";
+      if (impFlag == "Y") {
+        html += "<div class='panel panel-danger'>";
+      } else {
+        html += "<div class='panel panel-default'>";
+      }
+      html += "<div class='panel-heading row'>";
+      html += "<div class='col-xs-3 col-sm-3 col-md-3 col-lg-3' style='text-align:right;'>单据号：</div><div class='col-xs-9 col-sm-9 col-md-9 col-lg-9' style='text-align:left;'><a href='../repair/taskDetail.html?" + taskNo + "'>" + taskNo + "</a></div>";
+      html += "</div>"; //end panel-heading
+      html += "<div class='panel-body'>";
+      html += "<div class='row' style='margin-top:10px;''>";
+      html += "<div class='col-xs-3 col-sm-3 col-md-3 col-lg-3' style='text-align:right;'>状态：</div><div class='col-xs-9 col-sm-9 col-md-9 col-lg-9' style='text-align:left;'>" + statusCode + "</div>"
+      html += "</div><hr style='margin-top:10px;border-top:0px;'>";
+      html += "<div class='row' style='margin-top:10px;''>";
+      html += "<div class='col-xs-3 col-sm-3 col-md-3 col-lg-3' style='text-align:right;'>内容：</div><div class='col-xs-9 col-sm-9 col-md-9 col-lg-9' style='text-align:left;'>" + summpary + "</div>";
+      html += "</div><hr style='margin-top:10px;border-top:0px;'>";
+      html += "<div class='row' style='margin-top:10px;''>";
+      html += "<div class='col-xs-3 col-sm-3 col-md-3 col-lg-3' style='text-align:right;'>维修班组：</div><div class='col-xs-9 col-sm-9 col-md-9 col-lg-9' style='text-align:left;'>" + wgroupName + "</div>";
+      html += "</div><hr style='margin-top:10px;border-top:0px;'>";
+      html += "<div class='row' style='margin-top:10px;''>";
+      html += "<div class='col-xs-3 col-sm-3 col-md-3 col-lg-3' style='text-align:right;'>报修时间：</div><div class='col-xs-9 col-sm-9 col-md-9 col-lg-9' style='text-align:left;'>" + getDateTime(rec_create_time) + "</div>";
+      html += "</div><hr style='margin-top:10px;border-top:0px;'>";
+      html += "<div class='row' style='margin-top:10px;''>";
+      html += "<div class='col-xs-3 col-sm-3 col-md-3 col-lg-3' style='text-align:right;'>备注：</div><div class='col-xs-9 col-sm-9 col-md-9 col-lg-9' style='text-align:left;'>" + comments + "</div>";
+      html += "</div><hr style='margin-top:10px;border-top:0px;'>";
+      html += "</div>"; //end panel-body
+      html += "</div>" //end panel
+      return html;
+    }
+
+    function getDateTime(time){
+      var year = time.substring(0,4);
+      var month = time.substring(4,6);
+      var day = time.substring(6,8);
+      var hh = time.substring(8,10);
+      var min = time.substring(10,12);
+      var dateTime = year + "-" + month + "-" + day  + " " + hh  + ":" + min;
+      return dateTime;
+    }
+
+    //加载更多
+    $("#loadMore").click(function() {
+      page = page + 1;
+
+      $("#loading").show();
+      loadData(page);
+    });
+
+    //主页
+    $("#home").click(function() {
+      location.href = '../../../menu.html';
+    });
+
+    //刷新
+    $("#refresh").click(function() {
+      location.reload();
+    });
+
+    //返回
+    $("#back").click(function() {
+      window.history.back(-1);
+    });
+</script>
+
+</html>

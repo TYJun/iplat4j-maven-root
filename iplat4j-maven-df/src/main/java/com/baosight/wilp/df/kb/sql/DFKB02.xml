@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFKB02">
+
+    <!--*****************************************************基本信息*************************************************-->
+
+    <select id="getDeviceBasicInformation" parameterClass="java.lang.String" resultClass="java.util.LinkedHashMap">
+        SELECT
+            dd.machine_code 设备编码,
+            dd.machine_name 设备名称,
+            dd.models 规格型号,
+            dm.classify_name  设备分类,
+            dd.manager_depart_name 管理科室,
+            dd.use_deaprt_name 使用科室,
+            dd.maker_brand 品牌,
+            dd.manufacturer_name 生产单位,
+            dd.supplier_name 供应商,
+            dd.fixed_place 安装地点,
+            dd.STATUS 设备状态,
+            dd.maint_unit 保养单位
+        FROM
+            df_devicemachine dd
+                LEFT JOIN df_modulebaseclassfy dm ON dd.machine_type_id = dm.id
+        WHERE
+            dd.id = #id#
+    </select>
+
+    <select id="getIconDisplayFailYu" parameterClass="java.util.HashMap" resultClass="int">
+        SELECT
+            SUM( X ) fillCount
+        FROM
+            (
+                SELECT
+                    count( IF ( $df$!= '', TRUE, NULL ) ) X
+                FROM
+                    df_devicemachine dd
+                WHERE
+                    dd.id = #id#
+            )C
+    </select>
+
+    <select id="getIconDisplayArray" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+        select
+            dd.id,
+            DATE_FORMAT(dd.use_time ,'%Y-%m-%d') startTime,
+            floor((unix_timestamp()-unix_timestamp(use_time))/3600/24) as useDay,
+            dd.use_limit useLimit
+        from df_devicemachine  dd
+        where  dd.id = #id#
+    </select>
+
+
+   <!-- *****************************************************维护情况*************************************************-->
+
+    <select id="countInspectTask" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+        select
+        ifnull(sum(1), 0) account,
+        ifnull(sum(IF(status = 2, 1, 0)), 0) finishAmount,
+        ifnull(sum(IF(status = 1, 1, 0)), 0) executeAmount,
+        ifnull(sum(IF(status = -1, 1, 0)), 0) timeoutAmount
+        from di_task where 1 = 1
+        <isNotEmpty prepend=" and " property="deviceId">
+            machineID = #deviceId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" and " property="year">
+            YEAR(createTime) = #year#
+        </isNotEmpty>
+    </select>
+
+    <select id="countMaintainTask" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+        select
+        ifnull(sum(1), 0) account,
+        ifnull(sum(IF(status = 2, 1, 0)), 0) finishAmount,
+        ifnull(sum(IF(status = 1, 1, 0)), 0) executeAmount,
+        0 timeoutAmount
+        from di_task where 1 = 1
+        <isNotEmpty prepend=" and " property="deviceId">
+            machineID = #deviceId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" and " property="year">
+            YEAR(createTime) = #year#
+        </isNotEmpty>
+    </select>
+
+    <select id="countCleanTask" parameterClass="java.util.Map" resultClass="int">
+        select count(1) from df_clean where 1=1
+        <isNotEmpty prepend=" and " property="deviceId">
+            machine_id = #deviceId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" and " property="year">
+            YEAR(clean_date) = #year#
+        </isNotEmpty>
+    </select>
+
+    <select id="countLubricateTask" parameterClass="java.util.Map" resultClass="int">
+        select count(1) from df_lubricate where 1=1
+        <isNotEmpty prepend=" and " property="deviceId">
+            machine_id = #deviceId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" and " property="year">
+            YEAR(lubricate_date) = #year#
+        </isNotEmpty>
+    </select>
+
+
+    <!--*****************************************************同期对比*************************************************-->
+
+    <select id="inspectionCount" parameterClass="java.util.Map" resultClass="int">
+        SELECT
+            count( createTime ) AS plan
+        FROM
+            di_task t1
+        WHERE
+            YEAR ( t1.createTime ) = #year# and machineID = #deviceId#
+    </select>
+
+    <select id="maintainCount" parameterClass="java.util.Map" resultClass="double">
+        select
+            count(createTime) as plan
+        from dk_task t1
+        where
+            year(t1.createTime) = #year# and machineID = #deviceId#
+    </select>
+
+   <!-- *****************************************************全年评价*************************************************-->
+
+</sqlMap>

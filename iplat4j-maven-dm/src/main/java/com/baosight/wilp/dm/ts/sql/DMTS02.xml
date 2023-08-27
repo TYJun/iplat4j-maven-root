@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="DMTS02">
+
+	<select id="getTSPeopleList" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		drm.id	as "id",
+		drm.room_id	as "roomId",
+		drm.man_id	as "manId",
+		drm.apply_out_date as "applyOutDate",
+		dr.room_no AS "roomNo",
+		dr.building AS "building",
+		dr.floor AS "floor",
+		dr.room_name AS "roomName",
+		dm.man_no	as "manNo",  <!-- 工号 -->
+		dm.man_name	as "manName"  <!-- 姓名 -->
+		FROM dorms_room_man drm
+		LEFT JOIN dorms_room dr on dr.id = drm.room_id
+		LEFT JOIN dorms_man dm on dm.id = drm.man_id
+		WHERE 1=1 and drm.checkout_room_status != '1'
+		<isNotEmpty prepend=" AND " property="statusCode">
+			dm.status_code = #statusCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manNo">
+			dm.man_no = #manNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manName">
+			dm.man_name like concat('%',#manName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dm.dept_name like concat('%',#deptName#,'%')
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				drm.id asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<!-- 获取宿舍人员绑定关系表主键id 对应设置的实际月租和实际费用-->
+	<select id="queryInfoCurrentFee" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		    drm.id as 'id',
+			drm.room_id as 'roomId',
+			drm.man_id as 'manId',
+			drm.actual_rent as 'actualRent',
+			drm.actual_manage_fee as 'actualManageFee',
+			drm.bed_no as "bedNo",
+			dr.remaining_bed_num as "remainingBedNum"
+		FROM dorms_room_man drm
+		LEFT JOIN dorms_room dr on dr.id = drm.room_id
+		WHERE 1=1 and drm.id = #id#
+	</select>
+  
+</sqlMap>

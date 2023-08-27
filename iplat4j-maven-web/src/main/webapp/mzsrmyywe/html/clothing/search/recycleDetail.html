@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.css" />
+    <link rel="stylesheet" href="../reference/css/iconfont.css" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="../reference/css/colorGreen.css" />
+    <link rel="stylesheet" href="../reference/css/loading.css" />
+    <link rel="stylesheet" href="../../reference/css/common.css" />
+    <link rel="stylesheet" href="../reference/css/clothCommon.css" />
+  </head>
+  <style>
+    .main {
+      margin-top: 55px;
+      background-color: white;
+    }
+
+    .total {
+      float: right;
+      margin-right: 10%;
+    }
+
+    .scan {
+      position: fixed;
+      bottom: 15px;
+      right: 15px;
+      width: 60px;
+      z-index: 11;
+    }
+
+    .round {
+      border: 1px solid #8ca498;
+      width: 60px;
+      height: 60px;
+      line-height: 29px;
+      text-align: center;
+      color: #fff;
+      background-color: #8ca498;
+      filter: alpha(opacity=80);
+      /* 用于IE浏览器－透明度为20%*/
+      -moz-opacity: 0.8;
+      /*  用于Moz + Firefox－透明度为20%*/
+      opacity: 0.8;
+      -webkit-border-radius: 60px;
+      -moz-border-radius: 60px;
+      -o-border-radius: 60px;
+      border-radius: 60px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mui-card {
+      background-color: #30c37c;
+      color: white;
+    }
+
+    .mui-card-content {
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 18px;
+    }
+
+    .mui-numbox {
+      width: 160px;
+      height: 38px;
+    }
+
+    .mask {
+      height: 70%;
+    }
+
+    #update {
+      position: fixed;
+      bottom: 0;
+      background-color: white;
+      width: 100%;
+      height: 30%;
+    }
+
+    .hideHtml {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      align-items: center;
+    }
+
+    .sureBtn button {
+      position: fixed;
+      bottom: 0px;
+      width: 90%;
+      margin-left: 5%;
+      font-size: 18px;
+      color: white;
+      background-color: #30c37c;
+    }
+
+    h5 {
+      font-size: 18px;
+      text-align: center;
+      color: #30c37c;
+      padding-top: 10px;
+      padding-bottom: 20px;
+    }
+
+    .content {
+      width: 100%;
+    }
+  </style>
+
+  <body>
+    <header class="mui-bar mui-bar-nav backColor">
+      <h1 class="mui-title">回收详情</h1>
+      <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+      </button>
+      <!-- <button id="search" class="mui-btn mui-btn-link mui-btn-nav mui-pull-right">
+            <span class="mui-icon mui-icon-search"></span>
+        </button> -->
+    </header>
+    <div class="main">
+      <div id="chooseDept">
+        <input type="text" placeholder="输入科室" readonly id="initDept" />
+      </div>
+      <div class="list">
+        <ul id="list"></ul>
+      </div>
+    </div>
+    <!-- <div class="main">
+      <div class="deptSign">
+        <h5>科室签字</h5>
+        <div class="content" id="deptSign" style="text-align: center;">
+          <img src="" alt="" />
+        </div>
+      </div>
+    </div>
+    <div class="main">
+      <div
+        class="thirdPartySign"
+        style="margin-bottom: 40px;text-align: center;"
+      >
+        <h5>物业签字</h5>
+        <div class="content" id="thirdPartySign">
+          <img src="" alt="" />
+        </div>
+      </div>
+    </div> -->
+
+    <!-- 遮罩 -->
+    <div class="mask"></div>
+  </body>
+  <script type="text/javascript" src="../reference/mui/js/mui.min.js"></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/jquery-2.1.4.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/mui.picker.min.js"
+  ></script>
+  <script type="text/javascript" src="../reference/mui/js/baseInfo.js"></script>
+  <script
+    type="text/javascript"
+    src="../../reference/js/mui.loading.js"
+  ></script>
+  <!-- <script type="text/javascript" src="../../../cordova.js"></script> -->
+  <script>
+    // localStorage.setItem("initdeptName", "信息科")
+    var baseUrl = localStorage.getItem("url");
+    var initDeptName = localStorage.getItem("detailDeptName");
+    var initDeptNum = localStorage.getItem("detailDeptNum");
+    var dataGroupCode = localStorage.getItem("dataGroupCode");
+    // var deptSign = localStorage.getItem("deptSign");
+    // var thirdPartySign = localStorage.getItem("thirdPartySign");
+    var url = decodeURI(window.location.href.split("?")[1]);
+    // var deptSign = url.split("&")[2];
+    // var thirdPartySign = url.split("&")[3];
+    var deptRecycleNo = url.split("&")[1];
+    var config = "is_ signature";
+    var isSignature = "";
+    var workNo = localStorage.getItem("workNo");
+    var issueStatus = 0;
+    var submitArray = [];
+    var submitArray1 = [];
+    var tempClothType = "";
+    var totalIndex = 0;
+
+    $(function() {
+      init();
+      // isSign(config);
+    });
+    //选择科室
+    // $("#chooseDept").click(function() {
+    //     location.href = "chooseDept.html"
+    // })
+
+    //初始化
+    function init() {
+      // if (deptSign == "undefined" || deptSign == "null") {
+      //   $("#deptSign").html("暂无数据！");
+      // } else {
+      //   $("#deptSign img").attr("src", baseUrl + deptSign);
+      // }
+
+      // if (thirdPartySign == "undefined" || thirdPartySign == "null") {
+      //   $("#thirdPartySign").html("暂无数据！");
+      // } else {
+      //   $("#thirdPartySign img").attr("src", baseUrl + thirdPartySign);
+      // }
+
+      mui.showLoading("正在加载", "div");
+      $("#initDept").val(initDeptName);
+      var listHtml = "";
+      $.ajax({
+        type: "get",
+        url: baseUrl + "app_ManualController.do?getRecycleDetail",
+        data: {
+          dataGroupCode: dataGroupCode,
+          deptNum: initDeptNum,
+          deptRecycleNo: deptRecycleNo
+        },
+        success: function(data) {
+          mui.hideLoading();
+          var data = JSON.parse(data);
+          console.log(data);
+          if (data.respCode != "200") {
+            mui.toast(data.respMsg);
+            return;
+          }
+          var list = data.obj.recycle;
+          if (list.length == 0) {
+            mui.toast("当前没有数据！");
+            return;
+          }
+          var deptDiryItemBills = list[0].deptDiryItemBills;
+          for (var i = 0; i < deptDiryItemBills.length; i++) {
+            var element = deptDiryItemBills[i];
+            //   deptDiryItemBills.forEach((element, index) => {
+            var objObj = {
+              clothType: "",
+              clothTypeName: "",
+              clothModel: "",
+              num: "",
+              beforeNum: ""
+            };
+            objObj.clothType = element.clothType;
+            objObj.clothTypeName = element.clothTypeName;
+            objObj.clothModel = element.clothModel;
+            objObj.num = element.recycleNum + "";
+            objObj.beforeNum = 0;
+            submitArray.push(objObj);
+            listHtml += createHtml(
+              objObj.clothTypeName,
+              objObj.clothModel,
+              objObj.num,
+              i
+            );
+
+            // objObj.clothType = element.clothType;
+            // objObj.clothTypeName = element.clothTypeName;
+            // objObj.clothModel = element.clothModel;
+            // objObj.num = element.recycleNum + "";
+            // objObj.beforeNum = 0;
+            //   });
+          }
+          $("#list").html(listHtml);
+        }
+      });
+      mui.hideLoading();
+    }
+
+    //listHTML
+    function createHtml(clothTypeName, clothModel, num, index) {
+      totalIndex++;
+      var html = "";
+      html =
+        '<li class="mui-table-view-cell"><div class="mui-card"> <div class="mui-card-content"> <span class="clothType"> <span class ="clothTypeName">' +
+        clothTypeName +
+        '</span>（<span class="clothSize">' +
+        clothModel +
+        '</span>）</span> <span>发放数量：<span class="num" id=' +
+        index +
+        ">" +
+        num +
+        "</span></span></div></div> </li>";
+      return html;
+    }
+    //查询是否需要签字
+    function isSign(config) {
+      var param = {
+        dataGroupCode: dataGroupCode,
+        configItem: config
+      };
+      $.get(
+        baseUrl + "app_clothCommomQuery.do?queryClothConfig",
+        param,
+        function(data) {
+          var data = JSON.parse(data);
+          if (data.respCode != 200) {
+            mui.toast(data.respMsg);
+            return;
+          }
+          isSignature = data.obj.obj;
+          console.log(isSignature);
+        }
+      )
+        .fail(function(XMLHttpRequest) {
+          var text = JSON.parse(XMLHttpRequest.responseText);
+          mui.toast(text.message);
+          return;
+        })
+        .complete(function(XMLHttpRequest, status) {
+          if (status == "timeout") {
+            mui.toast("网速不给力，请重试！");
+            return;
+          } else if (status == "error") {
+            mui.toast("当前网络不可用，请查看网络状态！");
+            return;
+          }
+        });
+    }
+
+    /**
+     * @desc   点击返回按钮
+     * @author huoke
+     */
+    mui("body").on("tap", "#back", function() {
+      // location.href = '../clothing_menu.html'
+      location.href = "searchRecycleMain.html";
+    });
+
+    /**
+     * @desc   手机系统返回键
+     * @author huoke
+     */
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+      document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+      // window.history.back(-1)
+      location.href = "searchRecycleMain.html";
+    }
+  </script>
+</html>

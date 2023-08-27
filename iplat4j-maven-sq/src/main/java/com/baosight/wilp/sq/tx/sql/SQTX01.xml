@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+
+<sqlMap namespace="SQTX01">
+
+	<!-- 查询问卷信息 -->
+	<select id="getAssessManage" resultClass="java.util.HashMap">
+		select 
+			am.id,
+			am.creator,
+			DATE_FORMAT(am.create_time,'%Y-%m-%d %h:%i:%s') as create_time,
+			IFNULL(am.standard_id,"") as standard_id,
+			am.standard_code,
+			am.standard_name,
+			DATE_FORMAT(am.begin_date,'%Y-%m-%d') as begin_date,
+			DATE_FORMAT(am.end_date,'%Y-%m-%d') as end_date,
+			am.assess_type_name,
+			IFNULL(am.assess_dept_name,"") as assess_dept_name,
+			am.status_code,
+			am.assess_range,
+			IFNULL(am.work_name_leader,"") as work_name_leader,
+			IFNULL(am.assess_contact_tel,"") as assess_contact_tel,
+			IFNULL(am.bill_no,"") as bill_no,
+			IFNULL( am.project_name, "" ) AS project_name,
+			IFNULL( am.project_code, "" ) AS project_code
+ 		from 
+ 			sq_manage am
+ 		WHERE
+			1=1
+		<isNotEmpty property="datagroupCode">
+			am.data_group_code = #datagroupCode#
+		</isNotEmpty>
+ 		order by create_time DESC
+	</select>
+
+	
+	
+	<!-- 查询答卷信息 -->
+	<select id="getAssessManageProject3" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+		select * from
+ 			sq_manage_project
+ 		where
+ 			bill_no = #billNo#
+ 		and
+ 			creator = #creator#
+	</select>
+	
+	
+	
+	<!-- 查询分组信息 -->
+	<select id="countGroup" resultClass="int" parameterClass="java.util.HashMap">
+		select count(*) from sq_personnel_group where per_group_no = #projectCode# and work_no = #workNo#
+	</select>
+	
+	
+	<!-- 查询项目信息 -->
+	<select id="queryProject" resultClass="com.baosight.wilp.sq.ap.domain.SqProject" parameterClass="java.util.HashMap">
+		SELECT
+			pr.ID AS id,
+			pr.project_name AS projectName,
+			pr.project_remark AS projectRemark,
+			pr.creator AS creator,
+			pr.create_time AS createTime,
+			pr.order_number AS orderNumber,
+			pr.project_code as projectCode
+		FROM
+			sq_register_project pr
+			LEFT JOIN sq_manage ma ON pr.standard_id = ma.standard_id
+		where 
+			ma.bill_no = #billNo#
+		ORDER BY 
+			pr.order_number
+	</select>
+	
+	
+	<!-- 查询问题打分信息 -->
+	<select id="queryInstance" resultClass="com.baosight.wilp.sq.ap.domain.SqProjectInstance" parameterClass="java.util.HashMap">
+		SELECT
+			ID as id,
+			project_id as projectId,
+			project_code as projectCode,
+			instance_code as instanceCode,
+			instance_name as instanceName,
+			point as point,
+			point_type as pointType,
+			order_number as orderNumber,
+			creator as creator,
+			create_time as createTime
+		FROM
+			sq_register_instance
+		WHERE
+			1=1
+			<isNotEmpty prepend="AND" property="id">
+				project_id = #id#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="instanceCode">
+				instance_code = #instanceCode#
+			</isNotEmpty>
+		ORDER BY 
+			order_number
+	</select>
+	
+
+
+	<!-- 查询配置信息 -->
+	<select id="queryType" resultClass="java.util.HashMap">
+		SELECT
+			typename AS radioLabel,
+			typecode radioValue,
+			sortNo 
+		FROM
+			sq_s_typegroup tg,
+			sq_s_type tp 
+		WHERE
+			tp.typegroupid = tg.id 
+			AND tg.typegroupcode = 'sqStandards' 
+		ORDER BY
+			sortNo
+	</select>	
+	
+	
+	
+	<!-- 查询项目信息 -->
+	<select id="queryProjectParam" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+		SELECT
+			ID AS id,
+			project_code AS projectCode,
+			project_name AS projectName 
+		FROM
+			sq_register_project
+		WHERE
+			project_code = #projectCode#
+	</select>	
+
+
+
+	<!-- 保存打分记录 -->
+ 	<insert id="saveAssessManageProject" parameterClass="com.baosight.wilp.sq.ap.domain.SqManage">
+ 		insert into sq_manage_project(
+ 		id,
+ 		project_code,
+ 		project_name,
+ 		point,
+ 		score,
+ 		instance_code,
+ 		instance_name,
+ 		creator,
+ 		create_time,
+ 		modifier,
+ 		modify_time,
+ 		order_number,
+ 		bill_no,
+ 		idea,
+ 		advice
+ 		) values(
+ 		UUID(),
+ 		#projectCode#,
+ 		#projectName#,
+ 		#point#,
+ 		#score#,
+ 		#instanceCode#,
+ 		#instanceName#,
+ 		#creator#,
+ 		#createTime#,
+ 		#modifier#,
+ 		#modifyTime#,
+ 		#orderCode#,
+ 		#billNo#,
+ 		#idea#,
+ 		#advice#
+ 		)
+ 	</insert>
+
+
+
+	<!-- 查询项目总分 -->
+	<select id="queryPoints" parameterClass="String" resultClass="int">
+		select sum(point) as points from sq_manage_project where project_code = #value#
+	</select>
+
+
+	
+	<!-- 查询项目打分 -->
+	<select id="getSqManageProjectInstance" parameterClass="HashMap" resultClass="HashMap">
+	 	SELECT
+			smt.ID as id,
+			smt.project_code as projectCode,
+			sp.project_name as projectName,
+			smt.point as point,
+			smt.score as score,
+			smt.order_number as orderNumber,
+			smt.instance_name as instanceName,
+			smt.idea as idea,
+			smt.advice as advice
+		FROM
+			sq_manage_project smt
+			left join sq_register_project sp on smt.project_code = sp.project_code
+		WHERE
+			smt.project_code = #projectCode#
+			AND smt.bill_no = #billNo#
+ 			<isNotEmpty prepend="and" property="creator">
+ 				smt.creator=#creator#
+ 			</isNotEmpty> 
+ 	</select>
+  
+</sqlMap>

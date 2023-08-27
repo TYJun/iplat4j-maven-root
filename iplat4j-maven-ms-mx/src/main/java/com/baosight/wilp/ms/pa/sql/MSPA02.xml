@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MSPA02">
+    <select id="getNodes" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        SELECT DISTINCT tp.parent_id,
+                        tp.classify_code,
+                        tp.classify_name,
+        FROM tmspa01 tm,
+             t_param_classify tp
+        WHERE tm.t_param_classify_id = tp.id
+          AND tp.parent_id = tp.classify_code
+    </select>
+
+
+    <select id="getCodes" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        SELECT t.classify_name
+        FROM t_param_classify t
+        WHERE t.classify_code = #parentId#
+    </select>
+</sqlMap>

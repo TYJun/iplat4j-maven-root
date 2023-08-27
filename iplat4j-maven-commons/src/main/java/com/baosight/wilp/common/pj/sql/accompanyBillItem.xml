@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-03-23 14:36:26
+   		Version :  6.0.731.201809200158
+		tableName :iplat_v5demo_business.oi_bill_item 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 accompany_id  VARCHAR, 
+		 accept_no  VARCHAR, 
+		 accept_time  VARCHAR, 
+		 receipt_no  VARCHAR, 
+		 receipt_time  VARCHAR, 
+		 accompany_no  VARCHAR, 
+		 accompany_time  VARCHAR, 
+		 finish_no  VARCHAR, 
+		 finish_time  VARCHAR
+	-->
+<sqlMap namespace="accompanyBillItem">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.common.pj.domain.AccompanyBillItem">
+		SELECT
+				id	as "id",  <!-- 主键 -->
+				accompany_id	as "accompanyId",  <!-- 陪检主键 -->
+				accept_no	as "acceptNo",  <!-- 受理人 -->
+				accept_time	as "acceptTime",  <!-- 受理时间 -->
+				receipt_no	as "receiptNo",  <!-- 接单人 -->
+				receipt_time	as "receiptTime",  <!-- 接单时间 -->
+				accompany_no	as "accompanyNo",  <!-- 陪检人 -->
+				accompany_time	as "accompanyTime",  <!-- 陪检时间 -->
+				finish_no	as "finishNo",  <!-- 完工人 -->
+				finish_time	as "finishTime" <!-- 完工时间 -->
+		FROM iplat_v5demo_business.oi_bill_item WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM iplat_v5demo_business.oi_bill_item WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="accompanyId">
+			accompany_id = #accompanyId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="acceptNo">
+			accept_no = #acceptNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="acceptTime">
+			accept_time = #acceptTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="receiptNo">
+			receipt_no = #receiptNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="receiptTime">
+			receipt_time = #receiptTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="accompanyNo">
+			accompany_no = #accompanyNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="accompanyTime">
+			accompany_time = #accompanyTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="finishNo">
+			finish_no = #finishNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="finishTime">
+			finish_time = #finishTime#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO iplat_v5demo_business.oi_bill_item (id,  <!-- 主键 -->
+										accompany_id,  <!-- 陪检主键 -->
+										accept_no,  <!-- 受理人 -->
+										accept_time,  <!-- 受理时间 -->
+										receipt_no,  <!-- 接单人 -->
+										receipt_time,  <!-- 接单时间 -->
+										accompany_no,  <!-- 陪检人 -->
+										accompany_time,  <!-- 陪检时间 -->
+										finish_no,  <!-- 完工人 -->
+										finish_time  <!-- 完工时间 -->
+										)		 
+	    VALUES (#id#, #accompanyId#, #acceptNo#, #acceptTime#, #receiptNo#, #receiptTime#, #accompanyNo#, #accompanyTime#, #finishNo#, #finishTime#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM iplat_v5demo_business.oi_bill_item WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE iplat_v5demo_business.oi_bill_item 
+		SET 
+					accompany_id	= #accompanyId#,   <!-- 陪检主键 -->  
+					accept_no	= #acceptNo#,   <!-- 受理人 -->  
+					accept_time	= #acceptTime#,   <!-- 受理时间 -->  
+					receipt_no	= #receiptNo#,   <!-- 接单人 -->  
+					receipt_time	= #receiptTime#,   <!-- 接单时间 -->  
+					accompany_no	= #accompanyNo#,   <!-- 陪检人 -->  
+					accompany_time	= #accompanyTime#,   <!-- 陪检时间 -->  
+					finish_no	= #finishNo#,   <!-- 完工人 -->  
+					finish_time	= #finishTime#  <!-- 完工时间 -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!-- 采购合同 -->
+<sqlMap namespace="MPLJ02">
+
+    <select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.mp.lj.domain.MpContract">
+        SELECT
+            id	as "id",  <!-- 主键 -->
+            dock_cont_id as "dockContId", <!-- 对接系统的合同ID -->
+            cont_no	as "contNo",  <!-- 合同号 -->
+            item_num as "itemNum",<!-- 项目号 -->
+            cont_name	as "contName",  <!-- 合同名称 -->
+            status_code	as "statusCode",  <!-- 状态编码 -->
+            status_name	as "statusName",  <!-- 状态名称 -->
+            cont_classify	as "contClassify",  <!-- 合同分类 -->
+            cont_type	as "contType",  <!-- 合同类型 -->
+            supplier_num	as "supplierNum",  <!-- 供应商编码 -->
+            supplier_name	as "supplierName",  <!-- 供应商名称 -->
+            cont_cost	as "contCost",  <!-- 合同金额 -->
+            sign_date	as "signDate",  <!-- 合同签订日期 -->
+            valid_date	as "validDate",  <!-- 合同生效日期 -->
+            over_date	as "overDate",  <!-- 合同终止日期 -->
+            currency_code	as "currencyCode",  <!-- 币种编码 -->
+            currency_name	as "currencyName",  <!-- 币种名称 -->
+            manage_dept_num	as "manageDeptNum",  <!-- 所属（管理）科室编码 -->
+            manage_dept_name	as "manageDeptName",  <!-- 所属（管理）科室名称 -->
+            manager_num	as "managerNum",  <!-- 管理员（负责人）工号 -->
+            manager_name	as "managerName",  <!-- 管理员（负责人）名称 -->
+            purchase_way	as "purchaseWay",  <!-- 采购方式编码 -->
+            purchase_way_name	as "purchaseWayName",  <!-- 采购方式名称 -->
+            pay_way	as "payWay",  <!-- 付款方式编码 -->
+            pay_way_name	as "payWayName",  <!-- 付款方式名称 -->
+            valid_limit	as "validLimit",  <!-- 合同期效（年） -->
+            fundingSource_num  as "fundingSourceNum",  <!-- 资金来源编码 -->
+            fundingSource_name  as "fundingSourceName",  <!-- 资金来源名称 -->
+            remark	as "remark",  <!-- 合同说明 -->
+            rec_creator	as "recCreator",  <!-- 创建人 -->
+            rec_creator_name	as "recCreatorName",  <!-- 创建人姓名 -->
+            rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+            rec_revisor	as "recRevisor",  <!-- 修改人 -->
+            rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+            data_group_code	as "dataGroupCode",  <!-- 账套 -->
+            archive_flag	as "archiveFlag" <!-- 归档标记 -->
+        FROM  mp_contract WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="contNo">
+            cont_no like concat('%',#contNo#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="contNoEQ">
+            cont_no = #contNoEQ#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="contName">
+            cont_name like concat('%',#contName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" and " property="statusCode" >
+            status_code = #statusCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" and " property="deptNum" >
+            manage_dept_num = #manageDeptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" and "  property="manageDeptName" >
+            manage_dept_name like concat('%', #manageDeptName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" and " property="recCreator">
+            rec_creator = #recCreator#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recCreateTimeS">
+            rec_create_time >= concat(#recCreateTimeS#,' 00:00:00')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recCreateTimeE">
+            rec_create_time <![CDATA[<=]]> concat(#recCreateTimeE#, ' 23:59:59')
+        </isNotEmpty>
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                rec_create_time desc
+            </isEmpty>
+        </dynamic>
+    </select>
+
+    <select id="count" parameterClass="java.util.HashMap" resultClass="int">
+        SELECT count(*) FROM  mp_contract WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="contNo">
+            cont_no like concat('%',#contNo#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="contName">
+            cont_name like concat('%',#contName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" and " property="statusCode" >
+            status_code = #statusCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" and " property="deptNum" >
+            manage_dept_num = #manageDeptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" and "  property="manageDeptName" >
+            manage_dept_name like concat('%', #manageDeptName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" and " property="recCreator">
+            rec_creator = #recCreator#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recCreateTimeS">
+            rec_create_time >= concat(#recCreateTimeS#,' 00:00:00')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recCreateTimeE">
+            rec_create_time <![CDATA[<=]]> concat(#recCreateTimeE#, ' 23:59:59')
+        </isNotEmpty>
+    </select>
+
+    <insert id="insert" parameterClass="com.baosight.wilp.mp.lj.domain.MpContract">
+        INSERT INTO mp_contract (
+            id,  <!-- 主键 -->
+            dock_cont_id,  <!-- 对接合同ID -->
+            cont_no,  <!-- 合同号 -->
+            item_num,<!--项目号-->
+            cont_name,  <!-- 合同名称 -->
+            status_code,  <!-- 状态编码 -->
+            status_name,  <!-- 状态名称 -->
+            cont_classify,  <!-- 合同分类 -->
+            cont_type,  <!-- 合同类型 -->
+            supplier_num,  <!-- 供应商编码 -->
+            supplier_name,  <!-- 供应商名称 -->
+            cont_cost,  <!-- 合同金额 -->
+            sign_date,  <!-- 合同签订日期 -->
+            valid_date,  <!-- 合同生效日期 -->
+            over_date,  <!-- 合同终止日期 -->
+            currency_code,  <!-- 币种编码 -->
+            currency_name,  <!-- 币种名称 -->
+            manage_dept_num,  <!-- 所属（管理）科室编码 -->
+            manage_dept_name,  <!-- 所属（管理）科室名称 -->
+            manager_num,  <!-- 管理员（负责人）工号 -->
+            manager_name,  <!-- 管理员（负责人）名称 -->
+            purchase_way,  <!-- 采购方式编码 -->
+            purchase_way_name,  <!-- 采购方式名称 -->
+            pay_way,  <!-- 付款方式编码 -->
+            pay_way_name,  <!-- 付款方式名称 -->
+            valid_limit,  <!-- 合同期效（年） -->
+            fundingSource_name,  <!-- 资金来源名称 -->
+            fundingSource_num,   <!-- 资金来源编码 -->
+            remark,  <!-- 合同说明 -->
+            rec_creator,  <!-- 创建人 -->
+            rec_creator_name,  <!-- 创建人姓名 -->
+            rec_create_time,  <!-- 创建时间 -->
+            rec_revisor,  <!-- 修改人 -->
+            rec_revise_time,  <!-- 修改时间 -->
+            data_group_code,  <!-- 账套 -->
+            archive_flag  <!-- 归档标记 -->
+        )
+        VALUES (
+            #id#,
+            #dockContId#,
+            #contNo#,
+            #itemNum#,
+            #contName#,
+            #statusCode#,
+            #statusName#,
+            #contClassify#,
+            #contType#,
+            #supplierNum#,
+            #supplierName#,
+            #contCost#,
+            #signDate#,
+            #validDate#,
+            #overDate#,
+            #currencyCode#,
+            #currencyName#,
+            #manageDeptNum#,
+            #manageDeptName#,
+            #managerNum#,
+            #managerName#,
+            #purchaseWay#,
+            #purchaseWayName#,
+            #payWay#,
+            #payWayName#,
+            #validLimit#,
+            #fundingSourceName#,
+            #fundingSourceNum#,
+            #remark#,
+            #recCreator#,
+            #recCreatorName#,
+            #recCreateTime#,
+            #recRevisor#,
+            #recReviseTime#,
+            #dataGroupCode#,
+            #archiveFlag#
+        )
+    </insert>
+
+    <update id="update" parameterClass="com.baosight.wilp.mp.lj.domain.MpContract">
+        UPDATE mp_contract SET
+            <isNotEmpty property="contNo">cont_no	= #contNo#, </isNotEmpty>  <!-- 合同号 -->
+            <isNotEmpty property="contName">cont_name = #contName#,</isNotEmpty>   <!-- 合同名称 -->
+            <isNotEmpty property="itemNum">item_num = #itemNum#,</isNotEmpty>   <!-- 项目号 -->
+            <isNotEmpty property="statusCode">status_code	= #statusCode#,</isNotEmpty>   <!-- 状态编码 -->
+            <isNotEmpty property="statusName">status_name	= #statusName#,</isNotEmpty>   <!-- 状态名称 -->
+            <isNotEmpty property="contClassify">cont_classify = #contClassify#,</isNotEmpty>   <!-- 合同分类 -->
+            <isNotEmpty property="contType">cont_type = #contType#,</isNotEmpty>   <!-- 合同类型 -->
+            <isNotEmpty property="supplierNum">supplier_num = #supplierNum#,</isNotEmpty>   <!-- 供应商编码 -->
+            <isNotEmpty property="supplierName">supplier_name = #supplierName#,</isNotEmpty>   <!-- 供应商名称 -->
+            <isGreaterThan property="contCost" compareValue="0">cont_cost = #contCost#,</isGreaterThan>   <!-- 合同金额 -->
+            <isNotNull property="signDate">sign_date = #signDate#,</isNotNull>   <!-- 合同签订日期 -->
+            <isNotNull property="validDate">valid_date = #validDate#,</isNotNull>   <!-- 合同生效日期 -->
+            <isNotNull property="overDate">over_date = #overDate#,</isNotNull>   <!-- 合同终止日期 -->
+            <isNotEmpty property="currencyCode">currency_code = #currencyCode#, </isNotEmpty>  <!-- 币种编码 -->
+            <isNotEmpty property="currencyName">currency_name = #currencyName#,</isNotEmpty>   <!-- 币种名称 -->
+            <isNotEmpty property="manageDeptNum">manage_dept_num	= #manageDeptNum#,</isNotEmpty>   <!-- 所属（管理）科室编码 -->
+            <isNotEmpty property="manageDeptName">manage_dept_name = #manageDeptName#,</isNotEmpty>   <!-- 所属（管理）科室名称 -->
+            <isNotEmpty property="managerNum">manager_num	= #managerNum#,</isNotEmpty>   <!-- 管理员（负责人）工号 -->
+            <isNotEmpty property="managerName">manager_name = #managerName#,</isNotEmpty>   <!-- 管理员（负责人）名称 -->
+            <isNotEmpty property="purchaseWay">purchase_way = #purchaseWay#,</isNotEmpty>   <!-- 采购方式编码 -->
+            <isNotEmpty property="purchaseWayName">purchase_way_name = #purchaseWayName#,</isNotEmpty>   <!-- 采购方式名称 -->
+            <isNotEmpty property="payWay">pay_way	= #payWay#,</isNotEmpty>   <!-- 付款方式编码 -->
+            <isNotEmpty property="payWayName">pay_way_name = #payWayName#,</isNotEmpty>   <!-- 付款方式名称 -->
+            <isGreaterThan property="validLimit" compareValue="0">valid_limit	= #validLimit#,</isGreaterThan>   <!-- 合同期效（年） -->
+            <isNotEmpty property="fundingSourceNum">fundingSource_num = #fundingSourceNum#,</isNotEmpty>  <!-- 资金来源编码 -->
+            <isNotEmpty property="fundingSourceName">fundingSource_name = #fundingSourceName#,</isNotEmpty>  <!-- 资金来源名称 -->
+            <isNotEmpty property="remark">remark = #remark#,</isNotEmpty>   <!-- 合同说明 -->
+            rec_revisor	= #recRevisor#,   <!-- 修改人 -->
+            rec_revise_time	= #recReviseTime#   <!-- 修改时间 -->
+        WHERE id = #id#
+        <isNotEmpty property="statusCodes" prepend=" and ">
+            status_code in
+            <iterate property="statusCodes" open="(" conjunction="," close=")">
+                #statusCodes[]#
+            </iterate>
+        </isNotEmpty>
+    </update>
+
+    <delete id="delete" parameterClass="string">
+        delete from mp_contract where id = #value# and status_code = '01'
+    </delete>
+
+    <select id="queryContTree" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+            t1.id AS "label",
+            t1.cont_no AS "code",
+            t1.cont_name AS "name",
+            concat(cont_name,'-',t1.cont_no,'-',sign_date)  AS "text",
+            'root' AS "pId",
+            true AS leaf,
+            t1.supplier_num supplierNum,
+           t1.supplier_name supplierName
+        FROM mp_contract t1 where t1.status_code = '10' and t1.manage_dept_num = #deptNum#
+        <isNotEqual prepend=" AND " property="contId" compareValue="root"> id= #contId# </isNotEqual>
+        <isNotEmpty prepend=" AND " property="supplierNum"> supplier_num = #supplierNum#</isNotEmpty>
+    </select>
+
+    <select id="queryDockContIds" parameterClass="string" resultClass="string">
+        select dock_cont_id from mp_contract where manage_dept_num = #deptNum#
+    </select>
+
+    <select id="isExistedContract" resultClass="com.baosight.wilp.mp.lj.domain.MpContract">
+        select cont_no from mp_contract where 1=1
+        <isNotEmpty property="contNo" prepend=" AND ">
+            cont_no = #contNo#
+        </isNotEmpty>
+        <isNotEmpty property="contName" prepend=" AND ">
+            cont_name = #contName#
+        </isNotEmpty>
+        <isNotEmpty property="supplierNum" prepend=" AND ">
+            supplier_num = #supplierNum#
+        </isNotEmpty>
+    </select>
+
+    <select id="queryDetail" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.mp.lj.domain.MpContractDetail">
+        SELECT
+            id	as "id",  <!-- 主键 -->
+            purchase_plan_id	as "purchasePlanId",  <!-- 采购计划ID -->
+            cont_id	as "contId",  <!-- 合同ID -->
+            cont_no	as "contNo",  <!-- 合同号 -->
+            mat_num	as "matNum",  <!-- 物资编码 -->
+            mat_name	as "matName",  <!-- 物资名称 -->
+            mat_type_id	as "matTypeId",  <!-- 物资分类ID -->
+            mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+            mat_spec	as "matSpec",  <!-- 物资规格 -->
+            mat_model	as "matModel",  <!-- 物资型号 -->
+            unit	as "unit",  <!-- 计量单位 -->
+            unit_name	as "unitName",  <!-- 计量单位 -->
+            price	as "price",  <!-- 单价 -->
+            no_tax_price	as "noTaxPrice",  <!-- 不含税单价，预留 -->
+            num	as "num",  <!-- 合同明细数量 -->
+            total_cost	as "totalCost",  <!-- 合价（含税总价） -->
+            no_tax_cost	as "noTaxCost",  <!-- 合价（不含税总价），预留-->
+            tax_rate	as "taxRate",  <!-- 税率，预留 -->
+            deduct_tax_rate	as "deductTaxRate",  <!-- 可抵扣税率，预留 -->
+            surplus_num	as "surplusNum",  <!-- 剩余可采购数量 -->
+            surplus_cost	as "surplusCost",  <!-- 剩余可采购金额 -->
+            order_num	as "orderNum",  <!-- 已生成订单数量 -->
+            order_cost	as "orderCost",  <!-- 已生成订单金额 -->
+            billed_num	as "billedNum",  <!-- 已开票数量 -->
+            billed_cost	as "billedCost",  <!-- 总开票金额 -->
+            enter_num	as "enterNum",  <!-- 已入库数量 -->
+            enter_cost	as "enterCost", <!-- 总入库金额 -->
+            pay_num     as "payNum",    <!-- 已付款数量 -->
+            pay_cost     as "payCost",  <!-- 已付款金额 -->
+            picture_uri as "pictureUri" <!-- 图片地址 -->
+        FROM mp_contract_detail WHERE 1=1
+        <isNotEmpty prepend=" AND " property="contId">
+            cont_id = #contId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="matNum">
+            mat_num like concat('%', #matNum#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="matName">
+            mat_name like concat('%', #matName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="matTypeName">
+            mat_type_name like concat('%', #matTypeName#, '%')
+        </isNotEmpty>
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                mat_num asc
+            </isEmpty>
+        </dynamic>
+    </select>
+
+    <select id="countDetail" resultClass="int">
+        SELECT COUNT(*) FROM mp_contract_detail WHERE 1=1
+        <isNotEmpty prepend=" AND " property="contId">
+            cont_id = #contId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="matNum">
+            mat_num like concat('%', #matNum#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="matName">
+            mat_name like concat('%', #matName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="matTypeName">
+            mat_type_name like concat('%', #matTypeName#, '%')
+        </isNotEmpty>
+    </select>
+
+    <select id="queryDetailUnionPurchaseDetail" parameterClass="string" resultClass="java.util.HashMap">
+        select
+            mcd.id	as "id",  <!-- 主键 -->
+            mcd.purchase_plan_id	as "purchasePlanId",  <!-- 采购计划ID -->
+            mcd.cont_id	as "contId",  <!-- 合同ID -->
+            mcd.cont_no	as "contNo",  <!-- 合同号 -->
+            mcd.mat_num	as "matNum",  <!-- 物资编码 -->
+            mcd.mat_name	as "matName",  <!-- 物资名称 -->
+            mcd.mat_type_id	as "matTypeId",  <!-- 物资分类ID -->
+            mcd.mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+            mcd.mat_spec	as "matSpec",  <!-- 物资规格 -->
+            mcd.mat_model	as "matModel",  <!-- 物资型号 -->
+            mcd.unit	as "unit",  <!-- 计量单位 -->
+            mcd.unit_name	as "unitName",  <!-- 计量单位 -->
+            mcd.price	as "price",  <!-- 单价 -->
+            mcd.num	as "num",  <!-- 合同明细数量 -->
+            mcd.total_cost	as "totalCost",  <!-- 合价（含税总价） -->
+            mcd.tax_rate	as "taxRate",  <!-- 税率，预留 -->
+            mcd.surplus_num	as "surplusNum",  <!-- 剩余可采购数量 -->
+            mcd.surplus_cost	as "surplusCost",  <!-- 剩余可采购金额 -->
+            mcd.order_num	as "orderNum",  <!-- 已生成订单数量 -->
+            mcd.order_cost	as "orderCost",  <!-- 已生成订单金额 -->
+            mcd.billed_num	as "billedNum",  <!-- 已开票数量 -->
+            mcd.billed_cost	as "billedCost",  <!-- 总开票金额 -->
+            mcd.enter_num	as "enterNum",  <!-- 已入库数量 -->
+            mcd.enter_cost	as "enterCost", <!-- 总入库金额 -->
+            mcd.pay_num     as "payNum",    <!-- 已付款数量 -->
+            mcd.pay_cost     as "payCost",  <!-- 已付款金额 -->
+            mcd.picture_uri as "pictureUri", <!-- 图片地址 -->
+            mppd.num as "purchaseNum", <!-- 采购计划数量 -->
+            mppd.conted_num as "contedNum", <!-- 已生成合同数量 -->
+            mpp.purchase_no as "purchaseNo" <!-- 采购计划单号 -->
+        from mp_contract_detail mcd
+        left join mp_purchase_plan mpp on mcd.purchase_plan_id = mpp.id
+        left join mp_purchase_plan_detail mppd on mcd.purchase_plan_id = mppd.purchase_id
+            and mcd.mat_num = mppd.mat_num and mcd.mat_type_id = mppd.mat_type_id
+        where mcd.cont_id = #value#
+    </select>
+
+    <select id="queryContDetailNum" parameterClass="java.util.Map" resultClass="com.baosight.wilp.mp.lj.domain.MpContractDetail">
+        SELECT
+            price	as "price",  <!-- 单价 -->
+            num	as "num",  <!-- 合同明细数量 -->
+            total_cost	as "totalCost",  <!-- 合价（含税总价） -->
+            surplus_num	as "surplusNum",  <!-- 剩余可采购数量 -->
+            surplus_cost	as "surplusCost",  <!-- 剩余可采购金额 -->
+            order_num	as "orderNum",  <!-- 已生成订单数量 -->
+            order_cost	as "orderCost",  <!-- 已生成订单金额 -->
+            billed_num	as "billedNum",  <!-- 已开票数量 -->
+            billed_cost	as "billedCost",  <!-- 总开票金额 -->
+            enter_num	as "enterNum",  <!-- 已入库数量 -->
+            enter_cost	as "enterCost", <!-- 总入库金额 -->
+            pay_num     as "payNum",    <!-- 已付款数量 -->
+            pay_cost     as "payCost"   <!-- 已付款金额 -->
+        FROM mp_contract_detail WHERE 1=1
+        <isNotEmpty prepend=" AND " property="contId">
+            cont_id = #contId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="contNo">
+            cont_no = #contNo#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="matNum">
+            mat_num = #matNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="matTypeId">
+            mat_type_id = #matTypeId#
+        </isNotEmpty>
+    </select>
+
+    <insert id="insertDetail" parameterClass="java.util.List">
+        INSERT INTO mp_contract_detail (
+            id,  <!-- 主键 -->
+            purchase_plan_id,  <!-- 采购计划ID -->
+            cont_id,  <!-- 合同ID -->
+            cont_no,  <!-- 合同号 -->
+            mat_num,  <!-- 物资编码 -->
+            mat_name,  <!-- 物资名称 -->
+            mat_type_id,  <!-- 物资分类ID -->
+            mat_type_name,  <!-- 物资分类名称 -->
+            mat_spec,  <!-- 物资规格 -->
+            mat_model,  <!-- 物资型号 -->
+            unit,  <!-- 计量单位 -->
+            unit_name,  <!-- 计量单位 -->
+            price,  <!-- 单价 -->
+            num <!-- 合同明细数量 -->,
+            total_cost,  <!-- 总价 -->
+            picture_uri  <!-- 图片地址 -->
+        )
+        VALUES
+       <iterate conjunction=",">
+       (
+            #list[].id#,
+            #list[].purchasePlanId#,
+            #list[].contId#,
+            #list[].contNo#,
+            #list[].matNum#,
+            #list[].matName#,
+            #list[].matTypeId#,
+            #list[].matTypeName#,
+            #list[].matSpec#,
+            #list[].matModel#,
+            #list[].unit#,
+            #list[].unitName#,
+            #list[].price#,
+            #list[].num#,
+            #list[].totalCost#,
+            #list[].pictureUri#
+        )
+       </iterate>
+    </insert>
+
+    <update id="updateDetail" parameterClass="com.baosight.wilp.mp.lj.domain.MpContractDetail">
+        update mp_contract_detail set price = #price#, num = #num#, total_cost = #totalCost#
+        where cont_id = #contId# and purchase_plan_id = #purchasePlanId# and mat_num = #matNum# and mat_type_id = #matTypeId#
+    </update>
+
+    <update id="addOrderNum" parameterClass="com.baosight.wilp.mp.lj.domain.MpPurchaseOrderDetail">
+        UPDATE mp_contract_detail SET
+            order_num = order_num + #num#,
+            order_cost = order_cost + #orderCost#,
+            surplus_num = num - order_num,
+            surplus_cost = total_cost - order_cost
+        WHERE cont_no = #contNo# and mat_num = #matNum# and mat_type_id = #matTypeId#
+    </update>
+
+    <update id="reduceOrderNum" parameterClass="com.baosight.wilp.mp.lj.domain.MpPurchaseOrderDetail">
+        UPDATE mp_contract_detail SET
+              order_num = order_num - #num#,
+              order_cost = order_cost - #orderCost#,
+              surplus_num = num - order_num,
+              surplus_cost = total_cost - order_cost
+        WHERE cont_no = #contNo# and mat_num = #matNum# and mat_type_id = #matTypeId#
+    </update>
+
+    <update id="updateEnterNum" parameterClass="com.baosight.wilp.mp.lj.domain.MpPurchaseOrderDetail">
+        UPDATE mp_contract_detail SET
+              enter_num = enter_num + #curEnterNum#,
+              enter_cost = enter_cost + (#curEnterNum# * #price#)
+        WHERE cont_no = #contNo# and mat_num = #matNum# and mat_type_id = #matTypeId#
+    </update>
+    
+    <update id="updateInvoiceNum" parameterClass="com.baosight.wilp.mp.lj.domain.MpInvoiceDetail">
+        update mp_contract_detail SET
+            billed_num = billed_num + #num#,
+            billed_cost = billed_cost + #orderCost#
+        WHERE cont_no = #contNo# and mat_num = #matNum# and mat_type_id = #matTypeId#
+    </update>
+
+    <update id="updatePayNum" parameterClass="com.baosight.wilp.mp.lj.domain.MpInvoiceDetail">
+        update mp_contract_detail SET
+            pay_num = pay_num + #num#,
+            pay_cost = pay_cost + #orderCost#
+        WHERE cont_no = #contNo# and mat_num = #matNum# and mat_type_id = #matTypeId#
+    </update>
+
+    <delete id="deleteDetail" parameterClass="string">
+        delete from mp_contract_detail where cont_id = #value#
+    </delete>
+
+    <select id="queryFile" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.mp.lj.domain.MpContractFile">
+        select
+            id as "id",  <!-- 主键 -->
+            cont_id as "contId",  <!-- 合同ID -->
+            file_name as "fileName",  <!-- 附件名称 -->
+            file_size as "fileSize",  <!-- 附件大小 -->
+            doc_id as "docId",  <!-- iplat库附件ID(下载使用) -->
+            remark as "remark",  <!-- 附件说明 -->
+            rec_creator as "recCreator",  <!-- 创建人 -->
+            rec_creator_name as "recCreatorName",  <!-- 创建人 -->
+            date_format(rec_create_time, '%Y-%m-%d %H:%i:%s') as "recCreateTimeStr",  <!-- 创建时间 -->
+            rec_revisor as "recRevisor",  <!-- 修改人 -->
+            rec_revise_time as "recReviseTime",  <!-- 修改时间 -->
+            data_group_code as "dataGroupCode",  <!-- 账套 -->
+            archive_flag as "archiveFlag" <!-- 归档标记 -->
+        from mp_contract_file where 1 = 1
+        <isNotEmpty prepend=" AND " property="contId">
+            cont_id = #contId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="fileName">
+            file_name like concat('%', #fileName#, '%')
+        </isNotEmpty>
+    </select>
+
+    <insert id="insertFile" parameterClass="java.util.List">
+        INSERT INTO mp_contract_file (
+            id,  <!-- 主键 -->
+            cont_id,  <!-- 合同ID -->
+            file_name,  <!-- 附件名称 -->
+            file_size,  <!-- 附件大小 -->
+            doc_id,  <!-- iplat库附件ID(下载使用) -->
+            remark,  <!-- 附件说明 -->
+            rec_creator,  <!-- 创建人 -->
+            rec_creator_name, <!-- 创建人 -->
+            rec_create_time,  <!-- 创建时间 -->
+            rec_revisor,  <!-- 修改人 -->
+            rec_revise_time,  <!-- 修改时间 -->
+            data_group_code,  <!-- 账套 -->
+            archive_flag  <!-- 归档标记 -->
+        )
+        VALUES
+       <iterate conjunction=",">
+       (
+            #list[].id#,
+            #list[].contId#,
+            #list[].fileName#,
+            #list[].fileSize#,
+            #list[].docId#,
+            #list[].remark#,
+            #list[].recCreator#,
+            #list[].recCreatorName#,
+            #list[].recCreateTime#,
+            #list[].recRevisor#,
+            #list[].recReviseTime#,
+            #list[].dataGroupCode#,
+            #list[].archiveFlag#
+        )
+       </iterate>
+    </insert>
+
+    <!-- 删除项目附件 -->
+    <delete id="deleteFile" parameterClass="java.lang.String">
+        DELETE FROM mp_contract_file  WHERE cont_id = #value#
+    </delete>
+</sqlMap>

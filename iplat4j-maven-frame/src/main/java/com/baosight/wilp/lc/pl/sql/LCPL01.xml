@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+		
+<sqlMap namespace="LCPL01">
+
+	<select id="queryLog" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			select id,
+				   `module`,
+				   `operation_describe` AS "operationDescribe",
+				   `operator`,
+				   `operation_time` AS "operationTime",
+				    client_ip AS "clientIp"
+			from $projectSchema$.lc_perationlog 
+			WHERE 1=1
+		<isNotEmpty prepend=" AND " property="module">
+			`module` like concat('%', #module#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="operator">
+				`operator` like concat('%', #operator#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="clientIp">
+				`client_ip` like concat('%', #clientIp#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="callTimeS">
+				operation_time &gt; #callTimeS#
+			</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="callTimeE">
+				operation_time &lt; #callTimeE#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				operation_time desc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="queryLogCount" resultClass="int" parameterClass="java.util.HashMap">
+			SELECT COUNT(1)
+			from $projectSchema$.lc_perationlog
+			WHERE 1=1
+			<isNotEmpty prepend=" AND " property="module">
+				`module` like concat('%', #module#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="operator">
+					`operator` like concat('%', #operator#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="clientIp">
+					`client_ip` like concat('%', #clientIp#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="callTimeS">
+					operation_time &gt; #callTimeS#
+				</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="callTimeE">
+					operation_time &lt; #callTimeE#
+			</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+				<isNotEmpty property="orderBy">
+					$orderBy$
+				</isNotEmpty>
+				<isEmpty property="orderBy">
+					operation_time desc
+				</isEmpty>
+			</dynamic>
+	</select>
+	
+	<insert id="insertPerationLog" parameterClass="java.util.HashMap">
+    	INSERT INTO $projectSchema$.lc_perationlog (
+				<isNotNull  property="model">
+					module,  <!-- 科室编码 -->
+				</isNotNull>
+				<isNotNull  property="describe">
+					operation_describe,  <!-- 科室名称 -->
+				</isNotNull>
+				<isNotNull  property="operator">
+					operator,  <!-- 父ID -->
+				</isNotNull>
+				<isNotNull  property="operationTime">
+					operation_time,  <!--  -->
+				</isNotNull>
+				<isNotNull  property="operatoraddrIP">
+					client_ip,  <!-- 财务编码 -->
+				</isNotNull>
+					id  <!-- 主键 -->
+			)VALUES ( 
+				<isNotNull  property="model">
+			    	#model#, 
+			    </isNotNull>
+				<isNotNull  property="describe">
+			    	#describe#, 
+			    </isNotNull>
+			    <isNotNull  property="operator">
+					#operator#,   
+				</isNotNull>
+				<isNotNull  property="operationTime">
+					#operationTime#,   
+				</isNotNull>
+			    <isNotNull  property="operatoraddrIP">
+					#operatoraddrIP#,  
+				</isNotNull>
+			    	#id#
+		    ) 
+	</insert>
+	
+</sqlMap>

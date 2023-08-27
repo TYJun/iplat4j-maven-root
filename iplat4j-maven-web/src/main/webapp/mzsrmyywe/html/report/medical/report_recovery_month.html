@@ -1,0 +1,481 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="reference/mui/css/mui.min.css">
+  <link rel="stylesheet" href="reference/mui/css/iconfont.css">
+  <link rel="stylesheet" href="reference/mui/css/mui.picker.min.css">
+  <link rel="stylesheet" href="reference/css/common.css" />
+</head>
+<STYLE TYPE="text/css">
+  .search-div {
+    width: 100%;
+    color: #787464;
+    font-weight: bold;
+  }
+
+  .tab {
+    height: 40px;
+    line-height: 40px;
+    font-weight: bold;
+    color: #1790cf;
+    border-top: 1px solid #1790cf;
+    border-bottom: 1px solid #1790cf;
+  }
+
+  .list-tab {
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .grey {
+    background: #f7f7f7;
+  }
+
+  input[type=text] {
+    font-size: 14px;
+  }
+
+  .p {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    color: #787464;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .btn-transform {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    z-index: 98;
+    width: 70px;
+    height: 70px;
+    border-radius: 45px;
+    /*background: rgba(0, 0, 0, 0.4);*/
+    color: #a0a0a0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .table-div {
+    position: fixed;
+    top: 44px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 11;
+    background: #fff;
+  }
+
+  .table-title {
+    height: 40px;
+    line-height: 40px;
+    font-weight: bold;
+    color: #787464;
+    border-bottom: 1px solid #787464;
+  }
+
+  .select-div {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 99;
+    background: #fff;
+  }
+
+  .select-content {
+    width: 100%;
+    padding-top: 44px;
+  }
+
+  .dept-tab-div {
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+  }
+
+  .dept-div {
+    width: 100%;
+    overflow: scroll;
+    overflow-x: hidden;
+  }
+
+  .dept-tab {
+    color: #0087f3;
+  }
+</STYLE>
+
+<body>
+  <header class="mui-bar mui-bar-nav">
+    <h1 class="mui-title">月度科室回收表</h1>
+    <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+      返回
+    </button>
+    <!-- <button class="mui-btn mui-btn-blue mui-btn-link mui-pull-right">表格</button> -->
+  </header>
+
+  <div class="mui-content">
+    <div class="search-div">
+      <form class="mui-input-group">
+        <div class="mui-input-row">
+          <label>院区</label>
+          <a class="mui-navigate-right" id="handelPicker"></a><i id="dataGroupCodeName"
+            style="float: left;line-height: 40px;" class="mui-pull-right update"></i>
+        </div>
+    </div>
+    <div class="mui-input-row">
+      <label>科室</label>
+      <input id="dept" type="text" placeholder="请选择科室" readonly>
+    </div>
+    <div class="mui-input-row">
+      <label>日期</label>
+      <input id="date" type="text" placeholder="请选择日期" readonly>
+    </div>
+    </form>
+    <div class="p">
+      点击下方中间'总量'或'数量'可以查看单项对比
+    </div>
+  </div>
+
+  <div id="echarts" style="width:100%;height:150px;"></div>
+  </div>
+
+  <div id="transform" class="btn-transform">
+    <span class="iconfont icon-plus1" style="font-size:50px;"></span>
+  </div>
+
+  <div id="table" class="table-div" hidden>
+    <div class="mui-row table-title">
+      <div class="mui-col-xs-4 center">日期</div>
+      <div class="mui-col-xs-4 center">重量(kg)</div>
+      <div class="mui-col-xs-4 center">数量(袋)</div>
+    </div>
+    <div id="list" style="overflow:scroll;overflow-x:hidden;"></div>
+  </div>
+
+  <div class="select-div" hidden>
+    <header class="mui-bar mui-bar-nav">
+      <h1 class="mui-title">选择科室</h1>
+      <button id="review" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+        返回
+      </button>
+      <button id="confirm" class="mui-btn mui-btn-blue mui-btn-link mui-pull-right">确认</button>
+    </header>
+    <div class="select-content">
+      <div class="mui-row dept-tab-div">
+        <div class="mui-col mui-col-xs-9 dept-name">科室名称</div>
+        <div class="mui-col mui-col-xs-3 right dept-tab">全选</div>
+      </div>
+      <div class="dept-div">
+        <form id="dept_list" class="mui-input-group">
+          <!--2021-12-15新增-->
+          <div style="width:100%;height:40px;overflow:hidden;background-color:white;border: 1px solid;">
+            <input type="text" placeholder="点击选择科室" id="selectButton" onclick="myclick();" readonly="true" style="width:100%;height:35px;">
+          </div>
+          <div id="fuzzysearchdiv" style="display:none;width:100%;z-index:3;height:35px;background-color:white;border: 1px solid;"
+              onMouseOver="mousein()" onMouseOut="mouseout()">
+            <input type="text" placeholder="请输入查询科室名称" id="fuzzysearch" onkeyup="myfuzzysearch()" style="width:100%;"/>
+          </div>
+          <div id="selectdiv" style="display:none;border:1px solid #A9A9A9;width:100%;z-index:2;position:absolute;overflow-y :scroll;height:600px;background-color:gray;font-size: 16px; color: #000;"
+              onMouseOver="mousein()" onMouseOut="mouseout()">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="reference/mui/js/mui.picker.min.js" type="text/javascript"></script>
+<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="reference/echarts/echarts.min.js" type="text/javascript"></script>
+<script src="reference/js/common.js" type="text/javascript"></script>
+<!--2021-12-15新增-->
+<script src="reference/js/Select.js" type="text/javascript"></script>
+<script type="text/javascript">
+  var baseUrl = localStorage.getItem("url");
+  var workNo = localStorage.getItem('workNo');
+  var deptName = localStorage.getItem("deptName");
+  var deptCode = localStorage.getItem("deptCode");
+  var deptCodes = '';
+  var deptNames = '';
+  var dept_html = '';
+  this.getDeptList();//2021-12-15新增功能
+  loadYiYuanCode();
+  zuData();
+  $("#handelPicker").on('tap', function () {
+    getYqlb()
+
+  })
+  function loadYiYuanCode() {
+    $("#dataGroupCodeName").html('山西省人民医院');
+    deptCodes = "NO00001";
+  }
+  function getYqlb() {
+
+    var yqlbPicker = new mui.PopPicker();
+    var yqlb = [
+      {
+        text: "山西省人民医院",
+        value: "NO00001"
+
+      },
+      // {
+      //   text: "龙湾院区",
+      //   value: "NO00003"
+      // },
+      // {
+      //   text: "化工院区",
+      //   value: "NO00004"
+      // },
+      // {
+      //   text: "传染病院",
+      //   value: "NO00005"
+      // }
+    ]
+    yqlbPicker.setData(yqlb)
+    yqlbPicker.show(function (selectItems) {
+      // localStorage.setItem("dataGroupCode", selectItems[0].value)
+      deptCodes = selectItems[0].value;
+      $("#dataGroupCodeName").html(selectItems[0].text);
+      zuData();
+      //$("#deptName").html("")
+      // getHosLists();
+    })
+
+  }
+  function zuData() {
+    var deptArrStr = localStorage.getItem('yiyunadataAttr');
+    var blogJson = eval("(" + deptArrStr + ")");
+    console.log(deptCodes);
+    var deptArr = blogJson['' + deptCodes + ''];
+    console.log(deptArr);
+    deptCode = '';
+    var deptName = "";
+    var dept_html = '';
+    if (deptArr != undefined) {
+      for (var i = 0; i < deptArr.length; i++) {
+        dept_html += '<div class="mui-input-row mui-checkbox">';
+        dept_html += '<label>' + deptArr[i].deptName + '</label>';
+        dept_html += '<input name="' + deptArr[i].deptName + '" value="' + deptArr[i].deptNum + '" type="checkbox" checked="">';
+
+        dept_html += '</div>';
+        if (deptCode != '') {
+          deptCode += "," + deptArr[i].deptNum;
+          deptName += "," + deptArr[i].deptName;
+        } else {
+          deptCode += deptArr[i].deptNum;
+          deptName += deptArr[i].deptName;
+        }
+      }
+    }
+    //2021-12-15修改
+    // $('#dept_list').html(dept_html);
+    $('#list').height($(window).height() - 85);
+    $('.dept-div').height($(window).height() - 94);
+
+    deptNames = deptCode, month = date_YM();
+    $('#dept').val(deptName);
+    $('#date').val(month);
+    loadData();
+  }
+
+  //科室选择
+  document.getElementById("dept").addEventListener('tap', function () {
+    $('.select-div').show();
+  });
+
+  document.getElementById("confirm").addEventListener('tap', function () {
+    if ($("input[type=checkbox]:checked").length == 0) {
+      mui.toast("请选择科室");
+      return;
+    }
+    $("input[type=checkbox]:checked").each(function (index, element) {
+      if (index == 0) {
+        deptName = $(this).attr("name");
+        deptNames = $(this).val();
+      } else {
+        deptName = deptName + "," + $(this).attr("name");
+        deptNames = deptNames + "," + $(this).val();
+      }
+    });
+    $('#dept').val(deptName);
+    $('.select-div').hide();
+    loadData();
+  });
+
+  document.getElementById("review").addEventListener('tap', function () {
+    $('.select-div').hide();
+  });
+
+  //日期选择
+  document.getElementById("date").addEventListener('tap', function () {
+    var options = {
+      "type": "month"
+    };
+    var picker = new mui.DtPicker(options);
+    picker.show(function (rs) {
+      month = rs.text;
+      $('#date').val(month);
+      loadData();
+    });
+  });
+
+  function loadData() {
+    $.ajax({
+      url: baseUrl + 'MobileAgentService',
+      type: 'post',
+      headers: {
+        methodName: "getDeptTrashDayList",
+        serviceName: "MWAP07",
+      },
+      data: {
+        prames: JSON.stringify({
+          dataYiCode: deptCodes,
+          deptNum: deptNames,
+          yearMonth: month
+        })
+      },
+      success: function (data) {
+        if (data.status == "0") {
+          var list = data.attr.result;
+          if (list.length == 0 || list == null) {
+            mui.toast("未能查询到数据");
+            // return;
+          }
+          $('#echarts').height(list.length * 60 + 100);
+          var numArray = [], weightArray = [], dateArray = [], html = '';
+          for (var i = 0; i < list.length; i++) {
+            numArray.push(list[i].num);
+            weightArray.push(list[i].weight);
+            var time = list[i].createTime;
+            var dateTime = time.substring(time.lastIndexOf('-') + 1, time.length) + '日';
+            dateArray.push(dateTime);
+            html += createHtml(i, time, list[i].weight, list[i].num);
+          }
+          showCharts(numArray, weightArray, dateArray);
+          $('#list').html(html);
+        } else {
+          mui.toast("获取数据失败");
+        }
+      }
+    });
+  }
+
+  function createHtml(index, date, weight, num) {
+    if (index % 2 == 0)
+      var html = '<div class="mui-row list-tab" style="font-weight:bold;color:#8c8c8c;">';
+    else
+      var html = '<div class="mui-row list-tab" style="font-weight:bold;color:#636363;">';
+    html += '<div class="mui-col-xs-4 center">' + date + '</div>';
+    html += '<div class="mui-col-xs-4 center">' + weight + '</div>';
+    html += '<div class="mui-col-xs-4 center">' + num + '</div>';
+    html += '</div>';
+    return html;
+  }
+
+  var colors = ['#a0a7e6', '#59c4e6'];
+  function showCharts(numArray, weightArray, dateArray) {
+    var myChart = echarts.init(document.getElementById('echarts'));
+    option = {
+      title: {
+        // text: '世界人口总量',
+        // subtext: '数据来自网络'
+      },
+      color: colors,
+      tooltip: {
+        trigger: 'axis',
+        formatter: function (datas) {
+          var res = datas[0].name + '<br/>', val;
+          for (var i = 0, length = datas.length; i < length; i++) {
+            if (datas[i].seriesName == '总重') {
+              val = (datas[i].value) + 'kg';
+              res += datas[i].seriesName + '：' + val + '<br/>';
+            } else {
+              val = (datas[i].value) + '袋';
+              res += datas[i].seriesName + '：' + val + '<br/>';
+            }
+          }
+          return res;
+        },
+        axisPointer: {
+          type: 'shadow'
+        }
+      },
+      legend: {
+        data: ['总重', '数量']
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis: {
+        type: 'value',
+        boundaryGap: [0, 0.01]
+      },
+      yAxis: {
+        // name: "日", 
+        type: 'category',
+        data: dateArray
+      },
+      series: [{
+        name: '总重',
+        type: 'bar',
+        data: weightArray
+      }, {
+        name: '数量',
+        type: 'bar',
+        data: numArray
+      }]
+    };
+    myChart.setOption(option);
+  }
+
+
+  //表格视图切换
+  document.getElementById("transform").addEventListener('tap', function () {
+    $('#table').toggle();
+  });
+
+  mui("body").on('tap', 'div.dept-tab', function () {
+    var operateValue = this.innerHTML;
+    if (operateValue == "全选") {
+      $("#dept_list").find("input[type=checkbox]").prop("checked", "true");
+      $('div.dept-tab').html("取消全选");
+       //2021-12-15新增功能
+      document.getElementById("selectButton").value = "已选全部科室";
+    } else if (operateValue == "取消全选") {
+      $("#dept_list").find("input[type=checkbox]").prop("checked", "");
+      $('div.dept-tab').html("全选");
+        //2021-12-15新增功能
+      document.getElementById("selectButton").value = "";
+    }
+    //清空之前选中数据 //2021-12-15新增功能
+    selectedlist = [];
+    selectednamelist=[];
+  })
+
+  $('#back').click(function () {
+    location.href = 'report.html'
+  })
+</script>
+
+</html>

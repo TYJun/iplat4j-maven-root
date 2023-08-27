@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HRDP01">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.hr.dp.domain.HrJobChangeBill">
+		SELECT
+				id	as "id",  <!-- 主键ID -->
+				bill_no	as "billNo",  <!-- 单据号(DPyyMMxxxx) -->
+				bill_time	as "billTime",  <!-- 申请日期 -->
+				arrive_time	as "arriveTime",  <!-- 到岗时间 -->
+				leave_time	as "leaveTime",  <!-- 离岗时间 -->
+				dept_num	as "deptNum",  <!-- 申请部门 -->
+				change_code	as "changeCode",  <!-- 支援类型 -->
+				shift_time_section	as "shiftTimeSection",  <!-- 时间段 -->
+				shift_first_time	as "shiftFirstTime",  <!-- 上班时间 -->
+				because_memo	as "becauseMemo",  <!-- 申请原因说明 -->
+				audit_man	as "auditMan",  <!-- 申请人确认人姓名 -->
+				audit_id	as "auditId",  <!-- 申请人确认ID -->
+				audit_date	as "auditDate",  <!-- 申请人确认时间 -->
+				create_date	as "createDate",  <!-- 创建时间 -->
+				creator_name	as "creatorName",  <!-- 创建人 -->
+				creator_id	as "creatorId",  <!-- 创建人ID  -->
+				update_date	as "updateDate",  <!-- 更改时间 -->
+				updator_name	as "updatorName",  <!-- 更改人 -->
+				updator_id	as "updatorId",  <!-- 更改人ID -->
+				operate_type	as "operateType",  <!-- 最后操作类型 -->
+				status_code	as "statusCode",  <!-- 状态(0-新建，1-待审核，2-已审核，3-驳回) -->
+				current_dealer	as "currentDealer",  <!-- 满意度 -->
+				REC_REVISOR	as "recRevisor",  <!-- 修改人 -->
+				REC_REVISE_TIME	as "recReviseTime",  <!-- 修改时间 -->
+				numbers	as "numbers",  <!-- 支援人数 -->
+				audit_opinion	as "auditOpinion",  <!-- 审批意见 -->
+				support_station	as "supportStation" <!-- 支援岗位 -->
+		FROM .hr_job_change_bill WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			status_code = #statusCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="billNo">
+			bill_no like concat('%',#billNo#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="createDateS">
+			date_format(create_date,'%Y-%m-%d') &gt;= #createDateS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="createDateE">
+			date_format(create_date,'%Y-%m-%d') &lt;= #createDateE#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="arriveTimeS">
+			arrive_time &gt;= #arriveTimeS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="arriveTimeE">
+			arrive_time &lt;= #arriveTimeE#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			dept_num like concat('%',#deptNum#,'%')
+		</isNotEmpty>
+		<isEqual property="flag" prepend="and" compareValue="sp">
+			status_code in ('02','03')
+		</isEqual>
+		<isEqual property="flag" prepend="and" compareValue="dp">
+			status_code in ('01','04')
+		</isEqual>
+		ORDER BY create_date desc ,status_code asc
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .hr_job_change_bill WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+
+	<insert id="insert">
+		INSERT INTO .hr_job_change_bill (id,  <!-- 主键ID -->
+										bill_no,  <!-- 单据号(DPyyMMxxxx) -->
+										bill_time,  <!-- 申请日期 -->
+										arrive_time,  <!-- 到岗时间 -->
+										leave_time,  <!-- 离岗时间 -->
+										dept_num,  <!-- 申请部门 -->
+										change_code,  <!-- 支援类型 -->
+										shift_time_section,  <!-- 时间段 -->
+										shift_first_time,  <!-- 上班时间 -->
+										because_memo,  <!-- 申请原因说明 -->
+										audit_man,  <!-- 申请人确认人姓名 -->
+										audit_id,  <!-- 申请人确认ID -->
+										audit_date,  <!-- 申请人确认时间 -->
+										create_date,  <!-- 创建时间 -->
+										creator_name,  <!-- 创建人 -->
+										creator_id,  <!-- 创建人ID  -->
+										update_date,  <!-- 更改时间 -->
+										updator_name,  <!-- 更改人 -->
+										updator_id,  <!-- 更改人ID -->
+										operate_type,  <!-- 最后操作类型 -->
+										status_code,  <!-- 状态(0-新建，1-待审核，2-已审核，3-驳回) -->
+										current_dealer,  <!-- 满意度 -->
+										process_inst_id,
+										REC_REVISOR,  <!-- 修改人 -->
+										REC_REVISE_TIME,  <!-- 修改时间 -->
+										numbers,  <!-- 支援人数 -->
+										audit_opinion,  <!-- 审批意见 -->
+										audit_flag,
+										support_station
+										)		 
+	    VALUES (#id#, #billNo#, #billTime#, #arriveTime#, #leaveTime#, #deptNum#, #changeCode#, #shiftTimeSection#, #shiftFirstTime#, #becauseMemo#, #auditMan#, #auditId#, #auditDate#, #createDate#, #creatorName#, #creatorId#, #updateDate#, #updatorName#, #updatorId#, #operateType#, #statusCode#, #currentDealer#, #processInstId#, #recRevisor#, #recReviseTime#, #numbers#, #auditOpinion#, #auditFlag#, #supportStation#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM .hr_job_change_bill WHERE
+			bill_no = #billNo#
+	</delete>
+
+	<update id="update">
+		UPDATE .hr_job_change_bill 
+		SET 
+					bill_time	= #billTime#,   <!-- 申请日期 -->
+					arrive_time	= #arriveTime#,   <!-- 到岗时间 -->  
+					leave_time	= #leaveTime#,   <!-- 离岗时间 -->  
+					dept_num	= #deptNum#,   <!-- 申请部门 -->  
+					change_code	= #changeCode#,   <!-- 支援类型 -->  
+					shift_time_section	= #shiftTimeSection#,   <!-- 时间段 -->  
+					shift_first_time	= #shiftFirstTime#,   <!-- 上班时间 -->  
+					because_memo	= #becauseMemo#,   <!-- 申请原因说明 -->  
+					audit_id	= #auditId#,   <!-- 申请人确认ID -->
+					update_date	= #updateDate#,   <!-- 更改时间 -->
+					updator_name	= #updatorName#,   <!-- 更改人 -->  
+					updator_id	= #updatorId#,   <!-- 更改人ID -->  
+					status_code	= #statusCode#,   <!-- 状态(0-新建，1-待审核，2-已审核，3-驳回) -->
+					REC_REVISOR	= #recRevisor#,   <!-- 修改人 -->
+					REC_REVISE_TIME	= #recReviseTime#,   <!-- 修改时间 -->  
+					numbers	= #numbers#,   <!-- 支援人数 -->  
+					support_station	= #supportStation#  <!-- 支持岗位 -->
+		WHERE
+			id = #id#
+	</update>
+	<!--提交申请单-->
+	<update id="submit">
+		UPDATE hr_job_change_bill
+		SET status_code = '02'
+		where id = #id#
+	</update>
+
+	<!--审批申请单-->
+	<update id="agree">
+		UPDATE hr_job_change_bill
+		SET status_code = '03'
+		where id = #id#
+	</update>
+
+	<!--驳回申请单-->
+	<update id="back">
+		UPDATE hr_job_change_bill
+		SET status_code = '04',
+			audit_opinion = #auditOpinion#
+		where id = #id#
+	</update>
+
+</sqlMap>

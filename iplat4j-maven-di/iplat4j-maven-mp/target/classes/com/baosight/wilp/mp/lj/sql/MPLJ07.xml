@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MPLJ07">
+
+	<select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.mp.lj.domain.MpContPay">
+		SELECT
+			a.id	as "id",  <!-- 主键 -->
+			a.pay_no	as "payNo",  <!-- 付款号 -->
+			a.cont_id	as "contId",  <!-- 合同ID -->
+			a.cont_no	as "contNo",  <!-- 合同号 -->
+			b.cont_name	as "contName",  <!-- 合同名称 -->
+			b.supplier_name	as "supplierName", <!-- 开票单位 -->
+			a.dept_num	as "deptNum",  <!-- 科室编码 -->
+			a.dept_name	as "deptName",  <!-- 科室名称 -->
+			a.status_code	as "statusCode",  <!-- 状态编码 -->
+			a.status_name	as "statusName",  <!-- 状态名称 -->
+			a.currency_code	as "currencyCode",  <!-- 币种编码 -->
+			a.currency_name	as "currencyName",  <!-- 币种名称 -->
+			a.pay_way	as "payWay",  <!-- 付款方式编码 -->
+			a.pay_way_name	as "payWayName",  <!-- 付款方式名称 -->
+			a.pay_date	as "payDate",  <!-- 付款日期 -->
+			a.pay_cost	as "payCost",  <!-- 付款金额（元） -->
+			a.pay_tax_cost	as "payTaxCost",  <!-- 付款税额（元） -->
+			a.pay_content	as "payContent",  <!-- 付款内容 -->
+			a.remark	as "remark",  <!-- 合同说明 -->
+			a.rec_creator	as "recCreator",  <!-- 创建人 -->
+			a.rec_creator_name	as "recCreatorName",  <!-- 创建人姓名 -->
+			a.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+			a.rec_revisor	as "recRevisor",  <!-- 修改人 -->
+			a.rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+			a.data_group_code	as "dataGroupCode",  <!-- 账套 -->
+			a.archive_flag	as "archiveFlag" <!-- 归档标记 -->
+		FROM mp_cont_pay a
+		left join mp_contract b on b.id = a.cont_id
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			a.id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contNo">
+			a.cont_no like concat('%', #contNo#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contName">
+			b.cont_name like concat('%', #contName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="payNo">
+			a.pay_no like concat('%', #payNo#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			a.status_code = #statusCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			a.dept_num = #deptNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			a.dept_name like concat('%', #deptName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			a.data_group_code = #dataGroupCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">
+			a.pay_date >= #beginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">
+			a.pay_date <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				a.rec_create_time desc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="count" parameterClass="java.util.HashMap" resultClass="int">
+		select count(*) from mp_cont_pay where 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			a.id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contNo">
+			a.cont_no like concat('%', #contNo#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contName">
+			b.cont_name like concat('%', #contName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="payNo">
+			a.pay_no like concat('%', #payNo#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			a.status_code = #statusCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			a.dept_num = #deptNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			a.dept_name like concat('%', #deptName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			a.data_group_code = #dataGroupCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">
+			a.pay_date >= #beginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">
+			a.pay_date <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert" parameterClass="com.baosight.wilp.mp.lj.domain.MpContPay">
+		INSERT INTO mp_cont_pay (
+			id,  <!-- 主键 -->
+			pay_no,  <!-- 付款号 -->
+			cont_id,  <!-- 合同ID -->
+			cont_no,  <!-- 合同号 -->
+			dept_num,  <!-- 科室编码 -->
+			dept_name,  <!-- 科室名称 -->
+			status_code,  <!-- 状态编码 -->
+			status_name,  <!-- 状态名称 -->
+			currency_code,  <!-- 币种编码 -->
+			currency_name,  <!-- 币种名称 -->
+			pay_way,  <!-- 付款方式编码 -->
+			pay_way_name,  <!-- 付款方式名称 -->
+			pay_date,  <!-- 付款日期 -->
+			pay_cost,  <!-- 付款金额（元） -->
+			pay_tax_cost,  <!-- 付款税额（元） -->
+			pay_content,  <!-- 付款内容 -->
+			remark,  <!-- 合同说明 -->
+			rec_creator,  <!-- 创建人 -->
+			rec_creator_name,  <!-- 创建人姓名 -->
+			rec_create_time,  <!-- 创建时间 -->
+			rec_revisor,  <!-- 修改人 -->
+			rec_revise_time,  <!-- 修改时间 -->
+			data_group_code,  <!-- 账套 -->
+			archive_flag  <!-- 归档标记 -->
+		)
+		VALUES (#id#, #payNo#, #contId#, #contNo#, #deptNum#, #deptName#, #statusCode#, #statusName#, #currencyCode#, #currencyName#, #payWay#, #payWayName#, #payDate#, #payCost#, #payTaxCost#, #payContent#, #remark#, #recCreator#, #recCreatorName#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#, #archiveFlag#)
+	</insert>
+
+	<update id="update" parameterClass="com.baosight.wilp.mp.lj.domain.MpContPay">
+		UPDATE mp_cont_pay
+		SET
+			<isNotEmpty property="payNo">pay_no	= #payNo#,</isNotEmpty>
+			<isNotEmpty property="contId">cont_id	= #contId#,</isNotEmpty>
+			<isNotEmpty property="contNo">cont_no	= #contNo#,</isNotEmpty>
+			<isNotEmpty property="statusCode">status_code	= #statusCode#,</isNotEmpty>
+			<isNotEmpty property="statusName">status_name	= #statusName#,</isNotEmpty>
+			<isNotEmpty property="payWay">pay_way	= #payWay#,</isNotEmpty>
+			<isNotEmpty property="payWayName">pay_way_name= #payWayName#,</isNotEmpty>
+			<isNotNull property="payDate"> pay_date = #payDate#,</isNotNull>
+			<isGreaterThan property="payCost" compareValue="0">pay_cost	= #payCost#,</isGreaterThan>
+			<isNotEmpty property="payContent">pay_content	= #payContent#,</isNotEmpty>
+			rec_revisor	= #recRevisor#,
+			rec_revise_time	= #recReviseTime#
+		WHERE id = #id#
+	</update>
+
+	<delete id="delete" parameterClass="string">
+		DELETE FROM  mp_cont_pay WHERE id = #value# and status_code = '01'
+	</delete>
+
+
+
+	<update id="updateMpContInvoicePaySuccess" parameterClass="java.util.Map">
+		UPDATE mp_cont_invoice SET status_code	= #statusCode#,status_name	= #statusName#
+		WHERE pay_id = #id#
+	</update>
+
+</sqlMap>

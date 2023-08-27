@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="AURR01">
+
+    <!--  -->
+	<select id="queryResourceList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			SELECT t.* FROM (
+				SELECT 
+				    arr.role_id AS roleId,
+				    ar.id AS id,
+					ar.resource_ename AS resourceEname,
+					ar.resource_name AS resourceName,
+					ar.type,
+					ar.status,
+					ar.rec_creator AS recCreator,
+					ar.rec_create_time AS recCreateTime,
+					ar.rec_revisor,
+					ar.rec_revise_time 
+				FROM $projectSchema$.ac_rr arr 
+				LEFT JOIN $projectSchema$.ac_resource ar  ON arr.resource_id = ar.id
+		    ) t
+			WHERE t.status='1'
+			
+			<isNotEmpty prepend="and" property="roleId">
+				t.roleId =#roleId#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="type">
+				t.type =#type#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="resourceEname">
+				t.resourceEname =#resourceEname#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="resourceName">
+				t.resourceName like concat('%',#resourceName#,'%')
+			</isNotEmpty>
+			
+	</select>
+						
+	<!--  -->			
+	<select id="queryResourceListCount" parameterClass="java.util.HashMap" resultClass="int">
+			SELECT COUNT(1) FROM (
+					SELECT 
+				    arr.role_id AS roleId,
+				    ar.id AS id,
+					ar.resource_ename AS resourceEname,
+					ar.resource_name AS resourceName,
+					ar.type,
+					ar.status,
+					ar.rec_creator AS recCreator,
+					ar.rec_create_time AS recCreateTime,
+					ar.rec_revisor,
+					ar.rec_revise_time 
+				FROM $projectSchema$.ac_rr arr 
+				LEFT JOIN $projectSchema$.ac_resource ar  ON arr.resource_id = ar.id
+		    ) t
+			WHERE t.status='1'
+		
+			<isNotEmpty prepend="and" property="roleId">
+				t.roleId =#roleId#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="type">
+				t.type =#type#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="resourceEname">
+				t.resourceEname =#resourceEname#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="resourceName">
+				t.resourceName like concat('%',#resourceName#,'%')
+			</isNotEmpty>
+
+	</select>
+	
+	<delete id="deleteRoleResource" parameterClass="java.util.HashMap" >
+			DELETE FROM $projectSchema$.ac_rr 
+		    WHERE 1 = 1
+		    AND
+			<iterate  conjunction="OR" open="(" close=")" property="list">
+			     (role_id = #list[].roleId# AND resource_id = #list[].resourceId# )
+			</iterate>
+	</delete>
+	
+
+</sqlMap>

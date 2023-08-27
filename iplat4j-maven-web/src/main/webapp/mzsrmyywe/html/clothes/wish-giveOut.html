@@ -1,0 +1,662 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="format-detection" content="telephone=no" />
+  <link rel="stylesheet" href="../reference/mui/css/mui.min.css">
+  <link rel="stylesheet" href="../reference/css/common.css" />
+  <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css">
+  <link rel="stylesheet" href="css/buttom.css" />
+  <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css">
+
+</head>
+<STYLE TYPE="text/css">
+  body,
+  html {
+    height: 100%;
+  }
+
+  .mui-bar {
+    background-color: #2AABD2;
+  }
+
+  .mui-bar-nav {
+    box-shadow: 0 1px 1px #2AABD2;
+  }
+
+  .warn {
+    font-size: 16px;
+  }
+
+  .row-content {
+    height: 40px;
+    line-height: 40px;
+    padding: 0 15px;
+    border-bottom: 1px solid #EEEEEE;
+    font-size: 16px;
+    color: #666666;
+  }
+
+  .row-left {}
+
+  .row-right {
+    text-align: right;
+    color: #333333;
+  }
+
+  .mui-content>.mui-table-view:first-child {
+    margin-top: 0px;
+  }
+
+  .mui-table-view,
+  .mui-table-views {
+    clear: both;
+    background: #929292;
+    color: #FFFFFF;
+    height: 40px;
+    line-height: 40px;
+    font-size: 17px;
+  }
+
+  .mui-table-view li,
+  .mui-table-views li {
+    float: left;
+    text-align: center;
+    list-style: none;
+  }
+
+  .mui-table-views {
+    padding: 0;
+    margin: 0;
+  }
+
+  #sign {
+    position: fixed;
+    bottom: 0px;
+    left: 0;
+    right: 0;
+    background: #2AABD2;
+    text-align: center;
+    line-height: 50px;
+    height: 50px;
+    color: #FFFFff;
+    font-size: 19px;
+  }
+
+  .nav a {
+    display: inline-block;
+    width: 50%;
+    line-height: 50px;
+    height: 50px;
+    text-align: center;
+  }
+
+  /*模糊查询框*/
+  ul,
+  li {
+    margin: 0;
+    padding: 0;
+  }
+
+  .closeUl {
+    margin-top: 34px;
+    background: #FFFFFF;
+    overflow-y: auto;
+    height: 190px;
+  }
+
+  .closeLi {
+    padding: 7px 0px;
+    color: #2aabd2;
+    padding-left: 10px;
+    font-size: 14px;
+    list-style: none;
+    text-align: center;
+  }
+
+  .closeWord {
+    position: absolute;
+    top: 84px;
+    right: 5px;
+    height: 34px;
+    line-height: 34px;
+    width: 10%;
+    text-align: center;
+    z-index: 555;
+    color: #FFFFFF;
+    font-size: 15px;
+  }
+
+  .close {
+    width: 50%;
+    position: fixed;
+    top: 84px;
+    right: 0px;
+    z-index: 99;
+    background: #2aabd2;
+    box-shadow: 0px 2px 5px #2AABD2;
+    /*background-image: url(img/test.png);*/
+  }
+
+  .dicengClose {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+  }
+
+  .wish-scan {
+    height: 26px;
+    line-height: 25px;
+    text-align: center;
+    margin-top: 8px;
+    margin-left: 5px;
+    border: 1px solid #2AABD2;
+    border-radius: 13px;
+    color: #2AABD2;
+    font-size: 14px;
+  }
+
+  .mui-toast-message {
+    font-size: 16px !important;
+  }
+</STYLE>
+
+<body>
+  <header class="mui-bar mui-bar-nav">
+    <h1 class="mui-title">洗涤发放</h1>
+    <button onclick="location.href = 'wish-main.html';"
+      class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+      返回
+    </button>
+    <!-- <button onclick="location.href='wishList.html'" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-right" style="margin-right: 0;">
+   				列表
+      		</button> -->
+  </header>
+
+  <div id="warn" class="warn" hidden>
+    <small></small>
+  </div>
+
+  <div id="loading" class="loading1" hidden>
+    <div class="loading2">
+      <span class="mui-spinner" style="width:80px;height:80px;"></span>
+    </div>
+  </div>
+  <div class="mui-content" style="margin-bottom: 50px;">
+    <div class="mui-row row-content">
+      <div class="mui-col-sm-3 mui-col-xs-3">
+        发放科室
+      </div>
+      <div class="mui-col-sm-6 mui-col-xs-6 row-right" id="addIcon1">
+        <input type="text" id="workDept" placeholder="请输入或扫描科室"
+          style="width: 80%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;"
+          oninput="getDeptName(this.value)" />
+        <p id="workDeptNum" hidden="hidden"></p>
+      </div>
+      <div class="mui-col-sm-3 mui-col-xs-3">
+        <div class="wish-scan" onclick="scanDept()">科室扫描</div>
+      </div>
+    </div>
+    <!-- <div class="mui-row row-content">
+				<div class="mui-col-sm-5 mui-col-xs-5" >
+				</div>
+				<div class="mui-col-sm-7 mui-col-xs-7" >
+					<div class="wish-scan" onclick="scanDept()">扫描</div>
+				</div>
+			</div> -->
+
+    <div class="mui-row row-content ">
+      <div class="mui-col-sm-3 mui-col-xs-3">
+        扫描编码
+      </div>
+      <div class="mui-col-sm-6 mui-col-xs-6 row-right">
+        <input type="text" id="barCode" placeholder="请扫描工作服条码"
+          style="width: 80%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;">
+      </div>
+      <div class="mui-col-sm-3 mui-col-xs-3 row-right">
+        <div onclick="addScan()" class="wish-scan">编码扫描</div>
+      </div>
+    </div>
+
+    <!-- <div class="mui-row row-content ">
+				<div class="mui-col-sm-5 mui-col-xs-5">
+				</div>
+				<div class="mui-col-sm-7 mui-col-xs-7 row-right">
+					<div onclick="addScan()" class="wish-scan">扫描</div>
+				</div>
+			</div> -->
+
+    <div class="mui-row row-content ">
+      <div class="mui-col-sm-5 mui-col-xs-5">
+        累计数量
+      </div>
+      <div class="mui-col-sm-7 mui-col-xs-7 row-right">
+        <input type="text" id="addNum"
+          style="width: 80%;border:0;outline:none;font-size:18px;padding:0px;text-align:right;margin-bottom:0;height:21px;"
+          placeholder="洗涤数量" readonly="readonly" value="0" />
+      </div>
+    </div>
+
+    <ul class="mui-table-view">
+      <li style="width: 25%;">编码</li>
+      <li style="width: 35%;">工服名称</li>
+      <li style="width: 20%;">申请人</li>
+      <li style="width: 20%;">数量</li>
+    </ul>
+    <div class="list_blew" style=""></div>
+  </div>
+
+  <!-- <nav class="nav">
+			<a id="sign" style="background-color: #929292;">签名
+			</a>
+			<a class="submit" style="background-color:#2AABD2;float: right; ">提交
+			</a>
+		</nav> -->
+  <div id="sign">签名提交</div>
+
+  <div class="dicengClose" style="" hidden="hidden"></div>
+  <div class="close" style="" hidden="hidden">
+    <ul class="closeUl">
+    </ul>
+  </div>
+  <div class="closeWord" style="" hidden="hidden">关闭</div>
+  <div id="getItemByName" class="round" hidden>
+    <div class="row"
+      style="width:100%;height:35px;line-height:35px;padding-left:15px;padding-right:15px;background:#2aabd2;color:#FFFFFF;">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">地址选择<span id="closediv" style="float:right;">关闭</span></div>
+    </div>
+    <ul class="nav nav-pills nav-justified getItemByName">
+    </ul>
+  </div>
+</body>
+<script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../reference/js/common.js" type="text/javascript"></script>
+<script src="../reference/mui/js/mui.picker.min.js" type="text/javascript"></script>
+<script src="../../cordova.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+  var baseUrl = localStorage.getItem("url");
+  var workNo = localStorage.getItem("workNo");
+  var workName = localStorage.getItem("name");
+  var wishType = localStorage.getItem("wishType");
+  console.log(wishType);
+  // if(wishType == "01") {
+  // 	$(".mui-title").text("洗涤申请");
+  // } else if(wishType == "02") {
+  // 	$(".mui-title").text("洗涤回收");
+  // } else if(wishType == "03") {
+  // 	$(".mui-title").text("洗涤签收");
+  // }
+
+  // 根据高度判断签名按钮是否显示（系统键盘是否出现）
+  window.addEventListener('resize', function () {
+    var display = document.body.clientHeight <= 400 ? 'none' : 'block';
+    $('#sign').css('display', display)
+  }, false);
+
+  var deptN = '';
+  function scanDept() {
+    $('#workDept').val('');
+    $('#workDept').focus();
+    // cordova.plugins.barcodeScanner.scan(
+    // 	function(result) {
+    // 		if(result.text != "") {
+    // 			deptN = result.text;
+    // 			scanDeptSelf();
+    // 		} else {
+    // 			showMsg("扫描错误")
+    // 			$('#warn').fadeIn(500);
+    // 			setTimeout("$('#warn').fadeOut(500)", 3000);
+    // 		}
+    // 	},
+    // 	function(warn) {
+    // 		$('#warn small').html('获取二维码失败');
+    // 		$('#warn').fadeIn(500);
+    // 		setTimeout("$('#warn').fadeOut(500)", 3000);
+    // 	}
+    // );
+  }
+
+  //光标停住扫码
+  $('#workDept').bind('keypress', function (event) {
+    if (event.keyCode == "13") {
+      deptN = $("#workDept").val().replace(/\s+/g, "");
+      scanDeptSelf();
+    }
+  });
+
+  function scanDeptSelf() {
+    $.ajax({
+      url: baseUrl + 'queryGf/queryAllGf',
+      type: 'post',
+      headers: {
+        serviceName: "MFGZ01",
+        methodName: "getDeptInfo"
+      },
+      data: {
+        requestParam: JSON.stringify({
+          deptCode: deptN,
+        })
+      },
+      success: function (data) {
+        var list = data.data[0]
+        if (data.statusCode == "0") {
+          $('#workDept').val(list.deptName)
+          $("#workDeptNum").text(list.deptNum);
+          $('#barCode').focus();
+        } else {
+          mui.toast(data.msg);
+          return;
+        }
+      }
+    });
+  }
+  // scanDeptSelf();
+
+  var tableArry = [];
+  var ribbonCode = "";
+  //		ribbonCode = "KS000033000194601";
+  var num = 0;
+  var pellmellListStr = [];
+
+  //光标停住扫码
+  $('#barCode').bind('keypress', function (event) {
+    if (event.keyCode == "13") {
+      ribbonCode = $("#barCode").val().replace(/\s+/g, "");
+      addScanSelf();
+    }
+  });
+
+  //扫描二维码直接在表格下方添加数据
+  function addScan() {
+    $('#barCode').val('');
+    $('#barCode').focus();
+    // cordova.plugins.barcodeScanner.scan(
+    // 	function(result) {
+    // 		if(result.text != "") {
+    // 			ribbonCode = result.text;
+    // 			addScanSelf();
+    // 		} else {
+    // 			showMsg("扫描错误")
+    // 			$('#warn').fadeIn(500);
+    // 			setTimeout("$('#warn').fadeOut(500)", 3000);
+    // 		}
+    // 	},
+    // 	function(warn) {
+    // 		$('#warn small').html('获取二维码失败');
+    // 		$('#warn').fadeIn(500);
+    // 		setTimeout("$('#warn').fadeOut(500)", 3000);
+    // 	}
+    // );
+  }
+
+
+  function addScanSelf() {
+    // if($("#workDept").val() == "") {
+    // 	showMsg("请选择科室！");
+    // 	return;
+    // }
+    // if($("#workDeptNum").text() == "") {
+    // 	showMsg("请选择正确的科室！");
+    // 	return;
+    // }
+    $.ajax({
+      url: baseUrl + 'queryGf/queryAllGf',
+      type: 'post',
+      headers: {
+        serviceName: "MFGZ01",
+        methodName: "getRecoveryByBarCode"
+      },
+      data: {
+        requestParam: JSON.stringify({
+          uniCode: ribbonCode,
+          deptCode: $("#workDeptNum").text(),
+          deptName: $("#workDept").val()
+        })
+      },
+      success: function (data) {
+        // var data = JSON.parse(data)
+        var dataObj = data.data;
+        if (data.statusCode == "0") {
+          if (dataObj.fabricNum == "undefined" || dataObj.fabricNum == undefined) { } else {
+            var zdList = $('.list_blew ul');
+            var isNew = true;
+            var aa = {
+              uniformCode: dataObj.fabricNum,
+              uniformName: dataObj.fabricName,
+              uniformType: dataObj.fabricTypeName,
+              washHandoutNum: '1',
+              uniformUseCode: dataObj.userCode,
+              uniformUseName: dataObj.userName,
+              matLaundryCost: dataObj.fabricWashFee,
+              fabric_type_num: dataObj.fabricTypeNum,
+              fabric_model: dataObj.fabricModel,
+              bar_code: dataObj.barcode
+            }
+            for (var i = 0; i < zdList.length; i++) {
+              var _thisVal = zdList.eq(i).find('span.trash').attr('id');
+              if (_thisVal == ribbonCode) {
+                $('#barCode').val('');
+                showMsg("请勿重复扫描");
+                isNew = false;
+              }
+              console.log(_thisVal);
+            }
+            if (isNew) {
+              pellmellListStr.push(aa);
+              var code = dataObj.fabricNum.substring(dataObj.fabricNum.length - 6, dataObj.fabricNum.length)
+
+              var html = '<ul class="mui-table-views list" style="';
+              if (num % 2 == 0) {
+                html += 'background:#FFFFFF;line-height: inherit;';
+              } else {
+                html += 'background:#EEEEEE;line-height: inherit;';
+              }
+              html += 'color: #000000;">';
+              html += '<li class="ribbonde" style="width:25%;word-break: break-all;line-height: 40px;">' + code + '</li>';
+              if (dataObj.fabricName == "")
+                html += '<li class="styleShip" style="width:35%;line-height: 40px;">无</li>';
+              else
+                html += '<li class="styleShip" style="width:35%;word-break: break-all;line-height: 40px;">' + dataObj.fabricName + '</li>';
+              html += '<li class="styleShip" style="width:20%;line-height: 40px;">' + dataObj.userName + '</li>';
+              html += '<li class="styleShip  allNum" style="width:20%;line-height: 40px;">1&nbsp;<span id=' + dataObj.fabricNum + ' class="mui-icon mui-icon-trash trash"></span></li>';
+              html += '</ul>';
+              $('.list_blew').append(html);
+              num++;
+              $("#addNum").val(num);
+            }
+          }
+          $('#barCode').val('');
+        } else {
+          $('#warn small').html(data.msg);
+          $('#warn').fadeIn(500);
+          setTimeout("$('#warn').fadeOut(500)", 4000);
+          return;
+        }
+      }
+    });
+  }
+
+  $(function () {
+    $('#workDept').focus();
+    // scanDeptSelf()
+    // addScanSelf()
+  })
+  $('body').on('click', 'span.trash', function (e) {
+    console.log('删除' + 333)
+    var id = $(this).attr('id');
+    console.log(id)
+    console.log(pellmellListStr)
+    $(this).parents('.list').remove()
+    for (var i = 0; i < pellmellListStr.length; i++) {
+      if (id == pellmellListStr[i].uniformCode) {
+        pellmellListStr.splice(i, 1)
+        num--;
+        $("#addNum").val(num)
+      }
+    }
+    console.log(pellmellListStr)
+  })
+
+  /*
+   *通过科室模糊插叙新的信息 
+   * 
+   * * */
+  //科室模糊查询带出其他信息
+  mui("body").on('tap', ".closeUl li", function () {
+    var params = JSON.parse(this.id);
+    console.log(params)
+    $("#workDept").val(params.deptName);
+    $("#workDeptNum").text(params.deptNum);
+    hideSelect();
+  });
+  mui("body").on('tap', ".dicengClose", function () {
+    hideSelect();
+    qingkongClose();
+  });
+  mui("body").on('tap', ".closeWord", function () {
+    hideSelect();
+    qingkongClose();
+  });
+
+  //选择科室
+  var clearTime = null;
+
+  function getDeptName(value) {
+    clearTimeout(clearTime);
+    clearTime = setTimeout("indirectFunc(\"" + value + "\")", 1500)
+  }
+
+  function indirectFunc(value) {
+    var bedCode = value.trim();
+    if (bedCode != "") {
+      $.ajax({
+        url: baseUrl + 'queryGf/queryAllGf',
+        type: 'post',
+        headers: {
+          serviceName: "MFGZ01",
+          methodName: "getDeptInfoList"
+        },
+        data: {
+          requestParam: JSON.stringify({
+            // deptName: bedCode
+            deptName: $('#workDept').val()
+          })
+        },
+        success: function (data) {
+          // var data = JSON.parse(data)
+          var list = data.data;
+          var taskList = "";
+          if (data.statusCode == "0") {
+            if (list == null) {
+              showMsg("没有查询科室");
+              hideSelect();
+              return;
+            }
+            for (var i = 0; i < list.length; i++) {
+              taskList += createVi(list[i].deptName, list[i].deptNum);
+            }
+            showSelect();
+            $(".closeUl").html(taskList);
+
+          } else {
+            hideSelect();
+          }
+        }
+      });
+    } else {
+      hideSelect();
+    }
+  }
+  //工号模糊查询
+  function showSelect() {
+    $(".dicengClose").show();
+    $(".close").show();
+    $(".closeWord").show();
+  }
+
+  function qingkongClose() {
+    $("#workDept").val("");
+    $("#workDeptNum").text("");
+  }
+
+  function hideSelect() {
+    $(".dicengClose").hide();
+    $(".close").hide();
+    $(".closeWord").hide();
+  }
+
+  function createVi(deptName, deptNum) {
+    var json = {
+      "deptName": deptName,
+      "deptNum": deptNum
+    }
+    var jsonStr = JSON.stringify(json);
+    var html = "";
+    html += '<li  id=\'' + jsonStr + '\' class="closeLi" style="">' + deptName + '</li>';
+    return html;
+  }
+
+  // 签名按钮点击
+  document.getElementById("sign").addEventListener('tap', function () {
+    if ($("#workDept").val() == "") {
+      showMsg("请选择科室！");
+      return;
+    }
+    if ($("#workDeptNum").text() == "") {
+      showMsg("请选择正确的科室！");
+      return;
+    }
+    if (pellmellListStr.length == 0) {
+      showMsg("请扫描二维码");
+      return;
+    }
+    var zdList = $('.list_blew ul')
+    if (zdList.length != 0) {
+      var jsonSelf = {
+        handoutList: JSON.stringify(pellmellListStr),
+        deptName: $("#workDept").val(),
+        deptCode: $("#workDeptNum").text(),
+      }
+      var jsonS = JSON.stringify(jsonSelf)
+      location.href = 'giveout-sign.html?' + encodeURIComponent(jsonS)
+    } else {
+      showMsg('发放内容不能为空！')
+    }
+  }, false)
+
+  //提交
+  // document.querySelector(".submit").addEventListener('tap', function() {
+  // 	submitSelf();
+  // });	
+
+  /**
+   * mui清除按钮事件(ps:自定义的，不加此方法页面会报错，如果不需要，方法体为空就行)
+   */
+  //		function clearFunc() {}
+  //系统返回监听
+  document.addEventListener("deviceready", onDeviceReady, false);
+
+  function onDeviceReady() {
+    /**
+     * 系统返回键监听
+     */
+    document.addEventListener("backbutton", onBackKeyDown, false);
+  }
+
+  function onBackKeyDown() {
+    location.href = "wish-main.html";
+  }
+</script>
+
+</html>

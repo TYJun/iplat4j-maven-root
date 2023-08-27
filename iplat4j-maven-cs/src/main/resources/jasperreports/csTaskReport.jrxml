@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.17.0.final using JasperReports Library version 6.17.0-6d93193241dd8cc42629e188b94f9e0bc5722efd  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="csTaskReport" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="084031dc-4881-4b8c-9c27-d5b61451cdea">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<parameter name="taskNo" class="java.lang.String">
+		<parameterDescription><![CDATA[工单号]]></parameterDescription>
+	</parameter>
+	<parameter name="currentTime" class="java.lang.String">
+		<parameterDescription><![CDATA[当前时间]]></parameterDescription>
+	</parameter>
+	<parameter name="reqStaffId" class="java.lang.String">
+		<parameterDescription><![CDATA[需求人工号]]></parameterDescription>
+	</parameter>
+	<parameter name="reqStaffName" class="java.lang.String">
+		<parameterDescription><![CDATA[需求人]]></parameterDescription>
+	</parameter>
+	<parameter name="reqTelNum" class="java.lang.String">
+		<parameterDescription><![CDATA[登记号码]]></parameterDescription>
+	</parameter>
+	<parameter name="reqDeptName" class="java.lang.String">
+		<parameterDescription><![CDATA[请求科室]]></parameterDescription>
+	</parameter>
+	<parameter name="reqSpotName" class="java.lang.String">
+		<parameterDescription><![CDATA[保洁地点]]></parameterDescription>
+	</parameter>
+	<parameter name="evalGrade" class="java.lang.String">
+		<parameterDescription><![CDATA[工单满意度]]></parameterDescription>
+	</parameter>
+	<parameter name="evalOpinion" class="java.lang.String">
+		<parameterDescription><![CDATA[评价意见]]></parameterDescription>
+	</parameter>
+	<parameter name="comments" class="java.lang.String">
+		<parameterDescription><![CDATA[工单备注]]></parameterDescription>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT 
+gdmx.item_name as itemName,
+gdmx.service_dept_name as serDeptName,
+gdmx.execute_user_no as executorNo,
+gdmx.execute_user_name as executor
+FROM cs_gd gd
+LEFT JOIN cs_gd_mx gdmx on gdmx.task_id = gd.id
+WHERE gd.task_no = $P{taskNo}]]>
+	</queryString>
+	<field name="itemName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="itemName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cs_gd_mx"/>
+		<fieldDescription><![CDATA[保洁事项名称]]></fieldDescription>
+	</field>
+	<field name="serDeptName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="serDeptName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cs_gd_mx"/>
+		<fieldDescription><![CDATA[服务科室名称]]></fieldDescription>
+	</field>
+	<field name="executorNo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="executorNo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cs_gd_mx"/>
+		<fieldDescription><![CDATA[执行人工号]]></fieldDescription>
+	</field>
+	<field name="executor" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.tree.path" value="cs_gd_mx"/>
+		<property name="com.jaspersoft.studio.field.label" value="executor"/>
+		<fieldDescription><![CDATA[执行人]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="63" splitType="Stretch">
+			<staticText>
+				<reportElement x="112" y="20" width="330" height="30" uuid="dfcf6be3-0d98-4010-a125-4ccbf9c3c582"/>
+				<textElement textAlignment="Center">
+					<font fontName="微软雅黑" size="22"/>
+				</textElement>
+				<text><![CDATA["******医院"]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<textField>
+				<reportElement x="-20" y="3" width="581" height="28" uuid="590af0f9-3809-4941-94b3-94ce2ee7e5e3"/>
+				<textElement textAlignment="Center">
+					<font fontName="微软雅黑" size="17" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["后勤保洁工作任务单"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="-3" y="3" width="75" height="28" uuid="cd19e458-bbc0-414d-912f-802d9e509d6c"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[服务单号]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="72" y="3" width="105" height="28" uuid="5c686a53-a624-4109-b4a2-0618a460652a"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{taskNo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="381" y="3" width="39" height="28" uuid="930c2892-01dd-4717-8b3a-9d2469d8eba2"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[时间]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="420" y="3" width="141" height="28" uuid="fa92e813-cbfe-405b-b886-12f2a35f89de"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{currentTime}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="253" splitType="Stretch">
+			<staticText>
+				<reportElement x="-12" y="0" width="112" height="30" uuid="242372b9-3444-4625-9b93-1fde266ee58b"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[需求人]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="0" width="150" height="30" uuid="0564b6f0-7545-4c93-ae95-8e6ba63b5ab1"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{reqStaffName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="250" y="0" width="100" height="30" uuid="88d9c4a2-94d9-478e-ba6c-15227d5b6905"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[需求人工号]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="350" y="0" width="211" height="30" uuid="863862a1-48a0-4f9b-a03a-f8bb48767f31"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{reqStaffId}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="-12" y="30" width="112" height="31" uuid="358648da-5f4b-46d3-adc7-e1e0a0bcdf2e">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[登记号码]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="30" width="150" height="30" uuid="1ba113e6-426f-48f0-b87c-382f831769b1">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{reqTelNum}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="250" y="30" width="100" height="30" uuid="de65b05a-3a26-4d94-8fce-8b7b38240182"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[需求科室]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="350" y="30" width="211" height="30" uuid="8a492a39-383e-4640-9c10-15a4485592cb">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{reqDeptName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="-12" y="60" width="112" height="40" uuid="6a28167d-91d1-47ea-95cd-1ca051ff0232"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[保洁地点]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="60" width="461" height="40" uuid="772560c2-4aef-4ccf-a71d-9f4f80b689fe">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{reqSpotName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="-12" y="100" width="112" height="40" uuid="d4e9f463-7c6f-43f6-b2b8-279520b05e6d"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[工单备注]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="100" width="461" height="40" uuid="6fa85647-4289-41e0-b2ee-7ada06246338">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{comments}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="-12" y="140" width="112" height="53" uuid="5bd7d131-1883-493f-8fc3-24d85e89e054"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[工单满意度]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="140" width="130" height="53" uuid="ac42b24b-becf-454d-86b3-ec5d3a37303d"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{evalGrade}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="230" y="140" width="110" height="53" uuid="8221126e-10f2-467d-8c23-e2564a3dc7a1"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[评价意见]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="340" y="140" width="221" height="53" uuid="0c611593-ef81-4406-9315-a45646a9f2d3"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{evalOpinion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="-12" y="193" width="132" height="60" uuid="aed8c66e-2a10-47e6-86fe-ed0acbf8f6e1"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14"/>
+				</textElement>
+				<text><![CDATA[保洁事项]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="120" y="193" width="160" height="60" uuid="89c36f02-a764-4d92-8df4-ad27c48b0b1f"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14"/>
+				</textElement>
+				<text><![CDATA[服务科室]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="193" width="120" height="60" uuid="017fc5c1-814f-4399-ba37-0286e12bb706"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14"/>
+				</textElement>
+				<text><![CDATA[执行人工号]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="193" width="161" height="60" uuid="1df256d5-f209-481d-a368-85b079736c57"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14"/>
+				</textElement>
+				<text><![CDATA[执行人]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="40" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="-12" y="0" width="132" height="40" uuid="7f39f75f-0c7b-4583-8093-f0f7f49dcabf"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{itemName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="120" y="0" width="160" height="40" uuid="93493198-efad-480e-9b86-42015fd66cc0"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{serDeptName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="280" y="0" width="120" height="40" uuid="9cb99dee-1b82-4fbf-b4ff-335e5ca433f2"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{executorNo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="400" y="0" width="161" height="40" uuid="ba6553a6-91fa-4832-9421-d0533092ad2a"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{executor}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

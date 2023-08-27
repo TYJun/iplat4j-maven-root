@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="SIRK01">
+
+	<select id="query" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.si.rk.domain.SiEnter">
+		SELECT
+		REC_CREATOR	as "recCreator",  <!-- 记录创建责任者 -->
+		REC_CREATE_TIME	as "recCreateTime",  <!-- 记录创建时间 -->
+		REC_REVISOR	as "recRevisor",  <!-- 记录修改责任者 -->
+		REC_REVISE_TIME	as "recReviseTime",  <!-- 记录修改时间 -->
+		DATA_GROUP_CODE	as "dataGroupCode",  <!-- 院区（账套） -->
+		ARCHIVE_FLAG	as "archiveFlag",  <!-- 归档标记 -->
+		ID	as "id",  <!-- 主键 -->
+		ENTER_BILL_NO	as "enterBillNo",  <!-- 入库单号 -->
+		ENTER_TYPE	as "enterType",  <!-- 入库类别 -->
+		enter_type_name	as "enterTypeName",  <!-- 入库类型名称 -->
+		ORIGIN_BILL_NO	as "originBillNo",  <!-- 来源单据号 -->
+		ORIGIN_BILL_TYPE	as "originBillType",  <!-- 来源单据类型 -->
+		origin_bill_type_name	as "originBillTypeName",  <!-- 来源单据类型名称 -->
+		CONT_NO	as "contNo",  <!-- 合同号 -->
+		PURC_DEMAND_DETAIL_NO	as "purcDemandDetailNo",  <!-- 采购计划明细号 -->
+		WARE_HOUSE_NO	as "wareHouseNo",  <!-- 仓库号 -->
+		ware_house_name	as "wareHouseName",  <!-- 仓库名称 -->
+		total_num  as "totalNum",  <!-- 总入库数量 -->
+		total_amount "totalAmount",  <!-- 总入库金额 -->
+		STORAGE_NO	as "storageNo",  <!-- 库位号 -->
+		STACK_NO	as "stackNo",  <!-- 货位号 -->
+		enter_time	as "enterTime",  <!-- 制单日期 -->
+		BILL_MAKE_TIME	as "billMakeTime",  <!-- 制单日期 -->
+		BILL_MAKER	as "billMaker",  <!-- 制单人员 -->
+		BILL_CHECK_TIME	as "billCheckTime",  <!-- 审核日期 -->
+		BILL_CHECKER	as "billChecker",  <!-- 审核人员 -->
+		INVOICE_NUM	as "invoiceNum",  <!-- 发票流水号 -->
+		is_check	as "isCheck",  <!-- 是否已经审核(0/否,1/是) -->
+		bill_checker_name	as "billCheckerName",  <!-- 审核人员姓名 -->
+		bill_maker_name	as "billMakerName",  <!-- 制单人员姓名 -->
+		BATCH_NO	as "batchNo", <!-- 批次号 -->
+		remark	as "remark", <!-- 备注/红冲原因 -->
+		print_flag	as "printFlag", <!-- 打印标记 -->
+		user_dept_num as "userDeptNum", <!-- 直入直出科室编码 -->
+		user_dept_name as "userDeptName",  <!-- 直入直出科室名称 -->
+		check_sign	as "checkSign", <!-- 验收签字图片 -->
+		approval_sign	as "approvalSign", <!-- 审核验收签字 -->
+		(select surp_num from si_enter_detail where si_enter.ENTER_BILL_NO = si_enter_detail.ENTER_BILL_NO limit 1) supplierNum,
+		(select surp_name from si_enter_detail where si_enter.ENTER_BILL_NO = si_enter_detail.ENTER_BILL_NO limit 1) supplierName
+		FROM si_enter
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="enterBillNo"> <!-- 入库单号(模糊) -->
+			ENTER_BILL_NO like concat('%', #enterBillNo# ,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="enterBillNoEQ">  <!-- 入库单号(精确) -->
+			ENTER_BILL_NO = #enterBillNoEQ#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNo"> <!-- 仓库号 -->
+			WARE_HOUSE_NO = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="enterType"> <!-- 入库类别 -->
+			ENTER_TYPE = #enterType#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">   <!-- 制单日期（>=） -->
+			date_format(BILL_MAKE_TIME,'%Y-%m-%d') >= #beginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">    <!-- 制单日期止（<=） -->
+			date_format(BILL_MAKE_TIME,'%Y-%m-%d') <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="supplierName">    <!-- 供应商名称 -->
+			ENTER_BILL_NO in (select distinct ENTER_BILL_NO from si_enter_detail where surp_name like concat('%', #supplierName#, '%'))
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">  <!-- 院区（账套） -->
+			DATA_GROUP_CODE = #dataGroupCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="isCheck">  <!-- 状态 -->
+			is_check = #isCheck#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="printFlag">  <!-- 状态 -->
+			print_flag = #printFlag#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="billMakerName">  <!-- 状态 -->
+			bill_maker_name like concat('%', #billMakerName# ,'%')
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				ENTER_BILL_NO DESC
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .si_enter WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="enterBillNo"> <!-- 入库单号(模糊) -->
+			ENTER_BILL_NO like concat('%', #enterBillNo# ,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="enterBillNoEQ">  <!-- 入库单号(精确) -->
+			ENTER_BILL_NO = #enterBillNoEQ#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="enterType"> <!-- 入库类别 -->
+			ENTER_TYPE = #enterType#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNo"> <!-- 仓库号 -->
+			WARE_HOUSE_NO = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">   <!-- 制单日期（>=） -->
+			date_format(BILL_MAKE_TIME,'%Y-%m-%d') >= #beginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">    <!-- 制单日期止（<=） -->
+			date_format(BILL_MAKE_TIME,'%Y-%m-%d') <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">  <!-- 院区（账套） -->
+			DATA_GROUP_CODE = #dataGroupCode#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert" parameterClass="com.baosight.wilp.si.rk.domain.SiEnter">
+		INSERT INTO si_enter (REC_CREATOR,  <!-- 记录创建责任者 -->
+		REC_CREATE_TIME,  <!-- 记录创建时间 -->
+		REC_REVISOR,  <!-- 记录修改责任者 -->
+		REC_REVISE_TIME,  <!-- 记录修改时间 -->
+		DATA_GROUP_CODE,  <!-- 院区（账套） -->
+		ARCHIVE_FLAG,  <!-- 归档标记 -->
+		ID,  <!-- 主键 -->
+		ENTER_BILL_NO,  <!-- 入库单号 -->
+		ENTER_TYPE,  <!-- 入库类别 -->
+		enter_type_name,  <!-- 入库类型名称 -->
+		ORIGIN_BILL_NO,  <!-- 来源单据号 -->
+		ORIGIN_BILL_TYPE,  <!-- 来源单据类型 -->
+		origin_bill_type_name,  <!-- 来源单据类型名称 -->
+		CONT_NO,  <!-- 合同号 -->
+		PURC_DEMAND_DETAIL_NO,  <!-- 采购计划明细号 -->
+		WARE_HOUSE_NO,  <!-- 仓库号 -->
+		ware_house_name,  <!-- 仓库名称 -->
+		total_num,  <!-- 总入库数量 -->
+		total_amount,  <!-- 总入库金额 -->
+		STORAGE_NO,  <!-- 库位号 -->
+		STACK_NO,  <!-- 货位号 -->
+		enter_time,     <!-- 入库时间 -->
+		BILL_MAKE_TIME,  <!-- 制单日期 -->
+		BILL_MAKER,  <!-- 制单人员 -->
+		BILL_CHECK_TIME,  <!-- 审核日期 -->
+		BILL_CHECKER,  <!-- 审核人员 -->
+		INVOICE_NUM,  <!-- 发票流水号 -->
+		is_check,  <!-- 是否已经审核(0/否,1/是) -->
+		bill_checker_name,  <!-- 审核人员姓名 -->
+		bill_maker_name,  <!-- 制单人员姓名 -->
+		BATCH_NO,  <!-- 批次号 -->
+		user_dept_num, <!-- 直入直出科室编码 -->
+		user_dept_name,  <!-- 直入直出科室名称 -->
+		remark <!-- 备注/红冲原因 -->
+		)
+		VALUES (#recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#, #archiveFlag#, #id#, #enterBillNo#, #enterType#, #enterTypeName#, #originBillNo#, #originBillType#, #originBillTypeName#, #contNo#, #purcDemandDetailNo#, #wareHouseNo#, #wareHouseName#, #totalNum#, #totalAmount#, #storageNo#, #stackNo#, #enterTime#, #billMakeTime#, #billMaker#, #billCheckTime#, #billChecker#, #invoiceNum#, #isCheck#, #billCheckerName#, #billMakerName#, #batchNo#,#userDeptNum#,#userDeptName#, #remark#)
+	</insert>
+
+	<select id="queryOriginEnterBillType" parameterClass="string" resultClass="string">
+		select enter_type from si_enter where enter_bill_no = #value#
+	</select>
+
+	<delete id="delete">
+		DELETE FROM si_enter WHERE enter_bill_no = #enterBillNo#
+	</delete>
+
+	<update id="update" parameterClass="com.baosight.wilp.si.rk.domain.SiEnter">
+		UPDATE si_enter
+		SET
+			rec_revisor	= #recRevisor#,   <!-- 记录修改责任者 -->
+			rec_revise_time	= #recReviseTime#,   <!-- 记录修改时间 -->
+		    <isNotEmpty property="enterType"> enter_type = #enterType#, </isNotEmpty><!-- 入库类别 -->
+			<isNotEmpty property="enterTypeName"> enter_type_name = #enterTypeName#, </isNotEmpty> <!-- 入库类型名称 -->
+			user_dept_num = #userDeptNum#, <!-- 直入直出科室 -->
+			user_dept_name = #userDeptName#,<!-- 直入直出科室 -->
+			<isNotEmpty property="wareHouseNo"> ware_house_no = #wareHouseNo#,  </isNotEmpty>  <!-- 仓库号 -->
+			<isNotEmpty property="wareHouseName"> ware_house_name = #wareHouseName#,  </isNotEmpty>  <!-- 仓库名称 -->
+		    <isGreaterThan property="totalNum" compareValue="0">total_num = #totalNum#,</isGreaterThan>  <!-- 总入库数量 -->
+			<isGreaterThan property="totalAmount" compareValue="0">total_amount = #totalAmount#,</isGreaterThan>  <!-- 总入库金额 -->
+			remark = #remark#  <!-- 备注/红冲原因 -->
+		WHERE enter_bill_no	= #enterBillNo#
+	</update>
+
+	<update id="updatePrintFlag" parameterClass="java.util.List">
+		update si_enter set print_flag = 1 where ENTER_BILL_NO in
+		<iterate open="(" conjunction="," close=")">
+			#list[]#
+		</iterate>
+	</update>
+
+	<update id="checkEnter" parameterClass="java.util.HashMap">
+		update si_enter set is_check = 1,
+		<isNotEmpty property="enterTime"> enter_time= #enterTime#, </isNotEmpty>
+		<isNotEmpty property="billChecker">bill_checker = #billChecker#, </isNotEmpty>
+		<isNotEmpty property="billCheckerName">bill_checker_name = #billCheckerName#, </isNotEmpty>
+		<isNotEmpty property="billCheckTime">bill_check_time = #billCheckTime#, </isNotEmpty>
+		check_sign = #signature#
+		where ENTER_BILL_NO in
+		<iterate property="list" open="(" conjunction="," close=")">
+			#list[]#
+		</iterate>
+	</update>
+
+	<update id="approvalEnter" parameterClass="java.util.HashMap" >
+		update si_enter set is_check = 2,
+		<isNotEmpty property="enterTime"> enter_time= #enterTime#, </isNotEmpty>
+		<isNotEmpty property="billChecker">bill_checker = #billChecker#, </isNotEmpty>
+		<isNotEmpty property="billCheckerName">bill_checker_name = #billCheckerName#, </isNotEmpty>
+		<isNotEmpty property="billCheckTime">bill_check_time = #billCheckTime#, </isNotEmpty>
+		approval_sign = #signature# where ENTER_BILL_NO in
+		<iterate property="list" open="(" conjunction="," close=")">
+			#list[]#
+		</iterate>
+	</update>
+
+	<select id="hasApproval" parameterClass="java.util.List" resultClass="int">
+		select count(*) from si_enter where is_check = 2 and ENTER_BILL_NO in
+		<iterate open="(" conjunction="," close=")">
+			#list[]#
+		</iterate>
+	</select>
+
+</sqlMap>

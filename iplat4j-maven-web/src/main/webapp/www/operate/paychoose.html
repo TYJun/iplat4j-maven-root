@@ -1,0 +1,73 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.css">
+    <link rel="stylesheet" href="../reference/mui/css/iconfont.css">
+    <link rel="stylesheet" href="../css/common.css" />
+    <link rel="stylesheet" href="../css/colorGreen.css">
+    <link rel="stylesheet" href="../css/colorBlue.css">
+</head>
+<STYLE TYPE="text/css">
+body{
+  background: #eee;
+}
+.mui-table-view-cell {
+  padding: 13px 15px;
+  font-size: 15px;
+}
+.mui-table-view-cell:after {
+  background: #e2e2e2;
+}
+.mui-navigate-right:after {
+  font-size: 20px;
+}
+</STYLE>
+<body>
+  <header id="header" class="mui-bar mui-bar-nav">
+    <h1 class="mui-title">密码设置</h1>
+    <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left" style="color: #fff">
+      <span class="mui-icon mui-icon-left-nav"></span>
+    </button>
+  </header>
+  <div id="warn" class="warn" hidden>
+      <small></small>
+  </div>
+  <div class="mui-content">
+      <div class="mui-scroll">
+        <ul class="mui-table-view mui-table-view-chevron">
+            <li class="mui-table-view-cell">
+                <a class="mui-navigate-right" onclick="location.href='payPwd_modify.html'">支付密码设置</a>
+            </li>
+            <!--<li class="mui-table-view-cell">
+                <a class="mui-navigate-right" onclick="location.href='pwd_modify.html'">登录密码设置</a>
+            </li>-->
+          </ul>
+      </div>
+  </div>
+</body>
+<script type="text/javascript" src="../js/color.js"></script>
+<script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="../reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<!-- <script src="../cordova.js" type="text/javascript"></script> -->
+<script type="text/javascript">
+var baseUrl = localStorage.getItem("url");
+$('#back').click(function(){
+  location.href = '../setting.html'
+})
+/**
+ * 系统返回键监听
+ */
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady() {
+  document.addEventListener("backbutton", onBackKeyDown, false);
+}
+function onBackKeyDown() {
+  location.href = '../setting.html'
+}
+</script>
+</html>

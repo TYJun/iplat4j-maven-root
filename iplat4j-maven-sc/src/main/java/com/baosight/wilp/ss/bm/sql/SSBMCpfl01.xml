@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!-- 菜品分类 -->
+<sqlMap namespace="SSBMCpfl01">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.bm.domain.SSBMCpfl01">
+		SELECT
+		id as "id",  <!-- 主键 -->
+		meal_type_num as "mealTypeNum",  <!-- 餐类编码 -->
+		meal_type_name as "mealTypeName",  <!-- 餐类名称 -->
+		spuer_meal_type_num as "spuerMealTypeNum",  <!-- 上次餐类编码 -->
+		spuer_meal_type_name as "spuerMealTypeName",  <!-- 上级餐类名称 -->
+		memo as "memo",
+		rec_create_time as "recCreateTime",  <!-- 创建时间 -->
+		rec_creator as "recCreator",  <!-- 创建人 -->
+		status_code as "statusCode",
+		sort_no as "sortNo"
+		FROM
+		sc_order_type type
+		WHERE 1=1 
+		<isNotEmpty prepend=" AND " property="userId">
+			find_in_set(
+			type.spuer_meal_type_num,
+				(SELECT GROUP_CONCAT(canteen_num) 
+				FROM `sc_canteen_liaison_conf` 
+				where liaison_id like concat('%',#userId#,'%') ) 
+			) 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="mealTypeNum">
+			meal_type_num like
+			concat('%',#mealTypeNum#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="mealTypeName">
+			meal_type_name like
+			concat('%',#mealTypeName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spuerMealTypeNum">
+			spuer_meal_type_num = #spuerMealTypeNum#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="canteenNum">
+            spuer_meal_type_num = #canteenNum#
+        </isNotEmpty>
+		<isNotEmpty prepend="AND" property="canteenNum">
+            spuer_meal_type_num = #canteenNum#
+        </isNotEmpty>
+		order by rec_create_time desc,meal_type_num asc
+	</select>
+
+	<!--根据适宜人群获取菜品分类-->
+	<select id="queryByDiet" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.bm.domain.SSBMCpfl01">
+		SELECT
+		type.id as "id",  <!-- 主键 -->
+		type.meal_type_num as "mealTypeNum",  <!-- 餐类编码 -->
+		type.meal_type_name as "mealTypeName",  <!-- 餐类名称 -->
+		type.spuer_meal_type_num as "spuerMealTypeNum",  <!-- 上次餐类编码 -->
+		type.spuer_meal_type_name as "spuerMealTypeName",  <!-- 上级餐类名称 -->
+		type.memo as "memo",
+		type.rec_create_time as "recCreateTime",  <!-- 创建时间 -->
+		type.rec_creator as "recCreator",  <!-- 创建人 -->
+		type.status_code as "statusCode",
+		type.sort_no as "sortNo"
+		FROM
+		sc_order_type type
+		left join sc_menu menu on menu.menu_type_num = type.meal_type_num
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="diet">
+			find_in_set(#diet#,menu.suit_group)
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="userId">
+			find_in_set(
+			type.spuer_meal_type_num,
+			(SELECT GROUP_CONCAT(canteen_num)
+			FROM `sc_canteen_liaison_conf`
+			where liaison_id like concat('%',#userId#,'%') )
+			)
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="id">
+			type.id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="mealTypeNum">
+			type.meal_type_num like
+			concat('%',#mealTypeNum#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="mealTypeName">
+			type.meal_type_name like
+			concat('%',#mealTypeName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spuerMealTypeNum">
+			type.spuer_meal_type_num = #spuerMealTypeNum#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="canteenNum">
+			type.spuer_meal_type_num = #canteenNum#
+        </isNotEmpty>
+		<isNotEmpty prepend="AND" property="canteenNum">
+			type.spuer_meal_type_num = #canteenNum#
+        </isNotEmpty>
+		order by rec_create_time desc,meal_type_num asc
+	</select>
+
+	<select id="queryByCanteen" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.bm.domain.SSBMCpfl01">
+		SELECT
+		id as "id",  <!-- 主键 -->
+		meal_type_num as "mealTypeNum",  <!-- 餐类编码 -->
+		meal_type_name as "mealTypeName",  <!-- 餐类名称 -->
+		spuer_meal_type_num as "spuerMealTypeNum",  <!-- 上次餐类编码 -->
+		spuer_meal_type_name as "spuerMealTypeName",  <!-- 上级餐类名称 -->
+		memo as "memo",
+		rec_create_time as "recCreateTime",  <!-- 创建时间 -->
+		rec_creator as "recCreator",  <!-- 创建人 -->
+		status_code as "statusCode",
+		sort_no as "sortNo"
+		FROM
+		sc_order_type type
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="mealTypeNum">
+			meal_type_num = #mealTypeNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="mealTypeName">
+			meal_type_name =#mealTypeName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spuerMealTypeNum">
+			spuer_meal_type_num = #spuerMealTypeNum#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="canteenNum">
+            spuer_meal_type_num = #canteenNum#
+        </isNotEmpty>
+		<isNotEmpty prepend="AND" property="canteenName">
+			spuer_meal_type_name = #canteenName#
+        </isNotEmpty>
+	</select>
+
+
+	<insert id="insert">
+		INSERT INTO sc_order_type (
+		id,  <!-- 主键 -->
+		meal_type_num,  <!-- 餐类编码 -->
+		meal_type_name,  <!-- 餐类名称 -->
+		spuer_meal_type_num,  <!-- 上次餐类编码 -->
+		spuer_meal_type_name,  <!-- 上级餐类名称 -->
+		memo,
+		rec_create_time,  <!-- 创建时间 -->
+		rec_creator,  <!-- 创建人 -->
+		status_code,
+		sort_no
+		)
+		VALUES (#id#, #mealTypeNum#, #mealTypeName#,
+		#spuerMealTypeNum#,
+		#spuerMealTypeName#, #memo#, #recCreateTime#,
+		#recCreator#,
+		#statusCode#, #sortNo#)
+	</insert>
+
+	<insert id="insertByUpload">
+		INSERT INTO sc_order_type (
+		id,  <!-- 主键 -->
+		meal_type_num,  <!-- 餐类编码 -->
+		meal_type_name,  <!-- 餐类名称 -->
+		spuer_meal_type_num,  <!-- 上次餐类编码 -->
+		spuer_meal_type_name,  <!-- 上级餐类名称 -->
+		rec_create_time,  <!-- 创建时间 -->
+		rec_creator, <!-- 创建人 -->
+		status_code
+		)
+		VALUES (#id#, #mealTypeNum#, #mealTypeName#,
+		#spuerMealTypeNum#,
+		#spuerMealTypeName#,  #recCreateTime#,
+		#recCreator#,#statusCode#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM sc_order_type WHERE
+		id =
+		#id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_order_type
+		SET
+		meal_type_num = #mealTypeNum#,   <!--  餐类编码 -->
+		meal_type_name = #mealTypeName#,   <!-- 餐类名称 -->
+		spuer_meal_type_num = #spuerMealTypeNum#,   <!-- 上次餐类编码 -->
+		spuer_meal_type_name = #spuerMealTypeName#,   <!-- 上级餐类名称 -->
+		memo = #memo#,
+		rec_create_time = #recCreateTime#,   <!-- 创建时间 -->
+		rec_creator = #recCreator#,   <!-- 创建人 -->
+		status_code = #statusCode#,
+		sort_no = #sortNo#
+		WHERE
+		id = #id#
+	</update>
+
+	<!-- 获取菜品分类status_code:1启用 -->
+	<select id="getMenuTypeData" resultClass="HashMap"
+		parameterClass="java.util.HashMap">
+		SELECT
+		id,
+		meal_type_num typeCode,
+		meal_type_name typeName
+		FROM
+		sc_order_type
+		WHERE status_code = '1'
+		<isNotEmpty prepend="and" property="canteenNum">
+            spuer_meal_type_num = #canteenNum#
+         </isNotEmpty>
+		ORDER BY meal_type_num
+	</select>
+</sqlMap>

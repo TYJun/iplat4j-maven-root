@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SQFL01">
+
+	<!-- 查询问卷中是否存在分组 -->
+	<select id="queryProject" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select count(1) as count from sq_manage where project_code = #perGroupNo#		
+	</select>
+	
+	<!-- 获取人员组信息 -->
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			per_group_no as perGroupNo,
+			per_group_name as perGroupName,
+			createTime as createtime
+		from
+			sq_personnel_group
+		where
+			1=1
+		<isNotEmpty prepend=" AND " property="perGroupNo">
+			per_group_no like '%$perGroupNo$%'
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="perGroupName">
+			per_group_name like '%$perGroupName$%'
+		</isNotEmpty>
+        group by
+        	per_group_no,
+        	per_group_name
+        order by
+        	createTime
+        DESC
+   </select>
+
+
+   <!-- 新增人员组信息 -->
+   <insert id="insetPerGroup" parameterClass="java.util.HashMap">
+		INSERT INTO `sq_personnel_group` ( `id`, `per_group_no`, `per_group_name`, `work_no`, `name`, `dept_num`, `dept_name`, `createTime`, `group_id`)
+			VALUES
+		( #id#, #perGroupNo#, #perGroupName#, #workNo#, #name#, #deptNum#, #deptName#, #createTime#, #groupId# );
+	</insert>
+   
+   
+   <!-- 编辑人员组信息 -->
+   <insert id="updatePerGroup" parameterClass="java.util.HashMap">
+		INSERT INTO `sq_personnel_group` ( `id`, `per_group_no`, `per_group_name`, `work_no`, `name`, `dept_num`, `dept_name`, `updateTime`,`group_id`)
+			VALUES
+		( #id#, #perGroupNo#, #perGroupName#, #workNo#, #name#, #deptNum#, #deptName#, #updateTime#, #groupId# );
+	</insert>
+   
+   
+   <!-- 查询分组信息数量-->
+   <select id="queryGroupNo" parameterClass="java.util.HashMap" resultClass="int">
+   		SELECT
+			count( 1 ) 
+		FROM
+			sq_personnel_group 
+		WHERE
+			per_group_no = #perGroupNo#
+		OR
+			per_group_name = #perGroupName#
+   </select>
+   
+   
+   
+   <!-- 查询分组下人员信息 -->
+   <select id="queryName" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+   		SELECT
+			work_no as workNo,
+			name as name,
+			dept_name as deptName,
+			dept_num as deptNum
+		FROM
+			sq_personnel_group
+		where 
+			per_group_no = #perGroupNo#
+		LIMIT 0,5000
+		
+   </select>
+   
+   
+   <!-- 删除人员分组 -->
+   <delete id="deleteperGroupNo" parameterClass="java.util.HashMap">
+   		DELETE FROM sq_personnel_group WHERE per_group_no = #perGroupNo# and per_group_name = #perGroupName#
+   </delete>
+   
+   <!-- 删除人员分组 -->
+   <delete id="deleteperGroup" parameterClass="String">
+   		DELETE FROM sq_personnel_group WHERE group_id = #groupId#
+   </delete>
+   
+   
+   	<!-- 查询分组人员信息 -->
+	<select id="queryGroup" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.sq.fl.domain.SQFL01">
+		SELECT
+			group_id as groupId,
+			per_group_no as perGroupNo,
+			per_group_name as perGroupName,
+			work_no as workNo,
+			name as name,
+			dept_num as deptNum,
+			dept_name as deptName
+		FROM
+			sq_personnel_group 
+		WHERE
+			per_group_no = #perGroupNo#
+		<isNotEmpty property="offset">
+	  		<isNotEmpty property="limit">
+				limit #offset#,#limit#
+			</isNotEmpty>
+		</isNotEmpty>
+	</select>
+
+	<!-- 获取基础框架中的人员组信息 -->
+	<select id="queryPopInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+		a.work_no as workNo,
+		a.name as name,
+		b.dept_num as deptNum,
+		b.dept_name as deptName,
+		a.leader as userId,
+		a.vocational_post as post,
+		a.post as deptPost
+		from
+		bona_frame_mzsrmyy.ac_personnel a
+		left join bona_frame_mzsrmyy.ac_department b on b.id = a.dept_id
+		where
+		1=1
+		and a.status = '1'
+		<isNotEmpty prepend=" AND " property="post">
+			a.post like '%$post$%'
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="name">
+			a.name like '%$name$%'
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptPost">
+			a.post like '%$deptPost$%'
+		</isNotEmpty>
+
+	</select>
+
+</sqlMap>

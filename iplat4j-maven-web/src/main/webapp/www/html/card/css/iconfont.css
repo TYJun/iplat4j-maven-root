@@ -1,0 +1,57 @@
+
+@font-face {font-family: "iconfont";
+  src: url('../fonts/iconfont.ttf?t=1510284061709') format('truetype');
+}
+
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-edit:before { content: "\e649"; }
+
+.icon-phone:before { content: "\e652"; }
+
+.icon-time:before { content: "\e65f"; }
+
+.icon-refund:before { content: "\e6ac"; }
+
+.icon-profile:before { content: "\e6b7"; }
+
+.icon-link:before { content: "\e6bf"; }
+
+.icon-lock:before { content: "\e6c0"; }
+
+.icon-unlock:before { content: "\e6c2"; }
+
+.icon-friendfamous:before { content: "\e6cb"; }
+
+.icon-friend:before { content: "\e6cc"; }
+
+.icon-selection:before { content: "\e6ce"; }
+
+.icon-rechargefill:before { content: "\e6ec"; }
+
+.icon-recharge:before { content: "\e6ed"; }
+
+.icon-vipcard:before { content: "\e6ee"; }
+
+.icon-xinyongqiahuankuan:before { content: "\e604"; }
+
+.icon-wode:before { content: "\e62e"; }
+
+.icon-caifub:before { content: "\e669"; }
+
+.icon-people:before { content: "\e736"; }
+
+.icon-sponsor:before { content: "\e77d"; }
+
+.icon-moneybag:before { content: "\e7d1"; }
+
+.icon-my_light:before { content: "\e7d5"; }
+
+.icon-profile_light:before { content: "\e7dd"; }
+

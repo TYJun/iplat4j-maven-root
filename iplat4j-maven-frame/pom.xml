@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>iplat4j-maven-root</artifactId>
+        <groupId>com.bonawise.iplat4j</groupId>
+        <version>5.0.2</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <version>5.0.2</version>
+
+    <artifactId>iplat4j-maven-frame</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.bonawise.iplat4j</groupId>
+            <artifactId>iplat4j-maven-commons</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.bonawise.dingding</groupId>
+            <artifactId>taobao-sdk-java-auto_1479188381469</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.bonawise.sms</groupId>
+            <artifactId>ImApi</artifactId>
+        </dependency>
+
+
+        <!--HttpClient-->
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-core</artifactId>
+            <version>3.1.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxws</artifactId>
+            <version>3.1.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-http-jetty</artifactId>
+            <version>3.1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>1.65</version>
+            <scope>compile</scope>
+        </dependency>
+
+    </dependencies>
+
+
+
+</project>

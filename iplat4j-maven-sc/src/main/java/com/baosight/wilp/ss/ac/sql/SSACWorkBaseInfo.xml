@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!-- 职工订餐基础信息管理 -->
+<sqlMap namespace="SSACWorkBaseInfo">
+
+	<!-- 查询楼层 -->
+    <select id="queryFloor" resultClass="HashMap"
+        parameterClass="String">
+        SELECT
+        distinct(h.floor),a.typename floorName
+        FROM
+        (
+        SELECT * FROM
+        v_frame_ac_spot t,
+        (SELECT a.typecode,a.typename FROM sc_type a,sc_typegroup b 
+        WHERE a.typegroupid = b.ID AND b.typegroupcode = 'building') c
+        WHERE t.building = c.typecode
+        ) h ,
+        (SELECT a.typecode,a.typename,a.`sortNo`,a.`paramDesc2`,a.`paramValue2`,a.`paramValue1`
+        FROM sc_type a,sc_typegroup b WHERE a.typegroupid = b.ID AND
+        b.typegroupcode = 'floor') a 
+        WHERE h.floor = a.typecode AND h.floor IS NOT NULL
+        and h.typename =#building#
+        order by h.floor
+    </select>
+
+
+	<!-- 通过视图查询科室信息根据楼和层 -->
+    <select id="queryDeptByBuildAndFloor" resultClass="HashMap"
+        parameterClass="HashMap">
+        SELECT DISTINCT
+		    dept.dept_num,dept.dept_name,dept.id
+		FROM
+		    v_frame_ac_spot t
+		    left join v_frame_ac_department dept on t.dept_id = dept.id
+		    LEFT JOIN v_frame_ac_personnel p ON t.dept_id = p.dept_id 
+		    LEFT JOIN (
+		    SELECT a.typecode, a.typename 
+		    FROM sc_type a, sc_typegroup b 
+		    WHERE a.typegroupid = b.ID AND b.typegroupcode = 'building' 
+		    ) b ON t.building = b.typecode
+		    LEFT JOIN (
+		    SELECT a.typecode, a.typename 
+		    FROM sc_type a, sc_typegroup b 
+		    WHERE a.typegroupid = b.ID AND b.typegroupcode = 'floor' 
+		    ) f ON t.floor = f.typecode
+		    
+		WHERE
+		    1 =1
+        <isNotEmpty prepend=" AND " property="deptNum">
+            t.dept_num = #deptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="building">
+            b.typecode=#building#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="floor">
+            f.typecode=#floor#
+        </isNotEmpty>
+        ORDER BY
+        t.spot_num
+    </select>
+    
+	<!-- 通过视图查询房间信息根据科室 -->
+    <select id="queryRoomByDept" resultClass="HashMap"
+        parameterClass="HashMap">
+        SELECT DISTINCT
+		    dept.dept_num,dept.dept_name,dept.id
+		FROM
+		    v_frame_ac_spot t
+		    left join v_frame_ac_department dept on t.dept_id = dept.id
+		    LEFT JOIN v_frame_ac_personnel p ON t.dept_id = p.dept_id 
+		    LEFT JOIN (
+		    SELECT a.typecode, a.typename 
+		    FROM sc_type a, sc_typegroup b 
+		    WHERE a.typegroupid = b.ID AND b.typegroupcode = 'building' 
+		    ) b ON t.building = b.typecode
+		    LEFT JOIN (
+		    SELECT a.typecode, a.typename 
+		    FROM sc_type a, sc_typegroup b 
+		    WHERE a.typegroupid = b.ID AND b.typegroupcode = 'floor' 
+		    ) f ON t.floor = f.typecode
+		    
+		WHERE
+		    1 =1
+        <isNotEmpty prepend=" AND " property="deptNum">
+            t.dept_num = #deptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="building">
+            b.typecode=#building#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="floor">
+            f.typecode=#floor#
+        </isNotEmpty>
+        ORDER BY
+        t.spot_num
+    </select>
+
+    <select id="queryDeptByPer" resultClass="HashMap"
+            parameterClass="java.util.HashMap">
+       SELECT
+b.dept_num as deptNum,
+b.dept_name as deptName
+FROM bona_frame_mzsrmyy.ac_personnel a
+LEFT JOIN bona_frame_mzsrmyy.ac_department b on b.id = a.dept_id
+where a.work_no = #workNo#
+    </select>
+
+    <select id="queryRoomByBu" resultClass="HashMap"
+            parameterClass="java.util.HashMap">
+ SELECT
+ id as roomId,
+address as room
+FROM sc_address
+WHERE 1=1
+and take_effect = '1'
+and building = #building#
+and floor = #floor#
+    </select>
+
+    <select id="queryFloorByBu" resultClass="HashMap"
+            parameterClass="java.util.HashMap">
+ SELECT
+ id as floor,
+floor as floorName
+FROM sc_address
+WHERE 1=1
+and take_effect = '1'
+and building = #building#
+group by floor
+    </select>
+
+    <select id="queryBuildByBu" resultClass="HashMap"
+            parameterClass="java.util.HashMap">
+ SELECT
+ id as typeCode,
+building as typeName
+FROM sc_address
+WHERE 1=1
+and take_effect = #takeEffect#
+group by building
+
+    </select>
+
+    <select id="querycheckRoomName" resultClass="HashMap"
+            parameterClass="java.util.HashMap">
+ SELECT
+address
+FROM sc_address
+WHERE 1=1
+and take_effect = '1'
+and address = #roomName#
+    </select>
+
+</sqlMap>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-07-15 17:26:50
+   		Version :  6.0.731.201809200158
+		tableName :.df_special_file 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 doc_id  VARCHAR, 
+		 relate_id  VARCHAR   NOT NULL, 
+		 file_module  VARCHAR, 
+		 file_type  VARCHAR, 
+		 file_name  VARCHAR, 
+		 file_path  VARCHAR, 
+		 rec_creator  VARCHAR, 
+		 rec_create_time  VARCHAR, 
+		 rec_revisor  VARCHAR, 
+		 rec_revise_time  VARCHAR, 
+		 data_group_code  VARCHAR
+	-->
+<sqlMap namespace="DFSB05">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+				id	as "id",  <!-- 设备零部件ID -->
+				doc_id	as "docId",  <!-- 平台附件表ID -->
+				relate_id	as "relateId",  <!-- 关联id(设备id或检验单id) -->
+				file_module	as "fileModule",  <!-- 附件所属模块(0=设备附件,1=检验附件) -->
+				file_type	as "fileType",  <!-- 附件类型(0=图片,1=文档) -->
+				file_name	as "fileName",  <!-- 附件名称 -->
+				file_path	as "filePath",  <!-- 附件存路径 -->
+				rec_creator	as "recCreator",  <!-- 创建人 -->
+				rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+				rec_revisor	as "recRevisor",  <!-- 修改人 -->
+				rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+				data_group_code	as "dataGroupCode" <!-- 账套 -->
+		FROM .df_special_file WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .df_special_file WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="docId">
+			doc_id = #docId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="relateId">
+			relate_id = #relateId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="fileModule">
+			file_module = #fileModule#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="fileType">
+			file_type = #fileType#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="fileName">
+			file_name = #fileName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="filePath">
+			file_path = #filePath#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreator">
+			rec_creator = #recCreator#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTime">
+			rec_create_time = #recCreateTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recRevisor">
+			rec_revisor = #recRevisor#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recReviseTime">
+			rec_revise_time = #recReviseTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO .df_special_file (id,  <!-- 设备零部件ID -->
+										doc_id,  <!-- 平台附件表ID -->
+										relate_id,  <!-- 关联id(设备id或检验单id) -->
+										file_module,  <!-- 附件所属模块(0=设备附件,1=检验附件) -->
+										file_type,  <!-- 附件类型(0=图片,1=文档) -->
+										file_name,  <!-- 附件名称 -->
+										file_path,  <!-- 附件存路径 -->
+										rec_creator,  <!-- 创建人 -->
+										rec_create_time,  <!-- 创建时间 -->
+										rec_revisor,  <!-- 修改人 -->
+										rec_revise_time,  <!-- 修改时间 -->
+										data_group_code  <!-- 账套 -->
+										)		 
+	    VALUES (#id#, #docId#, #relateId#, #fileModule#, #fileType#, #fileName#, #filePath#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM .df_special_file WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE .df_special_file 
+		SET 
+					doc_id	= #docId#,   <!-- 平台附件表ID -->  
+					relate_id	= #relateId#,   <!-- 关联id(设备id或检验单id) -->  
+					file_module	= #fileModule#,   <!-- 附件所属模块(0=设备附件,1=检验附件) -->  
+					file_type	= #fileType#,   <!-- 附件类型(0=图片,1=文档) -->  
+					file_name	= #fileName#,   <!-- 附件名称 -->  
+					file_path	= #filePath#,   <!-- 附件存路径 -->  
+					rec_creator	= #recCreator#,   <!-- 创建人 -->  
+					rec_create_time	= #recCreateTime#,   <!-- 创建时间 -->  
+					rec_revisor	= #recRevisor#,   <!-- 修改人 -->  
+					rec_revise_time	= #recReviseTime#,   <!-- 修改时间 -->  
+					data_group_code	= #dataGroupCode#  <!-- 账套 -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

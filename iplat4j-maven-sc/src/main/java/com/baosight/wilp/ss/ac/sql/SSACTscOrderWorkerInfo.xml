@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!-- table information Generate time : 2021-07-08 16:52:00 Version : 6.0.731.201809200158 
+	tableName :sc_order_worker_info id VARCHAR NOT NULL primarykey, open_id VARCHAR 
+	NOT NULL, user_name VARCHAR, building VARCHAR, building_name VARCHAR, floor 
+	VARCHAR, floor_name VARCHAR, user_tel_number VARCHAR, dept_num VARCHAR, dept_name 
+	VARCHAR, bed_no VARCHAR, user_no VARCHAR, address VARCHAR, canteen_num VARCHAR, 
+	REC_REVISE_TIME DATETIME, room VARCHAR -->
+<sqlMap namespace="SSACTscOrderWorkerInfo">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.ac.domain.SSACTscOrderWorkerInfo">
+		SELECT
+		id as "id",  <!-- 主键 -->
+		open_id as "openId",  <!-- 微信ID(对于微信用户,保存openID;对于PC端用户,保存用户工号) -->
+		user_name as "userName",  <!-- 用户姓名 -->
+		building as "building",  <!-- 所属大楼 -->
+		building_name as "buildingName",
+		floor as "floor",  <!-- 病区编码 -->
+		floor_name as "floorName",
+		user_tel_number as "userTelNumber",  <!-- 用户电话 -->
+		dept_num as "deptNum",  <!-- 病区编码 -->
+		dept_name as "deptName",  <!-- 病区名称 -->
+		bed_no as "bedNo",  <!-- 床位号 -->
+		user_no as "userNo",  <!-- 住院号/工号 -->
+		address as "address",  <!-- 订餐地址 -->
+		canteen_num as "canteenNum",  <!-- 食堂编码 -->
+		REC_REVISE_TIME as "recReviseTime",  <!-- 更新时间 -->
+		room as "room"
+		FROM sc_order_worker_info WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+        <isNotEmpty prepend="AND" property="userName">
+            user_name = #userName#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="userCode">
+            user_no = #userCode#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="userNo">
+            user_no = #userNo#
+        </isNotEmpty>
+		<isNotEmpty prepend=" AND " property="openId">
+		   open_id = #openId# 
+	    </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="canteenNum"> 
+		   canteen_num = #canteenNum# 
+	    </isNotEmpty> 
+	</select>
+
+	<!-- <select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_order_worker_info WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		
+	</select> -->
+
+	<!-- <isNotEmpty prepend=" AND " property="id"> id = #id# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="openId"> open_id = #openId# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="userName"> user_name = #userName# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="building"> building = #building# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="buildingName"> building_name = #buildingName# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="floor"> floor = #floor# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="floorName"> floor_name 
+		= #floorName# </isNotEmpty> <isNotEmpty prepend=" AND " property="userTelNumber"> 
+		user_tel_number = #userTelNumber# </isNotEmpty> <isNotEmpty prepend=" AND 
+		" property="deptNum"> dept_num = #deptNum# </isNotEmpty> <isNotEmpty prepend=" 
+		AND " property="deptName"> dept_name = #deptName# </isNotEmpty> <isNotEmpty 
+		prepend=" AND " property="bedNo"> bed_no = #bedNo# </isNotEmpty> <isNotEmpty 
+		prepend=" AND " property="userNo"> user_no = #userNo# </isNotEmpty> <isNotEmpty 
+		prepend=" AND " property="address"> address = #address# </isNotEmpty> <isNotEmpty 
+		prepend=" AND " property="canteenNum"> canteen_num = #canteenNum# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="recReviseTime"> REC_REVISE_TIME = #recReviseTime# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="room"> room = #room# 
+		</isNotEmpty> -->
+
+	<insert id="insert">
+		INSERT INTO sc_order_worker_info (id,  <!-- 主键 -->
+		open_id,  <!-- 微信ID(对于微信用户,保存openID;对于PC端用户,保存用户工号) -->
+		user_name,  <!-- 用户姓名 -->
+		building,  <!-- 所属大楼 -->
+		building_name,
+		floor,  <!-- 病区编码 -->
+		floor_name,
+		user_tel_number,  <!-- 用户电话 -->
+		dept_num,  <!-- 病区编码 -->
+		dept_name,  <!-- 病区名称 -->
+		bed_no,  <!-- 床位号 -->
+		user_no,  <!-- 住院号/工号 -->
+		address,  <!-- 订餐地址 -->
+		canteen_num,  <!-- 食堂编码 -->
+		REC_REVISE_TIME,  <!-- 更新时间 -->
+		room
+		)
+		VALUES (#id#, #openId#, #userName#, #building#, #buildingName#, #floor#,
+		#floorName#, #userTelNumber#, #deptNum#, #deptName#, #bedNo#,
+		#userNo#, #address#, #canteenNum#, #recReviseTime#, #room#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM sc_order_worker_info WHERE
+		id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_order_worker_info
+		SET
+		open_id = #openId#,   <!-- 微信ID(对于微信用户,保存openID;对于PC端用户,保存用户工号) -->
+		user_name = #userName#,   <!-- 用户姓名 -->
+		building = #building#,   <!-- 所属大楼 -->
+		building_name = #buildingName#,
+		floor = #floor#,   <!-- 病区编码 -->
+		floor_name = #floorName#,
+		user_tel_number = #userTelNumber#,   <!-- 用户电话 -->
+		dept_num = #deptNum#,   <!-- 病区编码 -->
+		dept_name = #deptName#,   <!-- 病区名称 -->
+		bed_no = #bedNo#,   <!-- 床位号 -->
+		user_no = #userNo#,   <!-- 住院号/工号 -->
+		address = #address#,   <!-- 订餐地址 -->
+		canteen_num = #canteenNum#,   <!-- 食堂编码 -->
+		REC_REVISE_TIME = #recReviseTime#,   <!-- 更新时间 -->
+		room = #room#
+		WHERE
+		id = #id#
+	</update>
+
+	<update id="updateByUserNo">
+		UPDATE sc_order_worker_info
+		SET
+		open_id = #openId#,   <!-- 微信ID(对于微信用户,保存openID;对于PC端用户,保存用户工号) -->
+		user_name = #userName#,   <!-- 用户姓名 -->
+		building = #building#,   <!-- 所属大楼 -->
+		building_name = #buildingName#,
+		floor = #floor#,   <!-- 病区编码 -->
+		floor_name = #floorName#,
+		user_tel_number = #userTelNumber#,   <!-- 用户电话 -->
+		dept_num = #deptNum#,   <!-- 病区编码 -->
+		dept_name = #deptName#,   <!-- 病区名称 -->
+		bed_no = #bedNo#,   <!-- 床位号 -->
+		user_no = #userNo#,   <!-- 住院号/工号 -->
+		address = #address#,   <!-- 订餐地址 -->
+		canteen_num = #canteenNum#,   <!-- 食堂编码 -->
+		REC_REVISE_TIME = #recReviseTime#,   <!-- 更新时间 -->
+		room = #room#
+		WHERE
+		user_no = #userNo#
+	</update>
+
+</sqlMap>

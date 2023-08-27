@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<dataDictionary>
+	<object name="system_sso_log" type="table">
+		<column name="id" type="-5" length="0" scale="0" default="" primary="true" foreignTable="" foreignColumn="" notnull="false" increment="true">
+			<comment><![CDATA[日志主键]]></comment>
+		</column>
+		<column name="token_id" type="12" length="128" scale="0" default="NULL" primary="false" foreignTable="" foreignColumn="" notnull="false" increment="false">
+			<comment><![CDATA[单点登录给的TOKEN]]></comment>
+		</column>
+		<column name="token_request_ip" type="12" length="64" scale="0" default="NULL" primary="false" foreignTable="" foreignColumn="" notnull="false" increment="false">
+			<comment><![CDATA[客户端的请求IP地址]]></comment>
+		</column>
+		<column name="request_time" type="93" length="0" scale="0" default="NULL" primary="false" foreignTable="" foreignColumn="" notnull="false" increment="false">
+			<comment><![CDATA[请求的时间]]></comment>
+		</column>
+		<column name="try_index" type="4" length="0" scale="0" default="NULL" primary="false" foreignTable="" foreignColumn="" notnull="false" increment="false">
+			<comment><![CDATA[重试的次数]]></comment>
+		</column>
+		<column name="response_success" type="4" length="0" scale="0" default="NULL" primary="false" foreignTable="" foreignColumn="" notnull="false" increment="false">
+			<comment><![CDATA[是否正常返回]]></comment>
+		</column>
+		<column name="response_content" type="2004" length="0" scale="0" default="NULL" primary="false" foreignTable="" foreignColumn="" notnull="false" increment="false">
+			<comment><![CDATA[返回的原始内容]]></comment>
+		</column>
+		<column name="source_code_data" type="2004" length="0" scale="0" default="NULL" primary="false" foreignTable="" foreignColumn="" notnull="false" increment="false">
+			<comment><![CDATA[返回的JSON中取出的原始数据]]></comment>
+		</column>
+		<column name="process_success_flag" type="4" length="0" scale="0" default="NULL" primary="false" foreignTable="" foreignColumn="" notnull="false" increment="false">
+			<comment><![CDATA[处理结果说明]]></comment>
+		</column>
+		<column name="process_error_detial" type="2004" length="0" scale="0" default="NULL" primary="false" foreignTable="" foreignColumn="" notnull="false" increment="false">
+			<comment><![CDATA[登录异常信息说明]]></comment>
+		</column>
+		<index name="IDX_SYSTEM_SSO_LOG_1" type="BTREE" unique="false">
+			<indexcolumn name="TOKEN_ID"/>
+			<indexcolumn name="TRY_INDEX"/>
+		</index>
+		<comment><![CDATA[单点登录日志表]]></comment>
+	</object>
+</dataDictionary>

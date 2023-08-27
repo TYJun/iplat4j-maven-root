@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在线选房</title>
+  <link rel="stylesheet" href="../../reference/vant/css/index.css" />
+</head>
+<style>
+  #app {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  [v-cloak] {
+    display: none !important;
+  }
+
+  .bed-header {
+    width: 100%;
+    height: 50px;
+    padding: 15px 0;
+  }
+
+  .back {
+    float: left;
+    color: #3eacdb;
+    padding: 0 15px;
+    font-size: 14px;
+    line-height: 30px;
+  }
+
+  .title {
+    text-align: center;
+    color: black;
+    font-size: 20px;
+    width: 200px;
+    margin: 0 auto;
+    line-height: 30px;
+    font-weight: 600;
+  }
+
+  .bed-content-center {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+  }
+
+  .bed-content-center>div:nth-child(1) {
+    color: black;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .bed-content-center>div:nth-child(2) {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 20px;
+  }
+
+  .bed-content-center>div:nth-child(2)>div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .situation-text {
+    color: black;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 0 6px;
+  }
+
+  .situation-num-text {
+    color: black;
+    font-size: 14px;
+    width: 40px;
+    height: 24px;
+    margin: 0 auto;
+    line-height: 26px;
+    text-align: center;
+    background-color: #d7d7d7;
+  }
+
+  .preview-img {
+    text-align: center;
+  }
+
+  .van-image {
+    width: 80% !important;
+    height: 60% !important;
+  }
+
+  .rent-charges-text {
+    display: flex;
+    justify-content: space-around;
+    padding: 5px 20px;
+    width: 250px;
+  }
+
+  .notice {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    border-top: 1px solid black;
+  }
+
+  .notice>div:nth-child(1) {
+    display: flex;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 5px 0;
+  }
+
+  .notice-content {
+    padding: 0 20px;
+  }
+
+  .btn {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px;
+  }
+
+  .van-button {
+    width: 100px;
+    height: 35px;
+    background-color: #3eacdb;
+    color: #fff;
+    border-radius: 7px;
+  }
+
+  .van-toast {
+    top: 80%;
+  }
+</style>
+
+<body>
+  <div id="app" v-cloak>
+    <!-- 选择楼层房号弹出层 -->
+    <van-popup v-model="building_floor_site_show" round position="bottom">
+      <div class="popup-box">
+        <van-loading size="30px" vertical style="top: 250px;" v-show="building_floor_site_loading_ifShow">加载中...
+        </van-loading>
+        <van-cascader v-model="cascaderValue" title="请选择楼/层/房号" :options="building_select_list"
+          @close="building_floor_site_show = false" @finish="onFinish" />
+      </div>
+    </van-popup>
+    <div class="bed-header">
+      <span class="back" @click="back()">返回</span>
+      <div class="title">在线选房</div>
+    </div>
+    <div class="bed-content">
+      <van-cell-group>
+        <van-field v-model="choose_building" name="choose_building" @click="select_building_floor_site()" label="楼/层/房号"
+          placeholder="请选择楼/层/房号" readonly clickable />
+        </van-field>
+      </van-cell-group>
+      <div class="bed-content-center">
+        <div>房间情况</div>
+        <div>
+          <div>
+            <div class="situation-text">已入住情况</div>
+            <div class="situation-num-text">{{current_checkin_num}}/{{total_num}}</div>
+            <div class="situation-text">人</div>
+          </div>
+          <div>
+            <div class="situation-text">有无独立卫浴</div>
+            <div class="situation-num-text">{{own_bathroom_if}}</div>
+          </div>
+        </div>
+        <div class="preview-img">
+          <van-image src="http://imgsrc.baidu.com/forum/pic/item/950cccbf6c81800a9b646538bc3533fa838b47d3.jpg" />
+        </div>
+        <div class="rent-charges-text">
+          <div class="situation-text">房租费用:</div>
+          <div class="situation-num-text" style="width: 120px;">{{rent_charges}}</div>
+          <div class="situation-text">月</div>
+        </div>
+        <div class="rent-charges-text">
+          <div class="situation-text">管理费用:</div>
+          <div class="situation-num-text" style="width: 120px;">{{manage_charges}}</div>
+          <div class="situation-text">月</div>
+        </div>
+        <div class="notice">
+          <div>住宿须知</div>
+          <div class="notice-content">
+            <div>1.提交申请后,登录PC端打印申请表或联系对应老师进行打印,并补充其他资料进行审批</div>
+            <div>2.审核通过后,会通知进行选房</div>
+          </div>
+        </div>
+        <div class="btn">
+          <van-button @click="back">取消</van-button>
+          <van-button @click="sure">确认房间</van-button>
+        </div>
+      </div>
+    </div>
+</body>
+<script src="../../reference/vue/vue.js"></script>
+<script src="../../reference/vant/js/vant.min.js"></script>
+<script src="../../reference/js/jquery-2.1.4.js"></script>
+<script>
+  var app = new Vue({
+    el: "#app",
+    data() {
+      return {
+        baseUrl: localStorage.getItem("url"),
+        choose_building: "",
+        building_floor_site_show: false, //楼层房号弹出层是否展示
+        cascaderValue: '', //楼层房号选择的最后一项
+        building_select_list: [],  // 楼层房号选项列表，children 代表子选项，支持多级嵌套
+        building_floor_site_loading_ifShow: false, //控制楼层房号选择loading是否显示
+        site_value: "", //选择的房号value
+        current_checkin_num: 0, //当前住人
+        total_num: 0, //最多住人
+        own_bathroom_if: "", //有无独立浴室
+        rent_charges: "", //租赁费用
+        manage_charges: "", //管理费用
+        checkout_date: "", //退房时间
+        main_id: "",
+      }
+    },
+    methods: {
+      //点击选择楼层房号
+      select_building_floor_site() {
+        this.building_select_list = []
+        this.building_floor_site_show = true
+        this.building_floor_site_loading_ifShow = true
+        $.ajax({
+          url: this.baseUrl + "DMService",
+          type: "post",
+          headers: {
+            methodName: "getCanSelectRoom",
+            serviceName: "AppLinkService"
+          },
+          data: {
+            workNo: localStorage.getItem("workNo")
+          },
+          success: function (data) {
+            if (data.respCode == "200") {
+              app.building_floor_site_loading_ifShow = false
+              app.building_select_list = data.obj
+            } else {
+              app.building_floor_site_loading_ifShow = false
+              app.$toast(data.respMsg)
+            }
+          }
+        })
+      },
+      // 选择楼层房号 全部选项选择完毕后，会触发 finish 事件
+      onFinish({ selectedOptions }) {
+        this.building_floor_site_show = false;
+        this.choose_building = selectedOptions.map((item) => item.text).join('/');
+        this.site_value = selectedOptions[2].value
+        this.$nextTick(this.query_room_details());
+      },
+      query_room_details() {
+        $.ajax({
+          url: this.baseUrl + "MobileAgentService",
+          type: "post",
+          headers: {
+            methodName: "query",
+            serviceName: "DMXF01"
+          },
+          data: {
+            prames: JSON.stringify({
+              workNo: localStorage.getItem("workNo"),
+              roomId: this.site_value
+            })
+          },
+          success: function (data) {
+            if (data.status == 0) {
+              var room_details = data.blocks.result.rows[0]
+              app.total_num = room_details.bedNum
+              app.current_checkin_num = room_details.goRoomNum
+              app.own_bathroom_if = room_details.dormsIfwc || "未知"
+              app.rent_charges = room_details.dormsIfwc || "未知"
+              app.manage_charges = room_details.dormsIfwc || "未知"
+              app.checkout_date = room_details.estimatedOutDate
+              app.main_id = room_details.manId
+            } else {
+              app.$toast(data.msg);
+              return;
+            }
+          }
+        })
+      },
+      sure() {
+        if (this.site_value == "") {
+          this.$toast("请先选择房间")
+          return
+        }
+        $.ajax({
+          url: this.baseUrl + "MobileAgentService",
+          type: "post",
+          headers: {
+            methodName: "insert",
+            serviceName: "DMWI01"
+          },
+          data: {
+            prames: JSON.stringify({
+              estimatedOutDate: app.checkout_date,
+              roomId: this.site_value,
+              manId: this.main_id,
+              standardPriece: this.rent_charges == "未知" ? 0 : this.rent_charges
+            })
+          },
+          success: function (data) {
+            if (data.status == 200) {
+              app.$toast('分配成功!')
+              setTimeout(function () { location.href = "./main.html" }, 2000)
+            } else {
+              app.$toast(data.msg)
+            }
+          }
+        })
+      },
+      //左上角返回事件
+      back() {
+        location.href = "./main.html"
+      }
+    },
+  })
+</script>
+
+</html>

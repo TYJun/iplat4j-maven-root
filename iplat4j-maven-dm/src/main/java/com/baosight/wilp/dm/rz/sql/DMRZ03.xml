@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2022-02-10 21:55:27
+   		Version :  6.0.731.201809200158
+		tableName :.dorms_status_code 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 code_num  CHAR, 
+		 code_name  VARCHAR
+	-->
+<sqlMap namespace="DMRZ03">
+
+	<!-- 查询宿舍的状态列表 -->
+	<select id="queryStatusCodeList" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		select
+		id	as "id",  <!-- 主键 -->
+		code_num	as "codeNum",  <!-- 编码 -->
+		code_name	as "codeName" <!-- 编码名称/意义 -->
+		from dorms_status_code
+		order by code_num
+	</select>
+
+
+	<!-- 查询宿舍的状态列表数量 -->
+	<select id="countStatusCodeList" resultClass="int">
+		select count(*)
+		from (
+		select
+		id	as "id",  <!-- 主键 -->
+		code_num	as "codeNum",  <!-- 编码 -->
+		code_name	as "codeName" <!-- 编码名称/意义 -->
+		from dorms_status_code
+		order by code_num
+				 ) aaa
+	</select>
+
+	<!-- 查询状态含义 -->
+	<select id="queryStatusCodeMeaning" parameterClass="String"
+			resultClass="java.util.HashMap">
+		select
+		id	as "id",  <!-- 主键 -->
+		code_num	as "codeNum",  <!-- 编码 -->
+		code_name	as "codeName" <!-- 编码名称/意义 -->
+		from dorms_status_code
+		where code_num = #statusCode#
+	</select>
+
+</sqlMap>

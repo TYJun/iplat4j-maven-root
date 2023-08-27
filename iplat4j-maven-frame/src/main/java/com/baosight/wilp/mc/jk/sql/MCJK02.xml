@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="MCJK02">
+<!--	<insert id="insert">-->
+<!--	    INSERT INTO `iplat_frame_mzyy`.ac_personnel (-->
+<!--		  `id`,-->
+<!--		  `work_no`,-->
+<!--		  `name`,-->
+<!--		  `gender`,-->
+<!--		  `contact_tel`,-->
+<!--		  `id_no`,-->
+<!--		  `type`,-->
+<!--		  dept_name-->
+<!--		VALUES-->
+<!--		  (-->
+<!--			uuid(),-->
+<!--			 #STAFF_CODE#,-->
+<!--			 #STAFF_NAME#,-->
+<!--			 #GENDER_CODE#,-->
+<!--			 #TELEPHONE#,-->
+<!--			 #ID_NUMBER#,-->
+<!--			 #RCRT_CODE#,-->
+<!--			 #DEFAULT_ADMIN_DEP_NAME#-->
+<!--		  ) ;-->
+<!--	</insert>-->
+	<insert id="insert">
+		INSERT INTO `bona_frame_mzsrmyy`.`ac_personnel` (
+			`id`,
+			`work_no`,
+			`name`,
+			`gender`,
+			`contact_tel`,
+			`dept_id`,
+			`mailbox`,
+			`id_no`,
+			`pic_url`,
+			`type`,
+			`is_service`,
+			`status`,
+			`source`,
+			`cid`,
+			`cancellation`,
+			`rec_creater`,
+			`rec_create_time`,
+			`rec_revisor`,
+			`rec_revise_time`,
+			`zao`,
+			`wu`,
+			`wan`,
+			`dept_name`,
+			user_id,
+		    work_time,
+		    in_time,
+		    status_code,
+		    status_name
+			)
+		VALUES
+			(
+			UUID(),
+			#STAFF_CODE#,
+			#STAFF_NAME#,
+			#GENDER_CODE#,
+			#TELEPHONE#,
+			null,
+			null,
+			"000000000000123456",
+			null,
+			#RCRT_CODE#,
+			null,
+			"1",
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			"0",
+			"0",
+			"0",
+			#DEFAULT_ADMIN_DEP_NAME#,
+			#WEIXIN_WORK_ACCOUNT#,
+			#ACT_FROM#,
+			#ACT_TO#,
+			#STATUS_CODE#,
+            #STATUS_NAME#
+			) ;
+	</insert>
+
+
+	<update id="update">
+		UPDATE `bona_frame_mzsrmyy`.ac_personnel
+		SET
+		  `name`=#STAFF_NAME#,
+		  `gender`=#GENDER_CODE#,
+		  `id_no`="000000000000123456",
+		  `type`=#RCRT_CODE#,
+		  dept_id=#DEFAULT_BIZ_ID#,
+		  user_id = #WEIXIN_WORK_ACCOUNT#,
+		  post = #OCCUPATION_NAME#,
+		  work_time = #ACT_FROM#,
+		  in_time = #ACT_TO#,
+		  status_code = #STATUS_CODE#,
+		  status_name = #STATUS_NAME#
+		WHERE
+		 `work_no` = #STAFF_CODE#
+	</update>
+	<update id="update2">
+		UPDATE `bona_frame_mzsrmyy`.ac_personnel
+		SET
+		`dept_id`=#dept_id#
+		WHERE
+		 `work_no` = #STAFF_CODE#
+	</update>
+
+	<update id="update3">
+		update bona_frame_mzsrmyy.ac_personnel
+        set
+        status = '1'
+        where
+        work_no = #STAFF_CODE#
+        and
+        status_code in ('002','003')
+	</update>
+
+	<select id="query" parameterClass="com.baosight.wilp.mc.jk.domain.Personnel"
+			resultClass="java.util.HashMap">
+		SELECT
+		work_no
+		FROM `bona_frame_mzsrmyy`.ac_personnel WHERE 1=1
+		<isNotEmpty prepend=" AND " property="STAFF_CODE">
+			`work_no` = #STAFF_CODE#
+		</isNotEmpty>
+	</select>
+
+	<select id="query2" resultClass="com.baosight.wilp.mc.jk.domain.Personnel"
+			parameterClass="java.util.HashMap">
+		SELECT
+		id as id
+		FROM `bona_frame_mzsrmyy`.ac_department WHERE 1=1
+		<isNotEmpty prepend=" AND " property="DEFAULT_ADMIN_DEP_CODE">
+			`dept_num` = #DEFAULT_ADMIN_DEP_CODE#
+		</isNotEmpty>
+	</select>
+
+
+	<insert id="insert1">
+		INSERT INTO `bona_wilp_mzsrmyy`.`ac_personnel` (
+			`id`,
+			`work_no`,
+			`name`,
+			`gender`,
+			`contact_tel`,
+			`dept_id`,
+			`mailbox`,
+			`id_no`,
+			`pic_url`,
+			`type`,
+			`is_service`,
+			`status`,
+			`source`,
+			`cid`,
+			`cancellation`,
+			`rec_creater`,
+			`rec_create_time`,
+			`rec_revisor`,
+			`rec_revise_time`,
+			`zao`,
+			`wu`,
+			`wan`,
+			`dept_name`,
+			user_id
+		)
+		VALUES
+			(
+				UUID(),
+				#STAFF_CODE#,
+				#STAFF_NAME#,
+				#GENDER_CODE#,
+				#TELEPHONE#,
+				null,
+				null,
+				"000000000000123456",
+				null,
+				#RCRT_CODE#,
+				null,
+				"1",
+				null,
+				null,
+				null,
+				null,
+				null,
+				"平台获取",
+				now(),
+				"0",
+				"0",
+				"0",
+				#DEFAULT_ADMIN_DEP_NAME#,
+				#WEIXIN_WORK_ACCOUNT#
+			) ;
+	</insert>
+
+
+
+</sqlMap>

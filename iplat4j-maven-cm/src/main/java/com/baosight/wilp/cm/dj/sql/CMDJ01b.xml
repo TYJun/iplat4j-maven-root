@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CMDJ01b">
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			REC_CREATOR	as "recCreator",
+			REC_CREATE_TIME	as "recCreateTime",
+			REC_REVSIOR	as "recRevsior",
+			REC_REVISE_TIME	as "recReviseTime",
+			ARCHIVE_FLAG	as "archiveFlag",  <!-- 归档标记 -->
+			ID	as "id",
+			PAY_TYPE_NUM	as "payTypeNum",  <!-- 付款类型编码 -->
+			NO	as "no",  <!-- 序号 -->
+			LAST_TIME	as "lastTime",  <!-- 距离上次付款时间 -->
+			PAY_RATE	as "payRate",  <!-- 付款比例 -->
+			""	as "planPaymentTime",
+			""	as "reallyPaymentTime",
+			REMARK	as "remark" <!-- 备注 -->
+		FROM
+			cm_contract_payment_details
+		WHERE
+			PAY_TYPE_NUM = #payAgreNum#
+		<dynamic prepend="ORDER BY">
+        	<isNotEmpty property="orderBy">
+    			$orderBy$
+   		 	</isNotEmpty>
+	   		<isEmpty property="orderBy">
+				NO
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM cm_contract_payment_details WHERE PAY_TYPE_NUM = #payAgreNum#
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cm_contract_bill_payment
+			(
+				REC_CREATOR,
+				REC_CREATE_TIME,
+				REC_REVSIOR,
+				REC_REVISE_TIME,
+				ARCHIVE_FLAG,  <!-- 归档标记 -->
+				ID,
+				CONT_NO,  <!-- 合同号 -->
+				SUB_NO,
+				LAST_TIME,  <!-- 距离上次付款时间 -->
+				PAY_RATE,  <!-- 付款比例 -->
+				PAY_AMOUNT,  <!-- 付款金额 -->
+				REMARK,  <!-- 备注 -->
+				PAY_FLAG,  <!-- 付款标记 -->
+				msg_status,
+				PLAN_PAYMENT_TIME,
+			 	NO
+			)		 
+	    VALUES
+	    	(
+	    		#recCreator#,
+	    		#recCreateTime#,
+	    		#recRevsior#,
+	    		#recReviseTime#,
+	    		#archiveFlag#,
+	    		#id#,
+	    		#contNo#,
+	    		#subNo#,
+	    		#lastTime#,
+	    		#payRate#,
+	    		#payAmount#,
+	    		#remark#,
+	    		#payFlag#,
+	    		#msgStatus#,
+	    	 	#planPaymentTime#,
+	    	 	#no#
+	    	) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM cm_contract_bill_payment WHERE CONT_NO = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE
+			cm_contract_bill_payment 
+		SET
+			REC_CREATOR	= #recCreator#,   
+			REC_CREATE_TIME	= #recCreateTime#,   
+			REC_REVSIOR	= #recRevsior#,   
+			REC_REVISE_TIME	= #recReviseTime#,   
+			ARCHIVE_FLAG = #archiveFlag#,   <!-- 归档标记 -->  
+			CONT_NO	= #contNo#,   <!-- 合同号 -->  
+			SUB_NO	= #subNo#,   
+			LAST_TIME = #lastTime#,   <!-- 距离上次付款时间 -->  
+			PAY_RATE = #payRate#,   <!-- 付款比例 -->  
+			PAY_AMOUNT = #payAmount#,   <!-- 付款金额 -->  
+			REMARK = #remark#,   <!-- 备注 -->  
+			PAY_FLAG = #payFlag#,   <!-- 付款标记 -->  
+			msg_status = #msgStatus#  
+		WHERE 	
+			ID = #id#
+	</update>
+
+	<select id="queryPay" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			LAST_TIME lastTime,
+			PAY_RATE payRate,
+			PAY_AMOUNT payAmount,
+			REMARK remark,
+			PLAN_PAYMENT_TIME planPaymentTime
+		FROM
+			cm_contract_bill_payment
+		WHERE
+			CONT_NO = #id#
+		order by
+			CAST(NO as SIGNED) ASC
+	</select>
+
+	<select id="countPay" resultClass="int">
+		SELECT
+			a.ID
+		FROM
+			cm_contract_payment_details ccpd,
+			( SELECT
+				  ccbp.ID,
+				  ccbp.LAST_TIME,
+				  ccbp.REMARK,
+				  ccbp.PAY_AMOUNT,
+				  ccbp.PAY_RATE,
+				  ccbp.PLAN_PAYMENT_TIME ,
+				  ccbp.CONT_NO,
+				  ccb.PAY_AGRE_NUM
+			  FROM
+				  cm_contract_bill_payment ccbp
+					  LEFT JOIN cm_contract_bill ccb ON ccb.ID = ccbp.CONT_NO
+			  WHERE ccbp.CONT_NO = #id#
+				AND ccb.PAY_AGRE_NUM = #payAgreNum#
+			) a
+		WHERE
+			ccpd.PAY_TYPE_NUM  = #payAgreNum#
+		GROUP BY a.ID
+	</select>
+</sqlMap>

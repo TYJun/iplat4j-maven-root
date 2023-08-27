@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="no-js">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../../reference/bootstrap-3.3.5/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../reference/bootstrap-3.3.5/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../reference/loading/loaders.min.css">
+    <link rel="stylesheet" href="../../reference/mobiscroll-2.5.2/css/mobiscroll.custom-2.5.2.min.css">
+    <link rel="stylesheet" href="../../css/android-ios.css">
+    <link rel="stylesheet" href="../../css/loading.css" />    
+    <link rel="stylesheet" href="css/colorGreen.css">		
+</head>
+<STYLE TYPE="text/css">
+    body {
+        background: #F1F1F1;
+    }
+    
+    hr {
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+    
+    h3 {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .btn-sb {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background: #2aabd2;
+        text-align: center;
+        height: 50px;
+        line-height: 50px;
+        color: #fff;
+        font-size: 18px;
+    }
+    
+    .navbar {
+        margin-bottom: 0px;
+    }
+    
+    .nav>li>a {
+        padding: 5px 5px;
+    }
+    
+    h1 {
+        margin: 0 0 0rem;
+    }
+    
+    .row {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+</STYLE>
+
+<body>
+    <div>
+        <nav class="navbar navbar-fixed-top navbar-inverse nav-height">
+            <div id="back" class="glyphicon-btn-left">
+                <span class="glyphicon glyphicon-triangle-left userBtn" style="margin-left:1rem;"></span>
+            </div>
+            <div>
+                <h1 class="title-right">班组综合查询列表</h1>
+            </div>
+        </nav>
+    </div>
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div id="loading" class="spinner" style="position:fixed;z-index:9999;text-align:center;width:100%;">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+
+    <div id="content" class="top50">
+        
+    </div>
+    <div id="loadMore" class="alert" role="alert" style="background-color:#F5F5F5;text-align:center;">
+        加载更多
+    </div>
+
+</body>
+
+<script src="../../reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../../reference/bootstrap-3.3.5/js/bootstrap.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="../../cordova.js"></script>
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem('url');
+    // var baseUrl="http://192.168.1.15:8081/smp/"
+   // console.log(baseUrl)
+   var url = location.search;
+   console.log(url)
+   var taskNo = url.substring(1, url.length);
+   var hosId = localStorage.getItem("hosId");
+   var workNo = localStorage.getItem("workNo");
+   var deptNum = ''
+   var page = 1
+   $("#back").click(function() {
+      location.href = "taskList.html";
+    });
+
+    function init(){
+        $.ajax({
+            url: baseUrl + 'app_maintainController.do?queryAlltasks',
+            type: 'post',
+            data: {
+                workNo:workNo,
+                page:page,
+                rows:'10'
+            },
+            timeout:30000,
+            success: function(data) {
+                var data = JSON.parse(data);
+                console.log(data);
+                list = data.obj;
+                var taskList = "";
+                for(var i = 0; i < list.length; i++) {
+                    taskNo = list[i].taskNo;
+                    statusCode = list[i].statusCode;
+                    statusName = list[i].statusCode;
+                    summpary = list[i].summpary;
+                    impFlag = list[i].impFlag;
+                    currentDealer = list[i].currentDealer.split(',');
+                    isCurrentTask = list[i].isCurrentTask;
+                    deptName = list[i].deptName == "" ? "&nbsp;" : list[i].deptName;
+                    isExecutor = list[i].isExecutor;
+                    reqSpotName = list[i].reqSpotName;
+                    itemName = list[i].itemName;
+                    recCreator = list[i].recCreator;
+                    taskListComments = list[i].comments	
+                    recCreateTime = list[i].recCreateTime.substring(0, 4) + '-' + list[i].recCreateTime.substring(4, 6) + '-' + list[i].recCreateTime.substring(6, 8) + '&nbsp' + list[i].recCreateTime.substring(8, 10) + ':' + list[i].recCreateTime.substring(10, 12);
+                    desc = itemName + "-" + reqSpotName;
+                    taskList += createHtml( '', '', '', recCreateTime, taskNo, statusCode, statusName, impFlag, isCurrentTask, isExecutor, recCreator, desc, deptName, currentDealer, 'N',taskListComments); 
+                }         
+                $("#content").append(taskList);  
+                $('.detail').unbind("click").click(function() {
+                    var taskNo = $(this).text();
+                    var sigture = $(this).attr('id');
+                    var isPhoto = $(this).attr('isPhoto');
+                    localStorage.setItem('sigture', sigture);
+                    localStorage.setItem('isPhoto', isPhoto);
+                    // alert(hosId)
+                    if(hosId == "0510WXSDYRMYY" || hosId == "010SDYKDXBJDXYY") {                       
+                        location.href = "taskDetail-specific1.html?" + taskNo;
+                    } else {
+                        location.href = "taskDetail.html?" + taskNo;
+                    }
+                });
+                $("#loading").hide();       
+            },
+            complete: function(XMLHttpRequest, status) { //请求完成后最终执行参数
+                if(status == 'timeout') {
+                    $("#loading").hide();
+                    $('#warn small').html('加载失败！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);　　　　
+                } else if(status == 'error') {
+                    $("#loading").hide();
+                    $('#warn small').html('网络异常！');
+                    $("#warn").fadeIn(500);
+                }　
+            }          
+        });
+    };
+
+    function createHtml(app_finish, isPhoto, signature, recCreateTime, taskNo, statusCode, statusName, impFlag, isCurrentTask, isExecutor, recCreator, desc, deptName, str, allowBack,comments) {
+        var html = "";
+        if(impFlag == "Y") {
+            html = html + "<div id='div-child' class='panel panel-danger'>";
+            html = html + "<div class='panel-heading row' style='background:#F58482;border:none;font-size:15px;color:#fff;'><div class='col-xs-8 col-sm-8 col-md-8 col-lg-8 all-nopadding'>工单号：<a class='detail' id='" + signature + "' isPhoto='" + isPhoto + "' app_finish='" + app_finish + "' style='color:#fff;'>" + taskNo + "</a></div><div id='" + taskNo + "' class='col-xs-4 col-sm-4 col-md-4 col-lg-4 all-nopadding right'><a style='color:#fff;'>" + statusName + "</a></div></div><div class='panel-body'>";
+        } else {
+            html = html + "<div class='panel panel-default' style='margin-bottom:15px;border:none;'>";
+            html = html + "<div class='panel-heading row' style='background:#FFF;border:none;font-size:15px;'><div class='col-xs-8 col-sm-8 col-md-8 col-lg-8 all-nopadding'>工单号：<a id='" + signature + "' isPhoto='" + isPhoto + "' app_finish='" + app_finish + "' class='detail'>" + taskNo + "</a></div><div id='" + taskNo + "' class='col-xs-4 col-sm-4 col-md-4 col-lg-4 all-nopadding right'><a style='color:#F5A224'>" + statusName + "</a></div></div><div class='panel-body'>";
+        }
+        html += "<hr style='margin-top:-15px;margin-bottom:10px;'>";
+        html += "<div style='line-height:25px;font-size:13px;'>";
+        html = html + "<div class='col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey'>报修科室</div>";
+        html = html + "<div class='col-xs-8 col-sm-8 col-md-8 col-lg-8 outPlace' style='text-align:right;'>" + deptName + "</div>";
+        html += "</div>";
+        html += "<div style='line-height:25px;font-size:13px;'>";
+        html = html + "<div class='col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey'>报修时间</div>";
+        html = html + "<div class='col-xs-8 col-sm-8 col-md-8 col-lg-8 outPlace' style='text-align:right;'>" + recCreateTime + "</div>";
+        html += "</div>";
+        html += "<div style='line-height:25px;font-size:13px;'>";
+        html = html + "<div class='col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey'>维修概述</div>";
+        html = html + "<div class='col-xs-8 col-sm-8 col-md-8 col-lg-8 outPlace' style='text-align:right;'>" + desc + "</div>";
+        html += "</div>";
+        // html = html + "<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'><hr style='margin-top:4px;margin-bottom:10px;width:109%;margin-left:-4.5%;'></div>";
+        html = html + "</div></div>"
+        return html;
+    }
+    $("#loadMore").click(function() {
+        page = page + 1;
+        $("#loading").show();
+        init()
+    });
+    $(function(){
+        init()
+    })
+</script>
+</html>

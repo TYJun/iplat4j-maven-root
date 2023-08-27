@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.min.css" />
+    <link rel="stylesheet" href="../reference/css/common.css" />
+    <link rel="stylesheet" href="css/loading.css" />
+</head>
+<style type="text/css">
+    /*body {*/
+    /*	background: #eee;*/
+    /*	font-family: 'Helvetica Neue', Helvetica, sans-serif;*/
+    /*	font-size: 14px;*/
+    /*	line-height: 40px;*/
+    /*	color: #000;*/
+    /*}*/
+    
+    body {
+        touch-action: none;
+    }
+    
+    .task-div {
+        width: 100%;
+        margin: 10px auto;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 15px;
+        padding-bottom: 10px;
+        background: #fff;
+        border-radius: 2px;
+        box-shadow: 0px 2px 5px #d4d4d4;
+    }
+    
+    .task-title {
+        height: 40px;
+        line-height: 40px;
+        border-bottom: 1px solid #eee;
+        font-weight: bold;
+        color: #333333;
+    }
+    
+    .status-applying {
+        color: #ff9800;
+    }
+    
+    .status-accept {
+        color: #0dc515;
+    }
+    
+    .status-remove {
+        color: #f5675c;
+    }
+    
+    .status-unknown {
+        color: #f5675c;
+    }
+    
+    .task-info {
+        padding-top: 5px;
+        color: #333;
+    }
+    
+    .info-title {
+        color: #5d5d5d;
+    }
+    
+    .mui-table-view:before {
+        background-color: #eee;
+    }
+    
+    .mui-table-view:after {
+        background-color: #eee;
+    }
+    
+    .btn-div {
+        width: 100%;
+        text-align: right;
+        border-top: 1px solid #eee;
+        margin-top: 10px;
+        padding-top: 10px;
+        padding-bottom: 5px;
+    }
+    
+    .btn-div button {
+        margin-left: 10px;
+    }
+    
+    .btn-views {
+        width: 80px;
+        border-radius: 15px;
+        border: 1px solid #30c37c;
+        color: #30c37c;
+    }
+    
+    .title-deal {
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        opacity: 0.77;
+        font-size: 17px;
+        float: left;
+        width: 40%;
+    }
+    
+    .submit {
+        position: fixed;
+        bottom: 0px;
+        left: 0;
+        right: 0;
+        background: #2aabd2;
+        text-align: center;
+        line-height: 50px;
+        height: 50px;
+        color: #ffffff;
+        font-size: 19px;
+    }
+    
+    .diceng {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 100000;
+        background: black;
+        opacity: 0.5;
+    }
+    
+    .applyMoney {
+        position: fixed;
+        z-index: 100099;
+        width: 90%;
+        left: 5%;
+        top: 180px;
+        background: #ffffff;
+    }
+    
+    .applyTitle {
+        height: 50px;
+        line-height: 50px;
+        border-bottom: 1px solid #e1e1e1;
+        text-align: center;
+        font-size: 20px;
+        color: #666666;
+    }
+    
+    .applyInput {
+        height: 80px;
+        line-height: 80px;
+        padding: 22.5px 15px;
+    }
+    
+    .setInput {
+        color: #333333;
+        width: 100%;
+        border: 0;
+        outline: none;
+        text-align: left;
+        font-size: 15px;
+    }
+    
+    .editButtons {
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        font-size: 19px;
+    }
+    
+    .word-omit {
+        color: #333333;
+    }
+    
+    .mui-bar-tab .mui-tab-item.mui-active {
+        color: #30c37c;
+    }
+    
+    .search {
+        /*margin-top: 2px;*/
+        background: #fff;
+        margin: 10px auto;
+        width: 96%;
+    }
+    
+    .name {
+        padding-left: 15px;
+        padding-right: 15px;
+        /*padding-top: 15px;*/
+    }
+    
+    .btn1 {
+        margin-bottom: 5px;
+    }
+    /*扫码按钮
+    */
+    /*.scan{*/
+    /*	color: #fff;*/
+    /*	margin-top: 30px;*/
+    /*	margin-bottom: 30px;*/
+    /*	background-color: #2aabd2;*/
+    /*}*/
+    
+    .btn2 {
+        color: #fff;
+        margin-left: 50px;
+        background-color: #2aabd2;
+    }
+    
+    .content1 {
+        position: absolute;
+        height: 500px;
+        width: 100%;
+        overflow-y: auto;
+    }
+    
+    .scanCode {
+        width: 60px;
+        height: 60px;
+        position: fixed;
+        z-index: 4;
+        right: 40px;
+        bottom: 40px;
+        background-color: #0c79b1;
+    }
+    
+    .scanImg {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .before_hide:before {
+        display: none;
+    }
+    
+    .after_hide:after {
+        display: none;
+    }
+    /*.mui-scroll-wrapper{overflow-y:scroll}*/
+    /*.mui-scrollbar {*/
+    /*	!* position: absolute; *!*/
+    /*	z-index: 9998;*/
+    /*	flow: hidden;*/
+    /*	-webkit-transition: 500ms;*/
+    /*	transition: 500ms;*/
+    /*	transform: translateZ(0px);*/
+    /*	pointer-events: none;*/
+    /*	opacity: 0;*/
+    /*}*/
+</style>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">设备列表</h1>
+        <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+        返回
+      </button>
+        <!--			<button onclick="serviceRepair()" class="mui-btn mui-btn-blue mui-btn-link  mui-pull-right">-->
+        <!--      设备报修-->
+        <!--      </button>-->
+    </header>
+
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div id="loading" class="loading-div" style="z-index: 9" hidden>
+        <div class="loading-center">
+            <div class="loading-center-absolute">
+                <div class="object" id="object_one"></div>
+                <div class="object" id="object_two"></div>
+                <div class="object" id="object_three"></div>
+                <div class="object" id="object_four"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mui-content">
+        <div class="search">
+            <div class="mui-row row-content name">
+                <div class="mui-col-sm-4 mui-col-xs-4" style="padding-top: 10px">
+                    设备名称
+                </div>
+                <div class="mui-col-sm-8 mui-col-xs-8 middle">
+                    <input type="text" class="deviceName" />
+                </div>
+            </div>
+            <div class="mui-row row-content name" style="text-align: center">
+                <div class="mui-col-sm-4 mui-col-xs-4" style="padding-top: 10px"></div>
+                <div class="mui-col-sm-8 mui-col-xs-8 middle">
+                    <button class="reset btn1">重置</button>
+                    <button class="btn1 btn2 query">查询</button>
+                </div>
+            </div>
+            <!-- <div style="text-align: center">
+            					<button class="scan">扫码获取信息</button>
+            				</div> -->
+        </div>
+        <div class="mui-content mui-scroll-wrapper" id="pullrefresh" style="margin-top: 40px; background-color: rgb(238 238 238)">
+            <div class="mui-table-view mui-table-view-chevron mui-scroll before_hide after_hide" style="background-color: #eee">
+                <!--			<div>-->
+                <!--				<a href="tel:15733205015">拨打1573320****</a>-->
+
+                <!--			</div>-->
+                <div class="content1"></div>
+                <!--				<div class="task-div">-->
+                <!--						<div class="mui-row task-title">-->
+                <!--							<div class="mui-col mui-col-xs-8 task-no">订单号：-->
+                <!--								<span id="billNo"></span>-->
+                <!--							</div>-->
+                <!--							<div class="mui-col mui-col-xs-4 right status-applying">未领取</div>-->
+                <!--						</div>-->
+                <!--						<div class="task-content ">-->
+                <!--							<div class="mui-row task-info">-->
+                <!--								<div class="mui-col mui-col-xs-4">下单时间</div>-->
+                <!--								<div class="mui-col mui-col-xs-8 right word-omit">-->
+                <!--									<sapn id="start">-->
+                <!--										</span>-->
+                <!--								</div>-->
+                <!--							</div>-->
+                <!--							<div class="mui-row task-info">-->
+                <!--								<div class="mui-col mui-col-xs-4">总金额</div>-->
+                <!--								<div class="mui-col mui-col-xs-8 right word-omit"><span id="end"></span></div>-->
+                <!--							</div>-->
+                <!--							<div class="mui-row task-info">-->
+                <!--								<div class="mui-col mui-col-xs-4">菜品数</div>-->
+                <!--								<div class="mui-col mui-col-xs-8 right word-omit"><span id="applyReason"></span></span>-->
+                <!--								</div>-->
+                <!--							</div>-->
+                <!--						</div>-->
+                <!--						<div class="task-content ">-->
+                <!--							<div class="mui-row task-info">-->
+                <!--								<div class="mui-col mui-col-xs-12">订单详情</div>-->
+                <!--							</div>-->
+
+                <!--							<div class="mui-row task-info" style="padding-top: 5px;">-->
+                <!--								<div class="mui-col mui-col-xs-12">-->
+                <!--									<input type="text" style="padding: 0px;border: 0px;outline: none;text-align: right;margin-bottom:0;height: 20px;line-height: 20px;" readonly="readonly" value="我是个天才我是个天才我是个天才我是个天才我是个天才我是个天才我是个天才我是个天才" />-->
+
+                <!--								</div>-->
+                <!--							</div>-->
+                <!--						</div>-->
+                <!--						<div class="btn-div">-->
+                <!--							<button type="button" class="mui-btn mui-btn-outlined btn-views conplete">送餐完成</button>-->
+                <!--						</div>-->
+                <!--					</div>-->
+            </div>
+        </div>
+    </div>
+
+    <!--	     <div class="scanCode">-->
+    <!--			 <div style="text-align: center;margin-top: 5px;" class="scan">-->
+    <!--				 <img src="../../img/scan.png" alt="" class="scanImg">-->
+    <!--			 </div>-->
+
+    <!--		 </div>-->
+</body>
+<script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../reference/js/common.js" type="text/javascript"></script>
+<script src="../../cordova.js" type="text/javascript"></script>
+<script type="text/javascript">
+    //获取isExist本地存储的值
+    var isExist = localStorage.getItem("isExist");
+    //获取url本地存储的值
+    var baseUrl = localStorage.getItem("url");
+    //获取workNo本地存储的值
+    var workNo = localStorage.getItem("workNo");
+    //	var baseUrl = "http://192.168.1.138:8080/smp/";
+    //获取deptCode本地存储的值
+    var deptCode = localStorage.getItem("deptCode");
+    //输出deptCode数据类型
+    console.log(typeof deptCode);
+
+    var taskListAppend = ""; //设备列表
+    //当以get方式在url中传递参数时，可以利用location的search属性提取参数的值。
+    //获取的是上一个页面传过来的?id=
+    var url = location.search;
+
+    // var deviceId ="";
+    //var spotId = url.substring(1, url.length);
+    //接收上一个页面main.html传过来的参数
+    //split分隔符，假设url = ?id = 01853103-10ea-4935-85ba-46a5e05e5868 ,split("=")后显示的是?id和01853103-10ea-4935-85ba-46a5e05e5868。
+    //[1]表示返回值数组的长度为1的值就是01853103-10ea-4935-85ba-46a5e05e5868
+    var id = url.split('=')[1];
+    //alert(id);
+    //var id = "01853103-10ea-4935-85ba-46a5e05e5868";
+    var spotId = id;
+    //alert(spotId);
+    // machineId = "09661161c70a4ecd895317ae2d5d8c9a";
+    var page = 1;
+    var repairAdd = "";
+    $(function() {
+        //初始化加载
+        loadViews();
+        // mui('.mui-scroll-wrapper').scroll();         //初始化单页的区域滚动
+        page = 1;
+    });
+
+    //解决 所有a标签 导航不能跳转页面
+    mui("body").on("tap", "a", function() {
+        document.location.href = this.href;
+    });
+
+    function loadViews() {
+        console.log($(".deviceName").val());
+        //加载显示
+        $("#loading").show();
+        if (deptCode == "undefined") {
+            deptCode = "";
+        }
+        //封装一个对象prame来传参
+        var prame = {
+            machineId: id,
+            // machineId:deviceId,
+            userId: workNo,
+            deptNum: deptCode,
+            machineName: $(".deviceName").val(),
+            page: page,
+            rows: "10",
+        };
+        //将对象prame转为字符串
+        var prames = JSON.stringify(prame);
+        console.log(prames);
+        $.ajax({
+            url: baseUrl + "MobileAgentService",
+            type: "post",
+            headers: {
+                methodName: "queryDeviceList",
+                serviceName: "DFDAApp",
+            },
+            data: {
+                prames,
+            },
+            success: function(data) {
+                console.log(data);
+                //加载隐藏
+                $("#loading").hide();
+                // var data = eval("(" + data + ")");
+                // console.log(data);
+                //获取传过来的列表信息list
+                var list = data.attr.list;
+                //表单
+                taskListAppend = "";
+                // var list = data.obj;
+                console.log(list);
+                for (var i = 0; i < list.length; i++) {
+                    taskListAppend += createView1(
+                        list[i].spotCode,
+                        list[i].fixedPlace,
+                        list[i].maintUnit,
+                        list[i].status,
+                        list[i].manuTel,
+                        list[i].manufacturerName,
+                        list[i].machineTypeName,
+                        list[i].cons,
+                        list[i].contactTel,
+                        list[i].deptName,
+                        list[i].fixedTime,
+                        list[i].machineCode,
+                        list[i].machineName,
+                        list[i].models,
+                        list[i].supplierId,
+                        list[i].warrantyDate,
+                        list[i].outFactoryNo,
+                        list[i].building,
+                        list[i].floor
+                    );
+                }
+                //append函数：将taskListAppend插入到标签为div.content1中
+                $("div.content1").append(taskListAppend);
+            },
+        });
+    }
+    //封装函数
+    function createView1(
+        spotCode,
+        fixedPlace,
+        maintUnit,
+        status,
+        manuTel,
+        manufacturerName,
+        machineTypeName,
+        cons,
+        contactTel,
+        deptName,
+        fixedTime,
+        machineCode,
+        machineName,
+        models,
+        supplierId,
+        warrantyDate,
+        outFactoryNo,
+        building,
+        floor
+    ) {
+        cons = cons == null ? "" : cons;
+        contactTel = contactTel == null ? "" : contactTel;
+
+        var telArray = contactTel.split(","); //供应商电话的数组
+
+        manuTel = manuTel == null ? "" : manuTel;
+        // var telArray1 =manuTel.split(','); //厂商电话的数组
+        deptName = deptName == null ? "" : deptName;
+        fixedTime = fixedTime == null ? "" : fixedTime;
+        warrantyDate = warrantyDate == null ? "" : warrantyDate;
+
+        // var json = {
+        // 	"machineCode": machineCode,
+        // 	"machineName": machineName,
+        // 	"building": building,
+        // 	"floor": floor
+        // }
+        //
+        // repairAdd = JSON.stringify(json);
+        // console.log("repairAdd",repairAdd)
+        var html = "";
+        html += '<div class="task-div">';
+        html += '<div class="mui-row task-title">';
+        html +=
+            '<div class="mui-col mui-col-xs-12 task-no">设备编码：<span id="billNo" style="color:#30c37c;">' +
+            machineCode +
+            "</span></div>";
+        //			html += '<div class="mui-col mui-col-xs-4 right  status-accept">已取消</div>';
+        html += "</div>";
+        html += '<div class="task-content ">';
+        html += '<div class="mui-row task-info">';
+        html +=
+            '<div class="mui-col mui-col-xs-4" style="color:#999;">设备名称</div>';
+        html += '<div class="mui-col mui-col-xs-8 right word-omit">';
+        html += '<span id="start">' + machineName + "</span></div></div>";
+        html += '<div class="mui-row task-info">';
+        html +=
+            '<div class="mui-col mui-col-xs-4" style="color:#999;">出厂编号</div>';
+        html += '<div class="mui-col mui-col-xs-8 right word-omit">';
+        html += '<span id="start">' + outFactoryNo + "</span></div></div>";
+        html += '<div class="mui-row task-info">';
+        html +=
+            '<div class="mui-col mui-col-xs-4" style="color:#999;">型号</div>';
+        html += '<div class="mui-col mui-col-xs-8 right word-omit">';
+        html += '<span id="start">' + models + "</span></div></div>";
+        html += '<div class="mui-row task-info">';
+        html +=
+            '<div class="mui-col mui-col-xs-4" style="color:#999;">设备分类</div>';
+        html +=
+            '<div class="mui-col mui-col-xs-8 right word-omit" >' +
+            machineTypeName +
+            "</div>";
+        html += "</div>";
+        html += '<div class="mui-row task-info">';
+        html +=
+            '<div class="mui-col mui-col-xs-4" style="color:#999;">地点信息</div>';
+        html +=
+            '<div class="mui-col mui-col-xs-8 right " ><input style="outline:none;border:0;font-size:14px;text-align:right;" readonly value="' +
+            building +
+            "&nbsp;&nbsp;" +
+            floor +
+            '"/></div>';
+        html += "</div>";
+        html += '<div class="mui-row task-info">';
+        html +=
+            '<div class="mui-col mui-col-xs-4" style="color:#999;">供应商名称</div>';
+        html +=
+            '<div class="mui-col mui-col-xs-8 right word-omit"><span id="applyReason">' +
+            supplierId +
+            "</span></div>";
+        html += "</div>";
+        html += '<div class="mui-row task-info">';
+        html +=
+            '<div class="mui-col mui-col-xs-4" style="color:#999;">供应商ID</div>';
+        html +=
+            '<div class="mui-col mui-col-xs-8 right word-omit"><span >' +
+            cons +
+            "</span></div>";
+        html += "</div>";
+        html += '<div class="mui-row task-info">';
+        html +=
+            '<div class="mui-col mui-col-xs-4" style="color:#999;">设备状态</div>';
+        html += '<div class="mui-col mui-col-xs-8 right word-omit">';
+        // if(telArray.length>0){
+        // 	for(var i=0;i<telArray.length;i++){
+        // 		html +='<div><a href="tel:'+telArray[i]+'" style="color:#2196f3;">' + telArray[i] + '</a></div>'
+        // 	}
+        // }
+        html += "<span>" + status + "</span>";
+
+        html += "</div>";
+        html += "</div>";
+
+        html += '<div class="mui-row task-info">';
+        html +=
+            '<div class="mui-col mui-col-xs-4" style="color:#999;">厂商名称</div>';
+        html +=
+            '<div class="mui-col mui-col-xs-8 right word-omit"><span id="applyReason">' +
+            manufacturerName +
+            "</span></div>";
+        html += "</div>";
+
+        html += '<div class="mui-row task-info">';
+        html +=
+            '<div class="mui-col mui-col-xs-4" style="color:#999;">保养单位</div>';
+        html += '<div class="mui-col mui-col-xs-8 right word-omit">';
+        // if(telArray1.length>0){
+        // 	for(var i=0;i<telArray1.length;i++){
+        // 		html +='<div><a href="tel:' + telArray1[i] + '" style="color:#2196f3;">' + telArray1[i] + '</a></div>'
+        // 	}
+        // }
+        html += "<span>" + maintUnit + "</span>";
+        html += "</div>";
+        html += "</div>";
+
+        html += '<div class="mui-row task-info">';
+        html +=
+            '<div class="mui-col mui-col-xs-4" style="color:#999;">使用科室</div>';
+        html +=
+            '<div class="mui-col mui-col-xs-8 right word-omit"><span >' +
+            deptName +
+            "</span></div>";
+        html += "</div>";
+        html += '<div class="mui-row task-info">';
+        html +=
+            '<div class="mui-col mui-col-xs-4" style="color:#999;">安装日期</div>';
+        html +=
+            '<div class="mui-col mui-col-xs-8 right word-omit"><span >' +
+            fixedTime +
+            "</span></div>";
+        html += "</div>";
+        html += '<div class="mui-row task-info">';
+        html +=
+            '<div class="mui-col mui-col-xs-4" style="color:#999;">质保到期日</div>';
+        html +=
+            '<div class="mui-col mui-col-xs-8 right word-omit"><span >' +
+            warrantyDate +
+            "</span></div>";
+        html += "</div>";
+        if (isExist == "true") {
+            html +=
+                '<div class="mui-row task-info" style="text-align: center"><div><button  class="repair" machineCode ="' +
+                machineCode +
+                '" spotCode="' +
+                spotCode +
+                '" machineName="' +
+                machineName +
+                '"   building="' +
+                building +
+                '"  floor="' +
+                floor +
+                '" fixedPlace="' +
+                fixedPlace +
+                '" style="background-color: #2aabd2;color: #ffffff;">设备报修</button></div></div>';
+        }
+        html += "</div>";
+        html += "</div>";
+        return html;
+    }
+
+    document.getElementById("back").addEventListener("tap", function() {
+        location.href = "../../menu.html";
+    });
+
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        /**
+         * 系统返回键监听
+         */
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    /**
+     * 系统返回键方法
+     * @return {[type]} [description]
+     */
+    function onBackKeyDown() {
+        location.href = "../../menu.html";
+    }
+
+    /*
+     * 设备报修
+     * */
+    mui("body").on("tap", ".repair", function() {
+        var code = $(this).attr("machineCode");
+        var name = $(this).attr("machineName");
+        var build = $(this).attr("building");
+        var flo = $(this).attr("floor");
+        var fixedPlace = $(this).attr("fixedPlace");
+        var spotCode = $(this).attr("spotCode");
+        var json = {
+            machineCode: code,
+            machineName: name,
+            building: build,
+            floor: flo,
+            fixedPlace: fixedPlace,
+            spotCode: spotCode,
+        };
+        var repairAdd = JSON.stringify(json);
+        console.log("设备报修", json);
+        console.log("设备编码", $(this).attr("machineCode"));
+        location.href = "service-repair.html?" + encodeURIComponent(repairAdd);
+    });
+
+    /*
+     * 重置按钮
+     * **/
+
+    mui("body").on("tap", ".reset", function() {
+        $(".deviceName").val("");
+        $("div.content1").html("");
+        loadViews();
+    });
+
+    /*
+     * 扫码按钮
+     * */
+    // mui("body").on("tap", ".scan", function() {
+    // 	cordova.plugins.barcodeScanner.scan(
+    // 	  function (result) {
+    // 	    if (result.text != "") {
+    // 			deviceId = result.text;
+    // 			taskListAppend ="";
+    // 			loadViews();
+    // 	    }
+    // 	  },
+    // 	  function (error) {
+    // 	  }
+    // 	);
+    // })
+
+    /*
+     * 查询按钮
+     *
+     * */
+    mui("body").on("tap", ".query", function() {
+        console.log("点击查询按钮");
+        $("div.content1").html("");
+        loadViews();
+    });
+
+    //返回按钮
+    mui("body").on("tap", "#back", function() {
+        location.href = "../../menu.html";
+    });
+
+    // 上拉刷新，下拉加载
+    mui.init({
+        pullRefresh: {
+            container: "#pullrefresh",
+            down: {
+                callback: pulldownRefresh,
+                contentrefresh: "正在刷新",
+            },
+            up: {
+                contentrefresh: "加载中，请稍后...",
+                contentnomore: "暂无更多数据",
+                callback: pullupRefresh,
+            },
+        },
+    });
+
+    /**
+     * 下滑刷新
+     */
+    function pulldownRefresh() {
+        page = 1;
+        $(".deviceName").val("");
+        taskListAppend = "";
+        loadViews();
+        setTimeout(function() {
+            mui("#pullrefresh").pullRefresh().endPulldownToRefresh();
+        }, 1500);
+    }
+    /**
+     * 上滑加载更多
+     */
+    function pullupRefresh() {
+        page++;
+        // taskListAppend ="";
+        loadViews();
+        setTimeout(function() {
+            //关闭加载框
+            mui("#pullrefresh").pullRefresh().endPullupToRefresh();
+        }, 1500);
+    }
+</script>
+
+</html>

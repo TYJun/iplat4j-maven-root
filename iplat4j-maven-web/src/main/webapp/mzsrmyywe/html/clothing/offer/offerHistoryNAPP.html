@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.css" />
+    <link rel="stylesheet" href="../reference/css/iconfont.css" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="../reference/css/colorGreen.css" />
+    <link rel="stylesheet" href="../reference/css/loading.css" />
+    <link rel="stylesheet" href="../reference/css/clothCommon.css" />
+    <link rel="stylesheet" href="../../reference/css/common.css" />
+  </head>
+  <style type="text/css">
+    * {
+      touch-action: pan-y;
+    }
+
+    .scan {
+      position: fixed;
+      /*bottom: 15px;*/
+      left: 15px;
+      width: 60px;
+      z-index: 11;
+    }
+
+    .round {
+      border: 1px solid #bbb;
+      width: 60px;
+      height: 60px;
+      line-height: 70px;
+      text-align: center;
+      color: #fff;
+      background-color: #666666;
+      filter: alpha(opacity=80);
+      /* 用于IE浏览器－透明度为20%*/
+      -moz-opacity: 0.8;
+      /*  用于Moz + Firefox－透明度为20%*/
+      opacity: 0.8;
+      -webkit-border-radius: 60px;
+      -moz-border-radius: 60px;
+      -o-border-radius: 60px;
+      border-radius: 60px;
+    }
+
+    .shopping_result {
+      position: fixed;
+      z-index: 999;
+      top: 0px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      padding: 15px;
+    }
+
+    .searchDiv {
+      min-height: 160px;
+    }
+    /* 确认 */
+
+    .makesure {
+      position: absolute;
+      right: 0;
+      background-color: #30c37c;
+      color: white;
+    }
+  </style>
+
+  <body>
+    <header class="mui-bar mui-bar-nav backColor">
+      <h1 class="mui-title">洁物发放记录</h1>
+      <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+      </button>
+      <button
+        id="search"
+        class="mui-btn mui-btn-link mui-btn-nav mui-pull-right"
+      >
+        <span class="mui-icon mui-icon-search"></span>
+      </button>
+    </header>
+
+    <!-- loading -->
+    <!-- <div id="loading" class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div> -->
+    <!-- tab页 -->
+    <div class="top-part backColor">
+      <div class="top-bar">
+        <span id="1" class="choose">未交接</span>
+        <span id="3">已交接</span>
+      </div>
+    </div>
+    <!-- 主内容 -->
+    <div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+      <div class="mui-scroll" id="content">
+        <ul class="list-ul" id="list">
+          <!-- <li>
+                    <ul class="list-part">
+                        <li class="first">
+                            科室回收单号：<span class="taskNo" deptRecycleNo="deptRecycleNo">deptRecycleNo</span>
+                            <button class="makesure">确认</button>
+                        </li>
+                        <li>
+                            <span class="left-name">科室名称</span>
+                            <span class="status">deptName</span>
+                        </li>
+                        <li>
+                            <span class="left-name">回收时间</span>
+                            <span class="status">2020-05-14 09:10:00</span>
+                        </li>
+                    </ul>
+                    <ul class="mui-table-view">
+                        <li class="mui-table-view-cell mui-collapse" style="width: 100%;">
+                            <a class="mui-navigate-right" href="#">更多信息</a>
+                            <div class="mui-collapse-content">
+                                <div class="mui-card">
+                                    <div class="mui-card-content">
+                                        <ul class="list-ul" id="list2">
+                                            <li>
+                                                <ul class="list-part">
+                                                    <li>
+                                                        <span class="left-name">布草分类名称</span>
+                                                        <span class="status">clothTypeName</span>
+                                                    </li>
+                                                    <li>
+                                                        <span class="left-name">布草规格</span>
+                                                        <span class="status">clothModel</span>
+                                                    </li>
+                                                    <li>
+                                                        <span class="left-name">数量</span>
+                                                        <span class="status">num</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li> -->
+        </ul>
+      </div>
+    </div>
+    <!-- 遮罩 -->
+    <div class="mask"></div>
+    <!-- 查询条件 -->
+    <div class="searchDiv">
+      <header class="mui-bar mui-bar-nav backColor">
+        <h1 class="mui-title">查询</h1>
+      </header>
+      <!-- 时间 -->
+      <div class="mui-row row-content" style="margin-top: 50px;">
+        <div class="mui-col-sm-4 mui-col-xs-4">时间</div>
+        <div class="mui-col-sm-3 mui-col-xs-3">
+          <input type="text" id="beginTime" placeholder="开始时间" readonly />
+        </div>
+        <div class="mui-col-sm-1 mui-col-xs-1 middle">-</div>
+        <div class="mui-col-sm-3 mui-col-xs-3">
+          <input type="text" id="endTime" placeholder="截止时间" readonly />
+        </div>
+        <div class="mui-col-sm-1 mui-col-xs-1 middle">
+          <span class="mui-icon mui-icon-arrowright fontColor"></span>
+        </div>
+      </div>
+
+      <!-- 确认按钮 -->
+      <div class="searchBtn">
+        <span class="reset">重置</span>
+        <span class="sure backColor">查询</span>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript" src="../reference/mui/js/mui.min.js"></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/jquery-2.1.4.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/mui.picker.min.js"
+  ></script>
+  <script type="text/javascript" src="../reference/mui/js/baseInfo.js"></script>
+  <script
+    type="text/javascript"
+    src="../../reference/js/mui.loading.js"
+  ></script>
+  <!-- <script type="text/javascript" src="../../../cordova.js"></script> -->
+  <script type="text/javascript">
+    localStorage.setItem("dataGroupCode", "BONA");
+    var workNo = localStorage.getItem("workNo");
+    var baseUrl = localStorage.getItem("url");
+    var page = 1;
+    var dataGroupCode = localStorage.getItem("dataGroupCode"); //账套
+    var issueNo = ""; //科室发放单号
+    // var initDeptNum = localStorage.getItem('initDeptNum');//科室编码
+    var initDeptNum = localStorage.getItem("deptCode");
+    var deptNum = "";
+    var deptName = ""; //科室名称
+    var issueMan = ""; //发放人
+    var issueTime = ""; //发放时间
+    var beginTime = ""; //开始时间
+    var endTime = ""; //结束时间
+    var issueStatus = "0";
+    var neatIssueItemBills = ""; //发放布草信息
+    var confirmFlag = 1; //确认标记
+    $(function() {
+      init();
+    });
+
+    /**
+     * @desc  获取发放记录
+     * @param {Object} params 查询参数
+     * @author huoke
+     */
+    function init() {
+      var listHtml = "";
+      // $("#loading").show();
+      mui.showLoading("正在加载", "div");
+      var params = {
+        dataGroupCode: dataGroupCode,
+        recCreator: "",
+        beginTime: $("#beginTime").val(),
+        endTime: $("#endTime").val(),
+        deptNum: initDeptNum,
+        issueStatus: issueStatus
+      };
+      // alert(initDeptNum);
+      $.get(baseUrl + "app_clothIssueQuery.do?queryIssue", params, function(
+        data
+      ) {
+        var data = JSON.parse(data);
+        // $("#loading").hide();
+        mui.hideLoading();
+        if (data.respCode !== "200") {
+          mui.toast(data.respMsg);
+          return;
+        }
+        var list = data.obj.obj;
+        localStorage.setItem("allOfferObj", JSON.stringify(list));
+        // alert(list.length);
+        for (var i = 0; i < list.length; i++) {
+          // alert("11111");
+          issueNo = list[i].issueNo;
+          issueMan = list[i].issueMan;
+          deptNum = list[i].deptNum;
+          deptName = list[i].deptName;
+          issueTime = list[i].issueTime;
+          issueStatus = list[i].issueStatus;
+          neatIssueItemBills = list[i].neatIssueItemBills;
+          listHtml += createHtml(
+            issueNo,
+            deptName,
+            issueMan,
+            issueTime,
+            neatIssueItemBills
+          );
+        }
+        console.log(list);
+        // alert("asdsa")
+
+        $("#list").html(listHtml);
+      })
+        .fail(function(XMLHttpRequest) {
+          var text = JSON.parse(XMLHttpRequest.responseText);
+          mui.toast(text.message);
+          return;
+        })
+        .complete(function(XMLHttpRequest, status) {
+          if (status == "timeout") {
+            // $("#loading").hide();
+            mui.hideLoading();
+            mui.toast("网速不给力，请重试！");
+            return;
+          } else if (status == "error") {
+            // $("#loading").hide();
+            mui.hideLoading();
+            mui.toast("当前网络不可用，请查看网络是否畅通！");
+            return;
+          }
+        });
+    }
+
+    function createHtml(
+      issueNo,
+      deptName,
+      issueMan,
+      issueTime,
+      neatIssueItemBills
+    ) {
+      var html = "";
+      html +=
+        '<li> <ul class="list-part"> <li class="first">洁物发放单号：<span class="taskNo" deptRecycleNo="deptRecycleNo">' +
+        issueNo +
+        '</span> <button class="makesure">确认</button>  </li> <li> <span class="left-name">科室名称</span> <span class="status">' +
+        deptName +
+        '</span> </li> <li><span class="left-name">发放人</span><span class="status">' +
+        issueMan +
+        '</span></li> <li> <span class="left-name">发放时间</span> <span class="status">' +
+        issueTime +
+        '</span> </li></ul> <ul class="mui-table-view"> <li class="mui-table-view-cell mui-collapse" style="width: 100%;"> <a class="mui-navigate-right" href="#">更多信息</a><div class="mui-collapse-content"> <div class="mui-card"> <div class="mui-card-content"> <ul class="list-ul" id="list2">';
+      for (var i = 0; i < neatIssueItemBills.length; i++) {
+        var element = neatIssueItemBills[i];
+        // neatIssueItemBills.forEach(element => {
+        html +=
+          '<li><ul class="list-part"> <li> <span class="left-name">布草分类名称</span> <span class="status">' +
+          element.clothModel +
+          '</span> </li><li><span class="left-name">布草规格</span><span class="status">' +
+          element.clothModel +
+          '</span> </li> <li> <span class="left-name">数量</span> <span class="status">' +
+          element.issueNum +
+          "</span></li> </ul></li>";
+        // });
+      }
+      html += "</ul> </div></div> </div> </li> </ul> </li>";
+      return html;
+    }
+
+    /**
+     * @desc   扫描物品码
+     * @author huoke
+     */
+    mui("body").on("tap", "#round", function() {
+      cordova.plugins.barcodeScanner.scan(
+        function(result) {
+          var info = result.text;
+          init(info);
+        },
+        function(error) {
+          mui.toast("获取信息失败！");
+          return;
+        }
+      );
+    });
+
+    /**
+     * @desc   查询条件展示
+     * @author huoke
+     */
+    $("#search").click(function() {
+      $(".searchDiv").show();
+      $(".mask").show();
+    });
+
+    /**
+     * @desc   时间条件查询
+     * @author huoke
+     */
+    mui("body").on("tap", "#beginTime", function() {
+      var options = {
+        type: "date"
+      };
+      var pickerDate = new mui.DtPicker(options);
+      pickerDate.show(function(rs) {
+        $("#beginTime").val(rs.text);
+        beginTime = rs.text;
+      });
+    });
+
+    mui("body").on("tap", "#endTime", function() {
+      var options = {
+        type: "date"
+      };
+      var pickerDate = new mui.DtPicker(options);
+      pickerDate.show(function(rs) {
+        $("#endTime").val(rs.text);
+        endTime = rs.text;
+      });
+    });
+
+    // 确认
+    $("#list").on("click", ".makesure", function() {
+      console.log(
+        $(this)
+          .prev()
+          .html()
+      );
+      var billNo = $(this)
+        .prev()
+        .html();
+      var param = {
+        dataGroupCode: dataGroupCode,
+        issueNo: billNo,
+        confirmFlag: confirmFlag,
+        recCreator: workNo,
+        deptSign: ""
+      };
+      console.log(param);
+      $.ajax({
+        url: baseUrl + "app_clothBizController.do?issueComfirm",
+        type: "post",
+        data: JSON.stringify(param),
+        contentType: "application/json",
+        success: function(data) {
+          var data = JSON.parse(data);
+          if (data.respCode != 200) {
+            mui.toast(data.respMsg);
+            return;
+          }
+          localStorage.setItem("appOfferDetail", billNo);
+          location.href = "dataListApp.html";
+        },
+        error: function(XMLHttpRequest) {
+          var text = JSON.parse(XMLHttpRequest.response);
+          mui.toast(text.message);
+          return;
+        },
+        complete: function(XMLHttpRequest, status) {
+          if (status == "timeout") {
+            mui.toast("网速不给力,请重试!");
+            return;
+          } else if (status == "error") {
+            mui.toast("当前网络不可用,请查看网络是否畅通!");
+            return;
+          }
+        }
+      });
+    });
+
+    /**
+     * @desc   tap切换
+     * @author huoke
+     */
+    $("#3").click(function() {
+      location.href = "offerHistoryYAPP.html";
+    });
+    /**
+     * @desc   查询
+     * @author huoke
+     */
+    mui("body").on("tap", ".sure", function() {
+      $("#list").html("");
+      init();
+      $(".searchDiv").hide();
+      $(".mask").hide();
+    });
+
+    /**
+     * @desc   重置
+     * @author huoke
+     */
+    mui("body").on("tap", ".reset", function() {
+      $("#beginTime").val("");
+      $("#endTime").val("");
+    });
+
+    /**
+     * @desc   关闭弹框
+     * @author huoke
+     */
+    $(".mask").click(function() {
+      $(".searchDiv").hide();
+      $(".mask").hide();
+    });
+
+    /**
+     * @desc   mui上拉刷新，下拉加载
+     * @author huoke
+     */
+    mui.init({
+      pullRefresh: {
+        container: "#pullrefresh",
+        down: {
+          height: 50,
+          callback: pulldownRefresh,
+          contentrefresh: "正在刷新"
+        },
+        up: {
+          contentrefresh: "加载中，请稍后...",
+          contentnomore: "暂无更多数据",
+          callback: pullupRefresh
+        }
+      }
+    });
+
+    /**
+     * @desc   下滑刷新
+     * @author huoke
+     */
+    function pulldownRefresh() {
+      page = 1;
+      $("#list").html("");
+      init();
+      setTimeout(function() {
+        mui("#pullrefresh")
+          .pullRefresh()
+          .endPulldownToRefresh();
+      }, 1500);
+    }
+
+    /**
+     * @desc   上滑加载更多
+     * @author huoke
+     */
+    function pullupRefresh() {
+      page++;
+      init();
+      setTimeout(function() {
+        mui("#pullrefresh")
+          .pullRefresh()
+          .endPullupToRefresh();
+      }, 1500);
+    }
+
+    /**
+     * @desc   点击返回按钮
+     * @author huoke
+     */
+    mui("body").on("tap", "#back", function() {
+      console.log(".....");
+      location.href = "../menuApp.html";
+    });
+
+    /**
+     * @desc   手机系统返回键
+     * @author huoke
+     */
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+      document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+      location.href = "../menuApp.html";
+    }
+  </script>
+</html>

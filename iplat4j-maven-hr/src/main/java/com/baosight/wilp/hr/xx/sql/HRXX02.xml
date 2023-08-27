@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HRXX02">
+
+    <select id="query" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.hr.xx.domain.HrFile">
+        SELECT
+        id	as "id",  <!-- 主键（存文件用） -->
+        manId	as "manId",  <!-- 设备id -->
+        fileId	as "fileId",  <!-- 文件id -->
+        fileName	as "fileName",  <!-- 文件名称 -->
+        fileSize	as "fileSize",  <!-- 文件大小 -->
+        fileDesc	as "fileDesc",  <!-- 文件说明 -->
+        fileNum	as "fileNum" <!-- 文件排序 -->
+        FROM .hr_file WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            manId = #id#
+        </isNotEmpty>
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                id asc
+            </isEmpty>
+        </dynamic>
+
+    </select>
+
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM .hr_file WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+    </select>
+
+
+
+    <insert id="insert">
+        INSERT INTO .hr_file (id,  <!-- 主键（存文件用） -->
+        manId,  <!-- 设备id -->
+        fileId,  <!-- 文件id -->
+        fileName,  <!-- 文件名称 -->
+        fileSize,  <!-- 文件大小 -->
+        fileDesc,  <!-- 文件说明 -->
+        fileNum  <!-- 文件排序 -->
+        )
+        VALUES (#id#, #manId#, #fileId#, #fileName#, #fileSize#, #fileDesc#, #fileNum#)
+    </insert>
+
+    <delete id="delete" parameterClass="String">
+        DELETE FROM .hr_file WHERE
+            manId = #id#
+    </delete>
+
+    <update id="update">
+        UPDATE .hr_file
+        SET
+        manId	= #manId#,   <!-- 设备id -->
+        fileId	= #fileId#,   <!-- 文件id -->
+        fileName	= #fileName#,   <!-- 文件名称 -->
+        fileSize	= #fileSize#,   <!-- 文件大小 -->
+        fileDesc	= #fileDesc#,   <!-- 文件说明 -->
+        fileNum	= #fileNum#  <!-- 文件排序 -->
+        WHERE
+        id = #id#
+    </update>
+
+</sqlMap>

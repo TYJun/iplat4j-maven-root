@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="FAXZ01">
+    <select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+            faIdle.id as "faIdleId",
+            faIdle.rec_creator as "recCreator",
+            faIdle.rec_create_time as "recCreateTime",
+            faIdle.rec_revisor as "recRevisor",
+            faIdle.rec_revise_time as "recReviseTime",
+            faIdle.archive_flag as "archiveFlag",
+            faIdle.idle_no as "idleNo",
+            DATE_FORMAT( faIdle.idle_date, '%Y-%m-%d' ) as "idleDate",
+            faIdle.idle_reason as "idleReason",
+            faIdle.idle_direction as "idleDirection",
+            faIdle.goods_id as "goodsId",
+            faIdle.remark as "remark",
+            case faIdle.status_code
+            when "0" then "录入"
+            when "1" then "确认"
+            end as "statusCodeMean",
+            faIdle.apply_dept_num as "applyDeptNum",
+            faIdle.apply_dept_name as "applyDeptName",
+            faInfo.goods_num as "goodsNum",
+            faInfo.goods_name as "goodsName",
+            faInfo.model,
+            faInfo.manufacturer,
+            faInfo.buy_cost as "buyCost",
+            faInfo.use_years as "useYears",
+            DATE_FORMAT( faInfo.buy_date, '%Y-%m-%d' ) as "buyDate",
+            DATE_FORMAT( faInfo.use_date, '%Y-%m-%d' ) as "useDate",
+            faInfo.dept_name as "deptName",
+            faInfo.install_location as "installLocation"
+        FROM fa_idle faIdle
+        left join fa_info faInfo on faIdle.goods_id = faInfo.id
+        <dynamic prepend="where">
+            <isNotEmpty prepend="and" property="faIdleId">
+                faIdle.id = #faIdleId#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="goodsNum">
+                faInfo.goods_num like concat ('%',trim(#goodsNum#),'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="goodsName">
+                faInfo.goods_name like concat ('%',trim(#goodsName#),'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="idleStatusCode">
+                faIdle.status_code = #idleStatusCode#
+            </isNotEmpty>
+        </dynamic>
+    </select>
+
+    <insert id="saveFaIdleInfo" parameterClass="java.util.HashMap">
+        INSERT INTO fa_idle (id, rec_creator, rec_create_name, rec_create_time, archive_flag, idle_no,
+                             idle_date, idle_reason, idle_direction, goods_id, remark, status_code, apply_dept_num,
+                             apply_dept_name)
+        VALUES (#id#, #recCreator#, #recCreateName#, #recCreateTime#, #archiveFlag#, #idleNo#, #idleDate#,
+                #idleReason#, #idleDirection#, #goodsId#, #remark#, #statusCode#, #applyDeptNum#,
+                #applyDeptName#)
+    </insert>
+
+    <update id="updateFaIdleInfo" parameterClass="java.util.HashMap">
+        update fa_idle set
+            rec_revisor = #recRevisor#,rec_revise_name = #recReviseName#,rec_revise_time = #recReviseTime#,
+            archive_flag = CONVERT(#archiveFlag#, SIGNED) + 1,idle_no = #idleNo#,idle_date = #idleDate#,
+            idle_direction = #idleDirection#,idle_reason = #idleReason#,goods_id = #goodsId#,remark = #remark#,
+            apply_dept_num = #applyDeptNum#,apply_dept_name = #applyDeptName#
+        where id = #faIdleId#
+    </update>
+
+    <delete id="removeFaIdleInfo" parameterClass="java.util.HashMap">
+        delete from fa_idle where id = #faIdleId#
+    </delete>
+
+    <update id="confirmFaIdleInfo" parameterClass="java.util.HashMap">
+        update fa_idle
+        set status_code  = "1",
+            archive_flag = CONVERT(#archiveFlag#, SIGNED) + 1
+        where id = #faIdleId#
+          and archive_flag = #archiveFlag#
+    </update>
+
+    <update id="updateFaInfoUnlock" parameterClass="java.util.HashMap">
+        update fa_info set lock_flag = "0",status_code = "30" where id = #faInfoId#
+    </update>
+
+    <!-- 查询今日类别号 -->
+    <select id="queryMaxCode" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+        select
+            idle_no typeCode
+        from
+            fa_idle
+        where
+            idle_no like concat('%', #value#, '%')
+        order by
+            idle_no
+        desc
+    </select>
+</sqlMap>

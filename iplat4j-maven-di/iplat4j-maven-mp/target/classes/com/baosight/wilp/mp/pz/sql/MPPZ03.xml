@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MPPZ03">
+
+   <select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.mp.pz.domain.MpPurchaseTypeConfig">
+        select
+                id as "id",   <!--主键-->        
+                purchase_year as "purchaseYear",   <!--采购年份-->        
+                purchase_type as "purchaseType",   <!--采购类别-->        
+                purchase_type_name as "purchaseTypeName",   <!--采购类别名称-->        
+                purchase_cost as "purchaseCost",   <!--总金额-->        
+                data_group_code as "dataGroupCode",   <!--账套-->        
+                rec_creator as "recCreator",   <!--创建（申请）人-->        
+                rec_create_time as "recCreateTime",   <!--创建时间-->        
+                rec_revisor as "recRevisor",   <!--修改人-->        
+                rec_revise_time as "recReviseTime"  <!--修改时间-->        
+                from mp_purchase_type_config WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+        <isNotEmpty prepend=" AND " property="purchaseYear">
+            purchase_year = #purchaseYear#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="purchaseType">
+            purchase_type = #purchaseType#
+        </isNotEmpty>
+        <dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+    </select>
+
+	<select id="count" resultClass="int">
+        SELECT COUNT(*) FROM mp_purchase_type_config WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+    <!--  
+         <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="purchaseYear">
+            purchase_year = #purchaseYear#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="purchaseType">
+            purchase_type = #purchaseType#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="purchaseTypeName">
+            purchase_type_name = #purchaseTypeName#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="purchaseCost">
+            purchase_cost = #purchaseCost#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="dataGroupCode">
+            data_group_code = #dataGroupCode#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="recCreator">
+            rec_creator = #recCreator#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="recCreateTime">
+            rec_create_time = #recCreateTime#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="recRevisor">
+            rec_revisor = #recRevisor#
+        </isNotEmpty>
+         <isNotEmpty prepend=" AND " property="recReviseTime">
+            rec_revise_time = #recReviseTime#
+        </isNotEmpty>
+         -->
+
+    <!--新增所有列-->
+    <insert id="insert">
+        insert into mp_purchase_type_config(
+                id,   <!--主键-->        
+                purchase_year,   <!--采购年份-->        
+                purchase_type,   <!--采购类别-->        
+                purchase_type_name,   <!--采购类别名称-->        
+                purchase_cost,   <!--总金额-->        
+                data_group_code,   <!--账套-->        
+                rec_creator,   <!--创建（申请）人-->        
+                rec_create_time,   <!--创建时间-->        
+                rec_revisor,   <!--修改人-->        
+                rec_revise_time  <!--修改时间-->        
+                )
+        values (
+                #id# ,         
+                #purchaseYear# ,         
+                #purchaseType# ,         
+                #purchaseTypeName# ,         
+                #purchaseCost# ,         
+                #dataGroupCode# ,         
+                #recCreator# ,         
+                #recCreateTime# ,         
+                #recRevisor# ,         
+                #recReviseTime#         
+        )
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update mp_purchase_type_config
+        set
+                purchase_year = #purchaseYear# , <!--采购年份-->        
+                purchase_type = #purchaseType# , <!--采购类别-->        
+                purchase_type_name = #purchaseTypeName# , <!--采购类别名称-->        
+                purchase_cost = #purchaseCost# , <!--总金额-->        
+                data_group_code = #dataGroupCode# , <!--账套-->        
+                rec_creator = #recCreator# , <!--创建（申请）人-->        
+                rec_create_time = #recCreateTime# , <!--创建时间-->        
+                rec_revisor = #recRevisor# , <!--修改人-->        
+                rec_revise_time = #recReviseTime#  <!--修改时间-->        
+                
+        where id = #id#
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="delete">
+        delete from mp_purchase_type_config where id = #id#
+    </delete>
+
+</sqlMap>

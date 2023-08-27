@@ -1,0 +1,677 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../../reference/mui/css/mui.css">
+    <link rel="stylesheet" href="css/platform.css" />
+    <link rel="stylesheet" href="css/common.css" />
+</head>
+<STYLE TYPE="text/css">
+    body {
+        background: #EEEEEE;
+    }
+    
+    * {
+        padding: 0;
+        margin: 0;
+        touch-action: none;
+    }
+    
+    .mui-card {
+        width: 97%;
+        margin: 0 auto;
+        margin-top: 7px;
+    }
+    
+    .alert {
+        background: #F5F5F5;
+        border-top: 1px solid #E8E8E8;
+        border-bottom: 2px solid #E8E8E8;
+        background-color: #F5F5F5;
+        height: 3.2rem;
+        line-height: 3.2rem;
+        text-align: center;
+        margin-bottom: 60px;
+    }
+    
+    .mui-spinner {
+        width: 40px;
+        height: 40px;
+        margin-left: 45%;
+        margin-top: 23%;
+        display: none;
+    }
+    
+    .warn {
+        z-index: 4000;
+    }
+    
+    .mui-sliders {
+        position: fixed;
+        z-index: 2555;
+        top: 45px;
+        width: 100%;
+    }
+    
+    .mui-control-content {
+        margin-top: 43px;
+    }
+    
+    .titleFloat li {
+        list-style: none;
+        float: left;
+        width: 33.3%;
+        text-align: center;
+        padding: 10px 0 10px 0;
+    }
+    
+    .placeDiceng {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 3001;
+        background: #000;
+        opacity: 0.3;
+        display: none;
+    }
+    
+    .select-left-ul {
+        display: none;
+        padding: 0 15px;
+        margin: 0;
+        position: fixed;
+        z-index: 3002;
+        top: 120px;
+        left: 0;
+        width: 80%;
+        left: 10%;
+        background: #fff;
+        color: #333333;
+        font-size: 15px;
+        height: 350px;
+        overflow-y: auto;
+    }
+    
+    .select-left-ul li {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        border: 0;
+        font-weight: lighter;
+        border-bottom: 1px solid #eee;
+    }
+</STYLE>
+
+<body>
+    <header id="header" class="mui-bar mui-bar-nav">
+        <h1 class="mui-title"></h1>
+        <button onclick="goBack()" class=" mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+      	返回
+    </button>
+        <!-- <button class=" mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-right chooseDept" style="margin-right: 0;">
+      部门筛选
+    </button> -->
+    </header>
+
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div class="mui-content">
+        <div id="slider">
+            <!--<div id="sliderSegmentedControl" class="mui-segmented-control mui-segmented-control-inverted" style="position: fixed;z-index:3000;top: 45px;">
+                <a id="completeUn" class="mui-control-item mui-active" href="#item2task">
+						新建
+					</a>
+                <a id="alredy" class="mui-control-item" href="#item3task">
+						已认领
+					</a>
+                <a id="talkUn" class="mui-control-item" href="#item1task">
+						已整改
+					</a>
+                <a id="allList" class="mui-control-item" href="#item4task">
+						与我相关
+					</a>
+            </div>-->
+
+            <!--<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6"></div>-->
+            <div class="mui-slider-group" style="height:100%;margin-top: 47px;padding-left: 0;">
+                <!--title-->
+                <!--<div class="mui-sliders" id="newBuild">
+      			<div>
+							<ul class="mui-table-view">
+								<li class="mui-table-view-cell mui-table-view-cellsss" style="background: #989898;color: #FFFFFF;font-weight: bold;padding: 0;">
+									<ul class="titleFloat" style="padding: 0;padding-top: 2px;padding-bottom: 2px;">
+										<li>问题号</li>
+										<li>问题大类</li>
+										<li>所属部门</li>
+										<li>操作</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+      		</div>-->
+                <!--已认领-->
+                <div class="mui-sliders" id="newNotBuild">
+                    <div>
+                        <ul class="mui-table-view">
+                            <li class="mui-table-view-cell mui-table-view-cellsss" style="background: #989898;color: #FFFFFF;font-weight: bold;padding: 0;">
+                                <ul class="titleFloat" style="padding: 0;padding-top: 2px;padding-bottom: 2px;">
+                                    <li>问题号</li>
+                                    <li>问题状态</li>
+                                    <li>问题大类</li>
+                                    <!-- <li>所属部门</li> -->
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="item2task" class="mui-slider-item mui-control-content mui-active ">
+                    <div id="daiRenLing">
+
+                    </div>
+                    <div id='loadMoreRen' class='alert' name='0'>
+                        加载更多
+                    </div>
+                    <span id="rounditem5" class="mui-spinner"></span>
+                </div>
+
+                <div id="item3task" class="mui-slider-item mui-control-content">
+                    <div id="wrectification">
+
+                    </div>
+                    <div id='loadMoreComplete' class='alert' name='0'>
+                        加载更多
+                    </div>
+                    <span id="rounditem3" class="mui-spinner"></span>
+                </div>
+
+                <div id="item1task" class="mui-slider-item mui-control-content" style="height:100%;">
+                    <div id="yrectification">
+
+                    </div>
+                    <div id='loadMoreComplete2' class='alert' name="0" style="margin-top: 9px;">
+                        加载更多
+                    </div>
+                    <span id="rounditem1" class="mui-spinner"></span>
+                </div>
+
+                <div id="item4task" class="mui-slider-item mui-control-content" style="height:100%;">
+                    <div id="aboutMe">
+
+                    </div>
+                    <div id='loadMoreComplete4' class='alert' name="0" style="margin-top: 9px;">
+                        加载更多
+                    </div>
+                    <span id="rounditem4" class="mui-spinner"></span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="placeDiceng"></div>
+    <ul class="select-left-ul">
+
+    </ul>
+</body>
+<script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../../cordova.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem('url');
+    var workNo = localStorage.getItem('workNo');
+    var hospitalID = localStorage.getItem('hospitalID');
+    var url = decodeURIComponent(location.search);
+    var staInName = url.substring(1, url.length);
+    var timeParam = '';
+    var localTypeName = '';
+    console.log(staInName);
+    $(".mui-title").text(staInName)
+        //var statusCode = "20",
+    var statusCode = "00",
+        idText = "completeUn";
+    var row = 10,
+        rows = 10;
+    var page = 1,
+        taskDeptName = "";
+
+    if (staInName == '新建') {
+        /**/
+    } else if (staInName == '已认领') {
+        $('#alredy').addClass('mui-active');
+        $('#completeUn').removeClass('mui-active');
+        $('#item3task').addClass('mui-active');
+        $('#item2task').removeClass('mui-active');
+        statusCode = "10";
+        ajaxData();
+    } else if (staInName == '已整改') {
+        $('#talkUn').addClass('mui-active');
+        $('#completeUn').removeClass('mui-active');
+        $('#item1task').addClass('mui-active');
+        $('#item2task').removeClass('mui-active');
+        statusCode = "30";
+        ajaxData();
+    }
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        /**
+         * 系统返回键监听
+         */
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+        location.href = "homePage.html";
+    }
+    //部门帅选
+    mui("body").on("tap", ".placeDiceng", function() {
+        hidediceng();
+    })
+
+    function hidediceng() {
+        $(".placeDiceng").hide();
+        $(".select-left-ul").hide();
+    }
+
+    function showdiceng() {
+        $(".placeDiceng").show();
+        $(".select-left-ul").show();
+    }
+    mui("body").on("tap", ".select-left-ul-li", function() {
+        taskDeptName = JSON.parse(this.id).departName;
+        console.log(this.id)
+        hidediceng();
+        ajaxData();
+
+    })
+
+    //部门筛选
+    mui("body").on("tap", ".chooseDept", function() {
+        showdiceng();
+        $.ajax({
+            url: baseUrl + 'app_safty_query.do?queryDepart',
+            type: 'post',
+            data: {},
+            success: function(data) {
+                console.log(data)
+                var ss = ""
+                if (data.respCode == 200) {
+
+                    for (var i = 0; i < data.obj.length; i++) {
+
+                        var dd = {
+                            "departName": data.obj[i].departName
+                        }
+                        var cc = JSON.stringify(dd)
+                        ss += '<li  id=\'' + cc + '\' class="select-left-ul-li">' + data.obj[i].departName + '</li>';
+                    }
+                    $(".select-left-ul").html(ss);
+                } else {
+                    $('#warn small').html(data.respMsg);
+                    $("#warn").fadeIn(500);
+                }
+
+            },
+            complete: function(XMLHttpRequest, status) {
+                if (status == 'timeout') {
+                    /*$("#loading").hide();*/
+                    $('#rounditem1').hide();
+                    $('#rounditem3').hide();
+                    $('#warn small').html('加载失败！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);　
+                } else if (status == 'error') {
+                    /*$("#loading").hide();*/
+                    $('#rounditem1').hide();
+                    $('#rounditem3').hide();
+                    $('#warn small').html('网络异常！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                }
+            }
+        })
+    })
+
+    //几种状态的数据请求
+    ajaxData();
+
+    function ajaxData() {
+        $('#rounditem3').css('display', 'block');
+        $('#rounditem1').css('display', 'block');
+        var prame = {
+            timeParam: '',
+            flowStatusCode: statusCode,
+            row: row,
+            page: page,
+            localTypeName: '',
+            taskDeptName: taskDeptName,
+            workNo: workNo
+        };
+        prame = JSON.stringify(prame);
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            headers: {
+                serviceName: 'PRAP02',
+                methodName: 'quertSaftyLedger'
+            },
+            data: {
+                prames: prame
+            },
+            success: function(data) {
+                $('#rounditem3').hide();
+                $('#rounditem1').hide();
+                console.log("&&&&&&&&&&");
+                console.log(data);
+                //var list = data.obj.datas;
+                var list = data.attr.param;
+                var html = '';
+                //console.log(data);
+
+                if (data.msgKey == 200 || data.msgKey == '200') {
+                    for (var i = 0; i < list.length; i++) {
+                        var s = i;
+                        var createTime = list[i].createTime;
+                        var localTypeName = list[i].localTypeName;
+                        if (localTypeName == 'undefined' || localTypeName == undefined) {
+                            localTypeName = '';
+                        } else {
+                            localTypeName = list[i].localTypeName;
+                        }
+                        var dangerPlaceName = list[i].dangerPlaceName;
+                        var requireDesc = list[i].requireDesc;
+                        var dangerID = list[i].dangerID;
+                        var hospitalID = list[i].hospitalID;
+                        var taskDepartName = list[i].taskDepartName;
+                        var dangerCode = list[i].dangerCode;
+                        var flowStatusCode = list[i].flowStatusCode;
+                        var statusName = list[i].statusName;
+                        var dangerContent = list[i].dangerContent;
+
+                        html += poolFunss(s, createTime, localTypeName, dangerPlaceName, requireDesc, dangerID, hospitalID, taskDepartName, dangerCode, flowStatusCode, statusName, dangerContent);
+                    }
+                    if (statusCode == '00') {
+                        if (list.length < row) {
+                            $('#loadMoreRen').html('暂无更多数据');
+                        } else {
+                            $('#loadMoreRen').html('加载更多');
+                        }
+                        $('#rounditem5').hide();
+                        $('#daiRenLing').html(html);
+                    } else if (statusCode == "10") {
+                        if (list.length < row) {
+                            $('#loadMoreComplete').html('暂无更多数据');
+                        } else {
+                            $('#loadMoreComplete').html('加载更多');
+                        }
+                        $('#wrectification').html(html);
+                    } else if (statusCode == "30") {
+                        if (list.length < row) {
+                            $('#loadMoreComplete2').html('暂无更多数据');
+                        } else {
+                            $('#loadMoreComplete2').html('加载更多');
+                        }
+                        $('#rounditem1').hide();
+                        $('#yrectification').html(html);
+                    }
+                }
+            },
+            complete: function(XMLHttpRequest, status) {
+                if (status == 'timeout') {
+                    /*$("#loading").hide();*/
+                    $('#rounditem1').hide();
+                    $('#rounditem3').hide();
+                    $('#warn small').html('加载失败！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);　
+                } else if (status == 'error') {
+                    /*$("#loading").hide();*/
+                    $('#rounditem1').hide();
+                    $('#rounditem3').hide();
+                    $('#warn small').html('网络异常！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                }
+            }
+        })
+    }
+
+    //与我相关
+    function aboutmes() {
+        //等待圈
+        $('#rounditem4').css('display', 'block');
+
+        $.ajax({
+            url: baseUrl + 'app_safty_flowservice.do?queryHistoryProcessDanger',
+            type: 'post',
+            data: {
+                currentUser: workNo,
+                page: page,
+                row: rows
+            },
+            success: function(data) {
+                var list = data.obj.datas;
+                var html = '';
+                //console.log(data);
+
+                if (data.respCode == 200 || data.respCode == '200') {
+                    for (var i = 0; i < list.length; i++) {
+                        var s = i;
+                        var createTime = list[i].createTime;
+                        var localTypeName = list[i].localTypeName;
+                        if (localTypeName == 'undefined' || localTypeName == undefined) {
+                            localTypeName = '';
+                        } else {
+                            localTypeName = list[i].localTypeName;
+                        }
+                        var dangerPlaceName = list[i].dangerPlaceName;
+                        var requireDesc = list[i].requireDesc;
+                        var dangerID = list[i].dangerID;
+                        var hospitalID = list[i].hospitalID;
+                        var taskDepartName = list[i].taskDepartName;
+                        var dangerCode = list[i].dangerCode;
+                        var flowStatusCode = list[i].flowStatusCode;
+                        var statusName = list[i].statusName;
+                        var dangerContent = list[i].dangerContent;
+
+                        html += poolFunss(s, createTime, localTypeName, dangerPlaceName, requireDesc, dangerID, hospitalID, taskDepartName, dangerCode, flowStatusCode, statusName, dangerContent);
+                    }
+
+                    if (list.length < rows) {
+                        $('#loadMoreComplete4').html('暂无更多数据');
+                    } else {
+                        $('#loadMoreComplete4').html('加载更多');
+                    }
+                    $('#rounditem4').hide();
+                    $('#aboutMe').html(html);
+                }
+            },
+            complete: function(XMLHttpRequest, status) {
+                if (status == 'timeout') {
+                    $('#rounditem4').hide();
+                    $('#warn small').html('加载失败！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);　
+                } else if (status == 'error') {
+                    $('#rounditem4').hide();
+                    $('#warn small').html('网络异常！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                }
+            }
+        })
+    }
+
+    function poolFunss(s, createTime, localTypeName, dangerPlaceName, requireDesc, dangerID, hospitalID, taskDepartName, dangerCode, flowStatusCode, statusName, dangerContent) {
+        var html = '';
+        html += '<ul class="mui-table-view"';
+        if (s % 2 == 0) {
+            html += 'style="background: #FFFFFF;"';
+        } else {
+            html += 'style="background: #FAFAFA;"';
+        }
+        html += '>';
+        html += '<li class="mui-table-view-cell mui-table-view-cellsss" hospitalID="' + hospitalID + '" dangerID="' + dangerID + '" style="padding: 0;">';
+        html += '<ul class="titleFloat" style="padding: 0;">';
+        html += '<li style="padding-top:20px;"><a>' + dangerCode + '</a></li>';
+        /*if(idText == 'completeUn'){
+        	html += '<li style="padding-top: 20px;">'+localTypeName+'</li>';
+        	html += '<li style="padding-top: 20px;">'+taskDepartName+'</li>';
+        	html += '<li class="mui-table-sure" dangerID="'+dangerID+'" style="padding-top: 20px;"><a>认领</a></li>';
+        }else{*/
+        html += '<li style="padding-top: 20px;">';
+        if (flowStatusCode == '00') {
+            html += '新建';
+        } else if (flowStatusCode == '10') {
+            html += '已认领';
+        } else if (flowStatusCode == '30') {
+            html += '已整改';
+        } else if (flowStatusCode == '20') {
+            html += '已挂账';
+        }
+        html += '</li>';
+        html += '<li style="padding-top: 20px;">' + localTypeName + '</li>';
+        // html += '<li style="padding-top: 20px;">' + taskDepartName + '</li>';
+        /*}*/
+        html += '</ul></li></ul>';
+        return html;
+    }
+
+    //与我相关
+    mui('#sliderSegmentedControl').on('tap', 'a.mui-control-item', function() {
+        idText = $(this).attr('id');
+        if (idText == 'completeUn') {
+            //异步请求；
+            row = 10;
+            statusCode = "20";
+            $(".chooseDept").show();
+            ajaxData();
+        } else if (idText == 'alredy') {
+            row = 10;
+            statusCode = "30";
+            $(".chooseDept").show();
+            ajaxData();
+        } else if (idText == 'talkUn') {
+            row = 10;
+            statusCode = "80";
+            $(".chooseDept").show();
+            ajaxData();
+        } else if (idText == 'allList') {
+            $(".chooseDept").hide();
+            aboutmes();
+        }
+    })
+
+    //问题处理
+    $('#item3task').on('click', 'li.mui-table-view-cellsss', function() {
+        var jsonData = {
+            'hospitalID': $(this).attr('hospitalID'),
+            'dangerID': $(this).attr('dangerID')
+        }
+        var json = JSON.stringify(jsonData);
+        location.href = "problemDeal.html?" + encodeURIComponent(json);
+    })
+
+    $('#item2task').on('click', 'li.mui-table-view-cellsss', function(e) {
+        var jsonData = {
+            'hospitalID': $(this).attr('hospitalID'),
+            'dangerID': $(this).attr('dangerID')
+        }
+        var json = JSON.stringify(jsonData);
+        location.href = "problemClaim.html?" + encodeURIComponent(json);
+    })
+
+    //已整改
+    $('#item1task').on('click', 'li.mui-table-view-cellsss', function() {
+        var flowStatusCode = $(this).attr('flowStatusCode');
+        if (flowStatusCode == '99') {
+            $('#warn small').html('问题单已被确认 ！');
+            $("#warn").fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return;
+        }
+
+        var jsonData = {
+            'hospitalID': $(this).attr('hospitalID'),
+            'dangerID': $(this).attr('dangerID')
+        }
+        var json = JSON.stringify(jsonData);
+        location.href = "problemDealAlready.html?" + encodeURIComponent(json);
+    })
+
+    //与我相关
+    $('#item4task').on('click', 'li.mui-table-view-cellsss', function() {
+        var flowStatusCode = $(this).attr('flowStatusCode');
+        if (flowStatusCode == '99') {
+            $('#warn small').html('问题单已被确认 ！');
+            $("#warn").fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return;
+        }
+
+        var jsonData = {
+            'hospitalID': $(this).attr('hospitalID'),
+            'dangerID': $(this).attr('dangerID')
+        }
+        var json = JSON.stringify(jsonData);
+        location.href = "problemDealAlready.html?" + encodeURIComponent(json);
+    })
+
+    //加载更多
+
+    $('#loadMoreRen').click(function() {
+        var nameText = $(this).text();
+        if (nameText == '加载更多') {
+            row += 10;
+            ajaxData();
+            $(this).text('正在加载中...');
+        }
+    })
+
+    $('#loadMoreComplete').click(function() {
+        var nameText = $(this).text();
+        if (nameText == '加载更多') {
+            row += 10;
+            ajaxData();
+            $(this).text('正在加载中...');
+        }
+    })
+
+    $('#loadMoreComplete2').click(function() {
+        var nameText = $(this).text();
+        if (nameText == '加载更多') {
+            row += 10;
+            ajaxData();
+            $(this).text('正在加载中...');
+        }
+    })
+
+    $('#loadMoreComplete4').click(function() {
+        var nameText = $(this).text();
+        if (nameText == '加载更多') {
+            rows += 10;
+            aboutmes();
+            $(this).text('正在加载中...');
+        }
+    })
+
+    function goBack() {
+        location.href = "homePage.html";
+    }
+</script>
+
+</html>

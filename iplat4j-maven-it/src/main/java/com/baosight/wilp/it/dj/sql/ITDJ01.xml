@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="ITDJ01">
+    <select id="queryItTaskInfo" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+        select
+            id itTaskId,
+            task_no taskNo,
+            req_staff_no reqStaffNo,
+            req_staff_name reqStaffName,
+            req_tel_num reqTelNum,
+            req_dept_num reqDeptNum,
+            req_dept_name reqDeptName,
+            classify_id classifyId,
+            classify_name classifyName,
+            serve_content serveContent,
+            serve_dept_num serveDeptNum,
+            serve_dept_name serveDeptName,
+            building,
+            floor,
+            spot_num spotNum,
+            spot_name spotName,
+            remark,
+            impFlag,
+            status,
+            case status
+            when "00" then "待提交"
+            when "01" then "待完工"
+            when "02" then "待评价"
+            when "03" then "已结束"
+            when "10" then "作废"
+            end statusMean,
+            archive_flag archiveFlag,
+            DATE_FORMAT( rec_create_time, '%Y-%m-%d' ) recCreateTime
+        from
+            it_task
+        where
+            status = "00"
+        <isNotEmpty prepend="and" property="itTaskId">
+            id = #itTaskId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="taskNo">
+            task_no like concat('%', trim(#taskNo#), '%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="parentId">
+            classify_id like concat('%', trim(#parentId#), '%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="reqDeptName">
+            req_dept_name like concat('%', trim(#reqDeptName#), '%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="serveDeptName">
+            serve_dept_name like concat('%', trim(#serveDeptName#), '%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="recCreateTimeS">
+            DATE_FORMAT( rec_create_time, '%Y-%m-%d' ) >= #recCreateTimeS#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="recCreateTimeE">
+             #recCreateTimeE# >= DATE_FORMAT( rec_create_time, '%Y-%m-%d' )
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="dataGroupCode" open="(">
+            data_group_code in
+            <iterate open="(" close=")" conjunction="," property="dataGroupCode">
+                #dataGroupCode[]#
+            </iterate>
+        </isNotEmpty>
+        <isPropertyAvailable prepend="or" property="dataGroupCodeAll" close=")">
+            data_group_code = #dataGroupCodeAll#
+        </isPropertyAvailable>
+        <isNotPropertyAvailable prepend="and" property="dataGroupCode" open="(">
+            data_group_code is NULL
+        </isNotPropertyAvailable>
+        <isNotPropertyAvailable prepend="or" property="dataGroupCodeAll" close=")">
+            0
+        </isNotPropertyAvailable>
+        order by task_no desc
+    </select>
+    
+    <insert id="saveIndependentTask" parameterClass="java.util.HashMap">
+        insert into it_task(
+            id,task_no,status,req_staff_no,req_staff_name,req_tel_num,req_dept_num,req_dept_name,
+            classify_id,classify_name,serve_content,serve_dept_num,serve_dept_name,building,floor,
+            spot_num,spot_name,remark,rec_creator,rec_create_time,data_group_code,archive_flag,impFlag
+        ) values (
+            #itTaskId#,#taskNo#,#status#,#reqStaffId#,#reqStaffName#,#reqTelNum#,#reqDeptNum#,#reqDeptName#,
+            #parentId#,#parentId_textField#,#serveContent#,#serveDeptNum#,#serveDeptName#,#building#,#floor#,
+            #reqSpotNum#,#reqSpotName#,#remark#,#recCreator#,#recCreateTime#,#dataGroupCode#,#archiveFlag#,#impFlag#
+        )
+    </insert>
+
+    <update id="updateIndependentTask" parameterClass="java.util.HashMap">
+        update it_task set
+            req_staff_no = #reqStaffId#,
+            req_staff_name = #reqStaffName#,
+            req_tel_num = #reqTelNum#,
+            req_dept_num = #reqDeptNum#,
+            req_dept_name = #reqDeptName#,
+            classify_id = #parentId#,
+            classify_name = #parentId_textField#,
+            serve_content = #serveContent#,
+            serve_dept_num = #serveDeptNum#,
+            serve_dept_name = #serveDeptName#,
+            building = #building#,
+            floor = #floor#,
+            spot_num = #reqSpotNum#,
+            spot_name = #reqSpotName#,
+            remark = #remark#,
+            impFlag = #impFlag#,
+            rec_revisor = #recRevisor#,
+            rec_revise_time = #recReviseTime#,
+            archive_flag = CONVERT(#archiveFlag#,SIGNED) + 1
+        where id = #itTaskId# and archive_flag = #archiveFlag#
+    </update>
+
+    <update id="submit" parameterClass="java.util.HashMap">
+        update it_task set
+        status = #status#
+        where id = #itTaskId#
+    </update>
+
+    <update id="cancellation" parameterClass="java.util.HashMap">
+        update it_task set
+        status = #status#,
+        invalid_man_no = #invalidManNo#,
+        invalid_man_name = #invalidManName#,
+        invalid_time = #invalidTime#,
+        invalid_reason = #invalidReason#
+        where id = #itTaskId#
+    </update>
+
+    <select id="queryMaxCode" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+        select
+            task_no num
+        from
+            it_task
+        where
+            task_no like concat('%', #value#, '%')
+        order by
+            task_no desc
+    </select>
+</sqlMap>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFBJ01">
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		t1.id as "id",
+		t1.clean_no as "cleanNo",
+		t1.machine_id as "machineId",
+		t1.machine_code as "machineCode",
+		t1.machine_name as "machineName",
+		t1.fixed_place as "fixedPlace",
+		t1.clean_dept_num as "cleanDeptNum",
+		t1.clean_dept_name as "cleanDeptName",
+		t1.dept_manage_no as "deptManageNo",
+		t1.dept_manage_name as "deptManageName",
+		t1.clean_date as "cleanDate",
+		t1.remark as "remark",
+		t1.rec_creator  as "recCreator",
+		t1.rec_create_time as "recCreateTime",
+		t1.rec_revisor as "recRevisor",
+		t1.rec_revise_time  as "recReviseTime",
+		t1.data_group_code as "dataGroupCode"
+
+		FROM
+		df_clean t1
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="cleanNo">
+			clean_no like concat('%',#cleanNo#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineName">
+			machine_name like concat('%',#machineName#,'%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="fixedPlace">
+			fixed_place = #fixedPlace#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="cleanDateS">
+			clean_date  <![CDATA[ >= ]]>  #cleanDateS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="cleanDateE">
+			clean_date <![CDATA[ <= ]]> #cleanDateE#
+		</isNotEmpty>
+
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				clean_no DESC
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="queryId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			t1.id as "id",
+			t1.clean_no as "cleanNo",
+			t1.machine_id as "machineId",
+			t1.machine_code as "machineCode",
+			t1.machine_name as "machineName",
+			t1.fixed_place as "fixedPlace",
+			t1.clean_dept_num as "cleanDeptNum",
+			t1.clean_dept_name as "cleanDeptName",
+			t1.dept_manage_no as "deptManageNo",
+			t1.dept_manage_name as "deptManageName",
+			t1.clean_date as "cleanDate",
+			t1.remark as "remark",
+			t1.rec_creator  as "recCreator",
+			t1.rec_create_time as "recCreateTime",
+			t1.rec_revisor as "recRevisor",
+			t1.rec_revise_time  as "recReviseTime",
+			t1.data_group_code as "dataGroupCode",
+			t2.name as name,
+			t2.work_no as workNo
+		FROM
+			df_clean t1
+			LEFT JOIN df_cleaning_executor t2 ON t2.clean_no = t1.clean_no
+		WHERE
+			t1.id = #id#
+	</select>
+
+
+
+	<insert id="insert">
+		INSERT INTO df_clean
+		(
+			id,
+			clean_no,
+			machine_id,
+			machine_code,
+			machine_name,
+			fixed_place,
+			clean_dept_num,
+			clean_dept_name,
+			dept_manage_no,
+			dept_manage_name ,
+			clean_date,
+			remark ,
+			rec_creator ,
+			rec_create_time,
+			rec_revisor ,
+			rec_revise_time,
+			data_group_code
+
+		)
+		VALUES
+		(
+			#id#,
+			#cleanNo#,
+			#machineId#,
+			#machineCode#,
+			#machineName#,
+			#fixedPlace#,
+			#cleanDeptNum#,
+			#cleanDeptName#,
+			#deptManageNo#,
+			#deptManageName#,
+			#cleanDate#,
+			#remark#,
+			#recCreator#,
+			#recCreateTime#,
+			#recRevisor#,
+			#recReviseTime#,
+			#recReviseTime#
+		)
+	</insert>
+
+
+	<delete id="delete">
+		DELETE FROM df_clean WHERE id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE 
+			df_clean
+		SET
+			clean_no = 	#cleanNo#,
+			machine_id = 	#machineId#,
+			machine_code = 	#machineCode#,
+			machine_name = 	#machineName#,
+			fixed_place = 	#fixedPlace#,
+			clean_dept_num = 	#cleanDeptNum#,
+			clean_dept_name = 	#cleanDeptName#,
+			dept_manage_no = 	#deptManageNo#,
+			dept_manage_name = 	#deptManageName#,
+			clean_date = 	#cleanDate#,
+			remark  = 	#remark#,
+			rec_creator  = 	#recCreator#,
+			rec_create_time = 	#recCreateTime#,
+			rec_revisor = 		#recRevisor# ,
+			rec_revise_time = 	#recReviseTime#,
+			data_group_code  = 	#recReviseTime#
+		WHERE
+			id= #id#
+	</update>
+	
+
+
+
+
+	<select id="selectId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		id  machineId
+		FROM df_devicemachine
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			machine_code = #id#
+		</isNotEmpty>
+	</select>
+
+
+
+	<select id="selectIdd" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		id  machineId
+		FROM df_devicemachine
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			machine_name = #id#
+		</isNotEmpty>
+	</select>
+
+	<select id="selectDeviceCheck" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		machine_code   machineCode
+		FROM df_devicemachine
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			machine_code = #id#
+		</isNotEmpty>
+	</select>
+
+
+	<select id="selectDeviceCheckTwo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+		machine_code  machineCode
+		FROM df_clean
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="cleanNo">
+			clean_no = #cleanNo#
+		</isNotEmpty>
+	</select>
+
+</sqlMap>

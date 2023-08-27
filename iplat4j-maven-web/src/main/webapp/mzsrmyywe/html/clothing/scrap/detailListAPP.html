@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.css" />
+    <link rel="stylesheet" href="../reference/css/iconfont.css" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="../reference/css/colorGreen.css" />
+    <link rel="stylesheet" href="../reference/css/loading.css" />
+    <link rel="stylesheet" href="../../reference/css/common.css" />
+    <link rel="stylesheet" href="../reference/css/clothCommon.css" />
+  </head>
+  <style>
+    .main {
+      margin-top: 55px;
+      background-color: white;
+    }
+
+    .total {
+      float: right;
+      margin-right: 10%;
+    }
+
+    .scan {
+      position: fixed;
+      /*bottom: 15px;*/
+      left: 15px;
+      width: 60px;
+      z-index: 11;
+    }
+
+    .round {
+      border: 1px solid #30c37c;
+      width: 60px;
+      height: 60px;
+      line-height: 29px;
+      text-align: center;
+      color: #fff;
+      background-color: #30c37c;
+      filter: alpha(opacity=100);
+      /* 用于IE浏览器－透明度为20%*/
+      -moz-opacity: 1;
+      /*  用于Moz + Firefox－透明度为20%*/
+      opacity: 1;
+      -webkit-border-radius: 60px;
+      -moz-border-radius: 60px;
+      -o-border-radius: 60px;
+      border-radius: 60px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mui-card {
+      background-color: #30c37c;
+      color: white;
+    }
+
+    .mui-card-content {
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 18px;
+    }
+
+    .mui-numbox {
+      width: 160px;
+      height: 38px;
+    }
+
+    .mask {
+      height: 78%;
+    }
+
+    #update {
+      position: fixed;
+      bottom: 0;
+      background-color: white;
+      width: 100%;
+      height: 40%;
+    }
+
+    .hideHtml {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      align-items: center;
+    }
+
+    .sureBtn button {
+      position: fixed;
+      bottom: 40px;
+      font-size: 18px;
+      color: white;
+      background-color: #30c37c;
+    }
+
+    .save {
+      margin-left: 37%;
+      width: 50%;
+    }
+
+    .add {
+      margin-left: 14%;
+    }
+
+    .mui-table-view-radio .mui-table-view-cell > a:not(.mui-btn) {
+      border: 1px solid #c8c7cc;
+    }
+
+    .mui-table-view-cell {
+      margin-bottom: 15px;
+    }
+
+    .mui-table-view-cell {
+      font-size: 18px;
+      color: white;
+    }
+
+    .mui-table-view {
+      margin-top: 10px;
+    }
+
+    .hideBody {
+      position: fixed;
+      bottom: 0;
+      background-color: white;
+      width: 100%;
+      height: 30%;
+    }
+
+    .ulForward li {
+      text-align: center;
+      border-bottom: 1px solid #999;
+      font-size: 18px;
+      line-height: 50px;
+      width: 33%;
+      float: left;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    input.mui-input-clear.deptSearch {
+      margin-bottom: 0;
+    }
+  </style>
+
+  <body>
+    <header class="mui-bar mui-bar-nav backColor">
+      <h1 class="mui-title">报废</h1>
+      <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+      </button>
+      <!-- <button id="search" class="mui-btn mui-btn-link mui-btn-nav mui-pull-right">
+            <span class="mui-icon mui-icon-search"></span>
+        </button> -->
+    </header>
+    <div class="main">
+      <div id="chooseCloth">
+        <input type="text" placeholder="输入布草类型" readonly id="initCloth" />
+      </div>
+      <div class="list">
+        <ul class="mui-table-view mui-table-view-radio" id="list">
+          <!-- <li class="mui-table-view-cell backColor">
+                    <a class="mui-navigate-right">报废原因：11111</a>
+                </li>
+                <li class="mui-table-view-cell mui-selected  backColor">
+                    <a class="mui-navigate-right">报废原因：222222</a>
+                </li>
+                <li class="mui-table-view-cell  backColor">
+                    <a class="mui-navigate-right">报废原因：333333</a>
+                </li> -->
+        </ul>
+      </div>
+      <div
+        class="mui-numbox"
+        data-numbox-min="0"
+        style="width: 60%;margin: 10px;margin-left: 70px;"
+      >
+        <button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
+        <input class="mui-numbox-input" type="number" id="updateNum" />
+        <button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
+      </div>
+      <!-- <div id="newCloth" class="hideBody" style="margin-bottom: -55px;" hidden>
+
+            <div class="hideHtml">
+                <span id="newType" style="margin: 10px;font-size: 24px;border: 1px #999 solid; padding: 9px;border-radius: 6px;">
+
+                    <span id="clothTypeName">布草类型</span> （
+                <span id="newSize">布草规格</span>）
+                </span>
+                <div style="display: flex;justify-content: space-between; width: 68%;margin-top: 30px;">
+                    <button style="background-color: #30c37c;color: white;" onclick="cancel()">取消</button>
+                    <button style="background-color: #30c37c;color: white;" onclick="addSure()">确认</button>
+                </div>
+            </div>
+        </div> -->
+      <!-- <div id="update" hidden>
+            <div class="hideHtml">
+                <span id="updateType" style="margin: 10px;font-size: 24px;">布草上装（<span id="updateSize">均码</span>）</span>
+                <ul class="mui-table-view mui-table-view-radio">
+                    <li class="mui-table-view-cell">
+                        <a class="mui-navigate-right">布草损坏</a>
+                    </li>
+                    <li class="mui-table-view-cell mui-selected">
+                        <a class="mui-navigate-right">电子芯片损坏</a>
+                    </li>
+                </ul>
+                <div class="mui-numbox" data-numbox-min='0' style="margin: 10px;">
+                    <button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
+                    <input class="mui-numbox-input" type="number" id="updateNum" />
+                    <button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
+                </div>
+                <div style="display: flex;justify-content: space-between; width: 68%;margin-top: 10px;">
+                    <button style="background-color: #30c37c;color: white;" onclick="cancel()">取消</button>
+                    <button style="background-color: #30c37c;color: white;" onclick="sure()">确认</button>
+                </div>
+            </div>
+        </div> -->
+      <!-- 模糊查询弹框 -->
+      <div
+        id="ulForward"
+        style="position: fixed;z-index: 4200;width: 100%;bottom: -10px;"
+        hidden
+      >
+        <div class="mui-input-row mui-search">
+          <input
+            type="search"
+            class="mui-input-clear deptSearch"
+            placeholder="请输入布草名称进行查询"
+            oninput="search(this.value)"
+            style="border:#E1E1E1;width: 100%;background: #E1E1E1;border-radius: 0px;border-bottom: 1px solid #999;"
+          />
+        </div>
+        <ul
+          class="ulForward"
+          style="background:#E1E1E1;width: 100%;height:0px;overflow-y: auto;padding: 0;"
+        >
+          <span
+            id="roundWait"
+            class="mui-spinner"
+            style="height: 60px;width: 60px;"
+          ></span>
+        </ul>
+      </div>
+      <div class="sureBtn">
+        <!-- <button class="add" onclick="add()">增加</button> -->
+        <button class="save" onclick="save()" style="margin-left: 90px;">
+          确认
+        </button>
+      </div>
+    </div>
+
+    <!-- 遮罩 -->
+    <!-- <div class="mask"></div> -->
+  </body>
+  <script type="text/javascript" src="../reference/mui/js/mui.min.js"></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/jquery-2.1.4.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/mui.picker.min.js"
+  ></script>
+  <script type="text/javascript" src="../reference/mui/js/baseInfo.js"></script>
+  <script
+    type="text/javascript"
+    src="../../reference/js/mui.loading.js"
+  ></script>
+  <!-- <script type="text/javascript" src="../../../cordova.js"></script> -->
+  <script>
+    // localStorage.setItem("initdeptName", "信息科")
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var config = "is_ signature";
+    var isSignature = "";
+    var totalIndex = 0;
+    var deptName = "";
+    var deptNum = "";
+    var dataGroupCode = localStorage.getItem("dataGroupCode");
+    var clothType = "";
+    var clothTypeName = "";
+    var clothModel = "";
+    var scrappedCause = "";
+    var submitArray = [];
+    var recCreator = workNo;
+    $(function() {
+      init();
+    });
+
+    //初始化
+    function init() {
+      var listHtml = "";
+      mui.showLoading("正在加载", "div");
+      mui.hideLoading();
+      $.ajax({
+        type: "get",
+        url: baseUrl + "app_ManualController.do?getTypeByCode",
+        data: {
+          code: "scrapCause"
+        },
+        success: function(data) {
+          mui.hideLoading();
+
+          var data = JSON.parse(data);
+          console.log(data);
+          // if (data.respCode != "200") {
+          //     mui.toast(data.respMsg);
+          //     return;
+          // }
+
+          for (var i = 0; i < data.length; i++) {
+            var typeName = data[i].typename;
+            listHtml += createHtml(typeName, i);
+          }
+          $("#list").html(listHtml);
+        }
+      });
+    }
+
+    function createHtml(typeName, i) {
+      totalIndex++;
+      var html = "";
+      html =
+        '<li class="mui-table-view-cell backColor"><a class="mui-navigate-right" id=' +
+        i +
+        '>报废原因：<span class="cause">' +
+        typeName +
+        "</span></a> </li>";
+      return html;
+    }
+
+    $("#list").on("click", ".mui-selected", function() {
+      var index = $(this)
+        .find(".mui-navigate-right")
+        .attr("id");
+      console.log(index);
+      scrappedCause = $(this)
+        .find(".cause")
+        .html();
+    });
+
+    //选择科室布草
+    // mui("body").on("tap", "#chooseCloth", function() {
+    //     $(".sureBtn").hide();
+    //     var picker = new mui.PopPicker({
+    //         layer: 2
+    //     });
+    //     $.ajax({
+    //         type: "get",
+    //         url: baseUrl + "app_ManualController.do?getNeatIssueCloth",
+    //         data: {
+    //             dataGroupCode: dataGroupCode,
+    //             deptNum: deptNum
+    //         },
+    //         success: function(data) {
+    //             var data = JSON.parse(data);
+    //             var list = data.obj.obj;
+    //             console.log(list);
+    //             picker.setData(list);
+    //         },
+    //         error: function(XMLHttpRequest) {
+    //             var text = JSON.parse(XMLHttpRequest.responseText);
+    //             mui.toast(text.message);
+    //             return;
+    //         }
+    //     })
+
+    //     picker.hide();
+
+    //     picker.show(function(rs) {
+    //         $("#update").hide();
+    //         $("#newCloth").hide();
+    //         $(".sureBtn").show();
+    //         console.log(rs)
+    //         $("#initCloth").val(rs[0].text + rs[1].text);
+    //         console.log(rs[0].text);
+    //         console.log(rs[1].text);
+    //         clothTypeName = rs[0].text;
+    //         clothModel = rs[1].text;
+    //         clothType = rs[0].value;
+
+    //     });
+    // });
+
+    // 模糊查询科室布草类型
+    mui("body").on("tap", "#chooseCloth", function() {
+      $(".deptSearch").val("");
+      getCloth(name);
+      $("#ulForward").show();
+      $(".ulForward").animate(
+        {
+          height: "200px"
+        },
+        200
+      );
+    });
+
+    var timeId = null;
+
+    function search(name) {
+      clearTimeout(timeId);
+      timeId = setTimeout(function() {
+        getCloth(name);
+      }, 1000);
+    }
+
+    function getCloth(name) {
+      $.ajax({
+        type: "get",
+        url: baseUrl + "app_ManualController.do?getClothType",
+        data: {
+          dataGroupCode: dataGroupCode,
+          clothTypeName: name
+        },
+        success: function(data) {
+          var data = JSON.parse(data);
+          var list = data.obj.obj;
+          console.log(list);
+          var html = "";
+          for (var i = 0; i < list.length; i++) {
+            var typeName = list[i].clothTypeName;
+            var type = list[i].clothModel;
+            var typeCode = list[i].clothType;
+            clothType = typeCode;
+            html +=
+              '<li class="mui-table-view-cells"><a href="#"  name="' +
+              typeCode +
+              '">' +
+              '<span class="name">' +
+              typeName +
+              "</span>" +
+              " " +
+              '<span class="type">' +
+              type +
+              "</span>" +
+              "</a></li>";
+          }
+          $(".ulForward").html(html);
+        },
+        error: function(XMLHttpRequest) {
+          var text = JSON.parse(XMLHttpRequest.responseText);
+          mui.toast(text.message);
+          return;
+        }
+      });
+    }
+
+    // 选择布草类型
+    $("#ulForward").on("click", "li", function() {
+      var name = $(this)
+        .find("a .name")
+        .html();
+      var type = $(this)
+        .find("a .type")
+        .html();
+      console.log(name);
+      console.log(type);
+      var nameType = name + type;
+      $("#chooseCloth input").val(nameType);
+      clothModel = type;
+      clothTypeName = name;
+      $("#ulForward").hide();
+      $(".ulForward").css({
+        height: "0px"
+      });
+    });
+
+    //保存
+    function save() {
+      var cloth = {
+        clothType: "",
+        clothTypeName: "",
+        clothModel: "",
+        scrappedNum: "",
+        beforeNum: "0"
+      };
+      var num = $("#updateNum").val() + "";
+      cloth.scrappedNum = num;
+      cloth.clothType = clothType;
+      cloth.clothTypeName = clothTypeName;
+      cloth.clothModel = clothModel;
+      if (num == "0") {
+        mui.toast("报废数量不可为0！");
+        return;
+      }
+      if ($("#initCloth").val() == "") {
+        mui.toast("请选择布草类型！");
+        return;
+      }
+      if (scrappedCause == "") {
+        mui.toast("请选择报废原因！");
+        return;
+      }
+      console.log(cloth);
+      submitArray.push(cloth);
+      console.log(submitArray);
+      console.log("-----------");
+      mui.showLoading("正在保存", "div");
+      console.log(isSignature);
+      console.log(totalIndex);
+      var saveData = {
+        dataGroupCode: dataGroupCode,
+        belongStock: "2",
+        scrappedType: "0",
+        recCreator: recCreator,
+        scrappedCause: scrappedCause,
+        clothListStr: JSON.stringify(submitArray)
+      };
+      $.ajax({
+        type: "post",
+        url: baseUrl + "app_ManualController.do?saveScrapped",
+        data: saveData,
+        success: function(data) {
+          mui.hideLoading();
+          var data = JSON.parse(data);
+          if (data.respCode != 200) {
+            mui.toast(data.respMsg);
+            return;
+          }
+          mui.toast(data.respMsg);
+          setTimeout(function() {
+            location.href = "scrapMainAPP.html";
+          }, 1000);
+        },
+        error: function(XMLHttpRequest) {
+          var text = JSON.parse(XMLHttpRequest.responseText);
+          mui.toast(text.message);
+          return;
+        }
+      });
+    }
+
+    //查询是否需要签字
+    function isSign(config) {
+      var param = {
+        dataGroupCode: dataGroupCode,
+        configItem: config
+      };
+      $.get(
+        baseUrl + "app_clothCommomQuery.do?queryClothConfig",
+        param,
+        function(data) {
+          var data = JSON.parse(data);
+          if (data.respCode != 200) {
+            mui.toast(data.respMsg);
+            return;
+          }
+          isSignature = data.obj.obj;
+          console.log(isSignature);
+        }
+      )
+        .fail(function(XMLHttpRequest) {
+          var text = JSON.parse(XMLHttpRequest.responseText);
+          mui.toast(text.message);
+          return;
+        })
+        .complete(function(XMLHttpRequest, status) {
+          if (status == "timeout") {
+            mui.toast("网速不给力，请重试！");
+            return;
+          } else if (status == "error") {
+            mui.toast("当前网络不可用，请查看网络状态！");
+            return;
+          }
+        });
+    }
+
+    //报废选择
+    var list = document.querySelector(".mui-table-view.mui-table-view-radio");
+    list.addEventListener("selected", function(e) {
+      console.log("当前选中的为：" + e.detail.el.innerText);
+    });
+
+    /**
+     * @desc   点击返回按钮
+     * @author huoke
+     */
+    mui("body").on("tap", "#back", function() {
+      // location.href = '../clothing_menu.html'
+      location.href = "scrapMainAPP.html";
+    });
+
+    /**
+     * @desc   手机系统返回键
+     * @author huoke
+     */
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+      document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+      // window.history.back(-1)
+      location.href = "scrapMainAPP.html";
+    }
+  </script>
+</html>

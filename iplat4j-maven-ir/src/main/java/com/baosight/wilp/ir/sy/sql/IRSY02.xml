@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="IRSY02">
+
+    <select id="queryNoticeRecords" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+               id,
+               notice_title noticeTitle,
+               notice_content noticeContent,
+               DATE_FORMAT(create_time ,'%Y-%m-%d %T') createTime,
+               creator,
+               DATE_FORMAT(revise_time ,'%Y-%m-%d %T') reviseTime,
+               revisor,
+               status
+        from ${platSchema}.tirsy02
+        <dynamic prepend=" where ">
+            <isNotEmpty property="status" prepend=" AND ">
+                status = #status#
+            </isNotEmpty>
+            <isNotEmpty property="noticeTitle" prepend=" AND ">
+                notice_title like concat('%', #noticeTitle#, '%')
+            </isNotEmpty>
+            <isNotEmpty property="noticeContent" prepend=" AND ">
+                notice_content like concat('%', #noticeContent#, '%')
+            </isNotEmpty>
+            <isNotEmpty property="id" prepend=" AND ">
+                id = #id#
+            </isNotEmpty>
+        </dynamic>
+        order by create_time desc
+    </select>
+
+    <select id="queryNoticeCount" parameterClass="java.util.HashMap" resultClass="int">
+        select
+            count(*)
+        from ${platSchema}.tirsy02
+        <dynamic prepend=" where ">
+            <isNotEmpty property="status" prepend=" AND ">
+                status = #status#
+            </isNotEmpty>
+            <isNotEmpty property="noticeTitle" prepend=" AND ">
+                noticeTitle like concat('%', #notice_title#, '%')
+            </isNotEmpty>
+        </dynamic>
+    </select>
+
+    <delete id="deleteNoticeRecord" parameterClass="java.util.HashMap">
+        delete from ${platSchema}.tirsy02
+        where id in
+        <iterate open="(" close=")" conjunction="," property="ids">
+            #ids[]#
+        </iterate>
+    </delete>
+
+    <update id="batchUpdateNoticeRecord" parameterClass="java.util.HashMap">
+        update ${platSchema}.tirsy02
+        set status = '0'
+        where id in
+        <iterate open="(" close=")" conjunction="," property="ids">
+            #ids[]#
+        </iterate>
+    </update>
+
+</sqlMap>

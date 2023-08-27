@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFSB04">
+	<!-- 特种设备台账 -->
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			t.machine_code AS machineCode,
+			t.id AS machineId,
+			t.machine_name AS machineName,
+			t.machine_type_id AS machineTypeId,
+			t.fixed_place AS fixedPlace,
+			t.models models,
+			t.status_code AS statusCode,
+			t.manager_dept_id AS managerDepartId,
+			t.use_deaprt_id AS useDeaprtId
+		FROM
+			df_special_device t
+		WHERE
+			1 = 1
+		<isNotEmpty prepend="and" property="machineTypeId">
+			t.id like concat('%', #machineTypeId#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="machineCode">
+			t.machine_code like concat('%', #machineCode#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="machineName">
+			t.machine_name like concat('%', #machineName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="statusCode">
+			t.status_code = #statusCode#
+		</isNotEmpty>
+		limit #offset#,#limit#
+	</select>
+	
+	<!-- 设备基本情况 -->
+	<select id="initDeviceForm" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		    dd.id as machineId,
+			dd.machine_code as machineCode,
+			dd.machine_name as machineName,
+			CASE dd.status_code
+				WHEN '0' THEN
+					'新建'
+				WHEN '1' THEN
+					'启用'
+				WHEN '-1' THEN
+					'停用'
+				END AS statusCode,
+			dd.machine_type_id as machineTypeId,
+			dd.fixed_place as fixedPlace,
+			dd.models
+		FROM
+			df_special_device dd
+		where
+			dd.id=#machineId#
+	</select>
+
+	<!-- 维修记录 -->
+	<select id="initMaintainTable" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			gd.id AS taskId,
+			dm.id AS machineID,
+			gd.task_no AS taskNo,
+			gd.status_code AS statusCode,
+			tb1.DEPT_NAME AS reqDept,
+			GROUP_CONCAT(t2.`name`) AS NAME,
+			gd.item_name AS itemName,
+			gd.money AS maintainCost,
+			gd.comments AS comments,
+			t1.DEPT_NAME AS wgroupDept,
+			DATE_FORMAT(
+				gd.finish_time,
+				'%Y-%m-%d %T'
+			) AS finshTime
+		FROM
+			wx_gd gd
+		LEFT JOIN df_special_device dm ON dm.machine_code = gd.dev_num
+		LEFT JOIN tbmbd01 tb1 ON tb1.DEPT_NUM = gd.req_dept_num
+		LEFT JOIN wx_ry ry ON ry.task_no = gd.task_no
+		LEFT JOIN tbmbd01 t1 ON t1.DEPT_NUM = gd.wgroup_num
+		LEFT JOIN tbmbd02 t2 ON t2.work_no =ry.work_no
+		GROUP BY
+			gd.task_no
+	</select>
+	
+	<!-- 保养基准 -->
+	<select id="initMaintainSchemeTable" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			schemeID,
+			schemeCode,
+			schemeName,
+			jobContent,
+			`status` AS statusName,
+			createTime,
+			createMan,
+			modifyTime,
+			modifyMan
+		FROM
+			di_scheme
+	</select>
+	
+	<!-- 保养实绩 -->
+	<select id="initMaintainTaskTable" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			taskID,
+			schemeID,
+			`status` as statusName,
+			taskCode,
+			1 as schemeName,
+			2 as machineName,
+			3 as machineCode,
+			jobContent,
+			4 as deptName,
+			5 as `name`,
+			createTime,
+			finishTime
+		FROM
+			di_task
+	</select>
+
+	<!-- 巡检基准 -->
+	<select id="initInspectionSchemeTable" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			schemeID,
+			schemeCode,
+			schemeName,
+			jobContent,
+			`status` as statusName,
+			date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime,
+			createMan,
+			date_format(modifyTime,'%Y-%m-%d %H:%i:%s') modifyTime,
+			modifyMan
+		from
+			di_scheme
+		where
+			machineID = #machineId#
+			limit #offset#,#limit#
+	</select>
+
+	<!-- 巡检实绩 -->
+	<select id="initInspectionTaskTable" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			t.taskID,
+			CASE t. STATUS
+				WHEN '1' THEN
+					'执行中'
+				WHEN '-1' THEN
+					'已超时'
+				WHEN '2' THEN
+					'已完工'
+				WHEN '3' THEN
+					'关闭'
+				END AS STATUS,
+			t.taskCode,
+			i.schemeName,
+			t.schemeID,
+			m.machine_name machineName,
+			m.machine_code machineCode,
+			t.jobContent,
+			t.departName,
+			t.managerName,
+			t.finishMan finishName,
+			date_format(t.createTime,'%Y-%m-%d %H:%i:%s') createTime,
+			date_format(t.finishTime,'%Y-%m-%d %H:%i:%s') finishTime
+		FROM
+			di_task t
+				LEFT JOIN di_scheme i ON t.schemeID = i.schemeID
+				LEFT JOIN df_special_device m ON m.id = i.machineID
+		WHERE
+			t.machineID = #machineId#
+			limit #offset#,#limit#
+	</select>
+	
+	<!-- 设备档案count -->
+	<select id="count" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			t.id AS machineId
+		FROM
+			df_special_device t
+		WHERE
+			1 = 1
+		<isNotEmpty prepend="and" property="machineTypeId">
+			t.id = #machineTypeId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="machineCode">
+			t.machine_code = #machineCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="machineName">
+			t.machine_name = #machineName#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="deptName">
+			t.use_deaprt_name = #deptName#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="manageDeptName">
+			t.manager_depart_name = #manageDeptName#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="status">
+			t.status_code = #statusCode#
+		</isNotEmpty>
+		GROUP BY t.id
+	</select>
+
+	<!-- 查询巡检基准数量 -->
+	<select id="queryDiSchemaCount" parameterClass="string" resultClass="int">
+		select count(1) from di_scheme where machineID = #value#
+	</select>
+
+	<!-- 查询巡检任务数量 -->
+	<select id="queryDiTaskCount" parameterClass="string" resultClass="int">
+		select count(1) from di_task where machineID = #value#
+	</select>
+
+	<!-- 查询保养基准数量 -->
+	<select id="queryDkSchemaCount" parameterClass="string" resultClass="int">
+		select count(1) from dk_scheme where machineID = #value#
+	</select>
+
+	<!-- 查询保养任务数量 -->
+	<select id="queryDkTaskCount" parameterClass="string" resultClass="int">
+		select count(1) from dk_task where machineID = #value#
+	</select>
+
+	<!-- 查询维修任务数量 -->
+	<select id="queryMtCount" parameterClass="string" resultClass="int">
+		select count(1) from mt_gd where device_num = #value#
+	</select>
+
+	<!-- 巡检基准 -->
+	<select id="queryDiSchemeList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			schemeID,
+			schemeCode,
+			schemeName,
+			jobContent,
+			case `status`
+				when '0' then '新建'
+				when '1' then '启用'
+				when '-1' then '禁用'
+				end as statusName,
+			date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime,
+			createMan,
+			date_format(modifyTime,'%Y-%m-%d %H:%i:%s') modifyTime,
+			modifyMan
+		from
+			di_scheme
+		where
+			machineID = #machineId#
+			limit #offset#,#limit#
+	</select>
+
+	<!-- 巡检基准 count-->
+	<select id="queryDiSchemeCount" parameterClass="java.util.HashMap" resultClass="int">
+		select schemeID from di_scheme where machineID = #machineId#
+	</select>
+
+	<!-- 巡检任务 -->
+	<select id="queryDiTaskList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			t.taskID,
+			CASE t. STATUS
+				WHEN '1' THEN '执行中'
+				WHEN '-1' THEN '已超时'
+				WHEN '2' THEN '已完工'
+				WHEN '3' THEN '关闭'
+				END AS STATUS,
+			t.taskCode,
+			i.schemeName,
+			t.schemeID,
+			t.jobContent,
+			t.departName,
+			t.managerName,
+			t.finishMan finishName,
+			date_format(t.createTime,'%Y-%m-%d %H:%i:%s') createTime,
+			date_format(t.finishTime,'%Y-%m-%d %H:%i:%s') finishTime
+		FROM
+			di_task t
+				LEFT JOIN di_scheme i ON t.schemeID = i.schemeID
+		WHERE
+			t.machineID = #machineId#
+			limit #offset#,#limit#
+	</select>
+
+
+	<!-- 保养基准 -->
+	<select id="queryDkSchemeList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			schemeID,
+			schemeCode,
+			schemeName,
+			jobContent,
+			case `status`
+				when '0' then '新建'
+				when '1' then '启用'
+				when '-1' then '禁用'
+				end as statusName,
+			date_format(createTime,'%Y-%m-%d %H:%i:%s') createTime,
+			createMan,
+			date_format(modifyTime,'%Y-%m-%d %H:%i:%s') modifyTime,
+			modifyMan
+		FROM
+			dk_scheme
+		where
+			machineID = #machineId#
+			limit #offset#,#limit#
+	</select>
+
+	<!-- 保养基准 count -->
+	<select id="queryDkSchemeCount" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT schemeID FROM dk_scheme where machineID = #machineId#
+	</select>
+
+	<!-- 保养任务 -->
+	<select id="queryDkTaskList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			t.taskID,
+			CASE t. STATUS
+				WHEN '1' THEN '执行中'
+				WHEN '-1' THEN '已超时'
+				WHEN '2' THEN '已完工'
+				WHEN '3' THEN '关闭'
+				END AS statusName,
+			t.taskCode,
+			i.schemeName,
+			t.schemeID,
+			t.jobContent,
+			t.departName,
+			t.managerName,
+			t.finishMan finishName,
+			date_format(t.createTime,'%Y-%m-%d %H:%i:%s') createTime,
+			date_format(t.finishTime,'%Y-%m-%d %H:%i:%s') finishTime
+		FROM
+			dk_task t
+				LEFT JOIN dk_scheme i ON t.schemeID = i.schemeID
+		WHERE
+			t.machineID = #machineId#
+			limit #offset#,#limit#
+	</select>
+
+
+	<!-- 维修任务 -->
+	<select id="queryMtTaskList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		mb.id	as "taskID",  <!-- 主键 -->
+		mb.task_no	as "taskNo",  <!-- 工单号 -->
+		case mb.status_code
+		when '01' then '待受理'
+		when '12' then '退单待受理'
+		when '02' then '待派工'
+		when '11' then '退单待派工'
+		when '03' then '待接受任务'
+		when '05' then '待完工'
+		when '07' then '待评价'
+		when '08' then '待恢复'
+		when '98' then '作废'
+		when '99' then '已结束'
+		end as"statusName",  <!-- 显示的状态代码 -->
+		mb.req_staff_name as "reqStaffName" , <!-- 报修人 -->
+		mb.req_tel_num	as "reqTelNum",  <!-- 报修电话 -->
+		mb.req_dept_name	as "reqDeptName",  <!-- 报修科室 -->
+		mb.item_type_name	as "itemTypeName",  <!-- 维修项目分类 -->
+		mb.item_name	as "itemName",  <!-- 维修项目 -->
+		mb.req_spot_name	as "reqSpotName",  <!-- 维修地点 -->
+		mb.rec_create_time as "recCreateTime",<!-- 登记时间 -->
+		mh2.wgroup_name as "wgroupName",<!-- 维修科室名称 -->
+		mh7.operation_name as "finishPeopleName",<!-- 完工人 -->
+		mh7.operation_time as "finishTime",<!-- 完工时间 -->
+		(select GROUP_CONCAT(ry.name SEPARATOR '、') from mt_ry ry where ry.task_no = mb.task_no) excutors
+		FROM mt_gd  mb
+		left join mt_lc mh2 on mh2.task_no=mb.task_no and mh2.status_code = '02' and mh2.is_current = '1' and mh2.is_actual = '1'
+		left join mt_lc mh7 on mh7.task_no=mb.task_no and mh7.status_code = '07' and mh7.is_current = '1' and mh7.is_actual = '1'
+		WHERE device_num = #machineCode#
+		limit #offset#,#limit#
+	</select>
+
+	<!-- 维修任务 count-->
+	<select id="queryMtTaskCount" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT
+			mb.id
+		FROM mt_gd  mb
+				 left join mt_lc mh2 on mh2.task_no=mb.task_no and mh2.status_code = '02' and mh2.is_current = '1' and mh2.is_actual = '1'
+				 left join mt_lc mh7 on mh7.task_no=mb.task_no and mh7.status_code = '07' and mh7.is_current = '1' and mh7.is_actual = '1'
+		WHERE device_num = #machineCode#
+	</select>
+</sqlMap>

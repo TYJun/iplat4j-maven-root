@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFRH01">
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		t1.id AS "id",
+		t1.lubricate_no AS "lubricateNo",
+		t1.lubricate_id AS "lubricateId",
+		t1.machine_code AS "machineCode",
+		t1.machine_name AS "machineName",
+		t1.fixed_place AS "fixedPlace",
+		t1.lubricate_dept_num AS "lubricateDeptNum",
+		t1.lubricate_dept_name AS " lubricateDeptName" ,
+		t1.lubricate_manage_no AS "lubricateManageNo" ,
+		t1.lubricate_manage_name AS " lubricateManageName" ,
+		t1.lubricate_date AS "lubricateDate" ,
+		t1.remark AS " remark" ,
+		t1.rec_creator AS " recCreator",
+		t1.rec_create_time AS " recCreateTime ",
+		t1.rec_revisor AS " recRevisor" ,
+		t1.rec_revise_time AS "recReviseTime"
+		FROM
+		df_lubricate t1
+		WHERE
+		1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="lubricateNo">
+			lubricate_no like concat('%',#lubricateNo#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineName">
+			machine_name like concat('%',#machineName#,'%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="fixedPlace">
+			fixed_place = #fixedPlace#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="lubricateDateS">
+			lubricate_date  <![CDATA[ >= ]]>  #lubricateDateS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="lubricateDateE">
+			lubricate_date <![CDATA[ <= ]]> #lubricateDateE#
+		</isNotEmpty>
+
+	</select>
+
+
+	<select id="queryId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		t1.id AS "id",
+		t1.lubricate_no AS "lubricateNo",
+		t1.lubricate_id AS "lubricateId",
+		t1.machine_code AS "machineCode",
+		t1.machine_name AS "machineName",
+		t1.fixed_place AS "fixedPlace",
+		t1.lubricate_dept_num AS "lubricateDeptNum",
+		t1.lubricate_dept_name AS " lubricateDeptName" ,
+		t1.lubricate_manage_no AS "lubricateManageNo" ,
+		t1.lubricate_manage_name AS " lubricateManageName" ,
+		t1.lubricate_date AS "lubricateDate" ,
+		t1.remark AS " remark" ,
+		t1.rec_creator AS " recCreator",
+		t1.rec_create_time AS " recCreateTime ",
+		t1.rec_revisor AS " recRevisor" ,
+		t1.rec_revise_time AS "recReviseTime"
+		FROM
+		df_lubricate t1
+		WHERE
+	     t1.id = #id#
+
+	</select>
+
+
+
+	<select id="queryLubricationExecutor" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			t1.id AS "id",
+			t3.work_no AS "workNo",
+			t3.name AS "name",
+			t3.dept_num AS "deptNum" ,
+			t3.dept_name AS " deptName"
+		FROM
+			df_lubricate_executor t3
+				LEFT JOIN df_lubricate t1 ON t1.lubricate_no = t3.lubricate_no
+		WHERE
+			t1.id = #id#
+	</select>
+
+	<select id="queryLubricationInformation" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			t1.id AS "id",
+			t2.lubricate_spot AS "lubricateSpot",
+			t2.fill_oil AS "fillOil",
+			t2.waste_oil AS "wasteOil",
+			t2.oil_type AS "oilType",
+			t2.oil_water_content AS "oilWaterContent",
+			t2.oil_acid_content AS "oilAcidContent",
+			t2.each_element_content AS "eachElementContent",
+			t2.next_oil_time AS "nextOilTime",
+			t2.sort_no AS "sortNo"
+		FROM
+			df_lubricate_detail t2
+				LEFT JOIN df_lubricate t1 ON t1.lubricate_no = t2.lubricate_no
+		WHERE
+		   t1.id = #id#
+	</select>
+
+	<select id="select" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT * FROM df_clean WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO df_lubricate (
+			id,
+			lubricate_id,
+			lubricate_spot,
+			lubricate_no,
+			fill_oil,
+			waste_oil,
+			oil_type,
+			oil_water_content,
+			oil_acid_content,
+			each_element_content,
+			next_oil_time,
+			sort_no,
+			machine_id,
+			machine_code,
+			machine_name,
+			fixed_place,
+			lubricate_dept_num,
+			lubricate_dept_name,
+			lubricate_manage_no,
+			lubricate_manage_name,
+			lubricate_date,
+			remark,
+			rec_creator,
+			rec_create_time,
+			rec_revisor,
+			rec_revise_time
+		)
+		VALUES
+		(
+			#id#,
+			#lubricateId#,
+			#lubricateSpot#,
+			#lubricateNo#,
+			#fillOil#,
+			#wasteOil#,
+			#oilType#,
+			#oilWaterContent#,
+			#oilAcidContent#,
+			#eachElementContent#,
+			#nextOilTime#,
+			#sortNo#,
+			#machineId#,
+			#machineCode#,
+			#machineName#,
+			#fixedPlace#,
+			#lubricateDeptNum#,
+			#lubricateDeptName#,
+			#lubricateManageNo#,
+			#lubricateManageName#,
+			#lubricateDate#,
+			#remark#,
+			#recCreator#,
+			#recCreateTime#,
+			#recRevisor#,
+			#recReviseTime#
+		)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM df_lubricate WHERE id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE
+			df_lubricate
+		SET
+			machine_id = #machineId#,
+			machine_code = 	#machineCode#,
+			machine_name = 	#machineName#,
+			fixed_place = 	#fixedPlace#,
+			lubricate_dept_num = 	#lubricateDeptNum#,
+			lubricate_dept_name = 	#lubricateDeptName#,
+			lubricate_manage_no = 	#lubricateManageNo#,
+			lubricate_manage_name = 	#lubricateManageName#,
+			lubricate_date = 	#lubricateDate#,
+			remark  = 	#remark#,
+			rec_creator  = 	#recCreator#,
+			rec_create_time = 	#recCreateTime#,
+			rec_revisor = 		#recRevisor# ,
+			rec_revise_time = 	#recReviseTime#
+		WHERE
+			id= #id#
+	</update>
+
+
+	<select id="selectLubricateCheckTwo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+		machine_code  machineCode
+		FROM df_lubricate
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="lubricateNo">
+			lubricate_no = #lubricateNo#
+		</isNotEmpty>
+	</select>
+</sqlMap>

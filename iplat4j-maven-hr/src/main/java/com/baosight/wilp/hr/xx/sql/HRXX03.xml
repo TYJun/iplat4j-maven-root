@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HRXX03">
+
+    <select id="query" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.hr.xx.domain.HrManHistory">
+        SELECT
+        id	as "id",  <!-- 主键ID -->
+        man_id	as "manId",  <!-- 人员信息表ID -->
+        operator_type	as "operatorType",  <!-- 类型（入职、调岗、离职...） -->
+        first_time	as "firstTime",  <!-- 开始时间 -->
+        last_time	as "lastTime",  <!-- 结束时间 -->
+        operatorMan_id	as "operatormanId",  <!-- 操作人ID -->
+        operatorMan_name	as "operatormanName",  <!-- 操作人姓名 -->
+        operator_time	as "operatorTime",  <!-- 操作时间 -->
+        success_flag	as "successFlag"
+        FROM .hr_man_history WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            man_id = #id#
+        </isNotEmpty>
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                id asc
+            </isEmpty>
+        </dynamic>
+
+    </select>
+
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM .hr_man_history WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+    </select>
+
+
+    <insert id="insert">
+        INSERT INTO .hr_man_history (id,  <!-- 主键ID -->
+        man_id,  <!-- 人员信息表ID -->
+        operator_type,  <!-- 类型（入职、调岗、离职...） -->
+        first_time,  <!-- 开始时间 -->
+        last_time,  <!-- 结束时间 -->
+        operatorMan_id,  <!-- 操作人ID -->
+        operatorMan_name,  <!-- 操作人姓名 -->
+        operator_time,  <!-- 操作时间 -->
+        success_flag
+        )
+        VALUES (#id#, #manId#, #operatorType#, #firstTime#, #lastTime#, #operatormanId#, #operatormanName#, #operatorTime#, #successFlag#)
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM .hr_man_history WHERE
+            man_id = #id#
+    </delete>
+
+    <update id="update">
+        UPDATE .hr_man_history
+        SET
+        man_id	= #manId#,   <!-- 人员信息表ID -->
+        operator_type	= #operatorType#,   <!-- 类型（入职、调岗、离职...） -->
+        first_time	= #firstTime#,   <!-- 开始时间 -->
+        last_time	= #lastTime#,   <!-- 结束时间 -->
+        operatorMan_id	= #operatormanId#,   <!-- 操作人ID -->
+        operatorMan_name	= #operatormanName#,   <!-- 操作人姓名 -->
+        operator_time	= #operatorTime#,   <!-- 操作时间 -->
+        success_flag	= #successFlag#
+        WHERE
+        id = #id#
+    </update>
+
+</sqlMap>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-05-25 17:10:14
+   		Version :  6.0.731.201809200158
+		tableName :t_s_role 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 rolecode  VARCHAR, 
+		 rolename  VARCHAR   NOT NULL, 
+		 classId  VARCHAR, 
+		 moduleId  VARCHAR
+	-->
+<sqlMap namespace="PSPCWeChat">
+	<select id="queryUser" resultClass="com.baosight.wilp.ss.bm.domain.WeChatUser01"
+			parameterClass="java.util.HashMap">
+		select
+a.work_no as userName,
+b.`PASSWORD` as passWord,
+a.cid as cid,
+c.hospital_district as datagroupCode
+from bona_frame_mzsrmyy.ac_personnel a
+left join bona_iplat_mzsrmyy.xs_user b on b.LOGIN_NAME = a.work_no
+left join bona_frame_mzsrmyy.ac_department c on c.id = a.dept_id
+where a.user_id = #userId#
+	</select>
+
+
+	<select id="queryUserInfo" resultClass="java.util.HashMap"
+			parameterClass="String">
+select
+a.dept_num as deptCode,
+a.dept_name as deptName,
+a.hospital_district as datagroupCode,
+b.contact_tel as contactTel,
+"1" as needValidate,
+ b.work_no as workNo,
+ name,
+ b.user_id as userId
+from bona_frame_mzsrmyy.ac_department a
+left join bona_frame_mzsrmyy.ac_personnel b on b.dept_id = a.id
+where 1=1
+and b.user_id = #userId#
+	</select>
+
+	<select id="queryUserInfo2" resultClass="java.util.HashMap"
+			parameterClass="String">
+		select
+			a.dept_num as deptCode,
+			a.dept_name as deptName,
+			a.hospital_district as datagroupCode,
+			b.contact_tel as contactTel,
+			"1" as needValidate,
+			b.work_no as workNo,
+			name,
+			b.user_id as userId
+		from bona_frame_mzsrmyy.ac_department a
+				 left join bona_frame_mzsrmyy.ac_personnel b on b.dept_id = a.id
+		where 1=1
+		  and b.contact_tel = #mobile#
+	</select>
+
+	<select id="queryUserRole" resultClass="java.util.HashMap"
+			parameterClass="String">
+		select
+			c.GROUP_ENAME as role,
+			c.GROUP_CNAME as roleName
+		from  bona_frame_mzsrmyy.ac_personnel a
+				  left join bona_iplat_mzsrmyy.xs_user b on b.LOGIN_NAME = a.work_no
+				  LEFT JOIN bona_iplat_mzsrmyy.xs_user_group_member d on d.MEMBER_ID = b.USER_ID
+				  LEFT JOIN bona_iplat_mzsrmyy.xs_user_group c on c.ID = d.PARENT_ID
+		where 1=1
+		  and a.contact_tel = #mobile#
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sc_wecat_login (
+		id,  <!-- 主键 -->
+		name,
+		cardNum,
+		time
+		)
+		VALUES (uuid(),#name#,#cardNum#,now())
+	</insert>
+
+  
+</sqlMap>

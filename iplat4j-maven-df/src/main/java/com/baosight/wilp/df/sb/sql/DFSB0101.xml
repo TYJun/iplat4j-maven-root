@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="DFSB0101">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.df.sb.domain.DFSB01">
+		SELECT
+				id	as "id",  <!-- 设备ID -->
+				machine_code	as "machineCode",  <!-- 设备编码 -->
+				machine_name	as "machineName",  <!-- 设备名称 -->
+				machine_type_id	as "machineTypeId",  <!-- 设备分类ID -->
+				models	as "models",  <!-- 规格型号 -->
+				status_code	as "statusCode",  <!-- 状态代码（0=新建 1=启用，-1=停用） -->
+				fixed_id	as "fixedId",  <!-- 安装地点id -->
+				fixed_place	as "fixedPlace",  <!-- 安装地点 -->
+				inner_machine_code	as "innerMachineCode",  <!-- 内部设备编码 -->
+				document_no	as "documentNo",  <!-- 档案号 -->
+				work_media	as "workMedia",  <!-- 工作介质 -->
+				use_cert_no	as "useCertNo",  <!-- 使用证编号 -->
+				use_area	as "useArea",  <!-- 使用范围 -->
+				register_code	as "registerCode",  <!-- 注册代码 -->
+				register_date	as "registerDate",  <!-- 注册登记日期 -->
+				out_factory_date	as "outFactoryDate",  <!-- 出厂日期 -->
+				fixed_time	as "fixedTime",  <!-- 安装日期 -->
+				use_time	as "useTime",  <!-- 使用日期 -->
+				nonuse_date	as "nonuseDate",  <!-- 停用日期 -->
+				manager_dept_id	as "managerDeptId",  <!-- 管理科室ID -->
+				manager_dept_name	as "managerDeptName",  <!-- 管理科室名称 -->
+				manager_man_id	as "managerManId",  <!-- 管理员ID -->
+				manager_man_name	as "managerManName",  <!-- 管理员名称 -->
+				charge_user_id	as "chargeUserId",  <!-- 负责人ID -->
+				charge_user_name	as "chargeUserName",  <!-- 负责人名称 -->
+				use_deaprt_id	as "useDeaprtId",  <!-- 使用科室ID -->
+				use_deaprt_name	as "useDeaprtName",  <!-- 使用科室名称 -->
+				related_device	as "relatedDevice",  <!-- 关联设备 -->
+				use_for	as "useFor",  <!-- 用途 -->
+				memo	as "memo",  <!-- 备注 -->
+				need_scan	as "needScan",  <!-- 是否扫二维码（N=否，Y=是） -->
+				manufacturer_name	as "manufacturerName",  <!-- 制造单位 -->
+				manufacturer_certno	as "manufacturerCertno",  <!-- 制造单位资格证号 -->
+				fixed_unit	as "fixedUnit",  <!-- 安装单位 -->
+				fixed_certno	as "fixedCertno",  <!-- 安装单位资格证号 -->
+				maint_unit	as "maintUnit",  <!-- 维保单位 -->
+				maint_certno	as "maintCertno",  <!-- 维保单位资格证号 -->
+				check_unit	as "checkUnit",  <!-- 检验单位 -->
+				check_certno	as "checkCertno",  <!-- 检验单位资格证号 -->
+				this_check_date	as "thisCheckDate",  <!-- 本次年度检验日 -->
+				this_finish_date	as "thisFinishDate",  <!-- 本次年度检验完工日 -->
+				next_check_date	as "nextCheckDate",  <!-- 下次年度检验日 -->
+				annualInspCycle	as "annualinspcycle",  <!-- 周期(月)-年检 -->
+				this_expired_date	as "thisExpiredDate",  <!-- 本次到期检验日 -->
+				this_chexpired_date	as "thisChexpiredDate",  <!-- 本次到期检验完工日 -->
+				next_expired_date	as "nextExpiredDate",  <!-- 下次到期检验日 -->
+				regularInspCycle	as "regularinspcycle",  <!-- 周期(月)-定检 -->
+				rec_creator	as "recCreator",  <!-- 创建人 -->
+				rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+				rec_revisor	as "recRevisor",  <!-- 修改人 -->
+				rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+				data_group_code	as "dataGroupCode" <!-- 账套 -->
+		FROM .df_special_device WHERE 1=1
+
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .df_special_device WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+<!--查询设备编码-->
+	<select id="queryMachineCode"  parameterClass="java.util.HashMap" resultClass="int">
+		SELECT
+			count(*)
+		FROM
+			df_special_device
+		WHERE
+			1 = 1
+		  AND machine_code = #machineCode#
+	</select>
+	<!-- 删除项目附件 -->
+	<delete id="deleteFile" parameterClass="java.util.HashMap">
+		delete from df_special_file where relate_id = #id# AND file_type = #type# and file_module=#module#
+	</delete>
+	
+	
+	<!-- 保存项目附件 -->
+	<insert id="insertFile" parameterClass="com.baosight.wilp.df.sb.domain.DFSB03">
+		INSERT INTO df_special_file (id,  <!-- 设备零部件ID -->
+										doc_id,  <!-- 平台附件表ID -->
+										relate_id,  <!-- 关联id(设备id或检验单id) -->
+										file_module,  <!-- 附件所属模块(0=设备附件,1=检验附件) -->
+										file_type,  <!-- 附件类型(0=图片,1=文档) -->
+										file_name,  <!-- 附件名称 -->
+										file_path,  <!-- 附件存路径 -->
+										rec_creator,  <!-- 创建人 -->
+										rec_create_time,  <!-- 创建时间 -->
+										rec_revisor,  <!-- 修改人 -->
+										rec_revise_time,  <!-- 修改时间 -->
+										data_group_code  <!-- 账套 -->
+										)
+	    VALUES (#id#, #docId#, #relateId#, #fileModule#, #fileType#, #fileName#, #filePath#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#)
+	</insert>
+	
+	<!--查询上传的文件-->
+	<select id="queryFile" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+			dsf.id	as "id",  <!-- 设备零部件ID -->
+			dsf.doc_id	as "docId",  <!-- 平台附件表ID -->
+			dsf.relate_id	as "relateId",  <!-- 关联id(设备id或检验单id) -->
+			dsf.file_module	as "fileModule",  <!-- 附件所属模块(0=设备附件,1=检验附件) -->
+			dsf.file_type	as "fileType",  <!-- 附件类型(0=图片,1=文档) -->
+			dsf.file_name	as "fileName",  <!-- 附件名称 -->
+			dsf.file_path	as "filePath",  <!-- 附件存路径 -->
+			dsf.rec_creator	as "recCreator",  <!-- 创建人 -->
+			dsf.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+			dsf.rec_revisor	as "recRevisor",  <!-- 修改人 -->
+			dsf.rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+			dsf.data_group_code	as "dataGroupCode" <!-- 账套 -->
+		FROM .df_special_file  dsf
+		LEFT JOIN df_special_device  dd ON dsf.relate_id = dd.id
+		where dsf.relate_id = #relateId#
+		and
+		dsf.file_type = #type#
+		<!--<isNotEmpty prepend=" AND " property="relateId">
+			relate_id = #relateId#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+			relate_id asc
+		</isEmpty>
+  		</dynamic>-->
+			
+	</select>
+
+	<!--查询上传的图片-->
+	<select id="queryPic" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		dsf.id	as "id",  <!-- 设备零部件ID -->
+		dsf.doc_id	as "docId",  <!-- 平台附件表ID -->
+		dsf.relate_id	as "relateId",  <!-- 关联id(设备id或检验单id) -->
+		dsf.file_module	as "fileModule",  <!-- 附件所属模块(0=设备附件,1=检验附件) -->
+		dsf.file_type	as "fileType",  <!-- 附件类型(0=图片,1=文档) -->
+		dsf.file_name	as "fileName",  <!-- 附件名称 -->
+		dsf.file_path	as "filePath",  <!-- 附件存路径 -->
+		dsf.rec_creator	as "recCreator",  <!-- 创建人 -->
+		dsf.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		dsf.rec_revisor	as "recRevisor",  <!-- 修改人 -->
+		dsf.rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+		dsf.data_group_code	as "dataGroupCode" <!-- 账套 -->
+		FROM .df_special_file  dsf
+		LEFT JOIN df_special_device  dd ON dsf.relate_id = dd.id
+		where dsf.relate_id = #relateId#
+		and
+		dsf.file_type = '0'
+	</select>
+
+
+	<!-- 查询查询项目Count -->
+	<select id="queryFileCount" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT * FROM df_special_file WHERE relate_id = #relateId#
+	</select>
+<!--保存特种设备-->
+	<insert id="insert" parameterClass="java.util.HashMap">
+		INSERT INTO .df_special_device (id,  <!-- 设备ID -->
+										machine_code,  <!-- 设备编码 -->
+										machine_name,  <!-- 设备名称 -->
+										machine_type_id,  <!-- 设备分类ID -->
+										models,  <!-- 规格型号 -->
+										status_code,  <!-- 状态代码（0=新建 1=启用，-1=停用） -->
+										fixed_id,  <!-- 安装地点id -->
+										fixed_place,  <!-- 安装地点 -->
+										inner_machine_code,  <!-- 内部设备编码 -->
+										document_no,  <!-- 档案号 -->
+										work_media,  <!-- 工作介质 -->
+										use_cert_no,  <!-- 使用证编号 -->
+										use_area,  <!-- 使用范围 -->
+										register_code,  <!-- 注册代码 -->
+										register_date,  <!-- 注册登记日期 -->
+										out_factory_date,  <!-- 出厂日期 -->
+										fixed_time,  <!-- 安装日期 -->
+										use_time,  <!-- 使用日期 -->
+										nonuse_date,  <!-- 停用日期 -->
+										manager_dept_id,  <!-- 管理科室ID -->
+										manager_dept_name,  <!-- 管理科室名称 -->
+										manager_man_id,  <!-- 管理员ID -->
+										manager_man_name,  <!-- 管理员名称 -->
+										charge_user_id,  <!-- 负责人ID -->
+										charge_user_name,  <!-- 负责人名称 -->
+										use_deaprt_id,  <!-- 使用科室ID -->
+										use_deaprt_name,  <!-- 使用科室名称 -->
+										related_device,  <!-- 关联设备 -->
+										use_for,  <!-- 用途 -->
+										memo,  <!-- 备注 -->
+										need_scan,  <!-- 是否扫二维码（N=否，Y=是） -->
+										manufacturer_name,  <!-- 制造单位 -->
+										manufacturer_certno,  <!-- 制造单位资格证号 -->
+										fixed_unit,  <!-- 安装单位 -->
+										fixed_certno,  <!-- 安装单位资格证号 -->
+										maint_unit,  <!-- 维保单位 -->
+										maint_certno,  <!-- 维保单位资格证号 -->
+										check_unit,  <!-- 检验单位 -->
+										check_certno,  <!-- 检验单位资格证号 -->
+										this_check_date,  <!-- 本次年度检验日 -->
+										this_finish_date,  <!-- 本次年度检验完工日 -->
+										next_check_date,  <!-- 下次年度检验日 -->
+										annualInspCycle,  <!-- 周期(月)-年检 -->
+										this_expired_date,  <!-- 本次到期检验日 -->
+										this_chexpired_date,  <!-- 本次到期检验完工日 -->
+										next_expired_date,  <!-- 下次到期检验日 -->
+										regularInspCycle,  <!-- 周期(月)-定检 -->
+										rec_creator,  <!-- 创建人 -->
+										rec_create_time,  <!-- 创建时间 -->
+										rec_revisor,  <!-- 修改人 -->
+										rec_revise_time,  <!-- 修改时间 -->
+										data_group_code  <!-- 账套 -->
+										)		 
+	    VALUES (#id#, #machineCode#, #machineName#, #machineTypeId#, #models#, #statusCode#, #fixedId#, #fixedPlace#, #innerMachineCode#, #documentNo#, #workMedia#, #useCertNo#, #useArea#, #registerCode#, #registerDate#, #outFactoryDate#, #fixedTime#, #useTime#, #nonuseDate#, #managerDeptId#, #managerDeptName#, #managerManId#, #managerManName#, #chargeUserId#, #chargeUserName#, #useDeaprtId#, #useDeaprtName#, #relatedDevice#, #useFor#, #memo#, #needScan#, #manufacturerName#, #manufacturerCertno#, #fixedUnit#, #fixedCertno#, #maintUnit#, #maintCertno#, #checkUnit#, #checkCertno#, #thisCheckDate#, #thisFinishDate#, #nextCheckDate#, #annualinspcycle#, #thisExpiredDate#, #thisChexpiredDate#, #nextExpiredDate#, #regularinspcycle#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#) 
+	</insert>
+  <!--删除特种设备-->
+	<delete id="delete">
+		DELETE FROM .df_special_device WHERE 
+			id = #id#
+	</delete>
+		<!--更新特种设备-->
+	<update id="update" parameterClass="java.util.HashMap">
+		UPDATE .df_special_device 
+		SET 
+					machine_code	= #machineCode#,   <!-- 设备编码 -->  
+					machine_name	= #machineName#,   <!-- 设备名称 -->  
+					machine_type_id	= #machineTypeId#,   <!-- 设备分类ID -->  
+					models	= #models#,   <!-- 规格型号 -->  
+					status_code	= #statusCode#,   <!-- 状态代码（0=新建 1=启用，-1=停用） -->  
+					fixed_id	= #fixedId#,   <!-- 安装地点id -->  
+					fixed_place	= #fixedPlace#,   <!-- 安装地点 -->  
+					inner_machine_code	= #innerMachineCode#,   <!-- 内部设备编码 -->  
+					document_no	= #documentNo#,   <!-- 档案号 -->  
+					work_media	= #workMedia#,   <!-- 工作介质 -->  
+					use_cert_no	= #useCertNo#,   <!-- 使用证编号 -->  
+					use_area	= #useArea#,   <!-- 使用范围 -->  
+					register_code	= #registerCode#,   <!-- 注册代码 -->  
+					register_date	= #registerDate#,   <!-- 注册登记日期 -->  
+					out_factory_date	= #outFactoryDate#,   <!-- 出厂日期 -->  
+					fixed_time	= #fixedTime#,   <!-- 安装日期 -->  
+					use_time	= #useTime#,   <!-- 使用日期 -->  
+					nonuse_date	= #nonuseDate#,   <!-- 停用日期 -->  
+					manager_dept_id	= #managerDeptId#,   <!-- 管理科室ID -->  
+					manager_dept_name	= #managerDeptName#,   <!-- 管理科室名称 -->  
+					manager_man_id	= #managerManId#,   <!-- 管理员ID -->  
+					manager_man_name	= #managerManName#,   <!-- 管理员名称 -->  
+					charge_user_id	= #chargeUserId#,   <!-- 负责人ID -->  
+					charge_user_name	= #chargeUserName#,   <!-- 负责人名称 -->  
+					use_deaprt_id	= #useDeaprtId#,   <!-- 使用科室ID -->  
+					use_deaprt_name	= #useDeaprtName#,   <!-- 使用科室名称 -->  
+					related_device	= #relatedDevice#,   <!-- 关联设备 -->  
+					use_for	= #useFor#,   <!-- 用途 -->  
+					memo	= #memo#,   <!-- 备注 -->  
+					need_scan	= #needScan#,   <!-- 是否扫二维码（N=否，Y=是） -->  
+					manufacturer_name	= #manufacturerName#,   <!-- 制造单位 -->  
+					manufacturer_certno	= #manufacturerCertno#,   <!-- 制造单位资格证号 -->  
+					fixed_unit	= #fixedUnit#,   <!-- 安装单位 -->  
+					fixed_certno	= #fixedCertno#,   <!-- 安装单位资格证号 -->  
+					maint_unit	= #maintUnit#,   <!-- 维保单位 -->  
+					maint_certno	= #maintCertno#,   <!-- 维保单位资格证号 -->  
+					check_unit	= #checkUnit#,   <!-- 检验单位 -->  
+					check_certno	= #checkCertno#,   <!-- 检验单位资格证号 -->  
+					this_check_date	= #thisCheckDate#,   <!-- 本次年度检验日 -->  
+					this_finish_date	= #thisFinishDate#,   <!-- 本次年度检验完工日 -->  
+					next_check_date	= #nextCheckDate#,   <!-- 下次年度检验日 -->  
+					annualInspCycle	= #annualinspcycle#,   <!-- 周期(月)-年检 -->  
+					this_expired_date	= #thisExpiredDate#,   <!-- 本次到期检验日 -->  
+					this_chexpired_date	= #thisChexpiredDate#,   <!-- 本次到期检验完工日 -->  
+					next_expired_date	= #nextExpiredDate#,   <!-- 下次到期检验日 -->  
+					regularInspCycle	= #regularinspcycle#,   <!-- 周期(月)-定检 -->
+					rec_revisor	= #recRevisor#,   <!-- 修改人 -->  
+					rec_revise_time	= #recReviseTime#,   <!-- 修改时间 -->  
+					data_group_code	= #dataGroupCode#  <!-- 账套 -->  
+			WHERE 	
+			id = #id#
+	</update>
+
+		<insert  id="insertPic" parameterClass="java.util.Map">
+		INSERT INTO df_special_file (id,  <!-- 设备零部件ID -->
+										doc_id,  <!-- 平台附件表ID -->
+										relate_id,  <!-- 关联id(设备id或检验单id) -->
+										file_module,  <!-- 附件所属模块(0=设备附件,1=检验附件) -->
+										file_type,  <!-- 附件类型(0=图片,1=文档) -->
+										file_name,  <!-- 附件名称 -->
+										file_path,  <!-- 附件存路径 -->
+										rec_creator,  <!-- 创建人 -->
+										rec_create_time,  <!-- 创建时间 -->
+										rec_revisor,  <!-- 修改人 -->
+										rec_revise_time,  <!-- 修改时间 -->
+										data_group_code  <!-- 账套 -->
+										)		 
+	    VALUES (#id#, #docId#, #relateId#, #fileModule#, #fileType#, #fileName#, #filePath#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#) 
+	</insert>
+  	
+  	
+</sqlMap>

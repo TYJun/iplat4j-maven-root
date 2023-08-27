@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>签退成功</title>
+    <link rel="stylesheet" href="reference/mui/css/mui.min.css" />
+    <link rel="stylesheet" href="../../reference/mui/css/mui.css" />
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        width: 100%;
+        height: 100%;
+    }
+
+    /* 签到成功界面 */
+    #next {
+        color: #757575;
+        font-size: 60px;
+        position: fixed;
+        right: 10px;
+        top: 8px;
+    }
+
+    .SignSuccess {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        margin: 0 auto;
+    }
+
+    .Success-Conten {
+        position: relative;
+        margin: 0 auto;
+        top: 100px;
+        width: 300px;
+        height: 420px;
+        background-color: #efefef;
+        border: 1px solid #BBBBBB;
+        border-radius: 32px;
+    }
+
+    .circle {
+        width: 180px;
+        height: 180px;
+        background-color: #a0a0a0;
+        border-radius: 50%;
+        position: absolute;
+        left: 20%;
+        top: 40px;
+        line-height: 180px;
+        text-align: center;
+        color: #fff;
+        font-size: 30px;
+    }
+
+    .success-meeting-message {
+        position: relative;
+        height: 120px;
+        top: 250px;
+        margin: 0 auto;
+        color: #666666;
+        text-align: center;
+        padding: 10px;
+        font-size: 20px;
+    }
+
+    .success-meeting-message div {
+        font-size: 32px;
+        margin-bottom: 14px;
+    }
+</style>
+
+<body>
+    <div id="app">
+        <!-- 签退成功界面 -->
+        <div class="SignSuccess">
+            <div id="next" class="mui-icon mui-icon-closeempty"></div>
+            <div class="Success-Conten">
+                <div class="circle">签退成功</div>
+                <div class="success-meeting-message">
+                    <div class="theme">{{theme}}</div>
+                    <!-- <div class="date">2021-11-26</div>
+                <div class="time">19:00 - 20:00</div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../../html/device_inspection/reference/mui/js/vue.js"></script>
+<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../../reference/mui/js/mui.js" type="text/javascript"></script>
+<script>
+    var app = new Vue({
+        el: "#app",
+        data() {
+            return {
+                theme: localStorage.getItem("meetingSub"), //会议主题
+            }
+        },
+    })
+
+
+    //    右上角退出
+    $("#next").click(function () {
+        location.href = "../../menu.html"
+    })
+</script>
+
+</html>

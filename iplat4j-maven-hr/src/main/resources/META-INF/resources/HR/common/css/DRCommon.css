@@ -1,0 +1,34 @@
+/* 弹窗按钮样式 */
+.window-btn {
+    width: 90px !important;
+    height: 30px !important;
+    margin-right: 15px;
+}
+.k-grid-toolbar{
+    height : 38px !important;
+}
+.k-grid-toolbar .grid_toolbar{
+    height : 36px !important;
+}
+.xplat-float-right{
+    height : 25px !important;
+}
+
+.xplat-float-right button{
+    height : 100% !important;
+}
+
+.xplat-float-right button .fa{
+    font-size: 14px;
+}
+
+
+/* 超链接下划线 */
+a{
+    text-decoration:underline
+}
+
+/* ADD按钮样式 */
+.kendo-xplat-ADD {
+    float: left;
+}

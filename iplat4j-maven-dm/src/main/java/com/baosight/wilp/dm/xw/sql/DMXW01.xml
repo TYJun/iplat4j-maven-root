@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DMXW01">
+	<select id="queryXWInfoList" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		do.id as "id",  <!-- 主键 -->
+		do.id as "manId",  <!-- 主键 -->
+		do.man_no	as "manNo",  <!-- 工号 -->
+		do.man_name	as "manName",  <!-- 姓名 -->
+		do.sex	as "sex",  <!-- 性别 -->
+		CASE do.sex
+		WHEN '1' THEN '男'
+		ELSE '女'
+		END AS "sexMeaning",
+		do.age	as "age",  <!-- 员工年龄 -->
+		do.phone	as "phone",  <!-- 电话 -->
+		do.nowAddress	as "nowAddress",  <!-- 当前住址 -->
+		do.rec_creator	as "recCreator",  <!-- 创建人工号 -->
+		do.rec_create_name	as "recCreateName",  <!-- 创建人姓名 -->
+		do.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		do.rec_revisor	as "recRevisor",  <!-- 修改人工号 -->
+		do.rec_revise_name	as "recReviseName",  <!-- 修改人姓名 -->
+		do.rec_revise_time	as "recReviseTime" <!-- 修改时间 -->
+		FROM dorms_outsider do
+		WHERE 1=1
+		<dynamic prepend=" AND ">                                    <!-- 权限过滤数据 -->
+			<isEqual prepend=" AND " property="role" compareValue="DMADMIN">
+				1=1
+			</isEqual>
+			<isEqual prepend=" AND " property="role" compareValue="DMZSR">
+				(do.man_no = #workNo#)
+			</isEqual>
+		</dynamic>
+		<isNotEmpty prepend=" AND " property="manNo">
+			do.man_no = #manNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manName">
+			do.man_name like concat('%',#manName#,'%')
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				id asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="queryXWInfoListCount" resultClass="int">
+		SELECT COUNT(*) FROM (
+		SELECT
+		do.id as "id",  <!-- 主键 -->
+		do.id as "manId",  <!-- 主键 -->
+		do.man_no	as "manNo"  <!-- 工号 -->
+		FROM dorms_outsider do
+		WHERE 1=1
+		<dynamic prepend=" AND ">                                    <!-- 权限过滤数据 -->
+			<isEqual prepend=" AND " property="role" compareValue="DMADMIN">
+				1=1
+			</isEqual>
+			<isEqual prepend=" AND " property="role" compareValue="DMZSR">
+				(do.man_no = #workNo#)
+			</isEqual>
+		</dynamic>
+		<isNotEmpty prepend=" AND " property="id">
+			do.id = #id#
+		</isNotEmpty>
+		) aaa
+	</select>
+
+	<!-- 获取入住申请表中已存在入住信息的所有人（工号列表） -->
+	<select id="queryXWApplyManNoList" resultClass="java.util.HashMap">
+		SELECT
+		man_no	as "manNo"  <!-- 工号 -->
+		FROM dorms_man
+	</select>
+
+	<!-- 查询校外入住申请信息的详情 -->
+	<select id="queryXWApplyInfo" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		SELECT
+		do.id as "id",  <!-- 主键 -->
+		do.id as "manId",  <!-- 主键 -->
+		do.man_no	as "manNo",  <!-- 工号 -->
+		do.man_name	as "manName",  <!-- 姓名 -->
+		do.sex	as "sex",  <!-- 性别 -->
+		CASE do.sex
+		WHEN '1' THEN '男'
+		ELSE '女'
+		END AS "sexMeaning",
+		concat(do.age)	as "age",  <!-- 员工年龄 -->
+		do.phone	as "phone",  <!-- 电话 -->
+		do.nowAddress	as "nowAddress",  <!-- 当前所在 -->
+		do.rec_creator	as "recCreator",  <!-- 创建人工号 -->
+		do.rec_create_name	as "recCreateName",  <!-- 创建人姓名 -->
+		do.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		do.rec_revisor	as "recRevisor",  <!-- 修改人工号 -->
+		do.rec_revise_name	as "recReviseName",  <!-- 修改人姓名 -->
+		do.rec_revise_time	as "recReviseTime" <!-- 修改时间 -->
+		FROM dorms_outsider do
+		WHERE do.id = #manId#
+	</select>
+
+	<!-- 根据id删除记录 -->
+	<delete id="deleteInfo" parameterClass="string">
+		DELETE FROM .dorms_outsider WHERE
+			id = #infoId#
+	</delete>
+
+</sqlMap>

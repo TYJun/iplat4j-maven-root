@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="SSBMDZ03">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.bm.domain.SSBMDZ03">
+		SELECT
+		id as "id",  <!-- 主键 -->
+		group_num as "groupNum",
+		group_name as "groupName",
+		dept_name as "deptName",
+		dept_num as "deptNum"
+		FROM sc_group_op WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="groupName">
+			group_name like concat('%',#groupName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name like concat('%',#deptName#,'%')
+		</isNotEmpty>
+
+	</select>
+
+	<delete id="delete">
+		DELETE FROM sc_group_op
+		WHERE
+			id = #id#
+	</delete>
+
+	<select id="queryBuilding" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.ss.bm.domain.ScPatientAddress">
+		SELECT
+		name as "building"
+		FROM sc_location_tree
+		where type = "building"
+		group by building
+
+	</select>
+
+	<select id="queryFloor" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.ss.bm.domain.ScPatientAddress">
+		SELECT
+		name as "floor"
+		FROM sc_location_tree
+		where type = "floor"
+		group by floor
+	</select>
+
+	<select id="queryDeptName" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.ss.bm.domain.ScPatientAddress">
+		SELECT
+		dept_name as "deptName"
+		FROM bona_frame_mzsrmyy.ac_department
+		group by dept_name
+	</select>
+
+	<select id="queryAcDepartment" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.ss.bm.domain.ScPatientAddress">
+		SELECT
+		dept_name as "deptName",
+		dept_num as "deptNum",
+		dept_num_parent as deptNumParent,
+		dept_name_parent as deptNameParent
+		FROM bona_frame_mzsrmyy.ac_department
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name = #deptName#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert">
+	    INSERT INTO `sc_patient_address` (
+		   `id`,
+		  `dept_name_parent`,
+		  `dept_num_parent`,
+		  `dept_name`,
+		  `dept_num`,
+		  `building`,
+		  `floor`,
+		  `take_effect`
+		)
+		VALUES
+		  (
+			#id#,
+			#deptNameParent#,
+			#deptNumParent#,
+			#deptName#,
+			#deptNum#,
+			#building#,
+			#floor#,
+			#takeEffect#
+		  ) ;
+	</insert>
+	<update id="update1">
+		UPDATE sc_patient_address
+		SET
+		`building`=#building#,
+		  `floor`= #floor#,
+		  `dept_name`=#deptName#
+		WHERE
+		id = #id#
+	</update>
+
+	<update id="update2">
+		UPDATE sc_patient_address
+		SET
+		take_effect= '1'
+		WHERE
+		id = #id#
+	</update>
+
+	<select id="queryDeptName2" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.ss.bm.domain.SSBMDZ03">
+		SELECT
+			dept_num as "deptNum",
+			dept_name as "deptName"
+		FROM bona_frame_mzsrmyy.ac_department
+		group by dept_name
+	</select>
+
+	<insert id="insertGroup">
+		INSERT INTO `sc_group_op` (
+			`id`,
+			`group_num`,
+			`group_name`,
+			`dept_name`,
+			`dept_num`,
+			`create_time`
+		)
+		VALUES
+			(
+				#id#,
+				#groupNum#,
+				#groupName#,
+				#deptName#,
+				#deptNum#,
+				now()
+			) ;
+	</insert>
+
+</sqlMap>

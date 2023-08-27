@@ -1,0 +1,509 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="reference/mui/css/mui.min.css">
+    <link rel="stylesheet" href="reference/mui/css/iconfont.css">
+    <link rel="stylesheet" href="reference/css/common.css" />
+    <link rel="stylesheet" href="../../css/colorGreen.css" />
+    <link rel="stylesheet" href="../../css/colorBlue.css" />
+</head>
+<STYLE TYPE="text/css">
+    .mui-slider-title {
+        background: #0e5834;
+        color: #fff;
+    }
+    
+    .mui-media-body {
+        font-weight: bold;
+        font-size: 15px;
+        letter-spacing: 1px;
+    }
+    
+    .mui-ellipsis {
+        font-weight: normal;
+        font-size: 13px;
+        padding-top: 4px;
+    }
+    
+    .mui-table-view:after {
+        height: 0;
+    }
+    
+    .mui-table-view li:last-child:after {
+        height: 1px;
+    }
+    
+    .mui-navigate-right:after {
+        color: #209c60;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    
+    .info img {
+        width: 21px;
+        height: auto;
+        position: absolute;
+        top: 6px;
+        left: 18px;
+    }
+    
+    .title {
+        position: absolute;
+        top: 22px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 22px;
+        font-weight: bold;
+        color: #fff;
+        letter-spacing: 6px;
+    }
+    
+    .marqueeInfo {
+        margin-left: 50px;
+        font-size: 15px;
+        color: #15a760;
+        letter-spacing: 2px;
+        height: 36px;
+        line-height: 36px;
+    }
+    
+    .tip {
+        width: 118%;
+        background: #fff;
+        z-index: 1;
+        margin-top: 14px;
+    }
+    
+    .tip_title {
+        text-align: center;
+        font-size: 15px;
+        color: #f9821e;
+        line-height: 45px;
+        height: 34px;
+        padding-left: 10%;
+    }
+    
+    .tip_con {
+        display: flex;
+        color: #747474;
+        padding-top: 8px;
+    }
+    
+    .tip_con>span {
+        width: 44%;
+        text-align: center;
+    }
+    
+    .tip_time {
+        display: flex;
+        line-height: 24px;
+    }
+    
+    .tip_time span {
+        width: 44%;
+        text-align: center;
+        letter-spacing: 1px;
+        font-weight: bold;
+    }
+    
+    .tip_con>span:first-child,
+    .tip_time>span:first-child {
+        width: 12%;
+        font-weight: normal;
+    }
+    
+    #canteen ul li:last-child {
+        margin-bottom: 60px;
+    }
+    
+    #canteen ul li a {
+        padding-bottom: 0;
+    }
+    
+    .time_limit {
+        height: 0px;
+    }
+    /*li点击不变灰*/
+    
+    .mui-table-view-cell>a:not(.mui-btn).mui-active {
+        background-color: #fff;
+    }
+</STYLE>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">订餐</h1>
+        <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+		        <span class="mui-icon mui-icon-left-nav"></span>
+		        返回
+	      </button>
+    </header>
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div id="loading" class="loading1" hidden>
+        <div class="loading2">
+            <span class="mui-spinner" style="width:80px;height:80px;"></span>
+        </div>
+    </div>
+
+    <div class="mui-content">
+        <div id="slider" class="mui-slider">
+            <div class="mui-slider-group mui-slider-loop">
+                <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+                <div class="mui-slider-item mui-slider-item-duplicate">
+                    <a href="#">
+                        <img src="img/1.png">
+                        <p class="mui-slider-title">蔬菜</p>
+                    </a>
+                </div>
+                <div class="mui-slider-item">
+                    <a href="#">
+                        <img src="img/2.png">
+                        <p class="mui-slider-title">主食</p>
+                    </a>
+                </div>
+                <div class="mui-slider-item">
+                    <a href="#">
+                        <img src="img/3.png">
+                        <p class="mui-slider-title">肉类</p>
+                    </a>
+                </div>
+                <div class="mui-slider-item">
+                    <a href="#">
+                        <img src="img/4.png">
+                        <p class="mui-slider-title">水果</p>
+                    </a>
+                </div>
+                <div class="mui-slider-item">
+                    <a href="#">
+                        <img src="img/1.png">
+                        <p class="mui-slider-title">蔬菜</p>
+                    </a>
+                </div>
+                <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+                <div class="mui-slider-item mui-slider-item-duplicate">
+                    <a href="#">
+                        <img src="img/2.png">
+                        <p class="mui-slider-title">主食</p>
+                    </a>
+                </div>
+            </div>
+            <ul class="mui-table-view mui-table-view-chevron">
+                <li class="mui-table-view-cell marquee" style="padding: 0 10px 0 15px;">
+                    <div class="info">
+                        <img src="img/notice.png">
+                        <!-- <marquee behavior="scroll" direction="left" scrollamount="8" class="marqueeInfo"></marquee> -->
+                    </div>
+                </li>
+            </ul>
+
+            <div id="canteen" style="height:310px;overflow-x:hidden;">
+                <ul class="mui-table-view mui-table-view-chevron"></ul>
+                <!-- <ul class="mui-table-view mui-table-view-chevron">
+						<li class="mui-table-view-cell marquee" style="padding: 0 10px 0 15px;">
+							<div class="info">
+								<img src="img/notice.png">
+							</div>
+						</li> -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <nav class="mui-bar mui-bar-tab" style="background:#fff;">
+        <a id="main" class="mui-tab-item mui-active menu" href="javascript:void(0)">
+            <span class="mui-icon mui-icon-home"></span>
+            <span class="mui-tab-label">食堂</span>
+        </a>
+        <a id="notice" class="mui-tab-item notice" href="javascript:void(0)">
+            <span class="mui-icon mui-icon-email"></span>
+            <span class="mui-tab-label">消息</span>
+        </a>
+        <a id="order" class="mui-tab-item order" href="javascript:void(0)">
+            <span class="mui-icon mui-icon-compose"></span>
+            <span class="mui-tab-label">订单</span>
+        </a>
+    </nav>
+
+    <div id="operation_div" class="mui-popover mui-popover-action mui-popover-bottom">
+        <ul id="operations" class="mui-table-view">
+            <li class="mui-table-view-cell">
+                <a href="#operation_div">普餐</a>
+            </li>
+            <li class="mui-table-view-cell">
+                <a href="#operation_div">套餐</a>
+            </li>
+        </ul>
+        <ul class="mui-table-view">
+            <li class="mui-table-view-cell">
+                <a href="#operation_div"><b>取消</b></a>
+            </li>
+        </ul>
+    </div>
+</body>
+<script type="text/javascript" src="../../js/color.js"></script>
+<script src="reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="reference/js/common.js" type="text/javascript"></script>
+<!--<script src="../../cordova.js" type="text/javascript"></script>-->
+<script type="text/javascript">
+    // var baseUrl = 'http://192.168.1.11:8081/smp/';//localStorage.getItem("url");
+    // var baseUrl = 'http://49.4.71.205:8797/smp/';//localStorage.getItem("url");
+    var baseUrl = localStorage.getItem("url");
+    // localStorage.setItem("url",baseUrl);
+    // var workNo = '00018';//localStorage.getItem('workNo');
+    // var workNo = '0717';//localStorage.getItem('workNo');
+    var workNo = localStorage.getItem('workNo');
+    // localStorage.setItem('workNo', workNo);
+    // var dataGroupCode = 'CSYY2';//localStorage.getItem("dataGroupCode");
+    //var dataGroupCode = 'NO05005'; //localStorage.getItem("dataGroupCode");
+    var dataGroupCode = localStorage.getItem("dataGroupCode");
+        if(dataGroupCode){
+            
+        }else{
+            //如果没有帐套，默认使用科室编码作为帐套
+            dataGroupCode = localStorage.getItem("deptCode");
+        }
+    localStorage.setItem("dataGroupCode", dataGroupCode);
+    var height = $(window).height() - 94 - $('.mui-slider-item').height();
+    $('#canteen').height(height);
+
+    localStorage.removeItem('marqueeInfo');
+    //init();
+    function init() {
+			$.ajax({
+				//url: baseUrl + 'app_basicInfoController.do?queryCardWorkInfo',
+				url: baseUrl + 'cardmeal',
+                type: 'post',
+                headers:{
+                    className : 'CardWorkConsumeService',
+                    methodName : 'queryWorkInfo'
+                },
+				data: {
+					JSNHID: "UEzTab3BHgDYrE+W7sFECMtYMbF4FNsXM/Wo6WkDWNs="
+				},
+				success: function(data) {
+					// var data = eval("(" + data + ")");
+					console.log(data);
+					if(data.success ) {
+						if(!data.obj || !data.obj[0].cardBalance ){
+							return;
+						}
+                        workNo = data.obj[0].cardUserCode;
+                        localStorage.setItem('workNo',workNo)
+                        console.log('===',workNo);
+                        var name = data.obj[0].cardUserName;
+                        localStorage.setItem('name',name)
+                        console.log('===',name);
+                        var telPhone = data.obj[0].cardUserPhone;
+                        localStorage.setItem('telPhone',telPhone)
+                        console.log('===',telPhone);
+						$("#Kye").text(Number(data.obj[0].cardBalance/100).toFixed(2));
+						//loadViews();
+					} else {
+						$("#warn small").html(data.respMsg);
+						$("#warn").fadeIn(500);
+						setTimeout('$("#warn").fadeOut(500)', 3000);
+					}
+				}
+			});
+		}
+
+
+    // 公告
+    $.ajax({
+        //url: baseUrl + 'app_baseBasicInfoController.do?getEffectiveNotice',
+        url: baseUrl + 'meal',
+        type: 'post',
+        headers:{
+            className : 'AppBaseInfoService',
+            methodName : 'getEffectiveNotice'
+        },
+        data: {
+            typeCode: 'APPZG',
+        },
+        success: function(data) {
+            //var data = JSON.parse(data);
+            console.log(data);
+            if (data.respCode == '200') {
+                var html = '';
+                html += '<marquee behavior="scroll" direction="left" scrollamount="4" class="marqueeInfo">' + data.obj[0].noticeContent + '</marquee>';
+                $('.marquee .info').append(html);
+                localStorage.setItem('marqueeInfo', data.obj[0].noticeContent);
+            } else {
+            	console.log(data.respMsg);
+                //mui.toast("未查询到公告");
+            }
+
+        }
+
+    })
+
+    var slider = mui("#slider");
+    slider.slider({
+        interval: 5000
+    });
+    
+	 $.ajax({
+	        //url: baseUrl + 'app_baseBasicInfoController.do?queryCanteenInfo',
+	        url: baseUrl + 'meal',
+	        type: 'post',
+	        headers:{
+	            className : 'AppBaseInfoService',
+	            methodName : 'getCanteen'
+	        },
+	        data: {
+	            canteenTypeNum: 'zgst',
+                dataGroupCode: 'NO00001'
+	        },
+	        success: function(data) {
+	            //var data = JSON.parse(data);
+	            console.log(data);
+	            if (data.success) {
+	                var list = data.obj;
+	                setTimeout(showCanteen(list),500);
+	                
+	                // var html = '<ul class="mui-table-view mui-table-view-chevron">';
+	            } else {
+	                mui.toast('获取食堂信息失败');
+	            }
+	        }
+	    });
+   
+	function showCanteen(list){
+		var html = '';
+		for (var i = 0; i < list.length; i++) {
+            var json = {
+                "canteenNum": list[i].canteenNum,
+                "canteenName": list[i].canteenName,
+                "operate": list[i].operateName.split(","),
+                "canteenTimesInfo": JSON.stringify(list[i].canteenTimesInfo),
+                "buildConfig": JSON.stringify(list[i].buildConfig)
+            }
+            if(list[i].sendTime.length <3){
+                mui.toast('送餐时间配置缺失');
+            }
+            var jsonStr = JSON.stringify(json);
+            html += '<li id=\'' + jsonStr + '\' class="mui-table-view-cell mui-media">';
+            html += '<a class="mui-navigate-right">';
+            html += '<img class="mui-media-object mui-pull-left" src="img/meal.png">';
+            html += '<div class="mui-media-body">' + list[i].canteenName + '<p class="mui-ellipsis">' + localStorage.getItem("hosName") + '</p></div>';
+            html += '</a>';
+            html += '<div class="tip">';
+            html += '<div class="tip_title">食堂订餐截止时间限制</div>';
+
+            html += '<div class="time_limit">';
+            html += '<div class="tip_con"><span></span><span>今日</span><span>明日</span></div>';
+            html += '<div class="tip_time"><span>早餐</span><span>' + list[i].sendTime[0].todayOrderTime + '</span><span>' + list[i].canteenTimesInfo[0].tomorrowOrderTime + '</span></div>';
+            html += '<div class="tip_time"><span>中餐</span><span>' + list[i].sendTime[1].todayOrderTime + '</span><span>' + list[i].canteenTimesInfo[1].tomorrowOrderTime + '</span></div>';
+            html += '<div class="tip_time"><span>晚餐</span><span>' + list[i].sendTime[2].todayOrderTime + '</span><span>' + list[i].canteenTimesInfo[2].tomorrowOrderTime + '</span></div>';
+            html += '</div>';
+            html += '</div>';
+            html += '</div>';
+            html += '</li>';
+        }
+        // html += '</ul>';
+        $("#canteen ul").append(html);
+        $('.tip').click(function() {
+            if ($(this).hasClass('selected')) {
+                $(this).find('.time_limit').animate({
+                    "height": "0px"
+                });
+                $(this).removeClass('selected');
+            } else {
+                $(this).find('.time_limit').animate({
+                    "height": "100px"
+                });
+                $(this).addClass('selected');
+            }
+        })
+    
+	}
+    var canteenNum = "";
+    mui("body").on('tap', 'li.mui-media a', function() {
+        var json = JSON.parse($(this).parent('li').attr('id'));
+        localStorage.setItem("canteenName", json.canteenName);
+        localStorage.setItem("canteenTimesInfo", json.canteenTimesInfo);
+        localStorage.setItem("buildConfig", json.buildConfig);
+        
+        canteenNum = json.canteenNum;
+        // lxy
+        localStorage.setItem("canteenCode", canteenNum);
+
+        if (json.operate.length < 2) {
+            if (json.operate == "普餐") {
+                location.href = "meal_PC/mealList.html?" + canteenNum;
+            } else if (json.operate == "套餐")
+                location.href = "meal_TC/mealList.html?" + canteenNum;
+        } else {
+            var html = '';
+            for (var i = 0; i < json.operate.length; i++) {
+                html += '<li class="mui-table-view-cell">';
+                html += '<a href="#operation_div">' + json.operate[i] + '</a>';
+                html += '</li>';
+            }
+            $('#operations').html(html);
+            mui('#operation_div').popover('toggle');
+        }
+    });
+
+    mui('body').on('tap', '.mui-popover-action li>a', function() {
+
+        var operation = this.innerHTML;
+        if (operation == "普餐") {
+            location.href = "meal_PC/mealList.html?" + canteenNum;
+        } else if (operation == "套餐") {
+            location.href = "meal_TC/mealList.html?" + canteenNum;
+        } else {
+            console.log("没有选择套餐和普餐");
+        }
+
+    });
+
+    document.getElementById("main").addEventListener('tap', function() {
+        location.reload();
+    });
+
+    document.getElementById("order").addEventListener('tap', function() {
+        location.href = "meal_order.html";
+    });
+
+    document.getElementById("notice").addEventListener('tap', function() {
+        location.href = "notice.html";
+    });
+
+    document.getElementById("back").addEventListener('tap', function() {
+        location.href = "../../menu.html";
+    });
+
+    $('.marquee').click(function() {
+        location.href = "notice.html";
+    })
+
+
+
+
+    // APP系统键回退
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        /**
+         * 系统返回键监听
+         */
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+    //返回
+    function onBackKeyDown() {
+        location.href = "../../menu.html";
+    }
+</script>
+
+</html>

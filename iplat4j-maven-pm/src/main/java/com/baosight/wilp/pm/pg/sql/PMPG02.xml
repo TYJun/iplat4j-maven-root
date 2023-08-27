@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="PMPG02">
+    <select id="queryPmTypeMsg" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            id typeId,
+            type_code typeCode,
+            type_name typeName,
+            type_remark typeRemark,
+            stage_code stageCode,
+            stage_name stageName,
+            stage_remark stageRemark,
+            create_name createName,
+            DATE_FORMAT(create_time,'%Y-%m%-%d') createTime,
+            update_name updateName,
+            DATE_FORMAT(update_time,'%Y-%m%-%d') updateTime
+        from
+            pm_type_config
+        where
+        1 = 1
+        <isNotEmpty prepend="and" property="typeCode">
+            type_code like concat ("%",#typeCode#,"%")
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="typeName">
+            type_name like concat ("%",#typeName#,"%")
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="id">
+            id = #id#
+        </isNotEmpty>
+        order by
+            type_code DESC
+    </select>
+
+    <select id="queryTypeCodeMax" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+        select
+            type_code typeCode
+        from
+            pm_type_config
+        WHERE
+            type_code like concat ("%",#value#,"%")
+        order by
+            type_code DESC
+    </select>
+
+    <insert id="insertPmTypeMsg" parameterClass="java.util.HashMap">
+        insert into pm_type_config(id,type_code,type_name,type_remark,stage_code,stage_name,stage_remark,create_no,create_name,create_time)
+        values (#id#,#typeCode#,#typeName#,#typeRemark#,#stageCode#,#stageName#,#stageRemark#,#createNo#,#createName#,#createTime#)
+    </insert>
+
+    <update id="editPmTypeMsg" parameterClass="java.util.HashMap">
+        update
+            pm_type_config
+        set
+            type_name = #typeName#,
+            type_remark = #typeRemark#,
+            stage_code = #stageCode#,
+            stage_name = #stageName#,
+            stage_remark = #stageRemark#,
+            update_no = #updateNo#,
+            update_name = #updateName#,
+            update_time = #updateTime#
+        where
+            id = #id#
+    </update>
+
+    <delete id="deletePmTypeMsg" parameterClass="java.util.HashMap">
+        delete from pm_type_config where id = #id#
+    </delete>
+</sqlMap>

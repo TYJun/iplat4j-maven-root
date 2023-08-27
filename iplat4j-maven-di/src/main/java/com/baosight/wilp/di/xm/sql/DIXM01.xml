@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DIXM01">
+
+	<!-- 查询最大的巡检项目分类单号 -->
+	<select id="getMaxItemClass" parameterClass="String" resultClass="String">
+		select 
+			max(classify_code) 
+		from
+			di_itemclass
+		where 
+			classify_code like concat('%',#value#,'%') 
+	</select>
+	
+	<!-- 查询最大的巡检项目的单号  -->
+	<select id="getMaxItem" parameterClass="String" resultClass="String">
+		select 
+			max(code) 
+		from
+			di_item
+		where 
+			code like concat('%',#value#,'%') 
+	</select>
+	
+	<!-- 查询最大的巡检基准号码  -->
+	<select id="getMaxScheme" parameterClass="String" resultClass="String">
+		select 
+			max(schemeCode) 
+		from
+			di_scheme
+		where 
+			schemeCode like concat('%',#value#,'%') 
+	</select>
+	
+	<!-- 查询最大的任务编码 -->
+	<select id="getMaxTask" parameterClass="String" resultClass="String">
+		select 
+			max(taskCode) 
+		from
+			di_task
+		where 
+			taskCode like concat('%',#value#,'%') 
+	</select>
+	
+	
+	<select id="queryClass" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+		SELECT
+			p.id AS "id",
+			p.classify_code AS "classifyCode",
+			p.classify_name AS "classifyName",
+			p.parent_id AS "parentId",
+			p.memo AS "memo",
+		CASE
+				count( c.id ) 
+				WHEN 0 THEN
+				true ELSE false
+			END AS hasChildren 
+		FROM
+			di_itemclass p
+			LEFT JOIN di_itemclass c ON c.parent_id = p.id 
+		WHERE
+			1 = 1 
+		AND p.PARENT_ID = #node#
+		GROUP BY
+			p.id
+	</select>
+
+	<select id="countClass" resultClass="int">
+		SELECT COUNT(*) FROM di_itemclass WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insertClass"
+		parameterClass="java.util.HashMap">
+		INSERT INTO di_itemclass 
+		(
+		id,
+		classify_code,  <!-- 分类CODE -->
+		classify_name,  <!-- 分类名称 -->
+		parent_id,  <!-- 父id -->
+		memo  <!-- 备注 -->
+		)
+		VALUES (#id#, #classifyCode#, #classifyName#, #parentId#, #memo#)
+	</insert>
+
+	<delete id="deleteClass" parameterClass="java.util.List">
+		DELETE FROM
+			di_itemclass
+		WHERE
+			id
+		IN
+		<iterate conjunction="," open="(" close=")">
+			#value[]#
+		</iterate>
+	</delete>
+	
+	<select id="getChildId" parameterClass="java.lang.String"
+		resultClass="java.lang.String">
+		select id from di_itemclass where parent_id=#value#
+	</select>
+
+	<update id="updateClass"
+		parameterClass="java.util.HashMap">
+		UPDATE di_itemclass
+		SET
+		<isNotNull property="classifyCode">
+			classify_code = #classifyCode#,
+		</isNotNull>
+		<isNotNull property="classifyName">
+			classify_name = #classifyName#,
+		</isNotNull>
+		<isNotNull property="parentId">
+			parent_id = #parentId#,
+		</isNotNull>
+		<isNotNull property="memo">
+			memo = #memo#,
+		</isNotNull>
+		id = #id#
+		WHERE
+		id = #id#
+	</update>
+
+
+	<select id="isExistItem" parameterClass="java.util.List" resultClass="int">
+		SELECT count(1) FROM di_item WHERE module_id IN
+		<iterate conjunction="," open="(" close=")">
+			#value[]#
+		</iterate>
+	</select>
+
+	<select id="queryItem" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+		SELECT
+			c.id as "id",
+			c.id as itemId,
+			c.code as "code",  <!-- 项目编码 -->
+			c.content as "content",  <!-- 项目内容 -->
+			c.project_desc as "projectDesc",  <!-- 项目描述 -->
+			c.referenceValue as "referenceValue",  <!-- 参数值 -->
+			c.memo as "memo",  <!-- 备注 -->
+			c.xunjian_abnormal as "xunjianAbnormal",
+			c.actualValueUnit as "actualValueUnit",  <!-- 实际值单位 -->
+			c.module_id as moduleId,
+			p.classify_name as "typeName"
+		FROM di_item c
+		left join 
+			di_itemclass p on c.module_id = p.id
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="typeName">
+			p.classify_name like concat('%',#typeName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="itemName">
+			c.content like concat('%',#itemName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="typeId">
+			p.id = #typeId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="id">
+			c.id = #id#
+		</isNotEmpty>
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+
+	<select id="countItem" resultClass="int" parameterClass="java.util.HashMap">
+		SELECT 
+			c.id
+		FROM di_item c
+		left join 
+			di_itemclass p on c.module_id = p.id
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="typeName">
+			p.classify_name like concat('%',#typeName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="itemName">
+			c.content like concat('%',#itemName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="typeId">
+			p.id = #typeId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="id">
+			c.id = #id#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insertItem" parameterClass="java.util.HashMap">
+		INSERT INTO di_item (
+		id,
+		code,  <!-- 项目编码sss -->
+		content,  <!-- 项目内容 -->
+		project_desc,  <!-- 项目描述 -->
+		referenceValue,  <!-- 参数值 -->
+		memo,  <!-- 备注 -->
+		xunjian_abnormal,
+		actualValueUnit,  <!-- 实际值单位 -->
+		module_id
+		)
+		VALUES (#id#, #code#, #content#, #projectDesc#, #referenceValue#, #memo#,
+		#xunjianAbnormal#, #actualValueUnit#, #moduleId#)
+	</insert>
+
+	<delete id="deleteItem" parameterClass="java.util.ArrayList">
+		DELETE FROM di_item WHERE ID IN 
+		<iterate conjunction="," open="(" close=")">
+			#[]#
+		</iterate>
+	</delete>
+
+	<update id="updateItem" parameterClass="java.util.HashMap">
+		UPDATE di_item
+		SET
+		<isNotNull property="code">
+			code = #code#,
+		</isNotNull>
+		<isNotNull property="content">
+			content = #content#,
+		</isNotNull>
+		<isNotNull property="projectDesc">
+			project_desc = #projectDesc#,
+		</isNotNull>
+		<isNotNull property="referenceValue">
+			referenceValue = #referenceValue#,
+		</isNotNull>
+		<isNotNull property="memo">
+			memo = #memo#,
+		</isNotNull>
+		<isNotNull property="xunjianAbnormal">
+			xunjian_abnormal = #xunjianAbnormal#,
+		</isNotNull>
+		<isNotNull property="actualValueUnit">
+			actualValueUnit = #actualValueUnit#,
+		</isNotNull>
+		<isNotNull property="moduleId">
+			module_id = #moduleId#,
+		</isNotNull>
+		id = #id#
+		WHERE
+		id = #id#
+	</update>
+	
+</sqlMap>

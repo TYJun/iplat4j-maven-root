@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--排班时间配置-->
+<sqlMap namespace="HRPBSjpz01">
+
+    <select id="query" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.hr.pb.domain.HRPBSjpz01">
+        SELECT
+        id as "id",  <!-- 主键 -->
+        rec_creator as "recCreator",  <!-- 创建人 -->
+        rec_creator_name as "recCreatorName",  <!-- 创建人姓名 -->
+        rec_create_time as "recCreateTime",  <!-- 创建时间 -->
+        rec_revisor as "recRevisor",  <!-- 更新人ID -->
+        rec_revisor_name as "recRevisorName",  <!-- 更新人 -->
+        rec_revise_time as "recReviseTime",  <!-- 更新时间 -->
+        start_time as "startTime",  <!-- 开始时间 -->
+        end_time as "endTime",  <!-- 结束时间 -->
+        rest_start_time as "restStartTime",  <!-- 休息开始时间 -->
+        rest_end_time as "restEndTime",  <!-- 休息结束时间 -->
+        day_span as "daySpan",  <!-- 是否跨天(0-否，1-是) -->
+        schedule_name as "scheduleName",  <!-- 班次名称 -->
+        dept_num as "deptNum",  <!-- 班组编码 -->
+        dept_name as "deptName",  <!-- 班组名称 -->
+        status as "status",  <!-- 状态(0-停用，1-启用) -->
+        clock_start_time as "clockStartTime",  <!-- 出勤开始时间 -->
+        clock_end_time as "clockEndTime",  <!-- 下班截止时间 -->
+        datagroup_code as "datagroupCode"
+        FROM dr_time_config WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+		<isNotEmpty prepend=" AND " property="scheduleName">
+			schedule_name LIKE concat(#scheduleName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			dept_num = #deptNum#
+		</isNotEmpty>
+		order by schedule_name asc , status desc
+    </select>
+
+    <!--统计使用中的排班数量-->
+    <select id="queryById" parameterClass="String"
+            resultClass="com.baosight.wilp.hr.pb.domain.HRPBSjpz01">
+        SELECT
+        id as "id",  <!-- 主键 -->
+        rec_creator as "recCreator",  <!-- 创建人 -->
+        rec_creator_name as "recCreatorName",  <!-- 创建人姓名 -->
+        rec_create_time as "recCreateTime",  <!-- 创建时间 -->
+        rec_revisor as "recRevisor",  <!-- 更新人ID -->
+        rec_revisor_name as "recRevisorName",  <!-- 更新人 -->
+        rec_revise_time as "recReviseTime",  <!-- 更新时间 -->
+        start_time as "startTime",  <!-- 开始时间 -->
+        end_time as "endTime",  <!-- 结束时间 -->
+        rest_start_time as "restStartTime",  <!-- 休息开始时间 -->
+        rest_end_time as "restEndTime",  <!-- 休息结束时间 -->
+        day_span as "daySpan",  <!-- 是否跨天(0-否，1-是) -->
+        schedule_name as "scheduleName",  <!-- 班次名称 -->
+        dept_num as "deptNum",  <!-- 班组编码 -->
+        dept_name as "deptName",  <!-- 班组名称 -->
+        status as "status",  <!-- 状态(0-停用，1-启用) -->
+        clock_start_time as "clockStartTime",  <!-- 出勤开始时间 -->
+        clock_end_time as "clockEndTime",  <!-- 下班截止时间 -->
+        datagroup_code as "datagroupCode"
+        FROM dr_time_config WHERE 1=1
+        and id = #id#
+    </select>
+    
+    <!---->
+    <select id="queryByName" parameterClass="HashMap"
+            resultClass="com.baosight.wilp.hr.pb.domain.HRPBSjpz01">
+        SELECT
+        id as "id",  <!-- 主键 -->
+        rec_creator as "recCreator",  <!-- 创建人 -->
+        rec_creator_name as "recCreatorName",  <!-- 创建人姓名 -->
+        rec_create_time as "recCreateTime",  <!-- 创建时间 -->
+        rec_revisor as "recRevisor",  <!-- 更新人ID -->
+        rec_revisor_name as "recRevisorName",  <!-- 更新人 -->
+        rec_revise_time as "recReviseTime",  <!-- 更新时间 -->
+        start_time as "startTime",  <!-- 开始时间 -->
+        end_time as "endTime",  <!-- 结束时间 -->
+        rest_start_time as "restStartTime",  <!-- 休息开始时间 -->
+        rest_end_time as "restEndTime",  <!-- 休息结束时间 -->
+        day_span as "daySpan",  <!-- 是否跨天(0-否，1-是) -->
+        schedule_name as "scheduleName",  <!-- 班次名称 -->
+        dept_num as "deptNum",  <!-- 班组编码 -->
+        dept_name as "deptName",  <!-- 班组名称 -->
+        status as "status",  <!-- 状态(0-停用，1-启用) -->
+        clock_start_time as "clockStartTime",  <!-- 出勤开始时间 -->
+        clock_end_time as "clockEndTime",  <!-- 下班截止时间 -->
+        datagroup_code as "datagroupCode"
+        FROM dr_time_config WHERE 1=1
+        <isNotEmpty prepend=" AND " property="planName">
+            schedule_name = #planName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptNum">
+            dept_num = #deptNum#
+        </isNotEmpty>
+    </select>
+
+    <!--统计使用中的排班数量-->
+    <select id="countUsed" resultClass="String">
+        SELECT id FROM dr_work_plan WHERE 1=1 and status = '01'
+        <isNotEmpty prepend=" AND " property="scheduleId">
+            schedule_id = #scheduleId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="planDate">
+            plan_date >= #planDate#
+        </isNotEmpty>
+    </select>
+
+    <!--查询服务科室-->
+    <select id="queryServiceDept" resultClass="HashMap">
+        select
+		    dept_num as deptNum,
+		    dept_name as deptName,
+            hospital_district as datagroupCode
+		from
+        bona_frame_mzsrmyy.ac_department
+		where
+		    1=1
+		<isNotEmpty prepend=" AND " property="datagroupCode">
+            hospital_district = #datagroupCode#
+        </isNotEmpty>
+		order by dept_num
+    </select>
+
+    <!--通过工号查询科室信息-->
+    <select id="queryDeptInfoByUser" resultClass="HashMap">
+        select
+	        dept.dept_num as deptNum,
+	        dept.dept_name as deptName,
+	        dept.hospital_district as datagroupCode
+		from bona_frame_mzsrmyy.ac_department dept
+	    left join bona_frame_mzsrmyy.ac_personnel person on dept.id = person.dept_id
+	    where 1=1 
+	    and person.work_no = #workNo#
+    </select>
+
+    <!--通过工号查询员工信息-->
+    <select id="queryWorkInfo" resultClass="HashMap">
+		SELECT
+		DISTINCT
+            `work_no` AS `workNo`,
+            `name` AS `name`,
+            `gender` AS `gender`,
+            `contact_tel` AS `contactTel`,
+            `id_no` AS `idNo`,
+            `type` AS `staffType`,
+            `is_service` AS `isService`,
+            `status` AS `status`,
+            `status` AS `isStatus`
+		FROM
+            bona_frame_mzsrmyy.ac_personnel
+	    where 1=1 
+	    and work_no = #workNo#
+    </select>
+
+    <!--统计已有的排班数量-->
+    <select id="countTimeConfig" resultClass="int">
+        SELECT COUNT(id) FROM dr_time_config WHERE 1=1
+        <isNotEmpty prepend=" AND " property="startTime">
+            start_time = #startTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="endTime">
+            end_time = #endTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="restStartTime">
+            rest_start_time = #restStartTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="restEndTime">
+            rest_end_time = #restEndTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptNum">
+            dept_num = #deptNum#
+        </isNotEmpty>
+    </select>
+
+    <!--查询已配置的科室-->
+    <select id="queryDept" resultClass="HashMap">
+        select
+            distinct dept_num deptNum,dept_name deptName
+        from dr_time_config
+        ORDER by dept_num asc
+    </select>
+
+    <!--
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recCreator">
+            rec_creator = #recCreator#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recCreatorName">
+            rec_creator_name = #recCreatorName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recCreateTime">
+            rec_create_time = #recCreateTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recRevisor">
+            rec_revisor = #recRevisor#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recRevisorName">
+            rec_revisor_name = #recRevisorName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recReviseTime">
+            rec_revise_time = #recReviseTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="startTime">
+            start_time = #startTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="endTime">
+            end_time = #endTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="restStartTime">
+            rest_start_time = #restStartTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="restEndTime">
+            rest_end_time = #restEndTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="daySpan">
+            day_span = #daySpan#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="scheduleName">
+            schedule_name = #scheduleName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptNum">
+            dept_num = #deptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptName">
+            dept_name = #deptName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="status">
+            status = #status#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="clockStartTime">
+            clock_start_time = #clockStartTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="clockEndTime">
+            clock_end_time = #clockEndTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="datagroupCode">
+            datagroup_code = #datagroupCode#
+        </isNotEmpty>
+    -->
+
+    <insert id="insert">
+        INSERT INTO dr_time_config (id,  <!-- 主键 -->
+        rec_creator,  <!-- 创建人 -->
+        rec_creator_name,  <!-- 创建人姓名 -->
+        rec_create_time,  <!-- 创建时间 -->
+        rec_revisor,  <!-- 更新人ID -->
+        rec_revisor_name,  <!-- 更新人 -->
+        rec_revise_time,  <!-- 更新时间 -->
+        start_time,  <!-- 开始时间 -->
+        end_time,  <!-- 结束时间 -->
+        rest_start_time,  <!-- 休息开始时间 -->
+        rest_end_time,  <!-- 休息结束时间 -->
+        day_span,  <!-- 是否跨天(0-否，1-是) -->
+        schedule_name,  <!-- 班次名称 -->
+        dept_num,  <!-- 班组编码 -->
+        dept_name,  <!-- 班组名称 -->
+        status,  <!-- 状态(0-停用，1-启用) -->
+        clock_start_time,  <!-- 出勤开始时间 -->
+        clock_end_time,  <!-- 下班截止时间 -->
+        datagroup_code
+        )
+        VALUES (#id#, #recCreator#, #recCreatorName#, #recCreateTime#, #recRevisor#, #recRevisorName#, #recReviseTime#,
+        #startTime#, #endTime#, #restStartTime#, #restEndTime#, #daySpan#, #scheduleName#, #deptNum#, #deptName#,
+        #status#, #clockStartTime#, #clockEndTime#, #datagroupCode#)
+    </insert>
+
+    <delete id="delete">
+        DELETE
+        FROM dr_time_config
+        WHERE id = #id#
+    </delete>
+
+    <update id="update">
+        UPDATE dr_time_config
+        SET
+        rec_creator = #recCreator#,   <!-- 创建人 -->
+        rec_creator_name = #recCreatorName#,   <!-- 创建人姓名 -->
+        rec_create_time = #recCreateTime#,   <!-- 创建时间 -->
+        rec_revisor = #recRevisor#,   <!-- 更新人ID -->
+        rec_revisor_name = #recRevisorName#,   <!-- 更新人 -->
+        rec_revise_time = #recReviseTime#,   <!-- 更新时间 -->
+        start_time = #startTime#,   <!-- 开始时间 -->
+        end_time = #endTime#,   <!-- 结束时间 -->
+        rest_start_time = #restStartTime#,   <!-- 休息开始时间 -->
+        rest_end_time = #restEndTime#,   <!-- 休息结束时间 -->
+        day_span = #daySpan#,   <!-- 是否跨天(0-否，1-是) -->
+        schedule_name = #scheduleName#,   <!-- 班次名称 -->
+        dept_num = #deptNum#,   <!-- 班组编码 -->
+        dept_name = #deptName#,   <!-- 班组名称 -->
+        status = #status#,   <!-- 状态(0-停用，1-启用) -->
+        clock_start_time = #clockStartTime#,   <!-- 出勤开始时间 -->
+        clock_end_time = #clockEndTime#,   <!-- 下班截止时间 -->
+        datagroup_code = #datagroupCode#
+        WHERE
+        id = #id#
+    </update>
+
+</sqlMap>

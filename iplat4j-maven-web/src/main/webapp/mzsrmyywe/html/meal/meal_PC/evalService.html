@@ -1,0 +1,442 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="../reference/mui/css/mui.min.css">
+  <link rel="stylesheet" href="../reference/mui/css/iconfont.css">
+  <link rel="stylesheet" href="../reference/css/common.css" />
+  <link rel="stylesheet" href="../../../css/colorGreen.css"/>
+  <link rel="stylesheet" href="../../../css/colorBlue.css"/>
+  <link rel="stylesheet" href="../reference/css/fontawesome-stars.css" />
+  <link rel="stylesheet" href="../reference/css/font-awesome.min.css" />
+</head>
+<STYLE TYPE="text/css">
+.alert {
+  margin-bottom: 0px;
+  border-radius: 0px;
+  height: 40px;
+  line-height: 40px;
+}
+.br-theme-fontawesome-stars .br-widget a {
+  font: normal normal normal 10px/1 FontAwesome;
+}
+.br-theme-fontawesome-stars .br-widget a.br-selected:after {
+  color: #F51A1A;
+}
+
+.media {
+  margin-bottom: 7.5px;
+  margin-top: 7.5px;
+}
+.dropdown-menu>li>a {
+  padding: 6px 20px;
+}
+.dropdown-menu {
+  min-width: 150px;
+}
+.row {
+  margin-right: 0px;
+  margin-left: 0px;
+}
+.div-child {
+  width: 100%;
+  background: #fff;
+  border-bottom: 1px solid #D6D5D5;
+  margin-bottom: 10px;
+  border-radius: 2px;
+  padding: 0 15px;
+}
+.grey{
+  color:#A09F9F;
+}
+.btn-blue{
+  width:10rem;
+  text-align: center;
+  background-color: #5bc0de;
+  color: #fff;
+}
+.child-window {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2200;
+  background: rgba(0, 0, 0, 0.5);
+  filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#7F000000, endcolorstr=#7F000000);
+}
+.textarea {
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  padding: 15px;
+}
+.btn-pad {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.btn-gre {
+  background-color: #60C760;
+  text-align: center;
+  color: #fff;
+}
+.btn-red {
+  background-color: #E45959;
+  text-align: center;
+  color: #fff;
+}
+.top60 {
+  padding-top: 54px !important;
+}
+</STYLE>
+<body>
+  <header class="mui-bar mui-bar-nav">
+      <h1 class="mui-title">服务评价</h1>
+      <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+            <span class="mui-icon mui-icon-left-nav"></span>
+          </button>
+    </header>
+
+  <div id="warn" class="warn" hidden>
+    <small></small>
+  </div>
+
+  <div id="loading" class="spinner" style="position:fixed;z-index:9999;text-align:center;width:100%;" hidden>
+    <div class="bounce1"></div>
+    <div class="bounce2"></div>
+    <div class="bounce3"></div>
+  </div>
+  <div id="evalList" class="top60 mui-content">  
+       <!-- <div class="div-child">
+        <div class="row" style="height:20px;line-height:20px;">
+          <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 right-nopadding">
+            <span class="glyphicon glyphicon-user">
+            </span>
+          </div>
+          <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 grey">
+            123123
+          </div>
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 right grey">
+            2016-04-23 12:33
+          </div>
+          
+        </div>
+        <div class="row">
+          <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 right-nopadding">
+          </div>
+          <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 left">
+            <select class='eval' name='rating' style="font-size:10px;">
+              <option value=''></option>
+              <option value='2'>非常差</option>
+              <option value='4'>差</option>
+              <option value='6'>一般</option>
+              <option value='8'>好</option>
+              <option value='10'>非常好</option>
+            </select>
+          </div>
+          <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+            
+          </div>
+        </div>
+        <div class="row" style="min-height:30px;padding-bottom:10px;">
+          <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 right-nopadding">
+          </div>
+          <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+            日了狗了sad sad 但是萨事实上生生死死生生死死生生死死生生死死生生死死生生死死手术室
+          </div>
+        </div>
+      </div> -->
+      <div id="win-one" class="child-window" hidden>
+      <div id="approvalWindow" style="position: absolute;left: 10%;top: 30%;width:80%;background:#fff;height:40%;min-height:280px;">
+        <h4 style="padding-left:15px;">回复</h4>
+        <hr style="margin-top:10px;margin-bottom:0px;">
+        <div style="height:65%;">
+            <textarea id="approvalOpinion" class="textarea" placeholder="请输入回复内容"></textarea>
+        </div>
+        <div style="position:absolute;bottom:0;width:100%;" class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 btn-pad">
+                <button type='button' class='btn btn-gre btn-block confirm' style="border-radius: 0px;">确定</button>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 btn-pad">
+                <button type='button' class='btn btn-red btn-block cancel' style="border-radius: 0px;">取消</button>
+            </div>
+        </div>
+      </div>
+  </div>
+  </div>
+
+  <div id="loadMore" class="alert" role="alert" style="background-color:#F5F5F5;text-align:center;margin-top:10px;">
+        加载更多
+  </div>
+  
+</body>
+<script type="text/javascript" src="../../../js/color.js"></script>
+<script src="../reference/mui/js/mui.js" type="text/javascript"></script>
+<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../reference/js/common.js" type="text/javascript"></script>
+<script src="../reference/js/math.js" type="text/javascript"></script>
+<script src="../reference/js/jquery.barrating.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var url = location.search;
+    var canteenNum = url.substring(1, url.length);
+    var page = 1,billNoS,isJudge;
+
+    $(function(){
+      // getUserRole();
+      loadData();
+    });
+
+    function getUserRole(){
+      $('#loading').show();
+      $.ajax({
+        url:baseUrl + 'app_evalBillController.do?judgeRole',
+        async:false,
+        type:'post',
+        data:{
+          canteenNum:canteenNum,
+          userId:workNo,
+          dataGroupCode:localStorage.getItem("dataGroupCode")
+        },
+        success:function(data){
+          $("#loading").hide();
+          var data = JSON.parse(data);
+          console.log(data);
+          if(parseInt(data.obj)){
+            isJudge = true;
+          }else{
+            isJudge = false;
+          }
+        }
+      });
+    }
+    function loadData() {
+      $('#loading').show();
+      $.ajax({
+        url: baseUrl + 'app_baseBasicInfoController.do?getAdditionComments',
+        type: 'post',
+        data: {
+          canteenNum: canteenNum,
+          page: page,
+          // dataGroupCode:'CSYY2'//ocalStorage.getItem("dataGroupCode")
+        },
+        success: function(data) {
+          $("#loading").hide();
+          var data = JSON.parse(data);
+          console.log(data);
+          if (data.success) {
+            var list = new Array();
+            list = data.obj;
+            var html = "",
+              evalContent, evalLevel, evalTime, evalUserName, sendDate, parentId, additionalComment;
+            for (var i = 0; i < list.length; i++) {
+              evalContent = list[i].evalContent;
+              evalLevel = list[i].evalLevel;
+              evalTime = list[i].evalTime;
+              evalUserName = list[i].evalUserName;
+              sendDate = list[i].sendTime == null ? "" : list[i].sendTime;
+              parentId = list[i].id;
+              additionalComment = list[i].additionalComment;
+              html += createHtml(evalContent, evalLevel, evalTime, evalUserName, sendDate, parentId, additionalComment);
+            }
+            $("#evalList").append(html);
+
+            if (list != null && list.length < 10) {
+              $('#loadMore').text('暂无更多数据');
+            } else {
+              $('#loadMore').text('加载更多');
+            }
+
+            //回复评论
+            $(".AdditionComment").click(function() {
+              var parentId = $(this).attr("parentId");
+              $("button.confirm").attr("parentId", parentId);
+              $("#win-one").fadeToggle(300);
+            });
+
+            $('.eval').barrating({
+              theme: 'fontawesome-stars',
+              showSelectedRating: false,
+              readonly: true
+            });
+
+          }else {
+            mui.toast(data.msg);
+          }
+        }
+      });
+
+    }
+    
+
+    function createHtml(evalContent,evalLevel,evalTime,evalUserName,sendDate,parentId,additionalComment){
+      var html = "<div class='div-child'>";
+      html += "<div class='mui-row' style='height:20px;line-height:20px;'>";
+      html += "<div class='mui-col-xs-1 mui-col-sm-1 mui-col-md-1 mui-col-lg-1 right-nopadding'>";
+      html += "<span class='mui-icon mui-icon-contact'></span>";
+      html += "</div>";
+      html += "<div class='mui-col-xs-4 mui-col-sm-4 mui-col-md-4 mui-col-lg-4 grey' style='white-space:nowrap;overflow:hidden;'>匿名用户</div>";
+      html += "<div class='mui-col-xs-7 mui-col-sm-7 mui-col-md-7 mui-col-lg-7 right grey'>"+evalTime+"</div>";
+      html += "</div>";
+      html += "<div class='mui-row'>";
+      html += "<div class='mui-col-xs-3 mui-col-sm-3 mui-col-md-3 mui-col-lg-3 left'>";
+      html += "<select class='eval' name='rating'>";
+      html += "<option value=''></option>";
+      if(evalLevel=="2"){
+        html += "<option value='2' selected>非常差</option>";
+      }else{
+        html += "<option value='2'>非常差</option>";
+      }
+
+      if(evalLevel=="4"){
+        html += "<option value='4' selected>差</option>";
+      }else{
+        html += "<option value='4'>差</option>";
+      }
+
+      if(evalLevel=="6"){
+        html += "<option value='6' selected>一般</option>";
+      }else{
+        html += "<option value='6'>一般</option>";
+      }
+
+      if(evalLevel=="8"){
+        html += "<option value='8' selected>好</option>";
+      }else{
+        html += "<option value='8'>好</option>";
+      }
+
+      if(evalLevel=="10"){
+        html += "<option value='10' selected>非常好</option>";
+      }else{
+        html += "<option value='10'>非常好</option>";
+      }
+      
+      // html += "<option value='2'>非常差</option>";
+      // html += "<option value='4'>差</option>";
+      // html += "<option value='6'>一般</option>";
+      // html += "<option value='8'>好</option>";
+      // html += "<option value='10'>非常好</option>";
+      html += "</select>";
+      html += "</div>";
+      html += "<div class='mui-col-xs-8 mui-col-sm-8 mui-col-md-8 mui-col-lg-8 grey right' style='font-size:12px;line-height:22px;'>送餐时间："+sendDate+"</div>";
+      html += "</div>";
+      html += "<div class='mui-row' style='min-height:30px;padding-bottom:10px;'>";
+      html += "<div class='mui-col-xs-1 mui-col-sm-1 mui-col-md-1 mui-col-lg-1 right-nopadding'></div>";
+      html += "<div class='mui-col-xs-11 mui-col-sm-11 mui-col-md-11 mui-col-lg-11'>"+evalContent+"</div>";
+      
+      /*if(isJudge && additionalComment !=null && additionalComment.length == 0){
+        html += createButton(parentId);
+      }*/
+      html += "</div>";
+      if(additionalComment !=null && additionalComment.length != 0){
+        html += '<div>';
+        $.each(additionalComment,function(i,obj){
+          html += createAddComments(obj);
+        });
+        html += "</div>";
+      }
+
+      html += "</div>";
+      return html;
+    }
+
+    //添加回复按钮
+    function createButton(parentId){
+      var html = "";
+      html += '<div class="row" style="padding-bottom:10px;">';
+      html += '<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="text-align:right;float:right;"><button type="button" class="btn btn-blue btn-sm AdditionComment" parentId="'+parentId+'">回复</button></div>';
+      html += "</div>";
+      return html;
+    }
+
+    //添加回复内容显示
+    function createAddComments(obj) {
+      var html = "";
+      html += "<div class='div-child' style='border-bottom:0px;'>";
+      html += '<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"></div><div class="col-xs-11 col-sm-11 col-md-11 col-lg-11"><hr></div>';
+      html += "<div class='row' style='height:30px;line-height:40px;'>";
+      html += "<div class='col-xs-1 col-sm-1 col-md-1 col-lg-1 right-nopadding'>";
+      html += "</div>";
+      html += "<div class='col-xs-4 col-sm-4 col-md-4 col-lg-4 grey' style='color:#ffa245;'>商家回复</div>";
+      html += "<div class='col-xs-7 col-sm-7 col-md-7 col-lg-7 right grey' style='color:#ffa245;'>" + obj.evalTime + "</div>";
+      html += "</div>";
+      html += "<div class='row' style='min-height:30px;padding-bottom:10px;'>";
+      html += "<div class='col-xs-1 col-sm-1 col-md-1 col-lg-1 right-nopadding'></div>";
+      html += "<div class='col-xs-11 col-sm-11 col-md-11 col-lg-11' style='color:#ffa245;'>" + obj.evalContent + "</div>";
+      html += "</div>";
+      html += "</div>";
+      return html;
+    }
+
+    //回复
+    $("#approvalWindow").click(function(){
+      event.stopPropagation();
+    });
+
+    $('button.cancel').click(function(){
+      $("#win-one").fadeToggle(300);
+    });
+
+    $('button.confirm').click(function(){
+      $('button.confirm').css('pointer-events','none');
+      var parentId = $(this).attr('parentId'),
+      evalContent = $('#approvalOpinion').val();
+      $.ajax({
+        url:baseUrl + 'app_evalBillController.do?saveAdditionComments',
+        type:'post',
+        data:{
+          parentId:parentId,
+          evalContent:evalContent,
+          evalSubject:'1',
+          evalCreator:workNo,
+          dataGroupCode:localStorage.getItem("dataGroupCode")
+        },
+        success:function(data){
+          console.log(data);
+          var data = eval("("+data+")");
+          $('button.confirm').css('pointer-events','auto');
+          if(data.success){
+            $('#success small').html('回复成功！');
+            $('#success').show();
+            $("#win-one").fadeToggle(300);
+            setTimeout("location.reload()", 3000);
+          }else{
+            $('#warn small').html(data.msg);
+            $('#warn').fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+          }
+        },
+        complete: function(XMLHttpRequest, status) { //请求完成后最终执行参数
+          if (status == 'timeout') {
+            $('#warn small').html('网速不给力，请重试！');
+            $('#warn').fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);　　
+          } else if (status == 'error') {
+            $('#warn small').html('当前网络不可用，请查看网络是否畅通！');
+            $('#warn').fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+          }　
+        }
+      });
+    });
+
+
+    $("#loadMore").click(function(){
+      page++;
+      loadData();
+    });
+
+    $("#back").click(function() {
+      location.href = 'mealList.html?'+canteenNum;
+    });
+</script>
+</html>

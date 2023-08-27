@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MCTM0103">
+
+	<select id="queryTemplate" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			SELECT id AS 'templateId',  			<!-- 模板ID -->
+				template_code AS 'templateCode',  	<!-- 模板编码 -->
+				template_name AS 'templateName',  	<!-- 模板名称 -->
+				call_module AS 'module',  			<!-- 调用模块 -->
+				message AS 'message',				<!-- 消息 -->
+				is_cc AS 'isCc'						<!-- 是否抄送 -->
+			FROM $projectSchema$.mc_template
+			WHERE id = #id#
+		
+	</select>
+</sqlMap>

@@ -1,0 +1,642 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HISQ01">
+	<select id="queryF" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		id	as "id",  <!-- 主键 -->
+		apply_no	as "applyNo",  <!-- 申请单号 -->
+		status	as "status",  <!-- 状态（01=新增,02=待审核,03=审核通过,04=审核驳回） -->
+		icon_name	as "iconName",  <!-- 标识名称 -->
+		icon_zh_content	as "iconZhContent",  <!-- 标识中文内容 -->
+		icon_en_content	as "iconEnContent",  <!-- 标识英文内容 -->
+		classify_id	as "classifyId",  <!-- 标识分类表ID -->
+		classify_name	as "classifyName",  <!-- 标识分类名称 -->
+		icon_amount	as "iconAmount",  <!-- 数量 -->
+		building	as "building",  <!-- 楼 -->
+		floor	as "floor",  <!-- 层 -->
+		spot_code	as "spotCode",  <!-- 安装地点编码 -->
+		spot_name	as "spotName",  <!-- 安装地点名称 -->
+		spot_desc	as "spotDesc",  <!-- 安装地点说明 -->
+		install_date	as "installDate",  <!-- 安装日期 -->
+		apply_reason	as "applyReason",  <!-- 申请理由 -->
+		apply_dept_num	as "applyDeptNum",  <!-- 申请科室编码 -->
+		apply_dept_name	as "applyDeptName",  <!-- 申请科室名称 -->
+		manager_no	as "managerNo",  <!-- 管理员工号 -->
+		manager_name	as "managerName",  <!-- 管理员姓名 -->
+		remark	as "remark",  <!-- 备注 -->
+		rec_creator	as "recCreator",  <!-- 创建人 -->
+		rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		rec_revisor	as "recRevisor",  <!-- 修改人 -->
+		rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+		data_group_code	as "dataGroupCode",  <!-- 账套 -->
+		archive_flag	as "archiveFlag" <!-- 归档标记 -->
+		FROM .hi_apply WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="applyNo">
+			apply_no like concat('%',#applyNo#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			apply_dept_num = #deptNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			apply_dept_name = #deptName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="iconName">
+			icon_name like concat('%',#iconName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status">
+			status = #status#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTimeS">
+			rec_create_time  <![CDATA[ >= ]]>  #recCreateTimeS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTimeE">
+			rec_create_time  <![CDATA[ <= ]]> #recCreateTimeE#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				id asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.hi.common.domain.HiApply">
+		SELECT
+		id	as "id",  <!-- 主键 -->
+		apply_no	as "applyNo",  <!-- 申请单号 -->
+		status	as "status",  <!-- 状态（01=新增,02=待审核,03=审核通过,04=审核驳回） -->
+		icon_name	as "iconName",  <!-- 标识名称 -->
+		icon_zh_content	as "iconZhContent",  <!-- 标识中文内容 -->
+		icon_en_content	as "iconEnContent",  <!-- 标识英文内容 -->
+		classify_id	as "classifyId",  <!-- 标识分类表ID -->
+		classify_name	as "classifyName",  <!-- 标识分类名称 -->
+		icon_amount	as "iconAmount",  <!-- 数量 -->
+		building	as "building",  <!-- 楼 -->
+		floor	as "floor",  <!-- 层 -->
+		spot_code	as "spotCode",  <!-- 安装地点编码 -->
+		spot_name	as "spotName",  <!-- 安装地点名称 -->
+		spot_desc	as "spotDesc",  <!-- 安装地点说明 -->
+		install_date	as "installDate",  <!-- 安装日期 -->
+		apply_reason	as "applyReason",  <!-- 申请理由 -->
+		apply_dept_num	as "applyDeptNum",  <!-- 申请科室编码 -->
+		apply_dept_name	as "applyDeptName",  <!-- 申请科室名称 -->
+		manager_no	as "managerNo",  <!-- 管理员工号 -->
+		manager_name	as "managerName",  <!-- 管理员姓名 -->
+		remark	as "remark",  <!-- 备注 -->
+		rec_creator	as "recCreator",  <!-- 创建人 -->
+		rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		rec_revisor	as "recRevisor",  <!-- 修改人 -->
+		rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+		data_group_code	as "dataGroupCode",  <!-- 账套 -->
+		archive_flag	as "archiveFlag" ,<!-- 归档标记 -->
+		emo as "emo"
+		FROM .hi_apply  WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="applyNo">
+			apply_no like concat('%',#applyNo#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="iconName">
+			icon_name like concat('%',#iconName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status">
+			status = #status#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTimeS">
+			rec_create_time  <![CDATA[ >= ]]>  #recCreateTimeS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTimeE">
+			rec_create_time  <![CDATA[ <= ]]> #recCreateTimeE#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				id asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+
+	<select id="queryAudit" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.hi.common.domain.HiApply">
+		SELECT
+		id	as "id",  <!-- 主键 -->
+		apply_no	as "applyNo",  <!-- 申请单号 -->
+		status	as "status",  <!-- 状态（01=新增,02=待审核,03=审核通过,04=审核驳回） -->
+		icon_name	as "iconName",  <!-- 标识名称 -->
+		icon_zh_content	as "iconZhContent",  <!-- 标识中文内容 -->
+		icon_en_content	as "iconEnContent",  <!-- 标识英文内容 -->
+		classify_id	as "classifyId",  <!-- 标识分类表ID -->
+		classify_name	as "classifyName",  <!-- 标识分类名称 -->
+		icon_amount	as "iconAmount",  <!-- 数量 -->
+		building	as "building",  <!-- 楼 -->
+		floor	as "floor",  <!-- 层 -->
+		spot_code	as "spotCode",  <!-- 安装地点编码 -->
+		spot_name	as "spotName",  <!-- 安装地点名称 -->
+		spot_desc	as "spotDesc",  <!-- 安装地点说明 -->
+		install_date	as "installDate",  <!-- 安装日期 -->
+		apply_reason	as "applyReason",  <!-- 申请理由 -->
+		apply_dept_num	as "applyDeptNum",  <!-- 申请科室编码 -->
+		apply_dept_name	as "applyDeptName",  <!-- 申请科室名称 -->
+		manager_no	as "managerNo",  <!-- 管理员工号 -->
+		manager_name	as "managerName",  <!-- 管理员姓名 -->
+		remark	as "remark",  <!-- 备注 -->
+		rec_creator	as "recCreator",  <!-- 创建人 -->
+		rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		rec_revisor	as "recRevisor",  <!-- 修改人 -->
+		rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+		data_group_code	as "dataGroupCode",  <!-- 账套 -->
+		archive_flag	as "archiveFlag" <!-- 归档标记 -->
+		FROM .hi_apply  WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="applyNo">
+			apply_no like concat('%',#applyNo#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="iconName">
+			icon_name like concat('%',#iconName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status">
+			status = #status#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTimeS">
+			rec_create_time  <![CDATA[ >= ]]>  #recCreateTimeS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTimeE">
+			rec_create_time  <![CDATA[ <= ]]> #recCreateTimeE#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				id asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="querySpecialDate" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		id	as "id",  <!-- 主键 -->
+		apply_no	as "applyNo",  <!-- 申请单号 -->
+		status	as "status",  <!-- 状态（01=新增,02=待审核,03=审核通过,04=审核驳回） -->
+		icon_name	as "iconName",  <!-- 标识名称 -->
+		icon_zh_content	as "iconZhContent",  <!-- 标识中文内容 -->
+		icon_en_content	as "iconEnContent",  <!-- 标识英文内容 -->
+		classify_id	as "classifyId",  <!-- 标识分类表ID -->
+		classify_name	as "classifyName",  <!-- 标识分类名称 -->
+		icon_amount	as "iconAmount",  <!-- 数量 -->
+		building	as "building",  <!-- 楼 -->
+		floor	as "floor",  <!-- 层 -->
+		spot_code	as "spotCode",  <!-- 安装地点编码 -->
+		spot_name	as "spotName",  <!-- 安装地点名称 -->
+		spot_desc	as "spotDesc",  <!-- 安装地点说明 -->
+		install_date	as "installDate",  <!-- 安装日期 -->
+		apply_reason	as "applyReason",  <!-- 申请理由 -->
+		apply_dept_num	as "applyDeptNum",  <!-- 申请科室编码 -->
+		apply_dept_name	as "applyDeptName",  <!-- 申请科室名称 -->
+		manager_no	as "managerNo",  <!-- 管理员工号 -->
+		manager_name	as "managerName",  <!-- 管理员姓名 -->
+		remark	as "remark",  <!-- 备注 -->
+		rec_creator	as "recCreator",  <!-- 创建人 -->
+		rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		rec_revisor	as "recRevisor",  <!-- 修改人 -->
+		rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+		data_group_code	as "dataGroupCode",  <!-- 账套 -->
+		archive_flag	as "archiveFlag" <!-- 归档标记 -->
+		FROM .hi_apply WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="applyNo">
+			apply_no like concat('%',#applyNo#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="iconName">
+			icon_name like concat('%',#iconName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status">
+			status = #status#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTimeS">
+			rec_create_time  <![CDATA[ >= ]]>  #recCreateTimeS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTimeE">
+			rec_create_time  <![CDATA[ <= ]]> #recCreateTimeE#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				id asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="queryId" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.hi.common.domain.HiFile">
+		SELECT
+		id	as "id",  <!-- 主键 -->
+		apply_no	as "applyNo",  <!-- 申请单号 -->
+		status	as "status",  <!-- 状态（01=新增,02=待审核,03=审核通过,04=审核驳回） -->
+		icon_name	as "iconName",  <!-- 标识名称 -->
+		icon_zh_content	as "iconZhContent",  <!-- 标识中文内容 -->
+		icon_en_content	as "iconEnContent",  <!-- 标识英文内容 -->
+		classify_id	as "classifyId",  <!-- 标识分类表ID -->
+		classify_name	as "classifyName",  <!-- 标识分类名称 -->
+		icon_amount	as "iconAmount",  <!-- 数量 -->
+		building	as "building",  <!-- 楼 -->
+		floor	as "floor",  <!-- 层 -->
+		spot_code	as "spotCode",  <!-- 安装地点编码 -->
+		spot_name	as "spotName",  <!-- 安装地点名称 -->
+		spot_desc	as "spotDesc",  <!-- 安装地点说明 -->
+		install_date	as "installDate",  <!-- 安装日期 -->
+		apply_reason	as "applyReason",  <!-- 申请理由 -->
+		apply_dept_num	as "applyDeptNum",  <!-- 申请科室编码 -->
+		apply_dept_name	as "applyDeptName",  <!-- 申请科室名称 -->
+		manager_no	as "managerNo",  <!-- 管理员工号 -->
+		manager_name	as "managerName",  <!-- 管理员姓名 -->
+		remark	as "remark",  <!-- 备注 -->
+		rec_creator	as "recCreator",  <!-- 创建人 -->
+		rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		rec_revisor	as "recRevisor",  <!-- 修改人 -->
+		rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+		data_group_code	as "dataGroupCode",  <!-- 账套 -->
+		archive_flag	as "archiveFlag" <!-- 归档标记 -->
+		FROM .hi_apply
+		WHERE
+		 ID = #id#
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .hi_apply WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO .hi_apply (id,  <!-- 主键 -->
+		apply_no,  <!-- 申请单号 -->
+		status,  <!-- 状态（01=新增,02=待审核,03=审核通过,04=审核驳回） -->
+		icon_name,  <!-- 标识名称 -->
+		icon_zh_content,  <!-- 标识中文内容 -->
+		icon_en_content,  <!-- 标识英文内容 -->
+		classify_id,  <!-- 标识分类表ID -->
+		classify_name,  <!-- 标识分类名称 -->
+		icon_amount,  <!-- 数量 -->
+		building,  <!-- 楼 -->
+		floor,  <!-- 层 -->
+		spot_code,  <!-- 安装地点编码 -->
+		spot_name,  <!-- 安装地点名称 -->
+		spot_desc,  <!-- 安装地点说明 -->
+		install_date,  <!-- 安装日期 -->
+		apply_reason,  <!-- 申请理由 -->
+		apply_dept_num,  <!-- 申请科室编码 -->
+		apply_dept_name,  <!-- 申请科室名称 -->
+		manager_no,  <!-- 管理员工号 -->
+		manager_name,  <!-- 管理员姓名 -->
+		remark,  <!-- 备注 -->
+		rec_creator,  <!-- 创建人 -->
+		rec_create_time,  <!-- 创建时间 -->
+		rec_revisor,  <!-- 修改人 -->
+		rec_revise_time,  <!-- 修改时间 -->
+		data_group_code,  <!-- 账套 -->
+		archive_flag,  <!-- 归档标记 -->
+		status_name
+		)
+		VALUES (
+		#id#,
+		  #applyNo#,
+		  #status#,
+		  #iconName#,
+		  #iconZhContent#,
+		  #iconEnContent#,
+		  #classifyId#,
+		  #classifyName#,
+		  #iconAmount#,
+		  #building#,
+		  #floor#,
+		  #spotCode#,
+		  #spotName#,
+		  #spotDesc#,
+		  #installDate:DATE#,
+		  #applyReason#,
+		  #applyDeptNum#,
+		  #applyDeptName#,
+		  #managerNo#,
+		  #managerName#,
+		  #remark#,
+		  #recCreator#,
+		  #recCreateTime#,
+		  #recRevisor#,
+		  #recReviseTime#,
+		  #dataGroupCode#,
+		  #archiveFlag#,
+		  #statusName#)
+	</insert>
+
+
+	<delete id="delete">
+		DELETE FROM .hi_apply
+WHERE
+	id = #id#
+	</delete>
+
+	<delete id="deleteFail">
+		DELETE
+FROM
+	hi_file
+WHERE
+     relation_id = #id#
+	</delete>
+
+
+	<update id="update">
+	UPDATE .hi_apply
+	SET
+	apply_no	= #applyNo#,   <!-- 申请单号 -->
+	status	= #status#,   <!-- 状态（01=新增,02=待审核,03=审核通过,04=审核驳回） -->
+	icon_name	= #iconName#,   <!-- 标识名称 -->
+	icon_zh_content	= #iconZhContent#,   <!-- 标识中文内容 -->
+	icon_en_content	= #iconEnContent#,   <!-- 标识英文内容 -->
+	classify_id	= #classifyId#,   <!-- 标识分类表ID -->
+	classify_name	= #classifyName#,   <!-- 标识分类名称 -->
+	icon_amount	= #iconAmount#,   <!-- 数量 -->
+	building	= #building#,   <!-- 楼 -->
+	floor	= #floor#,   <!-- 层 -->
+	spot_code	= #spotCode#,   <!-- 安装地点编码 -->
+	spot_name	= #spotName#,   <!-- 安装地点名称 -->
+	spot_desc	= #spotDesc#,   <!-- 安装地点说明 -->
+	<isNotEmpty  property="installDate">
+		install_date	= #installDate:DATE#,   <!-- 安装日期 -->
+	</isNotEmpty>
+	<isNotEmpty  property="applyReason">
+		apply_reason	= #applyReason#,   <!-- 申请理由 -->
+	</isNotEmpty>
+	apply_dept_num	= #applyDeptNum#,   <!-- 申请科室编码 -->
+	apply_dept_name	= #applyDeptName#,   <!-- 申请科室名称 -->
+	manager_no	= #managerNo#,   <!-- 管理员工号 -->
+	manager_name	= #managerName#,   <!-- 管理员姓名 -->
+	<isNotEmpty  property="remark">
+		remark	= #remark#,   <!-- 备注 -->
+	</isNotEmpty>
+
+	rec_creator	= #recCreator#,   <!-- 创建人 -->
+	rec_create_time	= #recCreateTime#,   <!-- 创建时间 -->
+	rec_revisor	= #recRevisor#,   <!-- 修改人 -->
+	rec_revise_time	= #recReviseTime#,   <!-- 修改时间 -->
+	<isNotEmpty  property="dataGroupCode">
+		data_group_code	= #dataGroupCode#,   <!-- 账套 -->
+	</isNotEmpty>
+	archive_flag	= #archiveFlag#,  <!-- 归档标记 -->
+	status_name = #statusName#,
+	emo = ''
+	WHERE
+	id = #id#
+	</update>
+
+
+
+	<!-- 提交 -->
+	<update id="examine" parameterClass="java.util.HashMap">
+		UPDATE
+			.hi_apply
+		SET
+			status = '02',
+		    status_name = '待审核'
+		WHERE
+			ID = #id#
+	</update>
+
+<!--	撤回-->
+<update id="withdraw" parameterClass="java.util.HashMap">
+	UPDATE
+       .hi_apply
+    set
+       status = '01',
+       status_name = '新增'
+    where
+       id = #id#
+</update>
+
+	<!-- 审核通过 -->
+	<update id="evaluationPass" parameterClass="java.util.HashMap">
+		UPDATE
+			.hi_apply
+		SET
+			status = '03',
+			production_status = '00',
+			status_name = '排版设计中'
+		WHERE
+			ID = #id#
+	</update>
+
+	<!-- 提交设计通过 -->
+	<update id="evaluationPass1" parameterClass="java.util.HashMap">
+		UPDATE
+			.hi_apply
+		SET
+			status = '05',
+			production_status = '00',
+			status_name = '设计完成，科室审核确认'
+		WHERE
+			ID = #id#
+	</update>
+
+	<!-- 提交科室审核通过 -->
+	<update id="evaluationPass2" parameterClass="java.util.HashMap">
+		UPDATE
+			.hi_apply
+		SET
+			status = '07',
+			production_status = '00',
+			status_name = '科室审核通过'
+		WHERE
+			ID = #id#
+	</update>
+
+	<!-- 提交制作通过 -->
+	<update id="evaluationPass3" parameterClass="java.util.HashMap">
+		UPDATE
+			.hi_apply
+		SET
+			status = '09',
+			production_status = '00',
+			status_name = '制作完成'
+		WHERE
+			ID = #id#
+	</update>
+
+	<!-- 提交安装通过 -->
+	<update id="evaluationPass4" parameterClass="java.util.HashMap">
+		UPDATE
+			.hi_apply
+		SET
+			status = '11',
+			production_status = '00',
+			status_name = '安装完成'
+		WHERE
+			ID = #id#
+	</update>
+
+	<!-- 提交验收通过 -->
+	<update id="evaluationPass5" parameterClass="java.util.HashMap">
+		UPDATE
+			.hi_apply
+		SET
+			status = '13',
+			production_status = '00',
+			status_name = '验收通过'
+		WHERE
+			ID = #id#
+	</update>
+
+
+	<!-- 审核驳回 -->
+	<update id="evaluationOverrule" parameterClass="java.util.HashMap">
+		UPDATE
+			.hi_apply
+		SET
+			status = '04',
+			production_status = '00',
+		    emo = #emo#,
+			status_name = '审核驳回'
+		WHERE
+			ID = #id#
+	</update>
+
+	<!-- 第二次审核驳回 -->
+	<update id="evaluationOverrule1" parameterClass="java.util.HashMap">
+		UPDATE
+			.hi_apply
+		SET
+			status = '06',
+			production_status = '00',
+			emo1 = #emo#,
+			status_name = '设计不通过，科室驳回'
+		WHERE
+			ID = #id#
+	</update>
+
+	<!-- 第三次审核驳回 -->
+	<update id="evaluationOverrule2" parameterClass="java.util.HashMap">
+		UPDATE
+			.hi_apply
+		SET
+			status = '08',
+			production_status = '00',
+			emo1 = #emo#,
+			status_name = '科室审核不通过，科室驳回'
+		WHERE
+			ID = #id#
+	</update>
+
+	<!-- 第四次审核驳回 -->
+	<update id="evaluationOverrule3" parameterClass="java.util.HashMap">
+		UPDATE
+			.hi_apply
+		SET
+			status = '10',
+			production_status = '00',
+			emo1 = #emo#,
+			status_name = '制作不通过，科室驳回'
+		WHERE
+			ID = #id#
+	</update>
+
+	<!-- 第五次审核驳回 -->
+	<update id="evaluationOverrule4" parameterClass="java.util.HashMap">
+		UPDATE
+			.hi_apply
+		SET
+			status = '12',
+			production_status = '00',
+			emo1 = #emo#,
+			status_name = '安装未完成，科室驳回'
+		WHERE
+			ID = #id#
+	</update>
+
+	<!-- 第六次审核驳回 -->
+	<update id="evaluationOverrule5" parameterClass="java.util.HashMap">
+		UPDATE
+			.hi_apply
+		SET
+			status = '14',
+			production_status = '00',
+			emo1 = #emo#,
+			status_name = '科室验收不通过，科室驳回'
+		WHERE
+			ID = #id#
+	</update>
+
+
+
+
+	<!-- =====================================单号处理（流水号处理）开始 =================================================-->
+	<!-- 查询之前最大任务号 -->
+	<select id="querySerialNo" parameterClass="java.lang.String" resultClass="java.lang.String">
+		select type_num from cu_model_number where type=#value#
+	</select>
+
+	<update id="insertSerialNo" parameterClass="java.util.HashMap">
+		insert into cu_model_number(model_id,type,type_num,create_time,update_time)
+			value (UUID(),#type#,#serialNo#,#updateTime#,#updateTime#)
+	</update>
+
+	<update id="updateSerialNo" parameterClass="java.util.HashMap">
+		update cu_model_number set type_num=#serialNo#,update_time=#updateTime# where type=#type#
+	</update>
+
+
+	<!-- 登记界面地点选择三段式 -->
+	<select id="selectSpotBuildingName" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT building FROM bona_frame_mzsrmyy.ac_spot
+		where 1=1
+		and dept_id = '296'
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="building">
+			building like concat('%', #building#, '%')
+		</isNotEmpty>
+		GROUP BY building
+	</select>
+
+	<select id="selectSpotFloorName" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT floor FROM bona_frame_mzsrmyy.ac_spot
+		WHERE  dept_id = '296'
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="building">
+			building like concat('%', #building#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floor">
+			floor like concat('%', #floor#, '%')
+		</isNotEmpty>
+		GROUP BY floor ORDER BY floor
+	</select>
+	<select id="selectSpotRoomName" parameterClass="java.util.HashMap" resultClass="java.util.HashMap" >
+		SELECT building,floor,room reqSpotName , spot_num spotNum ,spot_name spotName
+		FROM bona_frame_mzsrmyy.ac_spot
+		WHERE  dept_id = '296'
+		and building like concat('%', #building#, '%')
+		and floor like concat('%', #floor#, '%')
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spotName">
+			spot_name like concat('%', #spotName#, '%')
+		</isNotEmpty>
+	</select>
+
+</sqlMap>

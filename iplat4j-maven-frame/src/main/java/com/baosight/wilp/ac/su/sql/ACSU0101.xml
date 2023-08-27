@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ACSU0101">
+
+	<insert id="insert" parameterClass="java.util.HashMap">
+    	INSERT INTO $projectSchema$.ac_supplier (
+			`id`,
+			`supplier_code`,
+			`supplier_name`,
+			`supplier_type`,
+			`contacts`,
+			`contact_number`,
+			`contact_address`,
+			`contact_email`,
+			`zip_code`,
+			`legal_representative`,
+			`icr_no`,
+			`business_scope`,
+			`abbreviation`,
+			`hrp_code`,
+			`status`,
+			`rec_creator`,
+			`rec_create_time`
+			)VALUES ( 
+				#id#,
+			    #supplierCode#,
+			    #supplierName#,
+			    #supplierType#,
+			    #contacts#,
+			    #contactNumber#,
+			    #contactAddress#,
+			    #contactEmail#,
+			    #zipCode#,
+			    #legalRepresentative#,
+			    #icrNo#,
+			    #businessScope#,
+			    #abbreviation#,
+			    #hrpCode#,
+			    #status#,
+			    #recCreator#,
+			    #recCreateTime#
+		    )
+	</insert>
+	
+	<select id="isExistSupplierName" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT COUNT(1) FROM $projectSchema$.ac_supplier WHERE supplier_name = #supplierName#
+	</select>
+
+	<select id="queryLastSuppNum" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT supplier_code as "suppNum"
+		FROM $projectSchema$.ac_supplier
+		where supplier_code like 'SU%' AND LENGTH(supplier_code) = 7
+		ORDER BY rec_create_time DESC, supplier_code DESC
+			LIMIT 1
+	</select>
+	
+</sqlMap>

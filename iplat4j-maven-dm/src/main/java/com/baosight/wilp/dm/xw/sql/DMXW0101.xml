@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="DMXW0101">
+
+	<!-- 将入住信息插入到人员入住信息表 -->
+	<insert id="insertDMXWInfoTable" parameterClass="java.util.HashMap">
+		INSERT INTO .dorms_outsider(
+		<isNotNull property="manNo">
+			man_no,  <!-- 工号 -->
+		</isNotNull>
+		<isNotNull property="manName">
+			man_name,  <!-- 姓名 -->
+		</isNotNull>
+		<isNotNull property="sex">
+			sex,  <!-- 性别 -->
+		</isNotNull>
+		<isNotNull property="age">
+			age,  <!-- 员工年龄 -->
+		</isNotNull>
+		<isNotNull property="phone">
+			phone,  <!-- 电话 -->
+		</isNotNull>
+		<isNotNull property="note">
+			nowAddress,  <!-- 当前住址 -->
+		</isNotNull>
+		<isNotNull property="recCreator">
+			rec_creator,  <!-- 创建人工号 -->
+		</isNotNull>
+		<isNotNull property="recCreateName">
+			rec_create_name,  <!-- 创建人姓名 -->
+		</isNotNull>
+		<isNotNull property="recCreateTime">
+			rec_create_time,  <!-- 创建时间 -->
+		</isNotNull>
+		id  <!-- 主键 -->)
+		VALUES (
+		<isNotNull property="manNo">
+			#manNo#,
+		</isNotNull>
+		<isNotNull property="manName">
+			#manName#,
+		</isNotNull>
+		<isNotNull property="sex">
+			#sex#,
+		</isNotNull>
+		<isNotNull property="age">
+			#age#,
+		</isNotNull>
+		<isNotNull property="phone">
+			#phone#,
+		</isNotNull>
+		<isNotNull property="note">
+			#note#,
+		</isNotNull>
+		<isNotNull property="recCreator">
+			#recCreator#,
+		</isNotNull>
+		<isNotNull property="recCreateName">
+			#recCreateName#,
+		</isNotNull>
+		<isNotNull property="recCreateTime">
+			#recCreateTime#,
+		</isNotNull>
+		#id#  <!-- 主键 -->)
+	</insert>
+
+</sqlMap>

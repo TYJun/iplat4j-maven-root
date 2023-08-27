@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SSBMCppb01">
+
+	<select id="query" parameterClass="java.util.HashMap"
+        resultClass="com.baosight.wilp.ss.bm.domain.SSBMCppb01">
+        SELECT
+        ms.id as id,
+        om.menu_num menuNum,
+        om.menu_name menuName,
+        om.menu_price menuPrice,
+        ms.price_after_discount priceAfterDiscount,
+        ms.surplus surplus,
+        ot.meal_type_name mealTypeName
+        FROM `sc_menu_sche` ms
+        left join sc_canteen_liaison_conf cl on ms.canteen_num = cl.canteen_num
+        left join sc_menu om on ms.menu_num = om.menu_num
+        left join sc_order_type ot ON ot.meal_type_num = om.menu_type_num and
+        ot.spuer_meal_type_num=om.canteen_num
+        where om.menu_name is not null
+        and find_in_set(ms.meal_num, cl.meal_num) > 0
+        <isNotEmpty prepend=" AND " property="userId">
+            find_in_set(#userId#, cl.liaison_id )
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="mealDate">
+            ms.meal_date = #mealDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="mealNum">
+            ms.meal_num = #mealNum#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="canteenNum">
+            ms.canteen_num = #canteenNum#
+        </isNotEmpty>
+        ORDER BY CONVERT(om.menu_name using gbk) ASC
+    </select>
+
+	<!-- <select id="count" resultClass="int">
+		SELECT COUNT(*) FROM
+		sc_menu_sche WHERE 1=1
+	</select> -->
+	
+	<!-- 排班菜品grid -->
+    <select id="queryOrderMenu"  parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+            t.id,
+            t.menu_num menuNum,
+            t.menu_name menuName,
+            t.menu_desc menuDesc,
+            t.menu_price menuPrice,
+            t.menu_type_num menuTypeNum,
+            t.menu_type_name menuTypeName,
+            t.suit_group suitGroup,
+            t.not_suit_group notSuitGroup,
+            lc.canteen_name canteenName,
+            t.menu_supply menuSupply 
+        FROM
+            sc_menu t
+            LEFT JOIN sc_canteen_liaison_conf lc ON t.canteen_num = lc.canteen_num 
+        WHERE
+            t.status_code = '1' 
+            <isNotEmpty prepend="and" property="canteenNum">
+                t.canteen_num = #canteenNum# 
+            </isNotEmpty>
+            AND t.menu_num NOT IN ( 
+              SELECT ms.menu_num 
+              FROM sc_menu_sche ms 
+              WHERE 1=1 
+              <isNotEmpty prepend="and" property="mealDate">
+                  ms.meal_date = #mealDate# 
+              </isNotEmpty>
+              <isNotEmpty prepend="and" property="mealNum">
+                  ms.meal_num = #mealNum#
+              </isNotEmpty>
+              <isNotEmpty prepend="and" property="canteenNum">
+                  ms.canteen_num = #canteenNum#
+              </isNotEmpty>
+              ) 
+          <isNotEmpty prepend="and" property="menuName">
+            t.menu_name like concat('%',#menuName#,'%')
+          </isNotEmpty>
+        ORDER BY
+            CONVERT ( t.menu_name USING gbk ) ASC
+    </select>
+
+<select id="queryMenuScheListWeek" parameterClass="java.util.HashMap" 
+    resultClass="com.baosight.wilp.ss.bm.domain.SSBMCppb03">
+        SELECT 
+        ms.id id ,
+        ms.`menu_num` menuNum,
+        ms.`meal_num`  mealNum,
+        ms.`meal_type_num` mealTypeNum,
+        ms.`meal_date` mealDate,
+        ms.`status_code` statusCode,
+        ms. `canteen_num` canteenNum,
+        ms. `num` num,
+        ms.`surplus` surplus,
+        ms.`price_after_discount` priceAfterDiscount,
+        ms. `operate_code` operateCode,
+        ms. `operate_name` operateName
+        FROM sc_menu_sche ms 
+        LEFT JOIN sc_menu om 
+         on ms.menu_num = om.menu_num
+         where 1=1
+        <isNotEmpty prepend="AND" property="operateCode">
+            ms.operate_code = #operateCode#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="bDate">
+             ms.meal_date like concat ('%',#bDate#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="canteenNum">
+            ms.canteen_num = #canteenNum#
+        </isNotEmpty>
+        order by om.menu_price
+    </select>
+
+    <select id="queryMenuSche" parameterClass="java.util.HashMap" 
+    resultClass="com.baosight.wilp.ss.bm.domain.SSBMCppb03" >
+        SELECT 
+         `id`,
+        `menu_num` menuNum,
+        `meal_num` mealNum,
+        `meal_type_num` menuTypeNum,
+        `meal_date` mealDate,
+        `status_code` statusCode,
+        `canteen_num` canteenNum,
+        `num`,
+        `surplus`,
+        `price_after_discount` priceAfterDiscount,
+        `operate_code` operateCode,
+        `operate_name` operateName 
+        FROM sc_menu_sche
+         where 1=1 
+         <isNotEmpty prepend="AND" property="menuNum">
+            menu_num = #menuNum# 
+        </isNotEmpty>
+         <isNotEmpty prepend="AND" property="mealDate">
+            meal_date = #mealDate#  
+        </isNotEmpty>
+         <isNotEmpty prepend="AND" property="mealNum">
+            meal_num = #mealNum#
+        </isNotEmpty>
+         <isNotEmpty prepend="AND" property="canteenNum">
+            canteen_num = #canteenNum#
+        </isNotEmpty>
+    </select>
+    
+    <select id="queryMenuScheById" parameterClass="String" 
+    resultClass="com.baosight.wilp.ss.bm.domain.SSBMCppb03" >
+         SELECT 
+        ms.id id ,
+        ms.`menu_num` menuNum,
+        ms.`meal_num`  mealNum,
+        ms.`meal_type_num` mealTypeNum,
+        ms.`meal_date` mealDate,
+        ms.`status_code` statusCode,
+        ms. `canteen_num` canteenNum,
+        ms. `num` num,
+        ms.`surplus` surplus,
+        ms.`price_after_discount` priceAfterDiscount,
+        ms. `operate_code` operateCode,
+        ms. `operate_name` operateName 
+        FROM sc_menu_sche ms
+         where id = #value#
+    </select>
+
+    <insert id="copyScheList">
+        INSERT INTO sc_menu_sche 
+        (id,  <!-- 主键 -->
+         menu_num,  <!-- 菜品编码 -->
+         meal_num,  <!-- 餐次编码 -->
+         meal_type_num,  <!-- 餐类编码 -->
+         meal_date,  <!-- 菜品日期 -->
+         status_code,  <!-- 状态编码[启用(1)/停用(0)] -->
+         canteen_num,  <!-- 食堂编码 -->
+         num,  <!-- 份量 -->
+         surplus,  <!-- 剩余数量 -->
+         price_after_discount  <!-- 折后价格 -->
+         )        
+        VALUES (#id#, #menuNum#, #mealNum#, '01', #mealDate#, '1', 
+        #canteenNum#, #surplus#, #surplus#, #priceAfterDiscount#)
+    </insert>
+
+    <insert id="insert">
+        INSERT INTO sc_menu_sche 
+        (id,  <!-- 主键 -->
+         menu_num,  <!-- 菜品编码 -->
+         meal_num,  <!-- 餐次编码 -->
+         meal_type_num,  <!-- 餐类编码 -->
+         meal_date,  <!-- 菜品日期 -->
+         status_code,  <!-- 状态编码[启用(1)/停用(0)] -->
+         canteen_num,  <!-- 食堂编码 -->
+         num,  <!-- 份量 -->
+         surplus,  <!-- 剩余数量 -->
+         price_after_discount  <!-- 折后价格 -->
+         )        
+        VALUES (#id#, #menuNum#, #mealNum#, '01', #mealDate#, '1', 
+        #canteenNum#, #menuSupply#, #menuSupply#, #menuPrice#) 
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM sc_menu_sche WHERE 
+            id = #id#
+    </delete>
+
+    <update id="update">
+        UPDATE sc_menu_sche 
+        SET 
+                    menu_num    = #menuNum#,   <!-- 菜品编码 -->  
+                    meal_num    = #mealNum#,   <!-- 餐次编码 -->  
+                    meal_type_num   = #mealTypeNum#,   <!-- 餐类编码 -->  
+                    meal_date   = #mealDate#,   <!-- 菜品日期 -->  
+                    status_code = #statusCode#,   <!-- 状态编码[启用(1)/停用(0)] -->  
+                    canteen_num = #canteenNum#,   <!-- 食堂编码 -->  
+                    num = #num#,   <!-- 份量 -->  
+                    surplus = #surplus#,   <!-- 剩余数量 -->  
+                    price_after_discount    = #priceAfterDiscount#,   <!-- 折后价格 -->  
+                    operate_code    = #operateCode#,   
+                    operate_name    = #operateName#  
+            WHERE   
+            id = #id#
+    </update>
+
+</sqlMap>

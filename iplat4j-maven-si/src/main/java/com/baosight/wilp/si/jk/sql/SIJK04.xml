@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="SIJK04">
+
+	<select id="queryOut" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			sod.id,
+			so.out_bill_no outBillNo,
+		    so.out_type_name outTypeName,
+			so.bill_maker_name outPerson,
+		    so.bill_make_time outTime,
+		    so.user_dept_name userDeptName
+		from si_out so left join si_out_detail sod on so.out_bill_no =sod.out_bill_no
+		where so.out_bill_no = #outBillNo#
+		<isNotEmpty property="matNum" prepend=" and ">
+			sod.mat_num = #matNum#
+		</isNotEmpty>
+		limit 1
+	</select>
+
+	<select id="queryEnter" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			sed.id,
+		    se.enter_bill_no enterBillNo,
+		    se.enter_type_name enterTypeName,
+			se.bill_maker_name enterPerson,
+			se.bill_make_time enterTime,
+		    se.ware_house_name wareHouseName
+		from si_enter se left join si_enter_detail sed on se.enter_bill_no = sed.enter_bill_no
+		where se.enter_bill_no = #enterBillNo#
+		<isNotEmpty property="matNum" prepend=" and ">
+			sed.mat_num = #matNum#
+		</isNotEmpty>
+		limit 1
+	</select>
+
+	<select id="queryWareHouse" parameterClass="string" resultClass="string">
+		select concat(ware_house_no, '-', ware_house_name) from si_enter where enter_bill_no = #value# limit 1
+	</select>
+
+	<select id="queryFaClassType" parameterClass="string" resultClass="java.util.HashMap">
+		select config_value_radio configValueRadio, config_value_text configValueText from mp_config where config_code = 'dockFixedAsset' limit 1
+	</select>
+</sqlMap>

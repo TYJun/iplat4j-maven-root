@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MSPL0201">
+    <insert id="insert">
+        insert into t_param_classify (id, parent_id, classify_code, classify_name,
+                                      classify_type, classify_sort, group_id, user_group_id)
+        values (#id#, #parentId#, #classifyCode#, #classifyName#, #classifyType#, #classifySort#, #groupId#,
+                #usergroupid#)
+    </insert>
+
+    <update id="update">
+        update t_param_classify
+        set parent_id     = #parentId#,
+            classify_code = #classifyCode#,
+            classify_name = #classifyName#,
+            classify_type = #classifyType#,
+            classify_sort = #classifySort#,
+            group_id      = #groupId#,
+            user_group_id=#usergroupid#
+        where id = #id#
+    </update>
+
+    <update id="update2">
+        update t_param_classify
+        set parent_id     = #parentId#,
+            classify_code = #classifyCode#,
+            classify_name = #classifyName#,
+            classify_type = #classifyType#,
+            classify_sort = #classifySort#,
+            group_id      = #groupId#,
+            user_group_id=#tparamid#
+        where id = #tparamid#
+    </update>
+
+    <update id="updatetwo">
+        update t_param_classify
+        set user_group_id=#usergroupid#
+        where id = #id#
+    </update>
+    <!--关联中间表关联关系-->
+    <select id="queryById" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        SELECT
+        id,
+        user_group_id,
+        t_param_id
+        from grouptable
+        where 1=1
+        <isNotEmpty prepend="and" property="usergroupid">
+            user_group_id = #usergroupid#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="tparamid">
+            t_param_id = #tparamid#
+        </isNotEmpty>
+    </select>
+
+    <select id="select2" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        SELECT id,classify_name,parent_id from t_param_classify
+        where 1=1
+        <isNotEmpty prepend="and" property="tparamid">
+            id = #tparamid#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="parentId">
+            parent_id = #parentId#
+        </isNotEmpty>
+    </select>
+    <!--关联中间表新增数据-->
+    <insert id="groupinsert">
+        insert into grouptable (id, user_group_id, t_param_id)
+        values (#id#, #usergroupid#, #tparamid#)
+    </insert>
+
+    <!--关联中间表新增关联数据-->
+    <insert id="groupinsert2">
+        insert into grouptable (id, user_group_id, t_param_id)
+        values (#id#, #usergroupid#, #tparamid#)
+    </insert>
+
+    <!--菜单树-->
+    <select id="queryTree" resultClass="java.util.HashMap">
+        SELECT DISTINCT
+        id as "label",
+        classify_name as "text",
+        parent_id as "pId",
+        "" as
+        "leaf",
+        classify_code
+        FROM t_param_classify
+        LEFT JOIN
+        ( SELECT user_group_id,t_param_id FROM grouptable
+        )e ON e.t_param_id = t_param_classify.id
+        <dynamic prepend="WHERE">
+            <isNotEmpty prepend="and" property="node">
+                parent_id = #node#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="usergroupid">
+                t_param_id = #usergroupid#
+            </isNotEmpty>
+        </dynamic>
+        order by
+        classify_code +0 desc
+    </select>
+</sqlMap>

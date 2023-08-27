@@ -1,0 +1,901 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="FADB01">
+    <!--  查询调拨单：查询当前科室的盘库状态、查询调拨单主表信息、查询调拨单明细信息  -->
+    <select id="queryOutFaInventoryInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT inventory_no
+        FROM fa_inventory
+        WHERE status_code = '0'
+          AND inventory_dept_num = #deptNum#
+    </select>
+
+    <select id="queryFaTransferByTransferNo" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.fa.db.domain.FaTransferVO">
+        SELECT `id`,
+               `transfer_no`           AS "transferNo",
+               `apply_dept_num`        AS "applyDeptNum",
+               `apply_dept_name`       AS "applyDeptName",
+               `apply_person`          AS "applyPerson",
+               DATE_FORMAT(`apply_time`, '%Y-%m-%d %H:%i:%S')  AS "applyTime",
+               `apply_reason`          AS "applyReason",
+               `apply_fileCode`        AS "applyFileCode",
+               `confirm_dept_num`      AS "confirmDeptNum",
+               `confirm_dept_name`     AS "confirmDeptName",
+               `confirm_build`         AS "confirmBuild",
+               `confirm_floor`         AS "confirmFloor",
+               `confirm_room`          AS "confirmRoom",
+               `confirm_location_num`  AS "confirmLocationNum",
+               `confirm_location_name` AS "confirmLocationName",
+               `confirm_person`        AS "confirmPerson",
+               DATE_FORMAT(`confirm_time`, '%Y-%m-%d %H:%i:%S')  AS "confirmTime",
+               `confirm_reason`        AS "confirmReason",
+               `confirm_fileCode`        AS "confirmFileCode",
+               `audit_dept_num`        AS "auditDeptNum",
+               `audit_dept_name`       AS "auditDeptName",
+               `audit_person`          AS "auditPerson",
+               DATE_FORMAT(`audit_time`, '%Y-%m-%d %H:%i:%S')  AS "auditTime",
+               `audit_reason`          AS "auditReason",
+               `audit_fileCode`          AS "auditFileCode",
+               CASE `transfer_status`
+                   WHEN '00' THEN '草稿'
+                   WHEN '10' THEN '待接收'
+                   WHEN '20' THEN '待审批'
+                   WHEN '40' THEN '审批驳回'
+                   WHEN '50' THEN '接收驳回'
+                   WHEN '100' THEN '已审批'
+                   END                 AS "transferStatus"
+        FROM fa_transfer
+        WHERE transfer_no = #transferNo#
+    </select>
+
+    <select id="queryFaTransferDetailByTransferNo" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.fa.da.domain.FaInfoDO">
+        SELECT id,
+               id                                                AS "faInfoId",
+               goods_num                                         AS "goodsNum",
+               goods_name                                        AS "goodsName",
+               goods_classify_code                               AS "goodsClassifyCode",
+               goods_classify_name                               AS "goodsClassifyName",
+               goods_type_code                                   AS "goodsTypeCode",
+               goods_type_name                                   AS "goodsTypeName",
+               model                                             AS "model",
+               amount                                            AS "amount",
+               price                                             AS "price",
+               buy_cost                                          AS "buyCost",
+               manufacturer                                      AS "manufacturer",
+               surp_name                                         AS "surpName",
+               DATE_FORMAT(buy_date, '%Y-%m-%d')        AS "buyDate",
+               DATE_FORMAT(use_date, '%Y-%m-%d')        AS "useDate",
+               build                                             AS "build",
+               floor                                             AS "floor",
+               install_location                                  AS "installLocation",
+               install_location_num                              AS "installLocationNum",
+               dept_num                                          AS "deptNum",
+               dept_name                                         AS "deptName",
+               CASE status_code
+                   WHEN '010' THEN '待用'
+                   WHEN '020' THEN '在用'
+                   WHEN '030' THEN '现场停用'
+                   WHEN '050' THEN '预报废'
+                   WHEN '060' THEN '报废'
+                   END                                           AS "statusCode",
+               unit_num                                          AS "unitNum",
+               unit_name                                         AS "unitName",
+               residual_rate                                     AS "residualRate",
+               estimated_residual_value                          AS "estimatedResidualValue",
+               use_years                                         AS "useYears",
+               fundingSource_num                                 AS "fundingSourceNum",
+               finace_class_num                                  AS "finaceClassNum",
+               DATE_FORMAT(in_account_date, '%Y-%m-%d') AS "inAccountDate",
+               invoice_no                                        AS "invoiceNo",
+               DATE_FORMAT(invoice_date, '%Y-%m-%d')    AS "invoiceDate",
+               device_id                                         AS "deviceId",
+               device_name                                       AS "deviceName",
+               device_type_name                                  AS "deviceTypeName",
+               rfid_code                                         AS "rfidCode",
+               net_asset_value                                   AS "netAssetValue",
+               estimate_cost                                     AS "estimateCost",
+               remark                                            AS "remark",
+               depreciation_way                                  AS "depreciationWay",
+               total_depreciation                                AS "totalDepreciation",
+               month_depreciation                                AS "monthDepreciation",
+               in_account_status                                 AS "inAccountStatus",
+               card_status                                       AS "cardStatus",
+               rec_creator                                       AS "recCreator",
+               rec_create_name                                   AS "recCreateName",
+               DATE_FORMAT(rec_create_time, '%Y-%m-%d %H:%i:%S') AS "recCreateTime",
+               rec_revisor                                       AS "recRevisor",
+               rec_revise_name                                   AS "recReviseName",
+               DATE_FORMAT(rec_revise_time, '%Y-%m-%d %H:%i:%S') AS "recReviseTime",
+               data_group_code                                   AS "dataGroupCode",
+               lock_flag                                         AS "lockFlag",
+               archive_flag                                      AS "archiveFlag",
+               split_reason                                      AS "splitReason"
+        FROM fa_info
+        WHERE id IN
+              (
+                  SELECT faInfo_id
+                  FROM fa_transfer_detail
+                  WHERE transfer_no = #transferNo#
+              )
+        ORDER BY goods_num DESC
+    </select>
+    <!--    -->
+
+    <!--  批量撤销申请单：更新资产信息状态、删除调拨单明细、删除调拨单 -->
+    <update id="updateFaInfoDept" parameterClass="java.util.HashMap">
+        UPDATE fa_info
+        SET dept_num             = #confirmDeptNum#,
+            dept_name            = #confirmDeptName#,
+            build                = #confirmBuild#,
+            floor                = #confirmFloor#,
+            room                 = #confirmRoom#,
+            install_location_num = #confirmLocationNum#,
+            install_location     = #confirmLocationNum_textField#
+        WHERE id IN
+              (SELECT faInfo_id FROM fa_transfer_detail WHERE transfer_no = #transferNo#)
+    </update>
+
+    <update id="revocationFaInfoStatus" parameterClass="java.util.ArrayList">
+        UPDATE fa_info SET status_code = '020'
+        WHERE status_code = '030' AND id IN
+        (SELECT faInfo_id FROM fa_transfer_detail WHERE transfer_no IN
+        <iterate open="(" close=")" conjunction=",">
+            #transferNoList[]#
+        </iterate>)
+    </update>
+
+    <delete id="deleteFaTransferDetail" parameterClass="java.util.ArrayList">
+        DELETE FROM fa_transfer_detail WHERE transfer_no IN
+        <iterate open="(" close=")" conjunction=",">
+            #transferNoList[]#
+        </iterate>
+    </delete>
+
+    <delete id="deleteFaTransfer" parameterClass="java.util.ArrayList">
+        DELETE FROM fa_transfer WHERE transfer_status = '00' AND transfer_no IN
+        <iterate open="(" close=")" conjunction=",">
+            #transferNoList[]#
+        </iterate>
+    </delete>
+    <!--  查询当前调拨单的资产  -->
+    <select id="queryFaTransferInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+        faInfo_id faInfoId
+        FROM fa_transfer_detail ftd
+        <dynamic prepend="where">
+            <isNotEmpty property="transferNo">
+                transfer_no = #transferNo#
+            </isNotEmpty>
+        </dynamic>
+    </select>
+
+    <update id="updateFaTransferInfo" parameterClass="java.util.HashMap">
+        update fa_transfer
+        set trans_no               = #transNo#,
+            new_use_dept_num       = #newUseDeptNum#,
+            new_use_dept_name      = #newUseDeptName#,
+            new_build              = #newBuild#,
+            new_floor              = #newFloor#,
+            new_goods_location     = #newGoodsLocation#,
+            new_goods_location_num = #newGoodsLocationNum#,
+            trans_date             = #transDate#,
+            trans_reason           = #transReason#,
+            remark                 = #remark#,
+            rec_revisor            = #recRevisor#,
+            rec_revise_name        = #recReviseName#,
+            rec_revise_time        = #recReviseTime#,
+            archive_flag           = CONVERT(#archiveFlag#, SIGNED) + 1
+        WHERE id = #faTransferId#
+          AND archive_flag = #archiveFlag#
+    </update>
+
+    <insert id="savePicInfo" parameterClass="java.util.HashMap">
+        insert into fa_pic(`id`,`type`,`relate_id`,`file_id`,`file_name`,`file_size`,`file_path`,`sort_no`)
+        values(uuid(),#type#,#relateId#,#fileId#,#fileName#,#fileSize#,#filePath#,#sortNo#)
+    </insert>
+
+<!--    <insert id="savePicInfo" parameterClass="java.util.ArrayList">-->
+<!--        insert into fa_pic(`id`,`type`,`relate_id`,`file_id`,`file_name`,`file_size`,`file_path`,`sort_no`)-->
+<!--        values-->
+<!--        <iterate conjunction=",">-->
+<!--            (#list[].uid#, #list[].type#, #list[].relateId#, #list[].docId#,-->
+<!--            #list[].fileName#, #list[].fileSize#, #list[].docUrl#, @x:=ifnull(@x,0)+1)-->
+<!--        </iterate>-->
+<!--    </insert>-->
+
+    <select id="showPic" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select file_path path
+        from fa_pic
+        where relate_id = #relateId#
+    </select>
+
+    <delete id="removeFaTransferInfo" parameterClass="java.util.HashMap">
+        delete
+        from fa_transfer
+        where id = #faTransferId#
+          and archive_flag = #archiveFlag#
+    </delete>
+
+    <delete id="removeFaTransferDetailInfo" parameterClass="java.util.HashMap">
+        delete
+        from fa_transfer_detail
+        where transfer_id = #faTransferId#
+    </delete>
+
+    <update id="updateFaInfoLock" parameterClass="java.util.HashMap">
+        update fa_info
+        set lock_flag = "1"
+        where id = #faInfoId#
+    </update>
+
+    <update id="updateFaInfoLockFor" parameterClass="java.util.HashMap">
+        update fa_info set lock_flag = "1"
+        where id in
+        <iterate open="(" close=")" conjunction="," property="allotList">
+            #allotList[].faInfoId#
+        </iterate>
+    </update>
+
+    <update id="updateFaInfoUnlock" parameterClass="java.util.HashMap">
+        update fa_info
+        set lock_flag   = "0",
+            status_code = "20"
+        where id
+                  in (select goods_id from fa_transfer_detail where transfer_id = #faTransferId#)
+    </update>
+
+    <update id="updateFaInfo" parameterClass="java.util.HashMap">
+        update fa_info info inner join
+            (SELECT
+            detail.goods_id,
+            transfer.new_use_dept_num,
+            transfer.new_use_dept_name,
+            transfer.new_build,
+            transfer.new_floor,
+            transfer.new_goods_location_num,
+            transfer.new_goods_location
+            FROM
+            fa_transfer_detail detail
+            LEFT JOIN fa_transfer transfer on transfer.id = detail.transfer_id
+            where transfer.id = #faTransferId#
+            ) compose
+        on info.id = compose.goods_id set
+            build = compose.new_build,
+            floor = compose.new_floor,
+            install_location_num = compose.new_goods_location_num,
+            install_location = compose.new_goods_location,
+            dept_num = compose.new_use_dept_num,
+            dept_name = compose.new_use_dept_name
+    </update>
+
+    <select id="queryPicInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select file_id   fileId,
+               file_name fileName,
+               file_size fileSize,
+               file_path filePath
+        from fa_pic
+        where relate_id = #relateId#
+        order by CONVERT(sort_no, SIGNED)
+    </select>
+
+    <delete id="removePicInfo" parameterClass="java.util.HashMap">
+        delete
+        from fa_pic
+        where relate_id = #relateId#
+    </delete>
+
+    <!-- 查询今日类别号 -->
+    <select id="queryMaxCode" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+        SELECT transfer_no typeCode
+        FROM fa_transfer
+        WHERE transfer_no LIKE concat('%', #value#, '%')
+        ORDER BY transfer_no DESC
+    </select>
+
+    <select id="queryFixedAssestsTabInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT id,
+               id                                                AS "faInfoId",
+               goods_num                                         AS "goodsNum",
+               goods_name                                        AS "goodsName",
+               goods_classify_code                               AS "goodsClassifyCode",
+               goods_classify_name                               AS "goodsClassifyName",
+               goods_type_code                                   AS "goodsTypeCode",
+               goods_type_name                                   AS "goodsTypeName",
+               model                                             AS "model",
+               amount                                            AS "amount",
+               price                                             AS "price",
+               buy_cost                                          AS "buyCost",
+               manufacturer                                      AS "manufacturer",
+               surp_name                                         AS "surpName",
+               DATE_FORMAT(buy_date, '%Y-%m-%d')        AS "buyDate",
+               DATE_FORMAT(use_date, '%Y-%m-%d')        AS "useDate",
+               build                                             AS "build",
+               floor                                             AS "floor",
+               install_location                                  AS "installLocation",
+               install_location_num                              AS "installLocationNum",
+               dept_num                                          AS "deptNum",
+               dept_name                                         AS "deptName",
+               CASE status_code
+                   WHEN '010' THEN '待用'
+                   WHEN '020' THEN '在用'
+                   WHEN '030' THEN '现场停用'
+                   WHEN '050' THEN '预报废'
+                   WHEN '060' THEN '报废'
+                   END                                           AS "statusCode",
+               unit_num                                          AS "unitNum",
+               unit_name                                         AS "unitName",
+               residual_rate                                     AS "residualRate",
+               estimated_residual_value                          AS "estimatedResidualValue",
+               use_years                                         AS "useYears",
+               fundingSource_num                                 AS "fundingSourceNum",
+               finace_class_num                                  AS "finaceClassNum",
+               DATE_FORMAT(in_account_date, '%Y-%m-%d') AS "inAccountDate",
+               invoice_no                                        AS "invoiceNo",
+               DATE_FORMAT(invoice_date, '%Y-%m-%d')    AS "invoiceDate",
+               device_id                                         AS "deviceId",
+               device_name                                       AS "deviceName",
+               device_type_name                                  AS "deviceTypeName",
+               rfid_code                                         AS "rfidCode",
+               net_asset_value                                   AS "netAssetValue",
+               estimate_cost                                     AS "estimateCost",
+               remark                                            AS "remark",
+               depreciation_way                                  AS "depreciationWay",
+               total_depreciation                                AS "totalDepreciation",
+               month_depreciation                                AS "monthDepreciation",
+               in_account_status                                 AS "inAccountStatus",
+               card_status                                       AS "cardStatus",
+               rec_creator                                       AS "recCreator",
+               rec_create_name                                   AS "recCreateName",
+               DATE_FORMAT(rec_create_time, '%Y-%m-%d %H:%i:%S') AS "recCreateTime",
+               rec_revisor                                       AS "recRevisor",
+               rec_revise_name                                   AS "recReviseName",
+               DATE_FORMAT(rec_revise_time, '%Y-%m-%d %H:%i:%S') AS "recReviseTime",
+               data_group_code                                   AS "dataGroupCode",
+               lock_flag                                         AS "lockFlag",
+               archive_flag                                      AS "archiveFlag",
+               split_reason                                      AS "splitReason"
+        FROM fa_info
+        WHERE id IN
+              (
+                  SELECT faInfo_id
+                  FROM fa_transfer_detail
+                  WHERE transfer_no = #value#
+              )
+    </select>
+
+    <!--  查询资产信息  -->
+    <select id="countFaInfoDOInfo" parameterClass="java.util.HashMap" resultClass="int">
+        SELECT COUNT(*) FROM fa_info
+        WHERE lock_flag NOT IN ("4") AND status_code IN ('010','020')
+        <isEqual prepend="AND" property="role" compareValue="user">
+            dept_name IN (
+            <iterate property="lookDeptName" conjunction=",">
+                #lookDeptName[]#
+            </iterate>
+            )
+        </isEqual>
+        <isNotEmpty prepend=" AND " property="faInfoId">
+            id = #faInfoId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsNum">
+            goods_num like concat ('%',trim(#goodsNum#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsName">
+            goods_name like concat ('%',trim(#goodsName#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="surpName">
+            surp_name like concat ('%',trim(#surpName#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="remark">
+            remark like concat ('%',trim(#remark#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="useYear">
+            use_years = #useYear#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyCostS">
+            buy_cost >= #buyCostS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyCostE">
+            #buyCostE# >= buy_cost
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="netAssetValueS">
+            net_asset_value >= #netAssetValueS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="netAssetValueE">
+            #netAssetValueE# >= net_asset_value
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyDateS">
+            DATE_FORMAT( buy_date, '%Y-%m-%d' ) >= #buyDateS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyDateE">
+            #buyDateE# >= DATE_FORMAT( buy_date, '%Y-%m-%d' )
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="useDateS">
+            DATE_FORMAT( use_date, '%Y-%m-%d' ) >= #useDateS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="useDateE">
+            #useDateE# >= DATE_FORMAT( use_date, '%Y-%m-%d' )
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsClassifyCode">
+            goods_classify_name like concat ('%',trim(#goodsClassifyCode#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsTypeCode">
+            goods_type_name like concat ('%',trim(#goodsTypeCode#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="fundingSourceNum">
+            fundingSource_num = #fundingSourceNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptName">
+            dept_name like concat ('%',trim(#deptName#),'%')
+        </isNotEmpty>
+    </select>
+
+    <select id="queryFaInfoDOInfo" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.fa.da.domain.FaInfoDO">
+        SELECT
+        id,
+        id AS "faInfoId",
+        enter_bill_no AS "enterBillNo",
+        mat_num AS "matNum",
+        mat_name AS "matName",
+        mat_type_num AS "matTypeNum",
+        mat_type_name AS "matTypeName",
+        model AS "model",
+        spec AS "spec",
+        unit_num AS "unitNum",
+        unit_name AS "unitName",
+        price AS "price",
+        goods_num AS "goodsNum",
+        goods_name AS "goodsName",
+        goods_classify_code AS "goodsClassifyCode",
+        goods_classify_name AS "goodsClassifyName",
+        goods_type_code AS "goodsTypeCode",
+        goods_type_name AS "goodsTypeName",
+        model AS "model",
+        amount AS "amount",
+        price AS "price",
+        buy_cost AS "buyCost",
+        manufacturer AS "manufacturer",
+        surp_name AS "surpName",
+        DATE_FORMAT( buy_date, '%Y-%m-%d' ) AS "buyDate",
+        DATE_FORMAT( use_date, '%Y-%m-%d' ) AS "useDate",
+        build AS "build",
+        floor AS "floor",
+        room AS "room",
+        install_location AS "installLocation",
+        install_location_num AS "installLocationNum",
+        dept_num AS "deptNum",
+        dept_name AS "deptName",
+        CASE status_code
+        WHEN '010' THEN '待用'
+        WHEN '020' THEN '在用'
+        WHEN '030' THEN '现场停用'
+        WHEN '050' THEN '预报废'
+        WHEN '060' THEN '报废'
+        END AS "statusCode",
+        unit_num AS "unitNum",
+        unit_name AS "unitName",
+        residual_rate AS "residualRate",
+        estimated_residual_value AS "estimatedResidualValue",
+        use_years AS "useYears",
+        fundingSource_num AS "fundingSourceNum",
+        finace_class_num AS "finaceClassNum",
+        DATE_FORMAT( in_account_date, '%Y-%m-%d' ) AS "inAccountDate",
+        invoice_no AS "invoiceNo",
+        DATE_FORMAT( invoice_date, '%Y-%m-%d' ) AS "invoiceDate",
+        device_id AS "deviceId",
+        device_name AS "deviceName",
+        device_type_name AS "deviceTypeName",
+        rfid_code AS "rfidCode",
+        net_asset_value AS "netAssetValue",
+        estimate_cost AS "estimateCost",
+        remark AS "remark",
+        depreciation_way AS "depreciationWay",
+        total_depreciation AS "totalDepreciation",
+        month_depreciation AS "monthDepreciation",
+        in_account_status AS "inAccountStatus",
+        card_status AS "cardStatus",
+        rec_creator AS "recCreator",
+        rec_create_name AS "recCreateName",
+        DATE_FORMAT( rec_create_time, '%Y-%m-%d %H:%i:%S' ) AS "recCreateTime",
+        rec_revisor AS "recRevisor",
+        rec_revise_name AS "recReviseName",
+        DATE_FORMAT( rec_revise_time, '%Y-%m-%d %H:%i:%S' ) AS "recReviseTime",
+        data_group_code AS "dataGroupCode",
+        lock_flag AS "lockFlag",
+        archive_flag AS "archiveFlag",
+        split_reason AS "splitReason"
+        FROM fa_info
+        WHERE lock_flag NOT IN ("4") AND status_code IN ('010','020')
+        <isEqual prepend="AND" property="role" compareValue="user">
+            dept_name IN (
+            <iterate property="lookDeptName" conjunction=",">
+                #lookDeptName[]#
+            </iterate>
+            )
+        </isEqual>
+        <isNotEmpty prepend=" AND " property="faInfoId">
+            id = #faInfoId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsNum">
+            goods_num like concat ('%',trim(#goodsNum#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsName">
+            goods_name like concat ('%',trim(#goodsName#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="surpName">
+            surp_name like concat ('%',trim(#surpName#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="remark">
+            remark like concat ('%',trim(#remark#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="useYear">
+            use_years = #useYear#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyCostS">
+            buy_cost >= #buyCostS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyCostE">
+            #buyCostE# >= buy_cost
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="netAssetValueS">
+            net_asset_value >= #netAssetValueS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="netAssetValueE">
+            #netAssetValueE# >= net_asset_value
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyDateS">
+            DATE_FORMAT( buy_date, '%Y-%m-%d' ) >= #buyDateS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyDateE">
+            #buyDateE# >= DATE_FORMAT( buy_date, '%Y-%m-%d' )
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="useDateS">
+            DATE_FORMAT( use_date, '%Y-%m-%d' ) >= #useDateS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="useDateE">
+            #useDateE# >= DATE_FORMAT( use_date, '%Y-%m-%d' )
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsClassifyCode">
+            goods_classify_name like concat ('%',trim(#goodsClassifyCode#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsTypeCode">
+            goods_type_name like concat ('%',trim(#goodsTypeCode#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="fundingSourceNum">
+            fundingSource_num = #fundingSourceNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptName">
+            dept_name like concat ('%',trim(#deptName#),'%')
+        </isNotEmpty>
+        order by dept_name,rec_revise_time DESC,rec_create_time DESC,goods_num
+    </select>
+    <!--    -->
+
+    <!--  查询调拨记录  -->
+    <select id="transferRecordQuery" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.fa.db.domain.FaTransferVO">
+        SELECT
+        `id`,
+        `transfer_no` AS "transferNo",
+        `apply_dept_num` AS "applyDeptNum",
+        `apply_dept_name` AS "applyDeptName",
+        `apply_person` AS "applyPerson",
+        DATE_FORMAT(`apply_time`, '%Y-%m-%d %H:%i:%S' ) AS "applyTime",
+        `apply_reason` AS "applyReason",
+        `confirm_dept_num` AS "confirmDeptNum",
+        `confirm_dept_name` AS "confirmDeptName",
+        `confirm_build` AS "confirmBuild",
+        `confirm_floor` AS "confirmFloor",
+        `confirm_room` AS "confirmRoom",
+        `confirm_location_num` AS "confirmLocationNum",
+        `confirm_location_name` AS "confirmLocationName",
+        `confirm_person` AS "confirmPerson",
+        DATE_FORMAT(`confirm_time`, '%Y-%m-%d %H:%i:%S' ) AS "confirmTime",
+        `confirm_reason` AS "confirmReason",
+        `audit_dept_num` AS "auditDeptNum",
+        `audit_dept_name` AS "auditDeptName",
+        `audit_person` AS "auditPerson",
+        DATE_FORMAT(`audit_time`, '%Y-%m-%d %H:%i:%S' ) AS "auditTime",
+        `audit_reason` AS "auditReason",
+        CASE `transfer_status`
+        WHEN '00' THEN '草稿'
+        WHEN '10' THEN '待接收'
+        WHEN '20' THEN '待审批'
+        WHEN '40' THEN '审批驳回'
+        WHEN '50' THEN '接收驳回'
+        WHEN '100' THEN '已审批'
+        END AS "transferStatus"
+        FROM
+        fa_transfer
+        WHERE
+        1 = 1
+        <isEqual prepend="and" property="tabStatus" compareValue="apply">
+            transfer_status = '00'
+        </isEqual>
+        <isEqual prepend="and" property="tabStatus" compareValue="confirm">
+            transfer_status = '10'
+            <isEqual prepend="and" property="role" compareValue="user">
+                confirm_dept_name IN (
+                <iterate property="lookDeptName" conjunction=",">
+                    #lookDeptName[]#
+                </iterate>
+                )
+            </isEqual>
+        </isEqual>
+        <isEqual prepend="and" property="tabStatus" compareValue="audit">
+            transfer_status = '20'
+            <isEqual prepend="and" property="role" compareValue="user" open="(" close=")">
+                apply_dept_name IN (
+                <iterate property="lookDeptName" conjunction=",">
+                    #lookDeptName[]#
+                </iterate>
+                )
+                OR
+                confirm_dept_name IN (
+                <iterate property="lookDeptName" conjunction=",">
+                    #lookDeptName[]#
+                </iterate>
+                )
+            </isEqual>
+        </isEqual>
+        <isEqual prepend="and" property="tabStatus" compareValue="all">
+            2 = 2
+            <isEqual prepend="and" property="role" compareValue="user" open="(" close=")">
+                apply_dept_name IN (
+                <iterate property="lookDeptName" conjunction=",">
+                    #lookDeptName[]#
+                </iterate>
+                )
+                OR
+                confirm_dept_name IN (
+                <iterate property="lookDeptName" conjunction=",">
+                    #lookDeptName[]#
+                </iterate>
+                )
+            </isEqual>
+        </isEqual>
+        <isNotEmpty prepend="and" property="transferStatus">
+            transfer_status = #transferStatus#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="transferNo">
+            transfer_no LIKE concat('%',trim(#transferNo#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="applyReason">
+            apply_reason LIKE concat('%',trim(#applyReason#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="confirmReason">
+            confirm_reason LIKE concat('%',trim(#confirmReason#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="auditReason">
+            audit_reason LIKE concat('%',trim(#auditReason#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="applyTimeS">
+            DATE_FORMAT( apply_time, '%Y-%m-%d' ) >= #buyDateS#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="applyTimeE">
+            #applyTimeE# >= DATE_FORMAT( apply_time, '%Y-%m-%d' )
+        </isNotEmpty>
+        ORDER BY apply_dept_name,apply_time DESC,transfer_no DESC
+    </select>
+
+    <select id="transferRecordCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM
+        fa_transfer
+        WHERE
+        1 = 1
+        <isEqual prepend="and" property="tabStatus" compareValue="apply">
+            transfer_status = '00'
+        </isEqual>
+        <isEqual prepend="and" property="tabStatus" compareValue="confirm">
+            transfer_status = '10'
+            <isEqual prepend="and" property="role" compareValue="user">
+                confirm_dept_name IN (
+                <iterate property="lookDeptName" conjunction=",">
+                    #lookDeptName[]#
+                </iterate>
+                )
+            </isEqual>
+        </isEqual>
+        <isEqual prepend="and" property="tabStatus" compareValue="audit">
+            transfer_status = '20'
+            <isEqual prepend="and" property="role" compareValue="user" open="(" close=")">
+                apply_dept_name IN (
+                <iterate property="lookDeptName" conjunction=",">
+                    #lookDeptName[]#
+                </iterate>
+                )
+                OR
+                confirm_dept_name IN (
+                <iterate property="lookDeptName" conjunction=",">
+                    #lookDeptName[]#
+                </iterate>
+                )
+            </isEqual>
+        </isEqual>
+        <isEqual prepend="and" property="tabStatus" compareValue="all">
+            2 = 2
+            <isEqual prepend="and" property="role" compareValue="user" open="(" close=")">
+                apply_dept_name IN (
+                <iterate property="lookDeptName" conjunction=",">
+                    #lookDeptName[]#
+                </iterate>
+                )
+                OR
+                confirm_dept_name IN (
+                <iterate property="lookDeptName" conjunction=",">
+                    #lookDeptName[]#
+                </iterate>
+                )
+            </isEqual>
+        </isEqual>
+        <isNotEmpty prepend="and" property="transferStatus">
+            transfer_status = #transferStatus#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="transferNo">
+            transfer_no LIKE concat('%',trim(#transferNo#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="applyReason">
+            apply_reason LIKE concat('%',trim(#applyReason#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="confirmReason">
+            confirm_reason LIKE concat('%',trim(#confirmReason#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="auditReason">
+            audit_reason LIKE concat('%',trim(#auditReason#),'%')
+        </isNotEmpty>
+    </select>
+    <!--    -->
+
+    <!--  资产调拨草稿保存 保存调拨单，保存明细 -->
+    <insert id="saveFaTransferInfo" parameterClass="com.baosight.wilp.fa.db.domain.FaTransferVO">
+        INSERT INTO fa_transfer
+        (id, transfer_no, apply_dept_num, apply_dept_name, apply_person, apply_time, apply_reason,
+         apply_fileCode, confirm_dept_num, confirm_dept_name, audit_time, transfer_status, `source`)
+        VALUES
+        (#id#, #transferNo#, #applyDeptNum#, #applyDeptName#, #applyPerson#, #applyTime#, #applyReason#,
+         #applyFileCode#, #confirmDeptNum#, #confirmDeptName#, #auditTime#, #transferStatus#, #source#)
+    </insert>
+
+    <insert id="saveFaTransferDetailInfo" parameterClass="java.util.ArrayList">
+        INSERT INTO fa_transfer_detail
+        (
+        id,transfer_no,faInfo_id,goods_num,goods_name,model,spec
+        )
+        VALUES
+        <iterate conjunction=",">
+            (
+            #faTransferDetailVOList[].id#,#faTransferDetailVOList[].transferNo#,#faTransferDetailVOList[].faInfoId#,
+            #faTransferDetailVOList[].goodsNum#,#faTransferDetailVOList[].goodsName#,#faTransferDetailVOList[].model#,#faTransferDetailVOList[].spec#
+            )
+        </iterate>
+    </insert>
+
+    <update id="updateFaInfoStatus" parameterClass="java.util.ArrayList">
+        UPDATE fa_info SET status_code = '030'
+        WHERE status_code = '020' AND
+        id IN
+        <iterate open="(" close=")" conjunction=",">
+            #faTransferDetailVOList[].faInfoId#
+        </iterate>
+    </update>
+    <!--    -->
+
+    <!--  提交调拨单  -->
+    <update id="submitFaTransferInfo" parameterClass="com.baosight.wilp.fa.db.domain.FaTransferVO">
+        UPDATE fa_transfer
+        SET transfer_status = #transferStatus#
+        WHERE transfer_status = '00'
+          AND transfer_no = #transferNo#
+    </update>
+    <!--    -->
+
+    <!-- 更新移除部分的资产状态 -->
+    <update id="updatePart" parameterClass="java.util.HashMap">
+        update fa_info set status_code = "020"
+        where status_code = "030" and id IN (
+        select faInfo_id
+        from fa_transfer_detail
+        where transfer_no = #transferNo#
+        AND faInfo_id NOT IN ($reject$))
+    </update>
+
+    <!--  移除部分调拨单  -->
+    <delete id="removePart" parameterClass="java.util.HashMap">
+        delete
+        from fa_transfer_detail
+        where transfer_no = #transferNo#
+          AND faInfo_id NOT IN ($reject$)
+    </delete>
+    <!--    -->
+
+    <!--  确认调拨单  -->
+    <update id="confirmFaTransferInfo" parameterClass="com.baosight.wilp.fa.db.domain.FaTransferVO">
+        UPDATE fa_transfer
+        SET transfer_status       = #transferStatus#,
+            confirm_reason        = #confirmReason#,
+            confirm_fileCode      = #confirmFileCode#,
+            confirm_build         = #confirmBuild#,
+            confirm_floor         = #confirmFloor#,
+            confirm_room          = #confirmRoom#,
+            confirm_location_num  = #confirmLocationNum#,
+            confirm_location_name = #confirmLocationName#,
+            confirm_person        = #confirmPerson#,
+            confirm_time          = #confirmTime#
+        WHERE transfer_status = '10'
+          AND transfer_no = #transferNo#
+    </update>
+    <!--    -->
+
+    <!--  审批调拨单  -->
+    <update id="auditFaTransferInfo" parameterClass="com.baosight.wilp.fa.db.domain.FaTransferVO">
+        UPDATE fa_transfer
+        SET transfer_status = #transferStatus#,
+            audit_fileCode  = #auditFileCode#,
+            audit_reason    = #auditReason#,
+            audit_dept_num  = #auditDeptNum#,
+            audit_dept_name = #auditDeptName#,
+            audit_person    = #auditPerson#,
+            audit_time      = #auditTime#
+        WHERE transfer_status = '20'
+          AND transfer_no = #transferNo#
+    </update>
+    <!--    -->
+
+    <!--  资产科调拨：无需审批 修改资产状态、新增调拨单、新增调拨履历  -->
+    <update id="updateFaInfoStatusNewToUse" parameterClass="java.util.HashMap">
+        UPDATE fa_info SET status_code = '020',dept_num = #deptNum#,dept_name = #deptName#,
+        build = "",floor = "",room = "",install_location_num = "",install_location = "",
+        in_account_date = #inAccountDate#,out_remark = #outRemark#
+        WHERE status_code = '010' AND id IN
+        <iterate open="(" close=")" conjunction="," property="faInfoIdList">
+            #faInfoIdList[]#
+        </iterate>
+    </update>
+
+    <update id="updateFaInfoStatusUsing" parameterClass="java.util.HashMap">
+        UPDATE fa_info SET dept_num = #deptNum#,dept_name = #deptName#,
+        build = "",floor = "",room = "",install_location_num = "",install_location = ""
+        WHERE status_code = '020' AND id IN
+        <iterate open="(" close=")" conjunction="," property="faInfoIdList">
+            #faInfoIdList[]#
+        </iterate>
+    </update>
+    <!--    -->
+
+    <!-- 资产调拨修改资产状态 -->
+    <update id="updateFaInfoStatusByList" parameterClass="java.util.HashMap">
+        UPDATE fa_info SET status_code = '020' WHERE status_code = '030' AND id IN
+        (
+        SELECT
+        faInfo_id
+        FROM fa_transfer_detail
+        WHERE transfer_no IN
+        <iterate open="(" close=")" conjunction="," property="transferNoList">
+            #transferNoList[]#
+        </iterate>
+        )
+    </update>
+    <!---->
+
+    <!-- 资产调拨单修改资产状态 -->
+    <update id="updateFaTransferStatusByList" parameterClass="java.util.HashMap">
+        UPDATE fa_transfer
+        SET transfer_status = #transferStatus#,
+        audit_reason = #auditReason#,
+        audit_fileCode = #auditFileCode#,
+        audit_dept_num = #auditDeptNum#,
+        audit_dept_name = #auditDeptName#,
+        audit_person = #auditPerson#,
+        audit_time = #auditTime#
+        WHERE transfer_status = '20'
+        AND transfer_no IN
+        <iterate open="(" close=")" conjunction="," property="transferNoList">
+            #transferNoList[]#
+        </iterate>
+    </update>
+    <!---->
+</sqlMap>

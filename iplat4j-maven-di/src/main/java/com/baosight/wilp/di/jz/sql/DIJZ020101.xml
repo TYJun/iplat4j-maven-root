@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DIJZ020101">
+
+	<!-- 查询设备信息 -->
+	<select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.di.jz.domain.DiDevicePacket">
+			SELECT
+				dd.fixed_place as classifyName,
+				dd.machine_name as paramName,
+				dd.machine_code as paramKey,
+				dd.id as deviceId
+			FROM
+				df_modulebaseclassfy dm
+				LEFT JOIN df_devicemachine dd ON dd.machine_type_id = dm.id
+			WHERE
+				1 = 1
+		<isNotEmpty prepend="AND" property="moduleId">
+			dm.id = #moduleId#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="machineName">
+			dd.machine_name like '%$machineName$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="machineCode">
+			dd.machine_code like '%$machineCode$%'
+		</isNotEmpty>
+		<isNotEmpty property="offset"> 	<!-- 分页 -->			
+			<isNotEmpty property="limit"> 	<!-- 分页 -->			
+			 limit #offset#,#limit#
+			</isNotEmpty>
+		</isNotEmpty>
+		
+	</select>
+	
+  
+  
+</sqlMap>

@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>选择医院</title>
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="icon" type="image/png" href="reference/assets/i/favicon.png">
+  <link rel="apple-touch-icon-precomposed"
+    href="reference/assets/i/app-icon72x72@2x.png">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+  <link rel="stylesheet" href="reference/assets/css/amazeui.min.css" />
+  <link rel="stylesheet" href="reference/mui/css/mui.css">
+  <link rel="stylesheet" href="css/common.css">
+</head>
+<style type="text/css">
+  .imgcenter {
+    text-align: center;
+  }
+</style>
+
+<body>
+
+  <header id="header" class="mui-bar mui-bar-nav">
+    <h1 class="mui-title">选择医院</h1>
+    <button
+      class="mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+      地区
+    </button>
+  </header>
+
+  <div id="warn" class="warn" hidden>
+    <small></small>
+  </div>
+
+  <div id="reload" class="alert" role="alert"
+    style="position:fixed;background-color:#DDDDDD;text-align:center;bottom:0;width:100%;display:none;">
+    点击重载
+  </div>
+  <div style="margin-top:60px;">
+    <ul data-am-widget="gallery"
+      class="am-gallery am-avg-sm-2 am-avg-md-3 am-avg-lg-4 am-gallery-default"
+      data-am-gallery="{ pureview: true }">
+
+    </ul>
+  </div>
+  <footer data-am-widget="footer" class="am-footer am-footer-default"
+    data-am-footer="{  }">
+    <div class="am-footer-miscs am-kai" style="font-size:10px;">
+      <p>没有医院？联系我们</p>
+      <p>电话1：025-57716635</p>
+      <p>电话2：400-878-2101</p>
+    </div>
+  </footer>
+
+</body>
+<script src="reference/bootstrap-3.3.5/js/jquery-2.1.4.js"
+  type="text/javascript"></script>
+<script src="reference/mui/js/mui.js" type="text/javascript"></script>
+<script type="text/javascript">
+  var url = location.search;
+  var province = url.substring(1, url.length);
+  province = decodeURIComponent(province);
+
+  $(function () {
+
+    $.ajax({
+      url: 'http://wx.yyhq365.cn/smp_wx/invoke',
+      type: 'post',
+      data: {
+        method: 'appHospital',
+        province: province
+      },
+      timeout: 30000,
+      success: function (data) {
+        var data = eval("(" + data + ")");
+        if (data.respCode == "200") {
+          var list = new Array();
+          list = eval("(" + data.respMsg + ")");
+          console.dir(list)
+          var html = "", hosName, hosId, imgUrl, hosUrl;
+          for (var i = 0; i < list.length; i++) {
+            hosName = list[i].hos_name;
+            hosId = list[i].ID;
+            imgUrl = "http://wx.yyhq365.cn/smp_wx/" + list[i].hos_img_address;
+            menu_imgUrl = list[i].hos_menu_img_address;    //新增主页面图片
+            hosUrl = list[i].hos_url;
+            html += createHtml(hosName, hosId, imgUrl, hosUrl, menu_imgUrl);
+          }
+          $('ul.am-gallery').html(html);
+        }
+
+        //获取url
+        $('a').click(function () {
+          localStorage.setItem("img", $(this).find("img").attr("src"));
+          localStorage.setItem("hosId", $(this).find("h3").attr("id"));
+          localStorage.setItem("hosName", $(this).find("h3").text());
+          localStorage.setItem("url", $(this).find('p').text());
+          localStorage.setItem("menuImg", $(this).find('p').attr("id"));
+          location.href = 'login.html';
+        });
+      }
+    });
+  });
+
+  function createHtml(hosName, hosId, imgUrl, hosUrl, menu_imgUrl) {
+    var html = "<li><div class='am-gallery-item imgcenter'><a>";
+    html += "<img class='am-radius' src='" + imgUrl + "' style='width:8rem;height:8rem;'/>";
+    html += "<p hidden class='hehe' id ='" + menu_imgUrl + "'>" + hosUrl + "</p>";
+    html += "<h3 id='" + hosId + "' class='am-gallery-title' style='text-align:center;'>" + hosName + "</h3>";
+    html += "</a></div></li>";
+    return html;
+  }
+
+  /**
+   * mui返回方法(ps:自定义的,不加会报错,不需要的话方法体定义为空)
+   * [goBack description]
+   * @return {[type]} [description]
+   */
+  function goBack() {
+    location.href = "hosArea.html";
+  }
+
+  if (!window.localStorage) {
+    alert('当前浏览器不支持本地存储功能');
+  }
+</script>
+
+</html>

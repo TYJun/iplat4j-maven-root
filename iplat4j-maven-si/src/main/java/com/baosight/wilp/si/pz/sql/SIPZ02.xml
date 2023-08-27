@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SIPZ02">
+
+	<select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.si.pz.domain.SiWzUser">
+		SELECT
+				id	as "id",  <!-- 主键 -->
+				work_no	as "workNo",  <!-- 工号 -->
+				name	as "name",  <!-- 姓名 -->
+				dept_code	as "deptCode",  <!-- 科室编码 -->
+				dept_name	as "deptName"  <!-- 科室名称 -->
+		FROM $frameSchema$.wz_user WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workNo">
+			work_no like concat('%', #workNo#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="name">
+			`name` like concat('%', #name#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name like concat('%', #deptName#, '%')
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			 <isNotEmpty property="orderBy">
+				  $orderBy$
+			 </isNotEmpty>
+			<isEmpty property="orderBy">
+				work_no, dept_code asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="count" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT count(*) FROM $frameSchema$.wz_user WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workNo">
+			work_no like concat('%', #workNo#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="name">
+			`name` like concat('%', #name#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name like concat('%', #deptName#, '%')
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert" parameterClass="com.baosight.wilp.si.pz.domain.SiWzUser">
+		insert into $frameSchema$.wz_user ( id, work_no, name, dept_code, dept_name )
+	    VALUES (#id#,#workNo#,#name#,#deptCode#,#deptName#)
+	</insert>
+
+	<insert id="update" parameterClass="com.baosight.wilp.si.pz.domain.SiWzUser">
+		update $frameSchema$.wz_user set
+	  		work_no	= #workNo#,
+			name = #name#,
+			dept_code = #deptCode#,
+			dept_name = #deptName#
+		where id = #id#
+	</insert>
+  
+	<delete id="delete" parameterClass="java.util.HashMap">
+		DELETE FROM $frameSchema$.wz_user WHERE id in
+		<iterate property="ids" open="(" conjunction="," close=")">#ids[]#</iterate>
+	</delete>
+
+</sqlMap>

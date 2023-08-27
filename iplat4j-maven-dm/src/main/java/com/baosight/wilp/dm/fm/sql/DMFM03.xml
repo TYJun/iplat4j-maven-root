@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-08-23 22:54:47
+   		Version :  6.0.731.201809200158
+		tableName :.dorms_room_elec_middle_month 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 elec  DECIMAL, 
+		 pointer_tag  VARCHAR, 
+		 operation_date  DATETIME, 
+		 dormitory_no  VARCHAR, 
+		 record_time  DATETIME, 
+		 last_elec  DECIMAL
+	-->
+<sqlMap namespace="DMFM03">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.dm.fm.domain.DMFM03">
+		
+SELECT 
+        a.id	,  
+				a.elec	,  
+				case  a.dormitory_no
+				when 'pxdl_10_1001' then '培训大楼10楼1001室'
+				when 'pxdl_10_1002' then '培训大楼10楼1002室'
+				when 'pxdl_10_1003' then '培训大楼10楼1003室'
+				when 'pxdl_10_1004' then '培训大楼10楼1004室'
+				when 'pxdl_10_1005' then '培训大楼10楼1005室'
+				when 'pxdl_10_1006' then '培训大楼10楼1006室'
+				when 'pxdl_10_1007' then '培训大楼10楼1007室'
+				when 'pxdl_10_1008' then '培训大楼10楼1008室'
+				when 'pxdl_10_1009' then '培训大楼10楼1009室'
+				when 'pxdl_10_1010' then '培训大楼10楼1010室'
+				when 'pxdl_10_1011' then '培训大楼10楼1011室'
+				when 'pxdl_10_1012' then '培训大楼10楼1012室'
+				when 'pxdl_10_1013' then '培训大楼10楼1013室'
+				when 'pxdl_10_1014' then '培训大楼10楼1014室'
+				when 'pxdl_10_1015' then '培训大楼10楼1015室'
+				when 'pxdl_10_1016' then '培训大楼10楼1016室'
+				when 'pxdl_10_1017' then '培训大楼10楼1017室'
+				when 'pxdl_11_1101' then '培训大楼11楼1101室'
+				when 'pxdl_11_1102' then '培训大楼11楼1102室'
+				when 'pxdl_11_1103' then '培训大楼11楼1103室'
+				when 'pxdl_11_1104' then '培训大楼11楼1104室'
+				when 'pxdl_11_1105' then '培训大楼11楼1105室'
+				when 'pxdl_11_1106' then '培训大楼11楼1106室'
+				when 'pxdl_11_1107' then '培训大楼11楼1107室'
+				when 'pxdl_11_1108' then '培训大楼11楼1108室'
+				when 'pxdl_11_1109' then '培训大楼11楼1109室'
+				when 'pxdl_11_1110' then '培训大楼11楼1110室'
+				when 'pxdl_11_1111' then '培训大楼11楼1111室'
+				when 'pxdl_11_1112' then '培训大楼11楼1112室'
+				when 'pxdl_11_1113' then '培训大楼11楼1113室'
+				when 'pxdl_11_1114' then '培训大楼11楼1114室'
+				when 'pxdl_11_1115' then '培训大楼11楼1115室'
+				when 'pxdl_11_1116' then '培训大楼11楼1116室'
+				when 'pxdl_11_1117' then '培训大楼11楼1117室'
+				when 'pxdl_12_1201' then '培训大楼12楼1201室'
+				when 'pxdl_12_1202' then '培训大楼12楼1202室'
+				when 'pxdl_12_1203' then '培训大楼12楼1203室'
+				when 'pxdl_12_1204' then '培训大楼12楼1204室'
+				when 'pxdl_12_1205' then '培训大楼12楼1205室'
+				when 'pxdl_12_1206' then '培训大楼12楼1206室'
+				when 'pxdl_12_1207' then '培训大楼12楼1207室'
+				when 'pxdl_12_1208' then '培训大楼12楼1208室'
+				when 'pxdl_12_1209' then '培训大楼12楼1209室'
+				when 'pxdl_12_1210' then '培训大楼12楼1210室'
+				when 'pxdl_12_1211' then '培训大楼12楼1211室'
+				when 'pxdl_12_1212' then '培训大楼12楼1212室'
+				when 'pxdl_12_1213' then '培训大楼12楼1213室'
+				when 'pxdl_12_1214' then '培训大楼12楼1214室'
+				when 'pxdl_12_1215' then '培训大楼12楼1215室'
+				when 'pxdl_12_1216' then '培训大楼12楼1216室'
+				when 'pxdl_12_1217' then '培训大楼12楼1217室' 
+				when 'pxdl_13_1301' then '培训大楼12楼1301室'
+				when 'pxdl_13_1302' then '培训大楼12楼1302室'
+				when 'pxdl_13_1303' then '培训大楼12楼1303室'
+				when 'pxdl_13_1304' then '培训大楼12楼1304室'
+				when 'pxdl_13_1305' then '培训大楼12楼1305室'
+				when 'pxdl_13_1306' then '培训大楼12楼1306室'
+				when 'pxdl_13_1307' then '培训大楼12楼1307室'
+				when 'pxdl_13_1308' then '培训大楼12楼1308室'
+				when 'pxdl_13_1309' then '培训大楼12楼1309室'
+				when 'pxdl_13_1310' then '培训大楼12楼1310室'
+				when 'pxdl_13_1311' then '培训大楼12楼1311室'
+				when 'pxdl_13_1312' then '培训大楼12楼1312室'
+				when 'pxdl_13_1313' then '培训大楼12楼1313室'
+				when 'pxdl_13_1314' then '培训大楼12楼1314室'
+				when 'pxdl_13_1315' then '培训大楼12楼1315室'
+				when 'pxdl_13_1316' then '培训大楼12楼1316室'
+				when 'pxdl_13_1317' then '培训大楼12楼1317室'
+				when 'pxdl_14_1401' then '培训大楼14楼1401室'
+				when 'pxdl_14_1402' then '培训大楼14楼1402室'
+				when 'pxdl_14_1403' then '培训大楼14楼1403室'
+				when 'pxdl_14_1404' then '培训大楼14楼1404室'
+				when 'pxdl_14_1405' then '培训大楼14楼1405室'
+				when 'pxdl_14_1406' then '培训大楼14楼1406室'
+				when 'pxdl_14_1407' then '培训大楼14楼1407室'
+				when 'pxdl_14_1408' then '培训大楼14楼1408室'
+				when 'pxdl_14_1409' then '培训大楼14楼1409室'
+				when 'pxdl_14_1410' then '培训大楼14楼1410室'
+				when 'pxdl_14_1411' then '培训大楼14楼1411室'
+				when 'pxdl_14_1412' then '培训大楼14楼1412室'
+				when 'pxdl_14_1413' then '培训大楼14楼1413室'
+				when 'pxdl_14_1414' then '培训大楼14楼1414室'
+				when 'pxdl_14_1415' then '培训大楼14楼1415室'
+				when 'pxdl_14_1416' then '培训大楼14楼1416室'
+				when 'pxdl_14_1417' then '培训大楼14楼1417室'
+				when 'pxdl_15_1501' then '培训大楼15楼1401室'
+				when 'pxdl_15_1502' then '培训大楼15楼1502室'
+				when 'pxdl_15_1503' then '培训大楼15楼1503室'
+				when 'pxdl_15_1504' then '培训大楼15楼1504室'
+				when 'pxdl_15_1505' then '培训大楼15楼1505室'
+				when 'pxdl_15_1506' then '培训大楼15楼1506室'
+				when 'pxdl_15_1507' then '培训大楼15楼1507室'
+				when 'pxdl_15_1508' then '培训大楼15楼1508室'
+				when 'pxdl_15_1509' then '培训大楼15楼1509室'
+				when 'pxdl_15_1510' then '培训大楼15楼1510室'
+				when 'pxdl_15_1511' then '培训大楼15楼1511室'
+				when 'pxdl_15_1512' then '培训大楼15楼1512室'
+				when 'pxdl_15_1513' then '培训大楼15楼1513室'
+				when 'pxdl_15_1514' then '培训大楼15楼1514室'
+				when 'pxdl_15_1515' then '培训大楼15楼1515室'
+				when 'pxdl_15_1516' then '培训大楼15楼1516室'
+				when 'pxdl_15_1517' then '培训大楼15楼1517室'
+				when 'hqdl_5_501' then '后勤大楼5楼501室'
+				when 'hqdl_5_502' then '后勤大楼5楼502室'
+				when 'hqdl_5_503' then '后勤大楼5楼503室'
+				when 'hqdl_5_504' then '后勤大楼5楼504室'
+				when 'hqdl_5_505' then '后勤大楼5楼505室'
+				when 'hqdl_5_506' then '后勤大楼5楼506室'
+				when 'hqdl_5_507' then '后勤大楼5楼507室'
+				when 'hqdl_5_508' then '后勤大楼5楼508室'
+				when 'hqdl_5_509' then '后勤大楼5楼509室'
+				when 'hqdl_5_510' then '后勤大楼5楼510室'
+				when 'hqdl_5_511' then '后勤大楼5楼511室'
+				when 'hqdl_5_512' then '后勤大楼5楼512室'
+				when 'hqdl_5_513' then '后勤大楼5楼513室'
+				when 'hqdl_5_514' then '后勤大楼5楼514室'
+				when 'hqdl_5_515' then '后勤大楼5楼515室'
+				when 'hqdl_5_516' then '后勤大楼5楼516室'
+				when 'hqdl_5_517' then '后勤大楼5楼517室'
+				when 'hqdl_5_518' then '后勤大楼5楼518室'
+				when 'hqdl_5_519' then '后勤大楼5楼519室'
+				when 'hqdl_5_520' then '后勤大楼5楼520室'
+				when 'hqdl_5_521' then '后勤大楼5楼521室'
+				when 'hqdl_5_522' then '后勤大楼5楼522室'
+				when 'hqdl_5_523' then '后勤大楼5楼523室'
+				when 'hqdl_5_524' then '后勤大楼5楼524室'
+				when 'hqdl_5_525' then '后勤大楼5楼525室'
+				when 'hqdl_5_526' then '后勤大楼5楼526室'
+				when 'hqdl_5_527' then '后勤大楼5楼527室'
+				when 'hqdl_5_528' then '后勤大楼5楼528室'
+				when 'hqdl_6_601' then '后勤大楼6楼601室'
+				when 'hqdl_6_602' then '后勤大楼6楼602室'
+				when 'hqdl_6_603' then '后勤大楼6楼603室'
+				when 'hqdl_6_604' then '后勤大楼6楼604室'
+				when 'hqdl_6_605' then '后勤大楼6楼605室'
+				when 'hqdl_6_606' then '后勤大楼6楼606室'
+				when 'hqdl_6_607' then '后勤大楼6楼607室'
+				when 'hqdl_6_608' then '后勤大楼6楼608室'
+				when 'hqdl_6_609' then '后勤大楼6楼609室'
+				when 'hqdl_6_610' then '后勤大楼6楼610室'
+				when 'hqdl_6_611' then '后勤大楼6楼611室'
+				when 'hqdl_6_612' then '后勤大楼6楼612室'
+				when 'hqdl_6_613' then '后勤大楼6楼613室'
+				when 'hqdl_6_614' then '后勤大楼6楼614室'
+				when 'hqdl_6_615' then '后勤大楼6楼615室'
+				when 'hqdl_6_616' then '后勤大楼6楼616室'
+				when 'hqdl_6_617' then '后勤大楼6楼617室'
+				when 'hqdl_6_618' then '后勤大楼6楼618室'
+				when 'hqdl_6_619' then '后勤大楼6楼619室'
+				when 'hqdl_6_620' then '后勤大楼6楼620室'
+				when 'hqdl_6_621' then '后勤大楼6楼621室'
+				when 'hqdl_6_622' then '后勤大楼6楼622室'
+				when 'hqdl_6_623' then '后勤大楼6楼623室'
+				when 'hqdl_6_624' then '后勤大楼6楼624室'
+				when 'hqdl_6_625' then '后勤大楼6楼625室'
+				when 'hqdl_6_626' then '后勤大楼6楼626室'
+				when 'hqdl_6_627' then '后勤大楼6楼627室'
+				when 'hqdl_7_701' then '后勤大楼7楼701室'
+				when 'hqdl_7_702' then '后勤大楼7楼702室'
+				when 'hqdl_7_703' then '后勤大楼7楼703室'
+				when 'hqdl_7_704' then '后勤大楼7楼704室'
+				when 'hqdl_7_705' then '后勤大楼7楼705室'
+				when 'hqdl_7_706' then '后勤大楼7楼706室'
+				when 'hqdl_7_707' then '后勤大楼7楼707室'
+				when 'hqdl_7_708' then '后勤大楼7楼708室'
+				when 'hqdl_7_709' then '后勤大楼7楼709室'
+				when 'hqdl_7_710' then '后勤大楼7楼710室'
+				when 'hqdl_7_711' then '后勤大楼7楼711室'
+				when 'hqdl_7_712' then '后勤大楼7楼712室'
+				when 'hqdl_7_713' then '后勤大楼7楼713室'
+				when 'hqdl_7_714' then '后勤大楼7楼714室'
+				when 'hqdl_7_715' then '后勤大楼7楼715室'
+				when 'hqdl_7_716' then '后勤大楼7楼716室'
+				when 'hqdl_7_717' then '后勤大楼7楼717室'
+				when 'hqdl_7_718' then '后勤大楼7楼718室'
+				when 'hqdl_7_719' then '后勤大楼7楼719室'
+				when 'hqdl_7_720' then '后勤大楼7楼720室'
+				when 'hqdl_7_721' then '后勤大楼7楼721室'
+				when 'hqdl_7_722' then '后勤大楼7楼722室'
+				when 'hqdl_7_723' then '后勤大楼7楼723室'
+				when 'hqdl_7_724' then '后勤大楼7楼724室'
+				when 'hqdl_7_725' then '后勤大楼7楼725室'
+				when 'hqdl_7_726' then '后勤大楼7楼726室'
+				when 'hqdl_7_727' then '后勤大楼7楼727室'
+				when 'hqdl_8_801' then '后勤大楼8楼801室'
+				when 'hqdl_8_802' then '后勤大楼8楼802室'
+				when 'hqdl_8_803' then '后勤大楼8楼803室'
+				when 'hqdl_8_804' then '后勤大楼8楼804室'
+				when 'hqdl_8_805' then '后勤大楼8楼805室'
+				when 'hqdl_8_806' then '后勤大楼8楼806室'
+				when 'hqdl_8_807' then '后勤大楼8楼807室'
+				when 'hqdl_8_808' then '后勤大楼8楼808室'
+				when 'hqdl_8_809' then '后勤大楼8楼809室'
+				when 'hqdl_8_810' then '后勤大楼8楼810室'
+				when 'hqdl_8_811' then '后勤大楼8楼811室'
+				when 'hqdl_8_812' then '后勤大楼8楼812室'
+				when 'hqdl_8_813' then '后勤大楼8楼813室'
+				when 'hqdl_8_814' then '后勤大楼8楼814室'
+				when 'hqdl_8_815' then '后勤大楼8楼815室'
+				when 'hqdl_8_816' then '后勤大楼8楼816室'
+				when 'hqdl_8_817' then '后勤大楼8楼817室'
+				when 'hqdl_8_818' then '后勤大楼8楼818室'
+				when 'hqdl_8_819' then '后勤大楼8楼819室'
+				when 'hqdl_8_820' then '后勤大楼8楼820室'
+				when 'hqdl_8_821' then '后勤大楼8楼821室'
+				when 'hqdl_8_822' then '后勤大楼8楼822室'
+				when 'hqdl_8_823' then '后勤大楼8楼823室'
+				when 'hqdl_8_824' then '后勤大楼8楼824室'
+				when 'hqdl_8_825' then '后勤大楼8楼825室'
+				when 'hqdl_8_826' then '后勤大楼8楼826室'
+				when 'hqdl_8_827' then '后勤大楼8楼827室'
+				else '未知' end as dormitoryNo,
+				IfNULL(a.elec-b.elec,0) as lastElec,
+				a.operation_date as operationDate,
+				case left(a.dormitory_no,4)
+			when 'pxdl'then '培训大楼'
+	    else '后勤大楼' end as pointerTag
+   FROM `dorms_room_elec_middle_month` a
+	 
+	 left join (
+	 SELECT 
+        id	,  
+				elec	,  
+				dormitory_no,
+				'0' as last_elec,
+				operation_date as operationDate,
+				case left(dormitory_no,4)
+			when 'pxdl'then '培训大楼'
+	    else '后勤大楼' end as pointerTag
+   FROM `dorms_room_elec_middle_month`  
+   where DATE_FORMAT(operation_date,'%Y-%m')=date_format(date_sub(curdate(), interval 1 month),'%Y-%m')
+	 ) b on b.dormitory_no = a.dormitory_no
+where DATE_FORMAT(a.operation_date,'%Y-%m')=date_format(now(),'%Y-%m')			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .dorms_room_elec_middle_month WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="elec">
+			elec = #elec#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="pointerTag">
+			pointer_tag = #pointerTag#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="operationDate">
+			operation_date = #operationDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dormitoryNo">
+			dormitory_no = #dormitoryNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recordTime">
+			record_time = #recordTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="lastElec">
+			last_elec = #lastElec#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO .dorms_room_elec_middle_month (id,
+										elec,  <!-- 当前电表度数 -->
+										pointer_tag,  <!-- 点位 -->
+										operation_date,  <!-- 采集时间 -->
+										dormitory_no,  <!-- 楼层编码 -->
+										record_time,  <!-- 创建时间 -->
+										last_elec  <!-- 上月电表度数 -->
+										)		 
+	    VALUES (#id#, #elec#, #pointerTag#, #operationDate#, #dormitoryNo#, #recordTime#, #lastElec#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM .dorms_room_elec_middle_month WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE .dorms_room_elec_middle_month 
+		SET 
+					elec	= #elec#,   <!-- 当前电表度数 -->  
+					pointer_tag	= #pointerTag#,   <!-- 点位 -->  
+					operation_date	= #operationDate#,   <!-- 采集时间 -->  
+					dormitory_no	= #dormitoryNo#,   <!-- 楼层编码 -->  
+					record_time	= #recordTime#,   <!-- 创建时间 -->  
+					last_elec	= #lastElec#  <!-- 上月电表度数 -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+
+
+<sqlMap namespace="SQZH01">
+
+	<!-- 查询总分 -->
+	<select id="queryPoint" parameterClass="String"  resultClass="java.util.HashMap">
+		select sum(point) as point from sq_register_instance where project_id in (
+			select id from sq_register_project where standard_id = #value#)
+	</select>
+	
+	
+	<!-- 查询参与人数量 -->
+	<select id="queryCreator" parameterClass="String"  resultClass="java.util.HashMap">
+		select DISTINCT creator from sq_manage_project WHERE bill_no = #value# GROUP BY creator
+	</select>
+
+	
+	<!-- 查询分数 -->
+	<select id="queryScore" parameterClass="String"  resultClass="java.util.HashMap">
+		SELECT sum( score ) AS score FROM sq_manage_project WHERE bill_no = #value#
+	</select>
+
+
+	<!-- 查询sql -->
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			id	as "id",  <!-- 主键 -->
+			batch_no	as "batchNo",  <!-- 批次号 -->
+			standard_code	as "standardCode",  <!-- 主题编码 -->
+			standard_name	as "standardName",  <!-- 调查考核主题 -->
+			work_no_leader	as "workNoLeader",  <!-- 负责人工号 -->
+			work_name_leader	as "workNameLeader",  <!-- 负责人 -->
+			begin_date	as "beginDate",  <!-- 开始时间 -->
+			end_date	as "endDate",  <!-- 结束时间 -->
+			project_code	as "projectCode",  <!-- 单据编号 -->
+			project_name	as "projectName",
+			creator	as "creator",  <!-- 记录创建人 -->
+			create_time	as "createTime",  <!-- 记录创建时间 -->
+			modifier	as "modifier",  <!-- 记录修改人 -->
+			modify_time	as "modifyTime",  <!-- 记录修改时间 -->
+			CASE
+				WHEN status_code = '00' THEN '新增'
+				WHEN status_code = '10' THEN '执行'
+				WHEN status_code = '99' THEN '完成'
+			END "statusCode",
+			CASE
+				WHEN assess_range = '0' THEN '全院范围'
+				WHEN assess_range = '1' THEN '指定范围'
+			END "assessRange"
+		FROM sq_manage WHERE status_code != 00
+		<isNotEmpty prepend=" AND " property="beginDate">
+				begin_date <![CDATA[ >= ]]>#beginDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endDate">
+				end_date <![CDATA[ <= ]]>#endDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="standardName">
+				standard_code = #standardName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+				status_code = #statusCode#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  create_time desc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sq_manage WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+	</select>
+	
+
+	<insert id="insert">
+		INSERT INTO .sq_manage (ID,  <!-- 主键 -->
+										bill_no,  <!-- 单据号 -->
+										standard_id,  <!-- 标准id -->
+										problem,  <!-- 检查中存在的问题 -->
+										standard_remark,  <!-- 标准备注 -->
+										standard_code,  <!-- 主题编码 -->
+										standard_name,  <!-- 调查考核主题 -->
+										build_date,  <!-- 考核时间 -->
+										creator,  <!-- 记录创建人 -->
+										create_time,  <!-- 记录创建时间 -->
+										modifier,  <!-- 记录修改人 -->
+										modify_time,  <!-- 记录修改时间 -->
+										begin_date,  <!-- 开始时间 -->
+										end_date,  <!-- 结束时间 -->
+										assess_type_name,  <!-- 问卷类型 -->
+										assess_dept_name,  <!-- 调查对象 -->
+										status_code,  <!-- 状态 -->
+										efficacious_num,  <!-- 有效数 -->
+										total_points,  <!-- 总分 -->
+										score,  <!-- 均分 -->
+										assess_range,  <!-- 范围(1代表指定范围,0代表全院范围) -->
+										work_name_leader,  <!-- 负责人 -->
+										assess_contact_tel,  <!-- 手机号 -->
+										work_no_leader,  <!-- 负责人工号 -->
+										batch_no,  <!-- 批次号 -->
+										reform_content,  <!-- 整改方案内容 -->
+										reform_status,  <!-- 整改情况 -->
+										reform_eval,  <!-- 领导评价 -->
+										assess_dept_num,  <!-- 调查对象科室编码 -->
+										data_group_code,  <!-- 账套 -->
+										project_name,  <!-- 人员分组名 -->
+										project_code  <!-- 人员分组编码 -->
+										)		 
+	    VALUES (#id#, #billNo#, #standardId#, #problem#, #standardRemark#, #standardCode#, #standardName#, #buildDate:DATE#, #creator#, #createTime#, #modifier#, #modifyTime#, #beginDate:DATE#, #endDate:DATE#, #assessTypeName#, #assessDeptName#, #statusCode#, #efficaciousNum#, #totalPoints#, #score#, #assessRange#, #workNameLeader#, #assessContactTel#, #workNoLeader#, #batchNo#, #reformContent#, #reformStatus#, #reformEval#, #assessDeptNum#, #dataGroupCode#, #projectName#, #projectCode#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM sq_manage WHERE 
+			ID = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sq_manage 
+		SET 
+					bill_no	= #billNo#,   <!-- 单据号 -->  
+					standard_id	= #standardId#,   <!-- 标准id -->  
+					problem	= #problem#,   <!-- 检查中存在的问题 -->  
+					standard_remark	= #standardRemark#,   <!-- 标准备注 -->  
+					standard_code	= #standardCode#,   <!-- 主题编码 -->  
+					standard_name	= #standardName#,   <!-- 调查考核主题 -->  
+					build_date	= #buildDate:DATE#,   <!-- 考核时间 -->  
+					creator	= #creator#,   <!-- 记录创建人 -->  
+					create_time	= #createTime#,   <!-- 记录创建时间 -->  
+					modifier	= #modifier#,   <!-- 记录修改人 -->  
+					modify_time	= #modifyTime#,   <!-- 记录修改时间 -->  
+					begin_date	= #beginDate:DATE#,   <!-- 开始时间 -->  
+					end_date	= #endDate:DATE#,   <!-- 结束时间 -->  
+					assess_type_name	= #assessTypeName#,   <!-- 问卷类型 -->  
+					assess_dept_name	= #assessDeptName#,   <!-- 调查对象 -->  
+					status_code	= #statusCode#,   <!-- 状态 -->  
+					efficacious_num	= #efficaciousNum#,   <!-- 有效数 -->  
+					total_points	= #totalPoints#,   <!-- 总分 -->  
+					score	= #score#,   <!-- 均分 -->  
+					assess_range	= #assessRange#,   <!-- 范围(1代表指定范围,0代表全院范围) -->  
+					work_name_leader	= #workNameLeader#,   <!-- 负责人 -->  
+					assess_contact_tel	= #assessContactTel#,   <!-- 手机号 -->  
+					work_no_leader	= #workNoLeader#,   <!-- 负责人工号 -->  
+					batch_no	= #batchNo#,   <!-- 批次号 -->  
+					reform_content	= #reformContent#,   <!-- 整改方案内容 -->  
+					reform_status	= #reformStatus#,   <!-- 整改情况 -->  
+					reform_eval	= #reformEval#,   <!-- 领导评价 -->  
+					assess_dept_num	= #assessDeptNum#,   <!-- 调查对象科室编码 -->  
+					data_group_code	= #dataGroupCode#,   <!-- 账套 -->  
+					project_name	= #projectName#,   <!-- 人员分组名 -->  
+					project_code	= #projectCode#  <!-- 人员分组编码 -->  
+			WHERE 	
+			ID = #id#
+	</update>
+  
+</sqlMap>

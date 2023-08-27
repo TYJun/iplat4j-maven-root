@@ -1,0 +1,52 @@
+@font-face {
+	font-family: "iconfont";
+	src: url('../fonts/choose-order-send.ttf') format('truetype');
+}
+
+.iconfont {
+	font-family: "iconfont" !important;
+	font-size: 16px;
+	font-style: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-gou:before {
+	content: "\e68d";
+}
+
+.icon-icon:before {
+	content: "\e649";
+}
+
+.icon-icon1:before {
+	content: "\e64b";
+}
+
+.icon-shanchu:before {
+	content: "\e7ac";
+}
+
+.icon-songcan:before {
+	content: "\e61c";
+}
+
+.icon-cha:before {
+	content: "\e683";
+}
+
+.icon-rexiao:before {
+	content: "\e627";
+}
+
+.icon-shouye-zhuyuandingcan:before {
+	content: "\e684";
+}
+
+.icon-jian:before {
+	content: "\e64e";
+}
+
+.icon-jia:before {
+	content: "\e6d3";
+}

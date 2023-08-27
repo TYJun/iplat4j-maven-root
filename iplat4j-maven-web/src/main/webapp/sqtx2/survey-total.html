@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="reference/mui/css/mui.min.css" />
+	<link rel="stylesheet" href="reference/css/common.css" />
+	<title>Document</title>
+</head>
+<style>
+	* {
+		margin: 0px;
+		padding: 0px;
+	}
+
+	header {
+		display: flex;
+		justify-content: space-between;
+		height: 50px;
+		align-items: center;
+		background-color: rgb(48, 195, 124);
+		font-size: 16px;
+		text-align: center;
+		color: #fff;
+	}
+
+	.totalMessage-p {
+		height: 50px;
+		color: rgb(48, 195, 124);
+		font-size: 20px;
+		font-weight: 600;
+		/* background-color: rgb(32, 213, 126); */
+		box-shadow: 1px 0px 5px 1px rgb(213, 208, 208);
+		line-height: 50px;
+		text-align: center;
+	}
+
+	.totalMessage-span {
+		float: left;
+		margin-left: 10px;
+	}
+
+	.totalMessage-span:after,
+	.totalMessage-span:before {
+		content: "";
+		display: block;
+		clear: both;
+	}
+
+	.choosePoints {
+		height: 50px;
+		width: 100%;
+		display: flex;
+		justify-content: space-evenly;
+		align-items: center;
+	}
+
+	.totalContent-li-header {
+
+		color: #333;
+		/* font-style: italic; */
+		font-weight: 600;
+		font-size: middle;
+
+	}
+
+	.totalContent-li-header-header {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	p {
+		color: #333;
+	}
+
+	.totalContent-span {
+		width: 700px;
+		margin-bottom: 20px;
+
+	}
+
+	.totalContent-li {
+
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.totalContent-input {
+		width: 90px !important;
+		height: 30px !important;
+	}
+
+	.totalContent-ul {
+		box-sizing: border-box;
+
+	}
+
+	.inputbox {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.allSatisfaction {
+		border-color: rgb(29, 144, 106);
+		width: 100px;
+		margin-right: 10px;
+	}
+</style>
+
+<body>
+
+	<div class="totalMessage" id="surveyApp">
+		<template>
+
+			<header><span class="totalMessage-span" @click="tomain()">返回</span><span>后勤总务服务质量问卷调查</span>
+
+				<button class="allSatisfaction" @click="allSatisfaction()">全选满意</button>
+			</header>
+			<!-- <p class="totalMessage-p">请问您对梅州市人民医院后勤总务服务质量是否满意？</p> -->
+
+
+
+			<div class="totalContent" v-if="showSurvey">
+				<div v-for="(item,index) in list" style="margin-bottom: 24px;">
+					<p class="totalMessage-p">{{index+1}}.{{item.standardName}}</p>
+
+
+					<!--第一级  -->
+					<ul class="totalContent-ul" v-for="(item1,index1) in item.ProjectItem">
+						<li class="totalContent-li-header" style="margin-bottom: 8px;">
+							{{index1+1}}.{{item1.projectName}}
+						</li>
+						<div class="inputbox">
+							<div class="mui-input-row mui-radio">
+								<label class="sel">满意</label>
+								<input :name="index+'-'+index1" ref="allChecked" type="radio" class="myinput"
+									:checked="item1.mychecked[0].value"
+									@click="onRadio3Change(satisfied,item1,index1,index)">
+
+							</div>
+							<div class="mui-input-row mui-radio">
+								<label class="sel">基本满意</label>
+								<input :name="index+'-'+index1" ref="allChecked" type="radio" class="myinput"
+									:checked="item1.mychecked[1].value"
+									@click="onRadio3Change(baseSatisfied,item1,index1,index)">
+
+							</div>
+							<div class="mui-input-row mui-radio">
+								<label class="sel">不满意</label>
+								<input :name="index+'-'+index1" ref="allChecked" type="radio" class="myinput"
+									:checked="item1.mychecked[2].value"
+									@click="onRadio3Change(noSatisfied,item1,index1,index)">
+
+							</div>
+						</div>
+						<div v-if="item1.showOne" style="border: 1px solid rgb(141 129 129 / 70%);background-color: #c8bfbf40;padding: 0 10px;">
+
+							<p style="width: 100%;text-align: center;margin-top: 10px;color: red;">（选择'满意'默认满分，直接跳过打分，选择'基本满意或不满意'，必须对不满意项进行扣分！）</p>
+							<div v-for="(item2,index2) in item1.instance">
+								<li class="totalContent-li-header-header">
+									<!-- 第二级 -->
+									<p style="font-weight: bold;">{{index1+1}}.{{index2+1}} {{item2.instanceName}}
+										<!-- {{item2.text}} -->
+									</p>
+									<span style="color: red;font-weight: 800;">总得分--{{item2.inputAll}}</span><span>(满分<span>{{item2.point}}</span>分)</span>
+								</li>
+								<div v-for="(item3,index) in item2.instanceItem">
+									<li class="totalContent-li">
+										<!-- 第三极 -->
+										<span class="totalContent-span">{{index1+1}}.{{index2+1}}.{{index+1}}
+											{{item3.label}}</span>
+										<div class="totalContent-input-box">
+											<input class="totalContent-input" ref="myinput" type="text"
+												v-model="item3.inputScore" @blur="removeChangeStyle()"
+												@focus="changeStyle()" @input="getTotal(item2,item3)">
+										</div>
+									</li>
+								</div>
+
+							</div>
+							<div style="box-sizing: border-box;">
+								<div style="margin-bottom: 12px;">您是否有其他意见或者建议：</div>
+								<textarea v-model="item1.advice" name="" id="" cols="1" rows="2"
+									placeholder="请输入"></textarea>
+							</div>
+							<div style="width: 100%;display: flex;justify-content: center;margin-bottom: 24px;">
+								<button class="submit"
+									style="background-color: rgb(48, 195, 124); width:150px;color: #fff;margin-bottom: 24px;"
+									@click="save(item1)">收起</button>
+							</div>
+
+						</div>
+
+					</ul>
+
+				</div>
+
+
+			</div>
+
+
+
+			<!-- <button class="submit">提交</button> -->
+			<div style="display: flex;  justify-content: space-evenly;margin-bottom: 48px;">
+
+				<button class="submit" style="background-color: rgb(48, 195, 124); width:150px;color: #fff;"
+					@click="submit">提交问卷</button>
+			</div>
+		</template>
+	</div>
+
+
+</body>
+<script src="reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="reference/js/common.js" type="text/javascript"></script>
+<script src="js/vue.js"></script>
+<script type="text/javascript">
+	 var baseUrl = localStorage.getItem("url");
+	 var workNo = "";
+	 $.ajax({
+		 url: baseUrl + 'MobileAgentService',
+		 type: 'post',
+		 headers: {
+			 methodName: "getUserWorkNo",
+			 serviceName: "SQAP01"
+		 },
+		 data: {},
+		 async: false,
+		 success: function (res) {
+			 workNo = res.globalUserId;
+		 }
+	 })
+
+	// var baseUrl = 'http://192.168.1.212:8080/mzsrmyy/'
+	// var workNo = localStorage.getItem("workNo");
+	var mychecked = document.querySelectorAll('.myinput')
+	var label = document.querySelectorAll('.sel')
+
+	// var workNo = localStorage.getItem("workNo");
+	var url = location.search;
+	var jsonStr = url.substring(1, url.length);
+	var json = JSON.parse(decodeURIComponent(jsonStr));
+
+
+	var url = location.search;
+	var billNo = json.billNo
+
+
+	// var json = JSON.parse(decodeURIComponent(jsonStr));
+
+	const surveyApp = new Vue({
+		el: '#surveyApp',
+		data() {
+			return {
+				radioList: [
+					{ value: '满意' },
+					{ value: '基本满意' },
+					{ value: '不满意' }
+				],
+				allchecked2: '',
+				satisfied: '满意',
+				baseSatisfied: '基本满意',
+				noSatisfied: '不满意',
+				list: [],
+				// grade: '',
+				showSurvey: true,
+				showSurveyOne: true,
+				totalScore: 0,
+				val: '',
+				showSave: false,
+				allchecked: '',
+				allchecked3: '',
+				myx: 100,
+				myIndex: '',
+
+			}
+		},
+		mounted() {
+		},
+		methods: {
+			changeStyle() {
+				event.currentTarget.style.border = '1px solid #3dad3d'
+				event.currentTarget.parentNode.previousSibling.parentNode.style.color = '#3dad3d'
+
+			},
+			removeChangeStyle() {
+				event.currentTarget.style.border = ''
+				event.currentTarget.parentNode.previousSibling.parentNode.style.color = ''
+			},
+			tomain() {
+				location.href = './main.html'
+			},
+			// 所有问题渲染
+			getList() {
+				var paramList = [];
+				console.log(json.billNo);
+				var prame = {
+					ID: json.standardId,
+					billNo: json.billNo,
+					workNo: workNo
+				};
+				prame = JSON.stringify(prame);
+				console.log(this.myIndex, 123456);
+
+				$.ajax({
+					url: baseUrl + 'MobileAgentService',
+					type: 'post',
+					headers: {
+						methodName: "getAssessManageProject",
+						serviceName: "SQAP01"
+					},
+					data: {
+						prames: prame
+					},
+					async: false,
+
+					success: function (res) {
+
+						paramList = res.attr.param;
+
+
+						paramList.forEach(item => {
+
+							var project = item.ProjectItem
+
+							project.forEach((item2, index2) => {
+								item2.showOne = false
+
+								item2.mychecked = [{ value: '' }, { value: '' }, { value: '' }]
+
+								var project2 = item2.instance
+								project2.forEach(item3 => {
+									var project3 = item3.instanceItem
+									item3.inputAll = 0
+									project3.forEach(item4 => {
+										item4.inputScore = JSON.parse(JSON.stringify(item4.score))
+										item3.inputAll += item4.inputScore
+									})
+								})
+
+							})
+
+						});
+					}
+
+				})
+				this.list = paramList;
+				console.log(this.list);
+			},
+
+
+
+			onRadio2Change(value, item, index) {
+				console.log(index);
+
+				if (value == '满意') {
+					console.log(item.ProjectItem);
+					item.ProjectItem.forEach((item) => {
+						item.mychecked[1].value = false
+						item.mychecked[2].value = false
+						item.mychecked[0].value = 'checked'
+					})
+					item.showOne = true
+
+				} else if (value == '基本满意') {
+					item.ProjectItem.forEach((item) => {
+						item.mychecked[1].value = 'checked'
+						item.mychecked[2].value = false
+						item.mychecked[0].value = false
+					})
+					item.showOne = true
+
+
+
+
+				} else {
+					item.ProjectItem.forEach((item) => {
+						item.mychecked[1].value = false
+						item.mychecked[2].value = 'checked'
+						item.mychecked[0].value = false
+					})
+					item.showOne = true
+
+				}
+
+
+			},
+			allSatisfaction() {
+
+				console.log(this.$refs.allChecked.length)
+
+				console.dir(this.$refs.allChecked[0].checked);
+				for (let i = 0; i <= this.$refs.allChecked.length / 3 - 1; i++) {
+					console.log(i * 3);
+					console.log(123, this.$refs.allChecked[i * 3].name);
+					this.$refs.allChecked[i * 3].checked = true
+					console.log(this.$refs.allChecked[i * 3].checked)
+				}
+
+
+
+			},
+			onRadio3Change(value, item, myIndex, myIndex1) {
+				var mychecked = document.querySelectorAll('.myinput')
+				for (let i = 0; i < mychecked.length; i++) {
+					mychecked[i].parentNode.style.background = ''
+					mychecked[i].parentNode.style.border = ''
+				}
+				event.currentTarget.parentNode.style.background = ' #c8bfbf40'
+
+
+
+				if (value == '满意') {
+					item.showOne = false
+
+				} else if (value == '基本满意') {
+					event.currentTarget.parentNode.style.border = '1px solid rgb(141 129 129 / 70%)'
+
+					event.currentTarget.parentNode.style.borderBottom = ''
+					item.showOne = true
+				} else {
+					event.currentTarget.parentNode.style.border = '1px solid rgb(141 129 129 / 70%)'
+
+					event.currentTarget.parentNode.style.borderBottom = ''
+					item.showOne = false
+					setTimeout(() => {
+						item.showOne = true
+					}, 100);
+				}
+
+			},
+
+			getTotal(val2, val3) {
+
+				if (val3.score >= 10&&val3.score<20) {
+					var num = Number(val3.score.toString().slice(0, 1))
+					var num2=Number(val3.score.toString().slice(1, 2))
+					console.log(num,num2);
+
+					let reg = RegExp(`^([0-${num}][0-${num2}]|${val3.score}|[0-9])$`)
+
+					if (!reg.test(val3.inputScore)) {
+						val3.inputScore = ''
+					}
+
+					this.totalScore = 0
+					val2.instanceItem.forEach(item => {
+						this.totalScore += Number(item.inputScore)
+					})
+
+					val2.inputAll = this.totalScore
+
+				}else if (val3.score >= 20) {
+					var num = Number(val3.score.toString().slice(0, 1))
+					var num2=Number(val3.score.toString().slice(1, 2))
+					console.log(num,num2);
+
+					let reg = RegExp(`^([0-${num-1}][0-9]|${val3.score}|[0-9])$`)
+
+					if (!reg.test(val3.inputScore)) {
+						val3.inputScore = ''
+					}
+
+					this.totalScore = 0
+					val2.instanceItem.forEach(item => {
+						this.totalScore += Number(item.inputScore)
+					})
+
+					val2.inputAll = this.totalScore
+
+				}
+				else {
+					var num = Number(val3.score.toString().slice(0, 1))
+					let reg = RegExp(`^([0-${val3.score}])$`)
+
+					if (!reg.test(val3.inputScore)) {
+						val3.inputScore = ''
+					}
+
+					this.totalScore = 0
+					val2.instanceItem.forEach(item => {
+						this.totalScore += Number(item.inputScore)
+					})
+
+					val2.inputAll = this.totalScore
+
+				}
+
+			},
+
+			submit() {
+				var prame = {
+					'workNo': workNo,
+					'batchNo': billNo,
+
+					"list": this.list,
+
+				}
+				prame = JSON.stringify(prame)
+
+				mui.confirm('是否确认提交问卷', '提示', function (el) {
+					if (el.index == 1) {
+						$.ajax({
+							url: baseUrl + 'MobileAgentService',
+							type: 'post',
+							headers: {
+								methodName: "saveAssessProjectInstance",
+								serviceName: "SQTX01"
+							},
+							data: {
+								prames: prame
+							},
+							success: function (data) {
+								mui.toast('保存成功')
+
+								setTimeout("location.href = 'main.html'", 2000);
+
+							}
+						});
+
+					}
+				})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				//    goalArray.push(json);
+
+
+
+
+				//for (let i = 0; i < grade.length; i++) {
+				// console.log(grade[i].value);
+
+				//}
+
+				// console.log(this.grade);
+			},
+
+			save(item) {
+				console.log(item,111111);
+				var mytotal=0
+
+				var myinputScore=0
+
+				for(let i=0;i<item.instance.length;i++){
+
+					mytotal=mytotal+item.instance[i].point
+					for(let j=0;j<item.instance[i].instanceItem.length;j++){
+						myinputScore=myinputScore+Number(item.instance[i].instanceItem[j].inputScore)
+					}
+				}
+
+				console.log(mytotal,myinputScore,2222);
+
+				var mychecked = document.querySelectorAll('.myinput')
+				for (let i = 0; i < mychecked.length; i++) {
+					mychecked[i].parentNode.style.background = ''
+					mychecked[i].parentNode.style.border = ''
+				}
+				if(mytotal==myinputScore){
+                  mui.toast('未修改分数')
+				}else{
+					item.showOne = false
+				}
+
+			}
+
+		},
+		created() {
+			this.getList()
+
+			console.log(this.list);
+		},
+	})
+
+
+
+
+</script>
+
+</html>

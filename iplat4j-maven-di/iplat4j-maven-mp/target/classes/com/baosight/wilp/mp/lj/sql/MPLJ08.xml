@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MPLJ08">
+
+	<select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.mp.lj.domain.MpContractHistory">
+		SELECT
+			id	as "id",  <!-- 主键 -->
+			cont_id	as "contId",  <!-- 合同ID -->
+			cont_no	as "contNo",  <!-- 合同号 -->
+			cont_name	as "contName",  <!-- 合同名称 -->
+			status_code	as "statusCode",  <!-- 状态编码 -->
+			status_name	as "statusName",  <!-- 状态名称 -->
+			cont_classify	as "contClassify",  <!-- 合同分类 -->
+			cont_type	as "contType",  <!-- 合同类型 -->
+			supplier_num	as "supplierNum",  <!-- 供应商编码 -->
+			supplier_name	as "supplierName",  <!-- 供应商名称 -->
+			cont_cost	as "contCost",  <!-- 合同金额 -->
+			sign_date	as "signDate",  <!-- 合同签订日期 -->
+			valid_date	as "validDate",  <!-- 合同生效日期 -->
+			over_date	as "overDate",  <!-- 合同终止日期 -->
+			currency_code	as "currencyCode",  <!-- 币种编码 -->
+			currency_name	as "currencyName",  <!-- 币种名称 -->
+			manage_dept_num	as "manageDeptNum",  <!-- 所属（管理）科室编码 -->
+			manage_dept_name	as "manageDeptName",  <!-- 所属（管理）科室名称 -->
+			manager_num	as "managerNum",  <!-- 管理员（负责人）工号 -->
+			manager_name	as "managerName",  <!-- 管理员（负责人）名称 -->
+			purchase_way	as "purchaseWay",  <!-- 采购方式编码 -->
+			purchase_way_name	as "purchaseWayName",  <!-- 采购方式名称 -->
+			pay_way	as "payWay",  <!-- 付款方式编码 -->
+			pay_way_name	as "payWayName",  <!-- 付款方式名称 -->
+			valid_limit	as "validLimit",  <!-- 合同期效（年） -->
+			fundingSource_name	as "fundingsourceName",  <!-- 资金来源名称 -->
+			fundingSource_num	as "fundingsourceNum",  <!-- 资金来源编码 -->
+			remark	as "remark",  <!-- 合同说明 -->
+			dock_cont_id	as "dockContId",  <!-- 对接系统的合同ID -->
+			operate_type	as "operateType",  <!-- 操作类型 -->
+			operate_no	as "operateNo",  <!-- 操作人 -->
+			operate_name	as "operateName",  <!-- 操作人姓名 -->
+			operate_time	as "operateTime" <!-- 操作时间 -->
+		FROM mp_contract_history WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contId">
+			cont_id = #contId#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			 <isNotEmpty property="orderBy">
+				  $orderBy$
+			 </isNotEmpty>
+			<isEmpty property="orderBy">
+				operate_time asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM mp_contract_history WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contId">
+			cont_id = #contId#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert" parameterClass="com.baosight.wilp.mp.lj.domain.MpContractHistory">
+		INSERT INTO mp_contract_history (
+			id,  <!-- 主键 -->
+			cont_id,  <!-- 合同ID -->
+			cont_no,  <!-- 合同号 -->
+			cont_name,  <!-- 合同名称 -->
+			status_code,  <!-- 状态编码 -->
+			status_name,  <!-- 状态名称 -->
+			cont_classify,  <!-- 合同分类 -->
+			cont_type,  <!-- 合同类型 -->
+			supplier_num,  <!-- 供应商编码 -->
+			supplier_name,  <!-- 供应商名称 -->
+			cont_cost,  <!-- 合同金额 -->
+			sign_date,  <!-- 合同签订日期 -->
+			valid_date,  <!-- 合同生效日期 -->
+			over_date,  <!-- 合同终止日期 -->
+			currency_code,  <!-- 币种编码 -->
+			currency_name,  <!-- 币种名称 -->
+			manage_dept_num,  <!-- 所属（管理）科室编码 -->
+			manage_dept_name,  <!-- 所属（管理）科室名称 -->
+			manager_num,  <!-- 管理员（负责人）工号 -->
+			manager_name,  <!-- 管理员（负责人）名称 -->
+			purchase_way,  <!-- 采购方式编码 -->
+			purchase_way_name,  <!-- 采购方式名称 -->
+			pay_way,  <!-- 付款方式编码 -->
+			pay_way_name,  <!-- 付款方式名称 -->
+			valid_limit,  <!-- 合同期效（年） -->
+			fundingSource_name,  <!-- 资金来源名称 -->
+			fundingSource_num,  <!-- 资金来源编码 -->
+			remark,  <!-- 合同说明 -->
+			dock_cont_id,  <!-- 对接系统的合同ID -->
+			operate_type,  <!-- 操作类型 -->
+			operate_no,  <!-- 操作人 -->
+			operate_name,  <!-- 操作人姓名 -->
+			operate_time  <!-- 操作时间 -->
+		)
+	    VALUES (#id#, #contId#, #contNo#, #contName#, #statusCode#, #statusName#, #contClassify#, #contType#, #supplierNum#, #supplierName#, #contCost#, #signDate#, #validDate#, #overDate#, #currencyCode#, #currencyName#, #manageDeptNum#, #manageDeptName#, #managerNum#, #managerName#, #purchaseWay#, #purchaseWayName#, #payWay#, #payWayName#, #validLimit#, #fundingSourceName#, #fundingSourceNum#, #remark#, #dockContId#, #operateType#, #operateNo#, #operateName#, #operateTime#)
+	</insert>
+
+	<select id="queryHistoryDetail" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.mp.lj.domain.MpContractHistoryDetail">
+		SELECT
+			id	as "id",  <!-- 主键 -->
+			history_id	as "historyId",  <!-- 操作主表ID -->
+			purchase_plan_id	as "purchasePlanId",  <!-- 采购计划ID -->
+			cont_id	as "contId",  <!-- 合同ID -->
+			cont_no	as "contNo",  <!-- 合同号 -->
+			mat_num	as "matNum",  <!-- 物资编码 -->
+			mat_name	as "matName",  <!-- 物资名称 -->
+			mat_type_id	as "matTypeId",  <!-- 物资分类ID -->
+			mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+			mat_spec	as "matSpec",  <!-- 物资规格 -->
+			mat_model	as "matModel",  <!-- 物资型号 -->
+			unit	as "unit",  <!-- 计量单位 -->
+			unit_name	as "unitName",  <!-- 计量单位名称 -->
+			before_price	as "beforePrice",  <!-- 操作前单价 -->
+			before_num	as "beforeNum",  <!-- 操作前合同明细数量 -->
+			before_total_cost	as "beforeTotalCost",  <!-- 操作前合价（含税总价） -->
+			after_price	as "afterPrice",  <!-- 操作后单价 -->
+			after_num	as "afterNum",  <!-- 操作后合同明细数量 -->
+			after_total_cost	as "afterTotalCost", <!-- 操作后合价（含税总价） -->
+		    has_modify   as "hasModify" <!-- 数据是否被修改 0=没有 1=有 -->
+		FROM mp_contract_history_detail WHERE 1=1
+		<isNotEmpty prepend=" AND " property="historyId">
+			history_id = #historyId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contId">
+			cont_id = #contId#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				mat_num asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="countHistoryDetail" resultClass="int">
+		SELECT COUNT(*) FROM mp_contract_history_detail WHERE 1=1
+		<isNotEmpty prepend=" AND " property="historyId">
+			history_id = #historyId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contId">
+			cont_id = #contId#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insertHistoryDetail" parameterClass="java.util.List">
+		INSERT INTO mp_contract_history_detail (
+			id,  <!-- 主键 -->
+			history_id,  <!-- 操作主表ID -->
+			purchase_plan_id,  <!-- 采购计划ID -->
+			cont_id,  <!-- 合同ID -->
+			cont_no,  <!-- 合同号 -->
+			mat_num,  <!-- 物资编码 -->
+			mat_name,  <!-- 物资名称 -->
+			mat_type_id,  <!-- 物资分类ID -->
+			mat_type_name,  <!-- 物资分类名称 -->
+			mat_spec,  <!-- 物资规格 -->
+			mat_model,  <!-- 物资型号 -->
+			unit,  <!-- 计量单位 -->
+			unit_name,  <!-- 计量单位名称 -->
+			before_price,  <!-- 操作前单价 -->
+			before_num,  <!-- 操作前合同明细数量 -->
+			before_total_cost,  <!-- 操作前合价（含税总价） -->
+			after_price,  <!-- 操作后单价 -->
+			after_num,  <!-- 操作后合同明细数量 -->
+			after_total_cost,  <!-- 操作后合价（含税总价） -->
+			has_modify    <!-- 数据是否被修改 0=没有 1=有 -->
+		)
+		VALUES
+		<iterate conjunction=",">
+		(
+			 #list[].id#,
+			 #list[].historyId#,
+			 #list[].purchasePlanId#,
+			 #list[].contId#,
+			 #list[].contNo#,
+			 #list[].matNum#,
+			 #list[].matName#,
+			 #list[].matTypeId#,
+			 #list[].matTypeName#,
+			 #list[].matSpec#,
+			 #list[].matModel#,
+			 #list[].unit#,
+			 #list[].unitName#,
+			 #list[].beforePrice#,
+			 #list[].beforeNum#,
+			 #list[].beforeTotalCost#,
+			 #list[].afterPrice#,
+			 #list[].afterNum#,
+			 #list[].afterTotalCost#,
+			 #list[].hasModify#
+		 )
+		</iterate>
+	</insert>
+
+	<select id="queryHistoryFile" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.mp.lj.domain.MpContractHistoryFile">
+		SELECT
+			id	as "id",  <!-- 主键 -->
+			history_id	as "historyId",  <!-- 操作主表ID -->
+			cont_id	as "contId",  <!-- 合同ID -->
+			file_name	as "fileName",  <!-- 附件名称 -->
+			file_size	as "fileSize",  <!-- 附件大小 -->
+			doc_id	as "docId",  <!-- iplat库附件ID(下载使用) -->
+			remark	as "remark",  <!-- 附件说明 -->
+			modify_type	as "modifyType" <!-- 修改标记（0=新增，-1=删除） -->
+		FROM mp_contract_history_file WHERE 1=1
+		<isNotEmpty prepend=" AND " property="historyId">
+			history_id = #historyId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contId">
+			cont_id = #contId#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				id asc
+			</isEmpty>
+		</dynamic>
+
+	</select>
+
+	<select id="countHistoryFile" resultClass="int">
+		SELECT COUNT(*) FROM mp_contract_history_file WHERE 1=1
+		<isNotEmpty prepend=" AND " property="historyId">
+			history_id = #historyId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contId">
+			cont_id = #contId#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insertHistoryFile" parameterClass="java.util.List">
+		INSERT INTO mp_contract_history_file (
+			id,  <!-- 主键 -->
+			history_id,  <!-- 操作主表ID -->
+			cont_id,  <!-- 合同ID -->
+			file_name,  <!-- 附件名称 -->
+			file_size,  <!-- 附件大小 -->
+			doc_id,  <!-- iplat库附件ID(下载使用) -->
+			remark,  <!-- 附件说明 -->
+			modify_type	 <!-- 修改标记（0=新增，-1=删除） -->
+		)
+		VALUES
+		<iterate conjunction=",">
+		(
+			 #list[].id#,
+			 #list[].historyId#,
+			 #list[].contId#,
+			 #list[].fileName#,
+			 #list[].fileSize#,
+			 #list[].docId#,
+			 #list[].remark#,
+			 #list[].modifyType#
+		 )
+		</iterate>
+	</insert>
+
+</sqlMap>

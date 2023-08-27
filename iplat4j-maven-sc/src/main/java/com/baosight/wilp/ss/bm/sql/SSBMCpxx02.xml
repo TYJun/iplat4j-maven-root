@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!-- table information Generate time : 2021-03-09 15:40:07 Version : 6.0.731.201809200158 
+	tableName :sc_menu_description id VARCHAR NOT NULL primarykey, 
+	relation_id VARCHAR, material VARCHAR, description VARCHAR, quantum VARCHAR -->
+<sqlMap namespace="SSBMCpxx02">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.bm.domain.SSBMCpxx02">
+		SELECT
+		id as "id",  <!-- 描述id -->
+		relation_id as "relationId",  <!-- 关联id -->
+		material as "material",  <!-- 材料 -->
+		description as "description",  <!-- 描述 -->
+		quantum as "quantum" <!-- 份量 -->
+		FROM sc_menu_description WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="relationId">
+			relation_id = #relationId#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				id asc
+			</isEmpty>
+		</dynamic>
+
+	</select>
+
+<!-- 	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_menu_description WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select> -->
+
+
+    <!-- 查询菜品组成详情 -->
+    <select id="getdescptionInfo" parameterClass="String" 
+        resultClass="com.baosight.wilp.ss.bm.domain.SSBMCpxx02">
+        SELECT
+            id,
+            relation_id relationId, 
+            material,
+            description,
+            quantum
+        FROM 
+            sc_menu_description t1
+        WHERE
+            t1.relation_id = #menuNum#
+    </select>
+
+	<!-- <isNotEmpty prepend=" AND " property="id"> id = #id# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="relationId"> relation_id = #relationId# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="material"> material = 
+		#material# </isNotEmpty> <isNotEmpty prepend=" AND " property="description"> 
+		description = #description# </isNotEmpty> <isNotEmpty prepend=" AND " property="quantum"> 
+		quantum = #quantum# </isNotEmpty> -->
+
+	<insert id="insert">
+		INSERT INTO sc_menu_description (id,  <!-- 描述id -->
+		relation_id,  <!-- 关联id -->
+		material,  <!-- 材料 -->
+		description,  <!-- 描述 -->
+		quantum  <!-- 份量 -->
+		)
+		VALUES (#id#, #relationId#, #material#, #description#, #quantum#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM sc_menu_description WHERE
+		id = #id#
+	</delete>
+	
+	<delete id="deleteByRelationId">
+		DELETE FROM sc_menu_description WHERE
+		relation_id = #relationId#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_menu_description
+		SET
+		relation_id = #relationId#,   <!-- 关联id -->
+		material = #material#,   <!-- 材料 -->
+		description = #description#,   <!-- 描述 -->
+		quantum = #quantum#  <!-- 份量 -->
+		WHERE
+		id = #id#
+	</update>
+
+</sqlMap>

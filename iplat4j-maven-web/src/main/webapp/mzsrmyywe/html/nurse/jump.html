@@ -1,0 +1,117 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="mui/css/mui.min.css">
+    <link rel="stylesheet" href="mui/css/iconfont.css">
+    <link rel="stylesheet" href="css/base.css">
+    <!-- <link rel="stylesheet" href="bootstrap-3.3.5/css/bootstrap.min.css"> -->
+    <title>陪护订单</title>
+</head>
+<STYLE TYPE="text/css">
+body {
+    /*background: #eee;*/
+    overflow: hidden;
+    color: #333333;
+}
+* { touch-action: pan-y; }
+.mui-bar-tab .mui-tab-item.mui-active {
+    color: #fd8700;
+}
+.content {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.ss {
+    width: 56%;
+    height: 16%;
+    /*box-shadow: 3px 3px 40px #cfcfcf;*/
+    border-radius: 72px;
+    margin-bottom: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.wordS {
+    font-size: 22px;
+    color: #fff;
+    letter-spacing: 8px;
+    font-weight: 600;
+}
+.bill {
+    background: #778899;
+    /*box-shadow: 10px 10px 40px #778899;*/
+}
+.report {
+    background: #cd853f;
+    /*box-shadow: 10px 10px 40px #cd853f;*/
+}
+.mui-bar {
+    position: fixed;
+    z-index: 10;
+    right: 0;
+    left: 0;
+    height: 44px;
+    padding-right: 10px;
+    padding-left: 10px;
+    border-bottom: 0;
+    background-color: #30c37c;
+    -webkit-box-shadow: 0 0 1px rgba(175, 175, 175, 0.85);
+    box-shadow: 0 0 1px rgba(175, 175, 175, 0.85);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+.mui-bar-nav {
+    top: 0;
+    -webkit-box-shadow: 0 1px 6px #209c60;
+    box-shadow: 0 1px 6px #209c60;
+}
+</STYLE>
+
+<body>
+    <header id="header" class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">陪护报表</h1>
+        <button class="mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+        返回
+      </button>
+    </header>
+    <div class="content">
+        <div class="ss bill">
+            <span class="mui-icon iconfont icondingdan" style="font-size: 60px;    margin-right: 22px;color: #fff;"></span>
+            <span class="wordS">订单</span>
+        </div>
+        <div class="ss report" style="display: none;">
+            <span class="mui-icon iconfont iconshuju" style="font-size: 60px;    margin-right: 22px;color: #fff;"></span>
+            <span class="wordS">报表</span>
+        </div>
+    </div>
+    
+</body>
+<script src="mui/js/mui.min.js" type="text/javascript"></script>
+<script src="js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="js/baseInfo.js" type="text/javascript"></script>
+<script>
+   var role = localStorage.getItem("role");
+   if(role.indexOf('ESCORT_ADMIN')>-1){
+    $('.report').show()
+   }
+  $('.bill').click(function(){
+    location.href='order.html'
+   })
+
+   $('.report').click(function(){
+    location.href='report.html'
+   })
+</script>
+</html>

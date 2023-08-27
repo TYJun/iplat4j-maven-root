@@ -1,0 +1,210 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+  <link rel="stylesheet" href="../../../reference/bootstrap-3.3.5/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="../../../css/android-ios.css">
+  <link rel="stylesheet" href="../../../css/loading.css"/>
+  <link rel="stylesheet" href="../../../css/colorGreen.css"/>
+  <link rel="stylesheet" href="../../../css/colorBlue.css"/>
+</head>
+<STYLE TYPE="text/css">
+.row {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+.navbar {
+    margin-bottom: 0px;
+}
+.badge {
+    color: #222;
+}
+.dropdown-menu {
+    min-width: 150px;
+}
+.col-lg-4, .col-md-4, .col-sm-4, .col-xs-4, .col-lg-6, .col-md-6, .col-sm-6, .col-xs-6 {
+    padding-right: 0px;
+    padding-left: 0px;
+}
+.dropdown-menu>li>a {
+    padding: 6px 20px;
+}
+</STYLE>
+<body>
+    <nav class="navbar navbar-inverse nav-height" style="border-radius:2px;" role="navigation">
+        <div style="float:left;">
+            <ul class="nav nav-pills ul-btn-right">
+                <li><a href="javascript:back();" style="color:#FFFFFF;">返回</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div id="loading" class="spinner" style="position:fixed;z-index:9999;text-align:center;width:100%;">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+
+  <div id="container" style="margin: 0 auto"></div>
+
+ <div>
+        <ul class="list-group">
+            <li class="list-group-item backColor" style="border-radius: 2px;border-color: #5bc0de;color:#FFFFFF;">
+                <span class="badge backColor" style="color:#FFFFFF;text-shadow: none;">电脑端/ APP端 / 微信端</span>
+           时间     
+            </li> 
+            <div id="lists">
+            <!--<li class="list-group-item">
+                <span class="badge" style="background-color:#FFFFFF">3/10</span>            
+                <div style="margin-left: 1px;">2016-4-25</div>
+            </li>
+            <li class="list-group-item">
+                <span class="badge" style="background-color:#FFFFFF">34/10</span>               
+                <div style="margin-left: 1px;">2016-4-24</div>
+            </li>-->
+            </div>  
+        </ul>
+    </div>
+  
+</body>
+<script type="text/javascript" src="../../../js/color.js"></script>
+<script src="../../../reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../../../reference/bootstrap-3.3.5/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../js/highcharts.js"></script>
+<script src="../js/exporting.js"></script>
+<script type="text/javascript">     
+    var baseUrl = localStorage.getItem("url");
+    var colorStyle = ['#9F88FF', '#00BBFF', '#99FF99', '#FF8800', '#C10066', '#888888',
+      '#5500FF', '#CCEEFF', '#FFE4B5', '#32CD32', '#B8860B', '#DCDCDC',
+      '#D8BFD8', '#1E90FF ', '#00FF00', '#FFB7DD', '#FFB3FF', '#444444',
+      '#4B0082', '#B0C4DE', '#F0FFF0', '#FF44AA', '#CC00FF', '#DDDDDD',
+      '#7B68EE', '#6495ED', '#228B22', '#8C0044', '#E8CCFF', '#886600'
+    ];
+
+    $.ajax({
+      url: baseUrl + 'app_mealReportController.do?getMealCanteenInfoTime',
+      type: 'post',
+      timeout: 30000,
+      success: function(data) {
+        var data = eval("(" + data + ")");
+        var list;
+        list = data.obj.data;
+
+        var weekNo = new Array(); //时间
+        var pcNum = new Array(); //电脑端订单量
+        var wxNum = new Array(); //微信端订餐量 
+        var appNum = new Array();
+        var i = 0;
+        if(list.length==8) i=1;
+        for (i; i < list.length; i++) {
+          weekNo.push(list[i].weekNo);
+          pcNum.push(parseInt(list[i].pcNum));
+          wxNum.push(parseInt(list[i].wxNum));
+          appNum.push(parseInt(list[i].appNum));
+        }
+        allNum(pcNum, wxNum, appNum, weekNo);
+        detailedData(list);
+        $("#loading").hide();
+      },
+      complete: function(XMLHttpRequest, status) {　　　　
+        if (status == 'timeout') {
+          $("#loading").hide();
+          $('#warn small').html('请求超时！');
+          $("#warn").fadeIn(500);
+          setTimeout("$('#warn').fadeOut(500)", 3000);　　　　
+        } else if (status == 'error') {
+          $("#loading").hide();
+          $('#warn small').html('网络异常！');
+          $("#warn").fadeIn(500);
+          setTimeout("$('#warn').fadeOut(500)", 3000);
+        }　
+      }
+    });
+
+    function allNum(pcNum, wxNum, appNum, weekNo) {
+      $('#container').highcharts({
+        chart: {
+          type: 'bar',
+          width: screen.width - 20,
+          height: 350,
+        },
+        title: {
+          text: '食堂一周订餐量',
+        },
+        xAxis: {
+          categories: weekNo,
+          title: {
+            text: null
+          }
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: '数量',
+            align: 'high'
+          },
+          labels: {
+            overflow: 'justify'
+          }
+        },
+        plotOptions: {
+          bar: {
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        legend: {
+          layout: 'vertical',
+          align: 'right',
+          verticalAlign: 'top',
+          x: 0,
+          y: 0,
+          floating: true,
+          borderWidth: 1,
+          backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+          shadow: true
+        },
+        credits: {
+          enabled: false
+        },
+        series: [{
+          name: '电脑端',
+          data: pcNum,
+          color: '#9F88FF',
+        }, {
+          name: '微信端',
+          data: wxNum,
+          color: '#6495ED',
+        }, {
+          name: 'APP端',
+          data: appNum,
+          color: '#F0AD4E',
+        }]
+      });
+    }
+
+    function detailedData(list) {
+      console.log(list);
+      var html = "";
+      var i = 0;
+      if(list.length==8) i=1;
+      for (i; i < list.length; i++) {
+        html += "<li class='list-group-item'><span class='badge' style='background-color:#FFFFFF'><span style='display:inline-block;width:37px;'>" + list[i].pcNum + "</span> / <span style='display:inline-block;width:37px;'>" + list[i].appNum + "</span> /<span style='display:inline-block;width:37px;'>" + list[i].wxNum + "</span></span><div style='margin-left: 1px;'>" + list[i].weekNo + "</div></li>";
+      }
+      $('#lists').html(html);
+    }
+
+    function back() {
+      window.history.back(-1);
+    }
+</script>
+</html>

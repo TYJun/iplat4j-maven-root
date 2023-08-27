@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CPPZ01">
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			id,
+			work_no AS "workNo",
+			work_name AS "workName",
+			dept_no AS "deptNo",
+			dept_name AS "deptName"
+		FROM
+			cp_worker_bind_dept
+		WHERE 1 = 1
+		<isNotEmpty prepend="and" property="workName">
+			work_name like concat('%',#workName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="deptName">
+			dept_name like concat('%',#deptName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="deptNo">
+			dept_no = #deptNo#
+		</isNotEmpty>
+	</select>
+
+	<delete id="delete" parameterClass="java.util.List">
+		delete from cp_worker_bind_dept where id in (
+			<iterate conjunction=",">
+				#ids[]#
+			</iterate>
+		)
+	</delete>
+
+	<insert id="saveDeptInfo" parameterClass="java.util.HashMap">
+		INSERT INTO cp_worker_bind_dept(work_no,work_name,dept_no,dept_name)
+		VALUES (#workNo#,#worker#,#deptNum#,#deptName#)
+	</insert>
+
+	<select id="queryCpDept" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT DISTINCT
+			dept_no AS "deptNo",
+			dept_name AS "deptName",
+		    'root' AS "parentId",
+			'1' AS "isLeaf"
+		FROM
+			cp_worker_bind_dept
+	</select>
+
+	<select id="queryWorker" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			work_no AS "workNo",
+			name
+		FROM
+			${projectSchema}.ac_personnel
+	</select>
+
+	<select id="queryDept" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			dept_num AS "deptNum",
+			dept_name AS "deptName"
+		FROM
+			${projectSchema}.ac_department
+        where status = '1'
+		AND dict_type = '管理区划'
+	</select>
+</sqlMap>

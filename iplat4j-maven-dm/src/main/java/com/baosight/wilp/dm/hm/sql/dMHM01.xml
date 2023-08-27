@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-05-04 18:25:14
+   		Version :  6.0.731.201809200158
+		tableName :.dorms_man 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 employee_id  VARCHAR, 
+		 man_name  VARCHAR, 
+		 sex_code  VARCHAR, 
+		 degree_code  VARCHAR, 
+		 department_no  VARCHAR, 
+		 employment_nature  VARCHAR, 
+		 phone  VARCHAR, 
+		 deposit  VARCHAR, 
+		 is_network  TINYINT, 
+		 is_stay  TINYINT, 
+		 create_name  VARCHAR, 
+		 create_date  DATETIME, 
+		 update_name  VARCHAR, 
+		 update_date  DATETIME, 
+		 operator_type  VARCHAR, 
+		 note  VARCHAR, 
+		 age  INTEGER, 
+		 if_married  VARCHAR, 
+		 permanent_residence  VARCHAR, 
+		 work_time  DATE, 
+		 if_review  INTEGER
+	-->
+<sqlMap namespace="dMHM01">
+	
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			dm.id	AS "id",  
+			dm.employee_id	AS "employeeId",
+			dm.man_name	AS "manName",
+			dm.sex_code	AS "sexCode",
+			dm.degree_code	AS "degreeCode",  
+			dm.department_no	AS "deptNum",  
+			dm.department_name	AS "departmentName",
+			/*t1.dept_name AS "departmentName",*/
+			dm.employment_nature	AS "employmentNature", 
+			dm.phone	AS "phone",
+			dm.deposit	AS "deposit",  
+			dm.is_network	AS "isNetworkCode",  
+			CASE dm.is_network
+					WHEN '1' THEN '是'
+					ELSE '否'
+			    END AS "isNetwork",
+			dm.is_stay	AS "isStayCode", 
+			CASE  dm.is_stay
+					WHEN '1' THEN '是'
+					ELSE '否'
+				END AS "isStay",
+			dm.create_name	AS "createName",  
+			dm.create_date	AS "createDate", 
+			dm.update_name	AS "updateName", 
+			dm.update_date	AS "updateDate", 
+			dm.operator_type	AS "operatorType",  
+			dm.note	AS "note", 
+			dm.age	AS "age",  
+			dm.if_married	AS "ifMarried",  
+			dm.permanent_residence	AS "permanentResidence",  
+			dm.work_time	AS "workTime", 
+			dm.if_review	AS "ifReviewCode", 
+			CASE dm.if_review
+					WHEN -2 THEN '等待审核'
+					WHEN 1 THEN '待分配' 
+					WHEN 2 THEN '已分配' 
+					WHEN -3 THEN '申请被驳回'
+			        WHEN 3  THEN '已退房'
+					ELSE '态未知状'
+			    END AS "ifReview" ,
+			dm.id_no AS "idNo"
+FROM dorms_man dm
+		WHERE
+		  1=1
+		<isNotEmpty prepend=" AND " property="id">
+			dm.id = #id#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="employeeId">
+			dm.employee_id LIKE CONCAT ("%",#employeeId#,"%")
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="manName">
+			dm.man_name LIKE CONCAT ("%",#manName#,"%")
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="deptNum">
+			dm.department_no LIKE CONCAT ("%",#deptNum#,"%")
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="departmentName">
+			dm.department_name LIKE CONCAT ("%",#departmentName#,"%")
+		</isNotEmpty>
+
+		<!--<isNotEmpty prepend=" AND " property="departmentName">
+			t1.dept_name LIKE CONCAT ("%",#departmentName#,"%")
+		</isNotEmpty>-->
+		
+		<isNotEmpty prepend=" AND " property="employmentNature">
+			dm.employment_nature LIKE CONCAT ("%",#employmentNature#,"%")
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="ifReview">
+			dm.if_review = #ifReview#
+		</isNotEmpty>
+		
+		 <dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		    dm.create_date DESC
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(1) FROM dorms_man dm WHERE 1=1
+		
+		<isNotEmpty prepend=" AND " property="employeeId">
+			dm.employee_id = #employeeId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manName">
+			dm.man_name = #manName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			dm.department_no = #deptNum#
+		</isNotEmpty>
+<!-- 		<isNotEmpty prepend=" AND " property="departmentName">
+			t1.dept_name = #departmentName#
+		</isNotEmpty> -->
+		<isNotEmpty prepend=" AND " property="employmentNature">
+			dm.employment_nature = #employmentNature#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="ifReview">
+			dm.if_review = #ifReview#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		    dm.create_date DESC
+		</isEmpty>
+  		</dynamic>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="employeeId">
+			employee_id = #employeeId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manName">
+			man_name = #manName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="sexCode">
+			sex_code = #sexCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="degreeCode">
+			degree_code = #degreeCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="departmentNo">
+			department_no = #departmentNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="employmentNature">
+			employment_nature = #employmentNature#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="phone">
+			phone = #phone#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deposit">
+			deposit = #deposit#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="isNetwork">
+			is_network = #isNetwork#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="isStay">
+			is_stay = #isStay#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="createName">
+			create_name = #createName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="createDate">
+			create_date = #createDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="updateName">
+			update_name = #updateName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="updateDate">
+			update_date = #updateDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="operatorType">
+			operator_type = #operatorType#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="note">
+			note = #note#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="age">
+			age = #age#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="ifMarried">
+			if_married = #ifMarried#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="permanentResidence">
+			permanent_residence = #permanentResidence#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workTime">
+			work_time = #workTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="ifReview">
+			if_review = #ifReview#
+		</isNotEmpty>
+	-->
+	<select id="queryHiList" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+			SELECT
+				drm.id id,
+				dm.id dmId,
+				dm.employee_id employeeId,
+				dm.man_name manName,
+				dm.age age,
+				dm.sex_code sexCode,
+				dm.degree_code degreeCode,
+				dm.department_no departmentNo,
+				dm.department_name departmentName,
+				dm.employment_nature employmentNature,
+				dm.phone phone,
+				drm.room_id roomId,
+				dr.room_name roomName,
+				drm.bed_no bedNo,
+				drm.standard_priece standardPriece,
+				drm.elec_priece elecPriece,
+				drm.water_priece waterPriece,
+				drm.estimated_out_date estimatedOutDate,
+				drm.out_date outDate,
+				drm.elec_degree elecDegree,
+				drm.in_date inDate,
+			    drm.change_time changeTime,
+				drm.out_reason	 outReason,
+				drm.return_key returnKey
+			FROM dorms_man dm,dorms_room_man drm,dorms_room dr 
+			WHERE dm.id = drm.man_id AND dr.id = drm.room_id AND 1=1
+
+			<isNotEmpty prepend=" AND " property="employeeId">
+				dm.employee_id = #employeeId#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="manName">
+				dm.man_name = #manName#
+			</isNotEmpty>
+
+			<isNotEmpty prepend=" AND " property="departmentNo">
+				dm.department_no = #departmentNo#
+			</isNotEmpty>
+
+		    <isNotEmpty prepend=" AND " property="departmentName">
+				dm.department_name = #departmentName#
+			</isNotEmpty>
+
+			<isNotEmpty prepend=" AND " property="employmentNature">
+				dm.employment_nature = #employmentNature#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="ifReview">
+				dm.if_review = #ifReview#
+			</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  drm.in_date DESC
+		</isEmpty>
+  		</dynamic>
+	</select>
+	
+	
+	<insert id="insert">
+		INSERT INTO .dorms_man (id,  <!-- 主键 -->
+										employee_id,  <!-- 工号 -->
+										man_name,  <!-- 姓名 -->
+										sex_code,  <!-- 性别 -->
+										degree_code,  <!-- 学位 -->
+										department_no,  <!-- 部门科室 -->
+										department_name,  <!-- 部门科室 -->
+										employment_nature,  <!-- 用工性质 -->
+										phone,  <!-- 电话 -->
+										deposit,  <!-- 押金编号 -->
+										is_network,  <!-- 是否联网 -->
+										is_stay,  <!-- 是否办暂住证 -->
+										create_name,  <!-- 记录创建人姓名 -->
+										create_date,  <!-- 记录创建时间 -->
+										update_name,  <!-- 记录最后修改人姓名 -->
+										update_date,  <!-- 记录最后修改时间 -->
+										operator_type,  <!-- 最后操作情况：I=插入，U=修改，D=删除 -->
+										note,  <!-- 备注 -->
+										age,  <!-- 员工年龄 -->
+										if_married,  <!-- 婚否:是，否 -->
+										permanent_residence,  <!-- 户口所在地 -->
+										work_time,  <!-- 入职时间 -->
+										if_review,  <!-- 是否通过审核：-2:新增：-1审核中；1：审核通过；-3：申请被驳回，不通过 -->
+										id_no<!-- 身份证编号 -->
+			
+										)		 
+	    VALUES (#id#, #employeeId#, #manName#, #sexCode#, #degreeCode#, #departmentNo#,#departmentName#, #employmentNature#, #phone#, #deposit#, #isNetwork#, #isStay#, #createName#, #createDate#, #updateName#, #updateDate#, #operatorType#, #note#, #age#, #ifMarried#, #permanentResidence#, #workTime:DATE#, #ifReview#,#idNo#)
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM .dorms_man WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE .dorms_man 
+		SET 
+					employee_id	= #employeeId#,   <!-- 工号 -->  
+					man_name	= #manName#,   <!-- 姓名 -->  
+					sex_code	= #sexCode#,   <!-- 性别 -->  
+					degree_code	= #degreeCode#,   <!-- 学位 -->  
+					department_no	= #departmentNo#,   <!-- 部门科室 -->  
+					department_name	= #departmentName#,   <!-- 部门科室 -->
+					employment_nature	= #employmentNature#,   <!-- 用工性质 -->
+					phone	= #phone#,   <!-- 电话 -->  
+					deposit	= #deposit#,   <!-- 押金编号 -->  
+					is_network	= #isNetwork#,   <!-- 是否联网 -->  
+					is_stay	= #isStay#,   <!-- 是否办暂住证 -->  
+					create_name	= #createName#,   <!-- 记录创建人姓名 -->  
+					create_date	= #createDate#,   <!-- 记录创建时间 -->  
+					update_name	= #updateName#,   <!-- 记录最后修改人姓名 -->  
+					update_date	= #updateDate#,   <!-- 记录最后修改时间 -->  
+					operator_type	= #operatorType#,   <!-- 最后操作情况：I=插入，U=修改，D=删除 -->  
+					note	= #note#,   <!-- 备注 -->  
+					age	= #age#,   <!-- 员工年龄 -->  
+					if_married	= #ifMarried#,   <!-- 婚否:是，否 -->  
+					permanent_residence	= #permanentResidence#,   <!-- 户口所在地 -->  
+					work_time	= #workTime:DATE#,   <!-- 入职时间 -->  
+					if_review	= #ifReview#  <!-- 是否通过审核：-2:新增：-1审核中；1：审核通过；-3：申请被驳回，不通过 -->  
+			WHERE 	
+			id = #id#
+	</update>
+	
+	<update id="updateStatus">
+		UPDATE .dorms_man 
+		SET 
+					if_review	= #ifReview#  <!-- 是否通过审核：-2:新增：-1审核中；1：审核通过；-3：申请被驳回，不通过  3:已退房-->  
+			WHERE 	
+			id = #id#
+	</update>
+  	
+  	
+  	
+  	<!-- 查询科室list -->
+	<select id="queryDeptList" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select DEPT_NUM deptNum,DEPT_NAME deptName from tbmbd01 where 1=1
+		<isNotEmpty prepend=" AND " property="deptNum">
+			DEPT_NUM like concat('%', #deptNum#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			DEPT_NAME like concat('%', #deptName#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			DATAGROUP_CODE = #dataGroupCode# 
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+         	<isNotEmpty property="orderBy">
+    		  	$orderBy$
+   		 	</isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  DEPT_NUM asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+	
+	<!-- 查询科室count -->
+	<select id="queryDeptCount" parameterClass="java.util.Map" resultClass="int">
+		select * from tbmbd01 where 1=1
+		<isNotEmpty prepend=" AND " property="deptNum">
+			DEPT_NUM like concat('%', #deptNum#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			DEPT_NAME like concat('%', #deptName#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			DATAGROUP_CODE = #dataGroupCode# 
+		</isNotEmpty>
+	</select>
+</sqlMap>

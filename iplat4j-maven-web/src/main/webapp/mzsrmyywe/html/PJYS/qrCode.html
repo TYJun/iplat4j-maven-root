@@ -1,0 +1,101 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.min.css">
+    <link rel="stylesheet" type="text/css" href="css/iconfont.css">
+</head>
+<STYLE TYPE="text/css">
+body {
+    background: #f5f5f5;
+}
+body,
+html {
+    width: 100%;
+    height: 100%;
+}
+.flex-center {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 50px;
+}
+.qrcode-div {
+    width: 200px;
+    height: 200px;
+}
+</STYLE>
+
+<body>
+    <header id="header" class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">扫码完工</h1>
+        <button class="menu mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+            <span class="mui-icon mui-icon-left-nav"></span>首页
+        </button>
+        <!-- <button class="mui-btn mui-btn-link mui-pull-right">编辑</button> -->
+    </header>
+    <div class="mui-content flex-center">
+        <div id="qrCode" class="qrcode-div"></div>
+    </div>
+    <!-- 选择底部-->
+    <nav class="mui-bar mui-bar-tab" style="background-color:#fff;">
+        <a id="page1" class="mui-tab-item" href="javascript:void(0);">
+          <span class="mui-icon iconfont icon-dengji-"></span>
+          <span class="mui-tab-label">登记</span>
+        </a>
+        <!-- <a id="page2" class="mui-tab-item" href="javascript:void(0);">
+          <span class="mui-icon iconfont icon-lishirenwu"></span>
+          <span class="mui-tab-label">历史记录</span>
+        </a>
+        <a id="page3" class="mui-tab-item" href="javascript:void(0);">
+          <span class="mui-icon iconfont icon-pingjia1"></span>
+          <span class="mui-tab-label">评价</span>
+        </a> -->
+        <a id="page4" class="mui-tab-item mui-active" href="javascript:void(0);">
+          <span class="mui-icon iconfont icon-scan_light"></span>
+          <span class="mui-tab-label">扫码完工</span>
+        </a>
+    </nav>
+</body>
+<script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/qrcode.js"></script>
+<script type="text/javascript" src="js/jquery.qrcode.js"></script>
+<script type="text/javascript">
+var baseUrl = localStorage.getItem("url");
+var workNo = localStorage.getItem("workNo");
+var name = localStorage.getItem("name");
+var deptCode = localStorage.getItem("deptCode");
+
+qrCode();
+
+function qrCode() {
+    var codeContent = workNo + ',' + name + ',' + deptCode;
+    $("#qrCode").qrcode({
+        "render": "canvas",
+        "size": 200,
+        "color": "#000000",
+        "text": encodeURIComponent(codeContent)
+    });
+}
+
+document.getElementById("page1").addEventListener('tap', function() {
+    location.href = "main.html";
+});
+
+/**
+ * 首页
+ */
+mui("body").on('tap', 'button.menu', function() {
+    location.href = "../../menu.html";
+})
+</script>
+
+</html>

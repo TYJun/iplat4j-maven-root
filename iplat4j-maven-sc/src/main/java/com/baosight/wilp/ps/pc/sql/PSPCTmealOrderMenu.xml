@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd"> 
+
+<sqlMap namespace="PSPCTmealOrderMenu">
+    <!-- 默认菜品数据查询 -->
+	<select id="queryMenuTimeInfoByApp" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.ps.pc.domain.PSPCTmealOrderMenu">
+		SELECT 
+            ms.id,
+            om.id as menuId,
+            om.menu_num AS menuNum,
+            TRIM(om.menu_name) AS menuName,
+            om.menu_pic_url AS menuPicUrl,
+            om.menu_price AS menuPrice,
+            om.not_suit_group notSuitGroup,
+            om.suit_group suitGroup,
+            ms.surplus,
+            ms.price_after_discount as priceAfterDiscount,
+            om.menu_type_num AS menuTypeNum,
+            om.menu_type_name AS menuTypeName,
+            om.menu_fee AS menuFee,
+            '0' evalLevel
+        FROM
+            sc_menu_sche ms 
+            left join sc_menu om on om.menu_num = ms.menu_num 
+        WHERE
+            1=1 
+        AND om.status_code = '1'
+        <isNotEmpty prepend="AND" property="mealData">
+            ms.meal_date = #mealData#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="canteenNum">
+            ms.canteen_num = #canteenNum#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="mealNum">
+            ms.meal_num = #mealNum#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="menuNum">
+            om.menu_num = #menuNum#
+        </isNotEmpty>
+       <isNotEmpty prepend="AND" property="operateCode">
+            ms.operate_code= #operateCode#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="mealType">
+            FIND_IN_SET(#mealType#,om.menu_type_num) > 0
+        </isNotEmpty>
+        ORDER BY evalLevel DESC,menuId desc
+        <isNotEmpty property="startRow">
+            <isNotEmpty property="rows">
+                LIMIT #startRow# ,#rows#
+            </isNotEmpty>
+        </isNotEmpty>
+	</select>
+
+    <!-- POS订餐菜品查询 -->
+    <select id="queryMenuTimeInfoByPos" parameterClass="HashMap" 
+        resultClass="com.baosight.wilp.ps.pc.domain.PSPCTmealOrderMenu">      
+        SELECT 
+            ms.id,
+            om.id as "menuId",
+            om.menu_num AS menuNum,
+            TRIM(om.menu_name) AS menuName,
+            om.menu_pic_url AS menuPicUrl,
+            om.menu_price AS menuPrice,
+            ms.surplus,
+            ms.price_after_discount,
+            om.menu_type_num AS menuTypeNum,
+            om.menu_type_name AS menuTypeName,
+            om.not_suit_group notSuitGroup,
+           '0' evalLevel
+         FROM
+            sc_menu_sche ms 
+            left join sc_menu om on om.menu_num = ms.menu_num 
+        WHERE
+            1=1 
+        AND om.status_code = '1'
+        <isNotEmpty prepend="AND" property="mealData">
+            ms.meal_date = #mealData#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="canteenNum">
+            ms.canteen_num = #canteenNum#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="mealNum">
+            ms.meal_num = #mealNum#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="menuNum">
+            om.menu_num = #menuNum#
+        </isNotEmpty>
+       <isNotEmpty prepend="AND" property="operateCode">
+            ms.operate_code= #operateCode#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="mealType">
+            FIND_IN_SET(#mealType#,om.menu_type_num) > 0
+        </isNotEmpty>
+        ORDER BY convert(om.menu_type_name using gbk) ASC ,om.menu_price asc
+        <isNotEmpty property="startRow">
+            <isNotEmpty property="rows">
+                LIMIT #startRow# ,#rows#
+            </isNotEmpty>
+        </isNotEmpty>
+    </select>
+
+    <!-- 菜品详情信息查看 -->
+    <select id="queryMenuDetail" parameterClass="String" 
+        resultClass="com.baosight.wilp.ps.pc.domain.PSPCTmealOrderMenu">
+        SELECT
+            t1.id menuId,
+            t1.menu_num menuNum,
+            t1.menu_name menuName,
+            t1.descption,
+            t1.menu_pic_url menuPicUrl,
+            t1.not_suit_group notSuitGroup,
+            t1.suit_group suitGroup, 
+            t1.menu_price menuPrice,
+            t1.nutrition,
+            t1.heat,
+            (SELECT CASE WHEN CEIL(AVG(eval_level)) IS NULL THEN 0 ELSE CEIL(AVG(eval_level)) END 
+           FROM `sc_order_bill_detail` 
+            WHERE 1=1 
+            and menu_num = #value#
+            
+              ) evalLevel
+        FROM
+            sc_menu AS t1
+        WHERE
+            t1.menu_num = #value#
+    </select>
+
+
+
+    <!-- 默认菜品数据查询总数 -->
+    <select id="queryCount" parameterClass="HashMap" resultClass="INT"> 
+        select count(1) from (
+            SELECT 
+                om.menu_num AS menuNum,
+                om.menu_name AS menuName,
+                om.menu_pic_url AS menuPicUrl,
+                om.menu_price AS menuPrice,
+                ms.surplus,
+               (SELECT CASE WHEN CEIL(AVG(eval_level)) IS NULL THEN 0 ELSE CEIL(AVG(eval_level)) END FROM sc_order_eval WHERE menu_num = menuNum) AS evalLevel
+            FROM
+	            sc_menu_sche ms 
+	            left join sc_menu om on om.menu_num = ms.menu_num 
+	        WHERE
+	            1=1 
+	        AND om.status_code = '1'
+            <isNotEmpty prepend="AND" property="mealData">
+                ms.meal_date = #mealData#
+            </isNotEmpty>
+            <isNotEmpty prepend="AND" property="canteenNum">
+                ms.canteen_num = #canteenNum#
+            </isNotEmpty>
+            <isNotEmpty prepend="AND" property="mealNum">
+                ms.meal_num = #mealNum#
+            </isNotEmpty>
+            <isNotEmpty prepend="AND" property="mealType">
+                FIND_IN_SET(#mealType#,om.menu_type_num) > 0
+            </isNotEmpty>
+        ) a
+    </select>
+
+    <!-- 根据订单号查询菜品信息 -->
+    <select id="getMenuInfoByBillNo" parameterClass="String" 
+        resultClass="com.baosight.wilp.ps.pc.domain.PSPCTmealOrderMenu02">
+        SELECT
+            t1.id,
+            t1.bill_detail_no billDetailNo,
+            t2.menu_name menuName,
+            t2.menu_num menuNum,
+            t2.menu_pic_url menuPicUrl,
+            t1.menu_number menuNumber,
+            t1.menu_total_price menuTotalPrice,
+            t1.menu_price menuPrice,
+            t1.eval_level evalLevel,
+            t1.eval_content evalContent,
+            t1.done
+        FROM
+            sc_order_bill_detail AS t1,
+            sc_menu AS t2
+        WHERE
+            t1.menu_num = t2.menu_num
+        AND t1.bill_no = #value#
+    </select>  
+</sqlMap>

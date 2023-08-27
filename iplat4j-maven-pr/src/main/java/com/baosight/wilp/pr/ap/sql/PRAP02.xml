@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="PRAP02">
+
+
+	<!-- 主页数据统计接口 -->
+	<select id="querySaftyCount" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		select count(1) as amount from pr_safty_danger where status_code = #value#
+	</select>
+
+
+	<!-- 查询工号下问题 -->
+	<select id="querySaftyWork" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		count(1) as amount
+	FROM
+		iplat_v5demo_business.t_safty_danger tsd
+	WHERE
+		tsd.dangerID =
+		( SELECT
+		  DISTINCT
+			dangerID
+		  FROM
+		  	pr_safty_danger_logs tsdl
+		  WHERE
+		    tsdl.logsMan = #flowStatusCode#
+		    and rejectStatus = #workNo# )
+	</select>
+
+
+
+	<!-- 问题台账 -->
+	<select id="saftyLedger" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		  CASE
+			WHEN status_code = '00' THEN '待认领'
+			WHEN status_code = '01' THEN '整改被驳回'
+			WHEN status_code = '10' THEN '已认领'
+			WHEN status_code = '19' THEN '挂账待认领'
+			WHEN status_code = '20' THEN '问题被挂账'
+			WHEN status_code = '30' THEN '已整改'
+			WHEN status_code = '99' THEN '结束'
+		  END "statusName",
+			tsd.status_code as flowStatusCode,
+			tsd.dangerCode as dangerCode,
+			tsd.localTypeName as localTypeName,
+			tsd.createTime as createTime,
+			tsd.id as dangerID,
+			tsd.dangerWhere as dangerPlaceName,
+			tsd.requireDesc as requireDesc2
+		FROM
+			pr_safty_danger tsd
+		where 1=1
+		<isNotEmpty prepend=" AND " property="beginDate">
+			tsd.createTime <![CDATA[ >= ]]> #beginDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endDate">
+			tsd.createTime <![CDATA[ <= ]]> #endDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="flowStatusCode">
+			tsd.status_code <![CDATA[ = ]]> #flowStatusCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="localTypeName">
+			tsd.localTypeName <![CDATA[ = ]]> #localTypeName#
+		</isNotEmpty>
+		<!-- <isNotEmpty property="page">
+			<isNotEmpty property="row">
+				LIMIT #page#,#row#
+			</isNotEmpty>
+		</isNotEmpty> -->
+	</select>
+
+
+	<!-- 查询问题大类 -->
+	<select id="querySafty" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+		a.typename,
+		a.typecode
+	FROM
+		pr_s_type a
+		LEFT JOIN pr_s_typegroup b ON a.typegroupid = b.ID
+	WHERE
+		b.typegroupcode = 'SAFTY_ROUGH_TYPE'
+	ORDER BY
+		a.sortNo
+	</select>
+
+
+	<!-- 查询挂账原因 -->
+	<select id="querySaftyLog" parameterClass="String" resultClass="com.baosight.wilp.pr.ap.domain.SaftyInformation">
+	SELECT
+		log.rejectReason as rejectReason
+	FROM
+		pr_safty_danger_logs log
+		LEFT JOIN pr_safty_danger tsd ON log.dangerID = tsd.id
+	WHERE
+		log.rejectStatus = '20'
+		and tsd.id = #value#
+		GROUP BY log.dangerID
+	</select>
+
+
+	<!-- 查询挂账原因 -->
+	<select id="querySaftyLog2" parameterClass="String" resultClass="com.baosight.wilp.pr.ap.domain.SaftyInformation">
+	SELECT
+		log.rejectReason as rejectReason2
+	FROM
+		pr_safty_danger_logs log
+		LEFT JOIN pr_safty_danger tsd ON log.dangerID = tsd.id
+	WHERE
+		log.rejectStatus = '39'
+		and tsd.id = #value#
+		GROUP BY log.dangerID
+	</select>
+
+
+	<!-- 查看问题明细 -->
+	<select id="querySaftyDetail" parameterClass="String" resultClass="com.baosight.wilp.pr.ap.domain.SaftyInformation">
+		SELECT
+			d.createMan as createMan,
+			d.createTime as createTime,
+			d.dangerCode as dangerCode,
+			d.dangerWhere as dangerWhere,
+			d.localTypeName as localTypeName,
+			d.contentDesc as dangerContent,
+			d.requiredTime as requiredTime,
+			r.contentDesc as content,
+			d.status_code as statusCode,
+			d.id as id,
+			r.id as dangerResultId,
+			d.requireDesc as requireDesc
+		FROM
+			pr_safty_danger d
+				LEFT JOIN pr_safty_danger_result r ON d.id = r.dangerID
+		WHERE
+			d.id = #value#
+	</select>
+
+
+	<!-- 查询整改前图片 -->
+	<select id="queryPic" parameterClass="String" resultClass="com.baosight.wilp.pr.ap.domain.Pic">
+		SELECT
+			tcf.fileName as fileName,
+			tcf.storagePath as storagePath
+		FROM
+			pr_common_file tcf
+				LEFT JOIN pr_safty_danger_pic tsdp ON tcf.fileID = tsdp.fileID
+				LEFT JOIN pr_safty_danger tsd ON tsd.id = tsdp.dangerID
+		WHERE
+			tsd.id = #value#
+	</select>
+
+
+	<!-- 查询整改后图片 -->
+	<select id="queryResultPic" parameterClass="String" resultClass="com.baosight.wilp.pr.ap.domain.ResultPic">
+		SELECT
+			tcf.fileName as fileName,
+			tcf.storagePath as storagePath
+		FROM
+			pr_common_file tcf
+				LEFT JOIN pr_safty_danger_result_pic tsdrp ON tcf.fileID = tsdrp.fileID
+				LEFT JOIN pr_safty_danger_result tsdr ON tsdr.id = tsdrp.dangerResultID
+				LEFT JOIN pr_safty_danger tsd ON tsd.id = tsdr.dangerID
+		WHERE
+			tsd.id = #value#
+	</select>
+
+
+	<!-- 查询安全问题等级 -->
+	<select id="queryGrade" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+		SELECT
+		typename AS typeName,
+		typecode AS typeCode
+		FROM
+		pr_s_type
+		WHERE
+		typegroupid = ( SELECT id FROM
+		pr_s_typegroup WHERE typegroupcode =
+		'SAFTY_GRADE_TYPE' )
+		ORDER BY
+		typeCode
+	</select>
+
+</sqlMap>

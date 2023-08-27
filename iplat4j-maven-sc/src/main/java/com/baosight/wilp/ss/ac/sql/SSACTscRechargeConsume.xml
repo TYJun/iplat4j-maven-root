@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!-- table information Generate time : 2021-07-12 13:58:45 Version : 6.0.731.201809200158 
+	tableName :sc_recharge_consume id VARCHAR NOT NULL 
+	primarykey, staff_no VARCHAR, staff_name VARCHAR, card_no VARCHAR, card_pwd 
+	VARCHAR, id_no VARCHAR, trade_no VARCHAR, business_no VARCHAR, buyer_alipay_no 
+	VARCHAR, seller_alipay_no VARCHAR, order_money DECIMAL, receive_money DECIMAL, 
+	invoice_money DECIMAL, pay_money DECIMAL, trade_create_time DATETIME, trade_pay_time 
+	DATETIME, trade_refund_time DATETIME, trade_end_time DATETIME, recharge_type 
+	VARCHAR, bill_no VARCHAR, status_code VARCHAR, operate_type VARCHAR, rec_create_time 
+	DATETIME, rec_revise_time DATETIME, consume_lot VARCHAR, remark VARCHAR, 
+	message VARCHAR -->
+<sqlMap namespace="SSACTscRechargeConsume">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.ac.domain.SSACTscRechargeConsume">
+		SELECT
+		id as "id",
+		staff_no as "staffNo",  <!-- 职工工号 -->
+		staff_name as "staffName",  <!-- 职工姓名 -->
+		card_no as "cardNo",  <!-- 就餐卡号 -->
+		card_pwd as "cardPwd",  <!-- 就餐卡密码 -->
+		id_no as "idNo",  <!-- 身份证号 -->
+		trade_no as "tradeNo",  <!-- 支付宝交易号 -->
+		business_no as "businessNo",  <!-- 商户订单号 -->
+		buyer_alipay_no as "buyerAlipayNo",  <!-- 买家支付宝账号 -->
+		seller_alipay_no as "sellerAlipayNo",  <!-- 卖家支付宝账号 -->
+		order_money as "orderMoney",  <!-- 订单金额 -->
+		receive_money as "receiveMoney",  <!-- 实收金额 -->
+		invoice_money as "invoiceMoney",  <!-- 开票金额 -->
+		pay_money as "payMoney",  <!-- 付款金额 -->
+		trade_create_time as "tradeCreateTime",  <!-- 交易创建时间 -->
+		trade_pay_time as "tradePayTime",  <!-- 交易付款时间 -->
+		trade_refund_time as "tradeRefundTime",  <!-- 交易退款时间 -->
+		trade_end_time as "tradeEndTime",  <!-- 交易结束时间 -->
+		recharge_type as "rechargeType",  <!-- 充值方式 支付宝/微信 -->
+		bill_no as "billNo",  <!-- 订单单号 -->
+		status_code as "statusCode",  <!-- -1/取消订单；1/支付；2/一卡通扣款成功；3/工作流调用成功，下单成功；4/调用工作流失败；5/一卡通扣款失败; 
+			9/支付异常 -->
+		operate_type as "operateType",  <!-- A/充值；B/订餐消费；C/团购消费 -->
+		rec_create_time as "recCreateTime",  <!-- 创建时间 -->
+		rec_revise_time as "recReviseTime",  <!-- 修改时间 -->
+		consume_lot as "consumeLot",  <!-- 批次 -->
+		remark as "remark",
+		message as "message" <!-- 扣款返回的消息 -->
+		FROM sc_recharge_consume WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				id asc
+			</isEmpty>
+		</dynamic>
+
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_recharge_consume WHERE
+		1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+	<!-- <isNotEmpty prepend=" AND " property="id"> id = #id# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="staffNo"> staff_no = #staffNo# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="staffName"> staff_name = #staffName# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="cardNo"> card_no = #cardNo# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="cardPwd"> card_pwd = 
+		#cardPwd# </isNotEmpty> <isNotEmpty prepend=" AND " property="idNo"> id_no 
+		= #idNo# </isNotEmpty> <isNotEmpty prepend=" AND " property="tradeNo"> trade_no 
+		= #tradeNo# </isNotEmpty> <isNotEmpty prepend=" AND " property="businessNo"> 
+		business_no = #businessNo# </isNotEmpty> <isNotEmpty prepend=" AND " property="buyerAlipayNo"> 
+		buyer_alipay_no = #buyerAlipayNo# </isNotEmpty> <isNotEmpty prepend=" AND 
+		" property="sellerAlipayNo"> seller_alipay_no = #sellerAlipayNo# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="orderMoney"> order_money = #orderMoney# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="receiveMoney"> receive_money 
+		= #receiveMoney# </isNotEmpty> <isNotEmpty prepend=" AND " property="invoiceMoney"> 
+		invoice_money = #invoiceMoney# </isNotEmpty> <isNotEmpty prepend=" AND " 
+		property="payMoney"> pay_money = #payMoney# </isNotEmpty> <isNotEmpty prepend=" 
+		AND " property="tradeCreateTime"> trade_create_time = #tradeCreateTime# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="tradePayTime"> trade_pay_time = #tradePayTime# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="tradeRefundTime"> trade_refund_time 
+		= #tradeRefundTime# </isNotEmpty> <isNotEmpty prepend=" AND " property="tradeEndTime"> 
+		trade_end_time = #tradeEndTime# </isNotEmpty> <isNotEmpty prepend=" AND " 
+		property="rechargeType"> recharge_type = #rechargeType# </isNotEmpty> <isNotEmpty 
+		prepend=" AND " property="billNo"> bill_no = #billNo# </isNotEmpty> <isNotEmpty 
+		prepend=" AND " property="statusCode"> status_code = #statusCode# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="operateType"> operate_type = #operateType# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="recCreateTime"> rec_create_time 
+		= #recCreateTime# </isNotEmpty> <isNotEmpty prepend=" AND " property="recReviseTime"> 
+		rec_revise_time = #recReviseTime# </isNotEmpty> <isNotEmpty prepend=" AND 
+		" property="consumeLot"> consume_lot = #consumeLot# </isNotEmpty> <isNotEmpty 
+		prepend=" AND " property="remark"> remark = #remark# </isNotEmpty> <isNotEmpty 
+		prepend=" AND " property="message"> message = #message# </isNotEmpty> -->
+
+	<insert id="insert">
+		INSERT INTO sc_recharge_consume (id,
+		staff_no,  <!-- 职工工号 -->
+		staff_name,  <!-- 职工姓名 -->
+		card_no,  <!-- 就餐卡号 -->
+		card_pwd,  <!-- 就餐卡密码 -->
+		id_no,  <!-- 身份证号 -->
+		trade_no,  <!-- 支付宝交易号 -->
+		business_no,  <!-- 商户订单号 -->
+		buyer_alipay_no,  <!-- 买家支付宝账号 -->
+		seller_alipay_no,  <!-- 卖家支付宝账号 -->
+		order_money,  <!-- 订单金额 -->
+		receive_money,  <!-- 实收金额 -->
+		invoice_money,  <!-- 开票金额 -->
+		pay_money,  <!-- 付款金额 -->
+		trade_create_time,  <!-- 交易创建时间 -->
+		trade_pay_time,  <!-- 交易付款时间 -->
+		trade_refund_time,  <!-- 交易退款时间 -->
+		trade_end_time,  <!-- 交易结束时间 -->
+		recharge_type,  <!-- 充值方式 支付宝/微信 -->
+		bill_no,  <!-- 订单单号 -->
+		status_code,  <!-- -1/取消订单；1/支付；2/一卡通扣款成功；3/工作流调用成功，下单成功；4/调用工作流失败；5/一卡通扣款失败; 
+			9/支付异常 -->
+		operate_type,  <!-- A/充值；B/订餐消费；C/团购消费 -->
+		rec_create_time,  <!-- 创建时间 -->
+		rec_revise_time,  <!-- 修改时间 -->
+		consume_lot,  <!-- 批次 -->
+		remark,
+		message  <!-- 扣款返回的消息 -->
+		)
+		VALUES (#id#, #staffNo#, #staffName#, #cardNo#, #cardPwd#, #idNo#,
+		#tradeNo#, #businessNo#, #buyerAlipayNo#, #sellerAlipayNo#,
+		#orderMoney#, #receiveMoney#, #invoiceMoney#, #payMoney#,
+		#tradeCreateTime#, #tradePayTime#, #tradeRefundTime#, #tradeEndTime#,
+		#rechargeType#, #billNo#, #statusCode#, #operateType#,
+		#recCreateTime#, #recReviseTime#, #consumeLot#, #remark#, #message#)
+	</insert>
+
+    <insert id="insertRechargeConsume" parameterClass="java.util.List">
+        insert into sc_recharge_consume(
+        id, staff_no, card_no,  id_no,
+        bill_no, status_code, consume_lot, rec_create_time
+        ) values
+        <iterate conjunction=",">
+            (
+            UUID(), #[].staffNo#, #[].cardNo#, #[].idNo#,
+            #[].billNo#, 1, #[].consumeLot#, now()
+            )
+        </iterate>
+    </insert>
+
+	<delete id="delete">
+		DELETE FROM sc_recharge_consume
+		WHERE
+		id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_recharge_consume
+		SET
+		staff_no = #staffNo#,   <!-- 职工工号 -->
+		staff_name = #staffName#,   <!-- 职工姓名 -->
+		card_no = #cardNo#,   <!-- 就餐卡号 -->
+		card_pwd = #cardPwd#,   <!-- 就餐卡密码 -->
+		id_no = #idNo#,   <!-- 身份证号 -->
+		trade_no = #tradeNo#,   <!-- 支付宝交易号 -->
+		business_no = #businessNo#,   <!-- 商户订单号 -->
+		buyer_alipay_no = #buyerAlipayNo#,   <!-- 买家支付宝账号 -->
+		seller_alipay_no = #sellerAlipayNo#,   <!-- 卖家支付宝账号 -->
+		order_money = #orderMoney#,   <!-- 订单金额 -->
+		receive_money = #receiveMoney#,   <!-- 实收金额 -->
+		invoice_money = #invoiceMoney#,   <!-- 开票金额 -->
+		pay_money = #payMoney#,   <!-- 付款金额 -->
+		trade_create_time = #tradeCreateTime#,   <!-- 交易创建时间 -->
+		trade_pay_time = #tradePayTime#,   <!-- 交易付款时间 -->
+		trade_refund_time = #tradeRefundTime#,   <!-- 交易退款时间 -->
+		trade_end_time = #tradeEndTime#,   <!-- 交易结束时间 -->
+		recharge_type = #rechargeType#,   <!-- 充值方式 支付宝/微信 -->
+		bill_no = #billNo#,   <!-- 订单单号 -->
+		status_code = #statusCode#,   <!-- -1/取消订单；1/支付；2/一卡通扣款成功；3/工作流调用成功，下单成功；4/调用工作流失败；5/一卡通扣款失败; 
+			9/支付异常 -->
+		operate_type = #operateType#,   <!-- A/充值；B/订餐消费；C/团购消费 -->
+		rec_create_time = #recCreateTime#,   <!-- 创建时间 -->
+		rec_revise_time = #recReviseTime#,   <!-- 修改时间 -->
+		consume_lot = #consumeLot#,   <!-- 批次 -->
+		remark = #remark#,
+		message = #message#  <!-- 扣款返回的消息 -->
+		WHERE
+		id = #id#
+	</update>
+
+</sqlMap>

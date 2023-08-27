@@ -1,0 +1,191 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="reference/mui/css/mui.min.css">
+  <link rel="stylesheet" href="reference/mui/css/iconfont.css">
+  <link rel="stylesheet" href="reference/css/common.css" />
+</head>
+<STYLE TYPE="text/css">
+  .mui-table-view {
+    color: #787464;
+  }
+</STYLE>
+
+<body>
+  <header class="mui-bar mui-bar-nav">
+    <h1 class="mui-title">报表</h1>
+    <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+      返回
+    </button>
+  </header>
+
+  <div class="mui-content">
+    <div id="echarts" style="width:100%;height:250px;"></div>
+    <ul class="mui-table-view mui-table-view-chevron">
+      <li class="mui-table-view-cell">
+        <a href="report_classify_date.html" class="mui-navigate-right">日分类汇总表</a>
+      </li>
+      <li class="mui-table-view-cell">
+        <a href="report_classify_month.html" class="mui-navigate-right">月度分类汇总表</a>
+      </li>
+      <li class="mui-table-view-cell">
+        <a href="report_recovery_month.html" class="mui-navigate-right">科室汇总表（日）</a>
+      </li>
+      <li class="mui-table-view-cell">
+        <a href="report_dept_month.html" class="mui-navigate-right">科室分类汇总表（日）</a>
+      </li>
+    </ul>
+  </div>
+</body>
+<script src="reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="reference/echarts/echarts.min.js" type="text/javascript"></script>
+<script src="reference/js/common.js" type="text/javascript"></script>
+<script type="text/javascript">
+  var baseUrl = localStorage.getItem("url");
+  var role = localStorage.getItem("role");
+  var workNo = localStorage.getItem('workNo');
+  var dataGroupCode = localStorage.getItem('dataGroupCode');
+  var roles = '';
+  console.log(role);
+  if (role.indexOf('LEADER') >= 0 || role.indexOf('LDpeo') >= 0 || workNo == 'admin') {
+    roles = 'LEADER'
+  }
+  getDeptByWork();
+  var year = new Date().getFullYear();
+  var colors = ['#59c4e6', '#8d98b3', '#a0a7e6', '#96dee8', '#93b7e3'];
+  loadData();
+  function loadData() {
+    $.ajax({
+      url: baseUrl + 'MobileAgentService',
+      type: 'post',
+      headers: {
+        methodName: "getDataByYear",
+        serviceName: "MWAP07",
+      },
+      data: {
+        prames: JSON.stringify({
+          year: year
+        })
+
+      },
+      success: function (data) {
+        if (data.status == "0") {
+          var list = data.attr.result;
+          var data = [],
+            title = [];
+          for (var i = 0; i < list.length; i++) {
+            var json = {
+              "value": list[i].weight,
+              "name": list[i].trash_type_name
+            }
+            title.push(list[i].trash_type_name);
+            data.push(json);
+          }
+          showCharts(data, title);
+        } else {
+          mui.toast("获取数据失败");
+        }
+      }
+    });
+  }
+  function getDeptByWork() {
+    $.ajax({
+      url: baseUrl + 'MobileAgentService',
+      type: 'post',
+      headers: {
+        methodName: "getDeptByWork",
+        serviceName: "MWAP07",
+      },
+      data: {
+        prames: JSON.stringify({
+          workNo: workNo,
+          // workNo:'yf006',
+          dataGroupCode: "",//dataGroupCode,2021-12-15修改，dataGroupCode传值接口报错，传空可以获取到数据
+          // dataGroupCode:'NO00001',
+          role: roles
+        })
+
+      },
+      success: function (data) {
+        if (data.status == "0") {
+          var yiCode = data.attr.result
+          localStorage.setItem("yiyunadataAttr", JSON.stringify(yiCode));
+        } else {
+          mui.toast("获取数据失败");
+        }
+      }
+    });
+  }
+  function showCharts(data, title) {
+    var myChart = echarts.init(document.getElementById('echarts'));
+    option = {
+      title: {
+        text: '医废分类汇总',
+        x: 'center'
+      },
+      color: colors,
+      tooltip: {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c}kg ({d}%)"
+      },
+      legend: {
+        orient: 'vertical',
+        x: 'left',
+        data: title
+      },
+      toolbox: {
+        show: false,
+        feature: {
+          mark: {
+            show: true
+          },
+          dataView: {
+            show: true,
+            readOnly: false
+          },
+          magicType: {
+            show: true,
+            type: ['pie', 'funnel'],
+            option: {
+              funnel: {
+                x: '25%',
+                width: '50%',
+                funnelAlign: 'left',
+                max: 1548
+              }
+            }
+          },
+          restore: {
+            show: true
+          },
+          saveAsImage: {
+            show: true
+          }
+        }
+      },
+      calculable: true,
+      series: [{
+        name: '医废类型',
+        type: 'pie',
+        radius: '40%',
+        center: ['62%', '55%'],
+        data: data
+      }]
+    };
+    myChart.setOption(option);
+  }
+
+  $('#back').click(function () {
+    location.href = '../../report/reportMenu.html'
+  })
+</script>
+
+</html>

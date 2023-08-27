@@ -1,0 +1,851 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.css">
+    <link rel="stylesheet" href="../reference/css/iconfont.css">
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css">
+    <link rel="stylesheet" href="../reference/css/colorGreen.css" />
+    <link rel="stylesheet" href="../reference/css/loading.css" />
+    <link rel="stylesheet" href="../reference/css/transportCommon.css" />
+</head>
+<style type="text/css">
+    /*新增按钮*/
+    /* #add {
+    right: 20px;
+  } */
+    
+    #add {
+        bottom: 0;
+        right: 30%;
+        border-radius: 5px;
+        background: #30c37c;
+        box-shadow: 0px 0px 10px #26a668;
+        width: 40%;
+        height: 44px;
+        z-index: 10;
+        display: flex;
+        padding: 18px 10px 10px 10px;
+        text-align: center;
+    }
+    
+    .sign-arrive {
+        width: 40%;
+        height: 44px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        font-size: 18px;
+        letter-spacing: 6px;
+        border-radius: 5px;
+        background-color: #007aff;
+    }
+    /* 取件状态 */
+    
+    .statusCode {
+        float: right;
+        color: #007aff;
+    }
+    
+    .mui-btn-success {
+        width: 25%;
+        margin-left: 20px;
+    }
+    
+    .list-part li:not(.first) {
+        overflow: auto;
+        display: block;
+        overflow-wrap: break-word;
+    }
+    /* .confirm {
+    text-align: center;
+  } */
+    
+    .confirm button {
+        width: 35%;
+        margin-left: 30px;
+    }
+    
+    .top-part span {
+        width: 50%;
+        display: inline-block;
+        text-align: center;
+        color: #fff;
+        line-height: 36px;
+        font-size: 15px;
+        letter-spacing: 1px;
+        margin: 0 6%;
+    }
+    
+    input[type='text'] {
+        margin-bottom: 0px;
+    }
+    
+    .mui-toast-message {
+        font-size: 20px;
+    }
+</style>
+
+<body>
+    <header class="mui-bar mui-bar-nav backColor">
+        <h1 class="mui-title">登记管理</h1>
+        <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+    </button>
+        <button id="search" class="mui-btn mui-btn-link mui-btn-nav mui-pull-right">
+      <span class="mui-icon mui-icon-search"></span>
+    </button>
+    </header>
+    <!-- loading -->
+    <div id="loading" class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    <!-- tab页 -->
+    <div class="top-part backColor">
+        <div class="top-bar">
+            <!-- <span id="false" class="choose center">进行中</span>
+      <span id="true" class="center">已取件</span> -->
+            <span id="false" class="choose center">我发出的</span>
+            <span id="wait" class="center">我收到的</span>
+        </div>
+    </div>
+    <!-- 主内容 -->
+    <div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+        <div class="mui-scroll" id="content">
+            <ul class="list-ul" id="list">
+            </ul>
+        </div>
+    </div>
+    <!-- 新增 -->
+    <nav class="mui-bar mui-bar-tab bottom">
+        <!-- <div id="add">
+      <span class="iconfont icon-zengjia"></span>
+    </div> -->
+        <!-- <div class="sign-arrive" id="add">新建运送单</div> -->
+    </nav>
+    <!-- 遮罩 -->
+    <div class="mask"></div>
+    <!-- 查询条件 -->
+    <div class="searchDiv">
+        <header class="mui-bar mui-bar-nav backColor">
+            <h1 class="mui-title">查询</h1>
+        </header>
+        <!-- 时间 -->
+        <div class="mui-row row-content" style="margin-top: 50px;">
+            <div class="mui-col-sm-4 mui-col-xs-4">时间</div>
+            <div class="mui-col-sm-3 mui-col-xs-3">
+                <input type="text" id="beginTime" placeholder="开始时间" readonly>
+            </div>
+            <div class="mui-col-sm-1 mui-col-xs-1 middle">-</div>
+            <div class="mui-col-sm-3 mui-col-xs-3">
+                <input type="text" id="endTime" placeholder="截止时间" readonly>
+            </div>
+            <div class="mui-col-sm-1 mui-col-xs-1 middle">
+                <span class="mui-icon mui-icon-arrowright fontColor"></span>
+            </div>
+        </div>
+        <!-- 单号 -->
+        <div class="mui-row row-content dh">
+            <div class="mui-col-sm-6 mui-col-xs-6">派单单号</div>
+            <div class="mui-col-sm-6 mui-col-xs-6">
+                <input type="text" id="inputBillNo" placeholder="请输入单号">
+            </div>
+        </div>
+        <!-- 状态 -->
+        <div class="mui-row row-content zt">
+            <div class="mui-col-sm-6 mui-col-xs-6">状态选择</div>
+            <div class="mui-col-sm-6 mui-col-xs-6">
+                <input type="text" id="state" style="border: none;" placeholder="请选择状态">
+            </div>
+        </div>
+        <!-- 物品编号 -->
+        <div class="mui-row row-content bh" style="display: none;">
+            <div class="mui-col-sm-6 mui-col-xs-6">物品编号</div>
+            <div class="mui-col-sm-6 mui-col-xs-6">
+                <input type="text" id="inputThingNo" placeholder="请输入编号">
+            </div>
+        </div>
+        <!-- 确认按钮 -->
+        <div class="searchBtn">
+            <span class="reset">重置</span>
+            <span class="sure backColor">查询</span>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../reference/mui/js/mui.js"></script>
+<script type="text/javascript" src="../reference/mui/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="../reference/mui/js/mui.picker.min.js"></script>
+<script type="text/javascript" src="../reference/mui/js/baseInfo.js"></script>
+<script type="text/javascript" src="../../../cordova.js"></script>
+<script type="text/javascript">
+    // localStorage.setItem("url", "http://yapi.bonawise.com/mock/91/");
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem('workNo')
+    var deptNum = localStorage.getItem('deptNum')
+    var name = localStorage.getItem('name')
+        // var isFinsh = false;
+    var page = 1;
+    var isWait = false;
+    var billNos = [];
+    var statusCode = '';
+    var isMore = false;
+    $(function() {
+        init()
+    })
+
+    /**
+     * @desc  获取取件单列表
+     * @author yaolei
+     */
+    function init() {
+        $("#loading").show();
+        console.log(isWait)
+        if (isWait == false) {
+            $('.bh').css('display', 'none')
+            $('.dh').css('display', 'block')
+            $('.zt').css('display', 'block')
+            getList();
+        } else {
+            $('.bh').css('display', 'block')
+            $('.dh').css('display', 'none')
+            $('.zt').css('display', 'none')
+            getWaitList();
+        }
+    }
+
+    function getList() {
+        $.ajax({
+            url: baseUrl + 'app_carriageCollectController.do?collectList4Clinical',
+            type: 'get',
+            data: {
+                workNo: workNo,
+                deptNum: deptNum,
+                billNo: $('#inputBillNo').val(),
+                page: 1,
+                startTime: $('#beginTime').val(),
+                endTime: $('#endTime').val(),
+                statusCode: statusCode
+            },
+            success: function(data) {
+                var data = JSON.parse(data);
+                console.log(data);
+                var list = data.obj;
+                console.log(list);
+                var html = '';
+                for (var i = 0; i < list.length; i++) {
+                    var billNo = list[i].billNo;
+                    var applyDeptName = list[i].applyDeptName;
+                    var recCreateTime = list[i].recCreateTime.replace(new  RegExp(/-/gm) , "/");
+                    var applyWorkName = list[i].applyWorkName;
+                    var itemsDesc = list[i].itemsDesc;
+                    var statusCode = list[i].statusCode;
+                    var applyBuilding = list[i].applyBuilding;
+                    var applyFloor = list[i].applyFloor;
+                    var itemNumGroup = list[i].itemNumGroup;
+                    html += createH(billNo, applyDeptName, recCreateTime, applyWorkName, itemsDesc, statusCode, applyBuilding, applyFloor, itemNumGroup);
+                }
+                $("#loading").hide();
+                $('#list').html(html);
+            },
+            error: function(XMLHttpRequest) {
+                $("#loading").hide();
+                var text = JSON.parse(XMLHttpRequest.responseText);
+                mui.toast(text.message, {
+                    duration: 4000,
+                    type: 'div'
+                })
+                return
+            },
+            complete: function(XMLHttpRequest, status) {
+                if (status == 'timeout') {
+                    $("#loading").hide();
+                    mui.toast('网速不给力，请重试！');
+                    return
+                } else if (status == 'error') {
+                    $("#loading").hide();
+                    mui.toast('当前网络不可用，请查看网络是否畅通！');
+                    return
+                }
+            }
+        })
+    }
+
+    function getWaitList() {
+        $.ajax({
+            url: baseUrl + 'app_carriageCollectController.do?getReceiveItemList',
+            type: 'get',
+            data: {
+                name: name,
+                deptNum: deptNum,
+                itemNum: $('#inputThingNo').val(),
+                startTime: $('#beginTime').val(),
+                endTime: $('#endTime').val()
+            },
+            success: function(data) {
+                var data = JSON.parse(data);
+                console.log('wait', data);
+                var list = data.obj;
+                console.log(list);
+                var html = '';
+                // for (var i = 0; i < list.length; i++) {
+                //     var billNo = list[i].billNo;
+                //     var targetDeptName = list[i].targetDeptName;
+                //     var recCreateTime = new Date(list[i].recCreateTime).toLocaleDateString().replace(/\//g, "-") + " " + new Date(list[i].recCreateTime).toTimeString().substr(0, 8);
+                //     var targetNameGroup = list[i].targetNameGroup;
+                //     var itemsInfo = list[i].itemsInfo;
+                //     var statusCode = list[i].statusCode;
+                //     var targetBuilding = list[i].targetBuilding;
+                //     var targetFloor = list[i].targetFloor;
+                //     var itemNumGroup = list[i].itemNumGroup;
+                //     html += createWait(billNo, targetDeptName, recCreateTime, targetNameGroup, itemsInfo, statusCode, targetBuilding, targetFloor, itemNumGroup);
+                // }
+                for (var i = 0; i < list.length; i++) {
+                    var itemNum = list[i].itemNum;
+                    var itemTypeName = list[i].itemTypeName;
+                    var sourceSpotName = list[i].sourceSpotName;
+                    var applyWorkName = list[i].applyWorkName;
+                    var applyTime = list[i].applyTimeStr;
+                    var targetSpotName = list[i].targetSpotName;
+                    var targetName = list[i].targetName;
+                    var sourceAreaName = list[i].sourceAreaName;
+                    var targetAreaName = list[i].targetAreaName;
+                    var statusCode = list[i].statusCode;
+                    var statusName = list[i].statusName;
+                    html += createList(itemNum, itemTypeName, sourceSpotName, applyWorkName, applyTime, targetSpotName, targetName, sourceAreaName, targetAreaName, statusCode, statusName);
+                }
+                $("#loading").hide();
+                $('#list').html(html);
+            },
+            error: function(XMLHttpRequest) {
+                $("#loading").hide();
+                var text = JSON.parse(XMLHttpRequest.responseText);
+                mui.toast(text.message, {
+                    duration: 4000,
+                    type: 'div'
+                })
+                return
+            },
+            complete: function(XMLHttpRequest, status) {
+                if (status == 'timeout') {
+                    $("#loading").hide();
+                    mui.toast('网速不给力，请重试！');
+                    return
+                } else if (status == 'error') {
+                    $("#loading").hide();
+                    mui.toast('当前网络不可用，请查看网络是否畅通！');
+                    return
+                }
+            }
+        })
+    }
+
+    // 创建取件单物资列表
+    function createList(itemNum, itemTypeName, sourceSpotName, applyWorkName, applyTime, targetSpotName, targetName, sourceAreaName, targetAreaName, statusCode, statusName) {
+
+        var html = `<li class="liLength">
+<ul class="list-part">
+  <li class="first">
+    物品编码：<span class="taskNo">${itemNum}</span>
+    <span class="statusCode">${statusName},${itemTypeName}</span>
+  </li>
+  <li>
+    <span class="left-name">申请科室</span>
+    <span class="status">${sourceAreaName}${sourceSpotName}</span>
+  </li>
+  <li>
+    <span class="left-name">申请时间</span>
+    <span class="status">${applyTime}</span>
+  </li>
+  <li>
+    <span class="left-name">申请人</span>
+    <span class="status">${applyWorkName}</span>
+  </li>
+  <li>
+    <span class="left-name">目标科室</span>
+    <span class="status">${targetAreaName}${targetSpotName}</span>
+  </li>
+  <li>
+    <span class="left-name">收件人</span>
+    <span class="status">${targetName}</span>
+  </li>`
+        if (statusCode == 08) {
+            html += `
+  <li>
+    <button type='button' style='margin-left:55px' class='mui-btn mui-btn-success hisBtn'>查看历史</button>
+    <button type='button' style='margin-left:55px' class='mui-btn mui-btn-success confirmBtn'>确认收件</button>
+  </li>
+</ul>
+</li>`
+        } else {
+            html += `<li style="text-align:center">
+    <button type='button' class='mui-btn mui-btn-success hisBtn'>查看历史</button>
+  </li>
+</ul>
+</li>`
+        }
+        return html;
+    }
+
+    function createH(billNo, applyDeptName, recCreateTime, applyWorkName, itemsDesc, statusCode, applyBuilding, applyFloor, itemNumGroup) {
+        console.log(statusCode);
+
+        if (statusCode == 01) {
+            statusCode = "待派工"
+        } else if (statusCode == 02) {
+            statusCode = "待取件"
+        } else {
+            statusCode = "已取件"
+        }
+        var html = `<li class="liLength">
+        <ul class="list-part">
+          <li class="first">
+            取件单号：<span class="taskNo">${billNo}</span>
+            <span class="statusCode">${statusCode}</span>
+          </li>
+          <li>
+            <span class="left-name">取件科室</span>
+            <span class="status">${applyBuilding}${applyFloor}${applyDeptName}</span>
+          </li>
+          <li>
+            <span class="left-name">申请时间</span>
+            <span class="status">${recCreateTime}</span>
+          </li>
+          <li>
+            <span class="left-name">申请人</span>
+            <span class="status">${applyWorkName}</span>
+          </li>
+          <li>
+            <span class="left-name">取件描述</span>
+            <span class="status">${itemsDesc}</span>
+          </li>
+          <li>
+            <span class="left-name">物品编码</span>
+            <span class="status">${itemNumGroup}</span>
+          </li>
+          `
+        if (statusCode == '待派工' || statusCode == '待取件') {
+            html += `
+          <li>
+           <button type="button" class="mui-btn mui-btn-success revise">改单</button>
+           <button type="button" class="mui-btn mui-btn-success revoke">撤单</button>
+           <button type="button" class="mui-btn mui-btn-success detailBtn">查看物品</button>
+          </li>`
+        } else if (statusCode == '已取件') {
+            html += `
+          <li style="text-align:center">
+           <button type="button" class="mui-btn mui-btn-success detailBtn">查看物品</button>
+          </li>`
+        }
+        html += `</ul>
+      </li>`
+        return html;
+    }
+
+    function createWait(billNo, targetDeptName, recCreateTime, targetNameGroup, itemsInfo, statusCode, targetBuilding, targetFloor, itemNumGroup) {
+        console.log(statusCode);
+
+        if (isWait == true) {
+            statusCode = "待收件"
+        }
+        var html = `<li class="liLength">
+        <ul class="list-part">
+          <li class="first">
+            取件单号：<span class="taskNo">${billNo}</span>
+            <span class="statusCode">${statusCode}</span>
+          </li>
+          <li>
+            <span class="left-name">取件科室</span>
+            <span class="status">${targetBuilding}${targetFloor}${targetDeptName}</span>
+          </li>
+          <li>
+            <span class="left-name">申请时间</span>
+            <span class="status">${recCreateTime}</span>
+          </li>
+          <li>
+            <span class="left-name">申请人</span>
+            <span class="status">${targetNameGroup}</span>
+          </li>
+          <li>
+            <span class="left-name">取件描述</span>
+            <span class="status">${itemsInfo}</span>
+          </li>
+          <li>
+            <span class="left-name">物品编码</span>
+            <span class="status">${itemNumGroup}</span>
+          </li>
+          <li class="confirm">
+            <button type="button" class="mui-btn mui-btn-success detailBtn">查看物品</button>
+           <button type="button" class="mui-btn mui-btn-success confirmBtn">确认收件</button>
+          </li>
+          </ul>
+      </li>`
+        return html;
+    }
+
+    /**
+     * @desc   物流详情
+     */
+    function toDetail(itemNum) {
+        location.href = './timeLine.html?' + itemNum;
+    }
+    mui("body").on("tap", ".hisBtn", function() {
+        var itemNum = $(this).parent().parent().find('.taskNo').text();
+        toDetail(itemNum);
+        console.log('ee', itemNum)
+    })
+
+    // 撤单
+    $('#list').on('click', '.revoke', function() {
+        console.log($(this).parent().parent().find('.first span:first-child()')[0].innerHTML);
+        var billNo = $(this).parent().parent().find('.first span:first-child()')[0].innerHTML;
+        $.ajax({
+            url: baseUrl + 'app_carriageCollectController.do?cancelCollect',
+            type: 'get',
+            data: {
+                billNo: billNo
+            },
+            success: function(data) {
+                console.log(data);
+                mui.toast('撤单成功');
+                init();
+            },
+            error: function(XMLHttpRequest) {
+                $("#loading").hide();
+                var text = JSON.parse(XMLHttpRequest.responseText);
+                mui.toast(text.message, {
+                    duration: 4000,
+                    type: 'div'
+                })
+                return
+            },
+            complete: function(XMLHttpRequest, status) {
+                if (status == 'timeout') {
+                    $("#loading").hide();
+                    mui.toast('网速不给力，请重试！');
+                    return
+                } else if (status == 'error') {
+                    $("#loading").hide();
+                    mui.toast('当前网络不可用，请查看网络是否畅通！');
+                    return
+                }
+            }
+        })
+    })
+
+    // 改单
+    $('#list').on('click', '.revise', function() {
+        var billNo = $(this).parent().parent().find('.first span:first-child()')[0].innerHTML;
+        console.log(billNo);
+        location.href = './resive.html?billNo=' + billNo;
+    })
+
+    //确认收件
+    $('#list').on('click', '.confirmBtn', function() {
+        var billNo = $(this).parent().parent().find('.first span:first-child()')[0].innerHTML;
+        // billNos.push(billNo);
+        console.log('666', billNo)
+        confirmBillNo(billNo);
+    })
+
+    function confirmBillNo(billNo) {
+        $.ajax({
+            url: baseUrl + 'app_carriageCollectController.do?confirmItemReceive',
+            type: 'get',
+            data: {
+                itemNum: billNo,
+                workNo: workNo
+            },
+            success: function(data) {
+                // var data = JSON.parse(data);
+                console.log('q', data);
+                $("#loading").hide();
+                mui.toast('收件成功');
+                getWaitList();
+            },
+            error: function(XMLHttpRequest) {
+                $("#loading").hide();
+                var text = JSON.parse(XMLHttpRequest.responseText);
+                mui.toast(text.message, {
+                    duration: 4000,
+                    type: 'div'
+                })
+                return
+            },
+            complete: function(XMLHttpRequest, status) {
+                if (status == 'timeout') {
+                    $("#loading").hide();
+                    mui.toast('网速不给力，请重试！');
+                    return
+                } else if (status == 'error') {
+                    $("#loading").hide();
+                    mui.toast('当前网络不可用，请查看网络是否畅通！');
+                    return
+                }
+            }
+        })
+        billNos = [];
+    }
+    /**
+     * @desc   新增转运单
+     * @author yaolei
+     */
+    $('#add').click(function() {
+        location.href = './addCollect.html'
+    })
+
+    /**
+     * @desc   tab页切换
+     * @author yaolei
+     */
+    mui('.top-bar').on('tap', '.center', function() {
+        var idText = this.getAttribute('id');
+        if (idText == 'false') {
+            $('#false').addClass('choose')
+            $('#true').removeClass('choose')
+            $('#wait').removeClass('choose')
+                // isFinsh = false;
+            isWait = false;
+            statusCode = '';
+            init();
+        }
+        // else if (idText == 'true') {
+        //   $('#true').addClass('choose')
+        //   $('#false').removeClass('choose')
+        //   $('#wait').removeClass('choose')
+        //   isFinsh = true;
+        //   isWait=false;
+        //   init();
+        // }
+        else {
+            $('#wait').addClass('choose')
+            $('#false').removeClass('choose')
+            $('#true').removeClass('choose')
+            isWait = true;
+            init();
+        }
+    })
+
+    /**
+     * @desc   单号模糊查询
+     * @author yaolei
+     */
+    var timer = '';
+    $('#inputBillNo').bind("input", function() {
+        clearTimeout(timer);
+        timer = setTimeout(function() {
+            init()
+        }, 2000)
+    })
+
+
+    /**
+     * @desc   查询条件展示
+     * @author yaolei
+     */
+    $('#search').click(function() {
+        $('.searchDiv').show()
+        $('.mask').show()
+    })
+
+    /**
+     * @desc   时间条件查询
+     * @author yaolei
+     */
+    mui("body").on("tap", "#beginTime", function() {
+        var options = {
+            "type": "date"
+        };
+        var pickerDate = new mui.DtPicker(options);
+        pickerDate.show(function(rs) {
+            $("#beginTime").val(rs.text);
+        });
+    });
+
+    mui("body").on("tap", "#endTime", function() {
+        var options = {
+            "type": "date"
+        };
+        var pickerDate = new mui.DtPicker(options);
+        pickerDate.show(function(rs) {
+            $("#endTime").val(rs.text);
+        });
+    });
+
+    // 选择状态
+    mui("body").on("tap", "#state", function() {
+        var picker = new mui.PopPicker();
+        picker.setData([{
+            value: "first",
+            text: "全部"
+        }, {
+            value: "second",
+            text: "待派工"
+        }, {
+            value: "three",
+            text: "待取件"
+        }, {
+            value: "four",
+            text: "已取件"
+        }])
+        picker.show(function(getSelectedItems) {
+            console.log(getSelectedItems)
+            $("#state").val(getSelectedItems[0].text);
+        })
+    });
+
+    /**
+     * @desc   查询
+     * @author yaolei
+     */
+    mui("body").on("tap", ".sure", function() {
+        var startTime = $("#beginTime").val();
+        var endTime = $("#endTime").val();
+        var billNo = $('#inputBillNo').val();
+        var state = $('#state').val();
+        var aa = new Date(startTime).getTime();
+        var bb = new Date(endTime).getTime();
+        if (aa > bb) {
+            mui.toast('截止时间不能早于开始时间！')
+        } else {
+            if (state == '全部') {
+                statusCode = '';
+            } else if (state == '待派工') {
+                statusCode = '01';
+            } else if (state == '待取件') {
+                statusCode = '02';
+            } else if (state == '已取件') {
+                statusCode = '03';
+            }
+            $('.searchDiv').hide();
+            $('.mask').hide();
+            init();
+        }
+        $("#beginTime").val('')
+        $("#endTime").val('')
+        $('#inputThingNo').val('')
+    })
+
+    /**
+     * @desc   重置
+     * @author yaolei
+     */
+    mui("body").on("tap", ".reset", function() {
+        $("#beginTime").val('')
+        $("#endTime").val('')
+        $('#inputBillNo').val('')
+        $('#inputThingNo').val('')
+    })
+
+    /**
+     * @desc   关闭弹框
+     * @author yaolei
+     */
+    $('.mask').click(function() {
+        $('.searchDiv').hide()
+        $('.mask').hide()
+        $("#beginTime").val('')
+        $("#endTime").val('')
+        $('#inputBillNo').val('')
+        $('#inputThingNo').val('')
+    })
+
+
+    /**
+     * @desc   点击进入详情页
+     * @author yaolei
+     */
+    mui("body").on("tap", ".detailBtn", function() {
+        localStorage.removeItem('registerBillNo')
+        var registerBillNo = $(this).parent().parent().find('.taskNo').text();
+        localStorage.setItem('registerBillNo', registerBillNo)
+        if (isWait == false) {
+            location.href = './registerDetail.html'
+        } else {
+            location.href = './serveDetail.html'
+        }
+    })
+
+    /**
+     * @desc   mui上拉刷新，下拉加载
+     * @author yaolei
+     */
+    mui.init({
+        pullRefresh: {
+            container: '#pullrefresh',
+            down: {
+                callback: pulldownRefresh,
+                contentrefresh: "正在刷新",
+            },
+            up: {
+                height: 100,
+                contentrefresh: "加载中，请稍后...",
+                contentnomore: "暂无更多数据",
+                callback: pullupRefresh
+            }
+        }
+    })
+
+    /**
+     * @desc   下滑刷新
+     * @author yaolei
+     */
+    function pulldownRefresh() {
+        page = 1;
+        $('#list').html('');
+        init();
+        setTimeout(function() {
+            mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+        }, 1500);
+    }
+
+    /**
+     * @desc   上滑加载更多
+     * @author yaolei
+     */
+    function pullupRefresh() {
+        // if ($('.liLength').length <= 10) {
+        if (isMore == false) {
+            page = 1;
+            init();
+        } else {
+            page++;
+            init();
+            console.log($('#list').html());
+        }
+        setTimeout(function() {
+            mui('#pullrefresh').pullRefresh().endPullupToRefresh();
+        }, 1500);
+    }
+
+    /**
+     * @desc   点击返回按钮
+     * @author yaolei
+     */
+    mui("body").on("tap", "#back", function() {
+        location.href = '../transportMain.html'
+    })
+
+    /**
+     * @desc   手机系统返回键
+     * @author yaolei
+     */
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+        window.history.back(-1);
+    }
+</script>
+
+</html>

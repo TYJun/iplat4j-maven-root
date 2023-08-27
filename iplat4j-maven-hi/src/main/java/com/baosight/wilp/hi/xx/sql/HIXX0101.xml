@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HIXX0101">
+
+	<select id="queryApplyNo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+         apply_no,
+         classify_id
+ from hi_icon
+where id = #id#
+	</select>
+
+	<select id="queryApplicationNumber" parameterClass="String" resultClass="java.util.HashMap">
+		select
+			apply_no
+		from hi_icon
+		where id = #id#
+	</select>
+
+	<select id="queryApplyId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			id
+		from hi_apply
+		where apply_no = #applyNo#
+	</select>
+
+
+
+	<select id="applyFile" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.hi.common.domain.HiFile">
+		SELECT
+		id	as "id",  <!-- 主键 -->
+		relation_id	as "relationId",  <!-- 关联id -->
+		file_name	as "fileName",  <!-- 附件名称 -->
+		file_size	as "fileSize",  <!-- 附件大小 -->
+		doc_id	as "docId",  <!-- iplat库附件ID(下载使用) -->
+		remark	as "remark",  <!-- 附件说明 -->
+		rec_creator	as "recCreator",  <!-- 创建人 -->
+		rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		rec_revisor	as "recRevisor",  <!-- 修改人 -->
+		rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+		data_group_code	as "dataGroupCode",  <!-- 账套 -->
+		archive_flag	as "archiveFlag", <!-- 归档标记 -->
+		file_path as filePath
+		FROM .hi_file WHERE archive_flag = '1'
+		<isNotEmpty prepend=" AND " property="id">
+			relation_id  = #applyId#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				relation_id asc
+			</isEmpty>
+		</dynamic>
+
+	</select>
+
+
+
+	<select id="identifiesAttachment" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		id	as "id",  <!-- 主键 -->
+		relation_id	as "relationId",  <!-- 关联id -->
+		file_name	as "fileName",  <!-- 附件名称 -->
+		file_size	as "fileSize",  <!-- 附件大小 -->
+		doc_id	as "docId",  <!-- iplat库附件ID(下载使用) -->
+		remark	as "remark",  <!-- 附件说明 -->
+		rec_creator	as "recCreator",  <!-- 创建人 -->
+		rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		rec_revisor	as "recRevisor",  <!-- 修改人 -->
+		rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+		data_group_code	as "dataGroupCode",  <!-- 账套 -->
+		archive_flag	as "archiveFlag", <!-- 归档标记 -->
+		file_path as filePath
+		FROM .hi_file WHERE archive_flag = '1'
+		<isNotEmpty prepend=" AND " property="id">
+			relation_id  = #id#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				relation_id asc
+			</isEmpty>
+		</dynamic>
+
+	</select>
+
+	<update id="makeStatus">
+		UPDATE   .hi_apply
+        set
+			production_status = '01'
+        where
+			apply_no = #applyNo#
+	</update>
+
+
+
+
+</sqlMap>

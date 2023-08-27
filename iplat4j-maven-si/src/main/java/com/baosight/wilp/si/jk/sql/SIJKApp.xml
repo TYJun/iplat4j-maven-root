@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="SIJKApp">
+    <!--App入库明细-->
+    <select id="enterWarehouseDetail" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+        sed.MAT_NAME matName,
+        sed.MAT_SPEC matSpec,
+        sed.UNIT_NAME unitName,
+        sed.ENTER_NUM enterNum,
+        sed.enter_type_name enterTypeName,
+        sed.ENTER_DATE enterTime,
+        se.ware_house_name wareHouseName
+        FROM
+        si_enter_detail sed
+        LEFT JOIN si_enter se ON sed.ENTER_BILL_NO = se.ENTER_BILL_NO
+        WHERE 1=1
+       <isNotEmpty prepend=" AND " property="matName"> <!--物资名称-->
+            sed.MAT_NAME like concat('%', #matName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="enterTypeName"> <!--入库类型-->
+            sed.enter_type_name like concat('%', #enterTypeName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="wareHouseName"> <!--仓库名称-->
+            se.ware_house_name like concat('%', #wareHouseName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="startTime"> <!--仓库名称-->
+            sed.ENTER_DATE >= #startTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="endTime"> <!--仓库名称-->
+            sed.ENTER_DATE <![CDATA[<=]]> #endTime#
+        </isNotEmpty>
+
+    </select>
+
+    <!--App出库明细-->
+    <select id="outWarehouseDetail" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+        sod.MAT_NAME matName,
+        sod.MAT_SPEC matSpec,
+        sod.UNIT_NAME unitName,
+        sod.OUT_NUM outNum,
+        sod.out_type_name outTypeName,
+        sod.OUT_DATE outTime,
+        so.ware_house_name wareHouseName
+        FROM
+        si_out_detail sod
+        LEFT JOIN si_out so ON sod.OUT_BILL_NO = so.OUT_BILL_NO
+        WHERE 1=1
+        <isNotEmpty prepend=" AND " property="matName"> <!--物资名称-->
+            sod.MAT_NAME like concat('%', #matName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="outTypeName"> <!--入库类型-->
+            sod.out_type_name like concat('%', #outTypeName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="wareHouseName"> <!--仓库名称-->
+            so.ware_house_name like concat('%', #wareHouseName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="startTime"> <!--仓库名称-->
+            sod.OUT_DATE >= #startTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="endTime"> <!--仓库名称-->
+            sod.OUT_DATE <![CDATA[<=]]> #endTime#
+        </isNotEmpty>
+    </select>
+</sqlMap>

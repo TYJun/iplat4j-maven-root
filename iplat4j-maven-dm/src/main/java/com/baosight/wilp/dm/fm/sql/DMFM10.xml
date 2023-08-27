@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DMFM10">
+
+	
+	<!-- 查询人员和地点 -->
+	<select id="querySpot" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT
+	dr1.id AS roomId,
+	dr1.room_name AS roomName,
+	dr1.building_code AS buildingCode,
+	dr1.floor_code AS floorCode,
+	dr1.rent AS rent,
+	drf.water_fee waterPriece,
+	drf.elec_fee elecPriece,
+	dr1.bed_num AS bedNum,
+	dr1.room_no AS roomNo
+FROM
+	dorms_room dr1
+	LEFT JOIN dorms_room_fee drf ON dr1.id = drf.room_id
+
+
+		where dr1.building_code not in ('后勤大楼','培训大楼')
+		
+		<isNotEmpty prepend=" AND " property="roomId">
+			dr1.id = #roomId#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="buildingCode">
+			dr1.building_code = #buildingCode#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="floorCode">
+			dr1.floor_code = #floorCode#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="waterPriece">
+			drf.water_fee = #waterPriece#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="elecPriece">
+			drf.elec_fee = #elecPriece#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="roomNo">
+			dr1.room_no like concat('%', #roomNo#, '%')
+		</isNotEmpty>
+		
+		
+		
+		ORDER BY
+			buildingCode
+	</select>
+	
+</sqlMap>

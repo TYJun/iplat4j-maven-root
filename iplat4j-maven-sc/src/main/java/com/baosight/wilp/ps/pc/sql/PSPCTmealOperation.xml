@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-05-28 14:37:40
+   		Version :  6.0.731.201809200158
+		tableName :sc_operation 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 operation_route  VARCHAR, 
+		 operation_time  VARCHAR, 
+		 creator_id  VARCHAR, 
+		 creator_name  VARCHAR, 
+		 bill_no  VARCHAR
+	-->
+<sqlMap namespace="PSPCTmealOperation">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.ps.pc.domain.PSPCTmealOperation">
+		SELECT
+				id	as "id",  
+				operation_route	as "operationRoute",  <!-- 操作节点，01-创建时间，02-支付时间，03-确认时间，04-送餐时间，05-评价时间，06-退款发起时间，07-退款确认时间 -->
+				operation_time	as "operationTime",  <!-- 操作时间 -->
+				creator_id	as "creatorId",  <!-- 创建人工号 -->
+				creator_name	as "creatorName",  <!-- 创建人名称 -->
+				bill_no	as "billNo" <!-- 订单主表bill_no -->
+		FROM sc_operation WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_operation WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="operationRoute">
+			operation_route = #operationRoute#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="operationTime">
+			operation_time = #operationTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="creatorId">
+			creator_id = #creatorId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="creatorName">
+			creator_name = #creatorName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="billNo">
+			bill_no = #billNo#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO sc_operation (id,
+										operation_route,  <!-- 操作节点，01-创建时间，02-支付时间，03-确认时间，04-送餐时间，05-评价时间，06-退款发起时间，07-退款确认时间 -->
+										operation_time,  <!-- 操作时间 -->
+										creator_id,  <!-- 创建人工号 -->
+										creator_name,  <!-- 创建人名称 -->
+										bill_no  <!-- 订单主表bill_no -->
+										)		 
+	    VALUES (#id#, #operationRoute#, #operationTime#, #creatorId#, #creatorName#, #billNo#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM sc_operation WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_operation 
+		SET 
+					operation_route	= #operationRoute#,   <!-- 操作节点，01-创建时间，02-支付时间，03-确认时间，04-送餐时间，05-评价时间，06-退款发起时间，07-退款确认时间 -->  
+					operation_time	= #operationTime#,   <!-- 操作时间 -->  
+					creator_id	= #creatorId#,   <!-- 创建人工号 -->  
+					creator_name	= #creatorName#,   <!-- 创建人名称 -->  
+					bill_no	= #billNo#  <!-- 订单主表bill_no -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

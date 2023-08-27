@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="MPCG01">
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+		    t1.id	as "id",  <!-- 主键 -->
+			t1.resource_id	as "resourceId",  <!-- 来源单据ID(需求汇总ID/补库计划ID) -->
+			t1.purchase_no	as "purchaseNo",  <!-- 采购计划单号 -->
+			t1.status_code	as "statusCode",  <!-- 状态编码 -->
+			t1.status_name	as "statusName",  <!-- 状态名称 -->
+			t1.purchase_num	as "purchaseNum",  <!-- 采购物资总数 -->
+			t1.purchase_cost	as "purchaseCost",  <!-- 总金额 -->
+			t1.dept_num	as "deptNum",  <!-- 专业科室编码 -->
+			t1.dept_name	as "deptName",  <!-- 专业科室编码 -->
+			t1.remark	as "remark",  <!-- 备注 -->
+			t1.rec_creator	as "recCreator",  <!-- 创建（申请）人 -->
+			t1.rec_creator_name	as "recCreatorName",  <!-- 创建（申请）人姓名 -->
+			t1.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+			t1.rec_revisor	as "recRevisor",  <!-- 修改人 -->
+			DATE_FORMAT(t1.rec_revise_time, '%Y-%m-%d %H:%i:%s') as "recReviseTime",  <!-- 修改时间 -->
+			t1.data_group_code	as "dataGroupCode",  <!-- 账套 -->
+			t1.archive_flag	as "archiveFlag", <!-- 归档标记 -->
+		    t1.purchase_remark as "purchaseRemark",
+		    t1.purchase_type as "purchaseType"
+		FROM mp_purchase_plan t1
+        where 1=1
+			<isNotEmpty property="id" prepend="and">
+				t1.id = #id#
+			</isNotEmpty>
+
+			<isNotEmpty property="purchaseNo" prepend="and">
+				t1.purchase_no = #purchaseNo#
+			</isNotEmpty>
+
+			<isNotEmpty property="statusCode" prepend="and">
+				t1.status_code = #statusCode#
+			</isNotEmpty>
+
+			<isNotEmpty property="statusCodes" prepend="and">
+				t1.status_code in
+				<iterate property="statusCodes" open="(" conjunction="," close=")">#statusCodes[]#</iterate>
+			</isNotEmpty>
+
+			<isNotEmpty property="deptNum" prepend="and">
+				t1.dept_num = #deptNum#
+			</isNotEmpty>
+
+			<isNotEmpty property="recCreator" prepend="and">
+				t1.rec_creator = #recCreator#
+			</isNotEmpty>
+
+			<isNotEmpty property="recCreatorName" prepend="and">
+				t1.rec_creator_name  like concat('%',#recCreatorName#,'%')
+			</isNotEmpty>
+
+			<isNotEmpty property="purchaseRemark" prepend="and">
+				t1.purchase_remark  like concat('%',#purchaseRemark#,'%')
+			</isNotEmpty>
+
+			<isNotEmpty prepend=" AND " property="recCreateTimeS">
+				t1.rec_create_time >= concat(#recCreateTimeS#,' 00:00:00')
+			</isNotEmpty>
+
+			<isNotEmpty prepend=" AND " property="recCreateTimeE">
+				t1.rec_create_time <![CDATA[<=]]> concat(#recCreateTimeE#, ' 23:59:59')
+			</isNotEmpty>
+
+			<dynamic prepend="and">
+				<isEqual property="roleAuth" prepend="and" compareValue="dept">
+					(t1.status_code = '10' and t1.dept_num = #curDept#)
+				</isEqual>
+				<isEqual property="roleAuth" prepend="and" compareValue="leader">
+					(t1.status_code = '60' and find_in_set(t1.dept_num, #depts#) )
+				</isEqual>
+				<isEqual property="roleAuth" prepend="and" compareValue="deptAndLeader">
+					((t1.status_code = '10' and t1.dept_num = #curDept#) or
+          				(t1.status_code = '60' and find_in_set(t1.dept_num, #depts#)))
+				</isEqual>
+			</dynamic>
+
+		group by t1.purchase_no desc
+	</select>
+
+	<select id="queryDetail" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		t1.id	as "id",  <!-- 主键 -->
+		t1.purchase_id	as "purchaseId",  <!-- 采购计划ID -->
+		t1.mat_num	as "matNum",  <!-- 物资编码 -->
+		t1.mat_name	as "matName",  <!-- 物资名称 -->
+		t1.mat_type_id	as "matTypeId",  <!-- 物资分类ID -->
+		t1.mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+		t1.mat_spec	as "matSpec",  <!-- 物资规格 -->
+		t1.mat_model	as "matModel",  <!-- 物资型号 -->
+		t1.unit	as "unit",  <!-- 计量单位 -->
+		t1.unit_name	as "unitName",  <!-- 计量单位 -->
+		t1.price	as "price",  <!-- 单价 -->
+		t1.num	as "num",  <!-- 计划数量 -->
+		t1.conted_num	as "contedNum", <!-- 以生成合同数量 -->
+		t1.picture_uri	as "pictureUri", <!-- 图片路径 -->
+		t2.purchase_no as "purchaseNo"
+		FROM mp_purchase_plan_detail t1
+		LEFT JOIN mp_purchase_plan  t2 ON t1.purchase_id = t2.id
+		<dynamic prepend="where">
+			<isNotEmpty property="id">
+				t1.purchase_id = #id#
+			</isNotEmpty>
+		</dynamic>
+		order by t1.mat_num
+	</select>
+
+
+	<select id="queryPendingApproval" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+		t1.id	as "id",  <!-- 主键 -->
+		t1.resource_id	as "resourceId",  <!-- 来源单据ID(需求汇总ID/补库计划ID) -->
+		t1.purchase_no	as "purchaseNo",  <!-- 采购计划单号 -->
+		t1.status_code	as "statusCode",  <!-- 状态编码 -->
+		t1.status_name	as "statusName",  <!-- 状态名称 -->
+		t1.purchase_num	as "purchaseNum",  <!-- 采购物资总数 -->
+		t1.purchase_cost	as "purchaseCost",  <!-- 总金额 -->
+		t1.dept_num	as "deptNum",  <!-- 专业科室编码 -->
+		t1.dept_name	as "deptName",  <!-- 专业科室编码 -->
+		t1.remark	as "remark",  <!-- 备注 -->
+		t1.rec_creator	as "recCreator",  <!-- 创建（申请）人 -->
+		t1.rec_creator_name	as "recCreatorName",  <!-- 创建（申请）人姓名 -->
+		t1.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		t1.rec_revisor	as "recRevisor",  <!-- 修改人 -->
+		t1.rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+		t1.data_group_code	as "dataGroupCode",  <!-- 账套 -->
+		t1.archive_flag	as "archiveFlag" <!-- 归档标记 -->
+		FROM  mp_purchase_plan  t1
+		where
+	    t1.status_code = '10'
+		<isNotEmpty property="id" prepend="and">
+			t1.id = #id#
+		</isNotEmpty>
+
+		<isNotEmpty property="purchaseNo" prepend="and">
+			t1.purchase_no = #purchaseNo#
+		</isNotEmpty>
+
+		<isNotEmpty property="statusCode" prepend="and">
+			t1.status_code = #statusCode#
+		</isNotEmpty>
+
+		<isNotEmpty property="deptNum" prepend="and">
+			t1.dept_num = #deptNum#
+		</isNotEmpty>
+
+		<isNotEmpty property="recCreator" prepend="and">
+			t1.rec_creator = #recCreator#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="recCreateTimeS">
+			t1.rec_create_time <![CDATA[ >= ]]>  #recCreateTimeS#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="recCreateTimeE">
+			t1.rec_create_time <![CDATA[ <= ]]>  #recCreateTimeE#
+		</isNotEmpty>
+		group by t1.purchase_no DESC
+	</select>
+
+
+
+	<insert id="saveProcurementPlan" parameterClass="java.util.HashMap">
+		INSERT INTO  mp_purchase_plan (
+			id,  <!-- 主键 -->
+			resource_id,  <!-- 来源单据ID(需求汇总ID/补库计划ID) -->
+			purchase_no,  <!-- 采购计划单号 -->
+			status_code,  <!-- 状态编码 -->
+			status_name,  <!-- 状态名称 -->
+			purchase_num,  <!-- 采购物资总数 -->
+			purchase_cost,  <!-- 总金额 -->
+			dept_num,  <!-- 专业科室编码 -->
+			dept_name,  <!-- 专业科室编码 -->
+			remark,  <!-- 备注 -->
+			rec_creator,  <!-- 创建（申请）人 -->
+			rec_creator_name,  <!-- 创建（申请）人姓名 -->
+			rec_create_time,  <!-- 创建时间 -->
+			rec_revisor,  <!-- 修改人 -->
+			rec_revise_time,  <!-- 修改时间 -->
+			data_group_code,  <!-- 账套 -->
+			archive_flag,  <!-- 归档标记 -->
+			purchase_remark,
+		    purchase_type
+		)
+		VALUES (
+			#id#,
+		  	#resourceId#,
+		  	#purchaseNo#,
+		  	#statusCode#,
+		  	#statusName#,
+		  	#purchaseNum#,
+		  	#purchaseCost#,
+		  	#deptNum#,
+		  	#deptName#,
+		  	#remark#,
+		  	#recCreator#,
+		  	#recCreatorName#,
+		  	#recCreateTime#,
+		  	#recRevisor#,
+		  	#recReviseTime#,
+		  	#dataGroupCode#,
+		  	#archiveFlag#,
+		    #purchaseRemark#,
+			#purchaseType#
+		  	)
+	</insert>
+
+	<insert id="saveProcurementPlanDetail" parameterClass="java.util.HashMap">
+		INSERT INTO mp_purchase_plan_detail (
+			id,  <!-- 主键 -->
+			purchase_id,  <!-- 采购计划ID -->
+			mat_num,  <!-- 物资编码 -->
+			mat_name,  <!-- 物资名称 -->
+			mat_type_id,  <!-- 物资分类ID -->
+			mat_type_name,  <!-- 物资分类名称 -->
+			mat_spec,  <!-- 物资规格 -->
+			mat_model,  <!-- 物资型号 -->
+			unit,  <!-- 计量单位 -->
+			unit_name,  <!-- 计量单位 -->
+			price,  <!-- 单价 -->
+			num,  <!-- 计划数量 -->
+			conted_num,  <!-- 以生成合同数量 -->
+		    picture_uri
+		)
+		VALUES (
+			#id#,
+		  	#purchaseId#,
+		  	#matNum#,
+		  	#matName#,
+		  	#matTypeId#,
+		  	#matTypeName#,
+		  	#matSpec#,
+		  	#matModel#,
+		  	#unit#,
+			#unitName#,
+		  	#price#,
+		  	#num#,
+		  	#contedNum#,
+		  	#pictureUri#
+		  	)
+	</insert>
+
+	<update id="update" parameterClass="java.util.HashMap">
+		update
+			mp_purchase_plan
+		set
+		    dept_num = #deptNum#,
+			dept_name = #deptName#,
+			purchase_num = #purchaseNum#,
+			purchase_cost = #purchaseCost#,
+		    rec_revisor = #recRevisor#,
+			rec_revise_time = #recReviseTime#,
+		    status_code	= #statusCode#,
+		    status_name = #statusName#,
+			purchase_remark  = #purchaseRemark#,
+			purchase_type = #purchaseType#
+		<dynamic prepend="where">
+			<isNotEmpty property="id">
+				id = #id#
+			</isNotEmpty>
+		</dynamic>
+	</update>
+
+	<delete id="deleter" parameterClass="java.lang.String">
+		DELETE FROM mp_purchase_plan where id = #value# and status_code = '01'
+	</delete>
+
+	<delete id="deleterDetail" parameterClass="java.lang.String">
+		DELETE FROM mp_purchase_plan_detail
+		<dynamic prepend="where">
+			purchase_id = #value#
+		</dynamic>
+	</delete>
+
+
+
+	<!-- 查询之前最大任务号 -->
+	<select id="querySerialNo" parameterClass="java.lang.String" resultClass="java.lang.String">
+		select type_num from cu_model_number where type=#value#
+	</select>
+
+	<update id="insertSerialNo" parameterClass="java.util.HashMap">
+		insert into cu_model_number(model_id,type,type_num,create_time,update_time)
+			value (UUID(),#type#,#serialNo#,#createTime#,#updateTime#)
+	</update>
+
+	<update id="updateSerialNo" parameterClass="java.util.HashMap">
+		update cu_model_number set type_num=#serialNo#,update_time=#updateTime# where type=#type#
+	</update>
+
+
+
+	<select id="mk" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+		t1.id	as "id",  <!-- 主键 -->
+		t1.resource_id	as "resourceId",  <!-- 来源单据ID(需求汇总ID/补库计划ID) -->
+		t1.purchase_no	as "purchaseNo" <!-- 采购计划单号 -->
+		FROM mp_purchase_plan t1
+		where 1=1
+
+		<isNotEmpty property="purchaseNo" prepend="and">
+			t1.purchase_no like concat('%',#purchaseNo#,'%')
+		</isNotEmpty>
+
+	</select>
+
+
+
+	<update id="submit" parameterClass="string">
+		UPDATE
+			mp_purchase_plan
+		SET
+			status_code = '10',
+			status_name = '待审批',
+			rec_revise_time = now()
+		WHERE
+			id = #id#
+	</update>
+
+	<update id="withdraw" parameterClass="string">
+		UPDATE
+			mp_purchase_plan
+		SET
+			status_code = '01',
+			status_name = '新建'
+		WHERE
+			id = #id#
+	</update>
+
+	<select id="getPurchaseTypeAllCost" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+
+		SELECT
+			ifnull(sum(purchase_cost), 0) purchaseCost
+		FROM
+			mp_purchase_plan
+		WHERE
+			status_code NOT IN ( '01', '20' )
+		<isNotEmpty property="purchaseYear" prepend="and">
+			rec_create_time like concat(#purchaseYear#,'%')
+		</isNotEmpty>
+		<isNotEmpty property="purchaseType" prepend="and">
+			purchase_type = #purchaseType#
+		</isNotEmpty>
+
+
+	</select>
+
+</sqlMap>

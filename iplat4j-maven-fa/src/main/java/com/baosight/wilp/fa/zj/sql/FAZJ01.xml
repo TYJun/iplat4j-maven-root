@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="FAZJ01">
+    <!-- 定时任务 -->
+    <select id="queryFaInfo" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.fa.da.domain.FaInfoDO">
+        SELECT
+        id	as "id",  <!-- 固定资产信息表主键 -->
+        rec_creator	as "recCreator",  <!-- 创建人 -->
+        rec_create_name	as "recCreateName",  <!-- 创建人姓名 -->
+        rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+        rec_revisor	as "recRevisor",  <!-- 修改人 -->
+        rec_revise_name	as "recReviseName",  <!-- 修改人姓名 -->
+        rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+        data_group_code	as "dataGroupCode",  <!-- 账套 -->
+        archive_flag	as "archiveFlag",  <!-- 归档标记 -->
+        goods_num	as "goodsNum",  <!-- 固定资产编码 -->
+        goods_name	as "goodsName",  <!-- 固定资产名称 -->
+        goods_classify_code	as "goodsClassifyCode",  <!-- 类别编码（一级） -->
+        goods_classify_name	as "goodsClassifyName",  <!-- 类别名称（一级） -->
+        goods_type_code	as "goodsTypeCode",  <!-- 类别名称编码（二级） -->
+        goods_type_name	as "goodsTypeName",  <!-- 类别名称（二级） -->
+        rfid_code	as "rfidCode",  <!-- RFID 芯片ID -->
+        model	as "model",  <!-- 型号规格 -->
+        unit_num	as "unitNum",  <!-- 计量单位 -->
+        unit_name	as "unitName",  <!-- 计量单位名称 -->
+        dept_num	as "deptNum",  <!-- 使用科室编码 -->
+        dept_name	as "deptName",  <!-- 使用科室名称 -->
+        manufacturer	as "manufacturer",  <!-- 制造厂商 -->
+        surp_num	as "surpNum",  <!-- 供应商编码 -->
+        surp_name	as "surpName",  <!-- 供应商名称 -->
+        buy_date	as "buyDate",  <!-- 购买日期 -->
+        use_date	as "useDate",  <!-- 使用日期 -->
+        build	as "build",  <!-- 楼 -->
+        floor	as "floor",  <!-- 层 -->
+        install_location_num	as "installLocationNum",  <!-- 安装位置编码 -->
+        install_location	as "installLocation",  <!-- 安装位置 -->
+        use_years	as "useYears",  <!-- 使用年限 -->
+        amount	as "amount",  <!-- 数量 -->
+        price	as "price",  <!-- 单价 -->
+        buy_cost	as "buyCost",  <!-- 资产原值 -->
+        residual_rate	as "residualRate",  <!-- 残值率 -->
+        estimated_residual_value	as "estimatedResidualValue",  <!-- 预计净残值 -->
+        net_asset_value	as "netAssetValue",  <!-- 资产净值 -->
+        estimate_cost	as "estimateCost",  <!-- 暂估值 -->
+        depreciation_way	as "depreciationWay",  <!-- 折旧方式 -->
+        total_depreciation	as "totalDepreciation",  <!-- 资产累计折旧 -->
+        month_depreciation	as "monthDepreciation",  <!-- 平均月折旧 -->
+        funds_source	as "fundsSource",  <!-- 资金来源 -->
+        in_account_date	as "inAccountDate",  <!-- 入账日期 -->
+        in_account_status	as "inAccountStatus",  <!-- 0/未入账;1/入账; -->
+        finace_class_num	as "finaceClassNum",  <!-- 财务类别编码 -->
+        invoice_no	as "invoiceNo",  <!-- 发票号 -->
+        invoice_date	as "invoiceDate",  <!-- 发票日期 -->
+        device_id	as "deviceId",  <!-- 设备ID -->
+        device_name	as "deviceName",  <!-- 设备名称 -->
+        device_type_name	as "deviceTypeName",  <!-- 设备分类名称 -->
+        remark	as "remark",  <!-- 备注 -->
+        lock_flag	as "lockFlag",  <!-- 0/未锁定；1/锁定 -->
+        card_status	as "cardStatus",  <!-- 发卡状态;0是没发卡,1是发卡 -->
+        status_code	as "statusCode",  <!-- 状态(01-新增，02-入账，03-闲置，04-报废) -->
+        split_reason	as "splitReason" <!-- 拆分原因 -->
+        FROM fa_info
+        where status_code in ("20","30")
+    </select>
+
+    <select id="queryFaDepreciation" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.fa.zj.domain.FaDepreciation">
+        SELECT DISTINCT
+            id	as "id",  <!-- 固定资产折旧表主键 -->
+            good_id	as "goodId",  <!-- 固资Id -->
+            depreciation_month	as "depreciationMonth",  <!-- 折旧月份 -->
+            used_month	as "usedMonth",  <!-- 已使用时间 -->
+            depreciation_value	as "depreciationValue",  <!-- 本月折旧 -->
+            total_depreciation	as "totalDepreciation",  <!-- 累计折旧 -->
+            net_asset_value	as "netAssetValue" <!-- 资产净值 -->
+        FROM fa_depreciation
+        ORDER BY
+            used_month desc
+    </select>
+    
+    <insert id="completeDEP" parameterClass="java.util.ArrayList">
+        insert into fa_depreciation
+            (id,good_id,depreciation_month,used_month,depreciation_value,total_depreciation,net_asset_value)
+        values
+            <iterate conjunction=",">
+                (#faDepreciations[].id#,#faDepreciations[].goodId#,#faDepreciations[].depreciationMonth#,#faDepreciations[].usedMonth#,
+                #faDepreciations[].depreciationValue#, #faDepreciations[].totalDepreciation#,#faDepreciations[].netAssetValue#
+                 )
+            </iterate>
+    </insert>
+
+    <update id="updateDEP" parameterClass="com.baosight.wilp.fa.zj.domain.FaDepreciation">
+        update fa_info set
+            net_asset_value = #netAssetValue#,
+            total_depreciation = #totalDepreciation#,
+            month_depreciation = #monthDepreciation#
+        where id = #goodId#
+    </update>
+    
+    
+    <!--  资产折旧新方法  -->
+    <select id="queryFaInfoNew" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+            id,
+            id AS "faInfoId",
+            goods_classify_code AS "goodsClassifyCode",
+            goods_classify_name AS "goodsClassifyName",
+            goods_type_code AS "goodsTypeCode",
+            goods_type_name AS "goodsTypeName",
+            dept_num AS "deptNum",
+            dept_name AS "deptName",
+            surp_num AS "surpNum",
+            surp_name AS "surpName",
+            invoice_no AS "invoiceNo",
+            goods_num AS "goodsNum",
+            goods_name AS "goodsName",
+            model,
+            spec,
+            buy_cost AS "buyCost",
+            fundingSource_num AS "fundingSourceNum",
+            fundingSource_name AS "fundingSourceName",
+            date_format(buy_date,'%Y-%m-%d') AS "buyDate",
+            date_format(use_date,'%Y-%m-%d') AS "useDate",
+            date_format(DATE_ADD(use_date, INTERVAL use_years YEAR), '%Y-%m' ) AS "lastDate",
+            date_format(use_date,'%Y-%m') AS "countDate",
+            date_format(NOW(),'%Y-%m') AS "nowDate",
+            use_years AS "useYears",
+            use_years * 12 AS "useMonths",
+            net_asset_value AS "netAssetValue",
+            total_depreciation AS "totalDepreciation",
+            month_depreciation AS "monthDepreciation"
+        FROM
+            fa_info
+        WHERE
+            status_code NOT IN ('060')
+        AND net_asset_value > 0
+        <isNotEmpty prepend="AND" property="depreciationMonth">
+            (depreciation_month != #depreciationMonth# OR depreciation_month IS NULL)
+        </isNotEmpty>
+        AND use_date IS NOT NULL
+        AND use_years IS NOT NULL
+        AND dept_num IS NOT NULL
+    </select>
+
+    <select id="queryFaDepreciationNew" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.fa.zj.domain.FaDepreciation">
+        SELECT
+            good_id	AS "goodId",
+            dept_num AS "deptNum",
+            dept_name AS "deptName",
+            goods_num AS "goodsNum",
+            goods_name AS "goodsName",
+            goods_classify_code AS "goodsClassifyCode",
+            goods_classify_name AS "goodsClassifyName",
+            goods_type_code AS "goodsTypeCode",
+            goods_type_name AS "goodsTypeName",
+            model,
+            spec,
+            buy_cost AS "buyCost",
+            depreciation_month	AS "depreciationMonth",
+            used_month	AS "usedMonth",
+            depreciation_value	AS "depreciationValue",
+            total_depreciation	AS "totalDepreciation",
+            net_asset_value	AS "netAssetValue",
+            fundingSource_num AS "fundingSourceNum",
+            fundingSource_name AS "fundingSourceName"
+        FROM
+            fa_depreciation
+        WHERE
+            net_asset_value > 0
+        AND depreciation_month = (SELECT MAX(depreciation_month) FROM fa_depreciation)
+        GROUP BY
+            good_id
+        ORDER BY
+            used_month desc
+    </select>
+
+    <insert id="completeDEPNEW" parameterClass="java.util.List">
+        INSERT INTO fa_depreciation(id,good_id,dept_num,dept_name,goods_num,goods_name,model,spec,buy_cost,
+            depreciation_month,used_month,depreciation_value,total_depreciation,net_asset_value,
+            fundingSource_num,fundingSource_name,goods_classify_code,goods_classify_name,goods_type_code,
+            goods_type_name)
+        VALUES
+        <iterate conjunction=",">
+            (UUID(),#faDepreciationDTOList[].faInfoId#,#faDepreciationDTOList[].deptNum#,
+             #faDepreciationDTOList[].deptName#,#faDepreciationDTOList[].goodsNum#,
+             #faDepreciationDTOList[].goodsName#,#faDepreciationDTOList[].model#,
+             #faDepreciationDTOList[].spec#,#faDepreciationDTOList[].buyCost#,
+             #faDepreciationDTOList[].depreciationMonth#,
+             #faDepreciationDTOList[].usedMonth#,#faDepreciationDTOList[].depreciationValue#,
+             #faDepreciationDTOList[].totalDepreciation#,#faDepreciationDTOList[].netAssetValue#,
+             #faDepreciationDTOList[].fundingSourceNum#,#faDepreciationDTOList[].fundingSourceName#,
+             #faDepreciationDTOList[].goodsClassifyCode#,#faDepreciationDTOList[].goodsClassifyName#,
+             #faDepreciationDTOList[].goodsTypeCode#,#faDepreciationDTOList[].goodsTypeName#)
+        </iterate>
+    </insert>
+
+    <insert id="throwDEPNEW" parameterClass="java.util.List">
+        INSERT INTO fa_throw_account(id,faInfo_id,dept_num,dept_name,surp_num,surp_name,invoice_no,
+        goods_type_code,goods_num,goods_name,net_asset_value,
+        account_type,create_date,goods_classify_code,goods_classify_name,goods_type_name)
+        VALUES
+        <iterate conjunction=",">
+            (UUID(),#faDepreciationDTOList[].faInfoId#,#faDepreciationDTOList[].deptNum#,#faDepreciationDTOList[].deptName#,
+            #faDepreciationDTOList[].surpNum#,#faDepreciationDTOList[].surpName#,#faDepreciationDTOList[].invoiceNo#,#faDepreciationDTOList[].goodsTypeCode#,#faDepreciationDTOList[].goodsNum#,
+            #faDepreciationDTOList[].goodsName#,#faDepreciationDTOList[].depreciationValue#,#faDepreciationDTOList[].accountType#,NOW(),
+            #faDepreciationDTOList[].goodsClassifyCode#,#faDepreciationDTOList[].goodsClassifyName#,#faDepreciationDTOList[].goodsTypeName#)
+        </iterate>
+    </insert>
+
+    <update id="updateDEPNEW" parameterClass="com.baosight.wilp.fa.zj.domain.FaDepreciationDTO">
+        UPDATE fa_info SET
+            total_depreciation = #totalDepreciation#,
+            month_depreciation = #depreciationValue#,
+            net_asset_value = #netAssetValue#,
+            depreciation_month = #depreciationMonth#
+        WHERE id = #faInfoId#
+    </update>
+</sqlMap>

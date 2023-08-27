@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ACDE0101">
+
+	<insert id="insert" parameterClass="java.util.HashMap">
+    	INSERT INTO $projectSchema$.ac_department (
+				<isNotNull  property="deptNum">
+					dept_num,  <!-- 科室编码 -->
+				</isNotNull>
+				<isNotNull  property="deptName">
+					dept_name,  <!-- 科室名称 -->
+				</isNotNull>
+				<isNotNull  property="parentId">
+					parent_id,  <!-- 父ID -->
+				</isNotNull>
+				<isNotNull  property="parentSet">
+					parent_set,  <!--  -->
+				</isNotNull>
+				<isNotNull  property="finaCode">
+					fina_code,  <!-- 财务编码 -->
+				</isNotNull>
+				<isNotNull  property="erpCode">
+					erp_code,  <!-- ERP编码 -->
+				</isNotNull>
+				<isNotNull  property="deptDescribe">
+					dept_describe,  <!-- 科室描述 -->
+				</isNotNull>
+				<isNotNull  property="type">
+			    	type,  <!-- 科室类型 -->
+			    </isNotNull>
+				<isNotNull  property="status">
+					status,  <!-- 科室状态 -->
+				</isNotNull>
+				<isNotNull  property="recCreater">
+					rec_creater,  <!-- 创建人 -->
+				</isNotNull>
+				<isNotNull  property="recCreateTime">
+					rec_create_time,  <!-- 创建时间 -->
+				</isNotNull>
+				<isNotNull  property="recRevisor">
+					rec_revisor,  <!-- 修改人 -->
+				</isNotNull>
+				<isNotNull  property="recReviseTime">
+					rec_revise_time,  <!-- 修改时间 -->
+				</isNotNull>
+					id  <!-- 主键 -->
+			)VALUES ( 
+				<isNotNull  property="deptNum">
+			    	#deptNum#, 
+			    </isNotNull>
+				<isNotNull  property="deptName">
+			    	#deptName#, 
+			    </isNotNull>
+			    <isNotNull  property="parentId">
+					#parentId#,   
+				</isNotNull>
+				<isNotNull  property="parentSet">
+					#parentSet#,   
+				</isNotNull>
+			    <isNotNull  property="finaCode">
+					#finaCode#,  
+				</isNotNull>
+				<isNotNull  property="erpCode">
+			    	#erpCode#, 
+			    </isNotNull>
+				<isNotNull  property="deptDescribe">
+			    	#deptDescribe#, 
+			    </isNotNull>
+			    <isNotNull  property="type">
+			    	#type#, 
+			    </isNotNull>
+				<isNotNull  property="status">
+			    	#status#, 
+			    </isNotNull>
+				<isNotNull  property="recCreater">
+			    	#recCreater#, 
+			    </isNotNull>
+				<isNotNull  property="recCreateTime">
+			    	#recCreateTime#, 
+			    </isNotNull>
+				<isNotNull  property="recRevisor">
+			    	#recRevisor#, 
+			    </isNotNull>
+				<isNotNull  property="recReviseTime">
+			    	#recReviseTime#, 
+			    </isNotNull>
+			    	#id#
+		    ) 
+	</insert>
+	
+	<!--  -->
+	<select id="getChildrenList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			
+		select id as hosdId,
+			 dept_num as hosdNum,
+			 dept_name as hosdName
+		from $projectSchema$.ac_department 
+		where FIND_IN_SET(id,$projectSchema$.getChildrenList(#id#))
+		and parent_id = 'root'
+	</select>
+	
+	<update id="updateHosdNum" parameterClass="java.util.HashMap">
+	    update $projectSchema$.ac_department 
+	    set 
+	    		<isNotNull  property="hospitalDistrict">
+			    	hospital_district = #hospitalDistrict#, 
+			    </isNotNull>
+	    	id=#id#
+	    where id=#id#
+    </update>
+	
+</sqlMap>

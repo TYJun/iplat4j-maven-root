@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="CUYD01">
+
+	<!-- 获取指定人员的用户组 -->
+	<select id="getUserRole" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select 
+			ifnull(GROUP_CONCAT(xug.GROUP_ENAME),'') roles,
+			ifnull(GROUP_CONCAT(xug.GROUP_CNAME),'') roleNames
+		from ${platSchema}.xs_user_group xug 
+		left join ${platSchema}.xs_user_group_member xugm on xug.ID = xugm.PARENT_ID 
+		left join ${platSchema}.xs_user xu on xu.USER_ID = xugm.MEMBER_ID
+		where  xu.LOGIN_NAME = #loginName#
+	</select>
+
+</sqlMap>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-02-09 9:14:27
+   		Version :  6.0.731.201809200158
+		tableName :iplat_v5demo_business.ot_tools 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 tool_no  VARCHAR, 
+		 tool_name  VARCHAR, 
+		 tool_type  VARCHAR
+	-->
+<sqlMap namespace="carriageTools">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.common.ys.domain.CarriageTools">
+		SELECT
+				id	as "id",  <!-- 运送工具主键（UUID） -->
+				tool_no	as "toolNo",  <!-- 工具编号 -->
+				tool_name	as "toolName",  <!-- 工具名称 -->
+				tool_type	as "toolType" <!-- 工具类型 -->
+		FROM iplat_v5demo_business.ot_tools WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM iplat_v5demo_business.ot_tools WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="toolNo">
+			tool_no = #toolNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="toolName">
+			tool_name = #toolName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="toolType">
+			tool_type = #toolType#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO iplat_v5demo_business.ot_tools (id,  <!-- 运送工具主键（UUID） -->
+										tool_no,  <!-- 工具编号 -->
+										tool_name,  <!-- 工具名称 -->
+										tool_type  <!-- 工具类型 -->
+										)		 
+	    VALUES (#id#, #toolNo#, #toolName#, #toolType#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM iplat_v5demo_business.ot_tools WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE iplat_v5demo_business.ot_tools 
+		SET 
+					tool_no	= #toolNo#,   <!-- 工具编号 -->  
+					tool_name	= #toolName#,   <!-- 工具名称 -->  
+					tool_type	= #toolType#  <!-- 工具类型 -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

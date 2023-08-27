@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SIPZ01">
+
+	<select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.rm.pz.domain.RmConfig">
+		SELECT
+				id	as "id",  <!-- 主键 -->
+				config_code	as "configCode",  <!-- 配置项编码 -->
+				config_name	as "configName",  <!-- 配置项名称 -->
+				config_value_radio	as "configValueRadio",  <!-- 配置项值（单选框的值） -->
+				config_value_text	as "configValueText",  <!-- 配置项值（多选框、输入框的值） -->
+				data_group_code	as "dataGroupCode", <!-- 账套 -->
+				order_no as "orderNo" <!-- 排序 -->
+		FROM si_config WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="configCode">
+			config_code = #configCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			 <isNotEmpty property="orderBy">
+				  $orderBy$
+			 </isNotEmpty>
+			<isEmpty property="orderBy">
+				order_no asc
+			</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int" parameterClass="java.util.HashMap">
+		SELECT COUNT(*) FROM si_config WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="configCode">
+			config_code = #configCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert" parameterClass="java.util.List">
+		insert into si_config (
+			id,  <!-- 主键 -->
+			config_code,  <!-- 配置项编码 -->
+			config_name,  <!-- 配置项名称 -->
+			config_value_radio,  <!-- 配置项值（单选框的值） -->
+			config_value_text,  <!-- 配置项值（多选框、输入框的值） -->
+			data_group_code,  <!-- 账套 -->
+			order_no  <!-- 排序 -->
+		)
+	    VALUES
+	  	<iterate conjunction=",">
+		(
+			#list[].id#,
+		 	#list[].configCode#,
+		 	#list[].configName#,
+		 	#list[].configValueRadio#,
+		 	#list[].configValueText#,
+		 	#list[].dataGroupCode#,
+		 	#list[].orderNo#
+		)
+		</iterate>
+
+	</insert>
+  
+	<delete id="deleteAll" parameterClass="string">
+		DELETE FROM si_config WHERE data_group_code = #dataGroupCode#
+	</delete>
+
+</sqlMap>

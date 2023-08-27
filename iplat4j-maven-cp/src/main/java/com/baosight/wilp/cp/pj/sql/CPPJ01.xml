@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="CPPJ01">
+    <select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+            t1.id AS "id",
+            t1.bill_no AS "billNo",
+            t1.rec_creator AS "recCreator",
+            t1.rec_create_name AS "recCreateName",
+            t1.rec_create_time AS "recCreateTime",
+            t1.rec_revisor AS "recRevisor",
+            t1.rec_revise_name AS "recReviseName",
+            t1.rec_revise_time AS "recReviseTime",
+            t1.complaint_date AS "complaintDate",
+            t1.complaint_name AS "complaintName",
+            t1.complaint_phone AS "complaintPhone",
+            t1.complaint_dept AS "complaintDept",
+            t1.complaint_email AS "complaintEmail",
+            t1.complaint_type AS "complaintType",
+            t1.complaint_way AS "complaintWay",
+            t1.complaint_content AS "complaintContent",
+            t1.evaluate_content AS "evaluateContent",
+            t1.dept_name AS "dealDept",
+            CASE  t1.status_code
+            WHEN '0'THEN '新建'
+            WHEN '1'THEN '待处理'
+            WHEN '2'THEN '待回访'
+            WHEN '3'THEN '待评价'
+            WHEN '4'THEN '已结束'
+            WHEN '5'THEN '作废'
+            END  AS "statusCode",
+            t02.return_work_name AS "returnWorkName",
+            t02.return_desc AS "returnDesc",
+            t02.return_date AS "returnDate",
+            t03.deal_work_name AS "dealWorkName",
+            t03.idendify AS "idendify",
+            t03.deal_date AS "dealDate"
+        FROM cp_bill t1
+        LEFT JOIN cp_file t01 ON t1.bill_no = t01.bill_no
+        LEFT JOIN (SELECT * FROM cp_bill_return ORDER BY create_time DESC) t02 ON t1.bill_no = t02.bill_no
+        LEFT JOIN (SELECT * FROM cp_bill_deal ORDER BY create_time DESC) t03 ON t1.bill_no = t03.bill_no
+        WHERE
+        t1.status_code= '3'
+        <isNotEmpty prepend=" AND " property="id">
+            t1.id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="billNo">
+            t1.bill_no like concat('%',#billNo#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recCreator">
+            t1.rec_creator like concat('%',#recCreator#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="complaintDept">
+            t1.complaint_dept like concat('%',#complaintDept#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="dealDept">
+            t1.dept_name like concat('%',#dealDept#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="complaintDateS">
+            date_format(t1.complaint_date,'%Y-%m-%d') >= #complaintDateS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="complaintDateE">
+            date_format(t1.complaint_date,'%Y-%m-%d') <![CDATA[<=]]> #complaintDateE#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="dealWorkName">
+            t03.deal_work_name like concat('%',#dealWorkName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="dealDateS">
+            date_format(t03.deal_date,'%Y-%m-%d') >= #dealDateS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="dealDateE">
+            date_format(t03.deal_date,'%Y-%m-%d') <![CDATA[<=]]> #dealDateE#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="returnWorkName">
+            t02.return_work_name like concat('%',#returnWorkName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="returnDesc">
+            t02.return_desc like concat('%',#returnDesc#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="returnDateS">
+            date_format(t02.return_date,'%Y-%m-%d') >= #returnDateS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="returnDateE">
+            date_format(t02.return_date,'%Y-%m-%d') <![CDATA[<=]]> #returnDateE#
+        </isNotEmpty>
+        group  by  t1.bill_no
+    </select>
+
+    <select id="count" resultClass="int">
+        SELECT
+            COUNT(DISTINCT t1.bill_no)
+        FROM cp_bill t1
+        LEFT JOIN cp_file t01 ON t1.bill_no = t01.bill_no
+        LEFT JOIN (SELECT * FROM cp_bill_return ORDER BY create_time DESC) t02 ON t1.bill_no = t02.bill_no
+        LEFT JOIN (SELECT * FROM cp_bill_deal ORDER BY create_time DESC) t03 ON t1.bill_no = t03.bill_no
+        WHERE
+        t1.status_code= '3'
+        <isNotEmpty prepend=" AND " property="id">
+            t1.id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="billNo">
+            t1.bill_no like concat('%',#billNo#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recCreator">
+            t1.rec_creator like concat('%',#recCreator#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="complaintDept">
+            t1.complaint_dept like concat('%',#complaintDept#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="dealDept">
+            t1.dept_name like concat('%',#dealDept#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="complaintDateS">
+            date_format(t1.complaint_date,'%Y-%m-%d') >= #complaintDateS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="complaintDateE">
+            date_format(t1.complaint_date,'%Y-%m-%d') <![CDATA[<=]]> #complaintDateE#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="dealWorkName">
+            t03.deal_work_name like concat('%',#dealWorkName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="dealDateS">
+            date_format(t03.deal_date,'%Y-%m-%d') >= #dealDateS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="dealDateE">
+            date_format(t03.deal_date,'%Y-%m-%d') <![CDATA[<=]]> #dealDateE#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="returnWorkName">
+            t02.return_work_name like concat('%',#returnWorkName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="returnDesc">
+            t02.return_desc like concat('%',#returnDesc#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="returnDateS">
+            date_format(t02.return_date,'%Y-%m-%d') >= #returnDateS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="returnDateE">
+            date_format(t02.return_date,'%Y-%m-%d') <![CDATA[<=]]> #returnDateE#
+        </isNotEmpty>
+    </select>
+
+    <select id="queryId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+        t1.id AS "id",
+        t1.bill_no AS "billNo",
+        t1.rec_creator AS "recCreator",
+        t1.rec_create_name AS "recCreateName",
+        t1.rec_create_time AS "recCreateTime",
+        t1.rec_revisor AS "recRevisor",
+        t1.rec_revise_name AS "recReviseName",
+        t1.rec_revise_time AS "recReviseTime",
+        t1.status_code AS "statusCode",
+        t1.complaint_date AS "complaintDate",
+        t1.complaint_name AS "complaintName",
+        t1.complaint_phone AS "complaintPhone",
+        t1.complaint_dept AS "complaintDept",
+        t1.complaint_email AS "complaintEmail",
+        t1.complaint_type AS "complaintType",
+        t1.complaint_way AS "complaintWay",
+        t1.complaint_content AS "complaintContent",
+        t1.tesk_eval AS "teskEval",
+        CASE  t1.status_code
+        WHEN '0'THEN '新建'
+        WHEN '1'THEN '待处理'
+        WHEN '2'THEN '待回访'
+        WHEN '3'THEN '待评价'
+        WHEN '4'THEN '已结束'
+        WHEN '5'THEN '作废'
+        END  AS "statusCode"  <!-- 合同状态 -->
+        FROM
+        cp_bill t1
+        LEFT JOIN cp_file t01 ON t1.bill_no = t01.bill_no
+        WHERE
+        t1.id = #id#
+    </select>
+</sqlMap>

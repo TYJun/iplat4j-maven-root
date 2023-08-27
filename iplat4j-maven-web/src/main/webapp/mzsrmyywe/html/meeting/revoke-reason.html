@@ -1,0 +1,181 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="reference/mui/css/mui.min.css">
+  <link rel="stylesheet" href="reference/css/buttom.css">
+  <link rel="stylesheet" href="reference/css/common.css"/>
+</head>
+<STYLE TYPE="text/css">
+body{
+  background: #f7f7f7;
+}
+.task-div{
+  width: 96%;
+  margin: 10px auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 5px;
+  padding-bottom: 15px;
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 0px 2px 5px #d4d4d4;
+}
+.task-title{
+  height: 40px;
+  line-height: 40px;
+  border-bottom: 1px solid #eee;
+  font-weight: bold;
+}
+.status-applying{
+  color: #ff9800;
+}
+.status-accept{
+  color: #0dc515;
+}
+.status-unknown{
+  color: #f5675c;
+}
+.status-remove {
+  color: #f5675c;
+}
+.task-info{
+  padding-top: 10px;
+}
+.info-title{
+  color: #5d5d5d;
+}
+.reason-div{
+  width: 96%;
+  margin: 10px auto;
+}
+.reason-class{
+  border:none;
+  outline:none;
+  height: 200px;
+  box-shadow: 0px 2px 5px #d4d4d4;
+}
+.btn-div{
+  width: 96%;
+  margin: 10px auto;
+}
+.mui-btn-blue, .mui-btn-primary, input[type=submit]{
+  background-color: #2aabd2;
+  border: 1px solid #2aabd2;
+}
+</STYLE>
+<body>
+    <header class="mui-bar mui-bar-nav">
+      <h1 class="mui-title">撤销原因</h1>
+      <button class="mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+        返回
+      </button>
+    </header>
+
+    <div id="warn" class="warn" hidden>
+      <small></small>
+    </div>
+    
+    <div id="loading" class="loading1" hidden>
+      <div class="loading2">
+        <span class="mui-spinner" style="width:80px;height:80px;"></span>
+      </div>
+    </div>
+
+    <div class="mui-content" style="padding-bottom:50px;">
+      <div class="task-div">
+        <div class="mui-row task-title">
+          <div id="applicationNo" class="mui-col mui-col-xs-8 task-no">申请单号：212018393809</div>
+          <div id="status" class="mui-col mui-col-xs-4 right status-applying">待完工</div>
+        </div>
+        <div class="task-content">
+          <div class="mui-row task-info">
+            <div class="mui-col mui-col-xs-4">会议室</div>
+            <div id="meetingName" class="mui-col mui-col-xs-8 right word-omit"></div>
+          </div>
+          <div class="mui-row task-info">
+            <div class="mui-col mui-col-xs-4">会议日期</div>
+            <div id="meetingTime" class="mui-col mui-col-xs-8 right word-omit"></div>
+          </div>
+          <div class="mui-row task-info">
+            <div class="mui-col mui-col-xs-4">会议主题</div>
+            <div id="meetingTheme" class="mui-col mui-col-xs-8 right word-omit"></div>
+          </div>
+        </div>
+      </div>
+      <div class="reason-div">
+        <textarea type="text" class="reason-class" placeholder="请输入撤销原因..."></textarea>
+      </div>
+      <div class="btn-div">
+        <button id="revoke" type="button" class="mui-btn mui-btn-primary mui-btn-block">提交</button>
+      </div>
+    </div>
+
+  
+</body>
+<script src="reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="reference/js/common.js" type="text/javascript"></script>
+<script type="text/javascript">
+  var baseUrl = localStorage.getItem("url");
+  var workNo = localStorage.getItem("workNo");
+  var url = location.search;
+  var jsonStr = url.substring(1,url.length);
+  var json = JSON.parse(decodeURIComponent(jsonStr));
+  console.log(json);
+  $('#applicationNo').html("申请单号："+json.billNo);
+  if(json.status=="1"){
+    $('#status').addClass("status-applying");
+    $('#status').html("待审批");
+  }else if(json.status=="2"){
+    $('#status').addClass("status-accept");
+    $('#status').html("已审批");
+  }else if(json.status=="-1"){
+    $('#status').addClass("status-remove");
+    $('#status').html("已撤销");
+  }else{
+    $('#status').addClass("status-unknown");
+    $('#status').html("未知状态");
+  }
+
+  $('#meetingName').html(json.meetingName);
+  $('#meetingTime').html(json.meetingTime);
+  $('#meetingTheme').html(json.meetingTheme);
+
+  document.getElementById("revoke").addEventListener('tap', function() {
+    var revokeReason = $('textarea').val().trim();
+    if(revokeReason==""){
+      showMsg("撤销原因不能为空");
+      return;
+    }
+    $("#loading").show();
+    $.ajax({
+      url:baseUrl+'app_MeetingController.do?cancelBill',
+      type:'post',
+      data:{
+        billID:json.billID,
+        billNo:json.billNo,
+        applicationUser:workNo,
+        cancelReson:revokeReason
+      },
+      success:function(data){
+        var data = eval('('+data+')');
+        console.log(data);
+        if(data.success){
+          showMsg('撤销成功');
+          setTimeout('window.history.back(-1)',2000);
+        }else{
+          showMsg(data.msg);
+          $("#loading").hide();
+        }
+      }
+    });
+  });
+
+</script>
+</html>

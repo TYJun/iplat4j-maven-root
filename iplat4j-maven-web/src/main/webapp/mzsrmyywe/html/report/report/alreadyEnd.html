@@ -1,0 +1,238 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<link rel="stylesheet" href="../../reference/mui/css/mui.min.css">
+	<link rel="stylesheet" href="../../reference/mui/css/iconfont.css">
+	<link rel="stylesheet" href="../../reference/mui/css/mui.picker.min.css">
+	<link rel="stylesheet" href="../../reference/css/common.css" />
+</head>
+<STYLE TYPE="text/css">
+	body,
+	html {
+		height: 100%;
+		overflow-y: hidden;
+	}
+
+	.warn {
+		height: 50px;
+		line-height: 38px;
+		top: 62px;
+		font-size: 28px;
+	}
+
+	.end-title {
+		height: 40px;
+		line-height: 40px;
+		border-bottom: 1px solid #CCCCCC;
+		color: #0e56dd;
+		font-weight: bold;
+	}
+
+	.end-content {
+		height: 35px;
+		line-height: 35px;
+		border-bottom: 1px solid #EEEEEE;
+	}
+
+	.end-footer {
+		height: 35px;
+		line-height: 35px;
+		border-bottom: 1px solid #EEEEEE;
+		color: #0e56dd;
+	}
+</STYLE>
+
+<body>
+	<!--<header class="mui-bar mui-bar-nav" style="height: 60px;">
+      <h1 class="mui-title" style="line-height: 60px;">医废登记</h1>
+    </header>-->
+	<header class="mui-bar mui-bar-nav">
+		<h1 class="mui-title">已结束</h1>
+		<button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left"><span
+				class="mui-icon mui-icon-left-nav"></span>返回</button>
+		</button>
+
+	</header>
+	<div class="warn" class="warn" hidden>
+		<small>呵呵</small>
+	</div>
+	<div class="mui-content">
+		<div class="search-div">
+			<form class="mui-input-group">
+				<div class="mui-input-row">
+					<label>医院名称</label>
+					<input id="hosName" type="text" placeholder="医院名称" readonly>
+				</div>
+				<div class="mui-input-row">
+					<label>截止日期</label>
+					<input id="chooseDate" type="text" placeholder="请选择日期" readonly>
+				</div>
+			</form>
+		</div>
+		<div class="mui-row tab">
+			<div class="mui-col-xs-4 center end-title">单号</div>
+			<div class="mui-col-xs-2 center end-title">重量</div>
+			<div class="mui-col-xs-2 center end-title">类型</div>
+			<div class="mui-col-xs-4 center end-title">科室</div>
+		</div>
+		<div id="list" style="overflow-y: auto;">
+		</div>
+
+	</div>
+
+</body>
+<script src="../../reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="../../reference/mui/js/mui.picker.min.js" type="text/javascript"></script>
+<script src="../../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../../reference/js/common.js" type="text/javascript"></script>
+<script type="text/javascript">
+	var baseUrl = localStorage.getItem("url");
+	var workNo = localStorage.getItem("workNo");
+	var hosId = localStorage.getItem('hosId');
+	var num = 0;
+	var createDate = "";
+	var endDate = date_YMD();
+	var dataGroupCode = localStorage.getItem("dataGroupCode")
+
+	$("#hosName").val(localStorage.getItem("hosName"));
+	$("#chooseDate").val(endDate);
+	loadData();
+	setHeight();
+	$(window).resize(function () {
+		setHeight();
+	});
+
+	function setHeight() {
+		var headerHeight = $("header").height();
+		var searchHeight = $(".search-div").height();
+
+		var rowHeight = $(".mui-row").height();
+		var listHeight = (document.body.offsetHeight - headerHeight - searchHeight - rowHeight);
+		$("#list").css({ "max-height": listHeight + "px" });
+	}
+	$("#back").click(function () {
+		location.href = "workReport.html";
+
+	})
+	document.getElementById("chooseDate").addEventListener('tap', function () {
+		var options = {
+			"type": "date"
+		};
+		var picker = new mui.DtPicker(options);
+		picker.show(function (rs) {
+			month = rs.text;
+			$('#chooseDate').val(month);
+			//alert();
+			//console.log("开始时间："+month);
+			loadData();
+
+		});
+	});
+
+	function loadData() {
+
+		createDate = $('#chooseDate').val();
+		$.ajax({
+			url: baseUrl + 'trash',
+			type: 'post',
+			headers: {
+				className: 'ServiceNBAP01',
+				methodName: 'getFinishedList',
+
+			},
+			data: {
+				trashOutTime: createDate,
+				userId: workNo,
+				dataGroupCode: dataGroupCode
+			},
+			success: function (data) {
+
+				console.log(data);
+				if (data.respCode == "200") {
+					var list = new Array();
+					list = data.param;
+					if (list.length == 0 || list == null) {
+						mui.toast("未能查询到数据");
+						// return;
+					}
+
+					var listRibbonCode = []; //单号
+					var listWeight = []; //重量
+					var listTrashTypeName = []; //类型
+					var listDeptName = []; //科室
+					var total = 0;
+					for (var i = 0; i < list.length; i++) {
+						listRibbonCode.push(list[i].ribbonCode);
+						listWeight.push(list[i].weight);
+						total += list[i].weight
+						listTrashTypeName.push(list[i].trashTypeName);
+						listDeptName.push(list[i].deptName);
+
+					}
+					//console.log("加载1：" + list);
+					createList(total, list);
+					//dataView(listName, listJgnum, listWgnum, listWwnum, titleText);
+					//	console.log("加载：" + list);
+					$("#loading").hide();
+				} else {
+					mui.toast(data.respMsg);
+				}
+			},
+			complete: function (XMLHttpRequest, status) { //请求完成后最终执行参数　　　
+				if (status == 'timeout') {
+					$("#loading").hide();
+					$('#warn small').html('请求超时！');
+					$("#warn").fadeIn(500);
+					setTimeout("$('#warn').fadeOut(500)", 3000);
+				} else if (status == 'error') {
+					$("#loading").hide();
+					$('#warn small').html('网络异常！');
+					$("#warn").fadeIn(500);
+					setTimeout("$('#warn').fadeOut(500)", 3000);
+				}
+			}
+		});
+	}
+
+	function createList(total, list) {
+		var html = '';
+		//$("#list").height(list.length*35+"px");
+		for (var i = 0; i < list.length; i++) {
+
+			console.log(list);
+			//list.ribbonCode, list.weight, list.trashTypeName, list.deptName,
+
+			if (i % 2 == 0) {
+				html += '<div class="center end-content" style="width:35%;float:left;" >' + list[i].ribbonCode + '</div>'
+				html += '<div class=" center end-content" style="width:15%;float:left;">' + list[i].weight + '</div>';
+				html += '<div class=" center end-content" style="width:15%;float:left;">' + list[i].trashTypeName + '</div>';
+				html += '<div class=" center end-content" style="float:left;width:35%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">' + list[i].deptName + '</div>';
+
+			} else {
+
+				html += '<div class="center end-content" style="width:35%;float:left;color:#777;" >' + list[i].ribbonCode + '</div>'
+				html += '<div class=" center end-content" style="width:15%;float:left;color:#777;">' + list[i].weight + '</div>';
+				html += '<div class=" center end-content" style="width:15%;float:left;color:#777;">' + list[i].trashTypeName + '</div>';
+				html += '<div class=" center end-content" style="float:left;width:35%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;color:#777;">' + list[i].deptName + '</div>';
+
+			}
+
+			//console.log("创建的" + list[i].jgnum);
+		}
+		html += '<div class=" center end-footer" style="float:left;width:35%;" >合计 </div>';
+
+		html += '<div class=" center end-footer" style="float:left;width:15%;">' + total + '</div>';
+		html += '<div class=" center end-footer" style="float:left;width:15%;"></div>';
+		html += '<div class="center end-footer" style="float:left;width:35%;"></div>';
+		html += '<div style="clear:both;"></div>';
+		$('#list').html(html);
+	}
+</script>
+
+</html>

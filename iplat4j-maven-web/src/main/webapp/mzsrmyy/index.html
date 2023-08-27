@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" type="text/css" href="https://gw.alipayobjects.com/as/g/antui/antui/10.1.10/dpl/antui.css">
+    <link rel="stylesheet" type="text/css" href="https://gw.alipayobjects.com/as/g/antui/antui/10.1.10/dpl/widget/loading.css">
+    <link rel="stylesheet" type="text/css" href="https://gw.alipayobjects.com/as/g/antui/antui/10.1.10/dpl/widget/dialog.css">
+    <link rel="stylesheet" type="text/css" href="./css/example.css">
+    <link rel="stylesheet" type="text/css" href="./css/weui.css">
+    <title>食堂列表</title>
+</head>
+<style type="text/css">
+    * {
+        box-sizing: border-box;
+    }
+    
+    body {
+        /*background: #fff;*/
+    }
+    
+    .like-img {
+        width: 43px;
+        height: 43px;
+        line-height: 43px;
+        text-align: center;
+        color: #fff;
+        font-size: 20px;
+        font-weight: bold;
+        border-radius: 3px;
+    }
+    
+    .meal {
+        background: #108ee9;
+    }
+    
+    .comboMeal {
+        background: #06B9D1;
+    }
+    
+    #CANTEEN_LIST {
+        background: #fff;
+        padding-left: 15px;
+        border-top: 1px solid #eee;
+    }
+    
+    .item-div {
+        width: 100%;
+        height: 230px;
+        padding: 10px 15px 10px 0;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .item1 {
+        width: 100%;
+        height: 70px;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+    }
+    
+    .image-div {
+        width: 80px;
+    }
+    
+    .image-div img {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .info-div {
+        width: calc(100% - 90px);
+        height: 70px;
+        padding: 3px 0;
+        background: url("./img/meal/more2.png") no-repeat scroll right center transparent;
+        background-size: 24px 24px;
+    }
+    
+    .info1 {
+        width: 100%;
+        color: #303133;
+        font-size: 15px;
+        font-weight: bold;
+    }
+    
+    .info2 {
+        width: 100%;
+        color: #909399;
+        font-size: 13px;
+        padding-top: 2px;
+    }
+    
+    .info3 {
+        width: 100%;
+        color: #606266;
+        font-size: 13px;
+        padding-top: 2px;
+    }
+    
+    .rules-div {
+        width: 100%;
+        padding-top: 10px;
+        font-size: 13px;
+        text-align: center;
+        color: #E6A23C;
+        font-weight: bold;
+    }
+    
+    .item2 {
+        width: 100%;
+        font-size: 14px;
+        color: #606266;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+    }
+    
+    .desc2 {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    
+    .desc21 {
+        width: 50%;
+        height: 50px;
+        padding-right: 5px;
+        margin-bottom: 5px;
+    }
+    
+    .desc-info {
+        width: 100%;
+        height: 50px;
+        padding: 5px;
+    }
+    
+    .title {
+        width: 100%;
+        color: #606266;
+        /*font-weight: bold;*/
+        text-align: center;
+        font-size: 13px;
+    }
+    
+    .content {
+        width: 100%;
+        color: #303133;
+        text-align: center;
+        font-weight: 500;
+    }
+    
+    .add {
+        position: fixed;
+        bottom: 170px;
+        right: 30px;
+        width: 45px;
+        height: 45px;
+        line-height: 45px;
+        background: #09bb07;
+        color: #fff;
+        text-align: center;
+        opacity: 0.9;
+        font-size: 15px;
+        border-radius: 50%;
+        box-shadow: 0px 0px 10px 5px #09bb07;
+        z-index: 9;
+    }
+</style>
+
+<body>
+    <!--正在加载-->
+
+    <div class="weui-loadmore" id="LOADING" style="display: none;">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips">正在加载</span>
+        <!--<div class="weui-loadmore weui-loadmore_line">
+					<span class="weui-loadmore__tips">暂无数据</span>
+				</div>-->
+
+    </div>
+    <!--toast提示信息-->
+
+    <div id="successToast" style="display: none;">
+        <div class="weui-mask_transparent"></div>
+        <div class="weui-toast">
+            <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+            <p class="weui-toast__content">已完成</p>
+        </div>
+    </div>
+
+    <div id="loadingToast" style="display: none;">
+        <div class="weui-mask_transparent"></div>
+        <div class="weui-toast">
+            <i class="weui-loading weui-icon_toast"></i>
+            <p class="weui-toast__content"></p>
+        </div>
+    </div>
+    <!--错误提示-->
+    <div id="falseMessage" class="weui-toptips weui-toptips_warn js_tooltips">错误提示</div>
+    <div style="padding-top: 0px;">
+        <div id="CANTEEN_LIST">
+
+
+        </div>
+    </div>
+    <div class="add" onclick="location.href='orders.html';">列表</div>
+
+</body>
+
+<script src="./js/jquery-2.1.4.min.js"></script>
+<script src="./js/popper.min.js"></script>
+<script src="./js/bootstrap.min.js"></script>
+<script src="./js/zepto.min.js"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+<!--<script src="https://cdn.bootcss.com/vConsole/3.8.1/vconsole.min.js"></script>-->
+<script type="text/javascript">
+
+//new VConsole();
+    /*
+     * 完整地址
+     * http://unitypay.yyhq365.cn/meal?1=1&addNum=CSC&areaCode=288023A06360
+     */
+    //		var bedCode = "DD0027";
+    //var hospital = unescape(GetQueryString("hospital"));
+    var hospital = decodeURIComponent(GetQueryString("hospital"));
+    var wocao = JSON.parse(decodeURI(GetQueryString("wocao")));
+    console.log(wocao);
+    if(wocao == '' || wocao == null){
+        // alert("通过微信公众号进来的")
+        localStorage.setItem("baseUrl", 'http://119.146.152.53:8081/mzsrmyy/')
+        // localStorage.setItem("baseUrl", 'http://lch520.nat200.top/')
+        localStorage.setItem('hospital', '梅州市人民医院');
+        localStorage.setItem("dataGroupCode", 'NO00001');
+        localStorage.setItem("bedCode", '');
+        localStorage.setItem("hosCode", '18776AD73466');
+    }else{
+        // alert("通过扫码进来的")
+        localStorage.setItem("baseUrl", wocao.url);
+        localStorage.setItem('hospital', '梅州市人民医院');
+        localStorage.setItem("dataGroupCode", wocao.dataGroupCode);
+        localStorage.setItem("bedCode", wocao.bedCode);
+        localStorage.setItem("hosCode", wocao.hosCode);
+
+        localStorage.setItem("deptNum", wocao.deptNum);
+        localStorage.setItem("deptName", wocao.deptName);
+        localStorage.setItem("name", wocao.name);
+        localStorage.setItem("phoneNo", wocao.phoneNo);
+        localStorage.setItem("bedNo", wocao.bedNo);
+        localStorage.setItem("roleNum", wocao.roleCode);
+    }
+	    /* var wocao = {
+			'hosCode': "AF24490F118B",
+			'hospital': "v5meal",
+			'dataGroupCode': "NO05005",
+			//'url': "http://v5mealtest.yyhq365.cn/v5meal/",
+			'url': "http://localhost:8084/iplat/",
+			"bedCode": 'demo001'
+		 }*/
+	// alert(JSON.stringify(wocao));
+	//hospital = wocao.hospital
+
+    // localStorage.setItem("floorName", wocao.floorName);
+    // localStorage.setItem("buildingName", wocao.buildingName);
+
+
+    // 微信支付节点地址
+    localStorage.setItem("wxPayUrl","http://wxpay.yyhq365.cn/");
+    // localStorage.setItem("wxPayUrl","http://lch520.nat200.top/");
+    //    localStorage.setItem("wxPayUrl","http://wxpaytest.yyhq365.cn/");
+    // 微信支付节点项目路径
+       localStorage.setItem("wxPayPath","mzsrmyy");
+
+    // localStorage.setItem("wxPayUrl","http://wxpaytest.yyhq365.cn/iplat4j/");
+    // localStorage.setItem("wxPayPath","sdfy");
+
+
+    var baseUrl = localStorage.getItem("baseUrl");
+    var dataGroupCode = localStorage.getItem("dataGroupCode");
+    getCanteen();
+/*
+ *1.显示、隐藏正在加载
+ *2.显示成功、加载吐司
+ *3.显示错误消息提示
+ * */
+    function hideLoad() {
+        $("#LOADING").hide();
+        //			$("#LOADING").css("opacity", 0);
+    }
+
+    function showLoad() {
+        $("#LOADING").show();
+        //			$("#LOADING").css("opacity", 1);
+    }
+    //显示、隐藏提示框
+    function showDialog() {
+        $("#iosDialog2").show();
+    }
+
+    $('#iosDialog2').on('click', '.weui-dialog__btn', function() {
+        $(this).parents('.js_dialog').fadeOut(200);
+        getCanteen();
+    });
+    //显示成功吐司
+    function showSuccessToast(toast) {
+        $(".weui-toast__content").text(toast);
+        $('#loadingToast').fadeIn(100);
+        setTimeout(function() {
+            $('#loadingToast').fadeOut(100);
+        }, 2000);
+    }
+    //显示加载吐司
+    function showLoadingToast(toast) {
+        $(".weui-toast__content").text(toast);
+        $('#loadingToast').fadeIn(100);
+        setTimeout(function() {
+            $('#loadingToast').fadeOut(100);
+        }, 2000);
+    }
+    //显示错误信息
+    function showFalseMessage(message) {
+        $("#falseMessage").text(message);
+        $('#falseMessage').fadeIn(100);
+        setTimeout(function() {
+            $('#falseMessage').fadeOut(100);
+        }, 2000);
+    }
+
+    function getCanteen() {
+        $.ajax({
+            //url: baseUrl + 'app_basicInfoController.do?queryCanteenInfo',
+            url: baseUrl + "meal",
+            type: "post",
+            headers: {
+              className: "AppBaseInfoService",
+              methodName: "getCanteen"
+            },
+            data: {
+                canteenTypeNum: 'bhst',
+                dataGroupCode: localStorage.getItem("dataGroupCode")
+            },
+            success: function(data) {
+                $('#LOADING').hide();
+                var resp = data;
+                console.log(resp);
+                if (resp.success) {
+                    var html = '';
+                    for (var i = 0; i < resp.obj.length; i++) {
+                        /**
+                         * 此段代码为包含套餐的情况，用于区分普餐和套餐的入口
+                         */
+                        // var array = resp.obj[i].operateCodeList;
+                        // for (var k = 0; k < array.length; k++) {
+                        //     var json = resp.obj[i];
+                        //     json["optp"] = array[k];
+                        //     var ids = JSON.stringify(json);
+                        //     html += '<a id=\'' + ids + '\' href="javascript:void(0)" class="am-list-item am-list-item-indent line-twoline">';
+                        //     if (json.optp.operateCode == "comboMeal")
+                        //         html += '<div class="am-list-thumb"><img src="../../static/images/meal/comboMeal.png" alt="" style="width:43px;height:43px;"></div>';
+                        //     else
+                        //         html += '<div class="am-list-thumb"><img src="../../static/images/meal/meal.png" alt="" style="width:43px;height:43px;"></div>';
+                        //     html += '<div class="am-list-content">';
+                        //     html += '<div class="am-list-title">' + json.canteenName + ' - ' + json.optp.operateName + '</div>';
+                        //     html += '<div class="am-list-brief">' + localStorage.getItem('hospital') + '</div>';
+                        //     html += '</div>';
+                        //     html += '<div class="am-list-arrow" aria-hidden="true"><span class="am-icon arrow horizontal"></span></div>';
+                        //     html += '</a>';
+                        // }
+
+                        /**
+                         * 此段代码为仅有普餐的情况
+                         */
+                        var json = resp.obj[i];
+                        var ids = JSON.stringify(json);
+
+                        if (json.canteenTimesInfo.length < 3) {
+
+                            showFalseMessage("缺少订餐时间配置项");
+                            break;
+                            html = '';
+                        }
+                        html += '<div id=\'' + ids + '\' class="item-div">';
+                        html += '<div class="item1">';
+                        html += '<div class="image-div">';
+                        html += '<img src="./img/meal/meal.png" alt="">';
+                        html += '</div>';
+                        html += '<div class="info-div">';
+                        html += '<div class="info1">' + json.canteenName + '</div>';
+                        html += '<div class="info2">' + localStorage.getItem("hospital") + '</div>';
+                        html += '<div class="info3">联系方式：<a style="color:#09bb07;" href="tel:' + json.telephone + '">' + json.telephone + '</a></div>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '<div class="rules-div">食堂订餐时间限制</div>';
+                        html += '<div class="item2">';
+                        html += '<div class="desc2">';
+                        html += '<div class="desc21">';
+                        html += '<div class="desc-info">';
+                        html += '<div class="title">今日早餐</div>';
+                        html += '<div class="content">00:00 ~ ' + json.canteenTimesInfo[0].todayOrderTime + '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '<div class="desc21">';
+                        html += '<div class="desc-info">';
+                        html += '<div class="title">今日午餐</div>';
+                        html += '<div class="content">00:00 ~ ' + json.canteenTimesInfo[1].todayOrderTime + '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '<div class="desc21">';
+                        html += '<div class="desc-info">';
+                        html += '<div class="title">今日晚餐</div>';
+                        html += '<div class="content">00:00 ~ ' + json.canteenTimesInfo[2].todayOrderTime + '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '<div class="desc21">';
+                        html += '<div class="desc-info">';
+                        html += '<div class="title">明日三餐</div>';
+                        html += '<div class="content">00:00 ~ ' + json.canteenTimesInfo[0].tomorrowOrderTime + '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                    }
+                    $('#CANTEEN_LIST').html(html);
+
+                    $('#CANTEEN_LIST div.item-div').click(function() {
+                        var json = JSON.parse($(this).attr("id"));
+                        localStorage.setItem("canteenCode", json.canteenNum);
+                        localStorage.setItem("canteenName", json.canteenName);
+                        localStorage.setItem("mealType", JSON.stringify(json.mealType));
+                        localStorage.setItem("mealDate", json.patiOrderDate.join(','));
+                        localStorage.setItem("mealTime", JSON.stringify(json.canteenTimesInfo));
+                        localStorage.setItem("sendTime", JSON.stringify(json.sendTime));
+						
+                        localStorage.setItem("building", JSON.stringify(json.buildConfig));
+                        //							localStorage.setItem("bedCode", bedCode);
+                        localStorage.setItem("overMoney", json.minPrice);
+                        localStorage.setItem("sendMoney", json.transFee);
+
+                        //							location.href = "dishes.html";
+                        jumpSelf("", json.canteenNum);
+
+                    })
+
+                } else {
+
+                    showFalseMessage("获取食堂信息失败");
+                }
+
+            }
+        });
+    }
+
+    function jumpSelf(aa, bb) {
+        // showLoad();
+        $.ajax({
+            //url: baseUrl + "app_patientBillInfoController.do?getWeChatAppId",
+            url: baseUrl + "meal",
+            type: "post",
+            headers: {
+              className: "AppBaseInfoService",
+              methodName: "getWeChatAppId"
+            },
+            data: {
+                canteenNum: bb,
+                dataGroupCode: localStorage.getItem("dataGroupCode")
+            },
+            success: function(data) {
+
+                hideLoad();
+                var resp = data;
+                console.log(resp);
+                if (resp.success) {
+                    if (aa == "comboMeal") {
+                        //								location.href = "comboType.html";
+                        location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + resp.obj.appId 
+                        		+ "&redirect_uri=" + localStorage.getItem("wxPayUrl")+ localStorage.getItem("wxPayPath")+'/comboType.html' + "&response_type=code&scope=snsapi_base&state=" + bb + "#wechat_redirect";
+
+                    } else {
+
+                        location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + resp.obj.appId
+                        		+ "&redirect_uri=" + localStorage.getItem("wxPayUrl")+ localStorage.getItem("wxPayPath")+'/dishes.html' + "&response_type=code&scope=snsapi_base&state=" + bb + "#wechat_redirect";
+
+
+                        //																					location.href = "dishes.html";
+                    }
+                } else {
+                    showFalseMessage('获取appID信息失败');
+                }
+
+            }
+        });
+    }
+
+    function GetQueryString(paramKey) {
+        var reg = new RegExp("(^|&)" + paramKey + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            console.log("r[2]:"+r[2]);
+            return r[2];
+        }
+        else{
+            return null;
+        }
+
+    }
+</script>
+
+</html>

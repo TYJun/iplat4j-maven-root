@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CMZB01">
+    <select id="queryBid" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            id,
+            bid_no bidNo,
+            bid_name bidName,
+            tenderee_no tendereeNo,
+            tenderee,
+            budget,
+            undertake_dept_no undertakeDeptNo,
+            undertake_dept_name undertakeDeptName,
+            bid_price bidPrice,
+            bid_winner_no bidWinnerNo,
+            bid_winner bidWinner,
+            bid_content bidContent,
+            bid_remark bidRemark,
+            case is_cm
+                when "0" then "否"
+                when "1" then "是"
+            end isCm,
+            case is_pm
+                when "0" then "否"
+                when "1" then "是"
+            end isPm,
+            rec_creator_no recCreatorNo,
+            rec_creator recCreator,
+            DATE_FORMAT(rec_create_time,'%Y-%m-%d') recCreateTime,
+            rec_revisor_no recRevisorNo,
+            rec_revisor recRevisor,
+            DATE_FORMAT(rec_revise_time,'%Y-%m-%d') recReviseTime
+        from
+            cm_bid
+        where
+            1=1
+        <isNotEmpty prepend="and" property="bidName">
+            bid_name like concat('%',#bidName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="bidId">
+            id = #bidId#
+        </isNotEmpty>
+    </select>
+
+    <select id="queryResultAList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            bidder_no surpNum,
+            bidder_name surpName
+        from
+            cm_bid_bidder
+        where
+            bid_pk = #bidId#
+        order by
+            CAST(sort as SIGNED) ASC
+    </select>
+
+    <select id="queryResultBList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            id uploadId,
+            file_path filePath,
+            file_name fileName,
+            file_remark fileRemark
+        from
+            cm_bid_file
+        where
+            bid_pk = #bidId#
+    </select>
+
+    <insert id="saveContentBidFile" parameterClass="java.util.HashMap">
+        insert into cm_bid_file
+        (
+            id,
+            file_path,
+            file_name,
+            file_size,
+            rec_creator_no,
+            rec_creator,
+            rec_create_time
+        ) values (
+            #uploadId#,
+            #filePath#,
+            #fileName#,
+            #fileSize#,
+            #recCreatorNo#,
+            #recCreator#,
+            #recCreateTime#
+        )
+    </insert>
+
+    <insert id="saveContentBid" parameterClass="java.util.HashMap">
+        insert into cm_bid(
+            id,
+            bid_no,
+            bid_name,
+            tenderee_no,
+            tenderee,
+            budget,
+            undertake_dept_no,
+            undertake_dept_name,
+            bid_price,
+            bid_winner_no,
+            bid_winner,
+            bid_content,
+            bid_remark,
+            rec_creator_no,
+            rec_creator,
+            rec_create_time
+        ) values (
+            #id#,
+            #bidNo#,
+            #bidName#,
+            #tendereeNo#,
+            #tenderee#,
+            #budget#,
+            #undertakeDeptNo#,
+            #undertakeDeptName#,
+            #bidPrice#,
+            #bidWinnerNo#,
+            #bidWinner#,
+            #bidContent#,
+            #bidRemark#,
+            #recCreatorNo#,
+            #recCreator#,
+            #recCreateTime#
+        )
+
+    </insert>
+
+    <update id="updateContentBid" parameterClass="java.util.HashMap">
+        update cm_bid
+        set
+            bid_no = #bidNo#,
+            bid_name = #bidName#,
+            tenderee_no = #tendereeNo#,
+            tenderee = #tenderee#,
+            budget = #budget#,
+            undertake_dept_no = #undertakeDeptNo#,
+            undertake_dept_name = #undertakeDeptName#,
+            bid_price = #bidPrice#,
+            bid_winner_no = #bidWinnerNo#,
+            bid_winner = #bidWinner#,
+            bid_content = #bidContent#,
+            bid_remark= #bidRemark#,
+            rec_revisor_no = #recRevisorNo#,
+            rec_revisor = #recRevisor#,
+            rec_revise_time = #recReviseTime#
+        where
+            id = #id#
+    </update>
+
+    <delete id="deleteContentBidBidder" parameterClass="java.util.HashMap">
+        delete from cm_bid_bidder where bid_pk = #bidId#
+    </delete>
+
+    <delete id="deleteContentBid" parameterClass="java.util.HashMap">
+        delete from cm_bid where id = #bidId#
+    </delete>
+
+    <insert id="insertResultA" parameterClass="java.util.HashMap">
+        insert into cm_bid_bidder(
+            id,
+            bid_pk,
+            bidder_no,
+            bidder_name,
+            sort,
+            rec_creator_no,
+            rec_creator,
+            rec_create_time
+        )
+        values (
+            #id#,
+            #bidPk#,
+            #bidderNo#,
+            #bidderName#,
+            #sort#,
+            #recCreatorNo#,
+            #recCreator#,
+            #recCreateTime#
+        )
+    </insert>
+
+    <update id="updateResultB" parameterClass="java.util.HashMap">
+        update cm_bid_file
+        set
+            bid_pk = #bidPk#,
+            file_remark = #fileRemark#
+        where
+            id = #id#
+    </update>
+
+    <delete id="deleteResultA" parameterClass="java.util.HashMap">
+        delete from cm_bid_bidder where bid_pk = #id#
+    </delete>
+
+    <delete id="deleteContentBidFile" parameterClass="java.util.HashMap">
+        delete from cm_bid_file where id = #fileId#
+    </delete>
+
+    <insert id="createContract" parameterClass="java.util.HashMap">
+        insert into cm_contract_bill
+        (
+            id,
+            bid_pk,
+            cont_no,
+            cont_name,
+            budget,
+            cont_dept_num,
+            cont_dept_name,
+            surp_num,
+            surp_name,
+            cont_admin,
+            cont_admin_name,
+            cont_status,
+            rec_creator,
+            rec_create_time,
+            bill_maker,
+            bill_make_time,
+            plan_finish_time
+        )
+        values
+        (
+            #id#,
+            #bidId#,
+            #contNo#,
+            #contName#,
+            #budget#,
+            #contDeptNum#,
+            #contDeptName#,
+            #surpNum#,
+            #surpName#,
+            #contAdmin#,
+            #contAdminName#,
+            "0",
+            #recCreator#,
+            #recCreateTime#,
+            #recCreator#,
+            #recCreateTime#,
+            " "
+        )
+    </insert>
+
+    <update id="updateContract" parameterClass="java.util.HashMap">
+        update
+            cm_bid
+        set is_cm = "1"
+        where id = #bidId#
+    </update>
+</sqlMap>

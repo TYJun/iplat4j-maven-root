@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="FABG01">
+    <select id="queryMaxCode" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+        select
+            modification_num typeCode
+        from
+            fa_modification
+        where
+            modification_num like concat('%', #value#, '%')
+        order by
+            modification_num desc
+    </select>
+
+    <insert id="saveModificationInfo" parameterClass="java.util.HashMap">
+        INSERT INTO fa_modification(
+            id,info_id,goods_num,goods_name,goods_classify_code,goods_classify_name,goods_type_code,goods_type_name,
+            rfid_code,model,unit_num,unit_name,dept_num,dept_name,manufacturer,surp_num,surp_name,buy_date,use_date,
+            build,floor,install_location_num,install_location,use_years,amount,price,buy_cost,residual_rate,
+            estimated_residual_value,net_asset_value,estimate_cost,depreciation_way,total_depreciation,month_depreciation,fundingSource_num,
+            in_account_date,finace_class_num,invoice_no,invoice_date,remark,change_reason,modification_num,status_code,rec_create_time,rec_creator
+        ) VALUES (
+            #faModificationId#,#faInfoId#,#goodsNum#,#goodsName#,#goodsClassifyCode#,#goodsClassifyName#,#goodsTypeCode#,#goodsTypeName#,
+            #rfidCode#,#model#,#unitNum#,#unitName#,#deptNum#,#deptName#,#manufacturer#,#surpNum#,#surpName#,#buyDate#,#useDate#,
+            #build#,#floor#,#installLocationNum#,#installLocation#,#useYears#,#amount#,#price#,#buyCost#,#residualRate#,
+            #estimatedResidualValue#,#netAssetValue#,#estimateCost#,#depreciationWay#,#totalDepreciation#,#monthDepreciation#,#fundingSourceNum#,
+            #inAccountDate#,#finaceClassNum#,#invoiceNo#,#invoiceDate#,#remark#,#changeReason#,#modificationNum#,#statusCode#,#recCreateTime#,#recCreator#
+        )
+    </insert>
+
+    <select id="query" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+        select
+            id faModificationId,
+            info_id faInfoId,
+            goods_num goodsNum,
+            goods_name goodsName,
+            goods_classify_code goodsClassifyCode,
+            goods_classify_name goodsClassifyName,
+            goods_type_code goodsTypeCode,
+            goods_type_name goodsTypeName,
+            rfid_code rfidCode,
+            model,
+            unit_num unitNum,
+            unit_name unitName,
+            dept_num deptNum,
+            dept_name deptName,
+            manufacturer,
+            surp_num surpNum,
+            surp_name surpName,
+            DATE_FORMAT( buy_date, '%Y-%m-%d' ) buyDate,
+            DATE_FORMAT( use_date, '%Y-%m-%d' ) useDate,
+            DATE_FORMAT( in_account_date, '%Y-%m-%d' ) inAccountDate,
+            finace_class_num finaceClassNum,
+            invoice_no invoiceNo,
+            DATE_FORMAT( invoice_date, '%Y-%m-%d' ) invoiceDate,
+            build,
+            floor,
+            install_location_num installLocationNum,
+            install_location installLocation,
+            use_years useYears,
+            amount,
+            price,
+            buy_cost buyCost,
+            residual_rate residualRate,
+            estimated_residual_value estimatedResidualValue,
+            net_asset_value netAssetValue,
+            estimate_cost estimateCost,
+            depreciation_way depreciationWay,
+            total_depreciation totalDepreciation,
+            month_depreciation monthDepreciation,
+            status_code	as "statusCode",
+            CASE status_code
+            WHEN '01' THEN '待审批'
+            WHEN '02' THEN '审批通过'
+            END AS "statusCodeMean",
+            fundingSource_num	as "fundingSourceNum",
+            modification_num modificationNum,
+            rec_creator recCreateName,
+            DATE_FORMAT( rec_create_time, '%Y-%m-%d %H:%i:%S' ) recCreateTime,
+            remark,
+            change_reason changeReason
+        from
+            fa_modification
+        <dynamic prepend="where">
+            <isEqual compareValue="true" property="isByFaInfoId" prepend="and">
+                status_code = "01"
+            </isEqual>
+            <isEqual compareValue="true" property="isByFaInfoId" prepend="and">
+                info_id = #faInfoId#
+            </isEqual>
+            <isEqual compareValue="true" property="isByModificationNum" prepend="and">
+                modification_num = #modificationNum#
+            </isEqual>
+        </dynamic>
+            order by goods_num
+    </select>
+
+    <delete id="remove" parameterClass="java.util.HashMap">
+        DELETE FROM fa_modification WHERE info_id = #faInfoId#
+    </delete>
+
+    <update id="editFaModification" parameterClass="java.util.HashMap">
+        UPDATE fa_modification SET
+                           goods_num	= #goodsNum#,
+                           goods_name	= #goodsName#,
+                           goods_classify_code	= #goodsClassifyCode#,
+                           goods_classify_name	= #goodsClassifyName#,
+                           goods_type_code	= #goodsTypeCode#,
+                           goods_type_name	= #goodsTypeName#,
+                           rfid_code	= #rfidCode#,
+                           model	= #model#,
+                           unit_num	= #unitNum#,
+                           unit_name	= #unitName#,
+                           dept_num	= #deptNum#,
+                           dept_name	= #deptName#,
+                           manufacturer	= #manufacturer#,
+                           surp_name	= #surpName#,
+                           buy_date	= #buyDate#,
+                           use_date	= #useDate#,
+                           build	= #build#,
+                           floor	= #floor#,
+                           install_location_num = #installLocationNum#,
+                           install_location	= #installLocation#,
+                           use_years	= #useYears#,
+                           amount = #amount#,
+                           price = #price#,
+                           buy_cost	= #buyCost#,
+                           residual_rate	= #residualRate#,
+                           estimated_residual_value	= #estimatedResidualValue#,
+                           net_asset_value = #netAssetValue#,
+                           estimate_cost = #estimateCost#,
+                           fundingSource_num	= #fundingSourceNum#,
+                           in_account_date	= #inAccountDate#,
+                           remark	= #remark#,
+                           total_depreciation	= #totalDepreciation#,
+                           month_depreciation = #monthDepreciation#,
+                           status_code = "02"
+        where
+            info_id = #faInfoId# and status_code = "01"
+    </update>
+
+    <!--  另起炉灶  -->
+    <select id="countFaInfoDOInfo" parameterClass="java.util.HashMap" resultClass="int">
+        SELECT COUNT(*) FROM fa_info
+        WHERE lock_flag NOT IN ("4")
+        <isEqual prepend="and" property="inAccountStatus" compareValue="confirmed">
+            status_code = "020" AND lock_flag = '0'
+        </isEqual>
+        <isEqual prepend="and" property="inAccountStatus" compareValue="unconfirmed">
+            status_code = "020" AND lock_flag = '2'
+        </isEqual>
+        <isEqual prepend="and" property="isCall" compareValue="true">
+            lock_flag = "0" and in_account_status = "1" and status_code in ("20","30")
+        </isEqual>
+        <isEqual prepend="and" property="split" compareValue="true">
+            lock_flag not in ("2","4") and status_code in ("20","30")
+        </isEqual>
+        <isEqual prepend="and" property="modify" compareValue="true">
+            status_code in ("20","30")
+        </isEqual>
+        <isNotEmpty prepend=" AND " property="faInfoId">
+            id = #faInfoId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsNum">
+            goods_num like concat ('%',trim(#goodsNum#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsName">
+            goods_name like concat ('%',trim(#goodsName#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="surpName">
+            surp_name like concat ('%',trim(#surpName#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="remark">
+            remark like concat ('%',trim(#remark#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="useYear">
+            use_years = #useYear#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyCostS">
+            buy_cost >= #buyCostS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyCostE">
+            #buyCostE# >= buy_cost
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="netAssetValueS">
+            net_asset_value >= #netAssetValueS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="netAssetValueE">
+            #netAssetValueE# >= net_asset_value
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyDateS">
+            DATE_FORMAT( buy_date, '%Y-%m-%d' )  >= #buyDateS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyDateE">
+            #buyDateE# >= DATE_FORMAT( buy_date, '%Y-%m-%d' )
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="useDateS">
+            DATE_FORMAT( use_date, '%Y-%m-%d' )  >= #useDateS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="useDateE">
+            #useDateE# >= DATE_FORMAT( use_date, '%Y-%m-%d' )
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsClassifyCode">
+            goods_classify_name like concat ('%',trim(#goodsClassifyCode#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsTypeCode">
+            goods_type_name  like concat ('%',trim(#goodsTypeCode#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptName">
+            dept_name like concat ('%',trim(#deptName#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="fundingSourceNum">
+            fundingSource_num = #fundingSourceNum#
+        </isNotEmpty>
+    </select>
+
+    <select id="queryFaInfoDOInfo" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.fa.da.domain.FaInfoDO">
+        SELECT
+            id,
+            id AS "faInfoId",
+            cont_no AS "contNo",
+            goods_num	AS "goodsNum",
+            goods_name	AS "goodsName",
+            goods_classify_code	AS "goodsClassifyCode",
+            goods_classify_name	AS "goodsClassifyName",
+            goods_type_code	AS "goodsTypeCode",
+            goods_type_name	AS "goodsTypeName",
+            model	AS "model",
+            amount	AS "amount",
+            price	AS "price",
+            buy_cost	AS "buyCost",
+            manufacturer	AS "manufacturer",
+            surp_name	AS "surpName",
+            DATE_FORMAT( buy_date, '%Y-%m-%d' ) AS "buyDate",
+            DATE_FORMAT( use_date, '%Y-%m-%d' ) AS "useDate",
+            build	AS "build",
+            floor	AS "floor",
+            room	AS "room",
+            install_location	AS "installLocation",
+            install_location_num AS "installLocationNum",
+            dept_num	AS "deptNum",
+            dept_name	AS "deptName",
+            CASE status_code
+            WHEN '010' THEN '待用'
+            WHEN '020' THEN '在用'
+            WHEN '030' THEN '现场停用'
+            WHEN '050' THEN '预报废'
+            WHEN '060' THEN '报废'
+            END AS "statusCode",
+            unit_num	AS "unitNum",
+            unit_name	AS "unitName",
+            residual_rate	AS "residualRate",
+            estimated_residual_value	AS "estimatedResidualValue",
+            use_years	AS "useYears",
+            fundingSource_num AS "fundingSourceNum",
+            finace_class_num	AS "finaceClassNum",
+            DATE_FORMAT( in_account_date, '%Y-%m-%d' ) AS "inAccountDate",
+            invoice_no	AS "invoiceNo",
+            DATE_FORMAT( invoice_date, '%Y-%m-%d' ) AS "invoiceDate",
+            device_id	AS "deviceId",
+            device_name	AS "deviceName",
+            device_type_name	AS "deviceTypeName",
+            rfid_code	AS "rfidCode",
+            net_asset_value	AS "netAssetValue",
+            estimate_cost	AS "estimateCost",
+            remark	AS "remark",
+            depreciation_way	AS "depreciationWay",
+            total_depreciation	AS "totalDepreciation",
+            month_depreciation	AS "monthDepreciation",
+            in_account_status AS "inAccountStatus",
+            card_status AS "cardStatus",
+            rec_creator	AS "recCreator",
+            rec_create_name	AS "recCreateName",
+            DATE_FORMAT( rec_create_time, '%Y-%m-%d %H:%i:%S' ) AS "recCreateTime",
+            rec_revisor	AS "recRevisor",
+            rec_revise_name	AS "recReviseName",
+            DATE_FORMAT( rec_revise_time, '%Y-%m-%d %H:%i:%S' ) AS "recReviseTime",
+            data_group_code	AS "dataGroupCode",
+            lock_flag AS "lockFlag",
+            archive_flag	AS "archiveFlag",
+            split_reason AS "splitReason"
+        FROM fa_info
+        WHERE lock_flag NOT IN ("4")
+        <isEqual prepend="and" property="inAccountStatus" compareValue="confirmed">
+            status_code = "020" AND lock_flag = '0'
+        </isEqual>
+        <isEqual prepend="and" property="inAccountStatus" compareValue="unconfirmed">
+            status_code = "020" AND lock_flag = '2'
+        </isEqual>
+        <isEqual prepend="and" property="isCall" compareValue="true">
+            lock_flag = "0" and in_account_status = "1" and status_code in ("20","30")
+        </isEqual>
+        <isEqual prepend="and" property="split" compareValue="true">
+            lock_flag not in ("2","4") and status_code in ("20","30")
+        </isEqual>
+        <isEqual prepend="and" property="modify" compareValue="true">
+            status_code in ("20","30")
+        </isEqual>
+        <isNotEmpty prepend=" AND " property="faInfoId">
+            id = #faInfoId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsNum">
+            goods_num like concat ('%',trim(#goodsNum#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsName">
+            goods_name like concat ('%',trim(#goodsName#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="surpName">
+            surp_name like concat ('%',trim(#surpName#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="remark">
+            remark like concat ('%',trim(#remark#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="useYear">
+            use_years = #useYear#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyCostS">
+            buy_cost >= #buyCostS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyCostE">
+            #buyCostE# >= buy_cost
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="netAssetValueS">
+            net_asset_value >= #netAssetValueS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="netAssetValueE">
+            #netAssetValueE# >= net_asset_value
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyDateS">
+            DATE_FORMAT( buy_date, '%Y-%m-%d' )  >= #buyDateS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyDateE">
+            #buyDateE# >= DATE_FORMAT( buy_date, '%Y-%m-%d' )
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="useDateS">
+            DATE_FORMAT( use_date, '%Y-%m-%d' )  >= #useDateS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="useDateE">
+            #useDateE# >= DATE_FORMAT( use_date, '%Y-%m-%d' )
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsClassifyCode">
+            goods_classify_name like concat ('%',trim(#goodsClassifyCode#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsTypeCode">
+            goods_type_name like concat ('%',trim(#goodsTypeCode#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptName">
+            dept_name like concat ('%',trim(#deptName#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="fundingSourceNum">
+            fundingSource_num = #fundingSourceNum#
+        </isNotEmpty>
+        order by dept_name,rec_revise_time DESC,rec_create_time DESC,LENGTH(goods_num),goods_num
+    </select>
+
+    <insert id="batchModificationInfo" parameterClass="java.util.ArrayList">
+        INSERT INTO fa_modification_batch_detail
+        (
+            id,faInfo_id,goods_num,goods_name,contract_no,goods_classify_code,goods_classify_name,
+            goods_type_code,goods_type_name,model,amount,price,buy_cost,manufacturer,surp_name,buy_date,
+            use_date,build,floor,install_location_num,install_location,dept_num,dept_name,unit_num,
+            unit_name,residual_rate,estimated_residual_value,use_years,fundingSource_num,finace_class_num,
+            invoice_no,estimate_cost,remark,rec_creator,rec_create_name,rec_create_time,
+            change_reason,approval_result,modify_type
+        )
+        VALUES
+        <iterate conjunction=",">
+        (
+            #faModificationBatchDetailVOList[].id#, #faModificationBatchDetailVOList[].faInfoId#,
+            #faModificationBatchDetailVOList[].goodsNum#, #faModificationBatchDetailVOList[].goodsName#,
+            #faModificationBatchDetailVOList[].contractNo#,#faModificationBatchDetailVOList[].goodsClassifyCode#,
+            #faModificationBatchDetailVOList[].goodsClassifyName#, #faModificationBatchDetailVOList[].goodsTypeCode#,
+            #faModificationBatchDetailVOList[].goodsTypeName#, #faModificationBatchDetailVOList[].model#,
+            #faModificationBatchDetailVOList[].amount#, #faModificationBatchDetailVOList[].price#,
+            #faModificationBatchDetailVOList[].buyCost#, #faModificationBatchDetailVOList[].manufacturer#,
+            #faModificationBatchDetailVOList[].surpName#, #faModificationBatchDetailVOList[].buyDate#,
+            #faModificationBatchDetailVOList[].useDate#, #faModificationBatchDetailVOList[].build#,
+            #faModificationBatchDetailVOList[].floor#, #faModificationBatchDetailVOList[].installLocationNum#,
+            #faModificationBatchDetailVOList[].installLocation#, #faModificationBatchDetailVOList[].deptNum#,
+            #faModificationBatchDetailVOList[].deptName#, #faModificationBatchDetailVOList[].unitNum#,
+            #faModificationBatchDetailVOList[].unitName#, #faModificationBatchDetailVOList[].residualRate#,
+            #faModificationBatchDetailVOList[].estimatedResidualValue#, #faModificationBatchDetailVOList[].useYears#,
+            #faModificationBatchDetailVOList[].fundingSourceNum#, #faModificationBatchDetailVOList[].finaceClassNum#,
+            #faModificationBatchDetailVOList[].invoiceNo#,
+            #faModificationBatchDetailVOList[].estimateCost#, #faModificationBatchDetailVOList[].remark#,
+            #faModificationBatchDetailVOList[].recCreator#, #faModificationBatchDetailVOList[].recCreateName#,
+            #faModificationBatchDetailVOList[].recCreateTime#,#faModificationBatchDetailVOList[].changeReason#,
+            '00',#faModificationBatchDetailVOList[].modifyType#
+        )
+        </iterate>
+    </insert>
+
+    <!--  变更时修改主表状态  -->
+    <update id="updateFaInfoLockFlag" parameterClass="java.util.HashMap">
+        UPDATE fa_info set lock_flag = '2' WHERE id = #id# AND lock_flag = '0' AND status_code = '20'
+    </update>
+
+    <!--  批量审批：修改资产表中信息  -->
+    <select id="queryFaInfoTOFaModification" parameterClass="java.util.ArrayList" resultClass="com.baosight.wilp.fa.bg.domain.FaModificationBatchDetailVO">
+        SELECT
+            UUID() AS "id",
+            id AS "faInfoId",
+            goods_num AS "goodsNum",
+            goods_name AS "goodsName",
+            contract_no AS "contractNo",
+            goods_classify_code AS "goodsClassifyCode",
+            goods_classify_name AS "goodsClassifyName",
+            goods_type_code AS "goodsTypeCode",
+            goods_type_name AS "goodsTypeName",
+            model,
+            spec,
+            price,
+            buy_cost AS "buyCost",
+            manufacturer,
+            surp_name AS "surpName",
+            buy_date AS "buyDate",
+            use_date AS "useDate",
+            build,
+            floor,
+            install_location_num AS "installLocationNum",
+            install_location AS "installLocation",
+            dept_num AS "deptNum",
+            dept_name AS "deptName",
+            unit_name AS "unitName",
+            residual_rate AS "residualRate",
+            net_asset_value AS "netAssetValue",
+            estimated_residual_value AS "estimatedResidualValue",
+            use_years AS "useYears",
+            fundingSource_num AS "fundingSourceNum",
+            fundingSource_name AS "fundingSourceName",
+            asset_use_code as "assetUseCode",
+            asset_use_name as "assetUseName",
+            asset_get_way_code as "assetGetWayCode",
+            asset_get_way_name as "assetGetWayName",
+            finace_class_num AS "finaceClassNum",
+            invoice_no AS "invoiceNo",
+            estimate_cost AS "estimateCost",
+            remark,
+            modify_type AS "modifyType"
+        FROM
+            fa_info
+        WHERE
+            id IN
+        <iterate open="(" close=")" conjunction=",">
+            #idsList[]#
+        </iterate>
+    </select>
+
+    <select id="queryFaModificationBatchDetail" parameterClass="java.util.ArrayList" resultClass="com.baosight.wilp.fa.bg.domain.FaModificationBatchDetailVO">
+        SELECT a.*
+        FROM
+        (SELECT
+            id,
+            faInfo_id AS "faInfoId",
+            goods_num AS "goodsNum",
+            goods_name AS "goodsName",
+            contract_no AS "contractNo",
+            goods_classify_code AS "goodsClassifyCode",
+            goods_classify_name AS "goodsClassifyName",
+            goods_type_code AS "goodsTypeCode",
+            goods_type_name AS "goodsTypeName",
+            model,
+            price,
+            buy_cost AS "buyCost",
+            manufacturer,
+            surp_name AS "surpName",
+            buy_date AS "buyDate",
+            use_date AS "useDate",
+            build,
+            floor,
+            install_location_num AS "installLocationNum",
+            install_location AS "installLocation",
+            dept_num AS "deptNum",
+            dept_name AS "deptName",
+            unit_name AS "unitName",
+            residual_rate AS "residualRate",
+            estimated_residual_value AS "estimatedResidualValue",
+            use_years AS "useYears",
+            fundingSource_num AS "fundingSourceNum",
+            finace_class_num AS "finaceClassNum",
+            invoice_no AS "invoiceNo",
+            estimate_cost AS "estimateCost",
+            remark,
+            modify_type AS "modifyType"
+        FROM
+            fa_modification_batch_detail
+        WHERE
+            faInfo_id IN
+        <iterate open="(" close=")" conjunction=",">
+            #idsList[]#
+        </iterate>
+        HAVING 1
+        ORDER BY REC_CREATE_TIME DESC) a
+        GROUP BY a.faInfoId
+    </select>
+
+    <insert id="saveComparisonResult" parameterClass="java.util.ArrayList">
+        INSERT INTO fa_modification_record(id,batch_id,faInfo_id,`key`,label,previous,later,`time`)
+        VALUES
+        <iterate conjunction=",">
+            (#results[].id#,#results[].batchId#,#results[].faInfoId#,#results[].key#,#results[].label#,#results[].previous#,#results[].later#,#results[].time#)
+        </iterate>
+    </insert>
+
+    <update id="updateFaInfoByModify" parameterClass="com.baosight.wilp.fa.bg.domain.FaModificationBatchDetailVO">
+        UPDATE fa_info SET
+           goods_num	= #goodsNum#,
+           goods_name	= #goodsName#,
+           goods_classify_code	= #goodsClassifyCode#,
+           goods_classify_name	= #goodsClassifyName#,
+           goods_type_code	= #goodsTypeCode#,
+           goods_type_name	= #goodsTypeName#,
+           model	= #model#,
+           spec	= #spec#,
+           unit_num	= #unitNum#,
+           unit_name	= #unitName#,
+           manufacturer	= #manufacturer#,
+           surp_num = #surpNum#,
+           surp_name	= #surpName#,
+           asset_use_code = #assetUseCode#,
+           asset_use_name = #assetUseName#,
+           asset_get_way_code = #assetGetWayCode#,
+           asset_get_way_name = #assetGetWayName#,
+           manufacturer_naty_code = #manufacturerNatyCode#,
+           manufacturer_naty_name = #manufacturerNatyName#,
+           buy_date	= #buyDate#,
+           use_date	= #useDate#,
+           build	= #build#,
+           floor	= #floor#,
+           room	= #room#,
+           install_location_num = #installLocationNum#,
+           install_location	= #installLocation#,
+           use_years	= #useYears#,
+           price = #price#,
+           buy_cost	= #buyCost#,
+           residual_rate	= #residualRate#,
+           estimated_residual_value	= #estimatedResidualValue#,
+           estimate_cost = #estimateCost#,
+           net_asset_value = #netAssetValue#,
+           fundingSource_num	= #fundingSourceNum#,
+           fundingSource_name	= #fundingSourceName#,
+           remark	= #remark#,
+           lock_flag = '0',
+           modify_type = #modifyType#
+        WHERE id = #faInfoId#
+    </update>
+
+    <update id="updateFaModifyApprovalResult" parameterClass="com.baosight.wilp.fa.bg.domain.FaModificationBatchDetailVO">
+        UPDATE fa_modification_batch_detail SET approval_result = '10' WHERE approval_result = '00' AND id = #id#
+    </update>
+    <!--    -->
+
+    <!-- 批量撤销：删除变更表中最后一条数据，更新资产表中状态 -->
+    <select id="queryLastId" parameterClass="java.util.ArrayList" resultClass="java.lang.String">
+        SELECT a.id
+        FROM (
+        SELECT id,faInfo_id
+        FROM fa_modification_batch_detail
+        WHERE faInfo_id IN
+        <iterate open="(" close=")" conjunction=",">
+            #idsList[]#
+        </iterate>
+        HAVING 1
+        ORDER BY REC_CREATE_TIME DESC
+        ) a
+        GROUP BY a.faInfo_id
+    </select>
+
+    <update id="updateModifyInfoByRevocation" parameterClass="java.util.ArrayList">
+        UPDATE fa_modification_batch_detail SET approval_result = '20'
+        WHERE approval_result = '00' AND id IN
+        <iterate open="(" close=")" conjunction=",">
+            #lastIdList[]#
+        </iterate>
+    </update>
+
+    <update id="updateFaInfoByRevocation" parameterClass="java.util.ArrayList">
+        UPDATE fa_info SET lock_flag = '0'
+        WHERE lock_flag = '2'
+        AND status_code = '20'
+        AND id IN
+        <iterate open="(" close=")" conjunction=",">
+            #idsList[]#
+        </iterate>
+    </update>
+    <!--    -->
+
+    <!-- 查询变更前和变更后变化 -->
+    <select id="queryFaModificationRecordByFaInfoId" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+        SELECT
+          t1.`id`,
+          t1.`faInfo_id` AS "faInfoId",
+          t1.`key`,
+          t1.`label`,
+          t1.`previous`,
+          t1.`later`,
+          date_format(t1.`time`,'%Y-%m-%d %H:%i:%S') AS "time",
+          t2.rec_create_name AS "recCreateName",
+          t2.change_reason AS "changeReason"
+        FROM
+            fa_modification_record t1
+        LEFT JOIN fa_modification_batch_detail t2 ON t1.batch_id = t2.id
+        WHERE
+            t1.faInfo_id = #VALUE#
+        ORDER BY `time` DESC,LENGTH(label)
+    </select>
+    <!--  -->
+
+    <!--  查询变更记录  -->
+    <select id="queryChangeRecord" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.fa.bg.domain.FaModificationBatchDetailVO">
+        SELECT
+            faInfo_id AS "faInfoId",
+            cont_no AS "contNo",
+            goods_num	AS "goodsNum",
+            goods_name	AS "goodsName",
+            goods_classify_code	AS "goodsClassifyCode",
+            goods_classify_name	AS "goodsClassifyName",
+            goods_type_code	AS "goodsTypeCode",
+            goods_type_name	AS "goodsTypeName",
+            dept_name	AS "deptName"
+        FROM fa_modification_batch_detail
+        WHERE 1=1
+        <isNotEmpty prepend=" AND " property="goodsNum">
+            goods_num like concat ('%',trim(#goodsNum#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsName">
+            goods_name like concat ('%',trim(#goodsName#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsClassifyCode">
+            goods_classify_code = #goodsClassifyCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsTypeCode">
+            goods_type_code = #goodsTypeCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptName">
+            dept_name like concat ('%',trim(#deptName#),'%')
+        </isNotEmpty>
+        GROUP BY goods_num
+    </select>
+</sqlMap>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+		
+<sqlMap namespace="LCFW01">
+
+	<select id="queryMethod" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			select id,
+				   module,
+				   class as "className",
+				   method,
+				   is_Parameter AS "isParameter",
+				   is_monitoring AS "isMonitoring"
+			from $projectSchema$.lc_monitoring
+			WHERE 1=1
+			<isNotEmpty prepend=" AND " property="module">
+				module = #module#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="className">
+				class = #className#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="method">
+				method = #method#
+			</isNotEmpty>
+	</select>
+
+	<insert id="insertMethod" parameterClass="java.util.HashMap">
+    	INSERT INTO $projectSchema$.lc_monitoring (
+				<isNotNull  property="module">
+					module,  <!-- 模块 -->
+				</isNotNull>
+				<isNotNull  property="className">
+					class,  <!-- 类名 -->
+				</isNotNull>
+				<isNotNull  property="method">
+					method,  <!-- 方法名 -->
+				</isNotNull>
+				<isNotNull  property="isMonitoring">
+					is_monitoring,  <!-- 是否监测 -->
+				</isNotNull>
+				<isNotNull  property="isMonitoring">
+					is_parameter,  <!-- 是否记录参数 -->
+				</isNotNull>
+					id  <!-- 主键 -->
+			)VALUES ( 
+				<isNotNull  property="module">
+			    	#module#, 
+			    </isNotNull>
+				<isNotNull  property="className">
+			    	#className#, 
+			    </isNotNull>
+			    <isNotNull  property="method">
+					#method#,   
+				</isNotNull>
+			    <isNotNull  property="isMonitoring">
+					#isMonitoring#,  
+				</isNotNull>
+				<isNotNull  property="isParameter">
+					#isParameter#,  
+				</isNotNull>
+			    	#id#
+		    ) 
+	</insert>
+	
+	<insert id="insertLog" parameterClass="java.util.HashMap">
+    	INSERT INTO $projectSchema$.lc_log (
+				<isNotNull  property="module">
+					module,  <!-- 模块 -->
+				</isNotNull>
+				<isNotNull  property="className">
+					class,  <!-- 类名 -->
+				</isNotNull>
+				<isNotNull  property="method">
+					method,  <!-- 方法名 -->
+				</isNotNull>
+				<isNotNull  property="parameter">
+					parameter,  <!-- 参数 -->
+				</isNotNull>
+				<isNotNull  property="status">
+					status,  <!-- 状态 -->
+				</isNotNull>
+				<isNotNull  property="errors">
+					errors,  <!-- 报错信息 -->
+				</isNotNull>
+				<isNotNull  property="callTime">
+					call_time,  <!-- 调用时间 -->
+				</isNotNull>
+					id  <!-- 主键 -->
+			)VALUES ( 
+				<isNotNull  property="module">
+			    	#module#, 
+			    </isNotNull>
+				<isNotNull  property="className">
+			    	#className#, 
+			    </isNotNull>
+			    <isNotNull  property="method">
+					#method#,   
+				</isNotNull>
+			    <isNotNull  property="parameter">
+					#parameter#,  
+				</isNotNull>
+				<isNotNull  property="status">
+					#status#,  
+				</isNotNull>
+				<isNotNull  property="errors">
+					#errors#,  
+				</isNotNull>
+				<isNotNull  property="callTime">
+					#callTime#,  
+				</isNotNull>
+			    	#id#
+		    ) 
+	</insert>
+	
+	
+</sqlMap>

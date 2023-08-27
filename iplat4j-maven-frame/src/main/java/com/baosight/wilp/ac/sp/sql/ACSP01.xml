@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-06-05 16:10:13
+   		Version :  6.0.731.201809200158
+		tableName :.ac_spot 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 spot_num  VARCHAR, 
+		 spot_name  VARCHAR, 
+		 dept_id  VARCHAR, 
+		 building  VARCHAR, 
+		 floor  VARCHAR, 
+		 room  VARCHAR, 
+		 jp_spot_name  VARCHAR, 
+		 remark  VARCHAR, 
+		 archive_flag  VARCHAR, 
+		 rec_creater  VARCHAR, 
+		 rec_create_time  VARCHAR, 
+		 rec_revisor  VARCHAR, 
+		 rec_revise_time  VARCHAR
+	-->
+<sqlMap namespace="ACSP01">
+
+	<select id="querySpot" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+				at.id	as "spotId",  <!-- 主键 -->
+				at.spot_num	as "spotNum",  <!-- 地点编码 -->
+				at.spot_name	as "spotName",  <!-- 地点名称 -->
+				at.dept_id	as "deptId",  <!-- 科室ID -->
+				ad.dept_name as "deptName",
+				at.building	as "building",  <!-- 楼号 -->
+				at.floor	as "floor",  <!-- 层数 -->
+				at.room	as "room",  <!-- 房间 -->
+				at.jp_spot_name	as "jpSpotName",  <!-- 地点名简拼 -->
+				at.remark	as "remark",  <!-- 备注 -->
+				(CASE WHEN at.status = '0'
+				THEN '停用'
+				else '启用'
+				END) AS "status",
+				at.archive_flag	as "archiveFlag",  <!-- 归档标记 -->
+				at.rec_creater	as "recCreater",  <!-- 创建人 -->
+				at.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+				at.rec_revisor	as "recRevisor",  <!-- 修改人 -->
+				at.rec_revise_time	as "recReviseTime" <!-- 修改时间 -->
+		FROM $projectSchema$.ac_spot at 
+		LEFT JOIN $projectSchema$.ac_department ad ON at.dept_id = ad.id
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="status">
+			at.status = #status#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="curDeptId">
+			at.dept_id = #curDeptId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			ad.dept_name like concat('%', #deptName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="building">
+		
+			at.building like concat('%', #building#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floor">
+			at.floor like concat('%', #floor#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="room">
+			at.room like concat('%', #room#, '%')
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="spotName">
+			at.spot_name like concat('%', #spotName#, '%')
+		</isNotEmpty>
+		 <isNotEmpty prepend="and" property="list">
+         	 	 at.dept_id in  
+       		   <iterate  open="("  close=")"  conjunction="," property="list">
+                       #list[].dept_id#
+               </iterate>   
+   		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  at.rec_create_time desc
+			</isEmpty>
+  		</dynamic>
+		
+	</select>
+
+	<select id="countSpot" resultClass="int">
+		SELECT count(1)
+		FROM $projectSchema$.ac_spot at
+		LEFT JOIN $projectSchema$.ac_department ad ON at.dept_id = ad.id
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="status">
+			at.status = #status#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="curDeptId">
+			at.dept_id = #curDeptId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			ad.dept_name like concat('%', #deptName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="building">
+
+			at.building like concat('%', #building#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floor">
+			at.floor like concat('%', #floor#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="room">
+			at.room like concat('%', #room#, '%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="spotName">
+			at.spot_name like concat('%', #spotName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="list">
+			at.dept_id in
+			<iterate  open="("  close=")"  conjunction="," property="list">
+				#list[].dept_id#
+			</iterate>
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				at.rec_create_time desc
+			</isEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="queryLastSpotNum" parameterClass="java.util.HashMap" 
+		resultClass="java.util.HashMap">
+		SELECT spot_num as "spotNum"
+		FROM $projectSchema$.ac_spot
+		WHERE spot_num LIKE 'SP%' AND LENGTH(spot_num) = 7
+		ORDER BY rec_create_time DESC,spot_num DESC
+			LIMIT 1
+	</select>
+	
+	<select id="queryTele" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+				id	as "telId",  <!-- 主键 -->
+				tel_num	as "telNum",  <!-- 电话号码 -->
+				spot_id	as "spotId",  <!-- 地点ID -->
+		        (SELECT spot_name  FROM $projectSchema$.ac_spot where id = spotId) spotName,
+				dept_id	as "deptId",  <!-- 科室ID -->
+				(SELECT dept_name  FROM $projectSchema$.ac_department where id = deptId) deptName,
+				remark	as "remark",  <!-- 备注 -->
+				(CASE WHEN status = '0'
+				THEN '停用'
+				else '启用'
+				END) AS "status",
+				archive_flag	as "archiveFlag",  <!-- 归档标记 -->
+				rec_creater	as "recCreater",  <!-- 创建人 -->
+				rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+				rec_revisor	as "recRevisor",  <!-- 修改人 -->
+				rec_revise_time	as "recReviseTime" <!-- 修改时间 -->
+		FROM $projectSchema$.ac_telephone
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="telNum">
+			tel_num = #telNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status1">
+			status = #status1#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="telId">
+			id = #telId#
+		</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="curDeptId">
+			dept_id = #curDeptId#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="curSpotId">
+			spot_id = #curSpotId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="list">
+         	 	 dept_id in  
+       		   <iterate  open="("  close=")"  conjunction="," property="list">
+                       #list[].dept_id#
+               </iterate>   
+   		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  rec_create_time desc
+			</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="queryTeleBySpotIdAndId" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+		SELECT
+		id	as "telId",  <!-- 主键 -->
+		tel_num	as "telNum",  <!-- 电话号码 -->
+		spot_id	as "spotId",  <!-- 地点ID -->
+		(SELECT spot_name  FROM $projectSchema$.ac_spot where id = spotId) spotName,
+		dept_id	as "deptId",  <!-- 科室ID -->
+		(SELECT dept_name  FROM $projectSchema$.ac_department where id = deptId) deptName,
+		remark	as "remark",  <!-- 备注 -->
+		(CASE WHEN status = '0'
+		THEN '停用'
+		else '启用'
+		END) AS "status",
+		archive_flag	as "archiveFlag",  <!-- 归档标记 -->
+		rec_creater	as "recCreater",  <!-- 创建人 -->
+		rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		rec_revisor	as "recRevisor",  <!-- 修改人 -->
+		rec_revise_time	as "recReviseTime" <!-- 修改时间 -->
+		FROM $projectSchema$.ac_telephone
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="spotId">
+			spot_id = #spotId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="telId">
+			id = #telId#
+		</isNotEmpty>
+
+	</select>
+
+
+
+	<select id="countUsingTele" resultClass="int">
+		SELECT COUNT(*) FROM $projectSchema$.ac_telephone WHERE status = 1 AND 1=1
+		<isNotEmpty prepend=" AND " property="telId">
+			id = #telId#
+		</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="curDeptId">
+			dept_id = #curDeptId#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="curSpotId">
+			spot_id = #curSpotId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="list">
+         	 	 dept_id in  
+       		   <iterate  open="("  close=")"  conjunction="," property="list">
+                       #list[].dept_id#
+               </iterate>   
+   		</isNotEmpty>
+	</select>
+	<select id="countTele" resultClass="int">
+		SELECT COUNT(*) FROM $projectSchema$.ac_telephone WHERE  1=1
+		<isNotEmpty prepend=" AND " property="telNum">
+			tel_num = #telNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status1">
+			status = #status1#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="telId">
+			id = #telId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="curDeptId">
+			dept_id = #curDeptId#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="curSpotId">
+			spot_id = #curSpotId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="list">
+			dept_id in
+			<iterate  open="("  close=")"  conjunction="," property="list">
+				#list[].dept_id#
+			</iterate>
+		</isNotEmpty>
+	</select>
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spotNum">
+			spot_num = #spotNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spotName">
+			spot_name = #spotName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptId">
+			dept_id = #deptId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="building">
+			building = #building#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floor">
+			floor = #floor#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="room">
+			room = #room#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="jpSpotName">
+			jp_spot_name = #jpSpotName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="remark">
+			remark = #remark#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="archiveFlag">
+			archive_flag = #archiveFlag#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreater">
+			rec_creater = #recCreater#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTime">
+			rec_create_time = #recCreateTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recRevisor">
+			rec_revisor = #recRevisor#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recReviseTime">
+			rec_revise_time = #recReviseTime#
+		</isNotEmpty>
+	-->
+
+	<insert id="insertSpot">
+		INSERT INTO $projectSchema$.ac_spot (id,  <!-- 主键 -->
+										spot_num,  <!-- 地点编码 -->
+										spot_name,  <!-- 地点名称 -->
+										dept_id,  <!-- 科室ID -->
+										building,  <!-- 楼号 -->
+										floor,  <!-- 层数 -->
+										room,  <!-- 房间 -->
+										jp_spot_name,  <!-- 地点名简拼 -->
+										remark,  <!-- 备注 -->
+		                                status, <!-- 状态：1启用   0停用 -->
+										archive_flag,  <!-- 归档标记 -->
+										rec_creater,  <!-- 创建人 -->
+										rec_create_time,  <!-- 创建时间 -->
+										rec_revisor,  <!-- 修改人 -->
+										rec_revise_time  <!-- 修改时间 -->
+										)		 
+	    VALUES (#spotId#, #spotNum#, #spotName#, #deptId#, #building#, #floor#, #room#, #jpSpotName#, #remark#, 1, #archiveFlag#, #recCreater#, #recCreateTime#, #recRevisor#, #recReviseTime#)
+	</insert>
+	
+	
+	<insert id="insertSpotFromExcel">
+		INSERT INTO $projectSchema$.ac_spot (id,  <!-- 主键 -->
+										spot_num,  <!-- 地点编码 -->
+										spot_name,  <!-- 地点名称 -->
+										dept_id,  <!-- 科室ID -->
+										building,  <!-- 楼号 -->
+										floor,  <!-- 层数 -->
+										room,  <!-- 房间 -->
+										jp_spot_name,  <!-- 地点名简拼 -->
+										remark,  <!-- 备注 -->
+										status, <!-- 状态：1启用   0停用 -->
+										archive_flag,  <!-- 归档标记 -->
+										rec_creater,  <!-- 创建人 -->
+										rec_create_time,  <!-- 创建时间 -->
+										rec_revisor,  <!-- 修改人 -->
+										rec_revise_time  <!-- 修改时间 -->
+										)		 
+	    VALUES (#spotId#, #spotNum#, #spotName#, (select ac_department.id from ac_department where ac_department.dept_name = #deptName# limit 1), #building#, #floor#, #room#, #jpSpotName#, #remark#, 1, #archiveFlag#, #recCreater#, #recCreateTime#, #recRevisor#, #recReviseTime#)
+	</insert>
+	
+	<insert id="insertTelFromExcel">
+		INSERT INTO $projectSchema$.ac_telephone (id,  <!-- 主键 -->
+										tel_num,  
+										spot_id, 
+										dept_id,  <!-- 科室ID -->
+										remark,
+										status, <!-- 状态：1启用   0停用 -->
+										archive_flag,  <!-- 归档标记 -->
+										rec_creater,  <!-- 创建人 -->
+										rec_create_time,  <!-- 创建时间 -->
+										rec_revisor,  <!-- 修改人 -->
+										rec_revise_time  <!-- 修改时间 -->
+										)		 
+	    VALUES (#telId#, #telNum#, (select ac_spot.id from ac_spot where ac_spot.spot_name = #spotName# limit 1), (select ac_department.id from ac_department where ac_department.dept_name = #deptName# limit 1), #remark#, 1,#archiveFlag#, #recCreater#, #recCreateTime#, #recRevisor#, #recReviseTime#)
+	</insert>
+	
+	<insert id="insertTele">
+		INSERT INTO $projectSchema$.ac_telephone (id,  <!-- 主键 -->
+										tel_num,  
+										spot_id, 
+										dept_id,  <!-- 科室ID -->
+										remark,
+										status, <!-- 状态：1启用   0停用 -->
+										archive_flag,  <!-- 归档标记 -->
+										rec_creater,  <!-- 创建人 -->
+										rec_create_time,  <!-- 创建时间 -->
+										rec_revisor,  <!-- 修改人 -->
+										rec_revise_time  <!-- 修改时间 -->
+										)		 
+	    VALUES (#telId#, #telNum#, #spotId#, #deptId#, #remark#, 1, #archiveFlag#, #recCreater#, #recCreateTime#, #recRevisor#, #recReviseTime#)
+	</insert>
+
+	<select id="teleIsExistInSpot" parameterClass="java.util.HashMap" resultClass="int">
+		select COUNT(1) from $projectSchema$.ac_telephone where tel_num = #telNum# and spot_id = #spotId#
+	</select>
+
+	<select id="isTeleInSpotExist" parameterClass="java.util.HashMap" resultClass="int">
+		select COUNT(1) from $projectSchema$.ac_telephone
+		where tel_num = #telNum# and spot_id =  (select id from $projectSchema$.ac_spot where spot_num = #spotNum#)
+	</select>
+
+  
+<!--	<delete id="deleteSpot" parameterClass="java.util.ArrayList">-->
+<!--		DELETE FROM $projectSchema$.ac_spot WHERE -->
+<!--			id IN-->
+<!--		<iterate conjunction="," open="(" close=")">-->
+<!--			#value[]#-->
+<!--		</iterate>-->
+<!--	</delete>-->
+	<update id="updateSpotStatus" parameterClass="java.util.HashMap">
+		UPDATE $projectSchema$.ac_spot
+		SET
+		status=#status#
+		WHERE id IN
+		<iterate property="list" open="(" close=")" conjunction=",">
+			#list[]#
+		</iterate>
+	</update>
+
+
+	<!--	<delete id="deleteTele" parameterClass="java.util.ArrayList">-->
+<!--		DELETE FROM $projectSchema$.ac_telephone WHERE -->
+<!--			id IN-->
+<!--		<iterate conjunction="," open="(" close=")">-->
+<!--			#value[]#-->
+<!--		</iterate>-->
+<!--	</delete>-->
+
+	<update id="updateTeleStatus" parameterClass="java.util.HashMap">
+		UPDATE $projectSchema$.ac_telephone
+		SET
+		status=#status#
+		WHERE id IN
+		<iterate property="list" open="(" close=")" conjunction=",">
+			#list[]#
+		</iterate>
+	</update>
+
+
+	<update id="updateSpot"  parameterClass="java.util.HashMap" >
+		UPDATE $projectSchema$.ac_spot
+		SET 
+
+					spot_name	= #spotName#,   <!-- 地点名称 -->  
+					building	= #building#,   <!-- 楼号 -->  
+					floor	= #floor#,   <!-- 层数 -->  
+					room	= #room#,   <!-- 房间 -->  
+					jp_spot_name	= #jpSpotName#,   <!-- 地点名简拼 -->  
+					remark	= #remark#,   <!-- 备注 -->  
+					
+					rec_revisor	= #recRevisor#,   <!-- 修改人 -->  
+					rec_revise_time	= #recReviseTime#  <!-- 修改时间 -->  
+			WHERE 	
+			id = #spotId#
+	</update>
+	
+	<update id="updateTele"  parameterClass="java.util.HashMap" >
+		UPDATE $projectSchema$.ac_telephone
+		SET 
+				tel_num	= #telNum#,   <!-- 电话号码 -->  
+				remark	= #remark#,   <!-- 备注 -->  
+				rec_revisor	= #recRevisor#,   <!-- 修改人 -->  
+				rec_revise_time	= #recReviseTime#  <!-- 修改时间 -->  
+		WHERE 	
+		id = #telId#
+	</update>
+
+	<insert id="importSpotFromExcel" parameterClass="java.util.HashMap">
+
+		INSERT INTO $projectSchema$.ac_spot (
+		id,
+		spot_num,
+		`spot_name`,
+		dept_id,
+		building,
+		floor,
+		room,
+		`jp_spot_name`,
+		remark,
+		status,
+		rec_creater,
+		rec_create_time
+		)VALUES
+		<iterate open="" close="" conjunction="," property="list">
+			(#list[].id#,
+			#list[].spotNum#,
+			#list[].spotName#,
+			(select id from $projectSchema$.ac_department where dept_num = #list[].deptId#),
+			#list[].building#,
+			#list[].floor#,
+			#list[].room#,
+			#list[].jpSpotName#,
+			#list[].remark#,
+			#list[].status#,
+			#list[].recCreater#,
+			#list[].recCreateTime#)
+		</iterate>
+	</insert>
+
+	<insert id="importTeleFromExcel" parameterClass="java.util.HashMap">
+
+		INSERT INTO $projectSchema$.ac_telephone (
+		id,
+		tel_num,
+		`spot_id`,
+		dept_id,
+		remark,
+		status,
+		rec_creater,
+		rec_create_time
+		)VALUES
+		<iterate open="" close="" conjunction="," property="list">
+			(#list[].id#,
+			#list[].telNum#,
+			(select id from $projectSchema$.ac_spot where spot_num = #list[].spotId#),
+			(select id from $projectSchema$.ac_department where dept_num = #list[].deptId#),
+			#list[].remark#,
+			#list[].status#,
+			#list[].recCreater#,
+			#list[].recCreateTime#)
+		</iterate>
+	</insert>
+
+
+	<select id="countSpotNum" resultClass="int">
+		SELECT COUNT(1) FROM $projectSchema$.ac_spot WHERE 1=1
+
+		<isNotEmpty prepend=" AND " property="spotNum">
+			spot_num = #spotNum#
+		</isNotEmpty>
+	</select>
+
+	<select id="countTeleNum" resultClass="int">
+		SELECT COUNT(1) FROM $projectSchema$.ac_telephone WHERE 1=1
+		<isNotEmpty prepend=" AND " property="teleNum">
+			tele_num = #teleNum#
+		</isNotEmpty>
+	</select>
+
+	<select id="querySpotInfoByNum" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select spot_num spotNum, building,floor,room
+		from $projectSchema$.ac_spot
+		where
+		spot_num in
+		<iterate  open="("  close=")"  conjunction="," property="list">
+			#list[]#
+		</iterate>
+	</select>
+
+	<select id="querySpotInfoByNumCount" parameterClass="java.util.HashMap" resultClass="int">
+		select count(1)
+		from $projectSchema$.ac_spot
+		where
+		spot_num in
+		<iterate  open="("  close=")"  conjunction="," property="list">
+			#list[]#
+		</iterate>
+	</select>
+
+</sqlMap>

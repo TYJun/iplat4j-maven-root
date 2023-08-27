@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/bonawise-maven-pay-hessian/bonawise-maven-pay-hessian.iml" filepath="$PROJECT_DIR$/bonawise-maven-pay-hessian/bonawise-maven-pay-hessian.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-ci/iplat4j-maven-ci.iml" filepath="$PROJECT_DIR$/iplat4j-maven-ci/iplat4j-maven-ci.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-cm/iplat4j-maven-cm.iml" filepath="$PROJECT_DIR$/iplat4j-maven-cm/iplat4j-maven-cm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-commons/iplat4j-maven-commons.iml" filepath="$PROJECT_DIR$/iplat4j-maven-commons/iplat4j-maven-commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-cp/iplat4j-maven-cp.iml" filepath="$PROJECT_DIR$/iplat4j-maven-cp/iplat4j-maven-cp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-cs/iplat4j-maven-cs.iml" filepath="$PROJECT_DIR$/iplat4j-maven-cs/iplat4j-maven-cs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-df/iplat4j-maven-df.iml" filepath="$PROJECT_DIR$/iplat4j-maven-df/iplat4j-maven-df.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-di/iplat4j-maven-di.iml" filepath="$PROJECT_DIR$/iplat4j-maven-di/iplat4j-maven-di.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-dk/iplat4j-maven-dk.iml" filepath="$PROJECT_DIR$/iplat4j-maven-dk/iplat4j-maven-dk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-dm/iplat4j-maven-dm.iml" filepath="$PROJECT_DIR$/iplat4j-maven-dm/iplat4j-maven-dm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-fa/iplat4j-maven-fa.iml" filepath="$PROJECT_DIR$/iplat4j-maven-fa/iplat4j-maven-fa.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-frame/iplat4j-maven-frame.iml" filepath="$PROJECT_DIR$/iplat4j-maven-frame/iplat4j-maven-frame.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-hi/iplat4j-maven-hi.iml" filepath="$PROJECT_DIR$/iplat4j-maven-hi/iplat4j-maven-hi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-hr/iplat4j-maven-hr.iml" filepath="$PROJECT_DIR$/iplat4j-maven-hr/iplat4j-maven-hr.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-im/iplat4j-maven-im.iml" filepath="$PROJECT_DIR$/iplat4j-maven-im/iplat4j-maven-im.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-ir/iplat4j-maven-ir.iml" filepath="$PROJECT_DIR$/iplat4j-maven-ir/iplat4j-maven-ir.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-it/iplat4j-maven-it.iml" filepath="$PROJECT_DIR$/iplat4j-maven-it/iplat4j-maven-it.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-mp/iplat4j-maven-mp.iml" filepath="$PROJECT_DIR$/iplat4j-maven-mp/iplat4j-maven-mp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-mp-rm/iplat4j-maven-mp-rm.iml" filepath="$PROJECT_DIR$/iplat4j-maven-mp-rm/iplat4j-maven-mp-rm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-ms-mx/iplat4j-maven-ms-mx.iml" filepath="$PROJECT_DIR$/iplat4j-maven-ms-mx/iplat4j-maven-ms-mx.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-pm/iplat4j-maven-pm.iml" filepath="$PROJECT_DIR$/iplat4j-maven-pm/iplat4j-maven-pm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-pr/iplat4j-maven-pr.iml" filepath="$PROJECT_DIR$/iplat4j-maven-pr/iplat4j-maven-pr.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-root.iml" filepath="$PROJECT_DIR$/iplat4j-maven-root.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-sc/iplat4j-maven-sc.iml" filepath="$PROJECT_DIR$/iplat4j-maven-sc/iplat4j-maven-sc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-security/iplat4j-maven-security.iml" filepath="$PROJECT_DIR$/iplat4j-maven-security/iplat4j-maven-security.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-si/iplat4j-maven-si.iml" filepath="$PROJECT_DIR$/iplat4j-maven-si/iplat4j-maven-si.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-sq/iplat4j-maven-sq.iml" filepath="$PROJECT_DIR$/iplat4j-maven-sq/iplat4j-maven-sq.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-vi/iplat4j-maven-vi.iml" filepath="$PROJECT_DIR$/iplat4j-maven-vi/iplat4j-maven-vi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-web/iplat4j-maven-web.iml" filepath="$PROJECT_DIR$/iplat4j-maven-web/iplat4j-maven-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iplat4j-maven-xq/iplat4j-maven-xq.iml" filepath="$PROJECT_DIR$/iplat4j-maven-xq/iplat4j-maven-xq.iml" />
+    </modules>
+  </component>
+</project>

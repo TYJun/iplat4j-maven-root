@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SQWJ02">
+	<!-- 问卷回显sql -->
+	<select id="queryManage" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			id as manageId,
+			batch_no as batchNo,
+			standard_code as standardCode,
+			standard_name as standardName,
+			work_no_leader as workNoLeader,
+			work_name_leader as workNameLeader,
+		    DATE_FORMAT(begin_date,'%Y-%m-%d') as beginDate,
+			DATE_FORMAT(end_date,'%Y-%m-%d') as endDate,
+			assess_range as canteenNum,
+			project_code as perGroupNo,
+			project_name as perGroupName,
+			is_cycle as isCycle,
+			cycle_time as cycleTime,
+			cycle_time_unit as cycleTimeUnit
+		FROM
+			sq_manage
+		WHERE
+			id = #manageId#
+	</select>
+
+
+
+
+	<!-- 查询二级下拉框 -->
+	<select id="queryName" resultClass="com.baosight.wilp.sq.wj.domain.SQWJ01">
+		SELECT
+			per_group_name as perGroupName,
+			per_group_no as perGroupNo
+		FROM
+			sq_personnel_group
+		WHERE
+			1 = 1
+		GROUP BY
+			per_group_no,
+			per_group_name
+	</select>
+
+	<!-- 查询问卷中是否存在空的明细 -->
+	<select id="queryInstance" parameterClass="String" resultClass="java.util.HashMap">
+		SELECT id instanceId FROM sq_register_instance WHERE project_id = #value#
+	</select>
+
+	<select id="queryProject" parameterClass="String" resultClass="java.util.HashMap">
+		SELECT id projectId  FROM sq_register_project WHERE standard_id = (
+		SELECT id standardId FROM sq_register_standard WHERE standard_code = #value#)
+	</select>
+	<!-- 查询问卷标准信息  -->
+	<select id="queryStandard" parameterClass="String" resultClass="com.baosight.wilp.sq.bz.domain.SQBZ01">
+		SELECT
+			id as standardId,
+			assess_type_code as assessTypeCode,
+			assess_type_name as assessTypename
+		FROM
+			sq_register_standard
+		WHERE
+			standard_code = #value#
+	</select>
+
+
+	<!-- 保存方法 -->
+	<insert id="insertManage" parameterClass="java.util.HashMap">
+		INSERT INTO `sq_manage` (
+			`id`,
+			`batch_no`,
+			`standard_code`,
+			`standard_name`,
+			`work_no_leader`,
+			`work_name_leader`,
+			`begin_date`,
+			`end_date`,
+			`assess_range`,
+			`project_code`,
+			`project_name`,
+			`is_cycle`,
+			`cycle_time`,
+			`cycle_time_unit`,
+		    `next_begin_date`,
+		    `next_end_date`,
+			`creator`,
+			`create_time`,
+			`modifier`,
+			`modify_time`,
+			`status_code`,
+			`data_group_code`
+		) VALUES(
+			#manageId#,
+			#batchNo#,
+		  	#standardCode#,
+		    #standardName#,
+			#workNo#,
+			#workName#,
+			#beginDate#,
+			#endDate#,
+			#assessRange#,
+			#projectcode#,
+			#projectName#,
+			#isCycle#,
+			#cycleTime#,
+			#cycleTimeUnit#,
+		    #nextBeginDate#,
+		    #nextEndDate#,
+			#creator#,
+			#createTime#,
+			#modifier#,
+			#modifyTime#,
+			#statusCode#,
+			#dataGroupCode#
+		)
+	</insert>
+
+
+
+	<!-- 修改问卷信息 -->
+	<update id="updateManage" parameterClass="java.util.HashMap">
+		UPDATE `sq_manage` SET
+			`standard_code` = #standardCode#,
+			`standard_name` = #standardName#,
+			`work_no_leader` = #workNo#,
+			`work_name_leader` = #workName#,
+			`begin_date` = #beginDate#,
+			`end_date` = #endDate#,
+			`assess_range` = #assessRange#,
+			`project_code` = #projectcode#,
+			`project_name` = #projectName#,
+			`is_cycle` = #isCycle#,
+			`cycle_time` = #cycleTime#,
+			`cycle_time_unit` = #cycleTimeUnit#,
+		    `next_begin_date` = #nextBeginDate#,
+		    `next_end_date` = #nextEndDate#,
+			`modifier` = #modifier#,
+			`modify_time` = #modifyTime#
+		WHERE
+			`id` = #manageId#
+	</update>
+
+
+	<!-- 修改问卷信息 -->
+	<update id="updateManageByParentsId" parameterClass="java.util.HashMap">
+		UPDATE `sq_manage` SET
+			   `parents_id` = #standardCode#,
+			   `parents_name` = #standardName#
+		WHERE
+			`id` = #manageId#
+	</update>
+
+	<!-- 任何状态下均可修改周期 -->
+	<update id="updateCyclePlan" parameterClass="java.util.HashMap">
+		UPDATE `sq_manage` SET
+			`is_cycle` = #isCycle#,
+			`cycle_time` = #cycleTime#,
+			`cycle_time_unit` = #cycleTimeUnit#,
+			`next_begin_date` = #nextBeginDate#,
+			`next_end_date` = #nextEndDate#,
+			`modifier` = #modifier#,
+			`modify_time` = #modifyTime#
+		WHERE
+			`id` = #manageId#
+	</update>
+
+	<!-- 自动创建问卷 -->
+	<insert id="insertExamStandard" parameterClass="java.util.HashMap">
+		insert into sq_exam_standard(
+			`id`,
+		    `batch_no`,
+		    `standard_code`,
+		    `standard_name`,
+		    `assess_type_code`,
+		    `assess_type_name`,
+		    `remark`,
+		    `creator`,
+		    `create_time`,
+		    `modifier`,
+		    `modify_time`,
+		    `data_group_code`
+		)
+		select
+			id,
+		    #batchNo#,
+			standard_code,
+			standard_name,
+			assess_type_code,
+			assess_type_name,
+			remark,
+			creator,
+			create_time,
+			modifier,
+			modify_time,
+			data_group_code
+		from
+			sq_register_standard
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="standardCode">
+				standard_code = #standardCode#
+			</isNotEmpty>
+		</dynamic>
+	</insert>
+
+	<insert id="insertExamProject" parameterClass="java.util.HashMap">
+		insert into sq_exam_project(
+			`id`,
+			`batch_no`,
+			`standard_id`,
+			`project_name`,
+			`project_remark`,
+			`creator`,
+			`create_time`,
+			`modifier`,
+			`modify_time`,
+			`order_no`
+		)
+		select
+			id,
+		    #batchNo#,
+			standard_id,
+			project_name,
+			project_remark,
+			creator,
+			create_time,
+			modifier,
+			modify_time,
+			order_no
+		from
+			sq_register_project
+		where
+			standard_id in (select id from sq_register_standard where standard_code = #standardCode#)
+	</insert>
+
+	<insert id="insertExamInstance" parameterClass="java.util.HashMap">
+		insert into sq_exam_instance(
+			`id`,
+			`batch_no`,
+			`project_id`,
+			`instance_name`,
+			`point_name`,
+			`point_type`,
+			`point`,
+			`creator`,
+			`create_time`,
+			`modifier`,
+			`modify_time`,
+			`order_no`
+		)
+		select
+			id,
+		    #batchNo#,
+			project_id,
+			instance_name,
+			point_name,
+			point_type,
+			point,
+			creator,
+			create_time,
+			modifier,
+			modify_time,
+			order_no
+		from
+			sq_register_instance
+		where
+			project_id in (select id from sq_register_project where standard_id in (select id from sq_register_standard where standard_code = #standardCode#))
+	</insert>
+
+	<insert id="insertExamItem" parameterClass="java.util.HashMap">
+		insert into sq_exam_item(
+			`id`,
+			`batch_no`,
+			`instance_id`,
+			`item_name`,
+			`item_score`,
+			`order_no`
+		)
+		select
+			id,
+		    #batchNo#,
+			instance_id,
+			item_name,
+			item_score,
+			order_no
+		from
+			sq_register_item
+		where
+			instance_id in (select id from sq_register_instance where project_id in (select id from sq_register_project where standard_id in (select id from sq_register_standard where standard_code = #standardCode#)))
+	</insert>
+
+	<!-- 自动生成问卷定时方法 -->
+	<insert id="autoCreateManage" parameterClass="java.util.HashMap">
+		insert into sq_manage(
+			`id`,
+		    `batch_no`,
+		    `standard_code`,
+		    `standard_name`,
+		    `work_no_leader`,
+		    `work_name_leader`,
+		    `begin_date`,
+		    `end_date`,
+		    `assess_range`,
+		    `project_code`,
+		    `project_name`,
+		    `is_cycle`,
+		    `creator`,
+		    `create_time`,
+		    `status_code`,
+		    `data_group_code`
+		) select
+			#manageId#,
+		    #batchNo#,
+		    `standard_code`,
+		    `standard_name`,
+		    `work_no_leader`,
+		    `work_name_leader`,
+		    `next_begin_date`,
+		    `next_end_date`,
+			`assess_range`,
+		    `project_code`,
+		    `project_name`,
+		    "0",
+			`creator`,
+			#createTime#,
+			"10",
+			`data_group_code`
+		from
+			sq_manage
+		where
+			batch_no = #existBatchNo#
+	</insert>
+
+	<!-- 生成子问卷后更新下次开始时间 -->
+	<update id="updateAutoCreateManage" parameterClass="java.util.HashMap">
+		update sq_manage set next_begin_date = #nextBeginDate#,next_end_date = #nextEndDate# where batch_no = #existBatchNo#
+	</update>
+
+	<insert id="autoCreateExamStandard" parameterClass="java.util.HashMap">
+		insert into sq_exam_standard(
+			`id`,
+			`batch_no`,
+			`standard_code`,
+			`standard_name`,
+			`assess_type_code`,
+			`assess_type_name`,
+			`remark`,
+			`creator`,
+			`create_time`,
+			`data_group_code`
+		)
+		select
+			id,
+			#batchNo#,
+			standard_code,
+			standard_name,
+			assess_type_code,
+			assess_type_name,
+			remark,
+			creator,
+			create_time,
+			data_group_code
+		from
+			sq_exam_standard
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="standardCode">
+				standard_code = #standardCode#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="existBatchNo">
+				batch_no = #existBatchNo#
+			</isNotEmpty>
+		</dynamic>
+	</insert>
+
+	<insert id="autoCreateExamProject" parameterClass="java.util.HashMap">
+		insert into sq_exam_project(
+			`id`,
+			`batch_no`,
+			`standard_id`,
+			`project_name`,
+			`project_remark`,
+			`creator`,
+			`create_time`,
+			`order_no`
+		)
+		select
+			id,
+			#batchNo#,
+			standard_id,
+			project_name,
+			project_remark,
+			creator,
+			create_time,
+			order_no
+		from
+			sq_exam_project
+		where
+			standard_id in (select id from sq_exam_standard where standard_code = #standardCode# and batch_no = #existBatchNo#) GROUP BY id
+	</insert>
+
+	<insert id="autoCreateExamInstance" parameterClass="java.util.HashMap">
+		insert into sq_exam_instance(
+			`id`,
+			`batch_no`,
+			`project_id`,
+			`instance_name`,
+			`point_name`,
+			`point_type`,
+			`point`,
+			`creator`,
+			`create_time`,
+			`order_no`
+		)
+		select
+			id,
+			#batchNo#,
+			project_id,
+			instance_name,
+			point_name,
+			point_type,
+			point,
+			creator,
+			create_time,
+			order_no
+		from
+			sq_exam_instance
+		where
+			project_id in (select id from sq_exam_project where standard_id in (select id from sq_exam_standard where standard_code = #standardCode# and batch_no = #existBatchNo#) and batch_no = #existBatchNo#) GROUP BY id
+	</insert>
+
+	<insert id="autoCreateExamItem" parameterClass="java.util.HashMap">
+		insert into sq_exam_item(
+			`id`,
+			`batch_no`,
+			`instance_id`,
+			`item_name`,
+			`item_score`,
+			`order_no`
+		)
+		select
+			id,
+			#batchNo#,
+			instance_id,
+			item_name,
+			item_score,
+			order_no
+		from
+			sq_exam_item
+		where
+			instance_id in (select id from sq_exam_instance where project_id in (select id from sq_exam_project where standard_id in (select id from sq_exam_standard where standard_code = #standardCode# and batch_no = #existBatchNo#) and batch_no = #existBatchNo#) and batch_no = #existBatchNo#) GROUP BY id
+	</insert>
+</sqlMap>

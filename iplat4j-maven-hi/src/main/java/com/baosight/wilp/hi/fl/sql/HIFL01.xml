@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HIFL01">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.hi.common.domain.HiClassify">
+		SELECT
+		id	as "id",  <!-- 主键 -->
+		classify_num	as "classifyNum",  <!-- 标识分类编码 -->
+		classify_name	as "classifyName",  <!-- 标识分类名称 -->
+		parent_id	as "parentId",  <!-- 上级分类id(根节点root) -->
+		super_classify_num as "superClassifyNum",
+		super_classify_name as  "superClassifyName",
+		level	as "level",  <!-- 等级 -->
+		is_leaf	as "isLeaf",  <!-- 是否是叶子节点（N=不是，Y=是） -->
+		remark	as "remark",  <!-- 备注 -->
+		sort_no	as "sortNo",  <!-- 排序字段 -->
+		rec_creator	as "recCreator",  <!-- 创建人 -->
+		rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		rec_revisor	as "recRevisor",  <!-- 修改人 -->
+		rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+		data_group_code	as "dataGroupCode",  <!-- 账套 -->
+		archive_flag	as "archiveFlag" <!-- 归档标记 -->
+		FROM .hi_classify WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="classifyNum">
+			classify_num like concat('%', #classifyNum#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="classifyName">
+			classify_name like concat('%', #classifyName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="parentId">
+			parent_id = #parentId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+				classify_num asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .hi_classify WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="classifyNum">
+			classify_num like concat('%', #classifyNum#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="classifyName">
+			classify_name like concat('%', #classifyName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="parentId">
+			parent_id = #parentId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+	</select>
+	
+	<!-- PC端查询医院标识分类 -->
+	<select id="queryItemTypeTree" resultClass="java.util.HashMap">
+		SELECT
+			t1.id as "label",
+			t1.classify_num	as "code",
+			t1.classify_name as "text",
+			t1.parent_id as "pId",
+		    CASE count(t2.id)
+				WHEN 0 THEN TRUE
+				ELSE FALSE
+			END AS leaf
+		FROM hi_classify t1
+		left join hi_classify t2 on t1.id = t2.parent_id
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend=" AND " property="parentId">
+				t1.parent_id = #parentId#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="dataGroupCode">
+				t1.data_group_code = #dataGroupCode#
+			</isNotEmpty>
+		</dynamic>
+		group by t1.id
+		order by t1.classify_num
+	</select>
+	
+	<!-- 选择医院标识分类 -->
+ 	<select id="selectItemTypeNames" parameterClass="java.util.Map" resultClass="com.baosight.wilp.hi.common.domain.HiClassify">
+  		SELECT id,
+		    classify_num classifyNum,
+		    classify_name classifyName,
+  			data_group_code dataGroupCode 
+  		FROM hi_classify  where 1=1
+  		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="classifyName">
+			classify_name like concat('%', #classifyName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="classifyNum">
+			classify_num = #classifyNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" and " property="parentId">
+			parent_id = #parentId#
+		</isNotEmpty>
+ 	</select>
+
+	
+	<insert id="insert" parameterClass="com.baosight.wilp.hi.common.domain.HiClassify">
+		INSERT INTO .hi_classify
+		(id,  <!-- 主键 -->
+		classify_num,  <!-- 标识分类编码 -->
+		classify_name,  <!-- 标识分类名称 -->
+		parent_id,  <!-- 上级分类id(根节点root) -->
+		super_classify_num,
+		super_classify_name,
+		level,  <!-- 等级 -->
+		is_leaf,  <!-- 是否是叶子节点（N=不是，Y=是） -->
+		remark,  <!-- 备注 -->
+		sort_no,  <!-- 排序字段 -->
+		rec_creator,  <!-- 创建人 -->
+		rec_create_time,  <!-- 创建时间 -->
+		rec_revisor,  <!-- 修改人 -->
+		rec_revise_time,  <!-- 修改时间 -->
+		data_group_code,  <!-- 账套 -->
+		archive_flag  <!-- 归档标记 -->
+		)
+		VALUES
+		 (#id#,
+		  #classifyNum#,
+		  #classifyName#,
+		  #parentId#,
+		  #superClassifyNum#,
+		  #superClassifyName#,
+		  #level#,
+		  #isLeaf#,
+		  #remark#,
+		  #sortNo#,
+		  #recCreator#,
+		  #recCreateTime#,
+		  #recRevisor#,
+		  #recReviseTime#,
+		  #dataGroupCode#,
+		  #archiveFlag#)
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM .hi_classify WHERE id = #id#
+	</delete>
+
+	<update id="update" parameterClass="com.baosight.wilp.hi.common.domain.HiClassify">
+		UPDATE .hi_classify
+		SET
+		classify_num	= #classifyNum#,   <!-- 标识分类编码 -->
+		classify_name	= #classifyName#,   <!-- 标识分类名称 -->
+		parent_id	= #parentId#,   <!-- 上级分类id(根节点root) -->
+		super_classify_num =  #superClassifyNum#,
+		super_classify_name = #superClassifyName#,
+		level	= #level#,   <!-- 等级 -->
+		is_leaf	= #isLeaf#,   <!-- 是否是叶子节点（N=不是，Y=是） -->
+		remark	= #remark#,   <!-- 备注 -->
+		sort_no	= #sortNo#,   <!-- 排序字段 -->
+		rec_creator	= #recCreator#,   <!-- 创建人 -->
+		rec_create_time	= #recCreateTime#,   <!-- 创建时间 -->
+		rec_revisor	= #recRevisor#,   <!-- 修改人 -->
+		rec_revise_time	= #recReviseTime#,   <!-- 修改时间 -->
+		data_group_code	= #dataGroupCode#,   <!-- 账套 -->
+		archive_flag	= #archiveFlag#  <!-- 归档标记 -->
+		WHERE
+		id = #id#
+	</update>
+	
+	<select id="isDelete" parameterClass="String" resultClass="int">
+		select sum(col) from (
+		    select count(*) col from hi_classify where parent_id = #id#
+		) tt
+	</select>
+
+	<!-- 根据分类编码或id查询指定医院标识 -->
+	<select id="queryMtSxDept" parameterClass="string" resultClass="com.baosight.wilp.hi.common.domain.HiClassify">
+		SELECT
+		id	as "id",  <!-- 主键 -->
+		classify_num	as "classifyNum",  <!-- 标识分类编码 -->
+		classify_name	as "classifyName",  <!-- 标识分类名称 -->
+		parent_id	as "parentId",  <!-- 上级分类id(根节点root) -->
+		super_classify_num as "superClassifyNum",
+		super_classify_name as  "superClassifyName",
+		level	as "level",  <!-- 等级 -->
+		is_leaf	as "isLeaf",  <!-- 是否是叶子节点（N=不是，Y=是） -->
+		remark	as "remark",  <!-- 备注 -->
+		sort_no	as "sortNo",  <!-- 排序字段 -->
+		rec_creator	as "recCreator",  <!-- 创建人 -->
+		rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		rec_revisor	as "recRevisor",  <!-- 修改人 -->
+		rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+		data_group_code	as "dataGroupCode",  <!-- 账套 -->
+		archive_flag	as "archiveFlag" <!-- 归档标记 -->
+		FROM .hi_classify WHERE id = #value# or classify_num = #value#
+	</select>
+
+
+
+
+
+  
+</sqlMap>

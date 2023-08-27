@@ -1,0 +1,39 @@
+.center{
+  text-align: center;
+}
+.left{
+  text-align: left;
+}
+.right{
+  text-align: right;
+}
+a {
+  text-decoration: none;
+}
+a:link {
+  text-decoration: none;
+}
+a:visited {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
+}
+a:active {
+  text-decoration: none;
+}
+.warn{
+  color:#FFFFFF;
+  background: rgba(0, 0, 0, 0.6);
+  filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#7F000000, endcolorstr=#7F000000);
+  border-radius:5px;
+  padding: 5px;
+  min-height:30px;
+  position:fixed;
+  text-align:center;
+  left:10%;
+  top:55px;
+  z-index:3000;
+  width:80%;
+}
+

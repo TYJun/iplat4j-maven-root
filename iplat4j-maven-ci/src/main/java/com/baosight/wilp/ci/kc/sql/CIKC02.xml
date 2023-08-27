@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="CIKC02">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.ci.kc.domain.CiStorgeRecord">
+		SELECT
+				REC_CREATOR	as "recCreator",  <!-- 记录创建责任者 -->
+				REC_CREATE_TIME	as "recCreateTime",  <!-- 记录创建时间 -->
+				REC_REVISOR	as "recRevisor",  <!-- 记录修改责任者 -->
+				REC_REVISE_TIME	as "recReviseTime",  <!-- 记录修改时间 -->
+				ARCHIVE_FLAG	as "archiveFlag",  <!-- 归档标记 -->
+				ID	as "id",  <!-- 主键 -->
+				ORIGIN_BILL_NO	as "originBillNo",  <!-- 来源单据号 -->
+				ORIGIN_BILL_TYPE	as "originBillType",  <!-- 来源单据类型 -->
+				ORIGIN_BILL_TYPE_NAME	as "originBillTypeName",  <!-- 来源单据类型名称 -->
+				WARE_HOUSE_NO	as "wareHouseNo",  <!-- 仓库号 -->
+				ware_house_name	as "wareHouseName",  <!-- 仓库名称 -->
+				STORAGE_NO	as "storageNo",  <!-- 库位号 -->
+				STACK_NO	as "stackNo",  <!-- 货位号 -->
+				mat_type_num	as "matTypeNum",  <!-- 物资分类编码 -->
+				mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+				MAT_NUM	as "matNum",  <!-- 物资编码 -->
+				MAT_NAME	as "matName",  <!-- 物资名称 -->
+				MAT_MODEL	as "matModel",  <!-- 物资型号 -->
+				MAT_SPEC	as "matSpec",  <!-- 物资规格 -->
+				UNIT	as "unit",  <!-- 计量单位编码 -->
+				UNIT_NAME	as "unitName",  <!-- 计量单位名称 -->
+				PRICE	as "price",  <!-- 单价 -->
+				BEFORE_NUM	as "beforeNum",  <!-- 操作前数量 -->
+				BEFORE_AMOUNT	as "beforeAmount",  <!-- 操作前总价 -->
+				AFTER_NUM	as "afterNum",  <!-- 操作后数量 -->
+				AFTER_AMOUNT	as "afterAmount",  <!-- 操作后总价 -->
+				batch_no	as "batchNo" <!-- 批次号 -->
+		FROM ci_storge_record WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="originBillNo">
+			ORIGIN_BILL_NO = #originBillNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="originBillTypeName">
+			ORIGIN_BILL_TYPE_NAME like concat('%', #originBillTypeName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="originBillNoLK">
+			ORIGIN_BILL_NO like concat('%', #originBillNoLK#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNo">
+			WARE_HOUSE_NO = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNum">
+			MAT_NUM = #matNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNumLK">
+			MAT_NUM like concat('%', #matNumLK#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matName">
+			MAT_NAME like concat('%', #matName#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="batchNo">
+			batch_no = #batchNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">   <!-- 制单日期（>=） -->
+			date_format(rec_create_time,'%Y-%m-%d %H:%i:%s') >= #beginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="startTime">   <!-- 制单日期（>=） -->
+			date_format(rec_create_time,'%Y-%m-%d %H:%i:%s') >= #startTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">    <!-- 制单日期止（<=） -->
+			date_format(rec_create_time,'%Y-%m-%d %H:%i:%s') <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="transBillNo">
+			ORIGIN_BILL_NO = (select ENTER_BILL_NO from ci_enter where ORIGIN_BILL_NO = #transBillNo#)
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+         	<isNotEmpty property="orderBy">
+    		  	$orderBy$
+   		 	</isNotEmpty>
+   			<isEmpty property="orderBy">
+    		  	REC_CREATE_TIME desc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .ci_storge_record WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="originBillNo">
+			ORIGIN_BILL_NO = #originBillNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="originBillNoLK">
+			ORIGIN_BILL_NO like concat('%', #originBillNoLK#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNo">
+			WARE_HOUSE_NO = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNum">
+			MAT_NUM = #matNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNumLK">
+			MAT_NUM like concat('%', #matNumLK#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matName">
+			MAT_NAME like concat('%', #matName#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="batchNo">
+			batch_no = #batchNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="transBillNo">
+			ORIGIN_BILL_NO = (select ENTER_BILL_NO from ci_enter where ORIGIN_BILL_NO = #transBillNo#)
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert" parameterClass="com.baosight.wilp.ci.kc.domain.CiStorgeRecord">
+		INSERT INTO ci_storge_record (REC_CREATOR,  <!-- 记录创建责任者 -->
+										REC_CREATE_TIME,  <!-- 记录创建时间 -->
+										REC_REVISOR,  <!-- 记录修改责任者 -->
+										REC_REVISE_TIME,  <!-- 记录修改时间 -->
+										ARCHIVE_FLAG,  <!-- 归档标记 -->
+										ID,  <!-- 主键 -->
+										ORIGIN_BILL_NO,  <!-- 来源单据号 -->
+										ORIGIN_BILL_TYPE,  <!-- 来源单据类型 -->
+										ORIGIN_BILL_TYPE_NAME,  <!-- 来源单据类型名称 -->
+										WARE_HOUSE_NO,  <!-- 仓库号 -->
+										ware_house_name,  <!-- 仓库名称 -->
+										STORAGE_NO,  <!-- 库位号 -->
+										STACK_NO,  <!-- 货位号 -->
+										mat_type_num,  <!-- 物资分类编码 -->
+										mat_type_name,  <!-- 物资分类名称 -->
+										MAT_NUM,  <!-- 物资编码 -->
+										MAT_NAME,  <!-- 物资名称 -->
+										MAT_MODEL,  <!-- 物资型号 -->
+										MAT_SPEC,  <!-- 物资规格 -->
+										UNIT,  <!-- 计量单位编码 -->
+										UNIT_NAME,  <!-- 计量单位名称 -->
+										PRICE,  <!-- 单价 -->
+										BEFORE_NUM,  <!-- 操作前数量 -->
+										BEFORE_AMOUNT,  <!-- 操作前总价 -->
+										AFTER_NUM,  <!-- 操作后数量 -->
+										AFTER_AMOUNT,  <!-- 操作后总价 -->
+										batch_no  <!-- 批次号 -->
+										)		 
+	    VALUES (#recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #archiveFlag#, #id#, #originBillNo#, #originBillType#, #originBillTypeName#, #wareHouseNo#, #wareHouseName#, #storageNo#, #stackNo#, #matTypeNum#, #matTypeName#, #matNum#, #matName#, #matModel#, #matSpec#, #unit#, #unitName#, #price#, #beforeNum#, #beforeAmount#, #afterNum#, #afterAmount#, #batchNo#) 
+	</insert>
+
+</sqlMap>

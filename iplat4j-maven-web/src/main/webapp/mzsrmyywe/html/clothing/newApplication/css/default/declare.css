@@ -1,0 +1,126 @@
+body {
+    background-color: #eee;
+    margin: auto;
+    padding: auto;
+}
+.historylist .list_card>li {
+    overflow: hidden;
+    box-shadow: 1px 1px 5px 0 #BBBBBB;
+}
+/* 头部区域 */
+.top {
+    position: relative;
+    width:100%;
+    height: 44px;
+    background-color: #4DB56C;
+    text-align: center;
+}
+#top-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    background-color: #4DB56C;
+}
+#icon-left-back {
+    float: left;
+    position: relative;
+    margin-right: 107px;
+    width: 28px;
+    height: 100%;
+    line-height: 44px;
+    color: #fff;
+    margin-left: 12px;
+    font-weight: 400;
+    font-size: 30px;
+}
+#title {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    line-height: 44px;
+    font-size: 17px;
+    font-weight: 500;
+    color: #fff;
+    
+}
+#select_class {
+    float: right;
+    position: relative;
+    right: 0;
+    line-height: 44px;
+    color: #fff;
+    margin-right: 26px;
+    font-weight: 500;
+    font-size: 17px;
+}
+/* 下拉栏区域 */
+.pulldown {
+    margin: 20px 20px;
+}
+.pulldown>ul {
+    overflow: hidden;
+    width: 340px;
+    height: 39px;
+    font-size: 14px;
+    border-radius: 7px;
+    border: 1px solid #5E5E5E;
+    margin-bottom: 10px;
+}
+.mui-navigate-right {
+    /* 下拉栏中的版面字体居中 */
+    line-height: 16px; 
+    padding: 0 8px;
+}
+/* 分类表格 */
+.selecttable {
+    width: 95%;
+    margin: 0 auto;
+    color: #fff;
+    border-radius: 10px;
+    /* border: 1px solid #8a8a8a; */
+  }
+  .selecttable th {
+    background-color: #8a8a8a;
+    font-size: 16px;
+    font-weight: 600;
+    height: 50px;
+    text-align: center;
+    width: 33.3%;
+  }
+  .selecttable td {
+    font-size: 14px;
+    height: 50px;
+    text-align: center;
+    width: 33.3%;
+  }
+  .selecttable tbody tr:nth-child(n + 1) {
+    background-color: #fdfefd;
+    color: #101010;
+  }
+  .selecttable tbody tr:nth-child(2n) {
+    background-color: #eaeaea;
+    color: #101010;
+  }
+  /* '提交'按钮 */
+#btn_submit {
+    display: block;
+    width: 349px;
+    height: 46px;
+    background-color: #4DB56C;
+    border-radius: 7px;
+    border: 1px solid #4DB56C;
+    margin: 0 auto;
+    left: 13px;
+    bottom: calc(3vh);
+    position: fixed;
+}
+#btn_submit span {
+    color: #eee;
+    font-size: 22px;
+    line-height: 34px;
+    margin: auto;
+}

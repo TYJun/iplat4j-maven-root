@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MSDC02">
+    <select id="query" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        select distinct id "label",
+        parent_id ,
+        classify_code ,
+        classify_name "text",
+        classify_type "pId" ,
+        classify_sort ,
+        group_id,
+        "" "leaf"
+        from t_area_classify
+        where 1=1
+        <isNotEmpty prepend="AND" property="node">
+            parent_id =
+            #node#
+        </isNotEmpty>
+    </select>
+    <!--    页面MSDC0101的修改-->
+    <update id="update">
+        update tmsdc01
+        set t_area_classify_id =
+                #group_id#
+        WHERE id = #DC_id#
+    </update>
+
+    <select id="queryTree" resultClass="java.util.HashMap">
+        SELECT
+        id as "label",
+        classify_name as "text",
+        parent_id as "pId",
+        "" as
+        "leaf"
+        FROM t_area_classify
+        LEFT JOIN
+        ( SELECT user_group_id,t_param_id FROM grouptable
+        )e ON e.t_param_id = t_area_classify.id
+        <dynamic prepend="WHERE">
+            <isNotEmpty prepend="and" property="node">
+                parent_id = #node#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="usergroupid">
+                t_param_id = #usergroupid#
+            </isNotEmpty>
+        </dynamic>
+        order by id
+    </select>
+
+    <!--    页面MSDC0101的修改-->
+    <update id="relevance">
+        update tmspl01
+        set tmsdc01_id=#parent_id#
+        WHERE id = #id#
+    </update>
+
+    <!--    页面MSDC0101的修改-->
+    <update id="relevanceUpdate">
+        update tmspl01
+        set tmsdc01_id=#parent_id#
+        WHERE id = #id#
+    </update>
+
+    <select id="queryRelevance1" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        SELECT
+        id "id",
+        tmsdc01_id "parent_id"
+        from tmspl01
+        WHERE 1=1
+        <!--        <isNotEmpty prepend="AND" property="parent_id">-->
+        <!--            tmsdc01_id =-->
+        <!--            #parent_id#-->
+        <!--        </isNotEmpty>-->
+        <isNotEmpty prepend="AND" property="parent_id">
+            tmsdc01_id =
+            #parent_id#
+        </isNotEmpty>
+    </select>
+
+    <select id="queryRelevance0102" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        SELECT id         "Reid",
+               name_      "ReName",
+               tag        "ReTag",
+               tmsdc01_id "RetDCid"
+        from tmspl01
+        WHERE tmsdc01_id =
+              #id#
+    </select>
+
+    <update id="remove">
+        update tmspl01
+        set
+        tmsdc01_id=null
+        WHERE 1=1
+        <isNotEmpty prepend="AND" property="id">
+            id =
+            #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="Reid">
+            id =
+            #Reid#
+        </isNotEmpty>
+    </update>
+
+
+    <!--    页面MSDC01初始化为root-->
+    <select id="queryTreeRoot" resultClass="com.baosight.wilp.ms.dc.domain.MSDC01"
+            parameterClass="java.util.HashMap">
+        SELECT distinct id "DC_id",
+        code_ "code",
+        name_ "name",
+        type "type",
+        weight "weight",
+        d.classify_name "group_id"
+        from tmsdc01
+        LEFT JOIN ( SELECT t4.id parent_id, t4.classify_name FROM t_area_classify t4 WHERE 1 = 1 ) d ON tmsdc01.group_id
+        = d.parent_id
+        LEFT JOIN
+        (SELECT t5.tag, t5.tmsdc01_id FROM tmspl01 t5) e ON tmsdc01.id=e.tmsdc01_id
+        WHERE 1=1
+        AND id IN(SELECT max(id) FROM tmsdc01 GROUP BY id)
+        <isNotEmpty prepend="AND" property="code">
+            code_ =
+            #code#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="param">
+            tag like concat('%',#param#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="name">
+            name_ like concat('%',#name#,'%')
+        </isNotEmpty>
+        order by
+        weight +0 desc
+    </select>
+
+    <select id="queryById" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        SELECT
+        id, parent_id "parrntId", classify_code "classifyCode", classify_name "classifyName", classify_type
+        "classifyType", classify_sort "classifySort", group_id "groupId"
+        FROM
+        `t_area_classify`
+        where 1=1
+        <isNotEmpty prepend="and" property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="classifyName">
+            classify_name = #classifyName#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="classifyCode">
+            classify_code = #classifyCode#
+        </isNotEmpty>
+    </select>
+</sqlMap>

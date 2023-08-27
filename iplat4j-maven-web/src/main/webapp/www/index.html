@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>index</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="reference/mui/css/mui.css">
+<STYLE TYPE="text/css">
+p{
+  font-size: 1.6rem;
+}
+
+</STYLE>
+
+</head>
+
+<body>
+
+  <div style="text-align:center;position:fixed;top:0;left:0;bottom:0;right:0;z-index:-1;">
+      <img src="img/index.png" style="width:100%;height:100%;">        
+  </div>
+
+</body>
+<script type="text/javascript">
+    var isLogin = localStorage.getItem("isLogin");
+
+    var t = 3;  
+    function showTime(){  
+        t -= 1; 
+        if(t==0){
+            if(isLogin == "true"){
+              location.href=localStorage.getItem("fileURL") + 'www/menu.html';
+            }else{
+              location.href='hosArea.html'; 
+            }
+        }  
+        //每秒执行一次,showTime()  
+        setTimeout("showTime()",1000);  
+    }  
+  
+  
+//执行showTime()  
+showTime();  
+
+</script>
+</html>

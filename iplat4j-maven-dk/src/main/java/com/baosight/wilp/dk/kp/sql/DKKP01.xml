@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DKKP01">
+
+	
+	<!-- 查询卡片信息 -->
+	<select id="queryKP" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		    cardID,
+		    cardCode,
+		    cardName,
+			case status when '1' then '启用' when '-1' then '禁用' 
+				when '0' then '新建' end as status, 
+		    createTime,
+		    memo,
+		    createMan,
+		    modifyTime,
+		    modifyMan
+		FROM
+			dk_card_maintain
+		where 1=1
+		<isNotEmpty prepend=" AND " property="cardCode">
+			cardCode like
+			concat('%',#cardCode#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="cardName">
+			cardName like
+			concat('%',#cardName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status">
+			status =#status#
+		</isNotEmpty>
+			order by cardCode desc
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+
+   <!-- 查询卡片信息总数 -->
+    <select id="countKP" resultClass="int" parameterClass="java.util.HashMap">
+		SELECT
+			cardID
+		FROM
+			dk_card_maintain
+		Where 1=1
+		<isNotEmpty prepend=" AND " property="cardCode">
+			cardCode like
+			concat('%',#cardCode#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="cardName">
+			cardName like
+			concat('%',#cardName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status">
+			status =#status#
+		</isNotEmpty>
+	</select>
+	
+	<!-- 删除卡片信息 -->
+	<delete id="deleteKP" parameterClass="java.util.ArrayList">
+		DELETE FROM dk_card_maintain WHERE 
+			cardID
+		IN
+		<iterate conjunction="," open="(" close=")">
+			#value[]#
+		</iterate>
+	</delete>
+	
+	<!-- 删除卡片里的项目 -->
+	<delete id="deleteItem" parameterClass="String">
+		DELETE FROM dk_card_item_inspection WHERE cardID =#value#
+	</delete>
+	
+	<!-- 启用卡片 -->
+	<update id="startKP" parameterClass="java.util.ArrayList">
+		update dk_card_maintain set status='1' WHERE cardID
+		IN
+		<iterate conjunction="," open="(" close=")">
+			#value[]#
+		</iterate>
+	</update>
+	
+	<!-- 禁用卡片 -->
+	<update id="stopKP" parameterClass="java.util.ArrayList">
+		update dk_card_maintain set status='-1' WHERE cardID
+		IN
+		<iterate conjunction="," open="(" close=")">
+			#value[]#
+		</iterate>
+	</update>
+
+    <!-- 查询卡片里的项目信息 -->
+	<select id="queryItem" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		    itemID_xmID,
+		    cardID,
+		    jitemName,
+		    itemDesc,
+			actualValueUnit
+		FROM
+			dk_card_item_inspection
+		where 1=1
+		<isNotEmpty prepend=" AND " property="cardID">
+			cardID =#cardID#
+		</isNotEmpty>
+			order by itemID_xmID desc
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+
+   <!-- 查询卡片里的项目信息总数 -->
+    <select id="countItem" resultClass="int" parameterClass="java.util.HashMap">
+		SELECT
+          itemID
+		FROM
+			dk_card_item_inspection
+		where 1=1
+		<isNotEmpty prepend=" AND " property="cardID">
+			cardID =#cardID#
+		</isNotEmpty>
+	</select>
+	<!-- 查询所有项目不包含已有的项目 -->
+	<select id="queryItemAll" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+		SELECT
+			c.id as "id",
+			c.id as itemId,
+			c.code as "code",  <!-- 项目编码 -->
+			c.content as "content",  <!-- 项目内容 -->
+			c.project_desc as "projectDesc",  <!-- 项目描述 -->
+			c.referenceValue as "referenceValue",  <!-- 参数值 -->
+			c.memo as "memo",  <!-- 备注 -->
+			c.xunjian_abnormal as "xunjianAbnormal",
+			c.actualValueUnit as "actualValueUnit",  <!-- 实际值单位 -->
+			c.module_id as moduleId,
+			p.classify_name as "typeName"
+		FROM dk_item c
+		left join 
+			dk_itemclass p on c.module_id = p.id
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="itemName">
+		   content like
+			concat('%',#itemName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="id">
+		c.id not in
+			<iterate property="id" conjunction="," open="(" close=")">
+			#id[]#
+		    </iterate>
+		</isNotEmpty>
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+	
+	<!-- 查询所有项目不包含已有的项目count -->
+	<select id="queryItemAllCount" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+		SELECT
+			c.id
+		FROM dk_item c
+		left join 
+			dk_itemclass p on c.module_id = p.id
+		WHERE 1=1 
+		<isNotEmpty prepend="and" property="itemName">
+		   content like
+			concat('%',#itemName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="id">
+		c.id not in
+			<iterate property="id" conjunction="," open="(" close=")">
+			#id[]#
+		    </iterate>
+		</isNotEmpty>
+	</select>
+	
+	<!-- 跟新卡片主信息 -->
+	<update id="updateKp" parameterClass="java.util.HashMap">
+		update dk_card_maintain set 
+			<isNotNull  property="cardName">
+			    cardName = #cardName#, 
+			</isNotNull>
+			<isNotNull  property="memo">
+			    memo = #memo#, 
+			</isNotNull>
+			<isNotNull  property="modifyMan">
+			    modifyMan = #modifyMan#,
+			</isNotNull>
+			<isNotNull  property="modifyTime">
+			    modifyTime = #modifyTime#
+			</isNotNull>
+            where cardID=#cardID#
+	</update>
+	
+	<!-- 新增卡片主信息 -->
+	<insert id="insertKp" parameterClass="java.util.HashMap">
+		INSERT INTO dk_card_maintain 
+		(
+		cardID,
+		cardCode,  <!-- KPCODE -->
+		cardName,  <!-- KP名称 -->
+		memo,  <!-- 备注 -->
+		createMan,  <!-- 创建人 -->
+		createTime,  <!-- 创建时间 -->
+		status  <!-- 状态 -->
+		)
+		VALUES (#cardID#, #cardCode#, #cardName#, #memo#, #createMan#,#createTime#,#status#)
+	</insert>
+	
+	<!-- 删除卡片里的项目信息 -->
+	<delete id="deleteKpItem" parameterClass="String">
+		DELETE FROM
+			dk_card_item_inspection
+		WHERE
+			cardID =#value#
+	</delete>
+	
+	<!-- 新增卡片里的项目信息 -->
+	<insert id="insertKpItem" parameterClass="java.util.HashMap">
+		INSERT INTO dk_card_item_inspection 
+		(
+		cardID,         <!-- 卡片id -->
+		itemID_xmID,  <!-- 项目id -->
+		jitemName,  <!-- 项目名称 -->
+		itemDesc,  <!-- 项目描述 -->
+		actualValueUnit  <!-- 实际值 -->
+		)
+		VALUES (#cardID#, #itemID_xmID#, #jitemName#, #itemDesc#, #actualValueUnit#)
+	</insert>
+
+	<select id="queryProjectTypeTree" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+			p.id AS "label",
+			p.classify_code AS "code",
+			p.classify_name AS "text",
+			p.parent_id AS "pId",
+			CASE
+				count( c.id )
+				WHEN 0 THEN TRUE
+				ELSE FALSE
+				END AS leaf
+		FROM
+			dk_itemclass p
+			LEFT JOIN dk_itemclass c ON c.parent_id = p.id
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend=" AND " property="parentId">
+				p.parent_id = #parentId#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="dataGroupCode">
+				p.data_group_code = #dataGroupCode#
+			</isNotEmpty>
+		</dynamic>
+		group by p.id
+		order by p.classify_code
+	</select>
+</sqlMap>

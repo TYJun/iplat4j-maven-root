@@ -1,0 +1,140 @@
+body {
+    background-color: #eee;
+    margin: auto;
+    padding: auto;
+}
+/* 头部区域 */
+.top {
+    position: relative;
+    width:100%;
+    height: 44px;
+    background-color: #4DB56C;
+    text-align: center;
+}
+#top-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    background-color: #4DB56C;
+}
+#icon-left-back {
+    float: left;
+    position: relative;
+    width: 28px;
+    height: 100%;
+    line-height: 44px;
+    color: #fff;
+    margin-left: 26px;
+    font-weight: 400;
+    font-size: 30px;
+}
+#title {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    line-height: 44px;
+    font-size: 17px;
+    font-weight: 500;
+    color: #fff;
+}
+/* 下拉栏区域 */
+.pulldown {
+    margin: 20px 20px;
+}
+.pulldown>ul {
+    overflow: hidden;
+    width: 340px;
+    height: 39px;
+    font-size: 14px;
+    border-radius: 7px;
+    border: 1px solid #5E5E5E;
+    margin-bottom: 10px;
+}
+.mui-navigate-right {
+    /* 下拉栏中的版面字体居中 */
+    line-height: 16px; 
+    padding: 0 8px;
+}
+/* 按钮区域 */
+#resetbtn,  #searchbtn{
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+    border-bottom-left-radius: 7px;
+}
+#searchbtn, #resetbtn {
+    width: 68px;
+    height: 37px;
+    font-size: 14px;
+}
+#searchbtn {
+    margin: 0px 8px 0 205px;
+    background-color: #4DB56C;
+    border: 1px solid #BBBBBB;
+    color: #fff;
+}
+#resetbtn {
+    margin: 0px 0px 0 0;
+    color: #4DB56C;
+    border: 1px solid #4DB56C;
+}
+
+/* 查询结果区域 */
+ul {
+    list-style: none;
+}
+.list_card{
+    padding: 0 19px;
+}
+.list_card>li {
+    /* width: 350px; */
+    background-color: #fff;
+    margin-top: 18px;
+    overflow: hidden;
+    border-radius: 7px;
+}
+/* 上部分 */
+.searchresult .list_card #top {
+    width: 100%;
+    height: 48px;
+    background-color: #4DB56C;
+}
+.searchresult .list_card #top .mui-icon-list {
+    font-size: 23px;
+    vertical-align: middle;
+    margin-left: 18px;
+    margin-right: 2px;
+    line-height: 47px;
+    color: #fff;
+}
+.searchresult .list_card #top .ordNum {
+    font-size: 16px;
+    color: #fff;
+    line-height: 47px;
+    font-size: 16px;
+}
+/* 下部分 */
+.card #bto {
+    width: 100%;
+    height: 105px;
+}
+#bto>ul {
+    margin-top: 20px;
+    margin-bottom: auto;
+    padding: 0 30px;
+    font-size: 14px;
+}
+#bto>ul>li{
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+#bto>ul>li>.Name {
+    float: left;
+}
+#bto>ul>li>.value {
+    float: right;
+}

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!-- 二维码信息 -->
+<sqlMap namespace="SSBMCtm01">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.bm.domain.SSBMCtm01">
+		SELECT
+		id as "id",  <!-- 主键ID -->
+		REC_CREATOR as "recCreator",
+		REC_CREATE_TIME as "recCreateTime",
+		REC_REVISOR as "recRevisor",
+		REC_REVISE_TIME as "recReviseTime",
+		area_code as "areaCode",  <!-- 院区编码 -->
+		area_name as "areaName",  <!-- 院区名称 -->
+		building_name as "buildingName",
+		building as "building",  <!-- 所属楼 -->
+		floor_name as "floorName",
+		floor as "floor",  <!-- 层 -->
+		ward_code as "wardCode",  <!-- 病区编码 -->
+		ward_name as "wardName",  <!-- 病区名称 -->
+		dept_name as "deptName",  <!-- 科室名称 -->
+		dept_code as "deptCode",  <!-- 科室编码 -->
+		bed_no as "bedNo",
+		add_num as "addNum",  <!-- 地点编码 -->
+		multi_code as "multiCode" <!-- 账套 -->
+		FROM sc_qrcode_address
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="ids">
+			id in ($ids$)
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name like  ('%$deptName$%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptCode">
+			dept_code = #deptCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="addNum">
+			add_num = #addNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floor">
+			floor = #floor#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="building">
+			building = #building#
+		</isNotEmpty>
+		ORDER BY  rec_create_time desc,`building_name`,
+		`floor_name`,`ward_name`,`dept_name`,
+		`bed_no`,area_code
+	</select>
+
+<!-- 	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_qrcode_address WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select> -->
+
+	<!-- 获取已配置的楼 -->
+	<select id="getQrBuilding" resultClass="HashMap"
+		parameterClass="HashMap">
+		SELECT DISTINCT building typeCode,building_name typeName 
+		FROM `sc_qrcode_address` 
+		where 1=1
+		<isNotEmpty prepend=" AND " property="areaCode">
+            area_code = #areaCode#
+        </isNotEmpty>
+		order by building
+	</select>
+	<!-- 获取已配置的某个楼的层集合 -->
+	<select id="getQrFloor" resultClass="HashMap"
+		parameterClass="HashMap">
+		SELECT DISTINCT floor typeCode,floor_name typeName 
+		FROM `sc_qrcode_address`
+		WHERE building=#building# order by floor*1
+	</select>
+
+	<!-- 获取已配置的某个层的科室集合 -->
+	<select id="getQrDept" resultClass="HashMap"
+		parameterClass="HashMap">
+		SELECT DISTINCT dept_code typeCode,dept_name typeName 
+		FROM `sc_qrcode_address`
+		WHERE building=#building# and floor=#floor#
+		order by dept_code;
+	</select>
+
+
+	<!-- 获取已配置的某个层的科室集合 -->
+	<select id="getQrDeptByAreaCode" resultClass="HashMap"
+		parameterClass="HashMap">
+		SELECT DISTINCT dept_code typeCode,dept_name typeName 
+		FROM `sc_qrcode_address`
+		WHERE area_code=#areaCode#
+		order by dept_code;
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sc_qrcode_address (id,  <!-- 主键ID -->
+		REC_CREATOR,
+		REC_CREATE_TIME,
+		REC_REVISOR,
+		REC_REVISE_TIME,
+		area_code,  <!-- 院区编码 -->
+		area_name,  <!-- 院区名称 -->
+		building_name,
+		building,  <!-- 所属楼 -->
+		floor_name,
+		floor,  <!-- 层 -->
+		ward_code,  <!-- 病区编码 -->
+		ward_name,  <!-- 病区名称 -->
+		dept_name,  <!-- 科室名称 -->
+		dept_code,  <!-- 科室编码 -->
+		bed_no,
+		add_num,  <!-- 地点编码 -->
+		multi_code  <!-- 账套 -->
+		)
+		VALUES (#id#, #recCreator#, #recCreateTime#, #recRevisor#,
+		#recReviseTime#,
+		#areaCode#, #areaName#, #buildingName#, #building#,
+		#floorName#,
+		#floor#, #wardCode#, #wardName#, #deptName#, #deptCode#,
+		#bedNo#,
+		#addNum#, #multiCode#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM sc_qrcode_address WHERE
+		id =
+		#id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_qrcode_address
+		SET
+		REC_CREATOR = #recCreator#,
+		REC_CREATE_TIME = #recCreateTime#,
+		REC_REVISOR = #recRevisor#,
+		REC_REVISE_TIME = #recReviseTime#,
+		area_code = #areaCode#,   <!-- 院区编码 -->
+		area_name = #areaName#,   <!-- 院区名称 -->
+		building_name = #buildingName#,
+		building = #building#,   <!-- 所属楼 -->
+		floor_name = #floorName#,
+		floor = #floor#,   <!-- 层 -->
+		ward_code = #wardCode#,   <!-- 病区编码 -->
+		ward_name = #wardName#,   <!-- 病区名称 -->
+		dept_name = #deptName#,   <!-- 科室名称 -->
+		dept_code = #deptCode#,   <!-- 科室编码 -->
+		bed_no = #bedNo#,
+		add_num = #addNum#,   <!-- 地点编码 -->
+		multi_code = #multiCode#  <!-- 账套 -->
+		WHERE
+		id = #id#
+	</update>
+
+</sqlMap>

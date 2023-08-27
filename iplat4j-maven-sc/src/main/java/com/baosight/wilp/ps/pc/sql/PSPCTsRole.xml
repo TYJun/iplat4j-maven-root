@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-05-25 17:10:14
+   		Version :  6.0.731.201809200158
+		tableName :t_s_role 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 rolecode  VARCHAR, 
+		 rolename  VARCHAR   NOT NULL, 
+		 classId  VARCHAR, 
+		 moduleId  VARCHAR
+	-->
+<sqlMap namespace="PSPCTsRole">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.ps.pc.domain.PSPCTsRole">
+		SELECT 
+		    id AS "id",
+		    rolecode AS "rolecode",
+		    rolename AS "rolename",
+		    classId AS "classid",
+		    moduleId AS "moduleid" 
+		FROM
+		    t_s_role 
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+	
+	<select id="queryRole" parameterClass="String" resultClass="com.baosight.wilp.ps.pc.domain.PSPCTsRole">
+		SELECT DISTINCT
+		    t.id AS "id",
+		    rolecode AS "rolecode",
+		    rolename AS "rolename",
+		    classId AS "classid",
+		    moduleId AS "moduleid" 
+		FROM
+		    t_s_role t
+		    LEFT JOIN t_s_role_user t1 ON t.id = t1.roleid 
+		WHERE 1=1
+		and t1.userid = #userid#
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM t_s_role WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="rolecode">
+			rolecode = #rolecode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="rolename">
+			rolename = #rolename#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="classid">
+			classId = #classid#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="moduleid">
+			moduleId = #moduleid#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO t_s_role (id,
+										rolecode,
+										rolename,
+										classId,
+										moduleId
+										)		 
+	    VALUES (#id#, #rolecode#, #rolename#, #classid#, #moduleid#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM t_s_role WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE t_s_role 
+		SET 
+					rolecode	= #rolecode#,   
+					rolename	= #rolename#,   
+					classId	= #classid#,   
+					moduleId	= #moduleid#  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

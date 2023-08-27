@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SSBMSCDD01">
+
+	<!-- Retrieve -->
+	<select id="query" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.ss.bm.domain.SSBMSCDD01">
+		SELECT
+		id	as "id",
+		class_name	as "className",  <!-- 地址分类名称 -->
+		dept_num	as "deptNum",  <!-- 科室编码 -->
+		dept_name	as "deptName",  <!-- 科室名称 -->
+		spot_num	as "spotNum",  <!-- 地点编码 -->
+		spot_name	as "spotName",  <!-- 地点名称 -->
+		building	as "building",  <!-- 楼 -->
+		floor	as "floor",  <!-- 层 -->
+		room	as "room",  <!-- 房间 -->
+		canteen_num	as "canteenNum" <!-- 食堂编码 -->
+		FROM sc_location_class WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="className">
+			class_name = #className#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			dept_num = #deptNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name = #deptName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spotNum">
+			spot_num = #spotNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spotName">
+			spot_name = #spotName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="building">
+			building = #building#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floor">
+			floor = #floor#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="room">
+			room = #room#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="canteenNum">
+			canteen_num = #canteenNum#
+		</isNotEmpty>
+		order by dept_num,spot_num
+	</select>
+
+	<select id="queryLeafCount" parameterClass="java.lang.String" resultClass="java.lang.String">
+		
+			SELECT
+				id
+			FROM
+				sc_location_tree
+			WHERE
+				top_code = #value#
+			
+	</select>
+	
+	<select id="queryChildren" parameterClass="java.lang.String"  resultClass="java.lang.String">
+		SELECT
+			id
+		FROM
+			sc_location_tree
+		WHERE
+			top_code = #value#
+		
+	</select>
+
+	<select id="queryTree" parameterClass="java.util.HashMap"  resultClass="java.util.HashMap">
+		SELECT
+			id,
+			top_code topCode,
+			code,
+			name,
+			has_children hasChildren
+		FROM
+			sc_location_tree
+		WHERE 1=1 
+		<isNotEmpty prepend=" AND " property="node">
+            top_code = #node#
+        </isNotEmpty>
+		order by code
+	</select>
+	
+	<select id="queryDepts" resultClass="java.util.HashMap">
+		SELECT
+			DEPT_NAME deptName,
+			DEPT_NUM deptNum
+		FROM
+			tbmbd01
+		group by
+			DEPT_NAME
+		
+	</select>
+	
+	<select id="querySpot" resultClass="java.util.HashMap">
+		SELECT
+			spot_num spotNum,
+			spot_name spotName
+		FROM
+			tbmbd06
+		GROUP BY
+			spot_num
+		
+	</select>
+
+	<!-- 通过视图查询科室信息根据楼和层 -->
+	<select id="queryDeptByBuildAndFloor" resultClass="HashMap"
+			parameterClass="HashMap">
+		SELECT DISTINCT
+		dept.dept_num AS deptNum,
+		dept.dept_name AS deptName,
+		dept.id AS deptId,
+		t.spot_num AS spotNum,
+		t.spot_name AS sportName,
+		t.room
+		FROM
+		v_frame_ac_spot t
+		left join v_frame_ac_department dept on t.dept_id = dept.id
+		LEFT JOIN v_frame_ac_personnel p ON t.dept_id = p.dept_id
+		LEFT JOIN (
+		SELECT a.typecode, a.typename
+		FROM sc_type a, sc_typegroup b
+		WHERE a.typegroupid = b.ID AND b.typegroupcode = 'building'
+		) b ON t.building = b.typecode
+		LEFT JOIN (
+		SELECT a.typecode, a.typename
+		FROM sc_type a, sc_typegroup b
+		WHERE a.typegroupid = b.ID AND b.typegroupcode = 'floor'
+		) f ON t.floor = f.typecode
+
+		WHERE
+		1 =1
+		<isNotEmpty prepend=" AND " property="deptNum">
+			t.dept_num = #deptNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="building">
+			b.typecode=#building#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floor">
+			f.typecode=#floor#
+		</isNotEmpty>
+		ORDER BY
+		t.spot_num
+	</select>
+
+
+	<select id="queryBuildingByCanteen" parameterClass="HashMap"  resultClass="HashMap">
+		SELECT
+			code as typeCode,
+		    name as typeName
+		FROM
+			sc_location_tree
+		WHERE type = 'building'
+		<isNotEmpty prepend=" AND " property="canteenNum">
+			canteen_num = #canteenNum#
+		</isNotEmpty>
+		order by typeName + 0 , CONVERT(typeName USING GBK)
+	</select>
+
+	<select id="queryFloorByCanteen" parameterClass="HashMap"  resultClass="HashMap">
+		SELECT
+			code as floor,
+		    name as floorName
+		FROM
+			sc_location_tree
+		WHERE type = 'floor'
+		AND top_code = (
+			SELECT id FROM sc_location_tree WHERE type = 'building'
+			AND canteen_num = #canteenNum# AND code = #building#
+		)
+		order by floorName + 0
+	</select>
+
+	<select id="queryDeptByCanteen" parameterClass="HashMap"  resultClass="HashMap">
+		SELECT DISTINCT
+			dept_num as dept_num,
+			dept_name as dept_name
+		FROM
+			`sc_location_class`
+		WHERE 1=1
+			<isNotEmpty prepend=" AND " property="building">
+				building=#building#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="floor">
+				floor=#floor#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="canteenNum">
+				canteen_num=#canteenNum#
+			</isNotEmpty>
+	</select>
+
+
+	<insert id="insert" parameterClass="java.util.HashMap">
+		insert into sc_location_tree(id,top_code,code,name,has_children,canteen_num,type)
+		values(#id#,#topCode#,#code#,#name#,#hasChildren#,#canteenNum#,#type#)
+	</insert>
+
+	<insert id="insertClass" parameterClass="java.util.HashMap">
+		INSERT INTO sc_location_class (id,
+		class_name,  <!-- 地址分类名称 -->
+		dept_num,  <!-- 科室编码 -->
+		dept_name,  <!-- 科室名称 -->
+		spot_num,  <!-- 地点编码 -->
+		spot_name,  <!-- 地点名称 -->
+		building,  <!-- 楼 -->
+		floor,  <!-- 层 -->
+		room,  <!-- 房间 -->
+		canteen_num  <!-- 食堂编码 -->
+		)
+		VALUES (#id#, #className#, #deptNum#, #deptName#, #spotNum#, #spotName#, #building#, #floor#, #room#, #canteenNum#)
+	</insert>
+
+	<update id="update" parameterClass="java.util.HashMap">
+		UPDATE 
+			sc_location_tree
+		set 
+			code = #code#,name=#name#		
+		WHERE 
+			id = #id#
+	</update>
+	
+	<update id="updateClass" parameterClass="java.util.HashMap">
+		sc_location_class
+		SET
+		class_name	= #className#,   <!-- 地址分类名称 -->
+		dept_num	= #deptNum#,   <!-- 科室编码 -->
+		dept_name	= #deptName#,   <!-- 科室名称 -->
+		spot_num	= #spotNum#,   <!-- 地点编码 -->
+		spot_name	= #spotName#,   <!-- 地点名称 -->
+		building	= #building#,   <!-- 楼 -->
+		floor	= #floor#,   <!-- 层 -->
+		room	= #room#,   <!-- 房间 -->
+		canteen_num	= #canteenNum#  <!-- 食堂编码 -->
+		WHERE
+		id = #id#
+	</update>
+	
+	<update id="updateParent" parameterClass="java.util.HashMap">
+		UPDATE 
+			sc_location_tree
+		set 
+			has_children = '0'
+		WHERE 
+			id = #topCode#
+	</update>
+	
+	<update id="updHasChildren" parameterClass="java.lang.String">
+		UPDATE
+			sc_location_tree
+		SET 
+			hasChildren = '1'
+		WHERE
+			id 
+		IN (
+			SELECT
+				id
+			FROM
+				(
+					SELECT
+						top_code id
+					FROM
+						sc_location_tree
+					WHERE
+						id = #value#
+				) a
+			)
+	</update>
+	<!-- Delete -->
+	<delete id="delete" parameterClass="String">
+		DELETE FROM 
+			sc_location_tree
+		WHERE
+			id = #id#
+	</delete>
+
+
+
+	<delete id="deleteAddressClass" parameterClass="java.util.HashMap">
+		DELETE FROM sc_location_class WHERE id = #id# 
+	</delete>
+
+</sqlMap>

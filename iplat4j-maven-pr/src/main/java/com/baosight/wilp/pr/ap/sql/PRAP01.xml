@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-02-20 13:18:58
+   		Version :  6.0.731.201809200158
+		tableName :.xs_user_group 
+		 ID  VARCHAR   NOT NULL   primarykey, 
+		 GROUP_ENAME  VARCHAR   NOT NULL, 
+		 GROUP_CNAME  VARCHAR, 
+		 GROUP_TYPE  VARCHAR, 
+		 SORT_INDEX  INTEGER, 
+		 REC_CREATOR  VARCHAR, 
+		 REC_CREATE_TIME  VARCHAR, 
+		 REC_REVISOR  VARCHAR, 
+		 REC_REVISE_TIME  VARCHAR, 
+		 ARCHIVE_FLAG  VARCHAR, 
+		 MANAGE_GROUP_ENAME  VARCHAR
+	-->
+<sqlMap namespace="PRAP01">
+	
+	
+	<!-- 查询登录人所属院区 -->
+	<select id="queryLoginHosp" parameterClass="java.lang.String" resultClass="com.baosight.wilp.pr.ap.domain.Information">
+		SELECT
+			tx1.ORG_ENAME as dataGroupCode,
+			xu.MOBILE as telPhone,
+			xu.USER_NAME as name,
+			xu.LOGIN_NAME as workNo,
+			xug.GROUP_ENAME as role,
+			xug.GROUP_CNAME as roleName
+		FROM
+			iplat_v5demo.txsog01 tx1
+		JOIN iplat_v5demo.txsog03 tx3 ON tx1.ORG_ID = tx3.ORG_ID
+		JOIN iplat_v5demo.xs_user_group xug ON xug.ID = tx3.USER_GROUP_ID
+		JOIN iplat_v5demo.xs_user_group_member xugm ON xug.ID = xugm.PARENT_ID
+		JOIN iplat_v5demo.xs_user xu ON xu.USER_ID = xugm.MEMBER_ID
+			where xu.LOGIN_NAME=#value#
+	</select>
+	
+	
+	
+	<!-- 查询登录人所属科室信息 -->
+	<select id="queryDept" parameterClass="java.lang.String" resultClass="com.baosight.wilp.pr.ap.domain.Information">
+		SELECT
+			t1.DEPT_NUM as deptCode,
+			t1.DEPT_NAME as deptName
+		FROM
+			iplat_v5demo_business.tbmbd01 t1 
+		WHERE
+			dept_num = ( SELECT dept_num FROM iplat_v5demo_business.tbmbd02 WHERE work_no = #value# )
+	</select>
+	
+	
+	
+	
+	<!-- 根据用户工号 获取用户信息 -->
+	<select id="queryGroup" parameterClass="java.lang.String"
+		resultClass="java.util.HashMap">
+		SELECT
+			xug.GROUP_ENAME as groupEname,
+			xug.GROUP_CNAME as groupCname 
+		FROM
+			iplat_v5demo.xs_user_group xug
+			JOIN iplat_v5demo.xs_user_group_member xugm ON xug.ID = xugm.PARENT_ID
+			JOIN iplat_v5demo.xs_user xu ON xu.USER_ID = xugm.MEMBER_ID 
+		WHERE
+			xu.LOGIN_NAME = #value#
+	</select>
+	
+	<!-- 查询数据字典分类 -->
+	<!-- <select id="trashTypegroup" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.nb.ap.domain.TrashTypegroup">
+		SELECT
+			id as id,
+			typeGroupCode as typegroupcode,
+			typeGroupName as typegroupname,
+			datagroupcode as dataGroupCode
+		FROM
+			trash_typegroup
+	</select> -->
+	
+	<!-- 查询数据字典分类配置 -->
+	<!-- <select id="trashType" parameterClass="java.lang.String" resultClass="com.baosight.wilp.nb.ap.domain.TrashType">
+		SELECT
+			ID AS "id",
+			typecode AS "typecode",
+			typename AS "typename",
+			typepid AS "typepid",
+			typegroupid AS "typegroupid",
+			paramDesc1 AS "paramdesc1",
+			paramValue1 AS "paramvalue1",
+			paramDesc2 AS "paramdesc2",
+			paramValue2 AS "paramvalue2",
+			paramDesc3 AS "paramdesc3",
+			paramValue3 AS "paramvalue3",
+			paramDesc4 AS "paramdesc4",
+			paramValue4 AS "paramvalue4",
+			paramDesc5 AS "paramdesc5",
+			paramValue5 AS "paramvalue5",
+			paramDesc6 AS "paramdesc6",
+			paramValue6 AS "paramvalue6",
+			sortNo AS "sortno" 
+		FROM
+			trash_type 
+		WHERE 
+			typegroupid = #value#
+	</select> -->
+
+
+  
+</sqlMap>

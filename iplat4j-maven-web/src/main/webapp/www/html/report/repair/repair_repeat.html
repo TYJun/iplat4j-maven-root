@@ -1,0 +1,206 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../../../reference/bootstrap-3.3.5/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../../css/android-ios.css">
+    <link rel="stylesheet" href="../../../css/loading.css" />
+    <link rel="stylesheet" href="../../../css/colorGreen.css"/>
+    <link rel="stylesheet" href="../../../css/colorBlue.css"/>
+</head>
+<style type="text/css">
+.company-list li {
+    border-bottom: 0px;
+}
+</style>
+
+<body>
+    <nav class="navbar navbar-inverse nav-height" style="border-radius:2px;" role="navigation">
+        <div style="float:left;">
+            <ul class="nav nav-pills ul-btn-right">
+                <li><a id="back" style="color:#FFFFFF;">返回</a></li>
+            </ul>
+        </div>
+        <div style="float:right;">
+        </div>
+    </nav>
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+    <div id="loading" class="spinner" style="position:fixed;z-index:9999;text-align:center;width:100%;">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    <div id="container" style="margin: 0 auto"></div>
+    <div>
+        <ul id="list" class="list-group">
+            <!--  <li class="list-group-item" style="background-color:#222;border-color: #080808;color:#FFFFFF;">
+                <span class="badge" style="background-color:#222;color:#FFFFFF;">数量/百分比</span>
+                总数:1024
+            </li>
+            <li class="list-group-item" style="background-color:#9F88FF">
+                <span class="badge" style="background-color:#9F88FF">1/10%</span>
+                chorme
+            </li>
+            <li class="list-group-item" style="background-color:#00BBFF">
+                <span class="badge" style="background-color:#00BBFF">1/10%</span>
+                firefox
+            </li> -->
+        </ul>
+    </div>
+</body>
+<script type="text/javascript" src="../../../js/color.js"></script>
+<script src="../../../reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../../../reference/bootstrap-3.3.5/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../js/highcharts.js"></script>
+<script src="../js/exporting.js"></script>
+<script type="text/javascript">
+$(function() {
+    $(document).ready(function() {
+        var baseUrl = localStorage.getItem("url");
+        var nameList = [];
+        var numList = [];
+        var total; //总数量
+        var dataList = new Array();
+        var colorArray = ['#9F88FF', '#00BBFF', '#99FF99', '#FF8800', '#C10066', '#888888',
+            '#5500FF', '#CCEEFF', '#FFE4B5', '#32CD32', '#B8860B', '#DCDCDC',
+            '#D8BFD8', '#1E90FF ', '#00FF00', '#FFB7DD', '#FFB3FF', '#444444',
+            '#4B0082', '#B0C4DE', '#F0FFF0', '#FF44AA', '#CC00FF', '#DDDDDD',
+            '#7B68EE', '#6495ED', '#228B22', '#8C0044', '#E8CCFF', '#886600'
+        ];
+
+        //加载数据
+
+        function loadData() {
+            $.ajax({
+                url: baseUrl + 'app_maintainReportController.do?getUnDuplicate',
+                type: 'post',
+                success: function(res) {
+                    $('#loading').hide();
+                    console.log("res:" + JSON.stringify(res));
+                    var res = eval("("+res+")");
+                    if (res.respCode == "200") {
+                        total = res.obj.total;
+                        var data = res.obj.data;
+                        var dt = {
+                            name: data.name,
+                            y: data.num,
+                            color: colorArray[0]
+                        };
+                        dataList.push(dt);
+                        nameList.push(data.name);
+                        numList.push(data.num);
+                        showCharts();
+                        initTotal(total, dataList);
+
+                    } else alert(res.respMsg);
+                },
+                complete: function(XMLHttpRequest, status) { //请求完成后最终执行参数
+                    if (status == 'timeout') {
+                      $("#loading").hide();
+                      $('#warn small').html('网速不给力，请重试！');
+                      $("#warn").fadeIn(500);
+                      setTimeout("$('#warn').fadeOut(500)", 3000);　　
+                    } else if (status == 'error') {
+                      $("#loading").hide();
+                      $('#warn small').html('当前网络不可用，请查看网络是否畅通！');
+                      $("#warn").fadeIn(500);
+                      setTimeout("$('#warn').fadeOut(500)", 3000);　
+                    }　
+              }
+            });
+        }
+        $('#loading').hide();
+        loadData();
+
+        //加载报表统计列表
+
+        function initTotal(total, data) {
+            var html = "<li class='list-group-item backColor' style='border-radius:2px;border-color: #5bc0de;color:#FFFFFF;'><span class='badge backColor' style='color:#FFFFFF;'>数量/百分比</span>总数:" + total + "</li>";
+            var percent = 0.00;
+            for (var i = 0; i < data.length; i++) {
+                if (total != 0) {
+                    percent = (100 * data[i].y / total).toFixed(1);
+                }
+                html += "<li class='list-group-item'><span class='badge' style='background-color:#FFFFFF;color:#000000;'>" + data[i].y + "/" + percent + "%</span><div style='width:18px;height:18px;background-color:" + colorArray[i] + ";float:left;'></div><div style='margin-left:25px;'>" + data[i].name + "</div></li>";
+            }
+
+            $('#list').html(html);
+        }
+
+        //加载highcharts
+
+        function showCharts() {
+            // Build the chart
+            $('#container').highcharts({
+                chart: {
+                    type: 'column',
+                    height: 250,
+                    inverted: true
+                },
+
+                title: {
+                text: '维修工单重复统计'
+                },
+                xAxis: {
+                    categories: nameList
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                exporting: {
+                    enabled: false
+                },
+                credits: {
+                    enabled: false
+                },
+                plotOptions: {
+                    series: {
+                        stacking: 'normal'
+                    },
+                    dataLabels: {
+                        enabled: true
+                    }
+                },
+                series: [{
+                    data: dataList
+                }],
+                colors: colorArray
+            });
+        }
+
+        $("#list").on('click', 'li', function() {
+            location.href = "repair_repeat_list.html";
+        });
+
+        //主页
+        $("#home").click(function() {
+            location.href = '../../../menu.html';
+        });
+
+        //刷新
+        $("#refresh").click(function() {
+            location.reload();
+        });
+
+        //返回
+        $("#back").click(function() {
+            window.history.back(-1);
+        });
+    });
+});
+</script>
+
+</html>

@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.min.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../reference/mui/css/mui.picker.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="css/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="css/loading.css" />
+  </head>
+  <style type="text/css">
+    body {
+      background: #f5f5f5;
+    }
+
+    .tab {
+      width: 100%;
+      padding: 8px 15px;
+      color: #ff9800;
+      font-size: 13px;
+    }
+
+    .selection-div {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 99;
+      background: #f5f5f5;
+    }
+
+    .addItemBtn {
+      position: fixed;
+      bottom: 65px;
+      right: 15px;
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      z-index: 98;
+    }
+
+    .selection-content {
+      width: 100%;
+      height: 100%;
+      padding-top: 44px;
+      overflow: scroll;
+      overflow-x: hidden;
+    }
+
+    .item-div {
+      width: 100%;
+    }
+
+    .item {
+      width: 100%;
+      height: 160px;
+      margin-bottom: 10px;
+      background: #fff;
+      padding: 10px 15px 5px 15px;
+      border-left: 4px solid #31c37b;
+    }
+
+    .border-shadows {
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+    }
+
+    .item1 {
+      width: 100%;
+      height: 20px;
+      font-size: 15px;
+      color: #303133;
+    }
+
+    .item2 {
+      width: 100%;
+      /* height: 18px; */
+      font-size: 13px;
+      color: #909399;
+    }
+
+    .mui-numbox {
+      border: none;
+      height: 31px;
+      padding: 0 31px;
+      width: 100px;
+    }
+
+    .mui-numbox [class*="btn-numbox"],
+    .mui-numbox [class*="numbox-btn"] {
+      background-color: #31c37b;
+      color: #fff;
+      width: 31px;
+      border-radius: 3px;
+    }
+
+    .operation-div {
+      padding: 5px 0;
+    }
+
+    .selection-tab {
+      width: 100%;
+      height: 43px;
+      padding: 11px 15px;
+      position: relative;
+      background: #fff;
+      color: #ff9800;
+      font-size: 13px;
+      border-bottom: 1px solid #ebeef5;
+    }
+
+    .selection-tab:after {
+      right: 15px;
+      content: "\e581";
+      font-family: Muiicons;
+      font-size: inherit;
+      line-height: 1;
+      position: absolute;
+      top: 50%;
+      display: inline-block;
+      -webkit-transform: translateY(-50%);
+      transform: translateY(-50%);
+      text-decoration: none;
+      color: #ff9800;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .selection-active {
+      background: #f5f5f5;
+      border: none;
+    }
+
+    .selection-active:after {
+      content: "\e580";
+    }
+
+    .hideForm {
+      display: none;
+    }
+
+    .mui-input-group .mui-input-row:last-child {
+      background: #fff;
+    }
+
+    label {
+      color: #606266;
+    }
+
+    .btn-div {
+      width: 100%;
+      padding: 15px;
+    }
+
+    .btn-sub {
+      width: 100%;
+      height: 40px;
+      background: #30c37c;
+      border: none;
+      color: #fff;
+    }
+
+    .mui-switch.mui-active:before {
+      content: "是";
+    }
+
+    .mui-switch:before {
+      content: "否";
+    }
+    .toBuilding {
+      color: #000;
+    }
+  </style>
+
+  <body>
+    <header id="header" class="mui-bar mui-bar-nav">
+      <h1 class="mui-title">陪检登记</h1>
+      <button class="menu mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>返回
+      </button>
+      <!-- <button class="mui-btn mui-btn-link mui-pull-right">编辑</button> -->
+    </header>
+    <div id="loading" class="loading-div" style="z-index:99;" hidden>
+      <div class="loading-center">
+        <div class="loading-center-absolute">
+          <div class="object" id="object_one"></div>
+          <div class="object" id="object_two"></div>
+          <div class="object" id="object_three"></div>
+          <div class="object" id="object_four"></div>
+        </div>
+      </div>
+    </div>
+    <div class="mui-content" style="margin-bottom: 50px;">
+      <div class="tab">基础信息</div>
+      <form class="mui-input-group">
+        <div class="mui-input-row">
+          <label>科室</label>
+          <input
+            id="dept"
+            type="text"
+            class="deptName"
+            placeholder="请选择科室"
+            readonly
+          />
+        </div>
+        <div class="mui-input-row">
+          <label>姓名</label>
+          <input
+            id="userName"
+            type="text"
+            class="mui-input-clear"
+            placeholder="请输入姓名"
+          />
+        </div>
+        <div class="mui-input-row">
+          <label>电话</label>
+          <input
+            id="contentTel"
+            type="text"
+            class=""
+            placeholder="请填写电话"
+            readonly
+          />
+        </div>
+        <div class="mui-input-row">
+          <label>陪检时间</label>
+          <input
+            id="accompanyTime"
+            type="text"
+            class="accompanyTime"
+            placeholder="请选择陪检时间"
+            readonly
+          />
+        </div>
+        <div class="mui-input-row" id="addItemBtn">
+          <label>陪检项目</label>
+          <input
+            type="text"
+            class=""
+            placeholder="请选择项目类型"
+            readonly="readonly"
+          />
+        </div>
+      </form>
+     
+      <div class="tab">陪检项目明细</div>
+      <div id="ITEM_LIST" class="item-div">
+      
+      </div>
+      <div class="btn-div">
+        <button type="button" class="btn-sub">登记</button>
+      </div>
+    </div>
+    <!-- 选择检查项目 -->
+    <div id="selection" class="selection-div" hidden>
+      <header id="header" class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">陪检项目</h1>
+        <button class="back mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+          <span class="mui-icon mui-icon-left-nav"></span>返回
+        </button>
+        <button class="save mui-btn mui-btn-link mui-pull-right">保存</button>
+      </header>
+      <div id="ITEM_SELECTION" class="selection-content">
+       
+      </div>
+    </div>
+    <!-- 新增项目按钮 -->
+  </body>
+  <script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/mui.picker.min.js"
+  ></script>
+  <script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var deptName = localStorage.getItem("deptName");
+    var deptCode = localStorage.getItem("deptCode");
+    var name = localStorage.getItem("name");
+    var phone = localStorage.getItem("telPhone");
+    var datagroupCode = localStorage.getItem("dataGroupCode");
+    console.log(getOneHourLater());
+    var myDate = new Date();
+    // var nowTime = myDate.toLocaleTimeString();
+    var year = myDate.getFullYear();
+    var month =
+      myDate.getMonth() + 1 < 10
+        ? "0" + (myDate.getMonth() + 1)
+        : myDate.getMonth() + 1;
+    var day = myDate.getDate() < 10 ? "0" + myDate.getDate() : myDate.getDate();
+
+    var hour =
+      myDate.getHours() < 10 ? "0" + myDate.getHours() : myDate.getHours();
+    var minute =
+      myDate.getMinutes() < 10
+        ? "0" + myDate.getMinutes()
+        : myDate.getMinutes();
+    var second =
+      myDate.getSeconds() < 10
+        ? "0" + myDate.getSeconds()
+        : myDate.getSeconds();
+    var nowTime =
+      year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+    console.log(nowTime);
+    // $("#applyTime").val(nowTime);
+
+    $(".mui-content").css("min-height", $(window).height());
+    $("#dept").val(deptName);
+    $("#dept").attr("deptCode", deptCode);
+    $("#userName").val(name);
+    $("#contentTel").val(phone);
+    $("#accompanyTime").val(nowTime);
+
+    /**
+     * 加载陪检项目
+     */
+    getAccomType();
+    function getAccomType() {
+      $.ajax({
+        url: baseUrl + "accompany",
+        type: "post",
+        headers: {
+          methodName: "queryAccompanyProject",
+          className: "AppAccompany"
+        },
+        success: function(data) {
+          console.log(data);
+          var items = data.map.obj;
+          var itemList = "";
+          var html;
+          for (var i = 0; i < items.length; i++) {
+            itemList += createItems(items[i]);
+          }
+          $("#ITEM_SELECTION").html(itemList);
+        },
+        error: function(XMLHttpRequest) {},
+        complete: function(XMLHttpRequest, status) {
+          if (status == "timeout") {
+            $("#loading").hide();
+            mui.toast("网速不给力，请重试！");
+            return;
+          } else if (status == "error") {
+            $("#loading").hide();
+            mui.toast("当前网络不可用，请查看网络是否畅通！");
+            return;
+          }
+        }
+      });
+    }
+    /**
+     * 加载科室列表&检查项目&运送工具
+     */
+    var lists = [];
+    
+    /**
+     *@desc   获取陪检时间
+     *@author wjy
+     */
+
+    (function($) {
+      $("#accompanyTime")[0].addEventListener(
+        "tap",
+        function() {
+          var optionsJson = this.getAttribute("data-options") || "{}";
+          var options = JSON.parse(optionsJson);
+          var picker = new $.DtPicker(options);
+          picker.show(function(rs) {
+            $("#accompanyTime")[0].value = rs.text + ":00";
+            appointmentTime = rs.text + ":00";
+            picker.dispose();
+          });
+        },
+        false
+      );
+    })(mui);
+
+    /**
+     * 选择科室
+     */
+    var picker = new mui.PopPicker({
+      layer: 2
+    });
+    var deptCode = "",
+      deptName = "";
+    mui("body").on("tap", "input.deptName", function() {
+      picker.show(function(data) {
+        // deptCode = data[1].value;
+        deptCode = data[1].id;
+        deptName = data[1].text;
+        $("#dept").val(deptName);
+      });
+    });
+
+    /**
+     * 生成检查项目元素
+     */
+    function createItems(items) {
+      var html = "";
+      lists.push(items);
+      html += '<div class="mui-input-row mui-checkbox">';
+      html += "<label>" + items.accompanyProject + "</label>";
+      html += '<input name="items" value="' + items.id + '" type="checkbox">';
+      html += "</div>";
+      return html;
+    }
+
+    /**
+     * 保存
+     */
+    mui("body").on("tap", "button.save", function() {
+      var items = $("input[name=items]:checked");
+      var itemTime = getOneHourLater();
+      var itemSelected = "";
+      for (var i = 0; i < items.length; i++) {
+        var text = items
+          .eq(i)
+          .prev()
+          .text();
+        var value = items.eq(i).val();
+        //这里循环运送类型获取地址
+        var addressCode = "";
+        var addressName = "";
+        for (var k = 0; k < lists.length; k++) {
+          //如果为当前运送类型并且有地点则默认第一个
+          if (lists[k].value == value && lists[k].address.length > 0) {
+            addressCode = lists[k].address[0].value;
+            addressName = lists[k].address[0].text;
+          }
+        }
+        itemSelected += createItemSelected(
+          text,
+          value,
+          itemTime,
+          addressCode,
+          addressName
+        );
+      }
+      $("#ITEM_LIST").html(itemSelected);
+      $("#selection").hide();
+      $("html").attr("style", "overflow:auto;");
+      $("body").attr("style", "overflow:auto;");
+    });
+
+    function getOneHourLater() {
+      var date1 = new Date();
+      var date2 = new Date(date1.getTime() + 3600 * 1000);
+      var year = date2.getFullYear(); //年
+      var month = date2.getMonth() + 1; //月
+      var day = date2.getDate(); //日
+      var hh = date2.getHours(); //时
+      var mm = date2.getMinutes(); //分
+      var clock = year + "-";
+      if (month < 10) clock += "0";
+      clock += month + "-";
+      if (day < 10) clock += "0";
+      clock += day + " ";
+      if (hh < 10) clock += "0";
+      clock += hh + ":";
+      if (mm < 10) clock += "0";
+      clock += mm;
+      return clock;
+    }
+
+    /**
+     * 创建已选项目
+     */
+    function createItemSelected(
+      text,
+      value,
+      itemTime,
+      addressCode,
+      addressName
+    ) {
+      var html = '<div id="' + value + '" class="item">';
+      html += '<div class="item1  mui-row">';
+      html += '<div class="mui-col-xs-10">' + text + "</div>";
+      html += '<div class="mui-col-xs-2">';
+      html +=
+        '<button type="button" class="itemDelete mui-btn mui-btn-link" style="padding: 6px 0;color: #F56C6C;">删除 <span class="mui-icon mui-icon-forward"></span> </button>';
+      html += "</div>";
+      html += "</div>";
+
+      html += '<div class="item4  mui-input-row">';
+      html += "<label>床号</label>";
+      html += '<input  type="text"  class="bedNo" placeholder="请输入床号" />';
+      // html += "<p>多个床号之前请用空格隔开</p>";
+      html += "</div>";
+      html += '<div class="item5  mui-input-row">';
+      html += "<label>备注</label>";
+      html += '<textarea rows="3" cols="20"></textarea>';
+      html += "</div>";
+      html += "</div>";
+      html += "</div>";
+      return html;
+      
+    }
+    /**
+     * @desc   获取楼信息
+     * @author wjy
+     */
+    $("#build").on("click", function() {
+      getBuildInfo("from");
+    });
+    $("#ITEM_LIST").on("click", ".toBuilding", function() {
+      getBuildInfo("to", this);
+    });
+
+    function getBuildInfo(param, element) {
+      $.ajax({
+        url: baseUrl + "carriage",
+        type: "post",
+        headers: {
+          methodName: "getBuilding",
+          className: "AppCarriage"
+        },
+        success: function(data) {
+          var list = data.map.obj;
+          var newList = [];
+          list.forEach((item, index) => {
+            newList[index] = {
+              text: item.building,
+              value: index
+            };
+          });
+          var picker = new mui.PopPicker({
+            layer: 1
+          });
+          picker.setData(newList);
+          picker.show(function(rs) {
+            console.log(rs);
+            if (param == "from") {
+              console.log("from");
+
+              $("#build").val(rs[0].text);
+              $("#floor").val("");
+            } else {
+              $(element).val(rs[0].text);
+              $(element)
+                .parent()
+                .siblings()
+                .find(".toFloor")
+                .val("");
+            }
+          });
+        },
+        error: function(XMLHttpRequest) {
+          mui.toast("网速不给力，请重试！");
+        },
+        complete: function(XMLHttpRequest, status) {
+          if (status == "timeout") {
+            $("#loading").hide();
+            mui.toast("网速不给力，请重试！");
+            return;
+          } else if (status == "error") {
+            $("#loading").hide();
+            mui.toast("当前网络不可用，请查看网络是否畅通！");
+            return;
+          }
+        }
+      });
+    }
+    /**
+     * @desc   获取层信息
+     * @author wjy
+     */
+    $("#floor").on("click", function() {
+      var building = $("#build").val();
+      getFloorInfo(building, "from");
+    });
+    $("#ITEM_LIST").on("click", ".toFloor", function() {
+      console.log(this);
+
+      var building = $(this)
+        .parent()
+        .siblings()
+        .find(".toBuilding")
+        .val();
+      console.log("building:", building);
+
+      getFloorInfo(building, "to", this);
+    });
+    function getFloorInfo(building, param, element) {
+      if (!building) {
+        mui.toast("请选择楼信息");
+        return;
+      }
+      $.ajax({
+        url: baseUrl + "carriage",
+        type: "post",
+        headers: {
+          methodName: "getFloor",
+          className: "AppCarriage"
+        },
+        data: {
+          building
+        },
+        success: function(data) {
+          var list = data.map.obj;
+          var newList = [];
+          list.forEach((item, index) => {
+            newList[index] = {
+              text: item.floor,
+              value: index
+            };
+          });
+          var picker = new mui.PopPicker({
+            layer: 1
+          });
+          picker.setData(newList);
+          picker.show(function(rs) {
+            if (param == "from") {
+              $("#floor").val(rs[0].text);
+            } else {
+              $(element).val(rs[0].text);
+            }
+          });
+        },
+        error: function(XMLHttpRequest) {},
+        complete: function(XMLHttpRequest, status) {
+          if (status == "timeout") {
+            $("#loading").hide();
+            mui.toast("网速不给力，请重试！");
+            return;
+          } else if (status == "error") {
+            $("#loading").hide();
+            mui.toast("当前网络不可用，请查看网络是否畅通！");
+            return;
+          }
+        }
+      });
+    }
+
+    /**
+     * @desc   获取科室信息
+     * @author wjy
+     */
+    $("#dept").on("click", function() {
+      var buildingInfo = $("#build").val();
+      var floorInfo = $("#floor").val();
+      getDeptInfo(buildingInfo, floorInfo, "from");
+    });
+    $("#ITEM_LIST").on("click", ".toDept", function() {
+      var buildingInfo = $(this)
+        .parent()
+        .siblings()
+        .find(".toBuilding")
+        .val();
+      var floorInfo = $(this)
+        .parent()
+        .siblings()
+        .find(".toFloor")
+        .val();
+      getDeptInfo(buildingInfo, floorInfo, "to", this);
+    });
+    function getDeptInfo(buildingInfo, floorInfo, param, element) {
+      if (!buildingInfo) {
+        mui.toast("请选择楼信息");
+        return;
+      }
+      if (!floorInfo) {
+        mui.toast("请选择层信息");
+        return;
+      }
+      $.ajax({
+        url: baseUrl + "carriage",
+        type: "post",
+        headers: {
+          methodName: "getDepartment",
+          className: "AppCarriage"
+        },
+        data: {
+          building: buildingInfo,
+          floor: floorInfo
+        },
+        success: function(data) {
+          console.log(data);
+
+          var list = data.map.obj;
+          console.log("list:", list);
+          var newList = [];
+          list.forEach((item, index) => {
+            newList[index] = {
+              text: item.deptName ? item.deptName : "--",
+              value: item.deptNum ? item.deptNum : "--"
+            };
+          });
+          console.log("newList:", newList);
+
+          var picker = new mui.PopPicker({
+            layer: 1
+          });
+          picker.setData(newList);
+          picker.show(function(rs) {
+            if (param == "from") {
+              console.log(rs);
+
+              $("#dept").val(rs[0].text);
+              $("#dept").attr("deptNo", rs[0].value);
+            } else {
+              console.log($(element));
+
+              $(element).val(rs[0].text);
+            }
+          });
+        },
+        error: function(XMLHttpRequest) {},
+        complete: function(XMLHttpRequest, status) {
+          if (status == "timeout") {
+            $("#loading").hide();
+            mui.toast("网速不给力，请重试！");
+            return;
+          } else if (status == "error") {
+            $("#loading").hide();
+            mui.toast("当前网络不可用，请查看网络是否畅通！");
+            return;
+          }
+        }
+      });
+    }
+
+    /**
+     * 减
+     */
+    mui("body").on("tap", "button.mui-btn-numbox-minus", function() {
+      var thisNum = $(this).next();
+      var num = parseInt(thisNum.val()) - 1;
+      if (num <= 1) {
+        thisNum.val(1);
+      } else {
+        thisNum.val(num);
+      }
+    });
+
+    /**
+     * 加
+     */
+    mui("body").on("tap", "button.mui-btn-numbox-plus", function() {
+      var thisNum = $(this).prev();
+      var num = parseInt(thisNum.val()) + 1;
+      thisNum.val(num);
+    });
+
+    /**
+     * 删除项目
+     */
+    mui("body").on("tap", "button.itemDelete", function() {
+      $(this)
+        .parent()
+        .parent()
+        .parent()
+        .remove();
+    });
+
+    /**
+     * 修改地点
+     */
+    var _this = null;
+    mui("body").on("tap", "button.placeChange", function() {
+      _this = $(this)
+        .parent()
+        .parent()
+        .parent();
+      var picker1 = new mui.PopPicker();
+      for (var i = 0; i < lists.length; i++) {
+        if (lists[i].value == _this.attr("id")) {
+          picker1.setData(lists[i].address);
+        }
+      }
+      picker1.show(function(data) {
+        _this.find("div.itemPlace").html(data[0].text);
+        _this.find("div.item3").html(data[0].value);
+        picker1.dispose();
+      });
+    });
+    /**
+     * 修改时间
+     */
+    var _this = null;
+    var dtPicker = new mui.DtPicker();
+    mui("body").on("tap", "button.timeChange", function() {
+      _this = $(this)
+        .parent()
+        .parent()
+        .parent();
+      dtPicker.show(function(thisDate) {
+        _this.find("div.item2").html(thisDate.value);
+        // console.log(thisDate);
+      });
+    });
+
+    /**
+     * 登记
+     * @method
+     * @param  {[type]}   ) {               } [description]
+     * @return {[type]}     [description]
+     * @author JiangPing
+     * @date   2018-04-12
+     */
+    mui("body").on("tap", "button.btn-sub", function() {
+      $("input").blur();
+      var itemList = $("#ITEM_LIST .item");
+      for (var i = 0; i < itemList.length; i++) {
+        var bedFlag = itemList
+          .eq(i)
+          .find("div.item4 .bedNo")
+          .val();
+        if (!bedFlag) {
+          mui.toast("请填写床号");
+          return;
+        }
+      }
+      var btnArray = ["否", "是"];
+      mui.confirm("确认提交?", "登记", btnArray, function(e) {
+        if (e.index == 1) {
+          doSubmit();
+        }
+      });
+    });
+
+    /**
+     * 登记
+     * @method doSubmit
+
+     */
+    function doSubmit() {
+
+      var itemList = $("#ITEM_LIST .item");
+      if (itemList.length == 0) {
+        mui.toast("请选择检查项目");
+        return;
+      }
+      var items = "";
+      for (var i = 0; i < itemList.length; i++) {
+        items +=
+          itemList
+            .eq(i)
+            .find("div.item1 .mui-col-xs-10")
+            .text() + ",";
+        items +=
+          itemList
+            .eq(i)
+            .find("div.item4 .bedNo")
+            .val()
+            .replace(/[^\d\s]/gi, " ") + ",";
+        items +=
+          itemList
+            .eq(i)
+            .find("div.item5 textarea")
+            .val() + ";";
+      }
+      $("#loading").show();
+      var deptName = $("#dept").val();
+      var deptCode = $("#dept").attr("deptCode");
+      var name = $("#userName").val();
+      var contentTel = $("#contentTel").val();
+      var accompanyTime = $("#accompanyTime").val();
+      $.ajax({
+        url: baseUrl + "accompany",
+        type: "post",
+        headers: {
+          methodName: "insertAccompanyProject",
+          className: "AppAccompany"
+        },
+        data: {
+          workNo: workNo,
+          fromDeptName: deptName,
+          fromDeptNo: deptCode,
+          name,
+          contentTel,
+          accompanyTime,
+          datagroupCode,
+          dectedClass: items
+        },
+        success: function(data) {
+          $("#loading").hide();
+          // var data = JSON.parse(data);
+
+          if (data.respCode == "200") {
+            mui.toast("保存成功");
+            setTimeout(function() {
+              location.href = "./main.html";
+            }, 2000);
+          } else {
+            mui.toast("保存失败");
+          }
+        }
+      });
+    }
+
+    /**
+     * 点击显示或隐藏项目分类
+     */
+    mui("body").on("tap", "div.selection-tab", function() {
+      $(this).toggleClass("selection-active");
+      $(this)
+        .next()
+        .toggleClass("hideForm");
+    });
+
+    /**
+     * 新增项目
+     */
+    mui("body").on("tap", "div#addItemBtn", function() {
+      $("input").blur();
+      $("#selection").show();
+    });
+
+    /**
+     * 关闭选择项目界面
+     */
+    mui("body").on("tap", "button.back", function() {
+      $("#selection").hide();
+    });
+
+    /**
+     * 首页
+     */
+    mui("body").on("tap", "button.menu", function() {
+      location.href = "main.html";
+    });
+  </script>
+</html>

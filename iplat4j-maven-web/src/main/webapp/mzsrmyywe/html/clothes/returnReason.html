@@ -1,0 +1,309 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="../reference/mui/css/mui.min.css">
+  <link rel="stylesheet" href="../reference/css/common.css" />
+</head>
+<STYLE TYPE="text/css">
+  body {
+    background: #eee;
+  }
+
+  .mui-bar {
+    background-color: #2AABD2;
+  }
+
+  .mui-bar-nav {
+    box-shadow: 0 1px 1px #2AABD2;
+  }
+
+  .task-div {
+    width: 96%;
+    margin: 10px auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background: #fff;
+    border-radius: 2px;
+    box-shadow: 0px 2px 5px #d4d4d4;
+  }
+
+  .task-title {
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 1px solid #eee;
+    font-weight: bold;
+  }
+
+  .status-applying {
+    color: #ff9800;
+  }
+
+  .status-accept {
+    color: #0dc515;
+  }
+
+  .status-remove {
+    color: #f5675c;
+  }
+
+  .status-unknown {
+    color: #f5675c;
+  }
+
+  .task-info {
+    padding-top: 10px;
+    color: #999999;
+  }
+
+  .info-title {
+    color: #5d5d5d;
+  }
+
+  .mui-table-view:before {
+    background-color: #eee;
+  }
+
+  .mui-table-view:after {
+    background-color: #eee;
+  }
+
+  .btn-div {
+    width: 100%;
+    text-align: left;
+    border-top: 1px solid #eee;
+    margin-top: 10px;
+    padding-bottom: 5px;
+  }
+
+  .btn-div button {
+    margin-left: 10px;
+  }
+
+  .btn-views {
+    width: 80px;
+    border-radius: 15px;
+    border: 1px solid #30c37c;
+    color: #30c37c;
+  }
+
+  .title-deal {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    opacity: 0.77;
+    font-size: 17px;
+    float: left;
+    width: 40%;
+  }
+
+  .submit {
+    position: fixed;
+    bottom: 0px;
+    left: 0;
+    right: 0;
+    background: #30c37c;
+    text-align: center;
+    line-height: 50px;
+    height: 50px;
+    color: #FFFFff;
+    font-size: 19px;
+  }
+
+  .diceng {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100000;
+    background: black;
+    opacity: 0.5;
+  }
+
+  .applyMoney {
+    position: fixed;
+    z-index: 100099;
+    width: 90%;
+    left: 5%;
+    top: 180px;
+    background: #FFFFFF;
+  }
+
+  .applyTitle {
+    height: 50px;
+    line-height: 50px;
+    border-bottom: 1px solid #e1e1e1;
+    text-align: center;
+    font-size: 20px;
+    color: #666666;
+  }
+
+  .applyInput {
+    height: 80px;
+    line-height: 80px;
+    padding: 22.5px 15px;
+  }
+
+  .setInput {
+    color: #333333;
+    width: 100%;
+    border: 0;
+    outline: none;
+    text-align: left;
+    font-size: 15px;
+  }
+
+  .editButtons {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 19px;
+  }
+
+  .word-omit {
+    color: #333333;
+  }
+
+  .returnSubmit {
+    width: 100%;
+    height: 50px;
+    background: #2AABD2;
+    color: #FFFFff;
+    line-height: 50px;
+    font-size: 19px;
+    text-align: center;
+    margin-top: 20px;
+    border-radius: 10px;
+  }
+</STYLE>
+
+<body>
+  <header class="mui-bar mui-bar-nav">
+    <h1 class="mui-title">退单原因</h1>
+    <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+      返回
+    </button>
+  </header>
+
+  <div id="warn" class="warn" hidden>
+    <small></small>
+  </div>
+  <div id="loading" class="loading1" hidden>
+    <div class="loading2">
+      <span class="mui-spinner" style="width:80px;height:80px;"></span>
+    </div>
+  </div>
+
+  <div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="">
+    <div class="mui-scroll">
+      <ul class="mui-table-view mui-table-view-chevron" style="background-color:#eee;">
+
+        <div style="padding: 0px  10px;">
+          <div class="mui-row"
+            style="background: #FFFFFF;margin-top: 20px;	box-shadow: 0px 5px 16px 0px rgba(209, 209, 209, 0.71);border-radius: 5px;">
+
+            <div class="mui-col-sm-12 mui-col-xs-12" style="font-size:15px ;">
+              <textarea class="remark" style="resize: none;height: 170px;border: none;"
+                placeholder="请输入退单原因..."></textarea>
+            </div>
+
+          </div>
+          <div class="returnSubmit" id="returnSubmit" style="">提交</div>
+        </div>
+      </ul>
+    </div>
+  </div>
+
+</body>
+<script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../reference/js/common.js" type="text/javascript"></script>
+<script src="../../cordova.js" type="text/javascript"></script>
+<script type="text/javascript">
+  var baseUrl = localStorage.getItem("url");
+  var workName = localStorage.getItem("name");
+  var url = location.search;
+  var jsonStrBack = url.substring(1, url.length);
+  var jsonBack = JSON.parse(decodeURIComponent(jsonStrBack));
+  console.log(jsonBack);
+  var clickAllow = true;
+  //loadViews();
+
+  document.getElementById("returnSubmit").addEventListener('tap', function () {
+    if (clickAllow == false) {
+      console.log("不能点")
+      return;
+    }
+    if ($(".remark").val() == "") {
+      showMsg("退单原因不能为空!");
+      clickAllow = true;
+      return;
+    } else {
+      clickAllow = false;
+      returnSubmit();
+    }
+
+  });
+
+  document.getElementById("back").addEventListener('tap', function () {
+    history.back(-1);
+  });
+
+  function returnSubmit() {
+    $("#loading").show();
+    $.ajax({
+      url: baseUrl + 'queryGf/queryAllGf',
+      type: 'post',
+      headers: {
+        serviceName: "MFGZ01",
+        methodName: "cancelFabricApply"
+      },
+      data: {
+        requestParam: JSON.stringify({
+          bill_no: jsonBack.billNo,
+          cancel_reason: $(".remark").val()
+        })
+      },
+      success: function (data) {
+        $("#loading").hide();
+        if (data.statusCode == "0") {
+          showMsg("退单成功!");
+          history.back(-1);
+        } else {
+          clickAllow = true;
+          showMsg(data.msg);
+        }
+        //showMsg("操作成功!")
+
+      }
+    });
+
+  }
+  document.addEventListener("deviceready", onDeviceReady, false);
+
+  function onDeviceReady() {
+    /**
+     * 系统返回键监听
+     */
+    document.addEventListener("backbutton", onBackKeyDown, false);
+  }
+
+  /**
+   * 系统返回键方法
+   * @return {[type]} [description]
+   */
+  function onBackKeyDown() {
+    history.back(-1);
+  }
+</script>
+
+</html>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MPLJ09">
+
+	<select id="queryApprovalRequire" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			p.id	as "id",  <!-- 主键 -->
+			p.plan_no	as "planNo",  <!-- 需求计划单号 -->
+			p.plan_time	as "planTime",  <!-- 需求计划时间(年份/年月/申请日期) -->
+			p.plan_type	as "planType",  <!-- 计划类型 -->
+			p.plan_type_name	as "planTypeName",  <!-- 计划类型名称 -->
+			p.plan_num	as "planNum",  <!-- 年度计划物资总数 -->
+			p.plan_cost	as "planCost",  <!-- 总金额 -->
+			p.status_code	as "statusCode",  <!-- 状态编码 -->
+			p.status_name	as "statusName",  <!-- 状态名称 -->
+			p.dept_num	as "deptNum",  <!-- 领用(申请)科室编码 -->
+			p.dept_name	as "deptName",  <!-- 领用(申请)科室编码 -->
+			p.dept_principal	as "deptPrincipal",  <!-- 科室负责人工号 -->
+			p.dept_principal_name	as "deptPrincipalName",  <!-- 科室负责人姓名 -->
+			p.remark	as "remark",  <!-- 备注/申请理由 -->
+			p.plan_desc	as "planDesc",  <!--需求计划概述 -->
+			p.rec_creator	as "recCreator",  <!-- 创建（申请）人 -->
+			p.rec_creator_name	as "recCreatorName",  <!-- 创建（申请）人姓名 -->
+			DATE_FORMAT(p.rec_create_time, '%Y-%m-%d %H:%i:%s')	as "recCreateTime"  <!-- 创建时间 -->
+		FROM rm_require_plan p
+		WHERE 1=1
+		<isNotEmpty property="statusCode" prepend="and">
+			p.status_code = #statusCode#
+		</isNotEmpty>
+		<isNotEmpty property="deptNum"  prepend="and">
+			p.dept_num = #deptNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="actFrom">
+			p.rec_create_time >= concat(#actFrom#,' 00:00:00')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="actTo">
+			p.rec_create_time <![CDATA[<=]]> concat(#actTo#, ' 23:59:59')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="keyword">
+			(p.plan_desc like concat('%', #keyword#, '%') or locate(#keyword#,'科室采购物资需求审批') > 0)
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="userCode">
+			p.id in (select distinct relate_id from rm_approval where approver = #userCode#)
+		</isNotEmpty>
+		<dynamic prepend="and">
+			<isEqual property="processState" compareValue="Return"  prepend="and">
+				p.status_code = '20'
+			</isEqual>
+			<isEqual property="processState" compareValue="Finish"  prepend="and">
+				p.status_code in ('30', '40', '50')
+			</isEqual>
+		</dynamic>
+	</select>
+
+	<select id="queryApprovedPurchase" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select
+			t1.id	as "id",  <!-- 主键 -->
+			t1.resource_id	as "resourceId",  <!-- 来源单据ID(需求汇总ID/补库计划ID) -->
+			t1.purchase_no	as "purchaseNo",  <!-- 采购计划单号 -->
+			t1.status_code	as "statusCode",  <!-- 状态编码 -->
+			t1.status_name	as "statusName",  <!-- 状态名称 -->
+			t1.purchase_num	as "purchaseNum",  <!-- 采购物资总数 -->
+			t1.purchase_cost	as "purchaseCost",  <!-- 总金额 -->
+			t1.dept_num	as "deptNum",  <!-- 专业科室编码 -->
+			t1.dept_name	as "deptName",  <!-- 专业科室编码 -->
+			t1.remark	as "remark",  <!-- 备注 -->
+			t1.rec_creator	as "recCreator",  <!-- 创建（申请）人 -->
+			t1.rec_creator_name	as "recCreatorName",  <!-- 创建（申请）人姓名 -->
+			t1.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+			t1.rec_revisor	as "recRevisor",  <!-- 修改人 -->
+			t1.rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+			t1.data_group_code	as "dataGroupCode",  <!-- 账套 -->
+			t1.archive_flag	as "archiveFlag", <!-- 归档标记 -->
+			t1.purchase_remark as "purchaseRemark",
+			t1.purchase_type as "purchaseType"
+		FROM mp_purchase_plan t1 where 1=1
+		<isNotEmpty prepend=" AND " property="actFrom">
+			t1.rec_create_time >= concat(#actFrom#,' 00:00:00')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="actTo">
+			t1.rec_create_time <![CDATA[<=]]> concat(#actTo#, ' 23:59:59')
+		</isNotEmpty>
+		<isNotEmpty property="starterDept"  prepend="and">
+			t1.dept_num = #starterDept#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="keyword">
+			(t1.purchase_remark like concat('%', #keyword#, '%') or locate(#keyword#,'物资采购计划审批') > 0)
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="userCode">
+			t1.id in (select distinct relate_id from mp_approval where approver = #userCode#)
+		</isNotEmpty>
+		<dynamic prepend="and">
+			<isEqual property="processState" compareValue="Running"  prepend="and">
+				t1.status_code in ('60', '70')
+			</isEqual>
+			<isEqual property="processState" compareValue="Return"  prepend="and">
+				t1.status_code = '20'
+			</isEqual>
+			<isEqual property="processState" compareValue="Finish"  prepend="and">
+				t1.status_code in ('30', '40', '50')
+			</isEqual>
+		</dynamic>
+	</select>
+
+	<select id="queryRequireNoById" parameterClass="string" resultClass="string">
+		select plan_no from rm_require_plan where id = #id#
+	</select>
+
+</sqlMap>

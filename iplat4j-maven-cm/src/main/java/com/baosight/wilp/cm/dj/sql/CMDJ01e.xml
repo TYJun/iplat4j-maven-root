@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CMDJ01e">
+	<insert id="insert" parameterClass="com.baosight.wilp.cm.domain.ContractBillLinkman">
+		INSERT INTO cm_contract_bill_linkman
+			(
+				id,
+				REC_CREATOR,
+				REC_CREATE_TIME,
+				REC_REVISOR,
+				REC_REVISE_TIME,
+				CONT_NO,  <!-- 合同号 -->
+				SUB_NO,  <!-- 子项号 -->
+				WORK_NO,
+				NAME,  <!-- 联系人 -->
+				number,  <!-- 联系电话 -->
+				dept_num  <!-- 科室编码 -->
+			)		 
+	    VALUES
+	    	(
+	    		#id#,
+	    		#recCreator#,
+	    		#recCreateTime#,
+	    		#recRevisor#,
+	    		#recReviseTime#,
+	    		#contNo#,
+	    		#subNo#,
+	    		#workNo#,
+	    		#name#,
+	    		#number#,
+	    		#deptNum#
+	    	) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM cm_contract_bill_linkman WHERE CONT_NO = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE
+			cm_contract_bill_linkman 
+		SET 
+			REC_CREATOR	= #recCreator#,   
+			REC_CREATE_TIME	= #recCreateTime#,   
+			REC_REVISOR	= #recRevisor#,   
+			REC_REVISE_TIME	= #recReviseTime#,   
+			CONT_NO	= #contNo#,   <!-- 合同号 -->  
+			SUB_NO = #subNo#,   <!-- 子项号 -->  
+			NAME = #name#,   <!-- 联系人 -->  
+			number = #number#,   <!-- 联系电话 -->  
+			dept_num = #deptNum#  <!-- 科室编码 -->  
+		WHERE 	
+			CONT_NO = #id#
+	</update>
+</sqlMap>

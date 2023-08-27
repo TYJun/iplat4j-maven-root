@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2022-02-11 14:27:21
+   		Version :  6.0.731.201809200158
+		tableName :.dorms_room_man 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 room_id  VARCHAR, 
+		 man_id  VARCHAR, 
+		 bed_no  VARCHAR,
+		 pay_status  VARCHAR,
+		 actual_in_date  VARCHAR, 
+		 actual_out_date  VARCHAR, 
+		 change_room_status  VARCHAR, 
+		 change_room_note  VARCHAR, 
+		 apply_change_date  VARCHAR,
+		 out_room_status  VARCHAR,
+		 out_room_note  VARCHAR,
+		 apply_out_date  VARCHAR,
+		 checkout_room_status  VARCHAR,
+		 actual_rent  VARCHAR,
+		 actual_manage_fee  VARCHAR,
+		 eval_status  VARCHAR,
+		 eval_level_wy  VARCHAR, 
+		 eval_level_room  VARCHAR, 
+		 eval_content  VARCHAR,
+		 last_operator  VARCHAR, 
+		 last_operation_name  VARCHAR, 
+		 last_operation_time  VARCHAR
+	-->
+<sqlMap namespace="DMRZ02">
+
+	<select id="query" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		id	as "id",  <!-- 主键 -->
+		room_id	as "roomId",  <!-- 宿舍信息表ID -->
+		man_id	as "manId",  <!-- 人员入住信息表ID -->
+		keep_room_days	as "keepRoomDays",  <!-- 宿舍保留天数 -->
+		bed_no	as "bedNo",  <!-- 床位号 -->
+		pay_status	as "payStatus",  <!-- 是否已经上传附件交钱(0为未交钱，1已交钱) -->
+		actual_in_date	as "actualInDate",  <!-- 实际入住时间 -->
+		actual_out_date	as "actualOutDate",  <!-- 实际退房时间 -->
+		change_room_status	as "changeRoomStatus",  <!-- 是否换过宿(0为未换过宿舍，1为换过宿舍) -->
+		change_room_note	as "changeRoomNote",  <!-- 调宿备注 -->
+		apply_change_date	as "applyChangeDate",  <!-- 申请调宿时间 -->
+		out_room_status	as "outRoomStatus",  <!-- 退宿状态(0为未退宿，1为已退宿) -->
+		out_room_note	as "outRoomNote",  <!-- 退宿备注 -->
+		apply_out_date	as "applyOutDate",  <!-- 申请退宿时间 -->
+		checkout_room_status	as "checkoutRoomStatus",  <!-- 是否已经进行退宿检查清单(0为未进行，1已进行) -->
+		actual_rent	as "actualRent",  <!-- 实际房租 -->
+		actual_manage_fee	as "actualManageFee",  <!-- 实际管理费 -->
+		eval_status	as "evalStatus",  <!-- 是否已经进行过评价(0为未评价，1已评价) -->
+		eval_level_wy	as "evalLevelWy",  <!-- 物业管理-评价等级(0-5) -->
+		eval_level_room	as "evalLevelRoom",  <!-- 宿舍情况-评价等级(0-5) -->
+		eval_content	as "evalContent",  <!-- 评价内容 -->
+		last_operator	as "lastOperator",  <!-- 最后操作人工号 -->
+		last_operation_name	as "lastOperationName",  <!-- 最后操作人人姓名 -->
+		last_operation_time	as "lastOperationTime" <!-- 最后操作时间 -->
+		FROM .dorms_room_man WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				id asc
+			</isEmpty>
+		</dynamic>
+
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .dorms_room_man WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+	<select id="queryId" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		id	as "id"  <!-- 主键 -->
+		FROM .dorms_room_man WHERE 1=1
+		<isNotEmpty prepend=" AND " property="manId">
+			man_id = #manId#
+		</isNotEmpty>
+	</select>
+
+	<!-- 查询当前manId是否在数据库表中存在数据 1为存在 -->
+	<select id="existCount" resultClass="int">
+		SELECT COUNT(*) FROM .dorms_room_man WHERE 1=1
+		<isNotEmpty prepend=" AND " property="manId">
+			man_id = #manId#
+		</isNotEmpty>
+	</select>
+
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomId">
+			room_id = #roomId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manId">
+			man_id = #manId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="keepRoomDays">
+			keep_room_days = #keepRoomDays#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="bedNo">
+			bed_no = #bedNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="payStatus">
+			pay_status = #payStatus#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="actualInDate">
+			actual_in_date = #actualInDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="actualOutDate">
+			actual_out_date = #actualOutDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="changeRoomStatus">
+			change_room_status = #changeRoomStatus#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="changeRoomNote">
+			change_room_note = #changeRoomNote#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="applyChangeDate">
+			apply_change_date = #applyChangeDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outRoomStatus">
+			out_room_status = #outRoomStatus#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outRoomNote">
+			out_room_note = #outRoomNote#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="applyOutDate">
+			apply_out_date = #applyOutDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="checkoutRoomStatus">
+			checkout_room_status = #checkoutRoomStatus#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="actualRent">
+			actual_rent = #actualRent#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="actualManageFee">
+			actual_manage_fee = #actualManageFee#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="evalStatus">
+			eval_status = #evalStatus#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="evalLevelWy">
+			eval_level_wy = #evalLevelWy#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="evalLevelRoom">
+			eval_level_room = #evalLevelRoom#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="evalContent">
+			eval_content = #evalContent#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="lastOperator">
+			last_operator = #lastOperator#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="lastOperationName">
+			last_operation_name = #lastOperationName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="lastOperationTime">
+			last_operation_time = #lastOperationTime#
+		</isNotEmpty>
+	-->
+
+	<!-- 将宿舍与人员的绑定信息插入到宿舍人员绑定关系表 -->
+	<insert id="insertDMMANTable" parameterClass="java.util.HashMap">
+		INSERT INTO .dorms_room_man (
+		<isNotNull property="roomId">
+			room_id,  <!-- 宿舍id -->
+		</isNotNull>
+		<isNotNull property="manId">
+			man_id,  <!-- 人员id -->
+		</isNotNull>
+		<isNotNull property="keepRoomDays">
+			keep_room_days,  <!-- 房间保留天数 -->
+		</isNotNull>
+		<isNotNull property="actualRent">
+			actual_rent,  <!-- 实际房租 -->
+		</isNotNull>
+		<isNotNull property="actualManageFee">
+			actual_manage_fee,  <!-- 实际管理费 -->
+		</isNotNull>
+		<isNotNull property="annualFee">
+			annual_fee,  <!-- 年费 -->
+		</isNotNull>
+		<isNotNull property="bedNo">
+			bed_no,  <!-- 床位号 -->
+		</isNotNull>
+		<isNotNull property="lastOperator">
+			last_operator,  <!-- 操作人工号 -->
+		</isNotNull>
+		<isNotNull property="lastOperationName">
+			last_operation_name,  <!-- 操作人人 -->
+		</isNotNull>
+		<isNotNull property="lastOperationTime">
+			last_operation_time,  <!-- 操作时间 -->
+		</isNotNull>
+		id  <!-- 主键 -->)
+		VALUES (
+		<isNotNull property="roomId">
+			#roomId#,
+		</isNotNull>
+		<isNotNull property="manId">
+			#manId#,
+		</isNotNull>
+		<isNotNull property="keepRoomDays">
+			#keepRoomDays#,
+		</isNotNull>
+		<isNotNull property="actualRent">
+			#actualRent#,
+		</isNotNull>
+		<isNotNull property="actualManageFee">
+			#actualManageFee#,
+		</isNotNull>
+		<isNotNull property="annualFee">
+			#annualFee#,
+		</isNotNull>
+		<isNotNull property="bedNo">
+			#bedNo#,
+		</isNotNull>
+		<isNotNull property="lastOperator">
+			#lastOperator#,
+		</isNotNull>
+		<isNotNull property="lastOperationName">
+			#lastOperationName#,
+		</isNotNull>
+		<isNotNull property="lastOperationTime">
+			#lastOperationTime#,
+		</isNotNull>
+		#id#  <!-- 主键 -->)
+	</insert>
+
+	<!-- 更新宿舍人员绑定关系表的操作 -->
+	<update id="updateDormRoomMan" parameterClass="java.util.HashMap">
+		update dorms_room_man
+		set
+		<isNotNull property="roomId">
+			room_id = #roomId#,  <!-- 宿舍信息表ID -->
+		</isNotNull>
+		<isNotNull property="keepRoomDays">
+			keep_room_days = #keepRoomDays#,  <!-- 宿舍保留天数 -->
+		</isNotNull>
+		<isNotNull property="bedNo">
+			bed_no = #bedNo#, <!-- 床位号 -->
+		</isNotNull>
+		<isNotNull property="payStatus">
+			pay_status = #payStatus#, <!-- 是否已经上传附件交钱(0为未交钱，1已交钱) -->
+		</isNotNull>
+		<isNotNull property="changeRoomStatus">
+			change_room_status = #changeRoomStatus#, <!-- 是否换过宿(0为未换过宿舍，1为换过宿舍) -->
+		</isNotNull>
+		<isNotNull property="changeRoomNote">
+			change_room_note = #changeRoomNote#,  <!-- 调宿备注 -->
+		</isNotNull>
+		<isNotNull property="applyChangeDate">
+			apply_change_date = #applyChangeDate#,  <!-- 申请换宿时间 -->
+		</isNotNull>
+		<isNotNull property="outRoomStatus">
+			out_room_status = #outRoomStatus#, <!-- 退宿状态(0为未退宿，1为已退宿) -->
+		</isNotNull>
+		<isNotNull property="outRoomNote">
+			out_room_note = #outRoomNote#, <!-- 退宿备注 -->
+		</isNotNull>
+		<isNotNull property="applyOutDate">
+			apply_out_date = #applyOutDate#,  <!-- 申请退宿时间 -->
+		</isNotNull>
+		<isNotNull property="checkoutRoomStatus">
+			checkout_room_status = #checkoutRoomStatus#,  <!-- 是否已经进行退宿检查清单(0为未进行，1已进行) -->
+		</isNotNull>
+		<isNotNull property="actualRent">
+			actual_rent = #actualRent#,  <!-- 实际房租 -->
+		</isNotNull>
+		<isNotNull property="actualManageFee">
+			actual_manage_fee = #actualManageFee#,  <!-- 实际管理费 -->
+		</isNotNull>
+		<isNotNull property="annualFee">
+			annual_fee = #annualFee#,  <!-- 年费 -->
+		</isNotNull>
+		<isNotNull property="evalStatus">
+			eval_status = #evalStatus#, <!-- 是否已经进行过评价(0为未评价，1已评价) -->
+		</isNotNull>
+		<isNotNull property="evalLevelWy">
+			eval_level_wy = #evalLevelWy#, <!-- 物业管理-评价等级(0-5) -->
+		</isNotNull>
+		<isNotNull property="evalLevelRoom">
+			eval_level_room = #evalLevelRoom#,  <!-- 宿舍情况-评价等级(0-5) -->
+		</isNotNull>
+		<isNotNull property="evalContent">
+			eval_content = #evalContent#, <!-- 评价内容 -->
+		</isNotNull>
+		<isNotNull property="actualInDate">
+			actual_in_date = #actualInDate#, <!-- 实际入住时间 -->
+		</isNotNull>
+		<isNotNull property="actualOutDate">
+			actual_out_date = #actualOutDate#,  <!-- 实际退房时间 -->
+		</isNotNull>
+		<isNotNull property="lastOperator">
+			last_operator = #lastOperator#, <!-- 最后操作人工号 -->
+		</isNotNull>
+		<isNotNull property="lastOperationName">
+			last_operation_name = #lastOperationName#, <!-- 最后操作人人姓名 -->
+		</isNotNull>
+		<isNotNull property="lastOperationTime">
+			last_operation_time = #lastOperationTime#, <!-- 最后操作时间 -->
+		</isNotNull>
+		id=#id# <!-- 主键 -->
+		where id=#id#
+	</update>
+
+
+
+	<!-- 批量更新宿舍人员绑定关系表的操作 -->
+	<update id="batchUpdateDormRoomMan" parameterClass="java.util.HashMap">
+		update dorms_room_man
+		set
+		<isNotNull property="roomId">
+			room_id = #roomId#,  <!-- 宿舍信息表ID -->
+		</isNotNull>
+		<isNotNull property="keepRoomDays">
+			keep_room_days = #keepRoomDays#,  <!-- 宿舍保留天数 -->
+		</isNotNull>
+		<isNotNull property="bedNo">
+			bed_no = #bedNo#, <!-- 床位号 -->
+		</isNotNull>
+		<isNotNull property="payStatus">
+			pay_status = #payStatus#, <!-- 是否已经上传附件交钱(0为未交钱，1已交钱) -->
+		</isNotNull>
+		<isNotNull property="changeRoomStatus">
+			change_room_status = #changeRoomStatus#, <!-- 是否换过宿(0为未换过宿舍，1为换过宿舍) -->
+		</isNotNull>
+		<isNotNull property="changeRoomNote">
+			change_room_note = #changeRoomNote#,  <!-- 调宿备注 -->
+		</isNotNull>
+		<isNotNull property="applyChangeDate">
+			apply_change_date = #applyChangeDate#,  <!-- 申请换宿时间 -->
+		</isNotNull>
+		<isNotNull property="outRoomStatus">
+			out_room_status = #outRoomStatus#, <!-- 退宿状态(0为未退宿，1为已退宿) -->
+		</isNotNull>
+		<isNotNull property="outRoomNote">
+			out_room_note = #outRoomNote#, <!-- 退宿备注 -->
+		</isNotNull>
+		<isNotNull property="applyOutDate">
+			apply_out_date = #applyOutDate#,  <!-- 申请退宿时间 -->
+		</isNotNull>
+		<isNotNull property="checkoutRoomStatus">
+			checkout_room_status = #checkoutRoomStatus#,  <!-- 是否已经进行退宿检查清单(0为未进行，1已进行) -->
+		</isNotNull>
+		<isNotNull property="actualRent">
+			actual_rent = #actualRent#,  <!-- 实际房租 -->
+		</isNotNull>
+		<isNotNull property="actualManageFee">
+			actual_manage_fee = #actualManageFee#,  <!-- 实际管理费 -->
+		</isNotNull>
+		<isNotNull property="annualFee">
+			annual_fee = #annualFee#,  <!-- 年费 -->
+		</isNotNull>
+		<isNotNull property="evalStatus">
+			eval_status = #evalStatus#, <!-- 是否已经进行过评价(0为未评价，1已评价) -->
+		</isNotNull>
+		<isNotNull property="evalLevelWy">
+			eval_level_wy = #evalLevelWy#, <!-- 物业管理-评价等级(0-5) -->
+		</isNotNull>
+		<isNotNull property="evalLevelRoom">
+			eval_level_room = #evalLevelRoom#,  <!-- 宿舍情况-评价等级(0-5) -->
+		</isNotNull>
+		<isNotNull property="evalContent">
+			eval_content = #evalContent#, <!-- 评价内容 -->
+		</isNotNull>
+		<isNotNull property="actualInDate">
+			actual_in_date = #actualInDate#, <!-- 实际入住时间 -->
+		</isNotNull>
+		<isNotNull property="actualOutDate">
+			actual_out_date = #actualOutDate#,  <!-- 实际退房时间 -->
+		</isNotNull>
+		<isNotNull property="lastOperator">
+			last_operator = #lastOperator#, <!-- 最后操作人工号 -->
+		</isNotNull>
+		<isNotNull property="lastOperationName">
+			last_operation_name = #lastOperationName#, <!-- 最后操作人人姓名 -->
+		</isNotNull>
+		<isNotNull property="lastOperationTime">
+			last_operation_time = #lastOperationTime# <!-- 最后操作时间 -->
+		</isNotNull>
+		where id IN
+		<iterate property="idList" conjunction="," open="(" close=")">
+			#idList[].id#
+		</iterate>
+	</update>
+  
+</sqlMap>

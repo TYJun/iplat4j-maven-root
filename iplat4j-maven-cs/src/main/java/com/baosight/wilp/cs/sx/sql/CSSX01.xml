@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!-- table information Generate time : 2021-11-19 9:59:22 Version : 6.0.731.201809200158 
+	tableName :.cs_itemclass id VARCHAR NOT NULL primarykey, item_code VARCHAR, 
+	item_name VARCHAR, parent_id VARCHAR, service_dept_num VARCHAR, service_dept_name 
+	VARCHAR, comments VARCHAR -->
+<sqlMap namespace="CSSX01">
+
+	<!-- sql 内容包含：
+	查询保洁事项列表 queryItem
+	查询保洁事项数量 countItem
+	查询保洁事项分类 queryClass
+	插入保洁事项分类 insertClass
+	删除保洁事项分类  deleteClass
+	获得保洁分类id getChildId
+	更新保洁事项分类相关信息 updateClass
+	更新保洁事项 updateItem
+	判断保洁事项是否存在 isExistItem
+	删除保洁事项 deleteItem
+	插入保洁事项 insertItem -->
+
+	<!-- 查询保洁事项列表 -->
+	<select id="queryItem" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+		SELECT
+		item.id as "itemId",  <!-- 主键 -->
+		item.item_code as "itemCode",  <!-- 事项编码 -->
+		item.item_name as "itemName",  <!-- 事项名称 -->
+		item.module_id as "moduleId",  <!-- 事项分类id -->
+		item.service_dept_num as "serviceDeptNum",  <!-- 事项绑定的科室编码 -->
+		item.service_dept_name as "serviceDeptName",  <!-- 事项绑定的科室名称 -->
+		item.comments as "comments", <!-- 备注 -->
+		itemclass.classify_code as "typeCode", <!-- 分类编码 -->
+		itemclass.classify_name as "typeName" <!-- 分类名称 -->
+		FROM cs_item item
+		left join
+		cs_itemclass itemclass on item.module_id =
+		itemclass.id
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="typeName">
+			itemclass.classify_name
+			like concat('%',#typeName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="itemCode">
+			item.item_code = #itemCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="itemName">
+			item.item_name like
+			concat('%',#itemName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="typeId">
+			itemclass.id = #typeId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="itemId">
+			item.id = #itemId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="itemCodeList">
+			item.item_code not in
+		<iterate property="itemCodeList" conjunction="," open="(" close=")">
+			#itemCodeList[].itemCode#
+		</iterate>
+		</isNotEmpty>
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+
+	</select>
+
+	<!-- 查询保洁事项数量 -->
+	<select id="countItem" resultClass="int"
+		parameterClass="java.util.HashMap">
+		SELECT
+		item.id
+		FROM cs_item item
+		left join
+		cs_itemclass itemclass on
+		item.module_id = itemclass.id
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="typeName">
+			itemclass.classify_name
+			like concat('%',#typeName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="itemName">
+			item.item_name like
+			concat('%',#itemName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="typeId">
+			itemclass.id = #typeId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="itemId">
+			item.id = #itemId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="itemCodeList">
+			item.item_code not in
+			<iterate property="itemCodeList" conjunction="," open="(" close=")">
+				#itemCodeList[].itemCode#
+			</iterate>
+		</isNotEmpty>
+	</select>
+
+	<!-- 查询保洁事项分类 -->
+	<select id="queryClass" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+		SELECT
+		p.id AS "id",
+		p.classify_code AS "classifyCode",
+		p.classify_name AS "classifyName",
+		p.parent_id AS "parentId",
+		p.memo AS
+		"memo",
+		CASE
+		count( c.id )
+		WHEN 0 THEN
+		true ELSE false
+		END AS hasChildren
+		FROM
+		cs_itemclass p
+		LEFT JOIN cs_itemclass c ON c.parent_id = p.id
+		WHERE
+		1 = 1
+		AND p.parent_id = #node#
+		GROUP BY
+		p.id
+	</select>
+
+	<!-- 插入保洁事项分类 -->
+	<insert id="insertClass" parameterClass="java.util.HashMap">
+		INSERT INTO cs_itemclass
+		(
+		id,
+		classify_code,  <!-- 分类编码 -->
+		classify_name,  <!-- 分类名称 -->
+		parent_id,  <!-- 父id -->
+		memo  <!-- 备注 -->
+		)
+		VALUES (#id#, #classifyCode#, #classifyName#, #parentId#, #memo#)
+	</insert>
+
+	<!-- 删除保洁事项分类 -->
+	<delete id="deleteClass" parameterClass="java.util.List">
+		DELETE FROM
+		cs_itemclass
+		WHERE
+		id
+		IN
+		<iterate conjunction="," open="(" close=")">
+			#value[]#
+		</iterate>
+	</delete>
+
+	<!-- 获得保洁分类id -->
+	<select id="getChildId" parameterClass="java.lang.String"
+		resultClass="java.lang.String">
+		select id from cs_itemclass where parent_id=#value#
+	</select>
+
+	<!-- 更新保洁事项分类相关信息  -->
+	<update id="updateClass" parameterClass="java.util.HashMap">
+		UPDATE cs_itemclass
+		SET
+		<isNotNull property="classifyCode">
+			classify_code = #classifyCode#,
+		</isNotNull>
+		<isNotNull property="classifyName">
+			classify_name = #classifyName#,
+		</isNotNull>
+		<isNotNull property="parentId">
+			parent_id = #parentId#,
+		</isNotNull>
+		<isNotNull property="memo">
+			memo = #memo#,
+		</isNotNull>
+		id = #id#
+		WHERE
+		id = #id#
+	</update>
+
+	<!-- 更新保洁事项 -->
+	<update id="updateItem" parameterClass="java.util.HashMap">
+		UPDATE cs_item
+		SET
+		<isNotNull property="itemName">
+			item_name = #itemName#,
+		</isNotNull>
+		<isNotNull property="serviceDeptNum">
+			service_dept_num = #serviceDeptNum#,
+		</isNotNull>
+		<isNotNull property="serviceDeptName">
+			service_dept_name = #serviceDeptName#,
+		</isNotNull>
+		<isNotNull property="comments">
+			comments = #comments#,
+		</isNotNull>
+		<isNotNull property="moduleId">
+			module_id = #moduleId#,
+		</isNotNull>
+		id = #id#
+		WHERE
+		id = #id#
+	</update>
+
+	<!-- 判断保洁事项是否存在 -->
+	<select id="isExistItem" parameterClass="java.util.List" resultClass="int">
+		SELECT count(1) FROM cs_item WHERE module_id IN
+		<iterate conjunction="," open="(" close=")">
+			#value[]#
+		</iterate>
+	</select>
+
+	<!-- 删除保洁事项 -->
+	<delete id="deleteItem" parameterClass="java.util.ArrayList">
+		DELETE FROM cs_item WHERE id IN
+		<iterate conjunction="," open="(" close=")">
+			#[]#
+		</iterate>
+	</delete>
+
+	<!-- 插入保洁事项 -->
+	<insert id="insertItem" parameterClass="java.util.HashMap">
+		INSERT INTO cs_item (
+		id, <!-- 主键 -->
+		module_id, <!-- 分类id -->
+		item_code,  <!-- 事项编码 -->
+		item_name,  <!-- 事项名称 -->
+		service_dept_num,  <!-- 绑定服务科室编码 -->
+		service_dept_name,  <!-- 绑定服务科室名称 -->
+		comments  <!-- 备注 -->
+		)
+		VALUES (#id#, #moduleId#, #itemCode#, #itemName#, #serviceDeptNum#,
+		#serviceDeptName#,
+		#comments#)
+	</insert>
+
+</sqlMap>

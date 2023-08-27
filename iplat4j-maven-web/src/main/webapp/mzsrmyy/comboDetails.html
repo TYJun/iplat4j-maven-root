@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="no-js">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="https://gw.alipayobjects.com/as/g/antui/antui/10.1.10/dpl/antui.css">
+		<link rel="stylesheet" type="text/css" href="https://gw.alipayobjects.com/as/g/antui/antui/10.1.10/dpl/widget/loading.css">
+		<link rel="stylesheet" type="text/css" href="https://gw.alipayobjects.com/as/g/antui/antui/10.1.10/dpl/util/pricefont.css">
+		<title>订单详情</title>
+	</head>
+	<style type="text/css">
+		* {
+			box-sizing: border-box;
+		}
+		
+		body {
+			background: #E4E7ED;
+			padding: 10px;
+		}
+		
+		.bg1-div {
+			width: 100%;
+			/*height: 300px;*/
+			background: #09BB07;
+			border-radius: 3px;
+			padding: 15px;
+		}
+		
+		.tab1-div {
+			width: 100%;
+			font-size: 14px;
+			/*color: #606266;*/
+			color: #fff;
+		}
+		
+		.address-div {
+			width: 100%;
+			padding-top: 2px;
+			font-size: 18px;
+			font-weight: bold;
+			/*color: #303133;*/
+			color: #fff;
+			margin-top: 10px;
+		}
+		
+		.user-div {
+			width: 100%;
+			font-size: 16px;
+			font-weight: bold;
+			/*color: #606266;*/
+			color: #fff;
+		}
+		
+		.send-time-div {
+			margin-top: 10px;
+			width: 100%;
+			font-size: 16px;
+			font-weight: bold;
+			color: #fff;
+		}
+		
+		.bg2-div {
+			margin-top: 10px;
+			padding: 15px;
+			background: #fff;
+			border-radius: 3px;
+		}
+		
+		.bill-no,
+		.bill-time {
+			width: 100%;
+			font-size: 16px;
+			color: #606266;
+			margin-bottom: 5px;
+		}
+		
+		.canteen-name {
+			width: 100%;
+			font-size: 16px;
+			font-weight: bold;
+			border-bottom: 1px solid #EBEEF5;
+			padding: 10px 0;
+			margin-top: 15px;
+			color: #303133;
+		}
+		
+		.dish-div {
+			margin-top: 10px;
+		}
+		
+		.dish-name {
+			font-size: 15px;
+			color: #606266;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+		
+		.dish-num {
+			width: 50px;
+			font-size: 12px;
+			color: #909399;
+		}
+		
+		.dish-price {
+			width: 80px;
+			color: #ff5722;
+			text-align: right;
+		}
+		
+		.dish-price span {
+			font-size: 13px;
+		}
+		
+		.total-price {
+			margin-top: 10px;
+			width: 100%;
+			padding-top: 15px;
+			border-top: 1px solid #EBEEF5;
+			text-align: right;
+			color: #303133;
+			font-size: 14px;
+		}
+		
+		.price-style {
+			color: #ff5722;
+		}
+		
+		.btn-pay {
+			width: 100%;
+			height: 47px;
+			border: #09BB07;
+			background: #09BB07;
+			color: #fff;
+			border-radius: 3px;
+			margin: 15px 0;
+		}
+		
+		.white-div {
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			z-index: 999;
+			background: #fff;
+		}
+		
+		.package-name {
+			width: 100%;
+			padding-bottom: 10px;
+			font-size: 15px;
+			font-weight: bold;
+			color: #606266;
+		}
+		
+		.dish-num {
+			width: 40px;
+			height: 25px;
+			line-height: 25px;
+			text-align: center;
+			color: #ff5722;
+			font-size: 14px;
+		}
+		
+		.dishes {
+			width: 100%;
+		}
+		
+		.dish {
+			font-size: 13px;
+			color: #909399;
+			margin-right: 5px;
+		}
+	</style>
+
+	<body>
+		<div id="app">
+			<!-- 页面过渡div -->
+			<div v-if="whiteShow" class="white-div"></div>
+			<div id="toastMsg" style="display: none;">
+				<div class="weui-mask_transparent"></div>
+				<div class="weui-toast">
+					<i class="weui-icon-cancel weui-icon_toast" style="font-size: 35px;"></i>
+					<p class="weui-toast__content">{{toastMsg}}</p>
+				</div>
+			</div>
+			<div class="bg1-div">
+				<div class="tab1-div">配送信息</div>
+				<div class="address-div">{{hospital}} {{address}}</div>
+				<div class="user-div">{{userName}} {{phoneNo}}</div>
+				<div class="am-flexbox send-time-div">
+					<div class="am-flexbox-item">配送时间</div>
+					<div class="am-flexbox-item" style="text-align: right;">{{reqSendTime}}</div>
+				</div>
+				<div class="am-flexbox send-time-div">
+					<div class="am-flexbox-item">备注</div>
+					<div class="am-flexbox-item" style="text-align: right;">{{desc}}</div>
+				</div>
+			</div>
+			<div class="bg2-div">
+				<div class="am-flexbox bill-no">
+					<div class="am-flexbox-item">订单编号</div>
+					<div class="am-flexbox-item" style="text-align: right;">{{billNo}}</div>
+				</div>
+				<div class="am-flexbox bill-time">
+					<div class="am-flexbox-item">创建时间</div>
+					<div class="am-flexbox-item" style="text-align: right;">{{createTime}}</div>
+				</div>
+				<div class="am-flexbox bill-time">
+					<div class="am-flexbox-item">食堂名称</div>
+					<div class="am-flexbox-item" style="text-align: right;">{{canteenName}}</div>
+				</div>
+				<div class="am-flexbox bill-time">
+					<div class="am-flexbox-item">订单状态</div>
+					<div class="am-flexbox-item" style="text-align: right;">{{statusName}}</div>
+				</div>
+				<div class="canteen-name">{{canteenName}}</div>
+				<div style="width: 100%;padding: 10px 0;">
+					<div class="package-name am-flexbox">
+						<div class="am-flexbox-item">{{packageName}}</div>
+						<div class="am-ft-center" style="width: 50px;text-align: right;">
+							{{packageNum}} 份
+						</div>
+					</div>
+					<div class="dishes">
+						<span v-for="item in dishes" class="dish">{{item.menuName}}</span>
+					</div>
+				</div>
+				<div class="total-price">小计&nbsp;&nbsp;
+					<span class="am-ft-14 am-ft-price price-style">
+                    <span>¥</span> {{totalPrice.toFixed(2)}}
+					</span>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.min.js"></script>
+	<script type="text/javascript" src="https://gw.alipayobjects.com/as/g/antui/antui/10.1.10/antui.js"></script>
+	<script type="text/javascript" src="./js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="./js/big.min.js"></script>
+	<script type="text/javascript">
+		new Vue({
+			el: '#app',
+			data: {
+				whiteShow: true,
+				loadShow: false,
+				dialogShow: false,
+				dicengShow: false,
+				toastMsg: "",
+				baseUrl: '',
+				userId: '',
+				hospital: '',
+				dataGroupCode: '',
+				billNo: '',
+				userName: '',
+				phoneNo: '',
+				canteenName: '',
+				packageName: '',
+				packageNum: 1,
+				dishes: [],
+				reqSendTime: '',
+				createTime: '',
+				address: '',
+				totalPrice: 0,
+				statusName: '',
+				desc: ''
+			},
+			methods: {
+				init: function() {
+					var _this = this;
+
+					_this.baseUrl = localStorage.getItem("baseUrl");
+					_this.userId = localStorage.getItem("userId");
+					_this.hospital = localStorage.getItem("hospital");
+					_this.dataGroupCode = localStorage.getItem("dataGroupCode");
+					_this.billNo = localStorage.getItem("billNo");
+					_this.loadBillInfo();
+				},
+				loadBillInfo: function() {
+					var _this = this;
+					$.ajax({
+						url: _this.baseUrl + 'app_patientBillInfoController.do?queryBill',
+						type: 'post',
+						data: {
+							billNo: _this.billNo,
+							dataGroupCode: _this.dataGroupCode
+						},
+						success: function(data) {
+							var resp = JSON.parse(data);
+							if(resp.success) {
+								_this.userName = resp.obj[0].userName;
+								_this.address = resp.obj[0].address;
+								_this.phoneNo = resp.obj[0].userTelNumber;
+								_this.reqSendTime = resp.obj[0].reqSendTime;
+								_this.createTime = resp.obj[0].recCreateTime;
+								_this.canteenName = resp.obj[0].canteenName;
+								_this.packageName = resp.obj[0].comboName;
+								_this.packageNum = resp.obj[0].billDetail[0].menuNumber;
+								_this.dishes = resp.obj[0].billDetail;
+								_this.totalPrice = resp.obj[0].billTotalPrice;
+								_this.statusName = resp.obj[0].statusName;
+								_this.desc = resp.obj[0].billRemark;
+							} else {
+								_this.showMsg(resp.msg)
+							}
+						}
+					});
+				}
+
+			},
+			showMsg: function(msg) {
+				var _this = this
+				_this.toastMsg = msg
+				var $toast = $("#toastMsg")
+				if($toast.css('display') != 'none') return;
+				$toast.fadeIn(100);
+				setTimeout(function() {
+					$toast.fadeOut(100);
+				}, 2000);
+
+			},
+			mounted: function() {
+				this.$nextTick(function() {
+					this.init()
+					this.whiteShow = false
+				})
+			}
+		})
+	</script>
+
+</html>

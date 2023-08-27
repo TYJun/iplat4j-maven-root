@@ -1,0 +1,646 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.css">
+    <link rel="stylesheet" href="../reference/css/iconfont.css">
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css">
+    <link rel="stylesheet" href="../reference/css/colorGreen.css" />
+    <link rel="stylesheet" href="../reference/css/loading.css" />
+    <link rel="stylesheet" href="../reference/css/transportCommon.css" />
+</head>
+<style type="text/css">
+    .scan {
+        position: fixed;
+        /*bottom: 15px;*/
+        left: 15px;
+        width: 60px;
+        z-index: 11;
+    }
+    
+    .round {
+        border: 1px solid #bbb;
+        width: 60px;
+        height: 60px;
+        line-height: 70px;
+        text-align: center;
+        color: #fff;
+        background-color: #666666;
+        filter: alpha(opacity=80);
+        /* 用于IE浏览器－透明度为20%*/
+        -moz-opacity: 0.8;
+        /*  用于Moz + Firefox－透明度为20%*/
+        opacity: 0.8;
+        -webkit-border-radius: 60px;
+        -moz-border-radius: 60px;
+        -o-border-radius: 60px;
+        border-radius: 60px;
+    }
+    /* 取件单 */
+    
+    .collectId {
+        margin-top: 44px;
+        font-size: 17px;
+        background: white;
+        display: flex;
+        justify-content: space-between;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    
+    .leftTitle {
+        margin-left: 23px;
+        width: 30%;
+        display: flex;
+        align-items: center;
+    }
+    
+    .pickNum {
+        float: left;
+        margin-right: 10px;
+    }
+    /* 确认取件 */
+    
+    #doCollect {
+        position: fixed;
+        bottom: 15px;
+        margin-left: 10%;
+    }
+    
+    #doCollect button {
+        color: #fff;
+        border: 1px solid #30c37c;
+        background-color: #30c37c;
+        width: 290px;
+        font-size: 20px;
+        border-radius: 10px;
+    }
+    /* 物资表单 */
+    
+    table {
+        font-size: 16px;
+        line-height: 50px;
+        background-color: white;
+    }
+    
+    .tableTitle {
+        float: left;
+        color: red;
+        margin-left: 5px;
+        margin-top: 44px;
+        line-height: 44px;
+    }
+    
+    table th {
+        color: #ffffff;
+        font-weight: 100;
+    }
+    /* 更多 */
+    
+    #moreDetail img {
+        width: 28px;
+        margin-top: 8px;
+        margin-right: 5px;
+    }
+    
+    .moreDiv {
+        width: 100%;
+        min-height: 100px;
+        background: #fff;
+        position: fixed;
+        top: 44px;
+        z-index: 12;
+        display: none;
+        color: #7b847b;
+    }
+    
+    .moreDiv .leftName {
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+    
+    .moreDiv .rightName {
+        float: right;
+        margin-right: 10px;
+    }
+    
+    .list-part li:not(.first) {
+        font-size: 17px;
+        line-height: 44px;
+    }
+    
+    .listBd {
+        border-bottom: solid 2px #f2f4f9;
+    }
+    
+    .mask {
+        top: 44px;
+    }
+    
+    .statusCode {
+        float: right;
+        color: #007aff;
+    }
+    
+    .list-part li:not(.first) {
+        overflow: auto;
+        display: block;
+        overflow-wrap: break-word;
+    }
+    
+    .list-part li:not(.first) span.status {
+        display: inline-block;
+        width: 80%;
+        text-align: right;
+    }
+    
+    .list-part li span {
+        font-size: 15px;
+    }
+    
+    .mui-toast-message {
+        font-size: 20px;
+    }
+</style>
+
+<body>
+    <header class="mui-bar mui-bar-nav backColor">
+        <h1 class="mui-title">取件单物品列表</h1>
+        <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+            <span class="mui-icon mui-icon-left-nav"></span>
+        </button>
+        <!-- <button id="moreDetail" class="mui-btn mui-btn-link mui-btn-nav mui-pull-right">
+            <span><img src="../../../img/moreInfo.png" alt=""></span>
+        </button> -->
+    </header>
+    <!-- 添加物资框 -->
+    <!-- <div class="scan" id="scan">
+        <div class="round" id="round">
+            <span class="mui-icon iconfont" style="font-size:16px;">扫描<br />物资</span>
+        </div>
+    </div> -->
+    <!-- loading -->
+    <div id="loading" class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    <!-- tab页 -->
+    <!-- <div class="top-part backColor">
+  <div class="top-bar">
+    <span id="1" class="choose">转出</span>
+    <span id="3">转入</span>
+  </div>
+</div> -->
+    <!-- 取件单 -->
+    <!-- <div id="collectId" class="collectId">
+        <div class="leftTitle">取件单</div>
+        <div class="pickNumList" id="pickNumList">
+            <div class="pickNum">localQJ20051900003</div>
+            <div class="pickNum">localQJ20051900003</div>
+        </div>
+    </div> -->
+    <!-- 主内容 -->
+    <!-- <table id="supplies" border="solid" width="100%" cellspacing="0" cellpadding="10" border-spacing="10" frame="below"
+        rules="rows">
+        <thead>
+            <div class="tableTitle">物品信息</div>
+            <tr align="center" valign="center" bgcolor="#30c37c">
+                <th>物资编码</th>
+                <th>物资分类</th>
+                <th>送达院区</th>
+                <th>送达科室</th>
+            </tr>
+        </thead>
+        <tbody id="cateList" align="center" valign="center"> -->
+    <!-- <tr>
+                <td>BX2328</td>
+                <td>文本</td>
+                <td>A院区</td>
+                <td>B院区</td>
+            </tr>
+            <tr>
+                <td>BX2328</td>
+                <td>文本</td>
+                <td>A院区</td>
+                <td>B院区</td>
+            </tr>
+            <tr class="active">
+                <td>BX2328</td>
+                <td>文本</td>
+                <td>A院区</td>
+                <td>B院区</td>
+            </tr> -->
+    <!-- </tbody>
+    </table> -->
+    <!-- 主内容 -->
+    <div class="tableTitle">物品信息</div>
+    <div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+        <div class="mui-scroll" id="content">
+            <ul class="list-ul" id="list">
+            </ul>
+        </div>
+    </div>
+    <!-- 新增 -->
+    <!-- <nav class="mui-bar mui-bar-tab bottom">
+        <div id="add">
+            <span class="iconfont icon-zengjia"></span>
+        </div>
+    </nav> -->
+    <!-- 确认 -->
+    <!-- <div id="doCollect">
+        <button>确认取件</button>
+    </div> -->
+    <!-- 遮罩 -->
+    <div class="mask"></div>
+    <!-- 更多信息 -->
+    <div class="moreDiv">
+        <ul class="list-part" id="moreList">
+            <li class="listBd">
+                <span class="leftName">取件单号</span>
+                <span class="rightName">2020</span>
+            </li>
+            <li class="listBd">
+                <span class="leftName">单据状态</span>
+                <span class="rightName">待派送</span>
+            </li>
+            <li class="listBd">
+                <span class="leftName">申请人</span>
+                <span class="rightName">张安</span>
+            </li>
+            <li class="listBd">
+                <span class="leftName">取件人</span>
+                <span class="rightName">张安</span>
+            </li>
+            <li class="listBd">
+                <span class="leftName">取件申请日期</span>
+                <span class="rightName">2020-05-26 09:00:00</span>
+            </li>
+        </ul>
+    </div>
+</body>
+<script type="text/javascript" src="../reference/mui/js/mui.js"></script>
+<script type="text/javascript" src="../reference/mui/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="../reference/mui/js/mui.picker.min.js"></script>
+<script type="text/javascript" src="../reference/mui/js/baseInfo.js"></script>
+<script type="text/javascript" src="../../../cordova.js"></script>
+<script type="text/javascript">
+    // localStorage.setItem("url", "http://yapi.bonawise.com/mock/91/");
+    var baseUrl = localStorage.getItem("url");
+    var page = 1;
+    var workNo = localStorage.getItem("workNo"); //取件人
+    var workName = localStorage.getItem("workName");
+    var billNo = localStorage.getItem("registerBillNo"); //取件单 
+    var itemNum = ''; //物资编码
+    var itemTypeName = ''; //物资分类
+    var targetAreaName = ''; //送达院区
+    var targetDeptName = ''; //送达科室
+    var statusCode = ''; //单据状态码
+    var status = ''; //单据状态
+    var applyWorkName = ''; //申请人
+    var applyTime = ''; //申请时间
+    var lineHtml = '';
+    var moreHtml = '';
+    $(function() {
+        init(billNo);
+        // init('BX2328');
+    })
+
+    /**
+     * @desc  移动扫码框
+     * @author chenjing
+     */
+    // touchMove('scan');
+
+    /**
+     * @desc  获取取件单内容列表
+     * @param {Object} params 查询参数
+     * @param {Number} itemNum 扫描的物品码
+     * @author huoke
+     */
+    function init(billNo) {
+        $("#loading").show();
+        var params = {
+            billNo: billNo
+        };
+        // $.get(baseUrl + 'app_carriageCollectController.do?getCollectDetail', params, function (data) {
+        //     var data = JSON.parse(data);
+        //     if (data.respCode === '200') {
+        //         $('#loading').hide();
+        //     } else {
+        //         mui.toast(data.respMsg);
+        //         return;
+        //     }
+        //     var objList = data.obj;
+
+        //     billNo = objList.billNo;
+        //     statusCode = objList.statusCode;
+        //     switch (statusCode) {
+        //         case '01':
+        //             status = '新建';
+        //             break;
+        //         case '02':
+        //             status = '待取件';
+        //             break;
+        //         case '03':
+        //             status = '已完成';
+        //             break;
+        //         default: break;
+        //     };
+        //     applyWorkName = objList.applyWorkName;
+        //     workNo = workNo;
+        //     applyTime = formatDate(objList.applyTime);
+        //     moreHtml += createHtmlMore(billNo, status, applyWorkName, workNo, applyTime);
+
+        //     $("#moreList").html(moreHtml);
+        //     var itemList = objList.itemList;
+        //     console.log(itemList);
+        //     for (var i = 0; i < itemList.length; i++) {
+        //         itemNum = itemList[i].itemNum;
+        //         itemTypeName = itemList[i].itemTypeName;
+        //         targetAreaName = itemList[i].targetAreaName;
+        //         targetDeptName = itemList[i].targetDeptName;
+        //         lineHtml += creatLineHtml(itemNum, itemTypeName, targetAreaName, targetDeptName)
+        //     }
+        //     $("#cateList").html(lineHtml);
+        // }).fail(function (XMlHttpRequest) {
+        //     var text = XMlHttpRequest.responseText;
+        //     mui.toast(text.message);
+        //     return;
+        // }).complete(function (XMlHttpRequest, status) {
+        //     if (status == 'timeout') {
+        //         $('#loading').hide();
+        //         mui.toast("网速不给力，请重试！");
+        //         return;
+        //     } else if (status == "error") {
+        //         $("#loading").hide();
+        //         mui.toast("当前网络不可用，请查看网络是否畅通！");
+        //         return;
+        //     }
+        // })
+        $.get(baseUrl + 'app_carriagePieController.do?itemList', params, function(data) {
+            var data = JSON.parse(data);
+
+            if (data.respCode === '200') {
+                var list = data.obj.rows;
+                var html = '';
+                console.log('111', list)
+                for (var i = 0; i < list.length; i++) {
+                    var itemNum = list[i].itemNum;
+                    var itemTypeName = list[i].itemTypeName;
+                    var sourceAreaName = list[i].sourceAreaName;
+                    var applyDeptName = list[i].applyDeptName;
+                    var applyWorkName = list[i].applyWorkName;
+                    var applyTel = list[i].applyTel;
+                    var applyBuilding = list[i].applyBuilding;
+                    var applyFloor = list[i].applyFloor;
+                    var applyTime = list[i].applyTime.replace(new  RegExp(/-/gm) , "/");
+                    var targetAreaName = list[i].targetAreaName;
+                    var targetBuilding = list[i].targetBuilding;
+                    var targetFloor = list[i].targetFloor;
+                    var targetDeptName = list[i].targetDeptName;
+                    var targetName = list[i].targetName;
+                    var targetTel = list[i].targetTel;
+                    html += createH(itemNum, itemTypeName, sourceAreaName, applyDeptName, applyWorkName, applyTel, applyBuilding, applyFloor, applyTime, targetAreaName, targetBuilding, targetFloor, targetDeptName, targetName, targetTel);
+                }
+                $("#loading").hide();
+                $('#list').html(html);
+            } else {
+                mui.toast(data.respMsg, {
+                    duration: 4000,
+                    type: 'div'
+                })
+                return;
+            }
+        }).fail(function(XMlHttpRequest) {
+            var text = XMlHttpRequest.responseText;
+            mui.toast(text.message, {
+                duration: 4000,
+                type: 'div'
+            })
+            return;
+        }).complete(function(XMlHttpRequest, status) {
+            if (status == 'timeout') {
+                $('#loading').hide();
+                mui.toast("网速不给力，请重试！");
+                return;
+            } else if (status == "error") {
+                $("#loading").hide();
+                mui.toast("当前网络不可用，请查看网络是否畅通！");
+                return;
+            }
+        })
+    }
+
+    /**
+     * @desc   更多展示
+     * @author huoke
+     */
+    $('#moreDetail').click(function() {
+        // var numbers = [];
+        // $("#pickNumList").find("div").each(function () {
+        //     numbers.push($(this).text());
+        // });
+        // addMoreHtml(numbers);
+        $('.moreDiv').show();
+        $('.mask').show();
+        $('#moreDetail').hide();
+    })
+
+    // 创建取件单物资列表
+    function createH(itemNum, itemTypeName, sourceAreaName, applyDeptName, applyWorkName, applyTel, applyBuilding, applyFloor, applyTime, targetAreaName, targetBuilding, targetFloor, targetDeptName, targetName, targetTel) {
+
+        var html = `<li class="liLength">
+        <ul class="list-part">
+          <li class="first">
+            物品编码：<span class="taskNo">${itemNum}</span>
+            <span class="statusCode">${itemTypeName}</span>
+          </li>
+          <li>
+            <span class="left-name">申请科室</span>
+            <span class="status">${sourceAreaName}${applyBuilding}${applyFloor}${applyDeptName}</span>
+          </li>
+          <li>
+            <span class="left-name">申请时间</span>
+            <span class="status">${applyTime}</span>
+          </li>
+          <li>
+            <span class="left-name">申请人</span>
+            <span class="status">${applyWorkName} ${applyTel}</span>
+          </li>
+          <li>
+            <span class="left-name">目标科室</span>
+            <span class="status">${targetAreaName}${targetBuilding}${targetFloor}${targetDeptName}</span>
+          </li>
+          <li>
+            <span class="left-name">收件人</span>
+            <span class="status">${targetName} ${targetTel}</span>
+          </li>
+          <li style="text-align:center">
+            <button type='button' class='mui-btn mui-btn-success hisBtn'>查看历史</button>
+          </li>
+        </ul>
+    </li>`
+        return html;
+    }
+
+    /**
+     * @desc   添加物资
+     * @author huoke
+     */
+    function creatLineHtml(itemNum, itemTypeName, targetAreaName, targetDeptName) {
+        var html = ''
+        html += "<tr>";
+        html += "<td class='detail' itemNum ='" + itemNum + "' onclick = 'toDetail(" + JSON.stringify(itemNum) + ")'>" + itemNum + "</td>";
+        html += "<td>" + itemTypeName + "</td>";
+        html += "<td>" + targetAreaName + "</td>";
+        html += "<td>" + targetDeptName + "</ttd>";
+        html += "</tr>";
+        return html;
+    }
+    /**
+     * @desc   添加更多信息
+     */
+    function createHtmlMore(billNo, status, applyWorkName, workName, applyTime) {
+        var html = '';
+        html += "<li>";
+        html += "<span class='leftName'>取件单号</span>";
+        html += "<span class='rightName' >" + billNo + "</span>";
+        html += "</li>";
+        html += "<li>";
+        html += "<span class='leftName'>单据状态</span>";
+        html += "<span class='rightName'>" + status + "</span>";
+        html += "</li>";
+        html += "<li>";
+        html += "<span class='leftName'>申请人</span>";
+        html += "<span class='rightName'>" + applyWorkName + "</span>";
+        html += "</li>";
+        html += "<li>";
+        html += "<span class='leftName'>取件人</span>";
+        html += "<span class='rightName'>" + workName + "</span>";
+        html += "</li>";
+        html += "<li>";
+        html += "<span class='leftName'>取件申请时间</span>";
+        html += "<span class='rightName'>" + applyTime + "</span>";
+        html += "</li>";
+        return html;
+    }
+    // 时间戳转换日期格式方法
+    function formatDate(value) {
+        if (value == null) {
+            return '';
+        } else {
+            let date = new Date(value);
+            let y = date.getFullYear(); // 年
+            let MM = date.getMonth() + 1; // 月
+            MM = MM < 10 ? ('0' + MM) : MM;
+            let d = date.getDate(); // 日
+            d = d < 10 ? ('0' + d) : d;
+            let h = date.getHours(); // 时
+            h = h < 10 ? ('0' + h) : h;
+            let m = date.getMinutes(); // 分
+            m = m < 10 ? ('0' + m) : m;
+            let s = date.getSeconds(); // 秒
+            s = s < 10 ? ('0' + s) : s;
+            return y + '-' + MM + '-' + d + ' ' + h + ':' + m + ':' + s;
+        }
+    }
+    /**
+     * @desc   物流详情
+     * @author huoke
+     */
+    function toDetail(itemNum) {
+        // localStorage.setItem("initTransItem",itemNum);
+        location.href = './detailTimeLine.html?' + itemNum;
+    }
+    mui("body").on("tap", ".hisBtn", function() {
+            var itemNum = $(this).parent().parent().find('.taskNo').text();
+            toDetail(itemNum);
+        })
+        /**
+         * @desc   关闭弹框
+         * @author chenjing
+         */
+    $('.mask').click(function() {
+        $('.moreDiv').hide();
+        $('.mask').hide();
+        moreHtml = '';
+        $('#moreDetail').show();
+    })
+
+    /**
+     * @desc   mui上拉刷新，下拉加载
+     * @author chenjing
+     */
+    mui.init({
+        pullRefresh: {
+            container: '#pullrefresh',
+            down: {
+                callback: pulldownRefresh,
+                contentrefresh: "正在刷新",
+            },
+            up: {
+                height: 100,
+                contentrefresh: "加载中，请稍后...",
+                contentnomore: "暂无更多数据",
+                callback: pullupRefresh
+            }
+        }
+    })
+
+    /**
+     * @desc   下滑刷新
+     * @author chenjing
+     */
+    function pulldownRefresh() {
+        page = 1;
+        $('#list').html('');
+        init(billNo);
+        setTimeout(function() {
+            mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+        }, 1500);
+    }
+
+    /**
+     * @desc   上滑加载更多
+     * @author chenjing
+     */
+    function pullupRefresh() {
+        page++;
+        init(billNo);
+        setTimeout(function() {
+            mui('#pullrefresh').pullRefresh().endPullupToRefresh();
+        }, 1500);
+    }
+
+    /**
+     * @desc   点击返回按钮
+     * @author chenjing
+     */
+    mui("body").on("tap", "#back", function() {
+        location.href = './register.html'
+    })
+
+
+
+    /**
+     * @desc   手机系统返回键
+     * @author chenjing
+     */
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+        location.href = './register.html';
+    }
+</script>
+
+</html>

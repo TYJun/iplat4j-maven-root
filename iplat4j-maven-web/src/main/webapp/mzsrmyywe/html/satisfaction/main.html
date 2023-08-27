@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="reference/mui/css/mui.css" />
+    <link rel="stylesheet" href="reference/css/common.css" />
+</head>
+<style type="text/css">
+    body {
+        background: #fff;
+    }
+    
+    .mui-content>.mui-table-view:first-child {
+        margin-top: 0px;
+    }
+    
+    .mui-table-view-cell {
+        padding: 18px 15px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    
+    .status-unfinished {
+        color: #ff9800;
+    }
+    
+    .status-finished {
+        color: #4caf50;
+    }
+    
+    .status-unknown {
+        color: #f96d63;
+    }
+</style>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">调查列表</h1>
+        <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+        返回
+      </button>
+    </header>
+
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div id="loading" class="loading1" hidden>
+        <div class="loading2">
+            <span class="mui-spinner" style="width: 80px; height: 80px"></span>
+        </div>
+    </div>
+
+    <div class="mui-content"></div>
+</body>
+<script src="reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="reference/js/common.js" type="text/javascript"></script>
+<script type="text/javascript">
+    // localStorage.setItem("url", "http://gdyy.bonawise.com:46027/smp/");
+    // localStorage.setItem("workNo", "123321");
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    $("#loading").show();
+    loadData();
+
+    function loadData() {
+        var prame = {
+            LoginUser: workNo,
+        };
+
+        prame = JSON.stringify(prame);
+
+        $.ajax({
+            url: baseUrl + "MobileAgentService",
+            type: "post",
+            headers: {
+                methodName: "getAssessManage",
+                serviceName: "SQAP01",
+            },
+            data: {
+                prames: prame,
+            },
+            success: function(data) {
+                $("#loading").hide();
+                console.log(data);
+                if (data.msgKey == "200") {
+                    var list = data.attr.param;
+                    var html = '<ul class="mui-table-view mui-table-view-chevron">';
+                    for (var i = 0; i < list.length; i++) {
+                        html += createViews(
+                            list[i].batch_no,
+                            list[i].standard_id,
+                            list[i].standard_name,
+                            list[i].status_code,
+                            list[i].status_submit
+                        );
+                    }
+                    html += "</ul>";
+                    $(".mui-content").html(html);
+                } else {
+                    mui.toast("暂无问卷！");
+                }
+            },
+        });
+    }
+
+    function createViews(
+        billNo,
+        standardId,
+        standardName,
+        status,
+        status_submit
+    ) {
+        var json = {
+            billNo: billNo,
+            standardId: standardId,
+            standardName: standardName,
+            status: status,
+            status_submit: status_submit,
+        };
+        var jsonStr = JSON.stringify(json);
+        var html = "<li id='" + jsonStr + '\' class="mui-table-view-cell">';
+        if (status == "99") {
+            html +=
+                '<a href="#about" class="mui-navigate-right">' +
+                standardName +
+                '  <i class="mui-pull-right status-finished">已完成</i></a>';
+        } else {
+            if (json.status_submit == "1") {
+                html +=
+                    '<a href="#about" class="mui-navigate-right">' +
+                    standardName +
+                    ' <i class="mui-pull-right status-unfinished">已提交</i></a>';
+            } else {
+                html +=
+                    '<a href="#about" class="mui-navigate-right">' +
+                    standardName +
+                    ' <i class="mui-pull-right status-unfinished">待完成</i></a>';
+            }
+        }
+
+        html += "</li>";
+        return html;
+    }
+
+    mui("body").on("tap", "li.mui-table-view-cell", function() {
+        console.log(this.id);
+        id = this.id;
+        var json = JSON.parse(this.id);
+        if (json.status == "10") {
+            if (json.status_submit == "1") {
+                mui.confirm("是否要重新答题", "", function(e) {
+                    console.log(json);
+                    e.index == 0 &&
+                        (location.href = "survey-detail.html?" + encodeURIComponent(id));
+                    e.index == 1 &&
+                        (location.href =
+                            "myd/index.html#/questionnaire-investigation?" +
+                            encodeURIComponent(id));
+                });
+            } else {
+                location.href =
+                    "myd/index.html#/questionnaire-investigation?" +
+                    encodeURIComponent(this.id);
+            }
+        } else {
+            location.href =
+                "myd/index.html#/questionnaire-investigation?" +
+                encodeURIComponent(this.id);
+        }
+    });
+    // 返回;
+    document.getElementById("back").addEventListener("tap", function() {
+        location.href = "../../menu.html";
+    });
+</script>
+
+</html>

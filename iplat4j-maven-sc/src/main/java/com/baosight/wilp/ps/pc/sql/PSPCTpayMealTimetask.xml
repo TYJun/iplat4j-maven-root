@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd"> 
+	<!-- 在线支付流转记录表sqlMap -->
+<sqlMap namespace="PSPCTpayMealTimetask">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ps.pc.domain.PSPCTpayMealTimetask">
+		SELECT
+		id as "id",
+		create_time as "createTime",  <!-- 创建时间 -->
+		hospital_code as "hospitalCode",  <!-- 食堂编码 -->
+		bill_id as "billId",  <!-- 订单ID -->
+		bill_no as "billNo",  <!-- 订单单号 -->
+		bill_type as "billType",  <!-- 订单类型 -->
+		bill_status as "billStatus",  <!-- 订单状态 -->
+		creator as "creator",  <!-- 创建人 -->
+		activiti_time as "activitiTime",  <!-- 工作流提交时间 -->
+		msg as "msg",  <!-- 提交工作流返回信息 -->
+		flag as "flag",  <!-- 状态标记 /01待提交工作流/99提交成功/98提交失败，手动走流程 -->
+		pay_type as "payType"
+		FROM sc_pay_timetask WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				id asc
+			</isEmpty>
+		</dynamic>
+
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_pay_timetask WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+
+	<insert id="insert">
+		INSERT INTO sc_pay_timetask (id,
+		create_time,  <!-- 创建时间 -->
+		hospital_code,  <!-- 食堂编码 -->
+		bill_id,  <!-- 订单ID -->
+		bill_no,  <!-- 订单单号 -->
+		bill_type,  <!-- 订单类型 -->
+		bill_status,  <!-- 订单状态 -->
+		creator,  <!-- 创建人 -->
+		activiti_time,  <!-- 工作流提交时间 -->
+		msg,  <!-- 提交工作流返回信息 -->
+		flag,  <!-- 状态标记 /01待提交工作流/99提交成功/98提交失败，手动走流程 -->
+		pay_type
+		)
+		VALUES (#id#, #createTime#, #hospitalCode#, #billId#, #billNo#, #billType#,
+		#billStatus#, #creator#, #activitiTime#, #msg#, #flag#, #payType#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM sc_pay_timetask WHERE
+		id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_pay_timetask
+		SET
+		create_time = #createTime#,   <!-- 创建时间 -->
+		hospital_code = #hospitalCode#,   <!-- 食堂编码 -->
+		bill_id = #billId#,   <!-- 订单ID -->
+		bill_no = #billNo#,   <!-- 订单单号 -->
+		bill_type = #billType#,   <!-- 订单类型 -->
+		bill_status = #billStatus#,   <!-- 订单状态 -->
+		creator = #creator#,   <!-- 创建人 -->
+		activiti_time = #activitiTime#,   <!-- 工作流提交时间 -->
+		msg = #msg#,   <!-- 提交工作流返回信息 -->
+		flag = #flag#,   <!-- 状态标记 /01待提交工作流/99提交成功/98提交失败，手动走流程 -->
+		pay_type = #payType#
+		WHERE
+		id = #id#
+	</update>
+
+</sqlMap>

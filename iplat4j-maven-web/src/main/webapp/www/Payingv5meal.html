@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  
+     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <style type="text/css">
+    body,
+    html {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    img {
+      width: 100%;
+    margin-top: 40px;
+    }
+    span {
+          display: block;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #8c8c8c;
+    }
+    </style>
+
+  </head>
+  
+  <body>
+  	<img src="paying.png">
+   <form id = "test_form" action="app_workBillInfoController.do?getWeChatPayInfoH5" hidden="hidden">
+		billNo:<br>
+		<input type="text" id ="billNo" name="billNo" value="Mickey">
+		<br>
+		<input type="submit" id ="Submit" value="Submit">
+	</form> 
+  </body>
+  <script type="text/javascript" src="plug-in/jquery/jquery-1.8.3.min.js"></script>
+  <script type="text/javascript">
+  $(document).ready(function (){
+		var userName= getParam("billNo");
+		var baseUrl= getParam("baseUrl");
+	    if(billNo){
+		  //location.href = 'app_workBillInfoController.do?getWeChatPayInfoH5&billNo='+userName;
+		  location.href = baseUrl + 'workmealGet?className=AppWorkPayService&methodName=workAppPay&billNo=' + userName + "&payType=0201";
+		}
+	});
+  
+  /** 
+   * 获取指定的URL参数值 
+   * URL:http://www.quwan.com/index?name=tyler 
+   * 参数：paramName URL参数 
+   * 调用方法:getParam("name") 
+   * 返回值:tyler 
+   */ 
+  function getParam(paramName) { 
+      paramValue = "", isFound = !1; 
+      if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) { 
+          arrSource = unescape(this.location.search).substring(1, this.location.search.length).split("&"), i = 0; 
+          while (i < arrSource.length && !isFound) arrSource[i].indexOf("=") > 0 && arrSource[i].split("=")[0].toLowerCase() == paramName.toLowerCase() && (paramValue = arrSource[i].split("=")[1], isFound = !0), i++ 
+      } 
+      return paramValue == "" && (paramValue = null), paramValue 
+  } 
+  </script>
+</html>

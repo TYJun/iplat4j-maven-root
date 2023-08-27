@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>单条详情</title>
+    <link rel="stylesheet" href="../../css/scrap/details.css"/>
+    <link
+      rel="stylesheet"
+      href="../../../../../html\reference\mui\css\mui.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../../../html\reference\mui\css\mui.picker.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../../../html\reference\mui\css\mui.picker.min.css"
+    />
+  </head>
+  <body>
+    <div id="app" v-clock>
+      <!-- 顶部区域 -->
+      <header>
+        <div class="top">
+          <div id="top-bar">
+            <h1 id="title">报废详情</h1>
+            <span
+              id="icon-left-back"
+              class="mui-icon mui-icon-arrowleft"
+            ></span>
+            
+          </div>
+        </div>
+      </header>
+      <!-- 次品单号输入框 -->
+      <div class="ordNum">
+        <span class="ord_title">报废单号:</span>
+        <div id="No"></div>
+      </div>
+      <!-- 详情表格 -->
+      <table class="table_details">
+        <thead>
+          <tr>
+            <th>医用织物分类</th>
+            <th>规格</th>
+            <th>数量</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item,index) in details_list" :key="index" id="content">
+            
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+
+  <script src="../../../../../reference/assets/js/jquery.min.js"></script>
+  <script src="../../../../../html/reference/mui/js/mui.min.js"></script>
+  <script src="../../../../../html/reference/mui/js/mui.picker.min.js"></script>
+  <script src="../../../../../js/vue.js"></script>
+  <script>
+   var baseUrl = localStorage.getItem("url");
+  var deptName = localStorage.getItem("deptName");
+  var deptNo = localStorage.getItem("deptNo");
+  var exceptionNo = localStorage.getItem("exceptionNo");
+  var html="";
+  var htmls="";
+  
+  $(function () {
+    init();
+  });
+
+  function create(fabricName, fabricModel, number) {
+            var html = "";
+            html ='<td>'+fabricName+'</td>'+'<td>'+fabricModel+'</td>'+'<td>'+number+'</td>'
+            return html
+  }
+
+  $("#icon-left-back").click(function(){
+            location.href = './historyList.html';
+        });
+
+  function init() {
+    $.ajax({
+      url: baseUrl + "ommf/queryException002",
+      type: "post",
+      datatype: "json",
+      data:{
+        requestParam:'{"exceptionNo":"' + exceptionNo+'"}'
+      },
+      success: function (data) {
+        console.log(data);
+        console.log(1);
+        console.log(data.object[0].fabricName);
+        htmls += create(data.object[0].fabricName, data.object[0].fabricModel, data.object[0].number);
+        var No='<input class="ord_input" value='+exceptionNo+' />';
+        $("#content").html(htmls);
+        $("#No").html(No);
+      }
+    })
+  }
+  </script>
+</html>

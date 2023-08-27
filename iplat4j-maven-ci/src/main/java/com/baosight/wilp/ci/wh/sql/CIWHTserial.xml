@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<!-- 序列号 -->
+<sqlMap namespace="CIWHTserial">
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ci.wh.domain.CIWHTserial">
+		SELECT
+		id as "id",
+		rec_revise_time as "recReviseTime",  <!-- 修改时间 -->
+		serial_num as "serialNum",  <!-- 序列号编码 -->
+		serial_index as "serialIndex" <!-- 序列号值 -->
+		FROM ci_serial WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="serialNum">
+			serial_num = #serialNum#
+		</isNotEmpty>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM ci_serial WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO ci_serial (id,
+		rec_revise_time,  <!-- 修改时间 -->
+		serial_num,  <!-- 序列号编码 -->
+		serial_index  <!-- 序列号值 -->
+		)
+		VALUES (#id#, #recReviseTime#, #serialNum#, #serialIndex#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM ci_serial WHERE
+		id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE ci_serial
+		SET
+		rec_revise_time = #recReviseTime#,   <!-- 修改时间 -->
+		serial_num = #serialNum#,   <!-- 序列号编码 -->
+		serial_index = #serialIndex#  <!-- 序列号值 -->
+		WHERE
+		id = #id#
+	</update>
+
+</sqlMap>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFBJ0101">
+	<!-- 获取最大合同号 -->
+	<select id="createCleanNo" parameterClass="java.lang.String" resultClass="java.lang.String">
+		select
+			max(clean_no)
+		from
+		  df_clean
+	</select>
+
+
+
+	<select id="queryPersonList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		cl.id as "id",
+		cl.clean_id as "cleanId",
+		cl.clean_no as "cleanNo",
+		cl.work_no as  "workNo",
+		cl.name as "name",
+		cl.dept_num as "deptNum",
+		cl.dept_name as "deptName"
+		FROM
+		df_cleaning_executor cl
+		WHERE
+		cl.clean_no = #cleanNo#
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				id asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="queryPersonCount" resultClass="int">
+		SELECT * FROM df_cleaning_executor WHERE clean_no=#cleanNo#
+		<isNotEmpty prepend=" AND " property="id">
+			clean_no = #cleanNo#
+		</isNotEmpty>
+	</select>
+
+
+</sqlMap>

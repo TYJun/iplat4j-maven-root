@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFCS01">
+
+	<!-- 查询设备参数信息 -->
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select 
+			cp.id,
+			cp.param_key paramKey,
+			cp.param_name paramName, 
+			cp.param_value paramValue,
+			cp.param_unit paramUnit,
+			cp.memo,
+			mbc.classify_code classifyCode,
+			mbc.classify_name classifyName
+		from df_classfyparam cp 
+		left join df_modulebaseclassfy mbc on cp.module_id = mbc.id
+		where 1=1
+		<isNotEmpty prepend="AND" property="moduleId">
+			cp.module_id = #moduleId#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="classifyName">
+			mbc.classify_name like concat('%', #classifyName#, '%') 
+		</isNotEmpty>
+		order by cp.param_key 
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+
+	<!-- 查询设备参数信息 count-->
+	<select id="count" parameterClass="java.util.HashMap" resultClass="int">
+		select 
+			cp.id,
+			cp.param_key paramKey,
+			cp.param_name paramName, 
+			cp.param_value paramValue,
+			cp.param_unit paramUnit,
+			cp.memo,
+			mbc.classify_code classifyCode,
+			mbc.classify_name classifyName
+		from df_classfyparam cp 
+		left join df_modulebaseclassfy mbc on cp.module_id = mbc.id
+		where 1=1
+		<isNotEmpty prepend="AND" property="moduleId">
+			cp.module_id = #moduleId#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="classifyName">
+			mbc.classify_name like '%$classifyName$%'
+		</isNotEmpty>
+	</select>
+
+	<!-- 删除设备参数 -->
+	<delete id="deleteItem" parameterClass="java.util.List">
+		DELETE FROM df_classfyparam WHERE param_key IN 
+		<iterate conjunction="," open="(" close=")">
+			#[]#
+		</iterate>
+	</delete>
+
+</sqlMap>

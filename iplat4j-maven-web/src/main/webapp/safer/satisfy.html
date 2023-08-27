@@ -1,0 +1,232 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="./reference/mui/css/mui.min.css">
+    <link rel="stylesheet" href="./reference/mui/css/mui.picker.min.css">
+    <link rel="stylesheet" href="./reference/css/common.css" />
+</head>
+<STYLE TYPE="text/css">
+    .row {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+    
+    .navbar {
+        margin-bottom: 0px;
+    }
+    
+    .badge {
+        color: #222;
+    }
+    
+    .dropdown-menu {
+        min-width: 150px;
+    }
+    
+    .col-lg-4,
+    .col-md-4,
+    .col-sm-4,
+    .col-xs-4,
+    .col-lg-6,
+    .col-md-6,
+    .col-sm-6,
+    .col-xs-6 {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+    
+    .dropdown-menu>li>a {
+        padding: 6px 20px;
+    }
+    
+    #type>div {
+        border-radius: 2px;
+        height: 2.8rem;
+        line-height: 2.8rem;
+        text-align: center;
+        border-bottom: 2px solid #DDD;
+    }
+    
+    .tab {
+        height: 40px;
+        line-height: 40px;
+        font-weight: bold;
+        /*background: #1bb2d8;*/
+        color: #787464;
+        border-top: 1px solid #787464;
+        border-bottom: 1px solid #787464;
+    }
+    
+    .list-tab {
+        height: 40px;
+        line-height: 40px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    table {
+        width: 100%;
+        margin-top: 10px;
+    }
+    
+    tr {
+        border-bottom: 1px solid #c8c7cc;
+    }
+    
+    td {
+        width: 16.7%;
+        text-align: center;
+    }
+    
+    .search-div>>>.mui-input-group .mui-input-row {
+        overflow: visible;
+    }
+</STYLE>
+
+<body>
+
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">安全巡查记录</h1>
+        <button class="mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+<!--        <a href="javascript:back();" style="color:#FFFFFF;">返回</a>-->
+    </button>
+    </header>
+
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div id="loading" class="spinner" style="position:fixed;z-index:9999;text-align:center;width:100%;">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+
+    <div class="mui-content">
+        <div class="search-div">
+            <form class="mui-input-group">
+                <div class="mui-input-row">
+                    <label>选择日期</label>
+                    <input id="startDate" type="text" placeholder="请选择日期" readonly>
+                </div>
+            </form>
+        </div>
+        <table>
+            <thead class="list">
+                <tr>
+                    <th>巡查设备</th>
+                    <th>巡查项目</th>
+                    <th>巡查时间</th>
+                    <th>完成人</th>
+                    <th>责任人</th>
+                    <th>是否正常</th>
+                </tr>
+            </thead>
+        </table>
+        <div id="statusChart" style="width:100%;height:280px;margin:20px auto; "></div>
+
+    </div>
+
+</body>
+<script src="./reference/mui/js/mui.min.js " type="text/javascript "></script>
+<script src="./reference/mui/js/mui.picker.min.js " type="text/javascript "></script>
+<script src="./reference/js/jquery-2.1.4.js " type="text/javascript "></script>
+<script src="./reference/js/common.js " type="text/javascript "></script>
+<script type="text/javascript" type="text/javascript">
+    var baseUrl = 'http://119.146.152.53:8081/mzsrmyy/';
+    var date = new Date();
+    var year = date.getFullYear();
+    var createTime = "";
+    var areaCode = [];
+    var beginDate = date_YM();
+    $('#startDate').val(beginDate);
+    var urls=location.search
+    var result = {};
+    if (urls.indexOf('?') > -1) {
+        var str = urls.split('?')[1];
+        var temp = str.split('&');
+        for (var i = 0; i < temp.length; i++) {
+            var temp2 = temp[i].split('=');
+            result[temp2[0]] = temp2[1];
+            // alert(JSON.stringify(result))
+            console.log('请url参数', result)
+        }
+    }
+
+    //起始日期选择
+    document.getElementById("startDate").addEventListener('tap', function() {
+        var options = {
+            "type": "month"
+        };
+        var picker = new mui.DtPicker(options);
+        picker.show(function(rs) {
+            console.log(rs);
+            month = rs.text;
+            $('#startDate').val(month);
+            //alert();
+            //console.log("开始时间："+month);
+            loadData($('#startDate').val());
+
+        });
+    });
+
+    // var spotId = JSON.stringify(result);
+    // loadData();
+    function loadData(createTime) {
+        console.log("开始时间："+createTime);
+        $.ajax({
+            url: baseUrl + 'imInfo',
+            type: 'post',
+            headers: {
+                methodName: "queryUserRole",
+                className: "ServiceIMJK01"
+            },
+
+            data: {
+                spotId:result.spotId,
+                createTime:createTime
+
+            },
+            success: function(data) {
+                console.log(result.spotId)
+                // if (data.respCode == "200") {
+                    var html = ''
+                    var list = data.obj;
+                    if (list.length == 0 || list == null) {
+                        mui.toast("未能查询到数据 ");
+                    }
+                    for (var i = 0; i < list.length; i++) {
+                       html += createFirst(list[0].schemeName,list[i].jitemName,list[i].date,list[i].name,list[i].zname, list[i].finishTime,list[i].writeValue);
+                    }
+                    $('.list').html(html)
+                    $("#loading ").hide();
+            }
+        });
+    };
+
+
+    function createFirst(schemeName,jitemName,date,name,zname, finishTime,writeValue) {
+        var html = '';
+        html += ` <tr>
+                    <td>${schemeName}</td>
+                    <td>${jitemName}</td>
+                    <td>${date}</td>
+                    <td>${name}</td>
+                    <td>${zname}</td>
+                    <td>${writeValue}</td>
+                </tr>`
+
+        return html;
+    }
+
+
+
+</script>
+
+</html>

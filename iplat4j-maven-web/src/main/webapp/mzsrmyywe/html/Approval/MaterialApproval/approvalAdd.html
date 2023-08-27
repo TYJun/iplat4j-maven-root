@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../../reference/mui/css/mui.min.css" />
+    <link rel="stylesheet" href="../../reference/mui//css/mui.picker.min.css">
+    <link rel="stylesheet" href="../../reference/mui/css/mui.picker.css">
+    <link rel="stylesheet" href="../animate.css" />
+</head>
+<style type="text/css">
+    #app {
+        height: 100vh;
+        background-color: #f5f5f5;
+    }
+
+    .info {
+        box-sizing: border-box;
+        padding: 4px 16px;
+        background-color: #fff;
+        margin-top: 44px;
+        font-size: 16px;
+        color: #333;
+    }
+
+    .info>div {
+        height: 50px;
+        line-height: 50px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .taskNo {
+        display: flex;
+    }
+
+    .time {
+        display: flex;
+        align-items: center;
+        border: none !important;
+    }
+
+    .mui-btn-block {
+        font-size: 16px;
+        padding: 0px;
+        border: none;
+    }
+
+    .material {
+        margin-top: 0px 16px 16px 16px;
+        background-color: #f5f5f5;
+        padding: 16px;
+    }
+
+    .list {
+        background-color: #fff;
+        box-sizing: border-box;
+        padding: 12px;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px 5px #f2f2f2;
+        position: relative;
+    }
+
+    .item {
+        height: 32px;
+        font-size: 16px;
+        color: #333;
+        display: flex;
+        align-items: center;
+    }
+
+    .btn {
+        display: flex;
+        /* flex-direction: column; */
+        align-items: center;
+        justify-content: center;
+
+    }
+
+    .btn>button {
+        font-size: 16px;
+        height: 44px;
+        margin: 0px 12px;
+        width: 110px;
+        margin-bottom: 20px;
+        /* border-radius: 22px; */
+    }
+    .btn>button{
+        color: #fff;
+        background-color: #30c37c;
+    }
+
+    .mui-input-row {
+        width: 68%;
+    }
+
+    input[type=text] {
+        margin-bottom: 0px;
+    }
+
+    .inputBorder {
+        border: 1px solid #fff !important;
+    }
+
+    .wuzi {
+        background-color: rgb(255, 255, 255);
+        border: 1px solid rgba(0, 0, 0, .2);
+        border-top: 1px solid #fff !important;
+        position: absolute;
+        left: 80px;
+        top: 34px;
+        z-index: 111;
+    }
+
+    .w_list {
+        padding: 10px;
+        font-size: 16px;
+        color: #333;
+    }
+
+    .w_list:hover {
+        background-color: #f0f0f0;
+    }
+
+    .delete {
+        width: 25px;
+        height: 25px;
+        background-color: rgb(234, 45, 27);
+        border-radius: 50%;
+        position: absolute;
+        right: -6px;
+        top: -9px;
+        text-align: center;
+        line-height: 24px;
+        color: #fff;
+    }
+
+    .mui-icon {
+        font-weight: 600;
+    }
+
+    .mui-popup-button {
+        color: #30c37c;
+    }
+
+    .mui-popup-button.mui-popup-button-bold {
+        font-weight: 500;
+    }
+    :root {
+        --animate-duration: .3s;
+    }
+</style>
+
+<body>
+    <div id="app">
+        <header class="mui-bar mui-bar-nav">
+            <h1 class="mui-title">领用单</h1>
+            <button id="back" onclick="onBackKeyDown()"
+                class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+                <span class="mui-icon mui-icon-left-nav"></span>
+                返回
+            </button>
+            <div id="deleteBtn" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-right"
+                style="position: relative;right: 12px;">
+                删除
+            </div>
+            <div id="finishBtn" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-right"
+                style="position: relative;right: 12px;display: none;">
+                取消
+            </div>
+        </header>
+        <div class="info">
+            <div class="taskNO">
+                <span>领用科室：</span>
+                <span>领用科室</span>
+            </div>
+            <div class="people">
+                <span>申请人：</span>
+                <span>领用科室</span>
+            </div>
+            <div class="time">
+                <span>申请时间：</span>
+                <span>
+                    <div class="mui-content-padded">
+                        <button id='date' class="btn mui-btn mui-btn-block">选择日期</button>
+                    </div>
+                </span>
+            </div>
+        </div>
+        <!-- 物资 -->
+        <div class="material"> 
+            <div class="list listmaterial">
+                <div class="delete animate__animated animate__zoomIn" hidden onclick="deleteFn()">
+                    <span class="mui-icon mui-icon mui-icon-closeempty"></span>
+                </div>
+                <div class="item"><span>物资名称：</span><span>物业管理科</span></div>
+                <div class="item"><span>物资分类：</span><span>年度</span></div>
+                <div class="item"><span>型号：</span><span>2022</span></div>
+                <div class="item"><span>单价(元)：</span><span>234</span></div>
+                <div class="item"><span>计划数量：</span><span>201.50</span></div>
+            </div>
+        </div>
+        <!-- 增加 -->
+        <div class="addMaterial" style="padding:0px 16px 16px 16px;">
+            <div class="list">
+
+                <div class="item" style="display:flex;position: relative;"><span>物资名称：</span>
+                    <div class="mui-input-row">
+                        <input type="text" id="inputWuzi" oninput="getWuzi()" onblur="inputBlur()"
+                            class="inputBorder mui-input-clear" placeholder="请输入物资名称">
+                    </div>
+                    <!-- 物资查询 -->
+                    <div class="wuzi" hidden>
+                        <div class="w_list">1</div>
+                        <div class="w_list">1</div>
+                        <div class="w_list">1</div>
+                        <div class="w_list">1</div>
+                    </div>
+                </div>
+                <div class="item"><span>物资分类：</span><span>年度</span></div>
+                <div class="item"><span>型号：</span><span>2022</span></div>
+                <div class="item"><span>单价(元)：</span><span>234</span></div>
+                <div class="item"><span>计划数量：</span>
+                    <div id="detal" class="mui-numbox" data-numbox-step='1' data-numbox-min='0' data-numbox-max='100'>
+                        <button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
+                        <input class="mui-numbox-input" type="number" />
+                        <button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 按钮 -->
+        <div class="btn" style=" margin-top: 32px;">
+            <button type="button" >增加</button>
+            <button type="button" >保存</button>
+            <button onclick="submit()">提交</button>
+        </div>
+
+
+</body>
+<script src="../../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../../reference//mui/js/mui.min.js"></script>
+<script src="../../reference/mui/js/mui.picker.min.js"></script>
+<!-- <script src="reference/mui/js/mui.picker.min.js" type="text/javascript"></script> -->
+<script src="../../reference/mui/js/mui.picker.js"></script>
+<script type="text/javascript">
+    mui.init();
+    var btn = document.querySelector('#date');
+    // var result = document.querySelector('#result');
+    var dtPicker = new mui.DtPicker({
+        type: 'date'
+    });
+    $(function () {
+        // 默认日期
+        btn.innerHTML = getNowFormatDate()
+        // 物资集合
+        let inputWidth = document.getElementById('inputWuzi').offsetWidth;
+        $('.wuzi').css('width', inputWidth + 'px')
+    })
+
+    // 输入事件
+    function getWuzi() {
+        $('.wuzi').show()
+        $('input[type=text]').removeClass('inputBorder')
+    }
+    function inputBlur() {
+        $('.wuzi').hide()
+        $('input[type=text]').addClass('inputBorder')
+    }
+
+    // 监听日期选择点击事件
+    btn.addEventListener('tap', function () {
+        dtPicker.show(function (selectItems) {
+            btn.innerHTML = selectItems.value;
+        })
+    }, false);
+    // 右上角删除物资按钮
+    $('#deleteBtn').click(function () {
+        $('#finishBtn').show()
+        $('#deleteBtn').hide()
+        $('.delete').show()
+    })
+    // 完成
+    $('#finishBtn').click(function () {
+        $('#finishBtn').hide()
+        $('#deleteBtn').show()
+        $('.delete').hide()
+    })
+    // 删除物资
+    function deleteFn() {
+        mui.confirm('确定删除该条领用单?', ['提示'], function (e) {
+            if (e.index == 1) {
+                console.log('1');
+            }
+        })
+    }
+    // 长按删除
+    let listmaterial = document.getElementsByClassName('listmaterial')
+    let time = null
+    for (let i = 0; i < listmaterial.length; i++) {
+        listmaterial[i].ontouchstart = function () {
+            console.log('1');
+            time = setTimeout(() => {
+                $('.delete').eq(i).show()
+                $('#finishBtn').show()
+                $('#deleteBtn').hide()
+            }, 1500)
+        }
+        listmaterial[i].ontouchend = function () {
+            clearTimeout(time)
+        }
+    }
+    function getNowFormatDate() {
+        let date = new Date(),
+            seperator1 = '-', //格式分隔符
+            year = date.getFullYear(), //获取完整的年份(4位)
+            month = date.getMonth() + 1, //获取当前月份(0-11,0代表1月)
+            strDate = date.getDate() // 获取当前日(1-31)
+        if (month >= 1 && month <= 9) month = '0' + month // 如果月份是个位数，在前面补0
+        if (strDate >= 0 && strDate <= 9) strDate = '0' + strDate // 如果日是个位数，在前面补0
+
+        let currentdate = year + seperator1 + month + seperator1 + strDate
+        return currentdate
+    }
+    function submit() {
+        location.href = './collectingDoc.html'
+    }
+    // 返回
+    function onBackKeyDown() {
+        location.href = './collectingDoc.html';
+    }
+</script>
+
+</html>

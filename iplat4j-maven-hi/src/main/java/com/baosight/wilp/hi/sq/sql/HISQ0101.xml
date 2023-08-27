@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HISQ0101">
+	<select id="queryNodeList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			node_auto_no as "nodeAutoNo",
+			node_name as "nodeName",
+			node_remark as "nodeRemark",
+			node_time as "nodeTime",
+			remark
+		FROM
+			cm_contract_bill_node
+		WHERE
+			cont_pk=#id#
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				CAST(NO as SIGNED) ASC
+			</isEmpty>
+		</dynamic>
+	</select>
+	<insert id="insert">
+		INSERT INTO .hi_approval (id,  <!-- 主键 -->
+		apply_no,  <!-- 标识申请ID -->
+		status,  <!-- 状态（00=无效，01=有效） -->
+		approval_result,  <!-- 审批结果（通过，驳回） -->
+		reject_reason,  <!-- 驳回原因 -->
+		approver,  <!-- 审批人工号 -->
+		approver_name,  <!-- 审批人姓名 -->
+		approval_time  <!-- 审批时间 -->
+		)
+		VALUES (#id#, #applyNo#, #status#, #approvalResult#, #rejectReason#, #approver#, #approverName#, #approvalTime#)
+	</insert>
+
+
+
+
+</sqlMap>

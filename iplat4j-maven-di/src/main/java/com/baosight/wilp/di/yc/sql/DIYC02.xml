@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DIYC02">
+
+	
+	<!-- 查询图片信息 -->
+	<select id="queryPic" parameterClass="String" resultClass="com.baosight.wilp.di.zh.domain.DIZH0101">
+		SELECT
+			path,
+			fileName 
+		FROM
+			di_device_task_pic
+		where 
+			taskId = #value#
+	</select>
+
+
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+			select 
+				t.taskID,
+				CASE
+				t.STATUS 
+				WHEN '1' THEN
+				'执行中' 
+				WHEN '-1' THEN
+				'已超时' 
+				WHEN '2' THEN
+				'已完工' 
+				WHEN '3' THEN
+				'关闭' 
+				END AS status,
+				t.taskCode,
+				i.schemeName,
+				t.schemeID,
+				case exceptionFlag when '-1' then '异常' when '1' then '正常' end as exceptionFlag,
+				m.machine_name machineName,
+				m.machine_code machineCode,
+				t.jobContent,
+				t.departName deptName,
+				t.managerName name,
+				t.finishManName finishName,
+				date_format(t.createTime,'%Y-%m-%d %H:%i:%s') createTime,
+				date_format(t.finishTime,'%Y-%m-%d %H:%i:%s') finishTime
+			from 
+				di_task t
+			left join
+				di_scheme i
+			on t.schemeID = i.schemeID
+			left join 
+				df_devicemachine m
+			on m.id = i.machineID
+			Where 1=1
+		<isNotEmpty prepend=" AND " property="taskCode">
+			t.taskCode like
+			concat('%',#taskCode#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="taskName">
+			i.schemeName like
+			concat('%',#taskName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="taskNameType">
+			i.schemeName like
+			concat('%',#taskNameType#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			t.departName like concat('%',#deptName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status">
+			t.status = #status#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineName">
+			m.machine_name like
+			concat('%',#machineName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="startTimeS">
+			t.createTime >=
+			#startTimeS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="startTimeE">
+			t.createTime <![CDATA[<=]]>
+			#startTimeE#
+		</isNotEmpty>
+			order by t.taskCode desc
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+	
+	<select id="count" resultClass="int" parameterClass="java.util.HashMap">
+		select 
+			t.taskID
+		from 
+			di_task t
+		left join
+			di_scheme i
+		on t.schemeID = i.schemeID
+		left join 
+			df_devicemachine m
+		on m.id = i.machineID
+		Where 1=1
+		<isNotEmpty prepend=" AND " property="taskCode">
+			t.taskCode like
+			concat('%',#taskCode#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="taskName">
+			i.schemeName like
+			concat('%',#taskName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status">
+			t.status = #status#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineName">
+			m.machine_name like
+			concat('%',#machineName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="startTimeS">
+			t.createTime >=
+			#startTimeS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="startTimeE">
+			t.createTime <![CDATA[<=]]>
+			#startTimeE#
+		</isNotEmpty>
+	</select>
+	
+	<!-- 巡检综合任务详情项目 -->
+	<select id="queryItem" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+				itemID, 
+				taskID, 
+				jitemName,
+				itemDesc,
+				referenceValue,
+				case successFlag when '1' then '正常' when '-1' then '异常' when '2' then '停用' end as successFlag,
+				writeValue,
+				actualValueUnit,
+		        case errorContent when '"null"' then '无' end as errorContent,
+				case exception_status when '1' then '以处理' when '0' then '待处理' end as exception_status,
+				exception_result
+		FROM 
+			di_taskitem 
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="taskID">
+			taskID = #taskID#
+		</isNotEmpty>
+		order by sort_no
+	    <isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+	
+	<!-- 巡检综合任务详情项目COUNT -->
+	<select id="queryItemCount" parameterClass="java.util.HashMap" 
+			resultClass="int">
+		SELECT
+				itemID, 
+				taskID, 
+				jitemName,
+				itemDesc,
+				referenceValue,
+				case successFlag when '1' then '正常' when '-1' then '异常' when '2' then '停用' end as successFlag,
+				writeValue,
+				actualValueUnit,
+				errorContent,
+				case exception_status when '1' then '以处理' when '0' then '待处理' end as exception_status,
+				exception_result
+		FROM 
+			di_taskitem 
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="taskID">
+			taskID = #taskID#
+		</isNotEmpty>
+			
+	</select>
+	
+	<!-- 巡检综合任务详情执行人 -->
+	<select id="queryExman" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+				jobID	as "jobID",
+				schemeID	as "schemeID",  
+				jobDepartID	as "jobDepartID",  
+				jobDepartNo	as "deptNo",  
+				jobManID	as "jobManID" ,
+				jobManNo as workNo,
+				jobManName as name,
+				jobDepartName as deptName
+		FROM di_schemejobs j
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="schemeID">
+			schemeID = #schemeID#	
+		</isNotEmpty>
+		<!-- <isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty> -->		
+	</select>
+	
+	<!-- 巡检综合任务定时改变超时状态 -->
+	<update id="changeStatus" >
+	    update
+		di_task set status=-1
+		where date_add(now(),interval -activeTime hour)>createTime and status=1;
+	</update>
+
+	<!-- 工单打印数据查询 -->
+	<select id="queryTaskForReport" parameterClass="string" resultClass="java.util.HashMap">
+		select
+			dt.taskID,
+			dt.taskCode taskNo,
+			ds.schemeName taskName,
+		    dt.createTime,
+		    dt.departName,
+			dt.managerName principal,
+			(select GROUP_CONCAT(jobManName SEPARATOR '、') from di_schemejobs where schemeID = dt.schemeID) excutors
+		from di_task dt
+		left join di_scheme ds on dt.schemeID = ds.schemeID
+		where dt.taskCode = #taskCode#
+	</select>
+
+	<!-- 查询任务名称取统一部分 -->
+	<select id="queryTaskName" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			SUBSTRING_INDEX(schemeName,'-',-1) taskNameType
+		FROM
+			`di_scheme`
+		GROUP BY SUBSTRING_INDEX(schemeName,'-',-1)
+	</select>
+
+	<select id="queryDept" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			dept_num deptNum,
+			dept_name deptName
+		FROM
+			$projectSchema$.ac_department
+        where status = '1'
+        group by dept_num
+	</select>
+
+
+</sqlMap>

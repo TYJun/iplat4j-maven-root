@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="EU99">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+				id	as "id",  
+				user_code	as "userCode",  
+				last_login_time	as "lastLoginTime",  
+				last_data_group_code	as "lastDataGroupCode",  
+				last_data_group_name	as "lastDataGroupName"
+		FROM ${platSchema}.teu99 WHERE 1=1
+		<isNotEmpty prepend=" AND " property="userCode">
+			user_code = #userCode#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO ${platSchema}.teu99 (
+			id,
+			user_code,
+			last_login_time,
+			last_data_group_code,
+			last_data_group_name
+		)		 
+	    VALUES (#id#, #userCode#, #lastLoginTime#, #lastDataGroupCode#, #lastDataGroupName#) 
+	</insert>
+
+	<update id="update">
+		UPDATE ${platSchema}.teu99 
+		SET 
+			last_login_time = #lastLoginTime#,  
+			last_data_group_code = #lastDataGroupCode#,  
+			last_data_group_name = #lastDataGroupName# 
+		WHERE 	
+			user_code = #userCode#
+	</update>
+  
+</sqlMap>

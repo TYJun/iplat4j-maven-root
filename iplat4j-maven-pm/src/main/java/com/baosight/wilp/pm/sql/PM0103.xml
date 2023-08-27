@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="PM0103">
+	
+	<!-- 获取最大项目号 -->
+	<select id="queryProjectNo" parameterClass="java.lang.String" resultClass="java.lang.String">
+		select max(PROJECT_NO) from pm01 where PROJECT_NO like concat(#value#,"%");
+	</select>
+
+	<select id="queryStageList" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		tt.id	as id,
+		tt.project_pk	as projectPk,
+		tt.stage_code	as stageCode,
+		tt.stage_name	as stageName,
+		tt.stage_remark	as stageRemark,
+		tt.plan_date	as planDate,
+		tt.datagroup_code as dataGroupCode,
+		tt.flag	as flag
+		FROM pm_stage tt
+		WHERE PROJECT_PK = #id#
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				tt.plan_date asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<!-- 查询项目阶段Count -->
+	<select id="queryStageCount" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT tt.* FROM pm_stage tt
+		WHERE PROJECT_PK = #id#
+	</select>
+
+	<!-- 删除项目阶段 -->
+	<delete id="deleteStage" parameterClass="java.lang.String">
+		delete from pm_stage where PROJECT_PK = #value#
+	</delete>
+
+	<!-- 保存项目阶段 -->
+	<insert id="insertStage" parameterClass="com.baosight.wilp.pm.domain.TpmStage">
+		INSERT INTO pm_stage (id,
+		project_pk,
+		stage_code,  <!-- 阶段编码 -->
+		stage_name,  <!-- 阶段名称 -->
+		stage_remark,  <!-- 阶段备注 -->
+		plan_date,  <!-- 计划日期 -->
+		create_no,  <!-- 创建人工号 -->
+		create_name,  <!-- 创建人 -->
+		create_time,  <!-- 创建时间 -->
+		datagroup_code,  <!-- 账套 -->
+		flag
+		)
+		VALUES (#id#, #projectPk#, #stageCode#, #stageName#, #stageRemark#, #planDate#, #createNo#, #createName#, #createTime#, #dataGroupCode#,#flag#)
+	</insert>
+	<!-- ==============================================项目阶段操作结束======================================================= -->
+
+	<!-- ==============================================执行人操作开始======================================================= -->
+	<!-- 查询执行人List -->
+	<select id="queryStaffList" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+			tt.ID	as id,
+			tt.PROJECT_PK	as projectPk,
+			tt.EXEC_STAFF_ID	as execStaffId,
+			tt.EXEC_STAFF_NAME	as execStaffName,
+			tt.NUMBER	as number,
+			tt.DEPT_NUM	as deptNum,
+			tt.DEPT_NAME as deptName,
+			tt.ARCHIVE_FLAG	as archiveFlag,
+			tt.REC_CREATOR	as recCreator,
+			tt.REC_CREATE_TIME	as recCreateTime,
+			tt.REC_REVISOR	as recRevisor,
+			tt.REC_REVISE_TIME	as recReviseTime 
+		FROM pm_staff tt 
+		WHERE PROJECT_PK = #id# 
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  tt.REC_CREATE_TIME asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<!-- 查询执行人Count -->
+	<select id="queryStaffCount" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT tt.* FROM pm_staff tt 
+		WHERE PROJECT_PK = #id#
+	</select>
+	
+	<!-- 删除执行人员 -->
+	<delete id="deleteStaff" parameterClass="java.lang.String">
+		delete from pm_staff where PROJECT_PK = #value#
+	</delete>
+	
+	<!-- 保存执行人员 -->						 
+	<insert id="insertStaff" parameterClass="com.baosight.wilp.pm.domain.TpmStaff">
+		INSERT INTO pm_staff (ID,  
+								PROJECT_PK,  
+								EXEC_STAFF_NAME,
+								EXEC_STAFF_ID,  
+								NUMBER,  <!-- 电话号码 -->
+								DEPT_NAME,  <!-- 科室编码 -->
+								DEPT_NUM,  <!-- 科室编码 -->
+								ARCHIVE_FLAG,  <!-- 归档标记 -->
+								REC_CREATOR,  <!-- 记录创建责任者 -->
+								REC_CREATE_TIME,  <!-- 记录创建时间 -->
+								REC_REVISOR,  <!-- 记录修改责任者 -->
+								REC_REVISE_TIME,  <!-- 记录修改时间 -->
+								DATAGROUP_CODE
+								)		 
+	    VALUES (#id#, #projectPk#, #execStaffName#, #execStaffId#, #number#, #deptName#, #deptNum#, #archiveFlag#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#) 
+	</insert>
+	<!-- ==============================================执行人操作结束======================================================= -->
+	
+	
+	<!-- ==============================================知会人操作开始======================================================= -->
+	<!-- 查询知会人List -->
+	<select id="queryKnowList" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+			tt.ID	as id,  <!-- 项目知会人员主键 -->
+			tt.PROJECT_PK	as projectPk,  <!-- 项目主键 -->
+			tt.NOTIFY_STAFF_ID	as notifyStaffId,  <!-- 知会人员工号 -->
+			tt.NOTIFY_STAFF_NAME	as notifyStaffName,  <!-- 知会人员工号 -->
+			tt.NUMBER	as number,  <!-- 电话号码 -->
+			tt.DEPT_NUM	as deptNum,  <!-- 科室编码 -->
+			tt.DEPT_NAME as deptName, <!-- 科室编码 -->
+			tt.ARCHIVE_FLAG	as archiveFlag,  <!-- 归档标记 -->
+			tt.REC_CREATOR	as recCreator,  <!-- 记录创建责任者 -->
+			tt.REC_CREATE_TIME	as recCreateTime,  <!-- 记录创建时间 -->
+			tt.REC_REVISOR	as recRevisor,  <!-- 记录修改责任者 -->
+			tt.REC_REVISE_TIME	as recReviseTime   <!-- 记录修改时间 -->
+		FROM pm_know tt
+		WHERE PROJECT_PK = #id# 
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  tt.REC_CREATE_TIME asc
+			</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<!-- 查询知会人Count -->
+	<select id="queryKnowCount" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT tt.* FROM pm_know tt
+		WHERE PROJECT_PK = #id#
+	</select>
+	
+	<!-- 删除知会人员 -->
+	<delete id="deleteKnow" parameterClass="java.lang.String">
+		delete from pm_know where PROJECT_PK = #value#
+	</delete>
+	
+	<!-- 保存知会人员 -->
+	<insert id="insertKnow" parameterClass="com.baosight.wilp.pm.domain.TpmKnow">
+		INSERT INTO pm_know (ID,  <!-- 项目知会人员主键 -->
+								PROJECT_PK,  <!-- 项目主键 -->
+								NOTIFY_STAFF_NAME, <!-- 知会人员名 -->
+								NOTIFY_STAFF_ID,  <!-- 知会人员工号 -->
+								NUMBER,  <!-- 电话号码 -->
+								DEPT_NAME, <!-- 科室名 -->
+								DEPT_NUM,  <!-- 科室编码 -->
+								ARCHIVE_FLAG,  <!-- 归档标记 -->
+								REC_CREATOR,  <!-- 记录创建责任者 -->
+								REC_CREATE_TIME,  <!-- 记录创建时间 -->
+								REC_REVISOR,  <!-- 记录修改责任者 -->
+								REC_REVISE_TIME,  <!-- 记录修改时间 -->
+								DATAGROUP_CODE
+								)		 
+	    VALUES (#id#, #projectPk#, #notifyStaffName#, #notifyStaffId#, #number#, #deptName#, #deptNum#, #archiveFlag#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#) 
+	</insert>
+	<!-- ==============================================知会人操作结束======================================================= -->
+	
+	
+	<!-- ==============================================项目附件操作开始======================================================= -->
+	<!-- 查询项目附件List -->
+	<select id="queryFileList" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+			ID	as id,  <!-- 项目附件主键 -->
+			PROJECT_PK	as projectPk,  <!-- 项目主键 -->
+			ATTACH_ID as attachId,  <!-- 附件ID -->
+			ATTACH_NAME	as attachName,  <!-- 附件名称 -->
+			ATTACH_PATH	as attachPath,  <!-- 附件路径 -->
+			ATTACH_SIZE	as attachSize,  <!-- 附件大小 -->
+			ATTACH_DESC	as attachDesc,  <!-- 附件说明 -->
+			ARCHIVE_FLAG	as archiveFlag,  <!-- 归档标记 -->
+			REC_CREATOR	as recCreator,  <!-- 记录创建责任者 -->
+			REC_CREATE_TIME	as recCreateTime,  <!-- 记录创建时间 -->
+			REC_REVISOR	as recRevisor,  <!-- 记录修改责任者 -->
+			REC_REVISE_TIME	as recReviseTime, <!-- 记录修改时间 -->
+			STAGE as stage
+		FROM
+		     pm_att
+		WHERE ARCHIVE_FLAG='1' and
+			PROJECT_PK = #id#
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  REC_CREATE_TIME asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<!-- 查询查询项目Count -->
+	<select id="queryFileCount" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT * FROM pm_att WHERE ARCHIVE_FLAG='1' and PROJECT_PK = #id#
+	</select>
+
+	<!-- 查询删除项目附件List -->
+	<select id="queryDeleteFile" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			ID	as id,  <!-- 项目附件主键 -->
+			PROJECT_PK	as projectPk,  <!-- 项目主键 -->
+			ATTACH_ID as attachId,  <!-- 附件ID -->
+			ATTACH_NAME	as attachName,  <!-- 附件名称 -->
+			ATTACH_PATH	as attachPath,  <!-- 附件路径 -->
+			ATTACH_SIZE	as attachSize,  <!-- 附件大小 -->
+			ATTACH_DESC	as attachDesc,  <!-- 附件说明 -->
+			ARCHIVE_FLAG	as archiveFlag,  <!-- 归档标记 -->
+			REC_CREATOR	as recCreator,  <!-- 记录创建责任者 -->
+			REC_CREATE_TIME	as recCreateTime,  <!-- 记录创建时间 -->
+			REC_REVISOR	as recRevisor,  <!-- 记录修改责任者 -->
+			REC_REVISE_TIME	as recReviseTime, <!-- 记录修改时间 -->
+		    STAGE as stage
+		FROM
+			pm_att
+		WHERE ARCHIVE_FLAG='2' and
+			PROJECT_PK=#id#
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				REC_CREATE_TIME asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<!-- 查询查询项目Count -->
+	<select id="queryDeleteFileCount" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT * FROM pm_att WHERE ARCHIVE_FLAG='2' and PROJECT_PK = #id#
+	</select>
+
+
+	<!-- 删除项目附件 -->
+	<delete id="deleteFile" parameterClass="java.lang.String">
+		delete from pm_att where PROJECT_PK = #value# and ARCHIVE_FLAG='1'
+	</delete>
+
+	<!-- 修改项目附件 -->
+	<update id="updateFile" parameterClass="java.util.HashMap">
+		update pm_att set ARCHIVE_FLAG='2',ATTACH_DESC=#attachDesc#,REC_REVISOR=#recRevisor#
+		,REC_REVISE_TIME=#recReviseTime# where PROJECT_PK=#projectPk# and ATTACH_ID=#attachId#
+	</update>
+
+	<!-- 保存项目附件 -->
+	<insert id="insertFile" parameterClass="com.baosight.wilp.pm.domain.TpmAtt">
+		INSERT INTO pm_att (ID,  <!-- 项目附件主键 -->
+							PROJECT_PK,  <!-- 项目主键 -->
+							ATTACH_ID,  <!-- 附件ID -->
+							ATTACH_NAME,  <!-- 附件名称 -->
+							ATTACH_PATH,  <!-- 附件路径 -->
+							ATTACH_SIZE,  <!-- 附件大小 -->
+							ATTACH_DESC,  <!-- 附件说明 -->
+							ARCHIVE_FLAG,  <!-- 归档标记 -->
+							REC_CREATOR,  <!-- 记录创建责任者 -->
+							REC_CREATE_TIME,  <!-- 记录创建时间 -->
+							REC_REVISOR,  <!-- 记录修改责任者 -->
+							REC_REVISE_TIME,  <!-- 记录修改时间 -->
+							DATAGROUP_CODE,
+		                    STAGE
+							)		 
+	    VALUES (#id#, #projectPk#, #attachId#, #attachName#, #attachPath#, #attachSize#, #attachDesc#, #archiveFlag#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#,#dataGroupCode#,#stage#)
+	</insert>
+	<!-- ==============================================项目附件操作结束======================================================= -->
+	
+</sqlMap>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="format-detection" content="telephone=no" />
+  <link rel="stylesheet" href="../reference/mui/css/mui.min.css">
+  <link rel="stylesheet" href="../reference/css/common.css" />
+  <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css">
+  <link rel="stylesheet" href="css/buttom.css" />
+  <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css">
+  <link rel="stylesheet" href="../reference/css/jquery.signature.css" />
+</head>
+<STYLE TYPE="text/css">
+  body,
+  html {
+    height: 100%;
+  }
+
+  .warn {
+    font-size: 16px;
+  }
+
+  .sig_above {
+    position: fixed;
+    top: 44px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2999;
+    background: #fff;
+  }
+
+  .sign-area {
+    width: 100%;
+  }
+
+  .canvas-area {
+    width: 100%;
+    border-top: 1px dashed #eee;
+    border-bottom: 1px dashed #eee;
+    background: #f7f7f7;
+    border-right: none;
+    border-left: none;
+    /* height: 350px; */
+  }
+
+  .sign-tab {
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #4988a7;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .mui-toast-message {
+    font-size: 16px !important;
+  }
+</STYLE>
+
+<body>
+  <header class="mui-bar mui-bar-nav">
+    <h1 class="mui-title">签字</h1>
+    <button id="signBack" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+      返回
+    </button>
+    <!-- <button class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-right" style="margin-right: 0;">
+   			提交
+      	</button> -->
+  </header>
+
+  <div id="warn" class="warn" hidden>
+    <small></small>
+  </div>
+
+  <div class="mui-content">
+    <div class="sig_above">
+      <div class="sign-area">
+        <div class="sign-tab">请在下方区域签名</div>
+        <div id="js-signature" class="canvas-area"></div>
+        <div class="mui-row">
+          <div class="mui-col-xs-6 center" style="padding:15px;">
+            <button type="button" class="mui-btn mui-btn-block mui-btn-outlined" onclick="clearCanvas()">清除</button>
+          </div>
+          <div class="mui-col-xs-6 center" style="padding:15px;">
+            <button class="mui-btn mui-btn-primary mui-btn-block" onclick="saveSignature()">提交</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../reference/js/common.js" type="text/javascript"></script>
+<script src="../reference/mui/js/mui.picker.min.js" type="text/javascript"></script>
+<script src="../../cordova.js" type="text/javascript"></script>
+<script src="../reference/js/jquery-ui.min.js" type="text/javascript"></script>
+<script src="../reference/js/jquery.ui.touch-punch.min.js" type="text/javascript"></script>
+<script src="../reference/js/jquery.signature.js" type="text/javascript"></script>
+<script type="text/javascript">
+  var baseUrl = localStorage.getItem("url");
+  var workNo = localStorage.getItem("workNo");
+  var workName = localStorage.getItem("name");
+  var url = location.search
+  var json = JSON.parse(decodeURIComponent(url.substring(1, url.length)))
+  var pellmellListStr = json.callbackList
+  console.log(pellmellListStr)
+  var deptName = json.deptName
+  var deptCode = json.deptCode
+  $('.canvas-area').width($('.sig_above').width());
+  $('.canvas-area').height($(document).height() - 200);
+
+  // $(window).resize(function(){
+  //     $('.canvas-area').height($(document).height() - 200);
+  // });
+
+  $(function () {
+    //签名
+    $('#js-signature').signature();
+    $('#js-signature').signature({ color: '#000' });
+  })
+
+  //清除签名
+  function clearCanvas() {
+    $('#js-signature').signature('clear');
+  }
+
+  var dataUrlSig = '';
+  var flag = true;
+
+  loadInf();
+
+  function loadInf() {
+    $("#loading").show();
+    $.ajax({
+      url: baseUrl + 'queryGf/queryAllGf',
+      type: 'post',
+      headers: {
+        serviceName: "MFGZ01",
+        methodName: "getUserInfo"
+      },
+      data: {
+        requestParam: JSON.stringify({
+          apply_work_no: workNo
+        })
+      },
+      success: function (data) {
+        //					var data = eval("(" + data + ")");
+        var list = data.data[0];
+        var taskList = "";
+        if (data.statusCode == "0") {
+          localStorage.setItem("name", list.apply_work_name)
+          localStorage.setItem("work_no", list.apply_work_no)
+          localStorage.setItem("name", list.apply_work_name)
+        } else {
+          showMsg(data.respMsg)
+        }
+
+      }
+    });
+
+  }
+  // 保存签名
+  function saveSignature() {
+    console.log('222')
+    var isNotSign = $('#js-signature').signature('isEmpty');
+    if (isNotSign) {
+      $('#warn small').html('未签名，不能保存 !');
+      $("#warn").fadeIn(500);
+      setTimeout("$('#warn').fadeOut(500)", 3000);
+      return;
+    }
+    dataUrlSig = $('canvas')[0].toDataURL("image/png").substring(22, $('canvas')[0].toDataURL("image/png").length);
+    // console.log(dataUrlSig)
+    $('#warn').show();
+    $('#warn small').html('正在提交中,请稍后...');
+    // 防止重复点击提交按钮，后台产生多条相同的数据
+    if (flag) {
+      setTimeout('saveFun();', 500);
+      flag = false
+    }
+  }
+
+  function saveFun() {
+    //获取图片
+    var jsonStr = JSON.stringify(dataUrlSig);
+    console.log(jsonStr)
+    $("#loading").show();
+    $.ajax({
+      url: baseUrl + 'queryGf/queryAllGf',
+      type: 'post',
+      headers: {
+        serviceName: "MFGZ01",
+        methodName: "saveCallbackAll"
+      },
+      data: {
+        requestParam: JSON.stringify({
+          sign: jsonStr,
+          callbackList: pellmellListStr,
+          deptName: deptName,
+          deptCode: deptCode,
+          callbackCode: workNo,
+          // wash_status: wishType,
+          callbackName: localStorage.getItem("name")
+        })
+      },
+      success: function (data) {
+        // var data = JSON.parse(data)
+        if (data.statusCode == "0") {
+          $('#warn small').html('提交成功 !');
+          // $('#warn small').html(data.msg);
+          setTimeout('location.href="wish-main.html"', 2000);
+        } else {
+          $("#loading").hide();
+          showMsg(data.msg);
+        }
+      }
+    });
+  }
+
+  //签字返回按钮
+  document.getElementById("signBack").addEventListener('tap', function () {
+    location.href = 'wish-apply.html'
+  }, false)
+
+  //系统返回监听
+  document.addEventListener("deviceready", onDeviceReady, false);
+  function onDeviceReady() {
+    /**
+     * 系统返回键监听
+     */
+    document.addEventListener("backbutton", onBackKeyDown, false);
+  }
+  function onBackKeyDown() {
+    location.href = "wish-apply.html";
+  }
+
+</script>
+
+</html>

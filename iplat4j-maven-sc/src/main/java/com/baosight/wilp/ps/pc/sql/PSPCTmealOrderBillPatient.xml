@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="PSPCTmealOrderBillPatient">
+
+    <select id="query" parameterClass="java.util.HashMap"
+        resultClass="com.baosight.wilp.ps.pc.domain.PSPCTmealOrderBillPatient">
+        SELECT
+        id as "id",  <!-- 主键 -->
+        REC_CREATOR as "recCreator",  <!-- 记录创建责任者 -->
+        REC_REVISE_TIME as "recReviseTime",  <!-- 记录修改时间 -->
+        REC_REVISOR as "recRevisor",  <!-- 记录修改责任者 -->
+        REC_CREATE_TIME as "recCreateTime",  <!-- 记录创建时间 -->
+        ARCHIVE_FLAG as "archiveFlag",  <!-- 归档标记 -->
+        bill_no as "billNo",  <!-- 订单号 -->
+        open_id as "openId",  <!-- 微信ID -->
+        user_name as "userName",  <!-- 用户姓名 -->
+        user_tel_number as "userTelNumber",  <!-- 用户电话 -->
+        building as "building",  <!-- 所属大楼 -->
+        building_name as "buildingName",
+        floor as "floor",  <!-- 楼层 -->
+        floor_name as "floorName",
+        dept_num as "deptNum",  <!-- 病区编码 -->
+        dept_name as "deptName",  <!-- 病区名称 -->
+        ward_code as "wardCode",  <!-- 病区编码 -->
+        ward_name as "wardName",  <!-- 病区名称 -->
+        bed_no as "bedNo",  <!-- 床位号 -->
+        meal_num as "mealNum",  <!-- 餐次编码 -->
+        address as "address",  <!-- 订餐地点 -->
+        req_send_time as "reqSendTime",  <!-- 需求送达时间 -->
+        bill_total_price as "billTotalPrice",  <!-- 订单总价 -->
+        canteen_num as "canteenNum",  <!-- 食堂编码 -->
+        bill_remark as "billRemark",  <!-- 订单备注 -->
+        pay_type as "payType",
+        status_code as "statusCode",  <!-- 状态代码 -->
+        current_dealer as "currentDealer",  <!-- 当前操作人 -->
+        process_inst_id as "processInstId",  <!-- 流程实例ID -->
+        print_flag as "printFlag",  <!-- 打印标记[已打印()Y/未打印(N)] -->
+        order_way as "orderWay",  <!-- 下单方式(医护下单-01,病患/电话下单-02) -->
+        classify as "classify",  <!-- 分类 -->
+        need_date as "needDate",  <!-- 需要时间，Y/D,明天、今天 -->
+        reject_code as "rejectCode",  <!-- 作废标记。null/1/2，正常/审核作废/确定作废 -->
+        reject_reason as "rejectReason",  <!-- 作废原因 -->
+        pay_no as "payNo",  <!-- 支付宝账号 -->
+        trans_fee as "transFee",  <!-- 配送费(不满足最低价时需要付配送费) -->
+        cardID as "cardid",  <!-- 卡片编码 -->
+        alipayID as "alipayid"
+        FROM sc_order_bill_patient WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        order by bill_no desc
+    </select>
+
+	<!-- 查询订单主表中最后的订单号 -->
+    <select id="getBillMaxDate" parameterClass="String" resultClass="java.util.HashMap">
+        <![CDATA[ 
+            SELECT 
+                need_date as needDate,
+                substr(MAX(bill_no), 11, 5) as indx
+            FROM 
+                sc_order_bill_patient
+            where 
+                need_date >= DATE_FORMAT(date_sub(now(), interval 2 day),'%Y-%m-%d')
+            GROUP BY 
+                need_date 
+            ORDER BY 
+                need_date DESC
+        ]]>
+    </select>
+
+    <!-- 根据订单号查询订单信息 -->
+    <select id="queryBillByBillNo" parameterClass="String" 
+        resultClass="com.baosight.wilp.ps.pc.domain.PSPCTmealOrderBillPatient">
+        SELECT a.*,lc.canteen_name as canteenName FROM
+        (SELECT
+                t.id,
+                t.bill_no AS billNo,
+                t.user_name AS userName,
+                t.user_tel_number AS userTelNumber,
+                t.dept_num AS deptNum,
+                t.open_id AS openId,
+                t.address as address,
+                t.pay_type AS payType,
+                t.dept_name AS deptName,
+                t.ward_name AS wardName,
+                t.bed_no AS bedNo,
+                t.current_dealer currentDealer,
+                t.need_date as needDate,
+                CONCAT(t.need_date,' ',t.req_send_time) AS reqSendTime, 
+                rec_creator AS recCreator,
+                t.REC_CREATE_TIME AS recCreateTime,
+                t.bill_total_price AS billTotalPrice,
+                t.bill_remark AS billRemark,
+                t.ARCHIVE_FLAG AS archiveFlag,
+                t.status_code AS statusCode,
+                s.status_name AS statusName,
+                t.building,
+                t.building_name as buildingName,
+                t.canteen_num as canteenNum,
+                t.reject_code as rejectCode,
+                t.reject_reason as rejectReason,
+                t.meal_num as mealNum,
+                case t.meal_num
+                    when '001' then '早餐'
+                    when '002' then '中餐'
+                    when '003' then '晚餐'
+                end as mealName,
+                t.pay_no as payNo,
+                t.alipayID
+        FROM
+                sc_order_bill_patient t
+        left join sc_operation_status s on t.status_code = s.status_code
+        WHERE  s.pbo_code = 'PATIENT_MEAL' and
+                t.bill_no = #value#
+       ) a 
+        LEFT JOIN (SELECT DISTINCT(canteen_num),canteen_name FROM sc_canteen_liaison_conf) lc ON a.canteenNum = lc.canteen_num
+    </select>
+
+    <!-- 根据订单号查询订单信息 -->
+    <select id="queryBillById" parameterClass="String" 
+        resultClass="com.baosight.wilp.ps.pc.domain.PSPCTmealOrderBillPatient">
+      SELECT
+            t.id,
+            t.bill_no AS billNo,
+            t.user_name AS userName,
+            t.user_tel_number AS userTelNumber,
+            t.dept_num AS deptNum,
+            t.open_id AS openId,
+            t.address as address,
+            t.pay_type AS payType,
+            t.dept_name AS deptName,
+            t.bed_no AS bedNo,
+            t.req_send_time AS reqSendTime,
+            t.REC_CREATE_TIME AS recCreateTime,
+            t.bill_total_price AS billTotalPrice,
+            t.bill_remark AS billRemark,
+            t.ARCHIVE_FLAG AS archiveFlag,
+            t.status_code AS statusCode,
+            t.building,t.building_Name as buildingName,
+            t.REC_CREATOR AS recCreator,
+            t.current_dealer currentDealer,
+            t.canteen_num canteenNum,
+            lc.canteen_name AS canteenName,
+            t.reject_code AS rejectCode,
+            t.reject_reason AS rejectReason,
+            t.pay_no AS payNo,
+            t.alipayID
+        FROM
+            sc_order_bill_patient t LEFT JOIN (SELECT DISTINCT(canteen_num),canteen_name FROM sc_canteen_liaison_conf) lc 
+            ON t.canteen_num = lc.canteen_num           
+        WHERE
+            t.id = #value# OR t.pay_no = #value# 
+    </select>
+
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM sc_order_bill_patient WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+    </select>
+
+    <!-- App根据用户账号查询订单信息 -->
+    <select id="getBillInfoByUserCode" parameterClass="java.util.HashMap" 
+        resultClass="com.baosight.wilp.ps.pc.domain.PSPCTmealOrderBillPatient">
+        SELECT
+            t.id,
+            t.bill_no AS billNo,
+            t.user_name AS userName,
+            t.user_tel_number AS userTelNumber,
+            t.open_id AS deptNum,
+            t.open_id AS openId,
+            t.pay_type AS payType,
+            t.dept_name AS deptName,
+            t.ward_name AS wardName,
+            t.bed_no AS bedNo,
+            t.meal_num AS mealNum,
+            t.need_date as needDate,
+            CONCAT(t.need_date,' ',t.req_send_time) AS reqSendTime, 
+            t.bill_total_price AS billTotalPrice,
+            t.bill_remark AS billRemark,
+            t.status_code AS statusCode,
+            t.reject_code AS rejectCode,
+        CASE
+        WHEN ( t.reject_code = '2' AND t.status_code != '00' ) THEN
+        '已退款'
+        WHEN ( t.reject_code = '3' AND t.status_code != '00' ) THEN
+        '超时未支付，已取消!'
+        WHEN ( t.reject_code = '4' AND t.status_code != '00' ) THEN
+        '用户手动取消!'
+        WHEN ( t.reject_code IS NULL AND t.status_code = '00' ) THEN
+        '已下单，未支付'
+        WHEN ( t.reject_code IS NULL AND t.status_code = '02' ) THEN
+        '已支付'
+        END AS statusName,
+            t.reject_reason AS rejectReason
+
+        FROM
+            sc_order_bill_patient t 
+        LEFT JOIN sc_operation_status ps ON t.status_code = ps.status_code
+        WHERE 1 = 1 
+        <isEmpty prepend="AND" property="pboCode">
+            ps.pbo_code = 'POS_MEAL'
+        </isEmpty>
+        <isEmpty prepend="AND" property="archiveFlag">
+            t.ARCHIVE_FLAG = 'POS'
+        </isEmpty>
+        
+        <isNotEmpty prepend="AND" property="wardCode">
+            t.ward_code = #wardCode#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="pboCode">
+            ps.pbo_code = #pboCode#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="archiveFlag">
+            t.ARCHIVE_FLAG = #archiveFlag#
+            <isNotEmpty prepend="AND" property="openId">
+	            t.open_id = #openId#
+	        </isNotEmpty>
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="statusCode">
+            t.status_code = #statusCode#
+        </isNotEmpty>
+        
+        <isEmpty prepend="AND" property="archiveFlag">
+           ( t.open_id = #openId# or t.REC_CREATOR = #openId#)
+        </isEmpty>
+        <isNotEmpty prepend="AND" property="needDate">
+            t.need_date = #needDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="startDate">
+            t.need_date >= #startDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="endDate">
+            t.need_date <![CDATA[<=]]> #endDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="deptName">
+            t.dept_name LIKE CONCAT('%', #deptName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="deptNum">
+            t.dept_num = #deptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="userId">
+            t.alipayID = #userId#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="patientCode">
+            t.open_id LIKE CONCAT('%', #patientCode#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="mealNum">
+            t.meal_num = #mealNum#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="userTelNumber">
+            t.user_tel_number= #userTelNumber#
+        </isNotEmpty>
+        ORDER BY 
+            t.REC_CREATE_TIME DESC,
+            CONVERT(t.dept_name USING gb2312),
+            t.bed_no * 1 ASC
+        LIMIT #startRow# ,#rows#
+    </select>
+
+    <select id="queryMealBillDept" resultClass="HashMap" parameterClass="String">
+        SELECT
+            t.dept_name,
+            t.dept_num
+        FROM
+            sc_order_bill_patient t
+        WHERE   
+            t.REC_CREATOR = #value#
+        GROUP BY
+            t.dept_num
+    </select>
+
+
+    <!-- App根据用户账号查询订单信息 -->
+    <select id="queryKeepAccounts" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.ps.pc.domain.PSPCTmealOrderBillPatient">
+        SELECT
+        t.open_id AS openId,
+        t.user_name AS userName,
+        t.user_tel_number AS userTelNumber,
+        t.dept_num AS deptNum,
+        t.dept_name AS deptName,
+        t.pay_type AS payType,
+        t.ward_name AS wardName,
+        t.bed_no AS bedNo,
+        t.meal_num AS mealNum,
+        t.need_date as needDate,
+        sum(t.bill_total_price) AS billTotalPrice,
+        t.bill_remark AS billRemark,
+        t.status_code AS statusCode,
+        t.reject_code AS rejectCode,
+        t.reject_reason AS rejectReason
+        FROM
+        sc_order_bill_patient t
+        WHERE 1 = 1
+        and pay_type='0002'
+        and reject_code is null
+        and status_code >= '02'
+        <isNotEmpty prepend="AND" property="openId">
+            t.open_id = #openId#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="statusCode">
+            t.status_code = #statusCode#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="userId">
+            t.alipayID = #userId#
+        </isNotEmpty>
+        GROUP BY open_id
+    </select>
+
+    <update id="updatePayType" parameterClass="HashMap">
+        UPDATE 
+            sc_order_bill_patient
+        SET 
+            pay_type = #payType#
+        WHERE 
+            bill_no = #billNo#
+    </update>
+
+    <!-- 用户支付成功，00状态下订单被取消，reject=3,但是支付成功消息回传，订单状态会更新为正常状态下的订单取消，reject=1 -->
+    <update id="updateRejectCodeByBillNo" parameterClass="java.util.HashMap">
+        UPDATE sc_order_bill_patient t  
+        SET t.reject_code=#rejectCode# 
+        WHERE t.bill_no=#billNo#
+    </update>
+    
+    <!-- 订单确认作废 -->
+    <update id="confirmCancelOrder" parameterClass="java.util.HashMap">
+        UPDATE sc_order_bill_patient t  
+        SET t.reject_code=#rejectCode# 
+        <isNotEmpty prepend=" , " property="rejectReason">
+            t.reject_reason = #rejectReason#
+        </isNotEmpty>
+        <isNotEmpty prepend=" , " property="statusCode">
+            t.status_code = #statusCode#
+        </isNotEmpty>
+        WHERE t.id=#id#
+    </update>
+
+    <!-- 更新修改时间 -->
+    <update id="updateReviseTime" parameterClass="HashMap">
+        UPDATE
+        sc_order_bill_patient
+        SET
+        REC_REVISE_TIME = #reviseTime#,
+        REC_REVISOR = #revisor#
+        WHERE
+        id = #billId#
+    </update>
+
+    <!-- 更新修改时间 -->
+    <update id="updateReviseTimeAndPayId" parameterClass="HashMap">
+        UPDATE
+        sc_order_bill_patient
+        SET
+        alipayID = #payId#,
+        REC_REVISE_TIME = #reviseTime#,
+        REC_REVISOR = #revisor#
+        WHERE
+        id = #billId#
+    </update>
+
+    <insert id="insert">
+        INSERT INTO sc_order_bill_patient (id,  <!-- 主键 -->
+        REC_CREATOR,  <!-- 记录创建责任者 -->
+        REC_REVISE_TIME,  <!-- 记录修改时间 -->
+        REC_REVISOR,  <!-- 记录修改责任者 -->
+        REC_CREATE_TIME,  <!-- 记录创建时间 -->
+        ARCHIVE_FLAG,  <!-- 归档标记 -->
+        bill_no,  <!-- 订单号 -->
+        open_id,  <!-- 微信ID -->
+        user_name,  <!-- 用户姓名 -->
+        user_tel_number,  <!-- 用户电话 -->
+        building,  <!-- 所属大楼 -->
+        building_name,
+        floor,  <!-- 楼层 -->
+        floor_name,
+        dept_num,  <!-- 病区编码 -->
+        dept_name,  <!-- 病区名称 -->
+        ward_code,  <!-- 病区编码 -->
+        ward_name,  <!-- 病区名称 -->
+        bed_no,  <!-- 床位号 -->
+        meal_num,  <!-- 餐次编码 -->
+        address,  <!-- 订餐地点 -->
+        req_send_time,  <!-- 需求送达时间 -->
+        bill_total_price,  <!-- 订单总价 -->
+        canteen_num,  <!-- 食堂编码 -->
+        bill_remark,  <!-- 订单备注 -->
+        pay_type,
+        status_code,  <!-- 状态代码 -->
+        current_dealer,  <!-- 当前操作人 -->
+        process_inst_id,  <!-- 流程实例ID -->
+        print_flag,  <!-- 打印标记[已打印()Y/未打印(N)] -->
+        order_way,  <!-- 下单方式(医护下单-01,病患/电话下单-02) -->
+        classify,  <!-- 分类 -->
+        need_date,  <!-- 需要时间，Y/D,明天、今天 -->
+        reject_code,  <!-- 作废标记。null/1/2，正常/审核作废/确定作废 -->
+        reject_reason,  <!-- 作废原因 -->
+        pay_no,  <!-- 统一支付ID -->
+        trans_fee,  <!-- 配送费(不满足最低价时需要付配送费) -->
+        cardID,  <!-- 卡片编码 -->
+        alipayID,
+        role_num
+        )
+        VALUES (#id#, #recCreator#, #recReviseTime#, #recRevisor#, #recCreateTime#,
+        #archiveFlag#, #billNo#, #openId#, #userName#, #userTelNumber#,
+        #building#, #buildingName#, #floor#, #floorName#, #deptNum#,
+        #deptName#, #wardCode#, #wardName#, #bedNo#, #mealNum#, #address#,
+        #reqSendTime#, #billTotalPrice#, #canteenNum#, #billRemark#,
+        #payType#, #statusCode#, #currentDealer#, #processInstId#,
+        #printFlag#, #orderWay#, #classify#, #needDate#, #rejectCode#,
+        #rejectReason#, #payNo#, #transFee#, #cardid#, #alipayid#,#roleNum#)
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM sc_order_bill_patient WHERE
+        id = #id#
+    </delete>
+
+    <update id="update">
+        UPDATE sc_order_bill_patient
+        SET
+        REC_CREATOR = #recCreator#,   <!-- 记录创建责任者 -->
+        REC_REVISE_TIME = #recReviseTime#,   <!-- 记录修改时间 -->
+        REC_REVISOR = #recRevisor#,   <!-- 记录修改责任者 -->
+        REC_CREATE_TIME = #recCreateTime#,   <!-- 记录创建时间 -->
+        ARCHIVE_FLAG = #archiveFlag#,   <!-- 归档标记 -->
+        bill_no = #billNo#,   <!-- 订单号 -->
+        open_id = #openId#,   <!-- 微信ID -->
+        user_name = #userName#,   <!-- 用户姓名 -->
+        user_tel_number = #userTelNumber#,   <!-- 用户电话 -->
+        building = #building#,   <!-- 所属大楼 -->
+        building_name = #buildingName#,
+        floor = #floor#,   <!-- 楼层 -->
+        floor_name = #floorName#,
+        dept_num = #deptNum#,   <!-- 病区编码 -->
+        dept_name = #deptName#,   <!-- 病区名称 -->
+        ward_code = #wardCode#,   <!-- 病区编码 -->
+        ward_name = #wardName#,   <!-- 病区名称 -->
+        bed_no = #bedNo#,   <!-- 床位号 -->
+        meal_num = #mealNum#,   <!-- 餐次编码 -->
+        address = #address#,   <!-- 订餐地点 -->
+        req_send_time = #reqSendTime#,   <!-- 需求送达时间 -->
+        bill_total_price = #billTotalPrice#,   <!-- 订单总价 -->
+        canteen_num = #canteenNum#,   <!-- 食堂编码 -->
+        bill_remark = #billRemark#,   <!-- 订单备注 -->
+        pay_type = #payType#,
+        status_code = #statusCode#,   <!-- 状态代码 -->
+        current_dealer = #currentDealer#,   <!-- 当前操作人 -->
+        process_inst_id = #processInstId#,   <!-- 流程实例ID -->
+        print_flag = #printFlag#,   <!-- 打印标记[已打印()Y/未打印(N)] -->
+        order_way = #orderWay#,   <!-- 下单方式(医护下单-01,病患/电话下单-02) -->
+        classify = #classify#,   <!-- 分类 -->
+        need_date = #needDate#,   <!-- 需要时间，Y/D,明天、今天 -->
+        reject_code = #rejectCode#,   <!-- 作废标记。null/1/2，正常/审核作废/确定作废 -->
+        reject_reason = #rejectReason#,   <!-- 作废原因 -->
+        pay_no = #payNo#,   <!-- 统一支付ID -->
+        trans_fee = #transFee#,   <!-- 配送费(不满足最低价时需要付配送费) -->
+        cardID = #cardid#,   <!-- 卡片编码 -->
+        alipayID = #alipayid#
+        WHERE
+        id = #id#
+    </update>
+
+    <!-- 查询堂食支付宝,微信支付的订单 -->
+    <select id="queryCardConsumeByBillId" parameterClass="String"
+            resultClass="com.baosight.wilp.ps.pc.domain.PSPCTscCardOrderFood">
+        SELECT
+        id  as "id",  <!-- uuid -->
+        datagroup_code  as "datagroupCode",
+        card_base_code  as "cardBaseCode",  <!-- 卡号 -->
+        card_user_name  as "cardUserName",  <!-- 持卡人姓名 -->
+        card_user_code  as "cardUserCode",  <!-- 住院号 -->
+        consume_bill_id as "consumeBillId",  <!-- 订单号 -->
+        consume_device_code as "consumeDeviceCode",  <!-- 设备号 -->
+        consume_address_code    as "consumeAddressCode",  <!-- 消费地点：02/食堂,01/网上 -->
+        qr_type as "qrType",  <!-- 刷码消费:10/是刷二维码消费,空或者0不是 -->
+        consume_type    as "consumeType",  <!-- 消费类型： 付款/退款     0/1 -->
+        consume_money   as "consumeMoney",  <!-- 消费金额 -->
+        consume_time    as "consumeTime",  <!-- 消费时间 -->
+        canteen_code    as "canteenCode",  <!-- 食堂编码 -->
+        canteen_name    as "canteenName",  <!-- 食堂名称 -->
+        status  as "status",  <!-- 订单状态码：订单初始状态 00，订单处理失败 01，订单已处理 02， 订单等待订餐确认结果 03，订单结束 04，订单的参数有问题 05 -->
+        memo    as "memo",  <!-- 备注 -->
+        random_no   as "randomNo" <!-- 消费机消费随机码 -->
+        FROM ae_patient_card_order_food WHERE id = #value#
+    </select>
+
+    <!-- 订单更新状态 -->
+    <update id="updateConsumeDeviceBillInfo" parameterClass="java.util.HashMap">
+        UPDATE
+            ae_patient_card_order_food
+        SET
+            status = #status#,
+            update_time = #updateTime#
+        WHERE
+            id = #id#
+    </update>
+
+</sqlMap>

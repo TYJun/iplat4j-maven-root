@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2022-03-24 1:57:39
+   		Version :  6.0.731.201809200158
+		tableName :.dorms_room_attachment 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 man_id  VARCHAR, 
+		 attachment_id  VARCHAR, 
+		 attachment_name  VARCHAR, 
+		 attachment_path  VARCHAR, 
+		 attachment_size  DOUBLE, 
+		 attachment_desc  VARCHAR, 
+		 attachment_flag  VARCHAR, 
+		 rec_creator  VARCHAR, 
+		 rec_create_name  VARCHAR, 
+		 rec_create_time  VARCHAR, 
+		 rec_revisor  VARCHAR, 
+		 rec_revise_name  VARCHAR, 
+		 rec_revise_time  VARCHAR
+	-->
+<sqlMap namespace="DMFJ01">
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manId">
+			man_id = #manId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="attachmentId">
+			attachment_id = #attachmentId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="attachmentName">
+			attachment_name = #attachmentName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="attachmentPath">
+			attachment_path = #attachmentPath#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="attachmentSize">
+			attachment_size = #attachmentSize#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="attachmentDesc">
+			attachment_desc = #attachmentDesc#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="attachmentFlag">
+			attachment_flag = #attachmentFlag#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreator">
+			rec_creator = #recCreator#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateName">
+			rec_create_name = #recCreateName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTime">
+			rec_create_time = #recCreateTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recRevisor">
+			rec_revisor = #recRevisor#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recReviseName">
+			rec_revise_name = #recReviseName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recReviseTime">
+			rec_revise_time = #recReviseTime#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO .dorms_room_attachment (id,  <!-- 附件主键 -->
+										man_id,  <!-- 人员入住信息表人员id -->
+										attachment_id,  <!-- 附件ID -->
+										attachment_name,  <!-- 附件名称 -->
+										attachment_path,  <!-- 附件路径 -->
+										attachment_size,  <!-- 附件大小 -->
+										attachment_desc,  <!-- 附件说明 -->
+										attachment_flag,  <!-- 归档标记 -->
+										rec_creator,  <!-- 记录创建责任者工号 -->
+										rec_create_name,  <!-- 记录创建责任者姓名 -->
+										rec_create_time,  <!-- 记录创建时间 -->
+										rec_revisor,  <!-- 记录修改责任者工号 -->
+										rec_revise_name,  <!-- 记录修改责任者姓名 -->
+										rec_revise_time  <!-- 记录修改时间 -->
+										)		 
+	    VALUES (#id#, #manId#, #attachmentId#, #attachmentName#, #attachmentPath#, #attachmentSize#, #attachmentDesc#, #attachmentFlag#, #recCreator#, #recCreateName#, #recCreateTime#, #recRevisor#, #recReviseName#, #recReviseTime#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM .dorms_room_attachment WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE .dorms_room_attachment 
+		SET 
+					man_id	= #manId#,   <!-- 人员入住信息表人员id -->  
+					attachment_id	= #attachmentId#,   <!-- 附件ID -->  
+					attachment_name	= #attachmentName#,   <!-- 附件名称 -->  
+					attachment_path	= #attachmentPath#,   <!-- 附件路径 -->  
+					attachment_size	= #attachmentSize#,   <!-- 附件大小 -->  
+					attachment_desc	= #attachmentDesc#,   <!-- 附件说明 -->  
+					attachment_flag	= #attachmentFlag#,   <!-- 归档标记 -->  
+					rec_creator	= #recCreator#,   <!-- 记录创建责任者工号 -->  
+					rec_create_name	= #recCreateName#,   <!-- 记录创建责任者姓名 -->  
+					rec_create_time	= #recCreateTime#,   <!-- 记录创建时间 -->  
+					rec_revisor	= #recRevisor#,   <!-- 记录修改责任者工号 -->  
+					rec_revise_name	= #recReviseName#,   <!-- 记录修改责任者姓名 -->  
+					rec_revise_time	= #recReviseTime#  <!-- 记录修改时间 -->  
+			WHERE 	
+			id = #id#
+	</update>
+
+	<!-- =========== 附加相关sql ===========  -->
+
+	<!-- 查询附件List -->
+	<select id="queryAttachmentList" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		id	as "id",  <!-- 附件主键 -->
+		man_id	as "manId",  <!-- 人员入住信息表人员id -->
+		attachment_id	as "attachmentId",  <!-- 附件ID -->
+		attachment_name	as "attachmentName",  <!-- 附件名称 -->
+		attachment_path	as "attachmentPath",  <!-- 附件路径 -->
+		attachment_size	as "attachmentSize",  <!-- 附件大小 -->
+		attachment_desc	as "attachmentDesc",  <!-- 附件说明 -->
+		attachment_flag	as "attachmentFlag",  <!-- 归档标记 -->
+		rec_creator	as "recCreator",  <!-- 记录创建责任者工号 -->
+		rec_create_name	as "recCreateName",  <!-- 记录创建责任者姓名 -->
+		rec_create_time	as "recCreateTime",  <!-- 记录创建时间 -->
+		rec_revisor	as "recRevisor",  <!-- 记录修改责任者工号 -->
+		rec_revise_name	as "recReviseName",  <!-- 记录修改责任者姓名 -->
+		rec_revise_time	as "recReviseTime" <!-- 记录修改时间 -->
+		FROM .dorms_room_attachment WHERE 1=1 and attachment_flag = '1'
+		and man_id = #manId# and attachment_path like "%attachment%"
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				rec_create_time asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<!-- 查询附件Count -->
+	<select id="countAttachmentList" resultClass="int">
+		SELECT COUNT(*) FROM .dorms_room_attachment
+		WHERE 1=1 and attachment_flag = '1'
+		  and man_id = #manId# and attachment_path like "%attachment%"
+	</select>
+
+	<insert id="insertFile" parameterClass="java.util.HashMap">
+		INSERT INTO .dorms_room_attachment (id,  <!-- 附件主键 -->
+		man_id,  <!-- 人员入住信息表人员id -->
+		attachment_id,  <!-- 附件ID -->
+		attachment_name,  <!-- 附件名称 -->
+		attachment_path,  <!-- 附件路径 -->
+		attachment_size,  <!-- 附件大小 -->
+		attachment_desc,  <!-- 附件说明 -->
+		attachment_flag,  <!-- 归档标记 -->
+		rec_creator,  <!-- 记录创建责任者工号 -->
+		rec_create_name,  <!-- 记录创建责任者姓名 -->
+		rec_create_time,  <!-- 记录创建时间 -->
+		rec_revisor,  <!-- 记录修改责任者工号 -->
+		rec_revise_name,  <!-- 记录修改责任者姓名 -->
+		rec_revise_time  <!-- 记录修改时间 -->
+		)
+		VALUES (#id#, #manId#, #attachmentId#, #attachmentName#, #attachmentPath#, #attachmentSize#, #attachmentDesc#, #attachmentFlag#, #recCreator#, #recCreateName#, #recCreateTime#, #recRevisor#, #recReviseName#, #recReviseTime#)
+	</insert>
+
+
+	<!-- 修改个人附件 -->
+	<update id="updateFile" parameterClass="java.util.HashMap">
+		update dorms_room_attachment set attachment_flag='2',attachment_desc=#attachmentDesc#,rec_revisor=#recRevisor#,rec_revise_name=#recReviseName#
+						,rec_revise_time=#recReviseTime# where man_id=#manId# and attachment_id=#attachmentId#
+	</update>
+
+	<!-- 删除个人附件 -->
+	<delete id="deleteFile" parameterClass="java.lang.String">
+		delete from dorms_room_attachment  where man_id=#manId# and attachment_flag='1'
+	</delete>
+
+
+	<!-- =========== 附加相关sql ===========  -->
+
+	<!-- 更新交钱状态 -->
+	<update id="updatePayStatus" parameterClass="String">
+		update dorms_room_man set pay_status = '1' where
+		man_id = #value#
+	</update>
+
+
+
+</sqlMap>

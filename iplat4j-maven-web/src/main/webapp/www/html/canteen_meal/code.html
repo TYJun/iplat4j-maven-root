@@ -1,0 +1,422 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="../../reference/mui/css/mui.css">
+  <link rel="stylesheet" href="../../reference/mui/css/iconfont.css">
+  <link rel="stylesheet" href="../../css/common.css" />
+  <link rel="stylesheet" href="../../css/colorGreen.css" />
+  <link rel="stylesheet" href="../../css/colorBlue.css" />
+</head>
+<STYLE TYPE="text/css">
+  body {
+    background: #eee;
+  }
+
+  .area {
+    margin: 20px auto 0px auto;
+  }
+
+  .mui-input-group {
+    margin-top: 10px;
+  }
+
+  .mui-input-group:first-child {
+    margin-top: 20px;
+  }
+
+  .mui-input-group label {
+    width: 22%;
+  }
+
+  .mui-input-row label~input,
+  .mui-input-row label~select,
+  .mui-input-row label~textarea {
+    width: 78%;
+  }
+
+  .mui-checkbox input[type=checkbox],
+  .mui-radio input[type=radio] {
+    top: 6px;
+  }
+
+  .mui-content-padded {
+    margin-top: 25px;
+  }
+
+  .mui-btn {
+    padding: 10px;
+  }
+
+  .link-area {
+    display: block;
+    margin-top: 25px;
+    text-align: center;
+  }
+
+  .spliter {
+    color: #bbb;
+    padding: 0px 8px;
+  }
+
+  .oauth-area {
+    position: absolute;
+    bottom: 20px;
+    left: 0px;
+    text-align: center;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+  }
+
+  .oauth-area .oauth-btn {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    background-size: 30px 30px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    margin: 0px 20px;
+    /*-webkit-filter: grayscale(100%); */
+    border: solid 1px #ddd;
+    border-radius: 25px;
+  }
+
+  .oauth-area .oauth-btn:active {
+    border: solid 1px #aaa;
+  }
+
+  .oauth-area .oauth-btn.disabled {
+    background-color: #ddd;
+  }
+
+  .mui-input-row label~input {
+    width: 70%;
+  }
+
+  .mui-input-group label {
+    width: 30%;
+  }
+
+  #tabbar-code {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .diceng {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 250;
+    background: black;
+    opacity: 0.5;
+  }
+
+  .realMoney {
+    position: fixed;
+    z-index: 251;
+    width: 100%;
+    /*bottom: 0px;*/
+    background: #FFFFFF;
+    height: 300px;
+    padding: 0 10px;
+  }
+
+  .setInput {
+    color: #333333;
+    width: 100%;
+    border: 0;
+    outline: none;
+    text-align: left;
+    font-size: 15px;
+  }
+
+  .editButtons {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 19px;
+    width: 90%;
+    margin-left: 5%;
+    margin-bottom: 20px;
+    border-radius: 6px;
+  }
+
+  .applyTitle {
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    font-size: 18px;
+    color: #666666;
+    letter-spacing: 1px;
+  }
+
+  .applyInput {
+    padding: 15px 15px;
+  }
+
+  .mui-input-row .mui-input-clear~.mui-icon-clear,
+  .mui-input-row .mui-input-password~.mui-icon-eye,
+  .mui-input-row .mui-input-speech~.mui-icon-speech {
+    top: 6px;
+  }
+
+  .mui-popup-title {
+    color: #1fbf71;
+  }
+
+  .mui-popup-title+.mui-popup-text {
+    margin: 6px 0 0;
+    letter-spacing: 1.2px;
+  }
+
+  .mui-popup-button.mui-popup-button-bold {
+    font-weight: normal;
+  }
+
+  .mui-popup-button {
+    color: #1fbf71;
+  }
+
+  .mui-icon-closeempty {
+    display: inline-block;
+    float: right;
+    height: 60px;
+    line-height: 60px;
+    font-size: 40px;
+  }
+</STYLE>
+
+<body>
+  <header class="mui-bar mui-bar-nav">
+    <h1 class="mui-title">堂食消费</h1>
+    <button class="mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left"
+      onclick="location.href='../../menu.html';">
+      <span class="mui-icon mui-icon-left-nav"></span>
+      返回
+    </button>
+    <button id="more" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-right" style="line-height:38px">
+      <img src="../../img/answer.png" style="margin-top: 10px;width: 22px;margin-right: 6px;">
+      <!-- <span class="mui-icon mui-icon-more"></span> -->
+    </button>
+  </header>
+
+  <p id="progress" class="mui-progressbar mui-progressbar-in" data-progress="20" style="display:none;"><span></span></p>
+
+  <div id="warn" class="warn" hidden>
+    <small></small>
+  </div>
+
+  <div class="mui-content">
+    <!-- 二维码 -->
+    <div id="tabbar-code" class="mui-control-content">
+      <div id="ewmCode"></div>
+      <div>2分钟自动刷新</div>
+    </div>
+  </div>
+
+  <!-- 输入支付密码 -->
+  <div class="diceng" hidden></div>
+  <div class="realMoney pwdWrite" hidden>
+    <div class="applyTitle">请输入支付密码<span class="mui-icon mui-icon-closeempty fontColor"></span></div>
+    <form class="mui-input-group" style="margin-bottom: 80px">
+      <div class="mui-input-row">
+        <label>工号</label>
+        <input id='workNumber' type="text" class="mui-input" readonly>
+      </div>
+      <div class="mui-input-row">
+        <label>支付密码</label>
+        <input id='password' type="password" class="mui-input-clear mui-input" placeholder="请输入支付密码">
+      </div>
+    </form>
+    <div class="editButtons paySure backColor" style="color: #FFFFFF;margin-top: 6px;display: none;">确定</div>
+    <div class="editButtons paySureCount backColor" style="color: #FFFFFF;margin-top: 6px;display: none;">确定</div>
+  </div>
+
+  <nav class="mui-bar mui-bar-tab" style="background-color:#fff;">
+    <a id="code" class="mui-tab-item mui-active" href="#tabbar-code">
+      <span class="mui-icon iconfont icon-scan1"></span>
+      <span class="mui-tab-label">付款码</span>
+    </a>
+    <a id="refresh" class="mui-tab-item">
+      <span class="mui-icon mui-icon-refresh"></span>
+      <span class="mui-tab-label">刷新</span>
+    </a>
+  </nav>
+</body>
+<script type="text/javascript" src="../../js/color.js"></script>
+<script src="../../reference/mui/js/mui.js" type="text/javascript"></script>
+<script src="../../reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script type="text/javascript" src="../../js/qrcode.js"></script>
+<script type="text/javascript" src="../../js/jquery.qrcode.js"></script>
+<!-- <script src="../../cordova.js" type="text/javascript"></script> -->
+<script type="text/javascript">
+  var baseUrl = localStorage.getItem("url");
+  var workNo = localStorage.getItem("workNo");
+  $('#workNumber').val(workNo);
+  (function (win, doc) {
+    function change() {
+      var a = $(window).height() - $(".realMoney").height();
+      $(".realMoney").css("bottom", 0 / 2 + "px");
+    }
+    change();
+    win.addEventListener('resize', change, false);
+  })(window, document);
+
+
+  $('#refresh').hide();
+  // 已经输过支付密码，不需要重新输入
+  if (localStorage.getItem('pwdYN') == 'Y') {
+    ewmCodeRefresh();
+    $('#refresh').show();
+  } else {
+    $('.pwdWrite').show();
+    $('.diceng').show();
+    $('#password').val('');
+    $('.paySureCount').hide();
+    $('.paySure').show();
+    $('.paySure').click(function () {
+      if ($('#password').val() == '') {
+        $("#warn small").html('支付密码不能为空！');
+        $("#warn").fadeIn(500);
+        setTimeout('$("#warn").fadeOut(500)', 3000);
+        $('#password').focus();
+        return
+      }
+      // 验证支付密码
+      $.ajax({
+        url: baseUrl + 'cardmeal',
+        type: 'post',
+        headers: {
+          className: 'CardWorkConsumeService',
+          methodName: 'checkPayPassword'
+        },
+        data: {
+          workNo: $('#workNumber').val(),
+          payPassword: $('#password').val()
+        },
+        success: function (data) {
+          console.log(data);
+          if (data.success) {
+            $("#warn small").html(data.respMsg);
+            $("#warn").fadeIn(500);
+            setTimeout('$("#warn").fadeOut(500)', 3000);
+            $('.pwdWrite').hide();
+            $('.diceng').hide();
+            localStorage.setItem('pwdYN', 'Y');
+            $('#refresh').show();
+            ewmCodeRefresh();
+
+          } else {
+            $("#warn small").html(data.respMsg);
+            $("#warn").fadeIn(500);
+            setTimeout('$("#warn").fadeOut(500)', 3000);
+            $('#password').val('');
+            $('#password').focus();
+          }
+        }
+      })
+    })
+  }
+
+  /**
+   * 二维码
+   * @return {[type]} [description]
+   */
+  var myVar = setInterval(function () { ewmCodeRefresh() }, 120000); //每隔两分钟刷新
+  function ewmCodeRefresh() {
+    $('#tabbar-code').height($(window).height() - 100);
+    $('#tabbar-code').show();
+    $('#ewmCode').html("");
+    $.ajax({
+      type: 'post',
+      url: baseUrl + 'cardmeal',
+      headers: {
+        className: 'CardWorkConsumeService',
+        methodName: 'generateQrInfo'
+      },
+      data: {
+        workNo: workNo
+      },
+      success: function (data) {
+        console.log(data);
+        if (data.success) {
+
+          var code = JSON.parse(data.obj).qrInfo;
+          ewmCode(code);
+        } else {
+          mui.toast("二维码加载失败！");
+        }
+      }
+    })
+  }
+
+  function ewmCode(code) {
+    $("#ewmCode").html('');
+    // var code = baseUrl + "\/appUrl.html";
+    $("#ewmCode").qrcode({
+      "render": "canvas",
+      "size": 250,
+      "color": "#000000",
+      "text": code
+    });
+  }
+
+  // 二维码刷新
+  $('#refresh').click(function () {
+    ewmCodeRefresh()
+  })
+
+  $('.diceng,.mui-icon-closeempty').click(function () {
+    $('.pwdWrite').hide();
+    $('.diceng').hide();
+  })
+
+  // 付款说明
+  $('#more').click(function () {
+    location.href = 'more.html';
+  })
+
+
+
+
+  /**
+   * mui清除按钮事件(ps:自定义的，不加此方法页面会报错，如果不需要，方法体为空就行)
+   */
+  function clearFunc() {
+
+  }
+
+  /**
+   * mui返回方法(ps:自定义的,不加会报错,不需要的话方法体定义为空)
+   * [goBack description]
+   * @return {[type]} [description]
+   */
+  function goBack() {
+    location.href = "../../menu.html";
+  }
+
+  // APP系统键回退
+  document.addEventListener("deviceready", onDeviceReady, false);
+  function onDeviceReady() {
+    /**
+ * 系统返回键监听
+ */
+    document.addEventListener("backbutton", onBackKeyDown, false);
+  }
+  //返回
+  function onBackKeyDown() {
+    location.href = "../../menu.html";
+  }
+</script>
+
+</html>

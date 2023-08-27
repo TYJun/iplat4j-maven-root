@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2022-03-16 23:14:27
+   		Version :  6.0.731.201809200158
+		tableName :.dorms_room_message_pz 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 config_type  VARCHAR, 
+		 config_type_name  VARCHAR, 
+		 sms_temp  VARCHAR, 
+		 is_running  VARCHAR, 
+		 sms_recv_code  VARCHAR
+	-->
+<sqlMap namespace="DMDX01">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+				id	as "id",  <!-- 主键 -->
+				config_type	as "configType",  <!-- 配置类型 -->
+				config_type_name	as "configTypeName",  <!-- 配置类型名称 -->
+				sms_temp	as "smsTemp",  <!-- 短信模板 -->
+				is_running	as "isRunning",  <!-- 是否启用: 1-启用，0-未启用 -->
+				sms_recv_code	as "smsRecvCode" <!-- 短信接收人代码 -->
+		FROM .dorms_room_message_pz WHERE 1=1
+		<isNotEmpty prepend=" AND " property="configType">
+			config_type = #configType#
+		</isNotEmpty>
+	</select>
+
+	<!-- 查询批量发送短信的模板 -->
+	<select id="queryBatchSMSTemp" parameterClass="String"
+			resultClass="java.util.HashMap">
+		select
+		sms_temp as "smsTemp"  <!-- 短信模板 -->
+		from dorms_room_message_pz
+		where config_type = #configType#
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .dorms_room_message_pz WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="configType">
+			config_type = #configType#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="configTypeName">
+			config_type_name = #configTypeName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="smsTemp">
+			sms_temp = #smsTemp#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="isRunning">
+			is_running = #isRunning#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="smsRecvCode">
+			sms_recv_code = #smsRecvCode#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO .dorms_room_message_pz (id,  <!-- 主键 -->
+										config_type,  <!-- 配置类型 -->
+										config_type_name,  <!-- 配置类型名称 -->
+										sms_temp,  <!-- 短信模板 -->
+										is_running,  <!-- 是否启用: 1-启用，0-未启用 -->
+										sms_recv_code  <!-- 短信接收人代码 -->
+										)		 
+	    VALUES (#id#, #configType#, #configTypeName#, #smsTemp#, #isRunning#, #smsRecvCode#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM .dorms_room_message_pz WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE .dorms_room_message_pz 
+		SET 
+					config_type	= #configType#,   <!-- 配置类型 -->  
+					config_type_name	= #configTypeName#,   <!-- 配置类型名称 -->  
+					sms_temp	= #smsTemp#,   <!-- 短信模板 -->  
+					is_running	= #isRunning#,   <!-- 是否启用: 1-启用，0-未启用 -->  
+					sms_recv_code	= #smsRecvCode#  <!-- 短信接收人代码 -->  
+			WHERE 	
+			id = #id#
+	</update>
+
+	<select id="queryRYInfoList" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		dm.id as "id",  <!-- 主键 -->
+		dm.id as "manId",  <!-- 主键 -->
+		dm.man_no	as "manNo",  <!-- 工号 -->
+		dm.man_name	as "manName",  <!-- 姓名 -->
+		dm.status_code	as "statusCode",  <!-- 工单状态(00待审核，01待分配，02待选房，03待入住，04已入住，10申请换宿，98申请退宿，99流程结束) -->
+		CASE dm.status_code
+		WHEN 00 THEN '待审核'
+		WHEN 01 THEN '待分配'
+		WHEN 02 THEN '待选房'
+		WHEN 03 THEN '待入住'
+		WHEN 04 THEN '已入住'
+		WHEN 10 THEN '申请换宿'
+		WHEN 98 THEN '申请退宿'
+		WHEN 99 THEN '流程结束'
+		END AS "statusCodeMeaning" ,
+		dm.sex	as "sex",  <!-- 性别 -->
+		CASE dm.sex
+		WHEN '1' THEN '男'
+		ELSE '女'
+		END AS "sexMeaning",
+		dm.age	as "age",  <!-- 员工年龄 -->
+		dm.phone	as "phone",  <!-- 电话 -->
+		dm.identity_card	as "identityCard",  <!-- 身份证 -->
+		dm.education_background	as "educationBackground",  <!-- 学历 -->
+		dm.academic_year	as "academicYear",  <!-- 学年 -->
+		dm.marital_status	as "maritalStatus",  <!-- 婚否:是，否 -->
+		dm.dept_num	as "deptNum",  <!-- 部门科室编码 -->
+		dm.dept_name	as "deptName",  <!-- 部门科室名称 -->
+		dm.employment_nature	as "employmentNature",  <!-- 职工性质 -->
+		dm.cash_pledge	as "cashPledge",  <!-- 押金编号 -->
+		dm.is_network	as "isNetwork",  <!-- 是否联网 -->
+		dm.is_stay	as "isStay",  <!-- 是否办暂住证 -->
+		dm.permanent_residence	as "permanentResidence",  <!-- 户口所在地 -->
+		dm.note	as "note",  <!-- 备注信息 -->
+		dm.hiredate	as "hiredate",  <!-- 入职时间 -->
+		dm.estimated_in_date	as "estimatedInDate",  <!-- 预计入住时间 -->
+		dm.estimated_out_date	as "estimatedOutDate",  <!-- 预计退房时间 -->
+		dm.rec_creator	as "recCreator",  <!-- 创建人工号 -->
+		dm.rec_create_name	as "recCreateName",  <!-- 创建人姓名 -->
+		dm.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		dm.rec_revisor	as "recRevisor",  <!-- 修改人工号 -->
+		dm.rec_revise_name	as "recReviseName",  <!-- 修改人姓名 -->
+		dm.rec_revise_time	as "recReviseTime", <!-- 修改时间 -->
+		drm.id as "roomManId", <!-- 宿舍人员绑定关系表id -->
+		drm.actual_in_date	as "actualInDate",  <!-- 实际入住时间 -->
+		drm.actual_out_date	as "actualOutDate",  <!-- 实际退房时间 -->
+		dr.room_name as roomName <!-- 宿舍总称 -->
+		FROM dorms_man dm
+		LEFT JOIN dorms_room_man drm on drm.man_id = dm.id
+		LEFT JOIN dorms_room dr on dr.id = drm.room_id
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			dm.id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manNo">
+			dm.man_no = #manNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manName">
+			dm.man_name like concat('%',#manName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dm.dept_name like concat('%',#deptName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="employmentNature">
+			dm.employment_nature = #employmentNature#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			dm.status_code = #statusCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomName">
+			dr.room_name like concat('%', #roomName#,'%')
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				id asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="queryRYInfoListCount" resultClass="int">
+		SELECT COUNT(*) FROM (
+		SELECT
+		dm.id as "id",  <!-- 主键 -->
+		dm.id as "manId",  <!-- 主键 -->
+		dm.man_no	as "manNo",  <!-- 工号 -->
+		dr.room_name as roomName <!-- 宿舍总称 -->
+		FROM dorms_man dm
+		LEFT JOIN dorms_room_man drm on drm.man_id = dm.id
+		LEFT JOIN dorms_room dr on dr.id = drm.room_id
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			dm.id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manNo">
+			dm.man_no = #manNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manName">
+			dm.man_name like concat('%',#manName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dm.dept_name like concat('%',#deptName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="employmentNature">
+			dm.employment_nature = #employmentNature#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			dm.status_code = #statusCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomName">
+			dr.room_name like concat('%', #roomName#,'%')
+		</isNotEmpty>
+		) aaa
+	</select>
+
+	<!-- 查询所选中的人的相关信息 -->
+	<select id="querySelectPeople" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		dm.id as "manId",  <!-- 主键 -->
+		dm.man_no	as "manNo",  <!-- 工号 -->
+		dm.man_name	as "manName",  <!-- 姓名 -->
+		dm.phone	as "phone",  <!-- 电话 -->
+		dr.room_name as roomName <!-- 宿舍总称 -->
+		FROM dorms_man dm
+		LEFT JOIN dorms_room_man drm on drm.man_id = dm.id
+		LEFT JOIN dorms_room dr on dr.id = drm.room_id
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="manIdList">
+			dm.id in
+			<iterate property="manIdList" conjunction="," open="(" close=")">
+				#manIdList[].manId#
+			</iterate>
+		</isNotEmpty>
+	</select>
+  
+</sqlMap>

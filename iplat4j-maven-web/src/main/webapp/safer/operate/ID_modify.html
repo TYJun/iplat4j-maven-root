@@ -1,0 +1,332 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="../reference/mui/css/mui.css">
+  <link rel="stylesheet" href="../css/common.css"/>
+</head>
+<STYLE TYPE="text/css">
+    body{
+      background: #eee;
+    }
+
+      .area {
+        margin: 20px auto 0px auto;
+      }
+      
+      .mui-input-group {
+        margin-top: 10px;
+      }
+      
+      .mui-input-group:first-child {
+        margin-top: 20px;
+      }
+      
+      .mui-input-group label {
+        width: 22%;
+      }
+      
+      .mui-input-row label~input,
+      .mui-input-row label~select,
+      .mui-input-row label~textarea {
+        width: 78%;
+      }
+      
+      .mui-checkbox input[type=checkbox],
+      .mui-radio input[type=radio] {
+        top: 6px;
+      }
+      
+      .mui-content-padded {
+        margin-top: 25px;
+      }
+      
+      .mui-btn {
+        padding: 10px;
+      }
+      
+      .link-area {
+        display: block;
+        margin-top: 25px;
+        text-align: center;
+      }
+      
+      .spliter {
+        color: #bbb;
+        padding: 0px 8px;
+      }
+      
+      .oauth-area {
+        position: absolute;
+        bottom: 20px;
+        left: 0px;
+        text-align: center;
+        width: 100%;
+        padding: 0px;
+        margin: 0px;
+      }
+      
+      .oauth-area .oauth-btn {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        background-size: 30px 30px;
+        background-position: center center;
+        background-repeat: no-repeat;
+        margin: 0px 20px;
+        /*-webkit-filter: grayscale(100%); */
+        border: solid 1px #ddd;
+        border-radius: 25px;
+      }
+      
+      .oauth-area .oauth-btn:active {
+        border: solid 1px #aaa;
+      }
+      
+      .oauth-area .oauth-btn.disabled {
+        background-color: #ddd;
+      }
+
+      .mui-input-row label~input{
+        width:70%;
+      }
+
+      .mui-input-group label {
+          width: 30%;
+      }
+      /*.mui-content-padded {
+        margin: 25px 0;
+        width: 48%;
+        float: left;
+      }
+      .mui-content-padded:last-child {
+        float: right;
+      }*/
+      #reset {
+        background: #fff;
+      }
+      .mui-content-padded .mui-btn {
+        letter-spacing: 1px;
+      }
+      .checkID {
+        display: block;
+        text-align: center;
+        color: red;
+        visibility: hidden;
+      }
+    
+</STYLE>
+<body>
+    <header class="mui-bar mui-bar-nav">
+      <h1 class="mui-title"></h1>
+      <button class="mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+      返回
+    </button>
+    </header>
+
+    <p id="progress" class="mui-progressbar mui-progressbar-in" data-progress="20" style="display:none;"><span></span></p>
+
+    <div id="warn" class="warn" hidden>
+      <small></small>
+    </div>
+
+    <div class="mui-content">
+      <form class="mui-input-group submitForm">
+        <div class="mui-input-row">
+          <label>工号</label>
+          <input id='workNumber' type="text" class="mui-input" readonly>
+        </div>
+        <div class="mui-input-row">
+          <label>身份证号</label>
+          <input id='newPassword' type="text" class="mui-input-clear mui-input" placeholder="请输入身份证号">
+        </div>
+      </form>
+      <form class="mui-input-group resetForm" style="display: none;">
+        <div class="mui-input-row">
+          <label>工号</label>
+          <input id='workNumberRe' type="text" class="mui-input" readonly>
+        </div>
+        <div class="mui-input-row">
+          <label>身份证号</label>
+          <input id='info' type="text" class="mui-input-clear mui-input" placeholder="请修改身份证号">
+        </div>
+      </form>
+      <div style="margin: 10px;" class="submitDiv">
+        <div class="mui-content-padded">
+          <button id='submit' class="mui-btn mui-btn-block mui-btn-primary">维护</button>
+        </div>
+      </div>
+      <div style="margin: 10px;display: none;" class="resetDiv">
+        <div class="mui-content-padded">
+          <button id='resetSure' class="mui-btn mui-btn-block mui-btn-primary">修改</button>
+        </div>
+        </div>
+      </div>
+    </div>
+</body>
+<script src="../reference/mui/js/mui.js" type="text/javascript"></script>
+<script src="../reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var progress = mui('#progress');
+    $('#workNumber').val(workNo);
+    $('#workNumberRe').val(workNo);
+    // 判断是否有身份证
+    $.ajax({
+        url: baseUrl + 'app_payPasswordController.do?getIdNoByWorkNo',
+        type: 'post',
+        data: {
+          workNo: workNo,
+        },
+        success: function(data) {
+          var data = JSON.parse(data);
+          console.log(data);
+          if(data.success){
+            mui(progress).progressbar().setProgress(100);
+            $('.submitForm').hide();
+            $('.submitDiv').hide();
+            $('.resetForm').show();
+            $('.resetDiv').show();
+            $('.mui-title').html('身份证信息修改')
+          }else {
+            $('.mui-title').html('身份证信息维护')
+            $('.submitForm').show();
+            $('.submitDiv').show();
+            $('.resetForm').hide();
+            $('.resetDiv').hide();
+          }
+        }
+      });
+
+    // 维护身份证
+    $("#submit").click(function() {
+      var newPassword = $('#newPassword').val();
+      if (newPassword == '') {
+        $('#warn small').html("身份证号不能为空！");
+        $("#warn").fadeIn(500);
+        setTimeout(function() {
+          $("#warn").fadeOut(500);
+        }, 3000);
+        return false;
+      }
+      if (newPassword.length != 15 && newPassword.length != 18) {
+        $('#warn small').html("请输入长度为15或18位的身份证号！");
+        $("#warn").fadeIn(500);
+        setTimeout(function() {
+          $("#warn").fadeOut(500);
+        }, 3000);
+        $('#newPassword').val('');
+        return false;
+      }
+      $("#progress").css("display", "");
+      mui(progress).progressbar().setProgress(30);
+      $.ajax({
+        url: baseUrl + 'app_payPasswordController.do?setUserIdNoByWorkNo',
+        type: 'post',
+        data: {
+          workNo: workNo,
+          idNo: newPassword,
+        },
+        success: function(data) {
+          var data = JSON.parse(data);
+          console.log(data);
+          if(data.success){
+            mui(progress).progressbar().setProgress(100);
+            $('#warn small').html(data.msg);
+            $("#warn").fadeIn(500);
+            setTimeout(function() {
+              $("#warn").fadeOut(500);
+            }, 3000);
+            setTimeout("goBack()",3000);
+          } else {
+            $("#progress").css("display", "none");
+            $('#warn small').html(data.msg);
+            $("#warn").fadeIn(500);
+            setTimeout(function() {
+              $("#warn").fadeOut(500);
+            }, 3000);
+            $('#newPassword').val('');
+          }
+        }
+      });
+
+    });
+
+    $('.mui-action-back').click(function(){
+      location.href = "../menu.html";
+    })
+
+   
+
+    // 修改身份证号
+    $('#resetSure').click(function(){
+      if ($('#info').val() == '') {
+        $('#warn small').html('身份证号不能为空');
+        $("#warn").fadeIn(500);
+        setTimeout(function() {
+          $("#warn").fadeOut(500);
+        }, 3000);
+        return 
+      }
+
+      if ($('#info').val().length != 18 && $('#info').val().length != 15) {
+        $('#warn small').html('请输入长度为15或18位的身份证号！');
+        $("#warn").fadeIn(500);
+        setTimeout(function() {
+          $("#warn").fadeOut(500);
+        }, 3000);
+        $('#info').val('');
+        return
+      }
+      $.ajax({
+        url: baseUrl + 'app_payPasswordController.do?setUserIdNoByWorkNo',
+        type: 'post',
+        data: {
+          workNo: workNo,
+          idNo: $('#info').val()
+        },
+        success: function(data){
+          var data = JSON.parse(data);
+          console.log(data);
+          if(data.success){
+            $('#warn small').html(data.msg);
+            $("#warn").fadeIn(500);
+            setTimeout(function() {
+              $("#warn").fadeOut(500);
+            }, 3000);
+            setTimeout("location.href='../menu.html';",3000);
+          }else {
+            $('#warn small').html(data.msg);
+            $("#warn").fadeIn(500);
+            setTimeout(function() {
+              $("#warn").fadeOut(500);
+            }, 3000);
+            $('#info').val('');
+          }
+        }
+      })
+    })
+
+    /**
+     * mui清除按钮事件(ps:自定义的，不加此方法页面会报错，如果不需要，方法体为空就行)
+     */
+    function clearFunc() {
+
+    }
+
+    /**
+     * mui返回方法(ps:自定义的,不加会报错,不需要的话方法体定义为空)
+     * [goBack description]
+     * @return {[type]} [description]
+     */
+    function goBack() {
+      location.href = "../menu.html";
+    }
+</script>
+</html>

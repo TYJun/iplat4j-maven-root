@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SQBZ010101">
+	<!--1、查询满意度选项-->
+    <select id="queryItemByInstanceId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            id,
+            instance_id instanceId,
+            item_name itemName,
+            item_score itemScore,
+            order_no orderNo
+        from
+            sq_register_item
+        <dynamic prepend="where">
+            <isNotEmpty prepend="and" property="instanceId">
+                instance_id = #instanceId#
+            </isNotEmpty>
+        </dynamic>
+        order by
+            order_no
+    </select>
+    <!--2、查询满意度题目-->
+    <select id="queryInstanceByInstanceId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            id instanceId,
+            project_id projectId,
+            instance_name instanceName,
+            point_type pointType,
+            point_name pointName,
+            point,
+            creator,
+            create_time,
+            modifier,
+            modify_time,
+            order_no orderNo
+        from
+            sq_register_instance
+        <dynamic prepend="where">
+            <isNotEmpty prepend="and" property="instanceId">
+                id = #instanceId#
+            </isNotEmpty>
+        </dynamic>
+        order by
+            order_no
+    </select>
+    <!--判断是否存在该项目-->
+    <select id="querySqInstanceAndItem" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            id projectId
+        from
+            sq_register_project
+        <dynamic prepend="where">
+            <isNotEmpty prepend="and" property="projectId">
+                id = #projectId#
+            </isNotEmpty>
+        </dynamic>
+    </select>
+    <!--插入题目详情-->
+    <insert id="insertSqProjectInstance" parameterClass="java.util.HashMap">
+        insert into sq_register_instance(
+            id,
+            instance_name,
+            project_id,
+            point_type,
+            point_name,
+            point,
+            order_no
+        ) values (
+            #instanceId#,
+            #instanceName#,
+            #projectId#,
+            #pointType#,
+            #pointName#,
+            #point#,
+            #orderNo#
+       )
+    </insert>
+    <!--插入题目选项表-->
+    <insert id="insertSqInstanceItem" parameterClass="java.util.HashMap">
+        insert into sq_register_item(
+            id,
+            instance_id,
+            item_name,
+            item_score,
+            order_no
+        ) values (
+            #id#,
+            #instanceId#,
+            #itemName#,
+            #itemScore#,
+            #orderNo#
+         )
+    </insert>
+    <!--更新问卷中题目-->
+    <update id="updateSqProjectInstance" parameterClass="java.util.HashMap">
+        update
+            sq_register_instance
+        set
+            point_type = #pointType#,
+            point_name = #pointName#,
+            instance_name = #instanceName#,
+            point = #point#,
+            order_no = #orderNo#
+        <dynamic prepend="where">
+            <isNotEmpty prepend="and" property="projectId">
+                project_id = #projectId#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="instanceId">
+                id = #instanceId#
+            </isNotEmpty>
+        </dynamic>
+    </update>
+    <!--删除选项表-->
+    <delete id="deleteSqInstanceItem" parameterClass="java.util.HashMap">
+        delete from sq_register_item where instance_id = #instanceId#
+    </delete>
+    <!--删除题目-->
+    <delete id="deleteSqInstance" parameterClass="java.util.HashMap">
+        delete from sq_register_instance where id = #instanceId#
+    </delete>
+</sqlMap>

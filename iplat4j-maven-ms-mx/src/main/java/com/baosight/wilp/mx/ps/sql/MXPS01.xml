@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MXPS01">
+
+    <select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.mx.ps.domain.MXPS01">
+        SELECT
+        a.id "id", a.`type` "type", a.tag "tag", a.name_ "tagName", a.r_value "rValue",
+        a.unit_name "unitName",a.dimension_name "dimensionName",
+        b.name_ "name",
+        CONCAT(c.lower,"~",c.upper) scope,
+        c.lower_lower "lowerLower",
+        c.upper_upper "upperUpper",
+        d.id "classifyId",
+        d.classify_name "classifyName"
+        FROM `tmspl01` a
+        LEFT JOIN tmsdc01 b ON b.id = a.tmsdc01_id
+        LEFT JOIN tmsar01 c ON c.id = a.tmsar01_id
+        LEFT JOIN t_area_classify d ON d.id = b.t_area_classify_id
+        WHERE 1=1 and ( a.param_enable_status = "1" or a.param_enable_status is NULL )
+        <isNotEmpty prepend="and" property="parentId">
+            a.t_param_classify_id = #parentId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="name_">
+            a.name_ LIKE concat('%',#name_#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="tag">
+            a.tag LIKE concat('%',#tag#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="device">
+            b.name_ LIKE concat('%',#device#,'%')
+        </isNotEmpty>
+    </select>
+    <select id="queryroot" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.mx.ps.domain.MXPS01">
+        SELECT
+        a.id "id", a.`type` "type", a.tag "tag", a.name_ "tagName", a.r_value "rValue",
+        a.unit_name "unitName",a.dimension_name "dimensionName",
+        b.name_ "name",
+        CONCAT(c.lower,"~",c.upper) scope,
+        c.lower_lower "lowerLower",
+        c.upper_upper "upperUpper",
+        d.id "classifyId",
+        d.classify_name "classifyName"
+        FROM `tmspl01` a
+        LEFT JOIN tmsdc01 b ON b.id = a.tmsdc01_id
+        LEFT JOIN tmsar01 c ON c.id = a.tmsar01_id
+        LEFT JOIN t_area_classify d ON d.id = b.t_area_classify_id
+        WHERE 1=1 and ( a.param_enable_status = "1" or a.param_enable_status is NULL )
+        <isNotEmpty prepend="and" property="name_">
+            a.name_ LIKE concat('%',#name_#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="tag">
+            a.tag LIKE concat('%',#tag#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="device">
+            b.name_ LIKE concat('%',#device#,'%')
+        </isNotEmpty>
+    </select>
+
+    <select id="queryByTag" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.mx.ps.domain.Tag">
+        SELECT
+        a.tag "name",
+        a.name_ "label",
+        b.name_ "device",
+        c.lower,
+        c.upper,
+        c.lower_lower "lowerLower",
+        c.upper_upper "upperUpper",
+        d.id "areaId",
+        d.classify_name "area",
+        e.classify_name "classify"
+        FROM `tmspl01` a
+        LEFT JOIN tmsdc01 b ON b.id = a.tmsdc01_id
+        LEFT JOIN tmsar01 c ON c.id = a.tmsar01_id
+        LEFT JOIN t_area_classify d ON d.id = b.t_area_classify_id
+        LEFT JOIN t_param_classify e ON e.id = a.t_param_classify_id
+        WHERE a.tag = #tag#
+    </select>
+
+    <!-- 超额/低额报警-->
+    <select id="getWarning" resultClass="java.util.HashMap">
+        SELECT
+            tl.tag as tagId,
+            tr.lower,
+            tr.lower_lower as moreLower,
+            tr.upper,
+            tr.upper_upper as moreUper
+        FROM `tmspl01` tl left join tmsar01 tr on tl.tmsar01_id=tr.id where tl.tmsar01_id is not null
+    </select>
+
+
+</sqlMap>

@@ -1,0 +1,473 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <!--   <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'"> -->
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../../reference/bootstrap-3.3.5/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../reference/bootstrap-3.3.5/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../css/android-ios.css">
+    <link rel="stylesheet" href="../../css/loading.css" />
+    <link rel="stylesheet" href="css/colorGreen.css">
+</head>
+<STYLE TYPE="text/css">
+    body {
+        background: #e7e7e7;
+    }
+    
+    hr {
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+    
+    h3 {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .navbar {
+        margin-bottom: 0px;
+    }
+    
+    h1 {
+        margin: 0 0 0rem;
+    }
+    
+    .row {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+</STYLE>
+
+<body>
+    <div>
+        <nav class="navbar navbar-fixed-top navbar-inverse nav-height">
+            <div id="back" class="glyphicon-btn-left">
+                <span class="glyphicon glyphicon-triangle-left userBtn" style="margin-left:1rem;"></span>
+            </div>
+            <div>
+                <h1 class="title-right">任务详情</h1>
+            </div>
+
+        </nav>
+    </div>
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+    <div id="loading" class="spinner" style="position:fixed;z-index:9999;text-align:center;width:100%;">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    <div id="content" class="top50">
+
+        <div style="width:100%;background:#fff;border:1px solid #eee;">
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    工单号
+                </div>
+                <div id="taskNo" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+            </div>
+            <hr style="margin-top:10px;">
+
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    紧急状态
+                </div>
+                <div id="impFlag" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+            </div>
+            <hr style="margin-top:10px;">
+
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    工单状态
+                </div>
+                <div id="statusName" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+            </div>
+            <hr style="margin-top:10px;">
+
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    报修人
+                </div>
+                <div id="name" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+            </div>
+            <hr style="margin-top:10px;">
+
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    报修日期
+                </div>
+                <div id="recCreateTime" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+            </div>
+            <hr style="margin-top:10px;">
+            <!-- <div class="row" style="margin-top:10px;">
+					<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 font-grey">
+						预约维修时间
+					</div>
+					<div id="orderTime" class="col-xs-7 col-sm-7 col-md-7 col-lg-7" style="text-align:right;"></div>
+				</div>
+				<hr style="margin-top:10px;"> -->
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    报修电话
+                </div>
+                <div id="reqTelNum" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+            </div>
+            <hr style="margin-top:10px;">
+
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    报修科室
+                </div>
+                <div id="reqDeptName" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+            </div>
+            <hr style="margin-top:10px;">
+
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    地点
+                </div>
+                <div id="reqSpotName" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+            </div>
+            <hr style="margin-top:10px;">
+
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    维修科室
+                </div>
+                <div id="wgroupName" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+            </div>
+            <hr style="margin-top:10px;">
+
+            <!-- <div class="row" style="margin-top:10px;">
+					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+						维修人
+					</div>
+					<div id="supportor" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+				</div>
+				<hr style="margin-top:10px;">
+
+				<div class="row" style="margin-top:10px;">
+					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+						维修人电话
+					</div>
+					<div id="supportorMobile" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+				</div>
+				<hr style="margin-top:10px;"> -->
+
+            <!-- <div class="row" style="margin-top:10px;">
+					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+						设备档案
+					</div>
+					<div id="deviceDang" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+				</div>
+				<hr style="margin-top:10px;"> -->
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    事项分类
+                </div>
+                <div id="itemTypeName" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+            </div>
+            <hr style="margin-top:10px;">
+
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    维修事项
+                </div>
+                <div id="itemName" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+            </div>
+
+            <div class="gezhi">
+                <hr style="margin-top:10px;">
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                        搁置原因
+                    </div>
+                    <div id="gezhiReason" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+                </div>
+            </div>
+            <hr style="margin-top:10px;">
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 font-grey">
+                    备注
+                </div>
+                <div id="comments" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;"></div>
+            </div>
+            <hr style="margin-top:10px;">
+            <div class="row" style="margin-top:10px;">
+                <div id="picture" class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+            </div>
+            <div class="row" style="margin-top:10px;background-color:#D1D1D1;border-radius:0px;height:40px;line-height:40px;font-size:13px;">
+                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="color:#FFFFFF;font-weight:bold;">
+                    材料名称
+                </div>
+                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="color:#FFFFFF;font-weight:bold;">
+                    材料类型
+                </div>
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 left-nopadding right" style="color:#FFFFFF;font-weight:bold;">
+                    数量
+                </div>
+            </div>
+            <div id="matCai" style="font-size:13px;">
+
+            </div>
+            <div id="pictureShow" class="row" hidden>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="background-color:#D1D1D1;border-top:1px solid #FFFFFF;COLOR:#FFFFFF;border-radius:0px;height:40px;line-height:40px;font-size:13px;">签名</div>
+                <img style="width:100%;height:250px;" />
+            </div>
+            <div class="row" style="margin-top:10px;">
+                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                </div>
+                <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                    <button id="submit" type="botton" class="btn btn-primary btn-block" style="display:none;"></button>
+                </div>
+                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">
+                        图片预览
+                    </h4>
+                </div>
+                <div style="text-align:center;">
+                    <img id="bigPicture">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-block" data-dismiss="modal">关闭
+            </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../../reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../../reference/bootstrap-3.3.5/js/bootstrap.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem('url');
+    var url = location.search;
+    var taskNo = url.substring(1, url.length);
+    var workNo = localStorage.getItem("workNo");
+    var baseUrl = localStorage.getItem("url");
+    var sigture = localStorage.getItem('sigture');
+    var isPhoto = localStorage.getItem('isPhoto');
+    var role = localStorage.getItem("role");
+    var dataGroupCode = localStorage.getItem("dataGroupCode");
+    var status = "";
+    var isCurrentDealer = "";
+
+    if (localStorage.getItem("layBy") == "Y")
+        $(".gezhi").show();
+
+    else
+        $(".gezhi").hide();
+    $(function() {
+        var prame = {
+            taskNo: taskNo,
+            dataGroupCode,
+            role,
+        };
+        prame = JSON.stringify(prame);
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            data: {
+                prames: prame
+            },
+            headers: {
+                methodName: "queryTaskInfo",
+                serviceName: "MTRE01"
+            },
+            timeout: 30000,
+            success: function(data) {
+                //var data = eval("(" + data + ")");
+                console.log(data)
+                    //console.log(data.pics.pic1);
+                if (data.status == "-1") {
+                    $('#warn small').html(data.msg);
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                }
+                data = data.attr
+                var impFlagName = "紧急";
+                if (data.impFlag != "Y") {
+                    impFlagName = "不紧急";
+                }
+
+                var supportorMobile = data.supportorMobile == null ? "" : data.supportorMobile;
+                var s1 = supportorMobile.replace(/,/g, ", ");
+                status = data.statusCode;
+                var list = data
+                $('#deviceDang').html(list.devName);
+                $("#taskNo").html(list.taskNo);
+                $("#impFlag").html(impFlagName);
+                $("#statusName").html(list.task);
+                $("#name").html(list.acceptancePeopleName);
+                $("#recCreateTime").html(list.acceptanceTime);
+                $("#reqTelNum").html(list.reqTelNum);
+                $("#reqDeptName").html(list.reqDeptName);
+                $("#reqSpotName").html(list.reqSpotName);
+                $("#wgroupName").html(list.wgroupName);
+                $("#supportor").html(list.supportor);
+                $("#supportorMobile").html(s1);
+                $("#itemTypeName").html(list.itemTypeName);
+                $("#itemName").html(list.itemName);
+                $("#comments").html(list.comments);
+                //$("#orderTime").html(list.appoinTime.substring(0, 16));
+                $("#gezhiReason").html(list.shelvingReason);
+                //报修图片
+                if (list.pic1 != "") {
+                    $('#pictureBX').html("");
+                    // 报修
+                    drawImage(list.pic1, 1);
+                    if (list.pic2 != "") {
+                        drawImage(list.pic2, 1);
+                    }
+                    if (list.pic3 != "") {
+                        drawImage(list.pic3, 1);
+                    }
+                }
+                // 签字
+                if (list.signature != "") {
+                    $('#pictureQZ').html("");
+                    drawImage(list.signature, 4);
+                }
+
+                //完工签名图片
+                if (sigture == 'Y') {
+                    $('#pictureShow').show();
+                    if (list.signature == null) {
+                        $('#pictureShow img').hide()
+
+                    } else {
+                        $('#pictureShow img').show()
+                        if (list.signature != "") {
+                            $('#pictureShow img').attr('src', 'data:image/jpeg;base64,' + list.signature);
+                        } else {
+                            $('#pictureShow img').attr('src', '../../img/alipay.png');
+                        }
+                    }
+                }
+
+                //完工拍照图片
+                if (isPhoto == 'Y') {
+                    //var picturess = JSON.parse(data.pics.pictures);
+                    //if (picturess != '{}') {
+                    if (list.finish1 != "") {
+                        $('#pictureWG').html("");
+                        drawImage(list.finish1, 3);
+                    }
+                    if (list.finish2 != "") {
+                        drawImage(list.finish2, 3);
+                    }
+                    if (list.finish3 != "") {
+                        drawImage(list.finish3, 3);
+                    }
+                    // }
+                }
+
+                $("#loading").hide();
+            },
+            complete: function(XMLHttpRequest, status) { //请求完成后最终执行参数
+                　　　　
+                if (status == 'timeout') {
+                    $("#loading").hide();
+                    $('#warn small').html('加载失败！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);　　　　
+                } else if (status == 'error') {
+                    $("#loading").hide();
+                    $('#warn small').html('网络异常！');
+                    $("#warn").fadeIn(500);
+                }　
+            }
+        });
+        //查询工单耗材
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            data: {
+                prames: prame
+            },
+            headers: {
+                methodName: "query",
+                serviceName: "MTFS0102"
+            },
+            success: function(data) {
+                console.log(data)
+                var html = '';
+                //var data = eval("(" + data + ")");
+
+                var data = data.blocks.result.rows;
+                console.log(data);
+                for (var i = 0; i < data.length; i++) {
+                    var matNum = data[i].matNum;
+                    var matTypeNum = data[i].matTypeNum;
+                    var matName = data[i].matName;
+                    var matTypeName = data[i].matTypeName;
+                    var num = data[i].num
+                    html += cancelCai(num, matName, matTypeName)
+                }
+                $("#matCai").html(html);
+            }
+        })
+    });
+    //耗材
+    function cancelCai(num, matName, matTypeName) {
+        var html = '';
+        html += '<div class="row" style="margin-top:10px;"><div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">' + matName + '</div><div id="matName" class="col-xs-5 col-sm-5 col-md-5 col-lg-5">' + matTypeName + '</div><div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 left-nopadding right">' + num + '</div></div>'
+        return html;
+    }
+
+    function drawImage(imageBase64) {
+        if (imageBase64 == '' || imageBase64 == null || imageBase64 == 'null') {
+            return;
+        }
+        var img = $('<img class="img-circle" style="width:100%;">');
+        img.attr('src', "data:image/jpeg;base64," + imageBase64);
+        var a = $('<a href="#" class="thumbnail"></a>');
+        var div = $('<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>');
+        img.appendTo(a);
+        a.appendTo(div);
+        div.appendTo('#picture');
+        var width = $("a.thumbnail:parent").width();
+        $("img.img-circle").css('height', width);
+
+        $('a.thumbnail').click(function() {
+            _this = $(this);
+            $("#bigPicture").removeAttr("style");
+            var image = new Image();
+            image.src = $(this).find('img').attr('src');
+            var width;
+            var height;
+            if (image.width >= image.height) {
+                $("#bigPicture").css("width", screen.width - 40);
+            } else {
+                var i;
+                height = screen.height - 200;
+                i = image.height / height;
+                width = image.width / i;
+            }
+            $("#bigPicture").css("width", width);
+            $("#bigPicture").css("height", height);
+            $("#bigPicture").attr("src", $(this).find('img').attr('src'));
+            $('#myModal').modal('show');
+            return false;
+        });
+    }
+
+    $("#back").click(function() {
+        location.href = "taskList.html";
+    });
+</script>
+
+</html>

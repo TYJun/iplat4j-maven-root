@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!-- table information Generate time : 2021-05-25 19:27:11 Version : 6.0.731.201809200158 
+	tableName :sc_type ID VARCHAR NOT NULL primarykey, typecode VARCHAR, 
+	typename VARCHAR, typepid VARCHAR, typegroupid VARCHAR, paramDesc1 VARCHAR, 
+	paramValue1 VARCHAR, paramDesc2 VARCHAR, paramValue2 VARCHAR, paramDesc3 
+	VARCHAR, paramValue3 VARCHAR, paramDesc4 VARCHAR, paramValue4 VARCHAR, paramDesc5 
+	VARCHAR, paramValue5 VARCHAR, paramDesc6 VARCHAR, paramValue6 VARCHAR, sortNo 
+	INTEGER -->
+<sqlMap namespace="SSBMSjzd02">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.bm.domain.SSBMSjzd02">
+		SELECT
+		ID as "id",
+		typecode as "typecode",
+		typename as "typename",
+		typepid as "typepid",
+		typegroupid as "typegroupid",
+		t1.typegroupname,
+        t1.typegroupcode,
+        t1.moduleId,
+		paramDesc1 as "paramdesc1",
+		paramValue1 as "paramvalue1",
+		paramDesc2 as "paramdesc2",
+		paramValue2 as "paramvalue2",
+		paramDesc3 as "paramdesc3",
+		paramValue3 as "paramvalue3",
+		paramDesc4 as "paramdesc4",
+		paramValue4 as "paramvalue4",
+		paramDesc5 as "paramdesc5",
+		paramValue5 as "paramvalue5",
+		paramDesc6 as "paramdesc6",
+		paramValue6 as "paramvalue6",
+		sortNo as "sortno"
+		FROM
+		`sc_type` t
+		LEFT JOIN sc_typegroup t1 ON t.typegroupid = t1.ID WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="typegroupid">
+			typegroupid = #typegroupid#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="typegroupcode">
+			typegroupcode = #typegroupcode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="typegroupname">
+			typegroupname like concat('%',#typegroupname#,'%')
+		</isNotEmpty>
+	</select>
+	
+	<select id="queryTypeValue" parameterClass="String" resultClass="com.baosight.wilp.ss.bm.domain.SSBMSjzd02">
+		SELECT
+		t.ID as "id",
+		typecode as "typecode",
+		typename as "typename",
+		typepid as "typepid",
+		typegroupid as "typegroupid",
+		t1.typegroupname,
+        t1.typegroupcode,
+        t1.moduleId,
+		paramDesc1 as "paramdesc1",
+		paramValue1 as "paramvalue1",
+		paramDesc2 as "paramdesc2",
+		paramValue2 as "paramvalue2",
+		paramDesc3 as "paramdesc3",
+		paramValue3 as "paramvalue3",
+		paramDesc4 as "paramdesc4",
+		paramValue4 as "paramvalue4",
+		paramDesc5 as "paramdesc5",
+		paramValue5 as "paramvalue5",
+		paramDesc6 as "paramdesc6",
+		paramValue6 as "paramvalue6",
+		sortNo as "sortno"
+		FROM
+		`sc_type` t
+		LEFT JOIN sc_typegroup t1 ON t.typegroupid = t1.ID 
+		WHERE 1=1
+		and typegroupcode = #typegroupcode#
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_type WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+	</select>
+
+	<!-- <isNotEmpty prepend=" AND " property="id"> ID = #id# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="typecode"> typecode = #typecode# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="typename"> typename = #typename# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="typepid"> typepid = #typepid# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="typegroupid"> typegroupid = #typegroupid# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="paramdesc1"> paramDesc1 
+		= #paramdesc1# </isNotEmpty> <isNotEmpty prepend=" AND " property="paramvalue1"> 
+		paramValue1 = #paramvalue1# </isNotEmpty> <isNotEmpty prepend=" AND " property="paramdesc2"> 
+		paramDesc2 = #paramdesc2# </isNotEmpty> <isNotEmpty prepend=" AND " property="paramvalue2"> 
+		paramValue2 = #paramvalue2# </isNotEmpty> <isNotEmpty prepend=" AND " property="paramdesc3"> 
+		paramDesc3 = #paramdesc3# </isNotEmpty> <isNotEmpty prepend=" AND " property="paramvalue3"> 
+		paramValue3 = #paramvalue3# </isNotEmpty> <isNotEmpty prepend=" AND " property="paramdesc4"> 
+		paramDesc4 = #paramdesc4# </isNotEmpty> <isNotEmpty prepend=" AND " property="paramvalue4"> 
+		paramValue4 = #paramvalue4# </isNotEmpty> <isNotEmpty prepend=" AND " property="paramdesc5"> 
+		paramDesc5 = #paramdesc5# </isNotEmpty> <isNotEmpty prepend=" AND " property="paramvalue5"> 
+		paramValue5 = #paramvalue5# </isNotEmpty> <isNotEmpty prepend=" AND " property="paramdesc6"> 
+		paramDesc6 = #paramdesc6# </isNotEmpty> <isNotEmpty prepend=" AND " property="paramvalue6"> 
+		paramValue6 = #paramvalue6# </isNotEmpty> <isNotEmpty prepend=" AND " property="sortno"> 
+		sortNo = #sortno# </isNotEmpty> -->
+
+	<insert id="insert">
+		INSERT INTO sc_type (ID,
+		typecode,
+		typename,
+		typepid,
+		typegroupid,
+		paramDesc1,
+		paramValue1,
+		paramDesc2,
+		paramValue2,
+		paramDesc3,
+		paramValue3,
+		paramDesc4,
+		paramValue4,
+		paramDesc5,
+		paramValue5,
+		paramDesc6,
+		paramValue6,
+		sortNo
+		)
+		VALUES (#id#, #typecode#, #typename#, #typepid#, #typegroupid#,
+		#paramdesc1#, #paramvalue1#, #paramdesc2#, #paramvalue2#,
+		#paramdesc3#, #paramvalue3#, #paramdesc4#, #paramvalue4#,
+		#paramdesc5#, #paramvalue5#, #paramdesc6#, #paramvalue6#, #sortno#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM sc_type WHERE
+		ID = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_type
+		SET
+		typecode = #typecode#,
+		typename = #typename#,
+		typepid = #typepid#,
+		typegroupid = #typegroupid#,
+		paramDesc1 = #paramdesc1#,
+		paramValue1 = #paramvalue1#,
+		paramDesc2 = #paramdesc2#,
+		paramValue2 = #paramvalue2#,
+		paramDesc3 = #paramdesc3#,
+		paramValue3 = #paramvalue3#,
+		paramDesc4 = #paramdesc4#,
+		paramValue4 = #paramvalue4#,
+		paramDesc5 = #paramdesc5#,
+		paramValue5 = #paramvalue5#,
+		paramDesc6 = #paramdesc6#,
+		paramValue6 = #paramvalue6#,
+		sortNo = #sortno#
+		WHERE
+		ID = #id#
+	</update>
+
+</sqlMap>

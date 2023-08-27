@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MSPA0102">
+    <insert id="insert">
+        INSERT INTO tmspa01 (id,
+                             staffid,
+                             name_,
+                             tel,
+                             email,
+                             grade_filter,
+                             create_by,
+                             create_date,
+                             t_param_classify_id)
+        VALUES (#id#,
+                #staffid#,
+                #name_#,
+                #tel#,
+                #email#,
+                #grade_filter#,
+                #create_by#,
+                #create_date#,
+                #t_param_classify_id#)
+    </insert>
+    <insert id="insert2">
+        INSERT INTO tmspa01 (id,
+                             staffid,
+                             name_,
+                             tel,
+                             email,
+                             grade_filter,
+                             create_by,
+                             create_date)
+        VALUES (#id#,
+                #staffid#,
+                #name_#,
+                #tel#,
+                #email#,
+                #grade_filter#,
+                #create_by#,
+                #create_date#)
+    </insert>
+    <select id="select" resultClass="java.util.HashMap">
+        select staffid
+        from tmspa01
+        where t_param_classify_id = #pid#;
+    </select>
+</sqlMap>

@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!-- 合同发票 -->
+<sqlMap namespace="MPLJ05">
+
+    <select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.mp.lj.domain.MpContInvoice">
+        SELECT
+            id	as "id",  <!-- 主键 -->
+            cont_id	as "contId",  <!-- 合同ID -->
+            cont_no	as "contNo",  <!-- 合同号 -->
+            cont_name	as "contName",  <!-- 合同名称 -->
+            invoice_no	as "invoiceNo",  <!-- 发票号 -->
+            status_code	as "statusCode",  <!-- 状态编码 -->
+            status_name	as "statusName",  <!-- 状态名称 -->
+            invoice_type	as "invoiceType",  <!-- 发票类型 -->
+            invoice_type_name	as "invoiceTypeName",  <!-- 发票类型名称 -->
+            supplier_num	as "supplierNum",  <!-- 开票(供应商)编码 -->
+            supplier_name	as "supplierName",  <!-- 开票（供应商）名称 -->
+            pay_date	as "payDate",  <!-- 开付日期 -->
+            currency_code	as "currencyCode",  <!-- 币种编码 -->
+            currency_name	as "currencyName",  <!-- 币种名称 -->
+            invoice_cost	as "invoiceCost",  <!-- 发票金额（元） -->
+            invoice_tax_cost	as "invoiceTaxCost",  <!-- 发票税额（元） -->
+            remark	as "remark",  <!-- 合同说明 -->
+            dept_num as "deptNum", <!-- 科室编码 -->
+            dept_name as "deptName", <!-- 科室名称 -->
+            rec_creator	as "recCreator",  <!-- 创建人 -->
+            rec_creator_name	as "recCreatorName",  <!-- 创建人姓名 -->
+            rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+            rec_revisor	as "recRevisor",  <!-- 修改人 -->
+            rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+            data_group_code	as "dataGroupCode",  <!-- 账套 -->
+            archive_flag	as "archiveFlag" <!-- 归档标记 -->
+        FROM mp_cont_invoice WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="contId">
+            cont_id = #contId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="contNo">
+            cont_no = #contNo#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="contName">
+            cont_name like concat('%', #contName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="invoiceNo">
+            invoice_no like concat('%', #invoiceNo#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCode">
+            status_code = #statusCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="invoiceType">
+            invoice_type = #invoiceType#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="supplierName">
+            supplier_name like concat('%', #supplierName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptNum">
+            dept_num = #deptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="payId">
+            pay_id = #payId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="dataGroupCode">
+            data_group_code = #dataGroupCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="beginTime">
+            rec_create_time >= concat(#beginTime#,' 00:00:00')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="endTime">
+            rec_create_time <![CDATA[<=]]> concat(#endTime#, ' 23:59:59')
+        </isNotEmpty>
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                rec_create_time desc
+            </isEmpty>
+        </dynamic>
+
+    </select>
+
+    <select id="count" parameterClass="java.util.HashMap" resultClass="int">
+        SELECT COUNT(*) FROM mp_cont_invoice WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="contId">
+            cont_id = #contId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="contNo">
+            cont_no = #contNo#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="contName">
+            cont_name like concat('%', #contName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="invoiceNo">
+            invoice_no like concat('%', #invoiceNo#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCode">
+            status_code = #statusCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="invoiceType">
+            invoice_type = #invoiceType#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="supplierName">
+            supplier_name like concat('%', #supplierName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptNum">
+            dept_num = #deptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="payId">
+            pay_id = #payId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="dataGroupCode">
+            data_group_code = #dataGroupCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="beginTime">
+            rec_create_time >= concat(#beginTime#,' 00:00:00')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="endTime">
+            rec_create_time <![CDATA[<=]]> concat(#endTime#, ' 23:59:59')
+        </isNotEmpty>
+    </select>
+
+    <insert id="insert" parameterClass="com.baosight.wilp.mp.lj.domain.MpContInvoice">
+        INSERT INTO mp_cont_invoice (
+            id,  <!-- 主键 -->
+            cont_id,  <!-- 合同ID -->
+            cont_no,  <!-- 合同号 -->
+            cont_name,  <!-- 合同名称 -->
+            invoice_no,  <!-- 发票号 -->
+            status_code,  <!-- 状态编码 -->
+            status_name,  <!-- 状态名称 -->
+            invoice_type,  <!-- 发票类型 -->
+            invoice_type_name,  <!-- 发票类型名称 -->
+            supplier_num,  <!-- 开票(供应商)编码 -->
+            supplier_name,  <!-- 开票（供应商）名称 -->
+            pay_date,  <!-- 开付日期 -->
+            currency_code,  <!-- 币种编码 -->
+            currency_name,  <!-- 币种名称 -->
+            invoice_cost,  <!-- 发票金额（元） -->
+            invoice_tax_cost,  <!-- 发票税额（元） -->
+            remark,  <!-- 合同说明 -->
+            dept_num, <!-- 科室编码 -->
+            dept_name, <!-- 科室名称 -->
+            rec_creator,  <!-- 创建人 -->
+            rec_creator_name,  <!-- 创建人姓名 -->
+            rec_create_time,  <!-- 创建时间 -->
+            rec_revisor,  <!-- 修改人 -->
+            rec_revise_time,  <!-- 修改时间 -->
+            data_group_code,  <!-- 账套 -->
+            archive_flag  <!-- 归档标记 -->
+        )
+        VALUES (#id#, #contId#, #contNo#, #contName#, #invoiceNo#, #statusCode#, #statusName#, #invoiceType#, #invoiceTypeName#, #supplierNum#, #supplierName#, #payDate#, #currencyCode#, #currencyName#, #invoiceCost#, #invoiceTaxCost#, #remark#, #deptNum#, #deptName#, #recCreator#, #recCreatorName#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#, #archiveFlag#)
+    </insert>
+
+    <delete id="delete" parameterClass="string">
+        DELETE FROM mp_cont_invoice WHERE id = #id# and status_code = '01'
+    </delete>
+
+    <update id="update" parameterClass="com.baosight.wilp.mp.lj.domain.MpContInvoice">
+        UPDATE mp_cont_invoice
+        SET
+            <isNotEmpty property="contId">cont_id	= #contId#,</isNotEmpty>   <!-- 合同ID -->
+            <isNotEmpty property="contNo">cont_no	= #contNo#,</isNotEmpty>   <!-- 合同号 -->
+            <isNotEmpty property="contName">cont_name = #contName#,</isNotEmpty>   <!-- 合同名称 -->
+            <isNotEmpty property="invoiceNo">invoice_no = #invoiceNo#,</isNotEmpty>   <!-- 发票号 -->
+            <isNotEmpty property="statusCode">status_code	= #statusCode#,</isNotEmpty>   <!-- 状态编码 -->
+            <isNotEmpty property="statusName">status_name	= #statusName#,</isNotEmpty>   <!-- 状态名称 -->
+            <isNotEmpty property="invoiceType">invoice_type = #invoiceType#,</isNotEmpty>   <!-- 发票类型 -->
+            <isNotEmpty property="invoiceTypeName">invoice_type_name = #invoiceTypeName#,</isNotEmpty>   <!-- 发票类型名称 -->
+            <isNotEmpty property="supplierNum">supplier_num = #supplierNum#,</isNotEmpty>   <!-- 开票(供应商)编码 -->
+            <isNotEmpty property="supplierName">supplier_name = #supplierName#,</isNotEmpty>   <!-- 开票（供应商）名称 -->
+            <isNotNull property="payDate">pay_date	= #payDate#,</isNotNull>   <!-- 开付日期 -->
+            <isNotEmpty property="currencyCode">currency_code = #currencyCode#,</isNotEmpty>   <!-- 币种编码 -->
+            <isNotEmpty property="currencyName">currency_name = #currencyName#,</isNotEmpty>   <!-- 币种名称 -->
+            <isGreaterThan property="invoiceCost" compareValue="0">invoice_cost	= #invoiceCost#,</isGreaterThan>   <!-- 发票金额（元） -->
+            <isGreaterThan property="invoiceTaxCost" compareValue="0">invoice_tax_cost = #invoiceTaxCost#,</isGreaterThan>   <!-- 发票税额（元） -->
+            <isNotEmpty property="remark">remark = #remark#,</isNotEmpty>   <!-- 备注 -->
+            rec_revisor	= #recRevisor#,   <!-- 修改人 -->
+            rec_revise_time	= #recReviseTime#   <!-- 修改时间 -->
+        WHERE id = #id#
+    </update>
+
+    <update id="clearPayId" parameterClass="string">
+        update mp_cont_invoice SET pay_id = null where pay_id = #payId#
+    </update>
+
+    <update id="updateByPayId" parameterClass="java.util.Map">
+        update mp_cont_invoice SET status_code = #statusCode#,status_name = #statusName# where pay_id = #payId#
+    </update>
+
+    <update id="addPayId" parameterClass="java.util.Map">
+        update mp_cont_invoice SET pay_id = #payId# where id in
+        <iterate property="list" open="(" conjunction="," close=")">
+            #list[]#
+        </iterate>
+    </update>
+
+    <select id="queryDetail" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.mp.lj.domain.MpInvoiceDetail">
+        SELECT
+            id	as "id",  <!-- 主键 -->
+            invoice_id as "invoiceId",  <!-- 发票ID -->
+            cont_no as "contNo",  <!-- 合同号 -->
+            order_id	as "orderId",  <!-- 采购订单ID -->
+            order_no  as "orderNo",  <!-- 订单号 -->
+            mat_num	as "matNum",  <!-- 物资编码 -->
+            mat_name	as "matName",  <!-- 物资名称 -->
+            mat_type_id	as "matTypeId",  <!-- 物资分类ID -->
+            mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+            mat_spec	as "matSpec",  <!-- 物资规格 -->
+            mat_model	as "matModel",  <!-- 物资型号 -->
+            unit	as "unit",  <!-- 计量单位 -->
+            unit_name	as "unitName",  <!-- 计量单位 -->
+            price	as "price",  <!-- 单价 -->
+            num	as "num",  <!-- 订单数量 -->
+            order_cost as "orderCost",  <!-- 订单金额 -->
+            picture_uri as "pictureUri" <!-- 图片地址 -->
+        FROM mp_invoice_detail WHERE invoice_id = #invoiceId#
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                mat_num, order_id asc
+            </isEmpty>
+        </dynamic>
+    </select>
+
+    <select id="countDetail" parameterClass="java.util.HashMap" resultClass="int">
+        SELECT COUNT(*) FROM mp_invoice_detail WHERE invoice_id = #invoiceId#
+    </select>
+
+    <select id="queryInvoiceDetailByPayId" parameterClass="string" resultClass="com.baosight.wilp.mp.lj.domain.MpInvoiceDetail">
+        SELECT
+            d.cont_no as "contNo",  <!-- 合同号 -->
+            d.mat_num	as "matNum",  <!-- 物资编码 -->
+            d.mat_name	as "matName",  <!-- 物资名称 -->
+            d.mat_type_id	as "matTypeId",  <!-- 物资分类ID -->
+            d.mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+            d.mat_spec	as "matSpec",  <!-- 物资规格 -->
+            d.mat_model	as "matModel",  <!-- 物资型号 -->
+            sum(d.num)	as "num",  <!-- 订单数量 -->
+            sum(d.order_cost) as "orderCost"  <!-- 订单金额 -->
+        FROM mp_cont_invoice mci
+        left join mp_invoice_detail d on d.invoice_id = mci.id
+        WHERE mci.pay_id = #payId# group by mat_num, mat_type_id
+    </select>
+
+    <insert id="insertDetail" parameterClass="java.util.List">
+        INSERT INTO mp_invoice_detail (
+            id,  <!-- 主键 -->
+            invoice_id,  <!-- 发票ID -->
+            cont_no,  <!-- 合同号 -->
+            order_id,  <!-- 采购订单ID -->
+            order_no,  <!-- 订单号 -->
+            mat_num,  <!-- 物资编码 -->
+            mat_name,  <!-- 物资名称 -->
+            mat_type_id,  <!-- 物资分类ID -->
+            mat_type_name,  <!-- 物资分类名称 -->
+            mat_spec,  <!-- 物资规格 -->
+            mat_model,  <!-- 物资型号 -->
+            unit,  <!-- 计量单位 -->
+            unit_name,  <!-- 计量单位 -->
+            price,  <!-- 单价 -->
+            num,  <!-- 订单数量 -->
+            order_cost,  <!-- 订单金额 -->
+            picture_uri  <!-- 图片地址 -->
+        )
+        VALUES
+        <iterate conjunction=",">
+        (
+            #list[].id#,
+            #list[].invoiceId#,
+            #list[].contNo#,
+            #list[].orderId#,
+            #list[].orderNo#,
+            #list[].matNum#,
+            #list[].matName#,
+            #list[].matTypeId#,
+            #list[].matTypeName#,
+            #list[].matSpec#,
+            #list[].matModel#,
+            #list[].unit#,
+            #list[].unitName#,
+            #list[].price#,
+            #list[].num#,
+            #list[].orderCost#,
+            #list[].pictureUri#
+        )
+        </iterate>
+    </insert>
+
+    <delete id="deleteDetail" parameterClass="string">
+        DELETE FROM mp_invoice_detail WHERE invoice_id = #value#
+    </delete>
+    
+</sqlMap>

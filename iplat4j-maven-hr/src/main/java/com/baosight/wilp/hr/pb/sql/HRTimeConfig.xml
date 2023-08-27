@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!-- table information Generate time : 2022-01-12 15:41:56 Version : 6.0.731.201809200158 
+	tableName :dr_time_config id VARCHAR NOT NULL primarykey, rec_creator VARCHAR, 
+	rec_creator_name VARCHAR, rec_create_time VARCHAR, rec_revisor VARCHAR, rec_revisor_name 
+	VARCHAR, rec_revise_time VARCHAR, start_time VARCHAR, end_time VARCHAR, rest_start_time 
+	VARCHAR, rest_end_time VARCHAR, day_span CHAR, schedule_name VARCHAR, dept_num 
+	VARCHAR, dept_name VARCHAR, status CHAR, clock_start_time VARCHAR, clock_end_time 
+	VARCHAR, datagroup_code VARCHAR -->
+<sqlMap namespace="HRTimeConfig">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.hr.pb.domain.HRTimeConfig">
+		SELECT
+		id as "id",  <!-- 主键 -->
+		rec_creator as "recCreator",  <!-- 创建人 -->
+		rec_creator_name as "recCreatorName",  <!-- 创建人姓名 -->
+		rec_create_time as "recCreateTime",  <!-- 创建时间 -->
+		rec_revisor as "recRevisor",  <!-- 更新人ID -->
+		rec_revisor_name as "recRevisorName",  <!-- 更新人 -->
+		rec_revise_time as "recReviseTime",  <!-- 更新时间 -->
+		start_time as "startTime",  <!-- 开始时间 -->
+		end_time as "endTime",  <!-- 结束时间 -->
+		rest_start_time as "restStartTime",  <!-- 休息开始时间 -->
+		rest_end_time as "restEndTime",  <!-- 休息结束时间 -->
+		day_span as "daySpan",  <!-- 是否跨天(0-否，1-是) -->
+		schedule_name as "scheduleName",  <!-- 班次名称 -->
+		dept_num as "deptNum",  <!-- 班组编码 -->
+		dept_name as "deptName",  <!-- 班组名称 -->
+		status as "status",  <!-- 状态(0-停用，1-启用) -->
+		clock_start_time as "clockStartTime",  <!-- 出勤开始时间 -->
+		clock_end_time as "clockEndTime",  <!-- 下班截止时间 -->
+		datagroup_code as "datagroupCode"
+		FROM dr_time_config WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				id asc
+			</isEmpty>
+		</dynamic>
+
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM dr_time_config WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+	<!-- <isNotEmpty prepend=" AND " property="id"> id = #id# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="recCreator"> rec_creator = #recCreator# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="recCreatorName"> rec_creator_name 
+		= #recCreatorName# </isNotEmpty> <isNotEmpty prepend=" AND " property="recCreateTime"> 
+		rec_create_time = #recCreateTime# </isNotEmpty> <isNotEmpty prepend=" AND 
+		" property="recRevisor"> rec_revisor = #recRevisor# </isNotEmpty> <isNotEmpty 
+		prepend=" AND " property="recRevisorName"> rec_revisor_name = #recRevisorName# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="recReviseTime"> rec_revise_time 
+		= #recReviseTime# </isNotEmpty> <isNotEmpty prepend=" AND " property="startTime"> 
+		start_time = #startTime# </isNotEmpty> <isNotEmpty prepend=" AND " property="endTime"> 
+		end_time = #endTime# </isNotEmpty> <isNotEmpty prepend=" AND " property="restStartTime"> 
+		rest_start_time = #restStartTime# </isNotEmpty> <isNotEmpty prepend=" AND 
+		" property="restEndTime"> rest_end_time = #restEndTime# </isNotEmpty> <isNotEmpty 
+		prepend=" AND " property="daySpan"> day_span = #daySpan# </isNotEmpty> <isNotEmpty 
+		prepend=" AND " property="scheduleName"> schedule_name = #scheduleName# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="deptNum"> dept_num = #deptNum# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="deptName"> dept_name = #deptName# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="status"> status = #status# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="clockStartTime"> clock_start_time = 
+		#clockStartTime# </isNotEmpty> <isNotEmpty prepend=" AND " property="clockEndTime"> 
+		clock_end_time = #clockEndTime# </isNotEmpty> <isNotEmpty prepend=" AND " 
+		property="datagroupCode"> datagroup_code = #datagroupCode# </isNotEmpty> -->
+
+	<insert id="insert">
+		INSERT INTO dr_time_config (id,  <!-- 主键 -->
+		rec_creator,  <!-- 创建人 -->
+		rec_creator_name,  <!-- 创建人姓名 -->
+		rec_create_time,  <!-- 创建时间 -->
+		rec_revisor,  <!-- 更新人ID -->
+		rec_revisor_name,  <!-- 更新人 -->
+		rec_revise_time,  <!-- 更新时间 -->
+		start_time,  <!-- 开始时间 -->
+		end_time,  <!-- 结束时间 -->
+		rest_start_time,  <!-- 休息开始时间 -->
+		rest_end_time,  <!-- 休息结束时间 -->
+		day_span,  <!-- 是否跨天(0-否，1-是) -->
+		schedule_name,  <!-- 班次名称 -->
+		dept_num,  <!-- 班组编码 -->
+		dept_name,  <!-- 班组名称 -->
+		status,  <!-- 状态(0-停用，1-启用) -->
+		clock_start_time,  <!-- 出勤开始时间 -->
+		clock_end_time,  <!-- 下班截止时间 -->
+		datagroup_code
+		)
+		VALUES (#id#, #recCreator#, #recCreatorName#, #recCreateTime#, #recRevisor#,
+		#recRevisorName#, #recReviseTime#, #startTime#, #endTime#,
+		#restStartTime#, #restEndTime#, #daySpan#, #scheduleName#, #deptNum#,
+		#deptName#, #status#, #clockStartTime#, #clockEndTime#,
+		#datagroupCode#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM dr_time_config WHERE
+		id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE dr_time_config
+		SET
+		rec_creator = #recCreator#,   <!-- 创建人 -->
+		rec_creator_name = #recCreatorName#,   <!-- 创建人姓名 -->
+		rec_create_time = #recCreateTime#,   <!-- 创建时间 -->
+		rec_revisor = #recRevisor#,   <!-- 更新人ID -->
+		rec_revisor_name = #recRevisorName#,   <!-- 更新人 -->
+		rec_revise_time = #recReviseTime#,   <!-- 更新时间 -->
+		start_time = #startTime#,   <!-- 开始时间 -->
+		end_time = #endTime#,   <!-- 结束时间 -->
+		rest_start_time = #restStartTime#,   <!-- 休息开始时间 -->
+		rest_end_time = #restEndTime#,   <!-- 休息结束时间 -->
+		day_span = #daySpan#,   <!-- 是否跨天(0-否，1-是) -->
+		schedule_name = #scheduleName#,   <!-- 班次名称 -->
+		dept_num = #deptNum#,   <!-- 班组编码 -->
+		dept_name = #deptName#,   <!-- 班组名称 -->
+		status = #status#,   <!-- 状态(0-停用，1-启用) -->
+		clock_start_time = #clockStartTime#,   <!-- 出勤开始时间 -->
+		clock_end_time = #clockEndTime#,   <!-- 下班截止时间 -->
+		datagroup_code = #datagroupCode#
+		WHERE
+		id = #id#
+	</update>
+
+</sqlMap>

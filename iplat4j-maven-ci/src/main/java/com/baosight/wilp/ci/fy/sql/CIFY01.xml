@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2022-06-10 15:22:22
+   		Version :  6.0.731.201809200158
+		tableName :ci_canteen_cost 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 date  DATETIME, 
+		 canteen_num  VARCHAR, 
+		 canteen_name  VARCHAR, 
+		 canteen_type  VARCHAR, 
+		 water  VARCHAR, 
+		 electricity  VARCHAR, 
+		 gas  VARCHAR, 
+		 labour  VARCHAR, 
+		 additional_costs  VARCHAR, 
+		 memo  VARCHAR
+	-->
+<sqlMap namespace="CIFY01">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.ci.fy.domain.CiCanteenCost">
+		SELECT
+				id	as "id",  <!-- id -->
+				date	as "date",  <!-- 日期 -->
+				canteen_num	as "canteenNum",  <!-- 食堂编码 -->
+				canteen_name	as "canteenName",  <!-- 食堂名称 -->
+				canteen_type	as "canteenType",  <!-- 食堂类型 -->
+				water	as "water",  <!-- 水费 -->
+				electricity	as "electricity",  <!-- 电费 -->
+				gas	as "gas",  <!-- 气费 -->
+				labour	as "labour",  <!-- 人工费 -->
+				additional_costs	as "additionalCosts",  <!-- 额外费用 -->
+				memo	as "memo" <!-- 备注 -->
+		FROM ci_canteen_cost WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="date">
+			date = #date#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="canteenNum">
+			canteen_num = #canteenNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="canteenType">
+			canteen_type = #canteenType#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">
+			`date` >= #beginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">
+			`date` <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+		order by canteen_name, `date`
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM ci_canteen_cost WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="date">
+			date = #date#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="canteenNum">
+			canteen_num = #canteenNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="canteenName">
+			canteen_name = #canteenName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="canteenType">
+			canteen_type = #canteenType#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="water">
+			water = #water#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="electricity">
+			electricity = #electricity#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="gas">
+			gas = #gas#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="labour">
+			labour = #labour#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="additionalCosts">
+			additional_costs = #additionalCosts#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="memo">
+			memo = #memo#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO ci_canteen_cost (id,  <!-- id -->
+										rec_create_time,
+										date,  <!-- 日期 -->
+										canteen_num,  <!-- 食堂编码 -->
+										canteen_name,  <!-- 食堂名称 -->
+										canteen_type,  <!-- 食堂类型 -->
+										water,  <!-- 水费 -->
+										electricity,  <!-- 电费 -->
+										gas,  <!-- 气费 -->
+										labour,  <!-- 人工费 -->
+										additional_costs,  <!-- 额外费用 -->
+										memo  <!-- 备注 -->
+										)		 
+	    VALUES (#id#, #recCreateTime#,#date#, #canteenNum#, #canteenName#, #canteenType#, #water#, #electricity#, #gas#, #labour#, #additionalCosts#, #memo#)
+	</insert>
+
+	<insert id="insertByExcel" parameterClass="java.util.List">
+		INSERT INTO ci_canteen_cost (id,  <!-- id -->
+		rec_create_time,
+		date,  <!-- 日期 -->
+		canteen_num,  <!-- 食堂编码 -->
+		canteen_name,  <!-- 食堂名称 -->
+		canteen_type,  <!-- 食堂类型 -->
+		water,  <!-- 水费 -->
+		electricity,  <!-- 电费 -->
+		gas,  <!-- 气费 -->
+		labour,  <!-- 人工费 -->
+		additional_costs,  <!-- 额外费用 -->
+		memo  <!-- 备注 -->
+		)
+		VALUES
+		<iterate conjunction=",">
+			(#okList[].id#,
+			#okList[].recCreateTime#,
+			#okList[].date#,
+			#okList[].canteenNum#,
+			#okList[].canteenName#,
+			#okList[].canteenType#,
+			#okList[].water#,
+			#okList[].electricity#,
+			#okList[].gas#,
+			#okList[].labour#,
+			#okList[].additionalCosts#,
+			#okList[].memo#)
+		</iterate>
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM ci_canteen_cost WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE ci_canteen_cost 
+		SET 
+					date	= #date#,   <!-- 日期 -->  
+					canteen_num	= #canteenNum#,   <!-- 食堂编码 -->  
+					canteen_name	= #canteenName#,   <!-- 食堂名称 -->  
+					canteen_type	= #canteenType#,   <!-- 食堂类型 -->  
+					water	= #water#,   <!-- 水费 -->  
+					electricity	= #electricity#,   <!-- 电费 -->  
+					gas	= #gas#,   <!-- 气费 -->  
+					labour	= #labour#,   <!-- 人工费 -->  
+					additional_costs	= #additionalCosts#,   <!-- 额外费用 -->  
+					memo	= #memo#  <!-- 备注 -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

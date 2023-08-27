@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.bonawise.iplat4j:iplat4j-maven-basic:5.0.2-SNAPSHOOT">
+    <CLASSES>
+      <root url="jar://F:/Work/apache-maven-3.8.5/.m2/repository/com/bonawise/iplat4j/iplat4j-maven-basic/5.0.2-SNAPSHOOT/iplat4j-maven-basic-5.0.2-SNAPSHOOT.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://F:/Work/apache-maven-3.8.5/.m2/repository/com/bonawise/iplat4j/iplat4j-maven-basic/5.0.2-SNAPSHOOT/iplat4j-maven-basic-5.0.2-SNAPSHOOT-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://F:/Work/apache-maven-3.8.5/.m2/repository/com/bonawise/iplat4j/iplat4j-maven-basic/5.0.2-SNAPSHOOT/iplat4j-maven-basic-5.0.2-SNAPSHOOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

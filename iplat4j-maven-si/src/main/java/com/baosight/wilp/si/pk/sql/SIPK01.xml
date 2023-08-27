@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="SIPK01">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.si.pk.domain.SiInven">
+		SELECT
+				REC_CREATOR	as "recCreator",  <!-- 记录创建责任者 -->
+				REC_CREATE_TIME	as "recCreateTime",  <!-- 记录创建时间 -->
+				REC_REVISOR	as "recRevisor",  <!-- 记录修改责任者 -->
+				REC_REVISE_TIME	as "recReviseTime",  <!-- 记录修改时间 -->
+				ARCHIVE_FLAG	as "archiveFlag",  <!-- 归档标记 -->
+				ID	as "id",  <!-- 主键 -->
+				INVEN_BILL_NO	as "invenBillNo",  <!-- 盘点单号 -->
+				INVEN_STATUS    as "invenStatus",   <!-- 盘点状态 -->
+				WARE_HOUSE_NO	as "wareHouseNo",  <!-- 仓库号 -->
+				ware_house_name	as "wareHouseName",  <!-- 仓库名称 -->
+				STORAGE_NO	as "storageNo",  <!-- 库位号 -->
+				STACK_NO	as "stackNo",  <!-- 货位号 -->
+				BILL_MAKE_TIME	as "billMakeTime",  <!-- 制单日期 -->
+				BILL_MAKER	as "billMaker",  <!-- 制单人员 -->
+				bill_maker_name	as "billMakerName",  <!-- 制单人姓名 -->
+				BILL_CHECK_TIME	as "billCheckTime",  <!-- 审核日期 -->
+				BILL_CHECKER	as "billChecker",  <!-- 审核人员 -->
+				bill_checker_name	as "billCheckerName" <!-- 审核人姓名 -->
+		FROM si_inven WHERE 1=1
+		<isNotEmpty prepend=" AND " property="invenBillNo"> <!-- 盘点单号 -->
+			INVEN_BILL_NO = #invenBillNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">   <!-- 制单日期（>=） -->
+			date_format(BILL_MAKE_TIME,'%Y-%m-%d') >= #beginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">    <!-- 制单日期止（<=） -->
+			date_format(BILL_MAKE_TIME,'%Y-%m-%d') <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNo">    <!-- 仓库号 -->
+			WARE_HOUSE_NO = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="invenStatus">    <!-- 盘点状态 -->
+			INVEN_STATUS = #invenStatus#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			DATA_GROUP_CODE = #dataGroupCode#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  INVEN_BILL_NO desc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM si_inven WHERE 1=1
+		<isNotEmpty prepend=" AND " property="invenBillNo"> <!-- 盘点单号 -->
+			INVEN_BILL_NO = #invenBillNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">   <!-- 制单日期（>=） -->
+			date_format(BILL_MAKE_TIME,'%Y-%m-%d') >= #beginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">    <!-- 制单日期止（<=） -->
+			date_format(BILL_MAKE_TIME,'%Y-%m-%d') <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNo">    <!-- 仓库号 -->
+			WARE_HOUSE_NO = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="invenStatus">    <!-- 盘点状态 -->
+			INVEN_STATUS = #invenStatus#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			DATA_GROUP_CODE = #dataGroupCode#
+		</isNotEmpty>
+	</select>
+	
+	<insert id="insert" parameterClass="com.baosight.wilp.si.pk.domain.SiInven">
+		INSERT INTO si_inven (REC_CREATOR,  <!-- 记录创建责任者 -->
+										REC_CREATE_TIME,  <!-- 记录创建时间 -->
+										REC_REVISOR,  <!-- 记录修改责任者 -->
+										REC_REVISE_TIME,  <!-- 记录修改时间 -->
+										DATA_GROUP_CODE,  <!-- 院区 -->
+										ARCHIVE_FLAG,  <!-- 归档标记 -->
+										ID,  <!-- 主键 -->
+										INVEN_BILL_NO,  <!-- 盘点单号 -->
+										INVEN_STATUS,   <!-- 盘点状态 -->
+										WARE_HOUSE_NO,  <!-- 仓库号 -->
+										ware_house_name,  <!-- 仓库名称 -->
+										STORAGE_NO,  <!-- 库位号 -->
+										STACK_NO,  <!-- 货位号 -->
+										BILL_MAKE_TIME,  <!-- 制单日期 -->
+										BILL_MAKER,  <!-- 制单人员 -->
+										bill_maker_name,  <!-- 制单人姓名 -->
+										BILL_CHECK_TIME,  <!-- 审核日期 -->
+										BILL_CHECKER,  <!-- 审核人员 -->
+										bill_checker_name  <!-- 审核人姓名 -->
+										)		 
+	    VALUES (#recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#, #archiveFlag#, #id#, #invenBillNo#, #invenStatus#, #wareHouseNo#, #wareHouseName#, #storageNo#, #stackNo#, #billMakeTime#, #billMaker#, #billMakerName#, #billCheckTime#, #billChecker#, #billCheckerName#) 
+	</insert>
+  
+	<delete id="delete" parameterClass="string">
+		DELETE FROM si_inven WHERE INVEN_BILL_NO = #invenBillNo#
+	</delete>
+
+	<update id="update" parameterClass="com.baosight.wilp.si.pk.domain.SiInven">
+		UPDATE si_inven
+		SET 
+			<isNotNull  property="billCheckTime">
+		    	BILL_CHECK_TIME	= #billCheckTime#,   <!-- 审核日期 --> 
+		    </isNotNull>
+		    <isNotNull  property="billChecker">
+		    	BILL_CHECKER	= #billChecker#,   <!-- 审核人员 -->  
+		    </isNotNull>
+		     <isNotNull  property="billCheckerName">
+		    	bill_checker_name	= #billCheckerName#,  <!-- 审核人姓名 --> 
+		    </isNotNull>
+		    INVEN_STATUS = #invenStatus#, <!-- 盘点状态 -->
+			REC_REVISOR	= #recRevisor#,   <!-- 记录修改责任者 -->  
+			REC_REVISE_TIME	= #recReviseTime#   <!-- 记录修改时间 -->  
+		WHERE 1=1 
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="invenBillNo"> <!-- 盘点单号 -->
+			INVEN_BILL_NO = #invenBillNo#
+		</isNotEmpty>
+	</update>
+  
+</sqlMap>

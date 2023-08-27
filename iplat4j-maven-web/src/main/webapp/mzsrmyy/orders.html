@@ -1,0 +1,439 @@
+<!-- <!DOCTYPE html> -->
+<html lang="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" type="text/css" href="https://gw.alipayobjects.com/as/g/antui/antui/10.1.10/dpl/antui.css">
+    <link rel="stylesheet" type="text/css" href="https://gw.alipayobjects.com/as/g/antui/antui/10.1.10/dpl/widget/loading.css">
+    <link rel="stylesheet" type="text/css" href="./css/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="./css/example.css">
+    <link rel="stylesheet" type="text/css" href="./css/weui.css">
+
+    <title>订单列表</title>
+</head>
+<style type="text/css">
+    * {
+        box-sizing: border-box;
+    }
+    
+    body {
+        /*background: #E4E7ED;*/
+        background: #fff;
+        font-size: 15px;
+    }
+    
+    .list-div {
+        width: 100%;
+    }
+    
+    .order-div {
+        width: 100%;
+        border-bottom: 1px solid #EBEEF5;
+    }
+    
+    .order-title {
+        padding: 10px 15px;
+    }
+    
+    .order-tab1 {
+        width: 40px;
+        height: 40px;
+        color: #606266;
+    }
+    
+    .order-no {
+        color: #303133;
+        font-weight: bold;
+        background: url("./img/meal/more.png") no-repeat scroll right center transparent;
+        background-size: 14px 14px;
+        height: 22px;
+    }
+    
+    .order-time {
+        height: 18px;
+        font-size: 12px;
+        color: #909399;
+    }
+    
+    .status-div {
+        width: 80px;
+        color: #606266;
+        font-size: 13px;
+        height: 40px;
+        line-height: 22px;
+    }
+    
+    .order-content {
+        padding: 0 15px 0 61px;
+    }
+    
+    .order-info1 {
+        width: 100%;
+        color: #303133;
+        font-weight: bold;
+        font-size: 14px;
+    }
+    
+    .order-info2 {
+        width: 100%;
+        color: #303133;
+        font-size: 13px;
+    }
+    
+    .order-info3 {
+        width: 100%;
+        color: #909399;
+        font-size: 13px;
+    }
+    
+    .order-operation {
+        width: 100%;
+        padding: 15px;
+        text-align: right;
+    }
+    
+    .order-operation button {
+        margin-left: 10px;
+    }
+    
+    .btn-info {
+        background: #fff;
+        border: 1px solid #DCDFE6;
+        color: #606266;
+        border-radius: 3px;
+        font-size: 14px;
+        height: 30px;
+    }
+    
+    .btn-cancel {
+        background: #fff;
+        border: 1px solid #F56C6C;
+        color: #F56C6C;
+        border-radius: 3px;
+        font-size: 14px;
+        height: 30px;
+    }
+    
+    .btn-pay {
+        background: #fff;
+        border: 1px solid #09BB07;
+        color: #09BB07;
+        border-radius: 3px;
+        font-size: 14px;
+        height: 30px;
+    }
+    
+    .btn-eval {
+        width: 80px;
+        background: #fff;
+        border: 1px solid #09BB07;
+        color: #09BB07;
+        border-radius: 3px;
+        font-size: 14px;
+        height: 30px;
+    }
+    
+    .loadMore {
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        font-size: 12px;
+    }
+    
+    .white-div {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 999;
+        background: #fff;
+    }
+</style>
+
+<body>
+    <div id="app">
+        <!-- 页面过渡div -->
+        <div v-if="whiteShow" class="white-div"></div>
+        <div id="toastMsg" style="display: none;">
+            <div class="weui-mask_transparent"></div>
+            <div class="weui-toast">
+                <i class="weui-icon-cancel weui-icon_toast" style="font-size: 35px;"></i>
+                <p class="weui-toast__content">{{toastMsg}}</p>
+            </div>
+        </div>
+        <div id="toastMsg1" style="display: none;">
+            <div class="weui-mask_transparent"></div>
+            <div class="weui-toast">
+                <i class="weui-icon-success-no-circle weui-icon_toast" style="font-size: 35px;"></i>
+                <p class="weui-toast__content">{{toastMsg1}}</p>
+            </div>
+        </div>
+        <div id="loadingToast" v-if="loadShow">
+            <div class="weui-mask_transparent"></div>
+            <div class="weui-toast">
+                <i class="weui-loading weui-icon_toast"></i>
+                <p class="weui-toast__content">正在加载</p>
+            </div>
+        </div>
+        <div class="list-div">
+            <div v-for="item in orders" :key="item.id" class="order-div">
+                <div class="order-title am-flexbox">
+                    <div class="am-ft-left order-tab1">
+                        <img src="./img/meal/bill.png" style="width: 40px;height: 40px;">
+                    </div>
+                    <div @click="details(item)" class="am-flexbox-item">
+                        <div class="order-no">{{item.billNo}}</div>
+                        <div class="order-time">{{item.openId}}</div>
+                    </div>
+                    <div class="am-ft-right status-div">{{item.statusName}}</div>
+                </div>
+                <div class="order-content">
+                    <div v-if="item.billNo.substring(0,2)=='CC'" class="order-info3">{{item.comboName}} {{item.billDetail[0].menuNumber}}份</div>
+                    <div v-else class="order-info3">{{item.billDetail[0].menuName}}等 {{item.billDetail.length}} 样菜品 共 {{item.billTotalPrice}} 元</div>
+                    <div class="order-info1">{{item.deptName}}</div>
+                    <div class="order-info2">{{item.userName}} {{item.userTelNumber}}</div>
+                </div>
+                <div class="order-operation">
+                    <button @click="abandoned(item)" v-if="item.statusCode==00||item.statusCode==01||item.statusCode==00" type="button" class="btn-cancel">取消订单</button>
+                    <!--<button @click="repay(item)" v-if="item.statusCode==00" type="button" class="btn-pay">重新支付</button>-->
+                    <!-- <button v-if="item.statusCode==03" type="button" class="btn-eval">评价</button> -->
+                </div>
+            </div>
+        </div>
+        <div @click="loadMore" v-if="!showLoading&&hasMore" class="loadMore">
+            加载更多 <span class="iconfont icon-31xiala" style="font-size: 11px;"></span>
+        </div>
+
+        <div v-if="!showLoading&&!hasMore" class="am-loading am-loading-nomore">
+            <span class="am-loading-text">没有更多了</span>
+        </div>
+    </div>
+</body>
+<!--<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.min.js"></script>-->
+<script src="./js/vue.min.js"></script>
+<script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+<script type="text/javascript" src="./js/jquery-2.1.4.min.js"></script>
+<!--<script src="https://cdn.bootcss.com/vConsole/3.8.1/vconsole.min.js"></script>-->
+<script type="text/javascript">
+//new VConsole();
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            whiteShow: true,
+            loadShow: false,
+            dialogShow: false,
+            dicengShow: false,
+            toastMsg: "",
+            toastMsg1: "",
+            baseUrl: '',
+            userId: '',
+            paintNo: '',
+            dataGroupCode: '',
+            orders: [],
+            page: '1',
+            showLoading: true,
+            hasMore: false
+        },
+        methods: {
+            init: function() {
+                var _this = this;
+                _this.baseUrl = localStorage.getItem("baseUrl");
+                // _this.baseUrl = 'http://wxsfy.yyhq365.cn/'
+                _this.userId = localStorage.getItem("userId");
+                _this.paintNo = localStorage.getItem("paintNo");
+                // _this.userId = "ovEyYt9-FIhGhxD9omRMryatjLDs";
+                _this.dataGroupCode = localStorage.getItem("dataGroupCode");
+                // _this.dataGroupCode ='1F9A69C68DFE'
+                _this.loadOrders();
+            },
+            //加载订单
+            loadOrders: function() {
+                var _this = this;
+                _this.loadShow = true
+                $.ajax({
+                    //url: _this.baseUrl + 'app_patientBillInfoController.do?getBillInfo',
+                    url: _this.baseUrl + "meal",
+					type: "post",
+					headers: {
+						className: "AppBaseInfoService",
+						methodName: "getBillInfo"
+					},
+                    data: {
+						pboCode: "PATIENT_MEAL",
+						archiveFlag: "WECHAT",
+                        userCode: _this.paintNo,
+                        userId: _this.userId,
+                        page: _this.page,
+						rows: 5,
+                        dataGroupCode: _this.dataGroupCode
+                    },
+                    success: function(data) {
+                        var resp = data;
+                        _this.loadShow = false
+                        if (resp.success) {
+                            for (var i = 0; i < resp.obj.length; i++) {
+                                _this.orders.push(resp.obj[i]);
+                            }
+                            if (resp.obj.length < 10)
+                                _this.hasMore = false;
+                            else
+                                _this.hasMore = true;
+                        } else {
+
+                            _this.showMsg(resp.respMsg)
+                        }
+                    }
+                });
+            },
+            //加载更多
+            loadMore: function() {
+                this.page++;
+                this.loadOrders();
+            },
+            //重新支付
+            repay: function(item) {
+
+                localStorage.setItem("billNo", item.billNo)
+                if (item.billNo.substring(0, 2) == "CC") {
+
+                    location.href = "comboPay.html";
+                } else {
+                    location.href = "pay.html";
+                }
+
+            },
+            showMsg: function(msg) {
+                var _this = this
+                _this.toastMsg = msg
+                var $toast = $("#toastMsg")
+                if ($toast.css('display') != 'none') return;
+                $toast.fadeIn(100);
+                setTimeout(function() {
+                    $toast.fadeOut(100);
+                }, 2000);
+
+            },
+            showMsg1: function(msg) {
+                var _this = this
+                _this.toastMsg1 = msg
+                var $toast = $("#toastMsg1")
+                if ($toast.css('display') != 'none') return;
+                $toast.fadeIn(100);
+                setTimeout(function() {
+                    $toast.fadeOut(100);
+                }, 2000);
+
+            },
+
+            //校验订单支付状态
+            billPayStatusCheck: function(billNo,callback){
+              $.ajax({
+              url: baseUrl + 'workmeal',
+              type: 'post',
+              headers: {
+                  className: 'AppOrderService',
+                  methodName: 'billPayStatusCheck'
+              },
+              data: {
+                  billNo: billNo
+              },
+             success: function (data) {
+             if(callback){
+                //回调
+                callback(data);
+            }
+        }
+    });
+},
+
+
+            //删除订单
+            abandoned: function(item) {
+                var _this = this;
+                var _this = this;
+
+                //订单作废
+                billPayStatusCheck(bill_no,function(data){
+                    if(data.respCode == "200" || data.respCode == "201"){
+                        //200正常订单，201用户取消支付，202订单状态确认中
+                        weui.confirm('您确定取消订单吗？', {
+                            title: '提示',
+                            buttons: [{
+                                label: '取消',
+                                type: 'default',
+                                onClick: function() {
+                                    console.log('no')
+                                }
+                            }, {
+                                label: '确定',
+                                type: 'primary',
+                                onClick: function() {
+                                    $.ajax({
+                                        //url: _this.baseUrl + 'app_patientBillInfoController.do?suspendBillTaskAll',
+                                        url: _this.baseUrl + "meal",
+                                        type: "post",
+                                        headers: {
+                                            className: "AppOrderService",
+                                            methodName: "cancelOrder"
+                                        },
+                                        data: {
+                                            billNo: item.billNo,
+                                            userCode: "",
+                                            openId: _this.paintNo,
+                                            rejectReason: "取消订单"
+                                        },
+                                        success: function(data) {
+                                            var resp = data;
+                                            if (resp.success) {
+                                                _this.showMsg1("取消成功!");
+                                                setInterval(function() {
+                                                    location.reload()
+                                                }, 3000);
+                                                // setTimeout(location.reload(), 1000);
+                                            } else {
+                                                _this.showMsg(resp.respMsg);
+                                            }
+                                        }
+                                    });
+                                }
+                            }]
+                        });
+                    }else if(data.respCode == "202"){
+                        //201关闭超时订单，202关闭截止订单，206支付订单,无需重复操作
+                        mui.toast("订单支付状态确认中，请稍后再试");
+                        setTimeout(function(){
+                            location.reload();
+                        },1000);
+                    }
+                });
+            },
+            //订单详情
+            details: function(item) {
+                localStorage.setItem("billNo", item.billNo);
+                localStorage.setItem("billStatusName", item.statusName);
+                if (item.billNo.substring(0, 2) == "CC") {
+
+                    location.href = "comboDetails.html";
+                } else {
+
+                    location.href = "details.html"
+                }
+
+            }
+        },
+        mounted: function() {
+            this.$nextTick(function() {
+                this.init()
+                this.whiteShow = false
+            })
+        }
+    })
+</script>
+
+</html>

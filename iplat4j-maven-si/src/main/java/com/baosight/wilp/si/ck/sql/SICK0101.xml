@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="SICK0101">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.si.ck.domain.SiOutDetail">
+		SELECT
+				REC_CREATOR	as "recCreator",  <!-- 记录创建责任者 -->
+				REC_CREATE_TIME	as "recCreateTime",  <!-- 记录创建时间 -->
+				REC_REVISOR	as "recRevisor",  <!-- 记录修改责任者 -->
+				REC_REVISE_TIME	as "recReviseTime",  <!-- 记录修改时间 -->
+				ARCHIVE_FLAG	as "archiveFlag",  <!-- 归档标记 -->
+				ID	as "id",  <!-- 主键 -->
+				OUT_BILL_DETAIL_NO	as "outBillDetailNo",  <!-- 出库单明细号 -->
+				OUT_BILL_NO	as "outBillNo",  <!-- 出库单号 -->
+				OUT_TYPE	as "outType",  <!-- 出库类别 -->
+				out_type_name	as "outTypeName",  <!-- 出库类型名称 -->
+				mat_type_num as "matTypeNum", <!-- 物资分类编码 -->
+				mat_type_name as "matTypeName", <!-- 物资分类名称 -->
+				MAT_NUM	as "matNum",  <!-- 物资编码 -->
+				MAT_NAME	as "matName",  <!-- 物资名称 -->
+				MAT_MODEL	as "matModel",  <!-- 物资型号 -->
+				MAT_SPEC	as "matSpec",  <!-- 物资规格 -->
+				UNIT	as "unit",  <!-- 计量单位编码 -->
+				UNIT_NAME	as "unitName",  <!-- 计量单位名称 -->
+				OUT_NUM	as "outNum",  <!-- 出库数量 -->
+				OUT_PRICE	as "outPrice",  <!-- 出库单价 -->
+				OUT_AMOUNT	as "outAmount",  <!-- 出库明细 -->
+				<isNotEmpty property="showRedRush">   <!-- 显示已红冲数量 -->
+					(select ifnull(sum(b.out_num),0) from si_out a left join si_out_detail b on a.OUT_BILL_NO = b.OUT_BILL_NO
+					where a.ORIGIN_BILL_NO = si_out_detail.OUT_BILL_NO and b.mat_type_num = si_out_detail.mat_type_num
+					and b.MAT_NUM = si_out_detail.MAT_NUM and a.OUT_TYPE = '05') totalRedRushNum,
+				</isNotEmpty>
+				<isEmpty property="showRedRush">0 as totalRedRushNum,</isEmpty>
+				OUT_DATE	as "outDate",  <!-- 出库日期 -->
+				OUT_TIME	as "outTime",  <!-- 出库时间 -->
+				BATCH_NO	as "batchNo",  <!-- 物资条码号13 -->
+				BATCH_NUM	as "batchNum", <!-- 物资条码号12 -->
+				sort_no	as "sortNo" <!-- 排序字段 -->
+		FROM si_out_detail WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outBillDetailNo">
+			OUT_BILL_DETAIL_NO = #outBillDetailNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outBillNo">
+			OUT_BILL_NO = #outBillNo#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  sort_no, OUT_BILL_DETAIL_NO asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM si_out_detail WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outBillDetailNo">
+			OUT_BILL_DETAIL_NO = #outBillDetailNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outBillNo">
+			OUT_BILL_NO = #outBillNo#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert" parameterClass="java.util.List">
+		INSERT INTO si_out_detail (
+		   	REC_CREATOR,  <!-- 记录创建责任者 -->
+			REC_CREATE_TIME,  <!-- 记录创建时间 -->
+			REC_REVISOR,  <!-- 记录修改责任者 -->
+			REC_REVISE_TIME,  <!-- 记录修改时间 -->
+			ARCHIVE_FLAG,  <!-- 归档标记 -->
+			ID,  <!-- 主键 -->
+			OUT_BILL_DETAIL_NO,  <!-- 出库单明细号 -->
+			OUT_BILL_NO,  <!-- 出库单号 -->
+			OUT_TYPE,  <!-- 出库类别 -->
+			out_type_name,  <!-- 出库类型名称 -->
+			mat_type_num, <!-- 物资分类编码 -->
+			mat_type_name, <!-- 物资分类编码 -->
+			MAT_NUM,  <!-- 物资编码 -->
+			MAT_NAME,  <!-- 物资名称 -->
+			MAT_MODEL,  <!-- 物资型号 -->
+			MAT_SPEC,  <!-- 物资规格 -->
+			UNIT,  <!-- 计量单位编码 -->
+			UNIT_NAME,  <!-- 计量单位名称 -->
+			OUT_NUM,  <!-- 出库数量 -->
+			OUT_PRICE,  <!-- 出库单价 -->
+			OUT_AMOUNT,  <!-- 出库明细 -->
+			OUT_DATE,  <!-- 出库日期 -->
+			OUT_TIME,  <!-- 出库时间 -->
+			BATCH_NO,  <!-- 物资条码号13 -->
+			BATCH_NUM,  <!-- 物资条码号12 -->
+			sort_no  <!-- 排序字段 -->
+		)
+	    VALUES 
+	    <iterate conjunction=",">
+	    	 (
+		    	 #outDetailList[].recCreator#, 
+		    	 #outDetailList[].recCreateTime#, 
+		    	 #outDetailList[].recRevisor#, 
+		    	 #outDetailList[].recReviseTime#, 
+		    	 #outDetailList[].archiveFlag#, 
+		    	 #outDetailList[].id#, 
+		    	 #outDetailList[].outBillDetailNo#, 
+		    	 #outDetailList[].outBillNo#, 
+		    	 #outDetailList[].outType#, 
+		    	 #outDetailList[].outTypeName#,
+				 #outDetailList[].matTypeNum#,
+				 #outDetailList[].matTypeName#,
+		    	 #outDetailList[].matNum#, 
+		    	 #outDetailList[].matName#, 
+		    	 #outDetailList[].matModel#, 
+		    	 #outDetailList[].matSpec#, 
+		    	 #outDetailList[].unit#, 
+		    	 #outDetailList[].unitName#, 
+		    	 #outDetailList[].outNum#, 
+		    	 #outDetailList[].outPrice#, 
+		    	 #outDetailList[].outAmount#, 
+		    	 #outDetailList[].outDate#, 
+		    	 #outDetailList[].outTime#, 
+		    	 #outDetailList[].batchNo#, 
+		    	 #outDetailList[].batchNum#,
+				 #outDetailList[].sortNo#
+	    	 ) 
+	    </iterate>
+	</insert>
+
+	<update id="update" parameterClass="com.baosight.wilp.si.ck.domain.SiOutDetail">
+		UPDATE si_out_detail
+		SET 
+			OUT_PRICE	= #outPrice#,   <!-- 出库单价 -->  
+			OUT_AMOUNT	= #outAmount#  <!-- 出库明细 -->  
+		WHERE ID = #id#
+	</update>
+
+	<delete id="deleteByEnterBillNo" parameterClass="string" >
+		delete from si_out_detail where out_bill_no = (select si_out.out_bill_no from si_out where origin_bill_no = #value#)
+	</delete>
+  
+</sqlMap>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'"> -->
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.css" />
+    <link rel="stylesheet" href="../reference/css/iconfont.css" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="../reference/css/colorGreen.css" />
+    <link rel="stylesheet" href="../reference/css/loading.css" />
+    <link rel="stylesheet" href="../reference/css/clothCommon.css" />
+  </head>
+  <style>
+    .mui-content {
+      top: 60px;
+    }
+
+    .mui-btn-success {
+      margin-left: 120px;
+    }
+  </style>
+
+  <body>
+    <header class="mui-bar mui-bar-nav">
+      <h1 class="mui-title">扫描结果</h1>
+      <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+      </button>
+    </header>
+    <!-- 主内容 -->
+    <div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+      <div class="mui-scroll" id="content">
+        <ul class="list-ul" id="list"></ul>
+        <button type="button" class="mui-btn mui-btn-success">
+          扫描布草芯片
+        </button>
+      </div>
+    </div>
+  </body>
+  <script
+    src="../../../reference/bootstrap-3.3.5/js/jquery-2.1.4.js"
+    type="text/javascript"
+  ></script>
+  <script
+    src="../../../reference/bootstrap-3.3.5/js/bootstrap.min.js"
+    type="text/javascript"
+  ></script>
+  <script
+    src="../../../reference/mui/js/mui.js"
+    type="text/javascript"
+  ></script>
+  <script type="text/javascript">
+    //localStorage.setItem("url", "http://yapi.bonawise.com/mock/132/");
+    var baseUrl = localStorage.getItem("url");
+    var dataGroupCode = localStorage.getItem("dataGroupCode");
+    var deptNum = "";
+    var dataGroupCode = "BONA";
+    var barCode = "";
+    var html = "";
+    $(function() {
+      init();
+    });
+
+    function init() {
+      //扫条形码
+      $.ajax({
+        url: baseUrl + "app_clothCommomQuery.do?queryClothByBarCode",
+        type: "get",
+        data: {
+          dataGroupCode: dataGroupCode,
+          barCode: barCode
+        },
+        success: function(data) {
+          //console.log(data);
+          var data = JSON.parse(data);
+          $("#ks").val(data.obj.deptName);
+          deptNum = data.obj.deptNum;
+          console.log(deptNum);
+          getCleanList();
+        }
+      });
+    }
+
+    function getCleanList() {
+      //洁物应发查询
+      $.ajax({
+        url: baseUrl + "app_clothIssueQuery.do?queryDueIssue",
+        type: "get",
+        data: {
+          dataGroupCode: dataGroupCode,
+          detpNum: deptNum
+        },
+        success: function(data) {
+          var data = JSON.parse(data);
+          console.log(data);
+
+          var list = data.obj.obj;
+          for (var i = 0; i < list.length; i++) {
+            var clothTypeName = list[i].clothTypeName;
+            var clothModel = list[i].clothModel;
+            var num = list[i].issueNum;
+            html += create(clothTypeName, clothModel, num);
+          }
+          $("#list").html(html);
+        }
+      });
+    }
+    //加载列表
+    function create(clothTypeName, clothModel, num) {
+      var html = "";
+      html = ` <li>
+                    <ul class="list-part">
+                        <li class="first">
+                            布草分类名称：<span class="taskNo">${clothTypeName}</span>
+                        </li>
+                        <li>
+                            <span class="left-name">布草种类</span>
+                            <span class="status">${clothModel}</span>
+                        </li>
+                        <li>
+                            <span class="left-name">应发数量</span>
+                            <span class="status">${num}</span>
+                        </li>
+                    </ul>
+                </li>`;
+      return html;
+    }
+    mui("body").on("tap", "#back", function() {
+      location.href = "./cleanmain.html";
+    });
+    mui("body").on("tap", ".mui-btn-success", function() {
+      location.href = "./scanChip.html";
+    });
+  </script>
+</html>

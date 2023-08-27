@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SQDX01">
+    <select id="querySQMsg" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.sq.common.SqSmsConfig">
+        select
+            id,
+            config_type configType,
+            config_type_name configTypeName,
+            sms_temp smstemp,
+            `day`,
+            `time`,
+            is_running isRunning,
+            sms_recv_code smsRecvCode,
+            datagroup_code datagroupCode
+        from
+            sq_sms_config
+    </select>
+
+    <insert id="saveSQMsg" parameterClass="java.util.HashMap">
+        insert into sq_sms_config(
+            id,
+            config_type,
+            config_type_name,
+            sms_temp,
+            day,
+            time,
+            is_running,
+            sms_recv_code,
+            datagroup_code
+        ) values (
+            #id#,
+            #configType#,
+            #configTypeName#,
+            #smsTemp#,
+            #day#,
+            #time#,
+            #isRunning#,
+            #smsRecvCode#,
+            #datagroupCode#
+        )
+    </insert>
+
+    <delete id="deleteSQMsg" parameterClass="java.util.HashMap">
+        delete from sq_sms_config
+        <dynamic prepend="where">
+            <isNotEmpty prepend="and" property="id">
+                id = #id#
+            </isNotEmpty>
+        </dynamic>
+    </delete>
+
+    <select id="queryReceiverForWorkNoLead" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            work_no_leader workNo
+        from
+            sq_manage
+        where
+            batch_no = #batchNo#
+    </select>
+
+    <select id="queryReceiverForAll" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            work_no workNo
+        from
+             sq_personnel_group
+        <dynamic prepend="where">
+            <isNotEmpty prepend="and" property="projectCode">
+                per_group_no = #projectCode#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="batchNo">
+                work_no not in (select work_no from sq_item where parent_batch_no = #batchNo#)
+            </isNotEmpty>
+        </dynamic>
+    </select>
+
+    <select id="queryReceiverForRemainder" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            work_no workNo
+        from
+            sq_personnel_group
+        <dynamic prepend="where">
+            <isNotEmpty prepend="and" property="projectCode">
+                per_group_no = #projectCode#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="batchNo">
+                work_no not in (select work_no from sq_item where parent_batch_no = #batchNo#)
+            </isNotEmpty>
+        </dynamic>
+
+    </select>
+
+
+</sqlMap>

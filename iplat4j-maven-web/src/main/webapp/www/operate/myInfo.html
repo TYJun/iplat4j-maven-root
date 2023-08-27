@@ -1,0 +1,384 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.css">
+    <link rel="stylesheet" href="../reference/mui/css/iconfont.css">
+    <link rel="stylesheet" href="../css/common.css" />
+    <link rel="stylesheet" href="../css/colorGreen.css">
+    <link rel="stylesheet" href="../css/colorBlue.css">
+</head>
+<STYLE TYPE="text/css">
+    body{
+  background: #eee;
+}
+.icon-logo {
+  width: 35px;
+  height: 35px;
+}
+.mui-content > .mui-table-view:first-child {
+  margin-top: 0px;
+}
+.mui-page-content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #eee;
+}
+.round {
+  border: 1px solid #bbb;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  color:#fff;
+  background-color: #666666;
+  filter: alpha(opacity=80);            /* 用于IE浏览器－透明度为20%*/
+  -moz-opacity: 0.8;                    /*  用于Moz + Firefox－透明度为20%*/
+  opacity: 0.8;
+  -webkit-border-radius: 60px;
+  -moz-border-radius: 60px;
+  -o-border-radius: 60px;
+  border-radius: 60px;
+}
+.mui-card-header {
+  font-size: 14px;
+  color:#0090bb;
+  font-weight: 500;
+}
+.mui-card-header.mui-card-media .mui-media-body {
+  font-size: 14px;
+  font-weight: 500;
+  color: #0090bb;
+}
+.box {
+  width:100%;
+  height:100px;
+  background:#fff;
+  padding: 10px;
+  overflow: hidden;
+}
+.img_alt{
+  filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#7F000000, endcolorstr=#7F000000);
+  z-index:1;
+  height:30px;
+  line-height: 30px;
+  color: #444;
+  padding-left: 15px;
+  padding-right: 15px;
+  width:100%;
+  background: #fff;
+  letter-spacing: 1px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.update-windows{
+  /*position:fixed;*/
+  z-index:999;
+  background:#fff;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  background: rgba(0, 0, 0, 0.6);
+  filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#7F000000, endcolorstr=#7F000000);
+}
+.mui-grid-view.mui-grid-9 .mui-table-view-cell {
+  border-right: none;
+  border-bottom: none;
+}
+.mui-grid-view.mui-grid-9 .mui-media-body {
+  letter-spacing: 1px;
+}
+.mui-icon-pulldown {
+  margin-left: 24px;
+  padding-top: 18px;
+  transform: rotate(-90deg);
+}
+canvas {
+  margin-top: 10px;
+}
+.icon-gonggao {
+  font-size: 28px;
+  vertical-align: middle;
+  color: white;
+  padding-right: 4px;
+}
+.rolediv {
+  width:100%;
+  background:#fff;
+}
+nav.mui-bar-tab {
+  background-color:#fff;
+  margin-bottom: -3px;
+  box-shadow: 0 0 0.5px rgba(0, 0, 0, .2);
+}
+.updateDiv {
+  width:80%;
+  min-height:40%;
+  position:absolute;
+  bottom:30%;left:10%;
+}
+.updateDiv .versionUpdate {
+  height:50px;
+  line-height:50px;
+  text-align:center;
+  border-bottom:1px solid #eee;
+  font-size:18px;
+  font-weight:bold;
+  background:#30c37c;color:#fff;
+}
+.versionDiv {
+  min-height:150px;
+  padding:15px;
+  font-size:16px;
+}
+#update {
+  height:50px;
+  line-height:50px;
+  text-align:center;
+  border-top:1px solid #eee;
+  font-size:18px;
+  font-weight:bold;
+}
+#menuPic {
+  width:100%;
+  height:200px;
+  background:url(../img/hospital.jpg);
+  background-size:cover;
+}
+.hosNameDiv {
+  height: 40px;
+  line-height: 40px;
+  padding-left: 15px;
+  background: #ffffff;
+  color: #676767;
+  border-radius: 8px 8px 0 0;
+  margin: 0 5px;
+  font-size: 16px;
+}
+#changeColor {
+  touch-action: none;
+}
+#scrollGG .circle {
+  width: 10px;
+  height: 10px;
+  background: red;
+  border-radius: 50%;
+  position: absolute;
+  right: 8px;
+  top: 6px;
+}
+.mui-bar-nav {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+.mui-navigate-right:after {
+  font-size: 20px;
+}
+.settingBackColor p {
+  color: #fff;
+  font-size: 15px;
+}
+.settingBackColor p#name {
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+.settingBackColor p#telPhone {
+  width: 46%;
+  text-align: center;
+  border-radius: 10px;
+  opacity: 0.8;
+  letter-spacing: 1px;
+  margin-top: 4px;
+  font-size: 13px;
+}
+.settingBackColor .mui-navigate-right:after {
+  color: #fff;
+  font-size: 20px;
+}
+#currentVersion {
+  padding-left: 6px;
+}
+.mui-table-view-cell {
+  padding: 13px 15px;
+  font-size: 15px;
+}
+.mui-table-view-cell .iconfont {
+  font-size: 23px;
+  vertical-align: middle;
+  padding-right: 16px;
+  margin-top: -4px;
+}
+.mui-table-view-cell:after {
+  background: #e2e2e2;
+}
+
+
+</STYLE>
+<body>
+  <header id="accountHeader" class="mui-bar mui-bar-nav" hidden="hidden">
+    <h1 class="mui-title">个人信息</h1>
+    <button id="accountBack" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+    </button>
+  </header>
+  <header id="erCode" class="mui-bar mui-bar-nav" hidden="hidden">
+    <h1 class="mui-title">二维码分享</h1>
+    <button id="erCodeBack" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+    </button>
+  </header>
+  <div id="warn" class="warn" hidden>
+      <small></small>
+  </div>
+  <div class="mui-content">
+      <div id="accountDiv" hidden="hidden">
+        <ul class="mui-table-view mui-table-view-chevron">
+          <li class="mui-table-view-cell">
+              <a>姓名<i class="mui-pull-right name"></i></a>
+          </li>
+          <li class="mui-table-view-cell">
+              <a>工号<i id="workNo" class="mui-pull-right update"></i></a>
+          </li>
+          <li class="mui-table-view-cell">
+              <a class="mui-navigate-right" onclick="location.href='tel_modify.html'">手机号<i class="mui-pull-right telPhone"></i></a>
+          </li>
+          <li class="mui-table-view-cell">
+              <a class="mui-navigate-right" onclick="location.href='dept_modify.html'">科室名称<i id="deptName" class="mui-pull-right"></i></a>
+          </li>
+          <li class="mui-table-view-cell">
+              <a class="roleChild mui-navigate-right">角色</a>
+          </li>
+          <div id="role_name" style="width:100%;padding:15px;display: none;"></div>
+      </ul>
+    </div>
+  </div>
+  <div id="bigQr" class="update-window" hidden>
+      <div style="text-align:center;margin-top:50px;">
+          <div id="qrBcode" style="width:250px;height:250px;margin:0px auto;">
+              <img src="../img/icon.png" style="width:25px;height:auto;"><span style="font-size:18px;font-weight:bold;">一站式后勤</span>
+          </div>
+      </div>
+  </div>
+</body>
+<script type="text/javascript" src="../js/color.js"></script>
+<script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="../reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script type="text/javascript" src="../js/qrcode.js"></script>
+<script type="text/javascript" src="../js/jquery.qrcode.js"></script>
+<!-- <script src="../cordova.js" type="text/javascript"></script> -->
+<script type="text/javascript">
+var baseUrl = localStorage.getItem("url");
+var workNo = localStorage.getItem("workNo");
+var role = localStorage.getItem("role");
+var roleName = localStorage.getItem("roleName").split(",");
+var role_name = '';
+for (var i = 0; i < roleName.length; i++) {
+    role_name += '<span class="mui-badge mui-badge-inverted" style="margin-right:10px;margin-bottom:5px;font-size:13px;">' + roleName[i] + '</span>';
+}
+$("#role_name").html(role_name);
+var url = location.search;
+url = url.substring(1,url.length)
+console.log(url)
+
+$(function() {
+  if(url == 'myInfo'){
+    $('#accountHeader').show()
+    $('#accountDiv').show()
+    $('#erCode').hide()
+    $('#bigQr').hide()
+  }else {
+    qrCode();
+    $('#erCode').show()
+    $('#bigQr').show()
+    $('#accountHeader').hide()
+    $('#accountDiv').hide()
+  }
+    
+});
+//基本信息
+$('.name').html(localStorage.getItem("name"));
+$('#workNo').html(localStorage.getItem("workNo"));
+$('.telPhone').html(localStorage.getItem("telPhone") == "" ? "无" : localStorage.getItem("telPhone"));
+$('#deptName').html(localStorage.getItem("deptName"));
+
+/**
+ * 二维码
+ * @return {[type]} [description]
+ */
+function qrCode() {
+    var code = baseUrl + "downloads/frameworkModuleJob/downloadSystemObject/appurl.html?class=com.bonawise.yishenghuo";
+    $("#qrCode").qrcode({
+        "render": "canvas",
+        "size": 80,
+        "color": "#000000",
+        "text": code
+    });
+
+    $("#qrBcode").qrcode({
+        "render": "canvas",
+        "size": 200,
+        "color": "#000000",
+        "text": code
+    });
+}
+
+$("#colseQr").click(function() {
+    $("#bigQr").hide();
+});
+
+$("#qrCode").click(function() {
+    $("#bigQr").show();
+});
+
+mui('body').on('tap','#accountBack',function(){
+  location.href = '../setting.html';
+})
+
+mui('body').on('tap','.roleChild',function(){
+  if($('.roleChild').hasClass('select')){
+    $('.roleChild').removeClass('select');
+    $('#role_name').slideUp()
+  }else {
+    $('.roleChild').addClass('select');
+    $('#role_name').slideDown()
+  }
+})
+
+// 展示二维码
+mui('body').on('tap','.erweima',function(){
+  $('#theme').removeClass('select')
+  $('.changeTheme').slideUp()
+  $('nav.mui-bar').hide()
+  $('.mui-scroll').hide()
+  $('#header').hide()
+  $('#bigQr').show()
+  $('#erCode').show()
+  $('.mui-content').removeClass('shortDiv')
+})
+mui('body').on('tap','#erCodeBack',function(){
+  location.href = '../setting.html'
+})
+
+/**
+ * 系统返回键监听
+ */
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady() {
+  document.addEventListener("backbutton", onBackKeyDown, false);
+}
+function onBackKeyDown() {
+  location.href = '../setting.html'
+}
+
+</script>
+</html>

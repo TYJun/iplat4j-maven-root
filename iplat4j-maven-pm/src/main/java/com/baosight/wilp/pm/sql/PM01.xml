@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="PM01">
+
+	<select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.pm.domain.Tpm01">
+			SELECT
+			pr.ID as id,  
+			pr.PARENT_PROJECT_PK	as parentProjectPk, 
+			pr.PROJECT_NO	as projectNo, 
+			pr.PROJECT_NAME	as projectName,  
+			pr.PROJECT_PROP	as projectProp,  
+			pr.PROJECT_TYPE_NUM as projectTypeNum,
+			pr.PROJECT_TYPE_NAME as projectTypeName,
+			pr.PROJECT_CONTENT	as projectContent,
+			pr.PROJECT_STATUS	as projectStatus, 
+			pr.PROJECT_PROGRESS	as projectProgress, 
+			pr.PROJECT_OBJECT_CONS	as projectObjectCons,
+			pr.PROJECT_OBJECT_CONS_NAME as projectObjectConsName,
+			pr.PROJECT_OBJECT_DEPT_NUM	as projectObjectDeptNum,  
+			pr.PROJECT_OBJECT_DEPT_NAME as projectObjectDeptName,
+			pr.CONTOR_ID	as contorId,  
+			pr.CONTOR_NAME as projectPrincipal,
+			pr.UNDERTAKE_DEPT_NUM	as undertakeDeptNum, 
+			pr.UNDERTAKE_DEPT_NAME as undertakeDeptName,
+			pr.START_DATE	as startDate,  
+			pr.FINISH_DEADLINE	as finishDeadline,  
+			pr.ACT_FINISTH_DATE	as actFinisthDate,  
+			pr.FINISH_EXPENSE	as finishExpense,  
+			pr.PROJECT_REMARK	as projectRemark,  
+			pr.WINBID_EXPENSE	as winbidExpense,  
+			pr.YSTIME	as ystime,  
+			pr.ARCHIVE_FLAG	as archiveFlag, 
+			pr.DATAGROUP_CODE	as dataGroupCode,  
+			pr.REC_CREATOR	as recCreator, 
+			pr.REC_CREATE_TIME	as recCreateTime, 
+			pr.REC_REVISOR	as recRevisor, 
+			pr.REC_REVISE_TIME	as recReviseTime, 
+			pr.SUPPLIER_NUM as supplierNum,
+			pr.SUPPLIER_NAME AS supplierName 
+		FROM pm01 pr 
+		WHERE
+		  	1=1
+		<isNotEmpty prepend=" AND " property="id">
+			pr.ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="projectNo">
+			pr.PROJECT_NO like concat('%',#projectNo#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="projectName">
+			pr.PROJECT_NAME like concat('%',#projectName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="projectProp">
+			pr.PROJECT_PROP = #projectProp# 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="projectStatus">
+			pr.PROJECT_STATUS = #projectStatus#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="projectTypeNum">
+			pr.PROJECT_TYPE_NUM = #projectTypeNum# 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="projectStatusIN">
+			find_in_set(pr.PROJECT_STATUS,#projectStatusIN# )  
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="projectPrincipal">
+			pr.CONTOR_NAME like concat('%',#projectPrincipal#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="projectObjectDeptNum">
+			pr.PROJECT_OBJECT_DEPT_NUM = #projectObjectDeptNum# 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			pr.DATAGROUP_CODE = #dataGroupCode# 
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+         	<isNotEmpty property="orderBy">
+    		  	$orderBy$
+   		 	</isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  pr.PROJECT_NO desc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="count" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT count(*) FROM pm01 pr 
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			pr.ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="projectNo">
+			pr.PROJECT_NO like concat('%',#projectNo#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="projectName">
+			pr.PROJECT_NAME like concat('%',#projectName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="projectProp">
+			pr.PROJECT_PROP = #projectProp# 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="projectTypeNum">
+			pr.PROJECT_TYPE_NUM = #projectTypeNum# 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="projectStatus">
+			pr.PROJECT_STATUS = #projectStatus# 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="projectPrincipal">
+			pr.CONTOR_NAME like concat('%',#projectPrincipal#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="projectObjectDeptNum">
+			pr.PROJECT_OBJECT_DEPT_NUM = #projectObjectDeptNum# 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			pr.DATAGROUP_CODE = #dataGroupCode# 
+		</isNotEmpty>
+	</select>
+	
+	<delete id="delete">
+		DELETE FROM pm01 WHERE ID = #id# 
+	</delete>
+	
+	
+	<insert id="insert" parameterClass="com.baosight.wilp.pm.domain.Tpm01">
+		insert into pm01 (
+			ID,
+			PARENT_PROJECT_PK,
+			PROJECT_NO,
+			PROJECT_NAME,
+			PROJECT_PROP,
+			PROJECT_TYPE_NAME,
+			PROJECT_TYPE_NUM,
+			PROJECT_PRI_NUM,
+			PROJECT_CONTENT,
+			PROJECT_STATUS,
+			PROJECT_PROGRESS,
+			PROJECT_OBJECT_CONS_NAME,
+			PROJECT_OBJECT_CONS,
+			PROJECT_OBJECT_DEPT_NAME,
+			PROJECT_OBJECT_DEPT_NUM,
+			CONTOR_NAME,
+			CONTOR_ID,
+			UNDERTAKE_DEPT_NAME,
+			UNDERTAKE_DEPT_NUM,
+			SUPPLIER_NAME,
+			SUPPLIER_NUM,
+			START_DATE,
+			FINISH_DEADLINE,
+			ACT_FINISTH_DATE,
+			FINISH_EXPENSE,
+			PROJECT_REMARK,
+			WINBID_EXPENSE,
+			YSTIME,
+			ARCHIVE_FLAG,
+			DATAGROUP_CODE,
+			REC_CREATOR,
+			REC_CREATE_TIME,
+			REC_REVISOR,
+			REC_REVISE_TIME
+		) 
+		VALUES (
+			#id#,#parentProjectPk#,#projectNo#,#projectName#,#projectProp#,#projectTypeName#,#projectTypeNum#,
+			#projectPriNum#,#projectContent#,"01",#projectProgress#,#projectObjectConsName#,#projectObjectCons#,#projectObjectDeptName#,
+			#projectObjectDeptNum#,#contorName#,#contorId#,#undertakeDeptName#,#undertakeDeptNum#,#supplierName#,#supplierNum#,#startDate#,#finishDeadline#,
+			#actFinisthDate#,#finishExpense#,#projectRemark#,#winbidExpense#,#ystime#,
+			#archiveFlag#,#dataGroupCode#,#recCreator#,#recCreateTime#,#recRevisor#,#recReviseTime#
+		)
+	</insert>
+	
+	
+	<update id="update" parameterClass="com.baosight.wilp.pm.domain.Tpm01">
+		update pm01 set 
+			PROJECT_NAME = #projectName#,
+			PROJECT_PROP = #projectProp#,
+			PROJECT_TYPE_NUM = #projectTypeNum#,
+			PROJECT_TYPE_NAME = #projectTypeName#,
+			PROJECT_PRI_NUM = #projectPriNum#,
+			PROJECT_CONTENT = #projectContent#,
+			PROJECT_STATUS = #projectStatus#,
+			PROJECT_PROGRESS = #projectProgress#,
+			PROJECT_OBJECT_CONS_NAME = #projectObjectConsName#,
+			PROJECT_OBJECT_CONS = #projectObjectCons#,
+			PROJECT_OBJECT_DEPT_NUM = #projectObjectDeptNum#,
+			PROJECT_OBJECT_DEPT_NAME = #projectObjectDeptName#,
+			CONTOR_NAME = #contorName#,
+			CONTOR_ID = #contorId#,
+			UNDERTAKE_DEPT_NAME = #undertakeDeptName#,
+			UNDERTAKE_DEPT_NUM = #undertakeDeptNum#,
+			SUPPLIER_NUM = #supplierNum#,
+			SUPPLIER_NAME = #supplierName#,
+			START_DATE = #startDate#,
+			FINISH_DEADLINE = #finishDeadline#,
+			WINBID_EXPENSE = #winbidExpense#,
+			FINISH_EXPENSE = #finishExpense#,
+			PROJECT_REMARK = #projectRemark#,
+			REC_REVISOR = #recRevisor#,
+			REC_REVISE_TIME = #recReviseTime#
+		where id = #id#
+	</update>
+
+	<update id="cancell" parameterClass="java.lang.String">
+		update pm01 set PROJECT_STATUS = "88" where PROJECT_NO = #value#
+	</update>
+
+	<update id="startPR" parameterClass="java.lang.String">
+		update pm01 set PROJECT_STATUS = "02" where PROJECT_NO = #value#
+	</update>
+</sqlMap>

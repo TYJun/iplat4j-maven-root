@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="DMXX0102">
+
+    <!-- 更新宿舍信息表的相关信息 -->
+    <update id="updateDMInfoTable" parameterClass="java.util.HashMap">
+        update dorms_room
+        set
+        <isNotNull property="building">
+            building = #building#,  <!-- 宿舍楼 -->
+        </isNotNull>
+        <isNotNull property="floor">
+            floor = #floor#,  <!-- 宿舍层 -->
+        </isNotNull>
+        <isNotNull property="roomNo">
+            room_no = #roomNo#,  <!-- 宿舍号 -->
+        </isNotNull>
+        <isNotNull property="roomName">
+            room_name = #roomName#,  <!-- 宿舍总称(楼+层+宿舍号) -->
+        </isNotNull>
+        <isNotNull property="bedNum">
+            bed_num = #bedNum#,  <!-- 床位数 -->
+        </isNotNull>
+        <isNotNull property="remainingBedNum">
+            remaining_bed_num = #remainingBedNum#,  <!-- 剩余床位数 -->
+        </isNotNull>
+        <isNotNull property="typeCode">
+            type_code = #typeCode#,  <!-- 房间类型(1男生宿舍/0女生宿舍) -->
+        </isNotNull>
+        <isNotNull property="openRoom">
+            open_room = #openRoom#,  <!-- 是否开放选房(0: 未开放，1:已开放) -->
+        </isNotNull>
+        <isNotNull property="dormProperties">
+            dorm_properties = #dormProperties#,  <!-- 房间属性(学生宿舍/职工宿舍) -->
+        </isNotNull>
+        <isNotNull property="dormPosition">
+            dorm_position = #dormPosition#,  <!-- 宿舍位置：院内、院外 -->
+        </isNotNull>
+        <isNotNull property="dormArea">
+            dorm_area = #dormArea#,  <!-- 房屋面积："<50㎡"、"50-100㎡"、">100㎡" -->
+        </isNotNull>
+        <isNotNull property="elevatorRoom">
+            elevator_room = #elevatorRoom#,  <!-- 是否为电梯房 -->
+        </isNotNull>
+        <isNotNull property="priBathroom">
+            pri_bathroom = #priBathroom#,  <!-- 独立卫生间：有、没有 -->
+        </isNotNull>
+        <isNotNull property="rent">
+            rent = #rent#,  <!-- 房租 -->
+        </isNotNull>
+        <isNotNull property="manageFee">
+            manage_fee = #manageFee#,  <!-- 管理费 -->
+        </isNotNull>
+        <isNotNull property="annualFee">
+            annual_fee = #annualFee#,  <!-- 年费 -->
+        </isNotNull>
+        <isNotNull property="note">
+            note = #note#,  <!-- 备注信息 -->
+        </isNotNull>
+        <isNotNull property="recRevisorNo">
+            rec_revisor_no = #recRevisorNo#,  <!-- 修改人工号 -->
+        </isNotNull>
+        <isNotNull property="recRevisorName">
+            rec_revisor_name = #recRevisorName#,  <!-- 修改人 -->
+        </isNotNull>
+        <isNotNull property="recReviseTime">
+            rec_revise_time = #recReviseTime#,  <!-- 修改时间 -->
+        </isNotNull>
+        id=#roomId# <!-- 主键 -->
+        where id=#roomId#
+    </update>
+
+    <update id = "batchUpdateDormBedNum" parameterClass="java.util.List">
+        update dorms_room set remaining_bed_num =
+        <iterate conjunction="" open="CASE id" close="END">
+        <![CDATA[
+            WHEN #list[].id# THEN remaining_bed_num + #list[].num#
+        ]]>
+        </iterate>
+        WHERE id IN
+        <iterate conjunction="," open="(" close=")">
+            #list[].id#
+        </iterate>
+    </update>
+
+    <update id="updateRemainingBedNum" parameterClass="java.util.HashMap">
+        UPDATE dorms_room
+        SET remaining_bed_num = remaining_bed_num + (#differenceValue#),
+        id = #roomId#
+        WHERE
+        id = #roomId#
+    </update>
+
+    <update id="updatedormMarInsert" parameterClass="java.util.HashMap">
+        UPDATE dorm_mat
+        SET mat_code = #matCode#,
+            mat_name = #matName#,
+            mat_spec = #matSpec#,
+            mat_model = #matModel#,
+            num = #num#,
+            rec_create_time = now(),
+            rec_creator = #recCreator#,
+            dorm_id = #dormId#
+        WHERE
+            id = #id#
+    </update>
+
+    <insert id="insertdormMarInsert" parameterClass="java.util.HashMap">
+        insert into dorm_mat(id,dorm_id,mat_code,mat_name,mat_spec,mat_model,num,rec_create_time,rec_creator)
+            value (uuid(),#dormId#,#matCode#,#matName#,#matSpec#,#matModel#,#num#,now(),#recCreator#)
+    </insert>
+
+  
+</sqlMap>

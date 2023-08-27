@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+
+<sqlMap namespace="PRAP03">
+		
+	
+
+	<!-- 修改问题状态 -->
+	<update id="updateStatusCode" parameterClass="java.util.HashMap">
+		update pr_safty_danger set status_code = #statusCode# where id = #id#
+	</update>
+	
+  	
+  	<!-- 记录日志  -->
+	<insert id="logs" parameterClass="java.util.HashMap">
+		INSERT INTO pr_safty_danger_logs ( id, dangerID,logsNo, logsMan, logsTime, rejectStatus, rejectReason, dataGroupCode )
+		VALUES
+			( UUID(), #dangerID#,#logsNo#, #logsMan#, #logsTime#, #rejectStatus#, #rejectReason#, #dataGroupCode# )
+	</insert>
+	
+	
+	<!-- 查询问题图片自增键 -->
+	<select id="queryProblemPic" parameterClass="java.util.HashMap" resultClass="String">
+		select fileID from pr_common_file where fileName = #fileName#
+	</select>
+	
+	
+	<!-- 图片关联 -->
+	<insert id="picParam">
+		insert into pr_safty_danger_result_pic (picID,dangerResultID,fileID) VALUES (UUID(),#dangerResultID#,#fileID#)
+	</insert>
+	
+	
+	<!-- 查询问题自增键 -->
+	<select id="queryResultID" parameterClass="com.baosight.wilp.pr.gl.domain.PRGL0201" resultClass="String">
+		select dangerResultID from pr_safty_danger_result where 1=1
+	<isNotEmpty prepend=" AND " property="contentdesc">
+		contentDesc = #contentdesc#
+	</isNotEmpty>
+	<isNotEmpty prepend=" AND " property="dangerid">
+		dangerID = #dangerid#
+	</isNotEmpty>
+	<isNotEmpty prepend=" AND " property="finishTime">
+		finishTime = #finishTime#
+	</isNotEmpty>
+	<isNotEmpty prepend=" AND " property="writeMan">
+		writeMan = #writeMan#
+	</isNotEmpty>
+	<isNotEmpty prepend=" AND " property="writeTime">
+		writeTime = #writeTime#
+	</isNotEmpty>
+	<isNotEmpty prepend=" AND " property="localtypecode">
+		localTypeCode = #localtypecode#
+	</isNotEmpty>
+	</select>
+	
+	
+	<!-- 保存问题整改内容 -->
+	<insert id="insert" parameterClass="com.baosight.wilp.pr.gl.domain.PRGL0201">
+		insert into pr_safty_danger_result(
+			id,
+			dangerID,
+			contentDesc,
+			finishTime,
+			writeMan,
+			writeTime,
+			localTypeCode,
+			localTypeName
+		)values(
+		    #id#,
+			#dangerid#,
+			#contentdesc#,
+			#finishTime#,
+			#writeMan#,
+			#writeTime#,
+			#localtypecode#,
+			#localTypeName#
+		);
+	</insert>
+	
+	
+	
+	<!-- 保存整改图片信息 -->
+	<insert id="insertPic" parameterClass="java.util.HashMap">
+		INSERT INTO pr_common_file (id, fileID, fileName, storagePath )
+		VALUES
+		( UUID( ), #fileId#, #fileName#, #storagePath#)
+	</insert>
+	
+	
+	
+	<!-- 驳回整改 -->
+	<update id="turnDownAgree" parameterClass="String">
+		update pr_safty_danger set status_code = "01" where id = #value#
+	</update>	
+	
+	
+	<!-- 保存驳回评价  -->
+	<insert id="turnDownEvaluation" parameterClass="java.util.HashMap">
+		INSERT INTO pr_safty_danger_logs ( dangerLogsID, dangerID, logsMan, logsTime, rejectStatus, rejectReason )
+		VALUES
+			( UUID(), #dangerID#, #logsMan#, #logsTime#, #rejectStatus#, #rejectReason# )
+	</insert>
+	
+	
+	<!-- 同意整改 -->
+	<update id="agree" parameterClass="String">
+		update pr_safty_danger set status_code = "99" where id = #value#
+	</update>	
+	
+	
+	
+	<!-- 保存整改评价 -->
+	<update id="evaluation" parameterClass="java.util.HashMap">
+		update pr_safty_danger_result set auditContent = #opinion# where id = #dangerresultid#
+	</update>
+	
+	
+	
+	
+	<!-- 保存需要整改的问题 -->
+	<insert id="insertSafty" parameterClass="java.util.HashMap">
+		INSERT INTO pr_safty_danger (
+			id,
+			dangerWhere,
+			contentDesc,
+			requiredTime,
+			dangerLevel,
+			status_code,
+			localTypeName,
+			localTypeCode,
+			createTime,
+			createNo,
+			createMan,
+			dangerCode,
+			requiredesc,
+			dataGroupCode
+		)
+		VALUES (
+				   #id#,
+				   #dangerWhere#,
+				   #contentDesc#,
+				   #requiredTime#,
+				   #dangerLevel#,
+				   #statusCode#,
+				   #localTypeName#,
+				   #localTypeCode#,
+				   #createTime#,
+				   #createNo#,
+				   #createMan#,
+				   #dangerCode#,
+				   #requiredesc#,
+				   #dataGroupCode#
+			   )
+	</insert>
+	
+	
+	
+	<!-- 查询问题自增键 -->
+	<select id="queryProblem" parameterClass="java.util.HashMap" resultClass="String">
+		select dangerID from pr_safty_danger where 1=1
+	<isNotEmpty prepend=" AND " property="localTypeCode">
+		localTypeCode = #localTypeCode#
+	</isNotEmpty>
+	<isNotEmpty prepend=" AND " property="dangerWhere">
+		dangerWhere = #dangerWhere#
+	</isNotEmpty>
+	<isNotEmpty prepend=" AND " property="requiredTime">
+		requiredTime = #requiredTime#
+	</isNotEmpty>
+	<isNotEmpty prepend=" AND " property="dangerLevel">
+		dangerLevel = #dangerLevel#
+	</isNotEmpty>
+	<isNotEmpty prepend=" AND " property="contentDesc">
+		contentDesc = #contentDesc#
+	</isNotEmpty>
+	</select>
+	
+	
+	
+	<!-- 图片关联 -->
+	<insert id="picParamDanger">
+		insert into pr_safty_danger_pic (id, dangerID,fileID) VALUES ( UUID(), #dangerID#,#fileID#)
+	</insert>
+	
+	
+	
+	<!-- 查询整改表自增 -->
+	<select id="queryDangerResultID" parameterClass="String" resultClass="com.baosight.wilp.pr.gl.domain.PRGL0301">
+		select dangerResultID as dangerresultid from pr_safty_danger_result where dangerID = #value#
+	</select>
+	
+
+	<!-- 按整改表删除整改信息 -->
+	<delete id="deleteDangerResult" parameterClass="String">
+		delete from pr_safty_danger_result where id = #value#
+	</delete>
+
+	
+	<!-- 查询整改图片关联表 -->
+	<select id="queryFileID" parameterClass="String" resultClass="com.baosight.wilp.pr.gl.domain.PRGL0301">
+		SELECT 
+			cf.fileID as fileID,
+			cf.fileName as fileName,
+			cf.storagePath as storagePath
+		FROM
+			pr_common_file cf
+			LEFT JOIN pr_safty_danger_result_pic pic ON pic.fileID = cf.fileID
+		WHERE
+			dangerResultID = #value#
+	</select>
+	
+	<!-- 删除关联表图片信息 -->
+	<delete id="deleteResultPic" parameterClass="String">
+		delete from pr_safty_danger_result_pic where fileID = #value#
+	</delete>
+	
+	
+	<!-- 删除图片表信息 -->
+	<delete id="deleteCommonPic" parameterClass="String">
+		delete from pr_common_file where fileID = #value#
+	</delete>
+
+
+	<!--通过问题id查询整改后图片路径-->
+	<select id="afterQueryPic" parameterClass="String" resultClass="com.baosight.wilp.pr.gl.domain.PRGL0201">
+		SELECT
+			tf.storagePath as storagePath,
+			tf.fileID as id
+		FROM
+			pr_common_file tf
+				LEFT JOIN pr_safty_danger_result_pic pp ON tf.fileID = pp.fileID
+				LEFT JOIN pr_safty_danger_result pr ON pr.id = pp.dangerResultID
+		WHERE
+			pr.dangerID = #value#
+	</select>
+
+</sqlMap>

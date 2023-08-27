@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="IRSY01">
+
+	<typeAlias alias="BS" type="com.baosight.wilp.ir.sy.domain.BusinessShortCut"/>
+	<select id="queryBusinessShortCut" parameterClass="java.util.HashMap" resultClass="BS">
+		select
+			   id,
+		       work_no workNo,
+		       node_ename nodeEname,
+		       node_cname nodeCname,
+		       click_num clickNum,
+		       flag,
+		       update_time updateTime,
+		       url
+		from ${platSchema}.xs_user_business_shortcut
+		<dynamic prepend=" where ">
+			<isNotEmpty prepend=" AND " property="workNo">
+				work_no = #workNo#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="nodeEname">
+				node_ename = #nodeEname#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="nodeCname">
+				node_cname = #nodeCname#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="flag">
+				flag = #flag#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<insert id="addBusinessShortCut" parameterClass="java.util.HashMap">
+		insert into ${platSchema}.xs_user_business_shortcut
+		(
+		 id,
+		 work_no,
+		 node_ename,
+		 node_cname,
+		 click_num,
+		 flag,
+		 update_time,
+		 url
+		)
+		values
+		(
+		 uuid(),
+		 #workNo#,
+		 #nodeEname#,
+		 #nodeCname#,
+		 #clickNum#,
+		 '1',
+		 #updateTime#,
+		 #url#
+		)
+	</insert>
+
+	<update id="updateBusinessShortCut" parameterClass="java.util.HashMap">
+		update ${platSchema}.xs_user_business_shortcut
+		<dynamic prepend="SET">
+			<isNotEmpty prepend="," property="workNo">
+				work_no = #workNo#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="nodeEname">
+				node_ename = #nodeEname#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="nodeCname">
+				node_cname = #nodeCname#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="clickNum">
+				click_num = #clickNum#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="flag">
+				flag = #flag#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="updateTime">
+				update_time = #updateTime#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="url">
+				url = #url#
+			</isNotEmpty>
+		</dynamic>
+		<dynamic prepend=" where ">
+			<isNotEmpty prepend=" AND " property="workNo">
+				work_no = #workNo#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="nodeEname">
+				node_ename = #nodeEname#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="nodeCname">
+				node_cname = #nodeCname#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="flag">
+				flag = #flag#
+			</isNotEmpty>
+		</dynamic>
+	</update>
+
+	<select id="queryNodeInfo" resultClass="java.util.HashMap">
+		SELECT
+			form_ename nodeEname,
+			form_cname nodeCname
+		FROM ${platSchema}.TEDFA00
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend=" AND " property="nodeEname">
+				form_ename = #nodeEname#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+</sqlMap>

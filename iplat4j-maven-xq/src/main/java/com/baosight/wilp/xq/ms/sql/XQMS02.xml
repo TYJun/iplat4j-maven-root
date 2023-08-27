@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="XQMS02">
+
+<!--    &#45;&#45;          sign_cert,-->
+<!--    &#45;&#45;          `timestamp`,-->
+    <insert id="insertSignDataRecords" parameterClass="java.util.HashMap">
+        insert into ${projectSchema}.sign_data_records
+        (
+         file_name,
+         file_code,
+         user_id,
+         transaction_id,
+         creator,
+         create_time
+        )
+        values
+        (
+            #signDataItem.fileName#,
+            #signDataItem.fileCode#,
+            #signDataItem.userId#,
+            #signDataItem.transactionId#,
+            #username#,
+            #createTime#
+        )
+    </insert>
+
+    <insert id="insertMultiSignDataRecords" parameterClass="java.util.HashMap">
+        insert into ${projectSchema}.sign_data_records
+        (
+            file_name,
+            file_code,
+            user_id,
+            transaction_id,
+            creator,
+            create_time
+        )
+        values
+        <iterate  conjunction="," property="signDataItemLists">
+            (
+                #signDataItemLists[].fileName#,
+                #signDataItemLists[].fileCode#,
+                #signDataItemLists[].userId#,
+                #signDataItemLists[].transactionId#,
+                #username#,
+                #createTime#
+            )
+        </iterate>
+    </insert>
+
+
+</sqlMap>

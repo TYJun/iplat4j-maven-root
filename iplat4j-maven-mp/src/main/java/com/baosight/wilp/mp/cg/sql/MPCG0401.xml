@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="MPCG0401">
+
+
+
+	<select id="queryDetail" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.mp.lj.domain.MpPurchasePlanDetail">
+		SELECT
+		id	as "id",  <!-- 主键 -->
+		purchase_id	as "purchaseId",  <!-- 采购计划ID -->
+		mat_num	as "matNum",  <!-- 物资编码 -->
+		mat_name	as "matName",  <!-- 物资名称 -->
+		mat_type_id	as "matTypeId",  <!-- 物资分类ID -->
+		mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+		mat_spec	as "matSpec",  <!-- 物资规格 -->
+		mat_model	as "matModel",  <!-- 物资型号 -->
+		unit	as "unit",  <!-- 计量单位 -->
+		price	as "price",  <!-- 单价 -->
+		num	as "num" <!-- 计划数量 -->
+		FROM .mp_purchase_plan_detail WHERE 1=1
+
+		<isNotEmpty prepend=" AND " property="purchaseId">
+			purchase_id = #purchaseId#
+		</isNotEmpty>
+
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				id asc
+			</isEmpty>
+		</dynamic>
+
+	</select>
+
+</sqlMap>

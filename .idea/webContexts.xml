@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebContextManager">
+    <option name="state">
+      <map>
+        <entry key="file://$PROJECT_DIR$/iplat4j-maven-web/src/main/webapp/mzsrmyy/confirm.html" value="file://$PROJECT_DIR$/iplat4j-maven-web/src/main/webapp/mzsrmyy" />
+        <entry key="file://$PROJECT_DIR$/iplat4j-maven-web/src/main/webapp/mzsrmyy/index.html" value="file://$PROJECT_DIR$/iplat4j-maven-web/src/main/webapp/mzsrmyy" />
+        <entry key="file://$PROJECT_DIR$/iplat4j-maven-web/src/main/webapp/www/html/meal/meal_PC/inDinner.html" value="file://$PROJECT_DIR$/iplat4j-maven-web/src/main/webapp/www/html/meal/meal_PC" />
+        <entry key="file://$PROJECT_DIR$/iplat4j-maven-web/src/main/webapp/www/login.html" value="file://$PROJECT_DIR$/iplat4j-maven-web/src/main/webapp/www" />
+        <entry key="file://$PROJECT_DIR$/iplat4j-maven-web/src/main/webapp/www/menu.html" value="file://$PROJECT_DIR$/iplat4j-maven-web/src/main/webapp/www" />
+      </map>
+    </option>
+  </component>
+</project>

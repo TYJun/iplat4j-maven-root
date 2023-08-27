@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ACPE0102">
+
+	<select id="queryPerlInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			SELECT t.* FROM (
+				select ap.id AS "id",
+						 ap.work_no AS "workNo",         <!-- 工号 -->
+						 ap.name AS "name",              <!-- 姓名 -->
+						 ap.gender AS "gender",
+						 (CASE WHEN ap.gender = '1' 
+										THEN '男' 
+							      ELSE '女'
+							 END) AS "genderText",           <!-- 性别 -->
+						 ap.contact_tel AS "contactTel", <!-- 联系电话-->
+						 ap.dept_id AS "deptId",         <!-- 所属科室ID-->
+						 ad.dept_name AS "deptName",     <!-- 所属科室名称-->
+						 ap.id_no AS "idNo",             <!-- 身份证号-->
+						 ap.type AS "type",              <!-- 员工类型code-->
+						 ap.is_service AS "isService",
+						 (CASE WHEN ap.is_service = '1' 
+										THEN '是' 
+							      ELSE '否'
+							 END) AS "isServiceText",        <!-- 服务人员 -->
+						 ap.status AS "status"
+				from $projectSchema$.ac_personnel ap
+				LEFT JOIN $projectSchema$.ac_department ad ON ad.id = ap.dept_id
+		    ) t
+			WHERE t.id = #id# 
+	 
+	</select>
+
+	<update id="update" parameterClass="java.util.HashMap">
+	    update $projectSchema$.ac_personnel 
+	    set 
+	    		<isNotNull  property="workNo">
+			    	work_no = #workNo#, 
+			    </isNotNull>
+				<isNotNull  property="name">
+			    	name = #name#, 
+			    </isNotNull>
+				<isNotNull  property="deptId">
+			    	dept_id = #deptId#, 
+			    </isNotNull>
+			    <isNotNull  property="contactTel">
+			    	contact_tel = #contactTel#, 
+			    </isNotNull>
+				<isNotNull  property="idNo">
+			    	id_no = #idNo#, 
+			    </isNotNull>
+				<isNotNull  property="type">
+			    	type = #type#, 
+			    </isNotNull>
+				<isNotNull  property="gender">
+			    	gender = #gender#, 
+			    </isNotNull>
+			    <isNotNull  property="isService">
+			    	is_service = #isService#, 
+			    </isNotNull>
+				<isNotNull  property="status">
+			    	status = #status#,
+			    </isNotNull>
+				<isNotNull  property="recRevisor">
+			    	rec_revisor = #recRevisor#, 
+			    </isNotNull>
+				<isNotNull  property="recReviseTime">
+			    	rec_revise_time = #recReviseTime#, 
+			    </isNotNull>
+	    	id=#id#
+	    where id=#id#
+    </update>
+	
+</sqlMap>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="SSBMJK03">
+
+<select id="query" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+	SELECT
+		 a.`REC_CREATOR`,
+		  a.`REC_CREATE_NAME`,
+		  a.`REC_REVISE_TIME`,
+		  a.`REC_REVISOR`,
+		  a.`REC_CREATE_TIME`,
+		  a.`ARCHIVE_FLAG`,
+		  a.`bill_no`,
+		  a.`open_id`,
+		  a.`user_name`,
+		  a.`user_tel_number`,
+		  a.`meal_num`,
+		  a.`meal_num_name`,
+		  a.`address`,
+		  a.`req_send_time`,
+		  a.`bill_total_price`,
+		  a.`canteen_num`,
+		  a.`canteen_name`,
+		  a.`bill_remark`,
+		  a.`pay_type`,
+		  a.`pay_type_name`,
+		  a.`status_code`,
+		  a.`self_code`,
+		  a.`current_dealer`,
+		  a.`process_inst_id`,
+		  a.`print_flag`,
+		  a.`order_way`,
+		  a.`need_date`,
+		  a.`reject_code`,
+		  a.`reject_reason`,
+		  a.`pay_no`,
+		  a.`card_id`,
+		  a.`dept_name`,
+		  a.`dept_num`,
+		  a.`building`,
+		  a.`building_name`,
+		  a.`floor`,
+		  a.`room`,
+		  a.`transaction_id`,
+		  a.`ship_fee`,
+		  b.`REC_CREATOR`,
+		   b.`REC_CREATE_NAME`,
+		  b.`REC_REVISE_TIME`,
+		   b.`REC_REVISOR`,
+		   b.`REC_CREATE_TIME`,
+		   b.`bill_no`,
+		   b.`bill_detail_no`,
+		   b.`menu_num`,
+		   b.`menu_name`,
+		   b.`menu_number`,
+		   b.`menu_price`,
+		   b.`menu_total_price`,
+		   b.`eval_level`,
+		   b.`eval_content`,
+		   b.`sche_id`,
+		   b.`package_price`
+		FROM sc_work_order_bill a
+		LEFT JOIN sc_work_order_bill_detail b ON a.bill_no = b.bill_no
+		WHERE 1=1
+		AND a.dept_num = #dept#
+		AND a.status_code > '00'
+		AND '99' >= a.status_code
+		AND (a.reject_code IS NULL)
+		GROUP BY a.dept_name
+		ORDER BY a.dept_name
+   </select>
+<!--	<select id="query1" resultClass="HashMap" parameterClass="java.util.HashMap">-->
+<!--		SELECT-->
+<!--		 a.`REC_CREATOR`,-->
+<!--		  a.`REC_CREATE_NAME`,-->
+<!--		  a.`REC_REVISE_TIME`,-->
+<!--		  a.`REC_REVISOR`,-->
+<!--		  a.`REC_CREATE_TIME`,-->
+<!--		  a.`ARCHIVE_FLAG`,-->
+<!--		  a.`bill_no`,-->
+<!--		  a.`open_id`,-->
+<!--		  a.`user_name`,-->
+<!--		  a.`user_tel_number`,-->
+<!--		  a.`meal_num`,-->
+<!--		  a.`meal_num_name`,-->
+<!--		  a.`address`,-->
+<!--		  a.`req_send_time`,-->
+<!--		  a.`bill_total_price`,-->
+<!--		  a.`canteen_num`,-->
+<!--		  a.`canteen_name`,-->
+<!--		  a.`bill_remark`,-->
+<!--		  a.`pay_type`,-->
+<!--		  a.`pay_type_name`,-->
+<!--		  a.`status_code`,-->
+<!--		  a.`self_code`,-->
+<!--		  a.`current_dealer`,-->
+<!--		  a.`process_inst_id`,-->
+<!--		  a.`print_flag`,-->
+<!--		  a.`order_way`,-->
+<!--		  a.`need_date`,-->
+<!--		  a.`reject_code`,-->
+<!--		  a.`reject_reason`,-->
+<!--		  a.`pay_no`,-->
+<!--		  a.`card_id`,-->
+<!--		  a.`dept_name`,-->
+<!--		  a.`dept_num`,-->
+<!--		  a.`building`,-->
+<!--		  a.`building_name`,-->
+<!--		  a.`floor`,-->
+<!--		  a.`room`,-->
+<!--		  a.`transaction_id`,-->
+<!--		  a.`ship_fee`,-->
+<!--		  b.`REC_CREATOR`,-->
+<!--		   b.`REC_CREATE_NAME`,-->
+<!--		  b.`REC_REVISE_TIME`,-->
+<!--		   b.`REC_REVISOR`,-->
+<!--		   b.`REC_CREATE_TIME`,-->
+<!--		   b.`bill_no`,-->
+<!--		   b.`bill_detail_no`,-->
+<!--		   b.`menu_num`,-->
+<!--		   b.`menu_name`,-->
+<!--		   b.`menu_number`,-->
+<!--		   b.`menu_price`,-->
+<!--		   b.`menu_total_price`,-->
+<!--		   b.`eval_level`,-->
+<!--		   b.`eval_content`,-->
+<!--		   b.`sche_id`,-->
+<!--		   b.`package_price`-->
+<!--		FROM sc_work_order_bill a-->
+<!--		LEFT JOIN sc_work_order_bill_detail b ON a.bill_no = b.bill_no-->
+<!--		WHERE 1=1-->
+<!--		AND a.dept_num = #dept#-->
+<!--		AND a.status_code > '00'-->
+<!--		AND '99' >= a.status_code-->
+<!--		AND (a.reject_code IS NULL)-->
+<!--		GROUP BY a.dept_name-->
+<!--		ORDER BY a.dept_name-->
+<!--	</select>-->
+  
+</sqlMap>

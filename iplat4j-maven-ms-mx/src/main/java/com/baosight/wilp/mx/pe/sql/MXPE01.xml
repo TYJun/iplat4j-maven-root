@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MXPE01">
+
+    <select id="queryCountForRealTime" resultClass="int" parameterClass="java.util.HashMap">
+        SELECT
+        a.id
+        FROM
+        t_alarm_log a
+        WHERE 1=1
+        <isNotEmpty prepend="and" property="month">
+            DATE_FORMAT(a.start_time,'%Y-%m') = #month#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="day">
+            DATE_FORMAT(a.start_time,'%Y-%m-%d') = #day#
+        </isNotEmpty>
+    </select>
+
+    <select id="queryCountForCancel" resultClass="int" parameterClass="java.util.HashMap">
+        SELECT
+        a.id
+        FROM
+        t_alarm_log a
+        WHERE a.end_time is NOT NULL
+        <isNotEmpty prepend="and" property="month">
+            DATE_FORMAT(a.start_time,'%Y-%m') = #month#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="day">
+            DATE_FORMAT(a.start_time,'%Y-%m-%d') = #day#
+        </isNotEmpty>
+    </select>
+
+    <select id="queryCountForConfirmed" resultClass="int" parameterClass="java.util.HashMap">
+        SELECT
+        a.id
+        FROM
+        t_alarm_log a
+        WHERE a.process_start_time is NOT NULL
+        <isNotEmpty prepend="and" property="month">
+            DATE_FORMAT(a.start_time,'%Y-%m') = #month#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="day">
+            DATE_FORMAT(a.start_time,'%Y-%m-%d') = #day#
+        </isNotEmpty>
+    </select>
+
+    <select id="queryCountForUnconfirmed" resultClass="int" parameterClass="java.util.HashMap">
+        SELECT
+        a.id
+        FROM
+        t_alarm_log a
+        WHERE a.end_time is NULL AND a.process_start_time is NULL
+        <isNotEmpty prepend="and" property="month">
+            DATE_FORMAT(a.start_time,'%Y-%m') = #month#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="day">
+            DATE_FORMAT(a.start_time,'%Y-%m-%d') = #day#
+        </isNotEmpty>
+    </select>
+
+    <select id="queryCountForAlarmType" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+        SELECT
+        a.description_ `name`, COUNT(a.id) `value`
+        FROM
+        t_alarm_log a
+        WHERE 1=1
+        <isNotEmpty prepend="and" property="month">
+            DATE_FORMAT(a.start_time,'%Y-%m') = #month#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="day">
+            DATE_FORMAT(a.start_time,'%Y-%m-%d') = #day#
+        </isNotEmpty>
+        GROUP BY a.description_
+    </select>
+
+    <select id="queryCountForClassify" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+        SELECT
+        a.classify_ `name`, COUNT(a.id) `value`
+        FROM
+        t_alarm_log a
+        WHERE 1=1
+        <isNotEmpty prepend="and" property="month">
+            DATE_FORMAT(a.start_time,'%Y-%m') = #month#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="day">
+            DATE_FORMAT(a.start_time,'%Y-%m-%d') = #day#
+        </isNotEmpty>
+        GROUP BY a.classify_
+    </select>
+
+    <select id="queryStatsMonthAddForHistory" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+        SELECT
+        DATE_FORMAT(a.start_time,'%Y-%m-%d') as `time`, COUNT(id) `value`
+        FROM
+        t_alarm_log a
+        WHERE 1=1
+        <isNotEmpty prepend="and" property="exist">
+            a.end_time is NULL
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="month">
+            DATE_FORMAT(a.start_time,'%Y-%m') = #month#
+        </isNotEmpty>
+        GROUP BY DATE_FORMAT(a.start_time,'%Y-%m-%d')
+    </select>
+
+    <select id="queryStatsDayAddForHistory" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+        SELECT
+        DATE_FORMAT(a.start_time,'%Y-%m-%d %H') as `time`, COUNT(a.id) `value`
+        FROM
+        t_alarm_log a
+        WHERE 1=1
+        <isNotEmpty prepend="and" property="exist">
+            a.end_time is NULL
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="day">
+            DATE_FORMAT(a.start_time,'%Y-%m-%d') = #day#
+        </isNotEmpty>
+        GROUP BY DATE_FORMAT(a.start_time,'%Y-%m-%d %H')
+    </select>
+
+</sqlMap>

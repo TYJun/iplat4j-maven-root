@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!-- table information Generate time : 2021-05-28 14:14:46 Version : 6.0.731.201809200158 
+	tableName :.di_device_packet id VARCHAR NOT NULL primarykey, packet_code 
+	VARCHAR, packet_name VARCHAR, content_class VARCHAR, memo VARCHAR, createTime 
+	DATETIME, createMan VARCHAR, createIP VARCHAR, modifyTime DATETIME, modifyMan 
+	VARCHAR, modifyIP VARCHAR, status VARCHAR -->
+<sqlMap namespace="DIJZ02">
+
+
+	<!-- 删除设备包中信息 -->
+	<delete id="deleteInspection"
+		parameterClass="java.util.ArrayList">
+		DELETE FROM di_device_packet WHERE
+		id
+		IN
+		<iterate conjunction="," open="(" close=")">
+			#value[]#
+		</iterate>
+	</delete>
+
+	<!-- 删除设备包明细中信息 -->
+	<delete id="deleteRelation" parameterClass="String">
+		DELETE FROM
+		di_device_packet_relation WHERE packet_id = #value#
+	</delete>
+
+
+
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.di.jz.domain.DiDevicePacket">
+		SELECT
+		CASE
+		WHEN status = '0' THEN '新建'
+		WHEN status = '1' THEN '启用'
+		WHEN status = '-1' THEN '禁用'
+		END "status",
+		id as "id",
+		packet_code as "packetCode",
+		packet_name as "packetName",
+		content_class as "contentClass",
+		memo as "memo",
+		createTime as "createtime",
+		createMan as "createman",
+		createIP as "createip",
+		modifyTime as "modifytime",
+		modifyMan as "modifyman",
+		modifyIP as "modifyip"
+		FROM di_device_packet WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status">
+			status = #status#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineCode">
+			packet_code like
+			'%$machineCode$%'
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineName">
+			packet_name like
+			'%$machineName$%'
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				id asc
+			</isEmpty>
+		</dynamic>
+
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM di_device_packet WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+
+	<!-- 修改基准状态 -->
+	<update id="updateStatus" parameterClass="java.util.HashMap">
+		UPDATE di_device_packet
+		SET
+		<isNotNull property="status">
+			status = #status#
+		</isNotNull>
+		WHERE
+		id = #id#
+	</update>
+
+</sqlMap>

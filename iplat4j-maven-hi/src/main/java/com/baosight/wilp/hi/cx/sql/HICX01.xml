@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HICX01">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.hi.common.domain.HiIcon">
+		SELECT
+		id	as "id",  <!-- 主键 -->
+		apply_no	as "applyNo",  <!-- 申请单号 -->
+		icon_num	as "iconNum",  <!-- 标识编号 -->
+		icon_name	as "iconName",  <!-- 标识名称 -->
+		icon_zh_content	as "iconZhContent",  <!-- 标识中文内容 -->
+		icon_en_content	as "iconEnContent",  <!-- 标识英文内容 -->
+		classify_id	as "classifyId",  <!-- 标识分类表ID -->
+		classify_name	as "classifyName",  <!-- 标识分类名称 -->
+		icon_amount	as "iconAmount",  <!-- 数量 -->
+		building	as "building",  <!-- 楼 -->
+		floor	as "floor",  <!-- 层 -->
+		spot_code	as "spotCode",  <!-- 安装地点编码 -->
+		spot_name	as "spotName",  <!-- 安装地点名称 -->
+		spot_desc	as "spotDesc",  <!-- 安装地点说明 -->
+		install_date	as "installDate",  <!-- 安装日期 -->
+		dept_num	as "deptNum",  <!-- 使用科室编码 -->
+		dept_name	as "deptName",  <!-- 使用科室名称 -->
+		manager_no	as "managerNo",  <!-- 管理员工号 -->
+		manager_name	as "managerName",  <!-- 管理员姓名 -->
+		status	as "status",  <!-- 状态(0=新建,1=启用,-1=停用) -->
+		remark	as "remark",  <!-- 备注 -->
+		rec_creator	as "recCreator",  <!-- 创建人 -->
+		rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		rec_revisor	as "recRevisor",  <!-- 修改人 -->
+		rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+		data_group_code	as "dataGroupCode",  <!-- 账套 -->
+		archive_flag	as "archiveFlag" <!-- 归档标记 -->
+		FROM .hi_icon WHERE
+        status = '01'
+		<isNotEmpty prepend=" AND " property="iconNum">
+			icon_num like concat('%',#iconNum#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="iconName">
+			icon_name like concat('%',#iconName#,'%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="classifyName">
+			classify_name like concat('%',#classifyName#,'%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name like concat('%',#deptName#,'%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name  = #deptName#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="building">
+			building  = #building#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="floor">
+			floor  = #floor#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="installDateS">
+			install_date <![CDATA[ >= ]]>  #installDateS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="installDateE">
+			install_date  <![CDATA[ <= ]]> #installDateE#
+		</isNotEmpty>
+
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				id asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="queryCount" resultClass="int">
+		SELECT
+			COUNT(id)
+		from hi_icon
+       where
+		status = '01'
+		<isNotEmpty prepend=" AND " property="iconNum">
+			icon_num like concat('%',#iconNum#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="iconName">
+			icon_name like concat('%',#iconName#,'%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="classifyName">
+			classify_name like concat('%',#classifyName#,'%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name like concat('%',#deptName#,'%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name  = #deptName#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="building">
+			building  = #building#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="floor">
+			floor  = #floor#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="installDateS">
+			install_date <![CDATA[ >= ]]>  #installDateS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="installDateE">
+			install_date  <![CDATA[ <= ]]> #installDateE#
+		</isNotEmpty>
+
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .hi_classify WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="classifyNum">
+			classify_num like concat('%', #classifyNum#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="classifyName">
+			classify_name like concat('%', #classifyName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="parentId">
+			parent_id = #parentId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+	</select>
+
+
+
+	<select id="queryStandardNum" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.hi.common.domain.HiStandard">
+		SELECT
+		t1.id	as "id",
+		t1.standard_num	as "standardNum",
+		t1.standard_name	as "standardName",
+		t1.classify_id	as "classifyId",
+		t1.classify_name	as "classifyName",
+		t1.remark	as "remark",
+		t1.rec_creator	as "recCreator",
+		t1.rec_create_time	as "recCreateTime",
+		t1.rec_revisor	as "recRevisor",
+		t1.rec_revise_time	as "recReviseTime",
+		t1.data_group_code	as "dataGroupCode",
+		t1.archive_flag	as "archiveFlag"
+		FROM .hi_standard t1
+		WHERE
+		classify_id = #classifyId#
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				standard_num asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+
+
+	<!-- PC端查询医院标识地点分类 -->
+	<select id="queryItemTypeTree" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		t1.building AS "label",
+		t1.building AS "code",
+		t1.building AS "text",
+		"root" AS "pId" ,
+		CASE WHEN t1.floor IS NOT NULL
+		THEN 0
+		ELSE 1
+		END AS leaf
+		FROM
+		hi_icon t1
+
+		group by t1.building
+
+
+	</select>
+
+
+	<select id="queryItemTypeTreeTwo" parameterClass="java.util.HashMap"  resultClass="java.util.HashMap">
+		select
+			t1.floor as "label",
+			t1.spot_code as "code",
+			t1.floor as "text",
+			t1.building as "pId",
+			"1" as leaf
+		FROM
+			hi_icon t1
+
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend=" AND " property="parentId">
+			t1.building = #parentId#
+		</isNotEmpty>
+			</dynamic>
+		group by t1.floor
+	</select>
+
+
+
+
+  
+</sqlMap>

@@ -1,0 +1,1657 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.css">
+    <link rel="stylesheet" href="../reference/css/iconfont.css">
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css">
+    <link rel="stylesheet" href="../reference/css/colorGreen.css" />
+    <link rel="stylesheet" href="../reference/css/loading.css" />
+    <link rel="stylesheet" href="../reference/css/transportCommon.css" />
+</head>
+<style type="text/css">
+    * {
+        touch-action: pan-y;
+    }
+    
+    .mui-content {
+        top: 50px;
+    }
+    
+    .scan {
+        position: fixed;
+        /*bottom: 15px;*/
+        left: 15px;
+        width: 60px;
+        z-index: 11;
+    }
+    
+    .round {
+        border: 1px solid #bbb;
+        width: 60px;
+        height: 60px;
+        line-height: 30px;
+        text-align: center;
+        color: #fff;
+        background-color: #666666;
+        filter: alpha(opacity=80);
+        /* 用于IE浏览器－透明度为20%*/
+        -moz-opacity: 0.8;
+        /*  用于Moz + Firefox－透明度为20%*/
+        opacity: 0.8;
+        -webkit-border-radius: 60px;
+        -moz-border-radius: 60px;
+        -o-border-radius: 60px;
+        border-radius: 60px;
+    }
+    
+    .shopping_result {
+        position: fixed;
+        z-index: 999;
+        top: 0px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #fff;
+        padding: 15px;
+    }
+    
+    .applyTable {
+        background-color: white;
+    }
+    
+    .applyList {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px grey solid;
+    }
+    
+    .applyLeft {
+        width: 300px;
+        padding-left: 10px;
+    }
+    
+    .applyTable img {
+        padding: 0px 10px;
+    }
+    
+    .applyRight {
+        text-align: right;
+        margin-top: 3px;
+    }
+    
+    .dele {
+        border: none;
+        color: #ec0505;
+    }
+    
+    .dele::selection {
+        color: indianred;
+    }
+    /* 确认取件 */
+    
+    #doSubmit {
+        /* position: fixed; */
+        bottom: 15px;
+        left: 50%;
+        /* margin-left: -145px; */
+        z-index: 2;
+    }
+    
+    #doSubmit button {
+        color: #fff;
+        border: 1px solid #30c37c;
+        background-color: #30c37c;
+        width: 290px;
+        font-size: 20px;
+        border-radius: 10px;
+    }
+    
+    input[type='text'] {
+        margin-bottom: 0;
+    }
+    /* 选择 */
+    
+    .updat {
+        display: flex;
+        justify-content: space-between;
+    }
+    /* 下拉列表 */
+    
+    .inputList {
+        position: absolute;
+        left: 127px;
+        top: 109px;
+        background-color: white;
+        width: 129px;
+        text-align: center;
+        height: auto;
+        max-height: 300px;
+        overflow: hidden;
+        display: none;
+    }
+    
+    .checked {
+        background: #b8f4e6;
+    }
+    
+    #applyBuilding {
+        border: none;
+        text-align: center;
+    }
+    #applyBuild {
+        border: none;
+        text-align: center;
+    }
+    
+    #applyFloor {
+        border: none;
+        text-align: center;
+    }
+    
+    #applyDeptNum {
+        border: none;
+        text-align: center;
+    }
+    /* #round {
+        position: static;
+        bottom: 20px;
+        right: 20px;
+        border-radius: 5px;
+        background: #30c37c;
+        box-shadow: 0px 0px 10px #26a668;
+        width: 30%;
+        height: 44px;
+        z-index: 10;
+        display: flex;
+        padding: 18px 10px 10px 10px;
+    } */
+    /*底部按钮*/
+    
+    .mui-bar-tab {
+        display: flex;
+        bottom: 0;
+        width: 100%;
+        height: 65px;
+        padding: 0;
+        table-layout: fixed;
+        border-top: 0;
+        border-bottom: 0;
+        -webkit-touch-callout: none;
+        justify-content: space-around;
+        align-items: center;
+    }
+    /*扫码送达*/
+    
+    .scan-arrive {
+        width: 30%;
+        height: 44px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        font-size: 18px;
+        letter-spacing: 6px;
+        border-radius: 5px;
+        background-color: #30c37c;
+    }
+    /*签字送达*/
+    
+    .sign-arrive {
+        width: 30%;
+        height: 44px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        font-size: 18px;
+        letter-spacing: 6px;
+        border-radius: 5px;
+        background-color: #007aff;
+    }
+    /* 新增按钮 */
+    
+    .add-arrive {
+        width: 30%;
+        height: 44px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        font-size: 18px;
+        letter-spacing: 6px;
+        border-radius: 5px;
+        background-color: #007aff;
+    }
+    
+    #content {
+        margin-top: 25px;
+    }
+    
+    .list-part li:not(.first) span.status {
+        display: inline-block;
+        width: 30%;
+        text-align: right;
+    }
+    
+    .mark {
+        width: 80%;
+        height: 50px;
+    }
+    
+    input.mui-input-clear.deptSearch {
+        margin-bottom: 0;
+    }
+    
+    .mui-scroll-wrapper {
+        z-index: 0;
+    }
+    
+    span#roundWait {
+        display: inline-block;
+        position: absolute;
+        left: 45%;
+        margin-top: 80px;
+    }
+    
+    .ulForward li {
+        text-align: center;
+        border-bottom: 1px solid #999;
+        font-size: 18px;
+        line-height: 50px;
+        width: 33%;
+        float: left;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis
+    }
+    
+    .mui-toast-container {
+        bottom: 60% !important;
+    }
+    
+    .nameList {
+        overflow: auto;
+        height: 200px;
+        width: 160px;
+        margin-left: 70px;
+    }
+    
+    .nameList li {
+        color: #007aff
+    }
+    
+    .mui-backdrop {
+        display: none;
+    }
+    
+    .mui-poppicker {
+        z-index: 5000;
+        height: 229px;
+    }
+    
+    .mui-toast-message {
+        font-size: 20px;
+    }
+</style>
+
+<body>
+    <header class="mui-bar mui-bar-nav backColor">
+        <h1 class="mui-title">新建运送单</h1>
+        <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+            <span class="mui-icon mui-icon-left-nav"></span>
+        </button>
+        <!-- <button id="search" class="mui-btn mui-btn-link mui-btn-nav mui-pull-right">
+            <span class="mui-icon mui-icon-search"></span>
+        </button> -->
+    </header>
+    <!-- 添加物资框 -->
+    <!-- <div class="scan" id="scan">
+        <div class="round" id="round">
+            <div style="font-size:15px;">扫描</div>
+            <div style="font-size:15px;">物资</div>
+        </div>
+    </div> -->
+    <!-- loading -->
+    <div id="loading" class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    <!-- tab页 -->
+    <!-- <div class="top-part backColor">
+    <div class="top-bar">
+      <span id="1" class="choose">转出</span>
+      <span id="3">转入</span>
+    </div>
+  </div> -->
+    <!-- 主内容 -->
+    <div class="mui-content mui-scroll-wrapper">
+        <div class="mui-scroll">
+
+
+            <div style="height: 210px;">
+                <div style="color: orange;margin-bottom: 5px;">科室信息</div>
+                <div id="applyTable" class="applyTable">
+                    <span class="applyList">
+                        <span class="applyLeft">申请人</span>
+                    <input  type="text" name="" id="workName" value="" class="applyRight" style="border: none;">
+                    <span><img src="../../../img/contact.png" alt=""></span>
+                    </span>
+                    <div class="applyList" id="applyMessage">
+                        <span class="applyLeft">取件楼层</span>
+                        <input type="text" id="applyBuild" >
+                        <!-- <input type="text" id="applyBuilding" > -->
+                        <!-- <input type="text" id="applyFloor" > -->
+                    </div>
+                    <div class="applyList" id="applyMessage">
+                        <span class="applyLeft">取件科室</span>
+                        <!-- <input type="text" id="applyDeptNum" oninput="searchKs(this.value)"> -->
+                        <input type="text" id="applyDeptNum" >
+                    </div>
+                    <!-- <div class="applyList">
+                    <span class="applyLeft">取件科室</span>
+                    <input type="text" id="deptName" value="" class="applyRight" style="border: none;" readonly>
+                    <span id="collectDept"><img src="../../../img/定位.png" alt=""></span>
+                </div> -->
+                    <div class="applyList">
+                        <span class="applyLeft">联系电话</span>
+                        <input id="tel" type="text" value="" placeholder="请输入联系方式" class="applyRight" style="border: none;">
+                        <span id="phoneNumber"><img src="../../../img/phoneNo.png" alt=""></span>
+                    </div>
+
+                </div>
+            </div>
+            <div id="content">
+                <div style="color: orange;margin-top: -30px;margin-left: 4px;">物资信息</div>
+                <div class="wupin">
+                    <!-- <span class="applyLeft">物品码</span>
+                <input id="wp" type="text" value="" placeholder="请输入物品码" class="applyRight"
+                    style="border: none;"> -->
+                    <span><button id="newBtn">新增</button></span>
+                </div>
+                <div>
+                    <ul class="list-ul" id="list">
+
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 新增 -->
+    <!-- <nav class="mui-bar mui-bar-tab bottom">
+    <div id="add">
+      <span class="iconfont icon-zengjia"></span>
+    </div>
+  </nav> -->
+
+    <!-- 新增 -->
+    <nav class="mui-bar mui-bar-tab bottom">
+        <!-- <div class="add-arrive" id="newBtn">输入编码</div>
+        <div class="scan-arrive" id="round">扫描编码</div> -->
+        <div class="sign-arrive" id="doSubmit">确认提交</div>
+    </nav>
+    <!-- 确认 -->
+    <!-- <div id="doSubmit">
+        <button>确认提交</button>
+    </div> -->
+    <!-- 遮罩 -->
+    <div class="mask"></div>
+    <!-- 查询条件 -->
+    <div class="searchDiv">
+
+    </div>
+
+    <div id="myModalsss" class="child-window" style="height:100%;background: #000000;opacity: 0.7;display: none;z-index: 4111;">
+    </div>
+    <div id="ulForward" style="position: fixed;z-index: 4200;width: 100%;bottom: -10px;display: none;">
+        <!-- <h3>我是测试文字</h3> -->
+        <!-- <div class="mui-input-row mui-search">
+            <input type="search" class="mui-input-clear" placeholder="">
+        </div> -->
+        <!-- <label for="">检索</label> -->
+        <div class="mui-input-row mui-search">
+            <input type="search" class="mui-input-clear deptSearch" placeholder="请输入XXX进行查询" oninput="searchArea(this.value)" style="border:#E1E1E1;width: 100%;background: #E1E1E1;border-radius: 0px;border-bottom: 1px solid #999;" />
+        </div>
+        <ul class="ulForward" style="background:#E1E1E1;width: 100%;height:0px;overflow-y: auto;padding: 0;">
+            <!-- <span id="roundWait" class="mui-spinner" style="height: 60px;width: 60px;"></span> -->
+        </ul>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../reference/mui/js/mui.js"></script>
+<script type="text/javascript" src="../reference/mui/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="../reference/mui/js/mui.picker.min.js"></script>
+<script type="text/javascript" src="../reference/mui/js/baseInfo.js"></script>
+<script type="text/javascript" src="../../../cordova.js"></script>
+<script type="text/javascript">
+    // localStorage.setItem("url", "http://yapi.bonawise.com/mock/91/");
+    var workNo = localStorage.getItem("workNo");
+    var areaCode = ''; //当前登陆人院区编码
+    var baseUrl = localStorage.getItem("url");
+    var workName = '';
+    var deptName = ''; //科室名称
+    var concatTel = ''; //联系方式
+    var applyBuilding = ''; //申请楼
+    var applyFloor = ''; //申请层
+    var deptNumList = '';
+    var deptNameList = '';
+    var applyDeptNum = ''; //申请科室编码
+    var applyRemark = ''; //备注
+    var items = '';
+    var areaName = '';
+    var applyDeptName = '';
+    var page = 1;
+    var cateHtml = ''; //物资html
+    var itemNo = ''; //物资编码
+    var itemTypeName = ''; //物资类型
+    var flowName = ''; //流程名字
+    var targetBuilding = ''; //派件楼
+    var targetFloor = ''; //派件层
+    var targetDeptNum = '';
+    var targetDeptName = ''; //派件科室
+    var targetAreaCode = '';
+    var targetAreaName = '';
+    var targetName = '';
+    var targetTel = '';
+    var targetRemark = '';
+    var itemDataList = [];
+    var dataArray = {};
+    var itemIndex = -1;
+    var choseLocal = '';
+    var currentId = 0;
+    var addNum = 1;
+    var num = '';
+    var that = '';
+    var picker = null;
+    var number = 0;
+    // 提交数据
+    $(function() {
+
+        init(workNo);
+        console.log(areaCode);
+    })
+
+    /**
+     * @desc  移动扫码框
+     * @author chenjing
+     */
+    // touchMove('scan')
+
+    /**
+     * @desc  获取转出单列表
+     * @param {Object} query 查询参数
+     * @param {Number} pageNumber 当前页码
+     * @param {Number} pageSize 每页条数
+     * @author chenjing
+     */
+    function init(workNo) {
+        // $("#loading").show();
+        var params = {
+            workNo: workNo
+        }
+        // $.get(baseUrl + 'app_carriageSupportController.do?loginInfo', params, function(data) {
+        //     var data = JSON.parse(data);
+        //     console.log('33', data)
+        //     $("#loading").hide();
+        //     areaCode = data.areaCode;
+        //     targetAreaCode = areaCode;
+        //     workName = data.workName;
+        //     deptName = data.deptName;
+        //     areaName = data.areaName;
+        //     concatTel = data.contactTel;
+        //     applyBuilding = data.building;
+        //     applyFloor = data.floor;
+        //     applyDeptNum = data.deptNum;
+        //     $("#workName").val(workName);
+        //     $("#tel").val(concatTel);
+        //     $("#applyBuilding").val(applyBuilding);
+        //     $("#applyFloor").val(applyFloor);
+        //     $("#applyDeptNum").val(deptName);
+        //     // dataArray['applyDeptName'] = deptName;
+        //     // dataArray['applyTel'] = concatTel;
+
+        // }).fail(function(XMLHttpRequest) {
+        //     var text = XMLHttpRequest.responseText;
+        //     mui.toast(text.message, {
+        //         duration: 4000,
+        //         type: 'div'
+        //     })
+        //     return
+        // }).complete(function(XMLHttpRequest, status) {
+        //     if (status == 'timeout') {
+        //         $("#loading").hide();
+        //         mui.toast('网速不给力，请重试！');
+        //         return
+        //     } else if (status == 'error') {
+        //         $("#loading").hide();
+        //         mui.toast('当前网络不可用，请查看网络是否畅通！');
+        //         return
+        //     }
+        // });
+
+    }
+
+    /**
+     * @desc   扫描编码
+     * @author chenjing
+     */
+    mui("body").on('tap', '#round', function() {
+        // cateList('HD0200001127')
+        cordova.plugins.barcodeScanner.scan(
+            function(result) {
+                if (result.cancelled == false) {
+                    var info = result.text;
+                    cateList(info);
+                }
+            },
+            function(error) {
+                mui.toast('获取信息失败！');
+                return;
+            }
+        );
+    });
+    //新增物品码
+    mui("body").on('tap', '#newBtn', function() {
+        // var wupinma=$('#wp').val();
+        // console.log(wupinma);
+        // cateList(wupinma);
+        cateList('');
+        console.log($("input[type='text']"))
+        $("input").on("blur", function() {
+            $("body").removeClass("mui-focusin");
+        })
+        var oHeight = $(document).height(); //body的高度
+        var page = $(".mui-scroll").height(); //可变的区域高度
+        console.log('969', oHeight, page, oHeight - page);
+        if (addNum > 1) {
+            mui('.mui-scroll-wrapper').scroll().scrollTo(0, (oHeight - page) - 100, 0)
+        }
+        addNum++;
+    });
+    /**
+     * @desc   扫描物资结果
+     * param {Number} itemNo 物品码
+     * @author huoke
+     */
+    function cateList(itemNo) {
+        itemIndex++;
+        var dataObj = '';
+        var itemObj = '';
+        cateHtml = '';
+        itemObj = {
+            index: itemIndex,
+            itemNum: itemNo,
+            itemTypeName: itemTypeName,
+            targetAreaCode: areaCode,
+            targetAreaName: areaName,
+            targetBuilding: targetBuilding,
+            targetFloor: targetFloor,
+            targetDeptNum: targetDeptNum,
+            targetDeptName: targetDeptName,
+            targetName: targetName,
+            targetTel: targetTel,
+            targetRemark: targetRemark
+        };
+        itemDataList.push(itemObj);
+        dataObj = {
+            applyWorkNo: workNo,
+            applyWorkName: workName,
+            applyTel: concatTel,
+            applyBuilding: applyBuilding,
+            applyFloor: applyFloor,
+            applyDeptNum: applyDeptNum,
+            applyDeptName: applyDeptName,
+            items: JSON.stringify(itemDataList)
+        };
+        dataArray = dataObj;
+        for (var i = itemDataList.length - 1; i < itemDataList.length; i++) {
+            index = itemDataList[i].index;
+            itemNoHT = itemDataList[i].itemNum;
+            itemTypeNameHT = itemDataList[i].itemTypeName;
+            targetAreaNameHT = itemDataList[i].targetAreaName;
+            targetBuildingHT = itemDataList[i].targetBuilding;
+            targetFloorHT = itemDataList[i].targetFloor;
+            targetDeptNameHT = itemDataList[i].targetDeptName;
+            cateHtml += createCate(index, itemNoHT, itemTypeNameHT, targetAreaNameHT, targetBuildingHT, targetFloorHT, targetDeptNameHT)
+        }
+        $("#list").append(cateHtml);
+        $("#list .updateArea").val(areaName)
+    }
+
+    /**
+     * @desc   写入物资html
+     * @author huoke
+     */
+    function createCate(index, itemNo, itemTypeName, targetAreaName, targetBuilding, targetFloor, targetDeptName) {
+        var html = '';
+        html += "<li>";
+        html += "<ul class='list-part'>";
+        html += "<li class='first' style='display: flex;justify-content: space-between;''>";
+        html += "<span class='taskNo'></span>";
+        html += "<button class='dele' class='status'>删除></button>";
+        html += "</li>";
+        html += "<li>编码：";
+        html += "<input type='text' style='width:48%;border:none;' id='" + index + "' class='left-name shuju itemNum' placeholder='请输入编码(必填)' value=" + itemNo + ">";
+        html += "<span class='status'>";
+        html += "<span>类型：</span>";
+        html += "<span class='shuju leixing'>" + itemTypeName + "</span>";
+        html += "</span>";
+        html += "</li>";
+        html += "<li>物品信息：";
+        html += "<input type='text' style='width:48%;border:none;' class='mark updateClass' placeholder='请选择物品'>";
+        html += "</li>";
+        html += "<li>收件人院区：";
+        html += "<input type='text' style='width:48%;border:none;' class='mark updateArea' placeholder='请选择院区'>";
+        html += "</li>";
+        html += "<li>收件人：";
+        html += "<input type='text' style='width:48%;border:none;' class='mark itemName' oninput='search(this.value,this)' placeholder='请输入姓名(非必填)'>";
+        // html += "<button style='float: right;' class='chosePerson'>选择收件人</button>"
+        html += "</li>";
+        html += "<li><ul class='nameList' style='display:none'></ul></li>"
+        html += "<li>收件人电话：";
+        html += "<input type='text' style='width:48%;border:none;' class='mark itemtel' placeholder='请输入电话(非必填)'>";
+        html += "</li>";
+        html += "<li>收件人地址：";
+        html += "<button style='float: right;' class='usualLocal'>常用地址</button>"
+            // html += "<input type='text' style='width:80%;border:none;padding: 0;' class='mark updateLocal' oninput='searchArea(this.value,this)' placeholder='请选择地点'>";
+        html += "<input type='text' style='width:80%;border:none;padding: 0;' class='mark updateLocal'  oninput='searchArea(this.value,this)' placeholder='请选择地点'>";
+        html += "</li>";
+        html += "<li>备注：";
+        html += "<input type='text' style='width:48%;border:none;' class='mark itemmark' placeholder='请输入备注(非必填)'>";
+        html += "</li>";
+        html += "</ul>";
+        html += "</li>";
+        return html;
+    }
+    /**
+     * @desc   延时调用方法
+     * @author huoke
+     */
+    function debounce(fn, wait) {
+        var timer = null;
+        return function() {
+            if (timer !== null) {
+                clearTimeout(timer);
+            }
+            timer = setTimeout(fn, wait);
+        }
+    }
+
+    /**
+     * @desc   选择申请人科室
+     * @author huoke
+     */
+
+    function newDept() {
+        // var that = $("this");
+        // console.log(areaCode);
+        var params = {
+            areaCode: areaCode,
+            building: '',
+            floor: '',
+            deptName: $("#deptName").val()
+        }
+        var deptListHtml = '';
+
+        $.get(baseUrl + 'app_carriageSupportController.do?getDept', params, function(data) {
+            var data = JSON.parse(data);
+            data.forEach(element => {
+                deptNumList = element.deptNum;
+                deptNameList = element.deptName;
+                deptListHtml += creatDeptList(deptNumList, deptNameList);
+            });
+            $("#dept_list").html(deptListHtml);
+        }).fail(function(XMLHttpRequest) {
+            $("#loading").hide();
+            var text = JSON.parse(XMLHttpRequest.responseText);
+            mui.toast(text.message, {
+                duration: 4000,
+                type: 'div'
+            })
+            return;
+        }).complete(function(XMLHttpRequest, status) {
+            $("#loading").hide;
+            if (status === 'timeout') {
+                mui.toast("网速不给力，请重试！");
+                return;
+            } else if (status === 'error') {
+                mui.toast("当前网络不可用，请查看网络是否畅通！");
+                return;
+            }
+        })
+        dataArray.applyDeptName = $("#deptName").val();
+        findDeptNum(dataArray.applyDeptName);
+    }
+    $("#deptName").on("input propertychange", debounce(newDept, 1000));
+
+    function creatDeptList(deptNumList, deptNameList) {
+        var html = '';
+        html += "<option nameCode='" + deptNumList + "' value='" + deptNameList + "' class = 'clickED'></option>";
+        // html += "<option value='" + deptNumList + "' class = 'clickED'>"+deptNameList+"</option>"
+
+        return html;
+    }
+
+    // 查询科室码
+    function findDeptNum(dept) {
+        var param = {
+            areaCode: areaCode,
+            building: '',
+            floor: '',
+            deptName: dept
+        }
+        $.get(baseUrl + 'app_carriageSupportController.do?getDept', param, function(data) {
+            var data = JSON.parse(data);
+            // console.log(data);
+            if (data.length == 1) {
+                applyDeptNum = data[0].deptNum;
+            }
+
+        }).fail(function(XMLHttpRequest) {
+            $("#loading").hide();
+            var text = JSON.parse(XMLHttpRequest.responseText);
+            mui.toast(text.message, {
+                duration: 4000,
+                type: 'div'
+            })
+            return;
+        }).complete(function(XMLHttpRequest, status) {
+            $("#loading").hide;
+            if (status === 'timeout') {
+                mui.toast("网速不给力，请重试！");
+                return;
+            } else if (status === 'error') {
+                mui.toast("当前网络不可用，请查看网络是否畅通！");
+                return;
+            }
+        })
+    }
+
+    /**
+     * @desc   选择取件楼层
+     * @author yaolei
+     */
+    // mui("body").on("tap", "#applyMessage", function() {
+    //     $.ajax({
+    //         url: baseUrl + 'app_carriageSupportController.do?getDeptTree',
+    //         type: 'get',
+    //         data: {
+    //             areaCode: areaCode,
+    //             workNo: workNo,
+    //             type: '1'
+    //         },
+    //         success: function(data) {
+    //             var data = JSON.parse(data);
+    //             console.log(data);
+    //             var picker = new mui.PopPicker({
+    //                 layer: 3
+    //             });
+    //             picker.setData(data);
+    //             picker.show(function(rs) {
+    //                 console.log(rs);
+
+    //                 $("#applyBuilding").val(rs[0].value);
+    //                 $("#applyFloor").val(rs[1].value);
+    //                 $("#applyDeptNum").val(rs[2].text);
+    //             });
+
+    //         },
+    //         error: function(XMLHttpRequest) {
+    //             $("#loading").hide();
+    //             var text = JSON.parse(XMLHttpRequest.responseText);
+    //             mui.toast(text.message, {
+    //                 duration: 4000,
+    //                 type: 'div'
+    //             })
+    //             return
+    //         },
+    //         complete: function(XMLHttpRequest, status) {
+    //             if (status == 'timeout') {
+    //                 $("#loading").hide();
+    //                 mui.toast('网速不给力，请重试！');
+    //                 return
+    //             } else if (status == 'error') {
+    //                 $("#loading").hide();
+    //                 mui.toast('当前网络不可用，请查看网络是否畅通！');
+    //                 return
+    //             }
+    //         }
+    //     })
+    // });
+
+    // 科室模糊查询
+    var time = null;
+
+    function searchKs(name) {
+        clearTimeout(time);
+        // 这里设定1.5s后执行，用户输入间隙在1.5s内，就不会去调用服务端接口，当然时间可以自己定
+
+        time = setTimeout(function() {
+            // 在这个里面调用服务端接口
+            getDept(name);
+        }, 2000);
+    }
+
+    function getDept(name) {
+        $.ajax({
+            url: baseUrl + 'app_carriageSupportController.do?getDeptTree',
+            type: 'get',
+            data: {
+                areaCode: areaCode,
+                workNo: workNo,
+                type: '1',
+                deptName: name
+            },
+            success: function(data) {
+                var data = JSON.parse(data);
+                console.log(data);
+                var picker = new mui.PopPicker({
+                    layer: 3
+                });
+                picker.setData(data);
+                picker.show(function(rs) {
+                    console.log(rs);
+                    $("#applyBuilding").val(rs[0].value);
+                    $("#applyFloor").val(rs[1].value);
+                    $("#applyDeptNum").val(rs[2].text);
+                    $("#list .updateLocal").val(rs[0].value + '/' + rs[1].value + '/' + rs[2].text)
+                });
+
+            },
+            error: function(XMLHttpRequest) {
+                $("#loading").hide();
+                var text = JSON.parse(XMLHttpRequest.responseText);
+                mui.toast(text.message, {
+                    duration: 4000,
+                    type: 'div'
+                })
+                return
+            },
+            complete: function(XMLHttpRequest, status) {
+                if (status == 'timeout') {
+                    $("#loading").hide();
+                    mui.toast('网速不给力，请重试！');
+                    return
+                } else if (status == 'error') {
+                    $("#loading").hide();
+                    mui.toast('当前网络不可用，请查看网络是否畅通！');
+                    return
+                }
+            }
+        })
+    }
+
+    // 选择收件人地址模糊查询
+    var tim = null;
+    // function searchArea(name, a) {
+    //     console.log('aa', name)
+    //     that = $(a);
+    //     var number = $(a).parent().prev().prev().prev().prev().prev().prev().find('.shuju').attr("id");
+    //     console.log('e', number)
+    //     var listItem = JSON.parse(dataArray.items);
+    //     for (var i = 0; i < listItem.length; i++) {
+    //         if (listItem[i].index == number) {
+    //             num = i;
+    //         }
+    //     }
+    //     console.log('444', num);
+    //     clearTimeout(tim);
+    //     // 这里设定1s后执行，用户输入间隙在1.5s内，就不会去调用服务端接口，当然时间可以自己定
+    //         tim = setTimeout(function () {
+    //             // 在这个里面调用服务端接口
+    //             getArea(name);
+    //         }, 1500)
+    // }
+    function searchArea(name) {
+        // currentId = $(a).parent().prev().prev().prev().find('input').attr('id');
+        // console.log('我是id', currentId);
+        // $("body .nameList").html('');
+        clearTimeout(tim);
+        //这里设定1.5s后执行，用户输入间隙在1.5s内，就不会去调用服务端接口，当然时间可以自己定
+
+        tim = setTimeout(function() {
+            // 在这个里面调用服务端接口
+            getArea(name);
+        }, 1000);
+    }
+
+    function getArea(name) {
+        var that = $('#' + number).parent().parent().find('.updateLocal');
+        console.log('jjj', that)
+        console.log('mmm', number)
+        var listItem = JSON.parse(dataArray.items);
+        for (var i = 0; i < listItem.length; i++) {
+            if (listItem[i].index == number) {
+                var num = i;
+            }
+        }
+        console.log('444', num);
+        var listItem = JSON.parse(dataArray.items);
+        console.log('woshi', listItem)
+        $.ajax({
+            url: baseUrl + 'app_carriageSupportController.do?getDeptTree',
+            type: 'get',
+            data: {
+                areaCode: areaCode,
+                workNo: workNo,
+                type: '1',
+                deptName: name
+            },
+            success: function(data) {
+                var data = JSON.parse(data);
+                console.log(data);
+                picker.setData(data);
+                picker.show(function(rs) {
+                    that.val(rs[0].text + '/' + rs[1].text + '/' + rs[2].text)
+                    listItem[num].targetBuilding = rs[0].text;
+                    listItem[num].targetFloor = rs[1].text;
+                    listItem[num].targetDeptNum = rs[2].value;
+                    listItem[num].targetDeptName = rs[2].text;
+                    targetDeptNum = rs[2].value
+                    targetBuilding = rs[0].text;
+                    targetFloor = rs[1].text;
+                    targetDeptName = rs[2].text;
+                    itemDataList = listItem;
+                    dataArray.items = JSON.stringify(listItem);
+                    console.log(dataArray.items);
+                });
+
+            },
+            error: function(XMLHttpRequest) {
+                $("#loading").hide();
+                var text = JSON.parse(XMLHttpRequest.responseText);
+                mui.toast(text.message, {
+                    duration: 4000,
+                    type: 'div'
+                })
+                return
+            },
+            complete: function(XMLHttpRequest, status) {
+                if (status == 'timeout') {
+                    $("#loading").hide();
+                    mui.toast('网速不给力，请重试！');
+                    return
+                } else if (status == 'error') {
+                    $("#loading").hide();
+                    mui.toast('当前网络不可用，请查看网络是否畅通！');
+                    return
+                }
+            }
+        })
+    }
+
+
+    /**
+     * @desc   选择收件人
+     * @author yaolei
+     */
+    mui("body").on("tap", ".chosePerson", function() {
+        console.log($(this).parent().prev().prev().prev().find('input').attr('id'))
+        currentId = $(this).parent().prev().prev().prev().find('input').attr('id');
+        console.log('我是id', currentId);
+        if ($('#' + currentId).parent().prev().find('span').text() != '') {
+
+            // $('.mui-search').html(' <input type="search" class="mui-input-clear deptSearch" placeholder="请输入XXX进行查询" oninput="search(this.value)" style="border:#E1E1E1;width: 100%;background: #E1E1E1;border-radius: 0px;" />');
+            // $(".ulForward").html('<span id="roundWait" class="mui-spinner" style="height: 60px;width: 60px;"></span>');
+            $('.deptSearch').val('');
+            getMan('');
+            $("#myModalsss").show();
+            $("#ulForward").show();
+            $(".ulForward").animate({
+                height: "240px"
+            }, 200);
+        } else {
+            mui.toast('请先选择物品')
+        }
+
+    });
+
+    // 收件人模糊查询
+    var timeId = null;
+
+    function search(name, a) {
+        currentId = $(a).parent().prev().prev().prev().find('input').attr('id');
+        console.log('我是id', currentId);
+        $("body .nameList").html('');
+        clearTimeout(timeId);
+        //这里设定1.5s后执行，用户输入间隙在1.5s内，就不会去调用服务端接口，当然时间可以自己定
+
+        timeId = setTimeout(function() {
+            // 在这个里面调用服务端接口
+            getMan(name);
+        }, 1000);
+    }
+
+
+    function getMan(name) {
+        $.ajax({
+            url: baseUrl + 'app_carriageSupportController.do?getMan',
+            type: 'get',
+            data: {
+                areaCode: areaCode,
+                name: name
+            },
+            success: function(data) {
+                var data = JSON.parse(data);
+                console.log('rrr', data);
+                if (data.length > 0) {
+                    $('#' + currentId).parent().parent().find('.nameList').show();
+                } else {
+                    $('#' + currentId).parent().parent().find('.nameList').hide();
+                }
+                var html = '';
+                var list = data;
+                console.log(data);
+                for (var i = 0; i < list.length; i++) {
+                    var workName = list[i].workName;
+                    html += '<li class="mui-table-view-cells" style="height:30px;font-size:15px" name="' + list[i].floor + ',' + list[i].building + ',' + list[i].deptName + ',' + list[i].deptNum + ',' + list[i].contactTel + '">' + workName + '</li>';
+                }
+                console.log('eeee', html)
+                $(".ulForward").html(html);
+                $("body .nameList").append(html);
+                $("body .nameList li").on('tap', function(e) {
+                    var texts = $(this).text();
+                    var local = $(this).attr("name");
+                    console.log(local.split(','))
+                    var localArray = local.split(',');
+                    if (localArray[0] == "" || localArray[1] == "") {
+                        choseLocal = ''
+                    } else {
+                        choseLocal = localArray[0] + localArray[1] + '-' + localArray[2];
+                    }
+                    var tel = localArray[4];
+                    console.log('点击了', $('#' + currentId).parent().parent().find('.itemName').val(texts));
+                    $('#' + currentId).parent().parent().find('.itemName').val(texts);
+                    $('#' + currentId).parent().parent().find('.itemtel').val(tel);
+                    $('#' + currentId).parent().parent().find('.updateLocal').val(choseLocal);
+                    $("body .nameList").hide();
+                    var listItem = JSON.parse(dataArray.items);
+                    for (var i = 0; i < listItem.length; i++) {
+                        if (listItem[i].index == currentId) {
+                            var num = i;
+                        }
+                    }
+                    listItem[num].targetBuilding = localArray[1];
+                    listItem[num].targetFloor = localArray[0];
+                    listItem[num].targetDeptNum = localArray[3];
+                    listItem[num].targetDeptName = localArray[2];
+                    // targetDeptNum = localArray[3]
+                    // targetBuilding = localArray[1];
+                    // targetFloor = localArray[0];
+                    // targetDeptName = localArray[2];
+                    itemDataList = listItem;
+                    dataArray.items = JSON.stringify(listItem);
+                })
+            },
+            error: function(XMLHttpRequest) {
+                $("#loading").hide();
+                var text = JSON.parse(XMLHttpRequest.responseText);
+                mui.toast(text.message, {
+                    duration: 4000,
+                    type: 'div'
+                })
+                return
+            },
+            complete: function(XMLHttpRequest, status) {
+                if (status == 'timeout') {
+                    $("#loading").hide();
+                    mui.toast('网速不给力，请重试！');
+                    return
+                } else if (status == 'error') {
+                    $("#loading").hide();
+                    mui.toast('当前网络不可用，请查看网络是否畅通！');
+                    return
+                }
+            }
+        })
+    };
+
+    // 选择人员
+    $("#ulForward").on("click", "li", function(e) {
+        var texts = $(this).find("a").text();
+        var local = $(this).find("a").attr("name");
+        console.log(local.split(','))
+        var localArray = local.split(',');
+        console.log('tt', localArray[0])
+        if (localArray[0] == "" || localArray[1] == "") {
+            choseLocal = ''
+        } else {
+            choseLocal = localArray[0] + localArray[1] + '-' + localArray[2];
+        }
+        var tel = localArray[4];
+        console.log('点击了', $('#' + currentId).parent().parent().find('.itemName').val(texts));
+        $('#' + currentId).parent().parent().find('.itemName').val(texts);
+        $('#' + currentId).parent().parent().find('.itemtel').val(tel);
+        $('#' + currentId).parent().parent().find('.updateLocal').val(choseLocal);
+        var listItem = JSON.parse(dataArray.items);
+        for (var i = 0; i < listItem.length; i++) {
+            if (listItem[i].index == currentId) {
+                var num = i;
+            }
+        }
+        listItem[num].targetBuilding = localArray[1];
+        listItem[num].targetFloor = localArray[0];
+        listItem[num].targetDeptNum = localArray[3];
+        listItem[num].targetDeptName = localArray[2];
+        targetDeptNum = localArray[3]
+        targetBuilding = localArray[1];
+        targetFloor = localArray[0];
+        targetDeptName = localArray[2];
+        itemDataList = listItem;
+        dataArray.items = JSON.stringify(listItem);
+        $("#ulForward").hide();
+        $("#myModalsss").hide();
+        $(".ulForward").css({
+            height: "0px"
+        });
+    });
+
+    $("body").on("tap", "#myModalsss", function(e) {
+        // console.log($('.deptSearch'));
+        // $('.deptSearch').val('')
+        // $(".ulForward").html('<span id="roundWait" class="mui-spinner" style="height: 60px;width: 60px;"></span>');
+        $("#ulForward").hide();
+        $("#myModalsss").hide();
+        $(".ulForward").css({
+            height: "0px"
+        });
+        picker.hide();
+        // getMan()
+
+    });
+
+    /**
+     * @desc   选择定位
+     * @author huoke
+     */
+    function findIndex(array, num) {
+        console.log(array);
+        console.log(num);
+        for (var i = 0; i < array.length; i++) {
+            if (array[i].index == num) {
+                return i;
+            }
+        }
+    }
+    /**
+     * @desc   删除
+     * @author huoke
+     */
+
+    $(".list-ul").on('click', '.dele', function() {
+        console.log('444433q', dataArray);
+        console.log($(this).html());
+        var number = $(this).parent().next().find('.shuju').attr("id");
+        console.log("number:" + number, itemDataList);
+        // var listItem = JSON.parse(dataArray.items);
+        // var num = findIndex(listItem, number);
+        // console.log(num);
+        // listItem.splice(num, 1);
+        for (var i = 0; i < itemDataList.length; i++) {
+            if (itemDataList[i].index == number) {
+                var num = i;
+            }
+        }
+        itemDataList.splice(num, 1);
+        dataArray.items = JSON.stringify(itemDataList);
+        console.log('rr', dataArray);
+        $(this).parent().parent().parent().remove();
+        console.log('88', $('.list-part').length)
+        if ($('.list-part').length > 1) {
+            var oHeight = $(document).height(); //body的高度
+            var page = $(".mui-scroll").height(); //可变的区域高度
+            mui('.mui-scroll-wrapper').scroll().scrollTo(0, oHeight - page - 100, 0);
+            addNum--;
+        } else {
+            var oHeight = $(document).height(); //body的高度
+            var page = $(".mui-scroll").height(); //可变的区域高度
+            mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0, 0);
+            addNum--;
+        }
+
+    })
+
+    /**
+     * @desc   选择分类
+     * @author huoke
+     */
+    mui("body").on("tap", ".updateClass", function() {
+            var that = $(this);
+            var number = $(this).parent().prev().find('.shuju').attr("id");
+            console.log($(this).parent().prev().find('.shuju').attr("id"))
+            var listItem = JSON.parse(dataArray.items);
+            console.log('11', listItem, number);
+            for (var i = 0; i < listItem.length; i++) {
+                if (listItem[i].index == number) {
+                    var num = i;
+                }
+            }
+            // var num = findIndex(listItem.index, number);
+            console.log('222', num);
+            var picker = new mui.PopPicker({
+                layer: 2
+            });
+            $.get(baseUrl + "app_carriageSupportController.do?getItemType", function(data) {
+                var data = JSON.parse(data);
+                console.log('ttt', data)
+                picker.setData(data);
+            }).fail(function(XMLHttpRequest) {
+                $("#loading").hide();
+                var text = JSON.parse(XMLHttpRequest.responseText);
+                mui.toast(text.message, {
+                    duration: 4000,
+                    type: 'div'
+                })
+                return;
+            }).complete(function(XMLHttpRequest, status) {
+                $("#loading").hide;
+                if (status === 'timeout') {
+                    mui.toast("网速不给力，请重试！");
+                    return;
+                } else if (status === 'error') {
+                    mui.toast("当前网络不可用，请查看网络是否畅通！");
+                    return;
+                }
+            })
+            picker.show(function(rs) {
+                console.log('啦啦啦啦啦啦', rs, num);
+                if (rs[0].children.length > 0) {
+                    that.parent().prev().find('.leixing').eq(0).html(rs[1].text);
+                    that.parent().parent().find("span").eq(0).html(rs[1].text);
+                    that.val(rs[1].text)
+                    listItem[num].itemTypeName = rs[1].text;
+                } else {
+                    that.parent().prev().find('.leixing').eq(0).html(rs[0].text);
+                    that.parent().parent().find("span").eq(0).html(rs[0].text);
+                    that.val(rs[0].text)
+                    listItem[num].itemTypeName = rs[0].text;
+                }
+                console.log('555', listItem[num]);
+                // dataArray.items[num].itemTypeName = rs[0].text;
+                itemDataList = listItem;
+                dataArray.items = JSON.stringify(listItem);
+                console.log(dataArray.items);
+                // $("#statusSearch").val(rs[0].text);
+            });
+        })
+        /**
+         * @desc   选择院区
+         * @author huoke
+         */
+    mui("body").on("tap", ".updateArea", function() {
+        var that = $(this);
+        console.log($(this).parent().prev().prev().find('.shuju').attr("id"))
+        var number = $(this).parent().prev().prev().find('.shuju').attr("id");
+        var listItem = JSON.parse(dataArray.items);
+        // var num = findIndex(listItem, number);
+        for (var i = 0; i < listItem.length; i++) {
+            if (listItem[i].index == number) {
+                var num = i;
+            }
+        }
+        console.log('333', num);
+        var picker = new mui.PopPicker({
+            layer: 1
+        });
+        $.get(baseUrl + "app_carriageSupportController.do?getAreas", function(data) {
+            console.log(data);
+            var data = JSON.parse(data);
+            picker.setData(data);
+        }).fail(function(XMLHttpRequest) {
+            $("#loading").hide();
+            var text = JSON.parse(XMLHttpRequest.responseText);
+            mui.toast(text.message, {
+                duration: 4000,
+                type: 'div'
+            })
+            return;
+        }).complete(function(XMLHttpRequest, status) {
+            $("#loading").hide;
+            if (status === 'timeout') {
+                mui.toast("网速不给力，请重试！");
+                return;
+            } else if (status === 'error') {
+                mui.toast("当前网络不可用，请查看网络是否畅通！");
+                return;
+            }
+        })
+        picker.show(function(rs) {
+            console.log(rs)
+                // var pai = '';
+                // if (areaCode == rs[0].value) {
+                //     pai = '院内';
+                // } else {
+                //     pai = '院外';
+                // }
+            that.val(rs[0].text)
+                // that.parent().prev().prev().prev().prev().find("span").eq(1).html(rs[0].text);
+                // that.parent().parent().parent().find('.modifyName').html(rs[0].text);
+            targetAreaCode = rs[0].value;
+            listItem[num].targetAreaCode = rs[0].value;
+            listItem[num].targetAreaName = rs[0].text;
+            // dataArray.items[num].targetAreaName = rs[0].text;
+            // dataArray.items[num].targetAreaCode = rs[0].value;
+            itemDataList = listItem;
+            dataArray.items = JSON.stringify(listItem);
+            console.log(dataArray.items);
+            areaCode = rs[0].value;
+        });
+    })
+    mui("body").on("tap", ".mui-poppicker-btn-cancel", function() {
+        $("#ulForward").hide();
+        $("#myModalsss").hide();
+        $(".ulForward").css({
+            height: "0px"
+        });
+        if (picker != null) {
+            picker.hide();
+        }
+    })
+    mui("body").on("tap", ".mui-poppicker-btn-ok", function() {
+        $("#ulForward").hide();
+        $("#myModalsss").hide();
+        $(".ulForward").css({
+            height: "0px"
+        });
+        if (picker != null) {
+            picker.hide();
+        }
+    })
+
+    /**
+     * @desc   选择地点
+     * @author huoke
+     */
+
+    mui("body").on("tap", ".updateLocal", function() {
+        $('.deptSearch').val('');
+        $("#myModalsss").show();
+        $("#ulForward").show();
+        $(".ulForward").animate({
+            height: "240px"
+        }, 180);
+        var that = $(this);
+        console.log('rr', that)
+        number = $(this).parent().prev().prev().prev().prev().prev().prev().find('.shuju').attr("id");
+        console.log('e', number)
+        var listItem = JSON.parse(dataArray.items);
+        for (var i = 0; i < listItem.length; i++) {
+            if (listItem[i].index == number) {
+                var num = i;
+            }
+        }
+        console.log('444', num);
+        var params = {
+            areaCode: targetAreaCode,
+            workNo: workNo,
+            type: '2',
+            deptName: ''
+        }
+        picker = new mui.PopPicker({
+            layer: 3
+        });
+        console.log('rrr', picker)
+        $.get(baseUrl + "app_carriageSupportController.do?getDeptTree", params, function(data) {
+            var data = JSON.parse(data);
+            console.log('dd', data)
+            picker.setData(data);
+            $(".ulForward").append(picker)
+        }).fail(function(XMLHttpRequest) {
+            $("#loading").hide();
+            var text = JSON.parse(XMLHttpRequest.responseText);
+            mui.toast(text.message, {
+                duration: 4000,
+                type: 'div'
+            })
+            return;
+        }).complete(function(XMLHttpRequest, status) {
+            $("#loading").hide;
+            if (status === 'timeout') {
+                mui.toast("网速不给力，请重试！");
+                return;
+            } else if (status === 'error') {
+                mui.toast("当前网络不可用，请查看网络是否畅通！");
+                return;
+            }
+        })
+        picker.show(function(rs) {
+            console.log(rs)
+            if (rs[2].text == undefined) {
+                rs[2].text = ''
+            }
+            // that.parent().prev().prev().prev().prev().find("span").eq(2).html('/' + rs[0].text);
+            // that.parent().prev().prev().prev().prev().find("span").eq(3).html('/' + rs[1].text);
+            // that.parent().prev().prev().prev().prev().find("span").eq(4).html('/' + rs[2].text);
+            that.val(rs[0].text + '/' + rs[1].text + '/' + rs[2].text)
+            listItem[num].targetBuilding = rs[0].text;
+            listItem[num].targetFloor = rs[1].text;
+            listItem[num].targetDeptNum = rs[2].value;
+            listItem[num].targetDeptName = rs[2].text;
+            targetDeptNum = rs[2].value
+            targetBuilding = rs[0].text;
+            targetFloor = rs[1].text;
+            targetDeptName = rs[2].text;
+            // dataArray.items[num].targetBuilding = rs[0].text;
+            // dataArray.items[num].targetFloor = rs[1].text;
+            // dataArray.items[num].targetDeptNum = rs[2].value;
+            // dataArray.items[num].targetDeptName = rs[2].text;
+            itemDataList = listItem;
+            dataArray.items = JSON.stringify(listItem);
+            console.log(dataArray.items);
+        });
+        $("#myModalsss").show();
+        $("#ulForward").show();
+        $(".ulForward").animate({
+            height: "240px"
+        }, 200);
+
+    })
+
+    // 选择常用地点
+    mui("body").on("tap", ".usualLocal", function() {
+        // targetAreaCode = $(this).parent().parent().find('.modifyDeptName').html()
+        var that = $(this);
+        var number = $(this).parent().prev().prev().prev().prev().prev().prev().find('.shuju').attr("id");
+        console.log('e', number)
+        var listItem = JSON.parse(dataArray.items);
+        // var num = findIndex(listItem, number);
+        for (var i = 0; i < listItem.length; i++) {
+            if (listItem[i].index == number) {
+                var num = i;
+            }
+        }
+        console.log('444', num);
+        var params = {
+            areaCode: targetAreaCode,
+            workNo: workNo
+        }
+        var picker = new mui.PopPicker({
+            layer: 1
+        });
+
+        $.get(baseUrl + 'app_carriageSupportController.do?getUsualDept', params, function(data) {
+            // console.log('99999',data)
+            data = JSON.parse(data)
+            var list = data.obj;
+            console.log('99998', data)
+            list.forEach(item => {
+                item["text"] = item.building + item.floor + item.deptName
+
+            })
+            console.log('uu', list)
+
+            picker.setData(list);
+        }).fail(function(XMLHttpRequest) {
+            $("#loading").hide();
+            var text = JSON.parse(XMLHttpRequest.responseText);
+            mui.toast(text.message, {
+                duration: 4000,
+                type: 'div'
+            })
+            return;
+        }).complete(function(XMLHttpRequest, status) {
+            $("#loading").hide;
+            if (status === 'timeout') {
+                mui.toast("网速不给力，请重试！");
+                return;
+            } else if (status === 'error') {
+                mui.toast("当前网络不可用，请查看网络是否畅通！");
+                return;
+            }
+        })
+        picker.show(function(rs) {
+
+            that.next().val(rs[0].text)
+            listItem[num].targetBuilding = rs[0].building;
+            listItem[num].targetFloor = rs[0].floor;
+            listItem[num].targetDeptNum = rs[0].deptNum;
+            listItem[num].targetDeptName = rs[0].deptName;
+            targetDeptNum = rs[0].deptNum
+            targetBuilding = rs[0].building;
+            targetFloor = rs[0].floor;
+            targetDeptName = rs[0].deptName;
+            itemDataList = listItem;
+            dataArray.items = JSON.stringify(listItem);
+            console.log(dataArray.items);
+
+        });
+
+    })
+
+
+
+    /**
+     * @desc   确认提交
+     * @params {object} dataArray 上传数据
+     * @author huoke
+     */
+    $("#doSubmit").click(function() {
+        console.log(dataArray);
+        console.log($(".list-part input:first").val());
+        console.log($(".mark").val())
+        if (itemDataList.length == 0) {
+            mui.toast("请扫描物资！")
+        } else {
+            console.log(dataArray);
+            deptName = $("#deptName").val();
+            dataArray.applyDeptName = deptName;
+            dataArray.applyDeptNum = applyDeptNum;
+            dataArray.applyBuilding = $("#applyBuilding").val();
+            dataArray.applyFloor = $("#applyFloor").val();
+            dataArray.applyDeptName = $("#applyDeptNum").val();
+            if (typeof(dataArray.items) === "string") {
+                dataArray.items = JSON.parse(dataArray.items)
+            }
+            dataArray.items.map((item, index) => {
+                item.itemNum = $(".itemNum")[index].value
+                item.targetName = $(".itemName")[index].value
+                item.targetTel = $('.itemtel')[index].value
+                item.targetRemark = $('.itemmark')[index].value
+                return item
+            })
+            dataArray.items = JSON.stringify(dataArray.items)
+            console.log('44455', dataArray, dataArray.items);
+            $.ajax({
+                url: baseUrl + 'app_carriageCollectController.do?addCollect',
+                type: 'post',
+                data: dataArray,
+                success: function(data) {
+                    var data = JSON.parse(data);
+                    if (data.respCode !== '200') {
+                        mui.toast(data.respMsg, {
+                            duration: 4000,
+                            type: 'div'
+                        })
+                        return;
+                    }
+                    mui.toast(data.respMsg, {
+                        duration: 4000,
+                        type: 'div'
+                    })
+                    setTimeout(function() {
+                        location.href = './register.html';
+                    }, 1000)
+
+                },
+                error: function(XMLHttpRequest) {
+                    var text = JSON.parse(XMLHttpRequest.responseText);
+                    mui.toast(text.message, {
+                        duration: 4000,
+                        type: 'div'
+                    })
+                    return;
+                },
+                complete: function(XMLHttpRequest, status) {
+                    if (status == 'timeout') {
+                        $("#loading").hide();
+                        mui.toast("网速不给力，请重试！");
+                        return;
+                    }
+                    // else if (status = 'error') {
+                    //     mui.toast('当前网络不可用，请查看网络是否畅通！');
+                    //     return;
+                    // }
+                }
+            })
+        }
+
+
+    })
+
+
+    /**
+     * @desc   关闭弹框
+     * @author chenjing
+     */
+    $('.mask').click(function() {
+        $('.searchDiv').hide()
+        $('.mask').hide()
+    })
+
+    /**
+     * @desc   点击返回按钮
+     * @author chenjing
+     */
+    mui("body").on("tap", "#back", function() {
+        location.href = '../menu.html'
+    })
+
+    /**
+     * @desc   手机系统返回键
+     * @author chenjing
+     */
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+        location.href = './register.html';
+    }
+
+    //初始化控件
+    // $('#basic').editableSelect(
+    //     {
+    //         onSelect: function (element) {
+    //             var name = $(this).val();
+    //             dataArray.applyDeptName = name;
+    //             findDeptNum(name);
+    //         }
+    //     }
+    // );
+    $("#deptName").click(function() {
+        $(".inputList").show();
+    })
+</script>
+
+</html>

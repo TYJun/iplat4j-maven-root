@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="DMXX0101">
+
+	<!-- 将宿舍信息插入到宿舍信息表 -->
+	<insert id="insertDMInfoTable" parameterClass="java.util.HashMap">
+		INSERT INTO .dorms_room (
+		<isNotNull property="building">
+			building,  <!-- 宿舍楼 -->
+		</isNotNull>
+		<isNotNull property="floor">
+			floor,  <!-- 宿舍层 -->
+		</isNotNull>
+		<isNotNull property="roomNo">
+			room_no,  <!-- 宿舍号 -->
+		</isNotNull>
+		<isNotNull property="roomName">
+			room_name,  <!-- 宿舍总称(楼+层+宿舍号) -->
+		</isNotNull>
+		<isNotNull property="bedNum">
+			bed_num,  <!-- 床位数 -->
+		</isNotNull>
+		<isNotNull property="remainingBedNum">
+			remaining_bed_num,  <!-- 剩余床位数 -->
+		</isNotNull>
+		<isNotNull property="typeCode">
+			type_code,  <!-- 房间类型(1男生宿舍/0女生宿舍) -->
+		</isNotNull>
+		<isNotNull property="openRoom">
+			open_room,  <!-- 是否开放选房(0: 未开放，1:已开放) -->
+		</isNotNull>
+		<isNotNull property="dormProperties">
+			dorm_properties,  <!-- 房间属性(学生宿舍/职工宿舍) -->
+		</isNotNull>
+		<isNotNull property="dormPosition">
+			dorm_position,  <!-- 宿舍位置：院内、院外 -->
+		</isNotNull>
+		<isNotNull property="dormArea">
+			dorm_area,  <!-- 房屋面积："<50㎡"、"50-100㎡"、">100㎡" -->
+		</isNotNull>
+		<isNotNull property="elevatorRoom">
+			elevator_room,  <!-- 是否为电梯房 -->
+		</isNotNull>
+		<isNotNull property="priBathroom">
+			pri_bathroom,  <!-- 独立卫生间：有、没有 -->
+		</isNotNull>
+		<isNotNull property="rent">
+			rent,  <!-- 房租 -->
+		</isNotNull>
+		<isNotNull property="manageFee">
+			manage_fee,  <!-- 管理费 -->
+		</isNotNull>
+		<isNotNull property="annualFee">
+			annual_fee,  <!-- 年费 -->
+		</isNotNull>
+		<isNotNull property="note">
+			note,  <!-- 备注信息 -->
+		</isNotNull>
+		<isNotNull property="recCreaterNo">
+			rec_creater_no,  <!-- 创建人工号 -->
+		</isNotNull>
+		<isNotNull property="recCreaterName">
+			rec_creater_name,  <!-- 创建人 -->
+		</isNotNull>
+		<isNotNull property="recCreateTime">
+			rec_create_time,  <!-- 创建时间 -->
+		</isNotNull>
+		materials,
+		id  <!-- 主键 -->)
+		VALUES (
+		<isNotNull property="building">
+			#building#,
+		</isNotNull>
+		<isNotNull property="floor">
+			#floor#,
+		</isNotNull>
+		<isNotNull property="roomNo">
+			#roomNo#,
+		</isNotNull>
+		<isNotNull property="roomName">
+			#roomName#,
+		</isNotNull>
+		<isNotNull property="bedNum">
+			#bedNum#,
+		</isNotNull>
+		<isNotNull property="remainingBedNum">
+			#remainingBedNum#,
+		</isNotNull>
+		<isNotNull property="typeCode">
+			#typeCode#,
+		</isNotNull>
+		<isNotNull property="openRoom">
+			#openRoom#,
+		</isNotNull>
+		<isNotNull property="dormProperties">
+			#dormProperties#,
+		</isNotNull>
+		<isNotNull property="dormPosition">
+			#dormPosition#,
+		</isNotNull>
+		<isNotNull property="dormArea">
+			#dormArea#,
+		</isNotNull>
+		<isNotNull property="elevatorRoom">
+			#elevatorRoom#,
+		</isNotNull>
+		<isNotNull property="priBathroom">
+			#priBathroom#,
+		</isNotNull>
+		<isNotNull property="rent">
+			#rent#,
+		</isNotNull>
+		<isNotNull property="manageFee">
+			#manageFee#,
+		</isNotNull>
+		<isNotNull property="annualFee">
+			#annualFee#,
+		</isNotNull>
+		<isNotNull property="note">
+			#note#,
+		</isNotNull>
+		<isNotNull property="recCreaterNo">
+			#recCreaterNo#,
+		</isNotNull>
+		<isNotNull property="recCreaterName">
+			#recCreaterName#,
+		</isNotNull>
+		<isNotNull property="recCreateTime">
+			#recCreateTime#,
+		</isNotNull>
+		#materials#,
+		#id#  <!-- 主键 -->)
+	</insert>
+
+	<!-- 查询图片信息 -->
+	<select id="showPic" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select id picId,room_id roomId,img_url path
+		from dorms_room_pic where room_id = #roomId#
+	</select>
+
+	<!-- 保存图片信息 -->
+	<insert id="insertPic" parameterClass="java.util.Map">
+		insert into dorms_room_pic(id,rec_creator,rec_create_time,data_group_code,room_id,img_name,img_url)
+			value (#id#,#recCreator#,#recCreateTime#,#dataGroupCode#,#roomId#,#fileName#,#path#)
+	</insert>
+
+	<!-- 删除宿舍图片信息 -->
+	<delete id="deletePicture" parameterClass="string">
+		delete from dorms_room_pic where room_id = #roomId#
+	</delete>
+
+    <insert id="dormMarInsert" parameterClass="java.util.HashMap">
+		insert into dorm_mat(id,dorm_id,mat_code,mat_name,mat_spec,mat_model,num,rec_create_time,rec_creator)
+			value (#id#,#dormId#,#matCode#,#matName#,#matSpec#,#matModel#,#num#,now(),#recCreator#)
+    </insert>
+  
+</sqlMap>

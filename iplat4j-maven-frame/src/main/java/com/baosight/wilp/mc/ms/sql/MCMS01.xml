@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MCMS01">
+
+<!--    <select id="queryMessage" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">-->
+<!--        SELECT mm.id,                                &lt;!&ndash; 主键 &ndash;&gt;-->
+<!--        mt.template_code AS 'templateCode',    &lt;!&ndash; 模板编码 &ndash;&gt;-->
+<!--        mt.id AS 'templateId',        &lt;!&ndash; 模板Id &ndash;&gt;-->
+<!--        mt.template_name AS 'templateName',    &lt;!&ndash; 模板名称&ndash;&gt;-->
+<!--        mt.call_module AS callModule,        &lt;!&ndash; 调用模块 &ndash;&gt;-->
+<!--        case mt.call_module-->
+<!--        when 'MT' then '维修'-->
+<!--        when 'NB' then '医废'-->
+<!--        when 'OM' then '订餐'-->
+<!--        when 'BC' then '被服'-->
+<!--        end as "callModuleText",                &lt;!&ndash; 调用模块显示文本 &ndash;&gt;-->
+<!--        mt.delivery_channel AS deliveryChannel,-->
+<!--        case mt.delivery_channel                &lt;!&ndash; 发送渠道 &ndash;&gt;-->
+<!--        when 'DX' then '短信'-->
+<!--        when 'PS' then '推送'-->
+<!--        when 'DD' then '钉钉'-->
+<!--        when 'WX' then '企业微信'-->
+<!--        end as "deliveryChannelText",        &lt;!&ndash; 发送渠道显示文本 &ndash;&gt;-->
+<!--        mm.message AS 'message',                &lt;!&ndash; 消息体&ndash;&gt;-->
+<!--        (CASE WHEN mm.is_success = '1'-->
+<!--        THEN '成功'-->
+<!--        ELSE '失败'-->
+<!--        END)-->
+<!--        AS 'isSuccess',                        &lt;!&ndash; 消息状态 &ndash;&gt;-->
+<!--        mm.receiver AS 'receiver',            &lt;!&ndash; 接受人工号&ndash;&gt;-->
+<!--        (select name from $projectSchema$.ac_personnel ap where mm.receiver = ap.work_no limit 1 )-->
+<!--        AS 'receiverText',            &lt;!&ndash; 接受人姓名 &ndash;&gt;-->
+<!--        mm.sending_time AS 'sendingTime',        &lt;!&ndash; 发送时间 &ndash;&gt;-->
+<!--        mm.status AS status                     &lt;!&ndash;阅读状态&ndash;&gt;-->
+<!--        FROM $projectSchema$.mc_message mm-->
+<!--        LEFT JOIN $projectSchema$.mc_template mt ON mt.id = mm.template_id-->
+<!--        WHERE 1=1-->
+<!--        <isNotEmpty prepend=" AND " property="id">-->
+<!--            id = #id#-->
+<!--        </isNotEmpty>-->
+<!--        <isNotEmpty prepend=" AND " property="templateCode">-->
+<!--            template_code like concat('%', #templateCode#, '%')-->
+<!--        </isNotEmpty>-->
+<!--        <isNotEmpty prepend=" AND " property="callModule">-->
+<!--            call_module = #callModule#-->
+<!--        </isNotEmpty>-->
+<!--        <isNotEmpty prepend=" AND " property="deliveryChannel">-->
+<!--            delivery_channel = #deliveryChannel#-->
+<!--        </isNotEmpty>-->
+<!--        <isNotEmpty prepend=" AND " property="receiver">-->
+<!--            receiver = #receiver#-->
+<!--        </isNotEmpty>-->
+<!--        <isNotEmpty prepend=" AND " property="sendingTimeS">-->
+<!--            sending_time &gt; #sendingTimeS#-->
+<!--        </isNotEmpty>-->
+<!--        <isNotEmpty prepend=" AND " property="sendingTimeE">-->
+
+<!--            sending_time &lt; #sendingTimeE#-->
+<!--        </isNotEmpty>-->
+<!--        <dynamic prepend="ORDER BY">-->
+<!--            <isNotEmpty property="orderBy">-->
+<!--                $orderBy$-->
+<!--            </isNotEmpty>-->
+<!--            <isEmpty property="orderBy">-->
+<!--                sending_time desc-->
+<!--            </isEmpty>-->
+<!--        </dynamic>-->
+<!--    </select>-->
+
+    <select id="queryMessage" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT mm.id,                                <!-- 主键 -->
+        mt.template_code AS 'templateCode',    <!-- 模板编码 -->
+        mt.id AS 'templateId',        <!-- 模板Id -->
+        mt.template_name AS 'templateName',    <!-- 模板名称-->
+        mt.call_module AS callModule,        <!-- 调用模块 -->
+        bt.MODULE_CNAME_1 AS 'callModuleText',    <!-- 调用模块显示文本 -->
+        mt.delivery_channel AS deliveryChannel,
+        case mt.delivery_channel                <!-- 发送渠道 -->
+        when 'DX' then '短信'
+        when 'PS' then '推送'
+        when 'DD' then '钉钉'
+        when 'WX' then '企业微信'
+        end as "deliveryChannelText",        <!-- 发送渠道显示文本 -->
+        mm.message AS 'message',                <!-- 消息体-->
+        (CASE WHEN mm.is_success = '1'
+        THEN '成功'
+        ELSE '失败'
+        END)
+        AS 'isSuccess',                        <!-- 消息状态 -->
+        mm.receiver AS 'receiver',            <!-- 接受人工号-->
+        (select name from $projectSchema$.ac_personnel ap where mm.receiver = ap.work_no limit 1 )
+        AS 'receiverText',            <!-- 接受人姓名 -->
+        mm.sending_time AS 'sendingTime',        <!-- 发送时间 -->
+        mm.status AS status                     <!--阅读状态-->
+        FROM $projectSchema$.mc_message mm
+        LEFT JOIN $projectSchema$.mc_template mt ON mt.id = mm.template_id
+        LEFT JOIN $platSchema$.tedpi02 bt ON bt.MODULE_ENAME_1=mt.call_module
+        WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="templateCode">
+            template_code like concat('%', #templateCode#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="callModule">
+            call_module = #callModule#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deliveryChannel">
+            delivery_channel = #deliveryChannel#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="receiver">
+            receiver = #receiver#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="sendingTimeS">
+            sending_time &gt; #sendingTimeS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="sendingTimeE">
+
+            sending_time &lt; #sendingTimeE#
+        </isNotEmpty>
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                sending_time desc
+            </isEmpty>
+        </dynamic>
+    </select>
+
+    <select id="queryMessageCount" resultClass="int" parameterClass="java.util.HashMap">
+        SELECT COUNT(1)
+        FROM $projectSchema$.mc_message mm
+        LEFT JOIN $projectSchema$.mc_template mt ON mt.id = mm.template_id
+        WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            mm.id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="templateCode">
+            mt.templateCode like concat('%', #templateCode#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="callModule">
+            mt.callModule = #callModule#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deliveryChannel">
+            mt.deliveryChannel = #deliveryChannel#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="receiver">
+            mm.receiver = #receiver#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="sendingTimeS">
+            sending_time &gt; #sendingTimeS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="sendingTimeE">
+
+            sending_time &lt; #sendingTimeE#
+        </isNotEmpty>
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                sending_time desc
+            </isEmpty>
+        </dynamic>
+
+    </select>
+
+    <select id="queryUnreadMessageCount" resultClass="int" parameterClass="java.util.HashMap">
+        SELECT COUNT(1)
+        FROM $projectSchema$.mc_message
+        WHERE 1=1
+        AND is_success='1'
+        <isNotEmpty prepend=" AND " property="receiver">
+            receiver = #receiver#
+        </isNotEmpty>
+
+        <isNotEmpty prepend=" AND " property="status">
+            status=#status#
+        </isNotEmpty>
+    </select>
+
+
+    <update id="updateStatus" parameterClass="java.util.HashMap">
+        UPDATE $projectSchema$.mc_message
+        SET
+        <isNotNull property="status">
+            status = #status#
+        </isNotNull>
+        WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+
+        <isNotEmpty prepend=" AND " property="receiver">
+            receiver = #receiver#
+        </isNotEmpty>
+    </update>
+
+
+<!--    <update id="setAllRead" parameterClass="java.util.HashMap">-->
+<!--        UPDATE $projectSchema$.mc_message SET status = '1' WHERE id IN-->
+<!--        <iterate conjunction="," open="(" close=") " property="list">-->
+<!--            #list[]#-->
+<!--        </iterate>-->
+
+<!--        <isNotEmpty prepend=" AND " property="receiver">-->
+<!--            receiver = #receiver#-->
+<!--        </isNotEmpty>-->
+
+<!--    </update>-->
+    <update id="setAllRead" parameterClass="java.util.HashMap">
+        UPDATE $projectSchema$.mc_message
+        SET status = '1'
+        WHERE status='0'
+        <isNotEmpty prepend=" AND " property="receiver">
+            receiver = #receiver#
+        </isNotEmpty>
+    </update>
+</sqlMap>

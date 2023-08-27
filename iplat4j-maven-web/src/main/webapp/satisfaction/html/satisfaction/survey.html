@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../../reference/mui/css/mui.css" />
+    <link rel="stylesheet" href="../reference/css/common.css" />
+</head>
+<style type="text/css">
+    body {
+        background: #f9f9f9;
+    }
+    
+    .title-div {
+        width: 100%;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 15px;
+        padding-right: 15px;
+        background: #fff;
+        box-shadow: 0px 1px 3px #eee;
+    }
+    
+    .title {
+        height: 30px;
+        line-height: 30px;
+        font-size: 14px;
+        /*font-weight: bold;*/
+    }
+    
+    .percent-div {
+        color: #717171;
+        height: 30px;
+        line-height: 30px;
+    }
+    
+    .percent-div span {
+        color: #009688;
+    }
+    
+    .goal-div {
+        color: #717171;
+        height: 30px;
+        line-height: 30px;
+    }
+    
+    .goal-div span {
+        color: #009688;
+    }
+    
+    .operation-div {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 99;
+        height: 40px;
+        /*padding-left: 15px;
+  padding-right: 15px;*/
+        background: #fff;
+        box-shadow: 0px -1px 2px #eee;
+    }
+    
+    .goal-score-div {
+        height: 40px;
+        line-height: 40px;
+        border-left: 1px solid #eee;
+        border-right: 1px solid #eee;
+        text-align: center;
+    }
+    
+    .btn-prev {
+        height: 40px;
+        line-height: 40px;
+        color: #0081e8;
+        text-align: center;
+    }
+    
+    .btn-next {
+        height: 40px;
+        line-height: 40px;
+        color: #0081e8;
+        text-align: center;
+    }
+    
+    .btn-unable {
+        color: #eee;
+    }
+    
+    .question-list-div {
+        width: 100%;
+        padding: 15px;
+        overflow: scroll;
+        overflow-x: hidden;
+    }
+    
+    .question-name {
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        font-size: 15px;
+        font-weight: bold;
+    }
+    
+    .div-radio {
+        width: 33.33%;
+        display: inline-block;
+        float: left;
+    }
+    
+    .mui-input-row {
+        clear: none;
+    }
+    
+    .mui-input-group:before {
+        background-color: #f9f9f9;
+    }
+    
+    .mui-input-group:after {
+        background-color: #f9f9f9;
+    }
+    
+    .mui-input-group .mui-input-row:after {
+        background-color: #f9f9f9;
+    }
+    
+    .mui-checkbox.mui-left input[type="checkbox"],
+    .mui-radio.mui-left input[type="radio"] {
+        left: 0px;
+    }
+    
+    .mui-checkbox.mui-left label,
+    .mui-radio.mui-left label {
+        padding-left: 40px;
+    }
+    
+    .mui-input-row label {
+        line-height: 1;
+    }
+    
+    .mui-checkbox input[type="checkbox"]:checked:before,
+    .mui-radio input[type="radio"]:checked:before {
+        color: #009688;
+    }
+</style>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">问卷调查</h1>
+        <button class="mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+        返回
+      </button>
+        <div class="row" id="idName">
+            <button id="submit" class="mui-btn mui-btn-blue mui-btn-link mui-pull-right">
+          提交
+        </button>
+        </div>
+    </header>
+
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div id="loading" class="loading1" hidden>
+        <div class="loading2">
+            <span class="mui-spinner" style="width: 80px; height: 80px"></span>
+        </div>
+    </div>
+
+    <div class="mui-content">
+        <div class="mui-row title-div">
+            <div class="mui-col mui-col-xs-12 center zhuti" style="font-size: 16px; font-weight: bold"></div>
+            <!--	<div class="mui-col mui-col-xs-4 center title">项目名字</div>-->
+            <div class="mui-col mui-col-xs-4 center percent-div">
+                完成: &nbsp;&nbsp;<span id="questionNum">0/0</span>
+            </div>
+            <div class="mui-col mui-col-xs-4"></div>
+            <div class="mui-col mui-col-xs-4 center goal-div" style="display: none">
+                总分: &nbsp;&nbsp;<span id="totalGoal">0分</span>
+            </div>
+        </div>
+        <div class="question-list-div">
+            <!-- <div class="question-div">
+          <div class="question-name word-omit">1.撒拉几的生力军</div>
+          <form class="mui-input-group">
+            <div class="mui-input-row mui-radio mui-left div-radio">
+              <label>10分</label>
+              <input name="radio1" type="radio">
+            </div>
+            <div class="mui-input-row mui-radio mui-left div-radio">
+              <label>8分</label>
+              <input name="radio1" type="radio">
+            </div>
+            <div class="mui-input-row mui-radio mui-left div-radio">
+              <label>6分</label>
+              <input name="radio1" type="radio">
+            </div>
+            <div class="mui-input-row mui-radio mui-left div-radio">
+              <label>4分</label>
+              <input name="radio1" type="radio">
+            </div>
+            <div class="mui-input-row mui-radio mui-left div-radio">
+              <label>2分</label>
+              <input name="radio1" type="radio" checked="">
+            </div>
+          </form>
+        </div>
+
+        <div class="question-div">
+          <div class="question-name word-omit">1.撒拉几的生力军</div>
+          <form class="mui-input-group">
+            <div class="mui-input-row mui-radio mui-left div-radio">
+              <label>是</label>
+              <input name="radio1" type="radio">
+            </div>
+            <div class="mui-input-row mui-radio mui-left div-radio">
+              <label>否</label>
+              <input name="radio1" type="radio">
+            </div>
+          </form>
+        </div> -->
+        </div>
+    </div>
+
+    <div class="mui-row operation-div">
+        <div id="prev" class="mui-col mui-col-xs-3 btn-prev btn-unable">
+            上一项
+        </div>
+        <div class="mui-col mui-col-xs-6 goal-score-div">
+            <span id="scoreGoal" style="display: none">0分</span> &nbsp;&nbsp;
+            <span class="howNum">0/0项</span>
+        </div>
+        <!-- <div class="mui-col mui-col-xs-6 goal-score-div">
+				得分:&nbsp;&nbsp;<span id="scoreGoal">0分</span> &nbsp;&nbsp;
+				<span class="howNum">0/0项</span>
+			</div> -->
+        <div id="next" class="mui-col mui-col-xs-3 btn-next">下一项</div>
+    </div>
+</body>
+<script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../reference/js/common.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var url = location.search;
+    var jsonStr = url.substring(1, url.length);
+    var json = JSON.parse(decodeURIComponent(jsonStr));
+    $(".question-list-div").height($(window).height() - 185);
+    var billNo = json.billNo;
+    console.log(json);
+    if (json.standardName != undefined || json.standardName != "undefined") {
+        $(".mui-title").text(json.standardName);
+    }
+    if (json.status == 99) {
+        $("#idName").hide();
+    }
+    var howNum = 0;
+    var surveyList = [],
+        surveyNum = 0;
+    $("#loading").show();
+    loadNewData();
+    // console.log(billNo);
+
+    function loadNewData() {
+        var prame = {
+            billNo: billNo,
+            ID: json.standardId,
+        };
+
+        prame = JSON.stringify(prame);
+
+        $.ajax({
+            url: baseUrl + "MobileAgentService",
+            type: "post",
+            headers: {
+                methodName: "getAssessManageProject",
+                serviceName: "SQAP01",
+            },
+            data: {
+                prames: prame,
+            },
+            success: function(data) {
+                console.log(data);
+                $("#loading").hide();
+                if (data.msgKey == "200") {
+                    var list = data.attr.param;
+                    console.log(list);
+                    surveyNum = list.length;
+                    for (var i = 0; i < list.length; i++) {
+                        var questionList = list[i].sqProjectInstance;
+                        // var json = {
+                        //   "orderCode":list[i].orderCode,
+                        //   "projectId":list[i].id,
+                        //   "projectCode":list[i].projectCode,
+                        //   "projectName":list[i].projectName,
+                        //   "totalPoints":list[i].points,
+                        //   // "goalPoints":0,
+                        //   "questions":[]
+                        // }
+                        for (var k = 0; k < questionList.length; k++) {
+                            var jsonS = {
+                                orderCode: i + 1,
+                                projectId: list[i].id,
+                                projectCode: list[i].projectCode,
+                                projectName: list[i].projectName,
+                                totalPoints: list[i].points,
+                                order_number: questionList[k].orderNumber,
+                                instance_id: questionList[k].id,
+                                instance_code: questionList[k].instanceCode,
+                                instance_name: questionList[k].instanceName,
+                                points: questionList[k].point,
+                                scorePoints: -1,
+                                point_type: questionList[k].point_type,
+                                idea: "",
+                                advice: "",
+                                radioList: questionList[k].radioList,
+                            };
+                            surveyList.push(jsonS);
+                        }
+                        // surveyList.push(json);
+                    }
+                    dealData(surveyList);
+                    //console.log(surveyList);
+                } else {
+                    showMsg(data.respMsg);
+                }
+            },
+        });
+    }
+    var index = 1;
+    var ideaNum = 0;
+
+    function dealData() {
+        // $('.title').html(list[index][0].projectName);
+        // $('#totalGoal').html(list[index][0].totalPoints+"分");
+        //			console.log(surveyList);
+        var selectNum = 0,
+            totalNum = 0;
+        var html = "";
+        for (var i = 0; i < surveyList.length; i++) {
+            if (surveyList[i].orderCode == index) {
+                $(".zhuti").text(surveyList[i].projectName);
+                //$('.title').html(surveyList[i].projectName);
+                $("#totalGoal").html(surveyList[i].totalPoints + "分");
+                totalNum++;
+                if (surveyList[i].scorePoints > -1) selectNum++;
+                html += createViews(surveyList[i], i + 1);
+                ideaNum = i;
+            }
+        }
+        //			console.log(index)
+        //console.log(ideaNum)
+        html +=
+            '<div class="question-div" style="display: inline-block; width: 100%;">';
+        html += '<div style="font-size:15px;">意见：</div>';
+
+        html +=
+            '<textarea class="div-idea" oninput="getIdea(this.value)">' +
+            surveyList[ideaNum].idea +
+            "</textarea>";
+        html += "</div>";
+        html +=
+            '<div class="question-div" style="display: inline-block; width: 100%;">';
+        html += '<div style="font-size:15px;">建议：</div>';
+        html +=
+            '<textarea class="div-advice" oninput="getAdvice(this.value)">' +
+            surveyList[ideaNum].advice +
+            "</textarea>";
+        html += "</div>";
+        $("#questionNum").html(selectNum + "\/" + totalNum);
+        $(".question-list-div").html(html);
+        $(".howNum").text(index + "/" + surveyNum + "项");
+    }
+
+    function createViews(json, serialNo) {
+        var reg1 = new RegExp("；", "g");
+        var reg2 = new RegExp(";", "g");
+        var html =
+            '<div class="question-div" style="display: inline-block; width: 100%;">';
+
+        json.instance_name = json.instance_name
+            .replace(reg1, "<br>")
+            .replace(reg2, "<br>");
+
+        html +=
+            '<div style="font-size:19px;line-height: 24px;">' +
+            serialNo +
+            "." +
+            json.instance_name +
+            "</div>";
+
+        //这里规则不清楚，需要根据实际情况修改
+
+        if (json.point_type == "1") {
+            html += typeThree(
+                json.instance_id,
+                json.points,
+                json.scorePoints,
+                serialNo
+            );
+        } else {
+            //				if(json.points == 10) {
+            //					html += typeOne(json.instance_id, json.scorePoints, serialNo);
+            //				} else {
+            //					html += typeTwo(json.instance_id, json.scorePoints, serialNo);
+            //				}
+            console.log(json.radioList);
+            html += typeNew(json.instance_id, json.radioList, serialNo);
+        }
+        html += "</div>";
+        return html;
+    }
+
+    function typeNew(instance_id, list, serialNo) {
+        var html = '<form class="mui-input-group">';
+
+        for (var i = 0; i < list.length; i++) {
+            html +=
+                '<div id="' +
+                instance_id +
+                '" value="' +
+                list[i].value +
+                '" class="mui-input-row mui-radio mui-left div-radio">';
+
+            html += "<label>" + list[i].label + "</label>";
+            html +=
+                '<input name="radio' +
+                serialNo +
+                '" type="radio" value="' +
+                list[i].value +
+                '">';
+            html += "</div>";
+        }
+        html += "</form>";
+        return html;
+    }
+
+    function typeOne(instance_id, scorePoints, serialNo) {
+        var html = '<form class="mui-input-group">';
+        html +=
+            '<div id="' +
+            instance_id +
+            '" value="10" class="mui-input-row mui-radio mui-left div-radio">';
+        html += "<label>10分</label>";
+        if (scorePoints == 10)
+            html +=
+            '<input name="radio' +
+            serialNo +
+            '" type="radio" value="10" checked="">';
+        else
+            html += '<input name="radio' + serialNo + '" type="radio" value="10">';
+        html += "</div>";
+        html +=
+            '<div id="' +
+            instance_id +
+            '" value="8" class="mui-input-row mui-radio mui-left div-radio">';
+        html += "<label>8分</label>";
+        if (scorePoints == 8)
+            html +=
+            '<input name="radio' +
+            serialNo +
+            '" type="radio" value="8" checked="">';
+        else
+            html += '<input name="radio' + serialNo + '" type="radio" value="8">';
+        html += "</div>";
+        html +=
+            '<div id="' +
+            instance_id +
+            '" value="6" class="mui-input-row mui-radio mui-left div-radio">';
+        html += "<label>6分</label>";
+        if (scorePoints == 6)
+            html +=
+            '<input name="radio' +
+            serialNo +
+            '" type="radio" value="6" checked="">';
+        else
+            html += '<input name="radio' + serialNo + '" type="radio" value="6">';
+        html += "</div>";
+        html +=
+            '<div id="' +
+            instance_id +
+            '" value="4" class="mui-input-row mui-radio mui-left div-radio">';
+        html += "<label>4分</label>";
+        if (scorePoints == 4)
+            html +=
+            '<input name="radio' +
+            serialNo +
+            '" type="radio" value="4" checked="">';
+        else
+            html += '<input name="radio' + serialNo + '" type="radio" value="4">';
+        html += "</div>";
+        html +=
+            '<div id="' +
+            instance_id +
+            '" value="2" class="mui-input-row mui-radio mui-left div-radio">';
+        html += "<label>2分</label>";
+        if (scorePoints == 2)
+            html +=
+            '<input name="radio' +
+            serialNo +
+            '" type="radio" value="2" checked="">';
+        else
+            html += '<input name="radio' + serialNo + '" type="radio" value="2">';
+        html += "</div>";
+        html += "</form>";
+        return html;
+    }
+
+    function typeTwo(instance_id, scorePoints, serialNo) {
+        var html = '<form class="mui-input-group">';
+        html +=
+            '<div id="' +
+            instance_id +
+            '" value="5" class="mui-input-row mui-radio mui-left div-radio">';
+        html += "<label>5分</label>";
+        if (scorePoints == 5)
+            html +=
+            '<input name="radio' +
+            serialNo +
+            '" type="radio" value="5" checked="">';
+        else
+            html += '<input name="radio' + serialNo + '" type="radio" value="5">';
+        html += "</div>";
+        html +=
+            '<div id="' +
+            instance_id +
+            '" value="4" class="mui-input-row mui-radio mui-left div-radio">';
+        html += "<label>4分</label>";
+        if (scorePoints == 4)
+            html +=
+            '<input name="radio' +
+            serialNo +
+            '" type="radio" value="4" checked="">';
+        else
+            html += '<input name="radio' + serialNo + '" type="radio" value="4">';
+        html += "</div>";
+        html +=
+            '<div id="' +
+            instance_id +
+            '" value="3" class="mui-input-row mui-radio mui-left div-radio">';
+        html += "<label>3分</label>";
+        if (scorePoints == 3)
+            html +=
+            '<input name="radio' +
+            serialNo +
+            '" type="radio" value="3" checked="">';
+        else
+            html += '<input name="radio' + serialNo + '" type="radio" value="3">';
+        html += "</div>";
+        html +=
+            '<div id="' +
+            instance_id +
+            '" value="2" class="mui-input-row mui-radio mui-left div-radio">';
+        html += "<label>2分</label>";
+        if (scorePoints == 2)
+            html +=
+            '<input name="radio' +
+            serialNo +
+            '" type="radio" value="2" checked="">';
+        else
+            html += '<input name="radio' + serialNo + '" type="radio" value="2">';
+        html += "</div>";
+        html +=
+            '<div id="' +
+            instance_id +
+            '" value="1" class="mui-input-row mui-radio mui-left div-radio">';
+        html += "<label>1分</label>";
+        if (scorePoints == 1)
+            html +=
+            '<input name="radio' +
+            serialNo +
+            '" type="radio" value="1" checked="">';
+        else
+            html += '<input name="radio' + serialNo + '" type="radio" value="1">';
+        html += "</div>";
+        html += "</form>";
+        return html;
+    }
+
+    function typeThree(instance_id, points, scorePoints, serialNo) {
+        var html = '<form class="mui-input-group">';
+        html +=
+            '<div id="' +
+            instance_id +
+            '" value="' +
+            points +
+            '" class="mui-input-row mui-radio mui-left div-radio">';
+        html += "<label>是</label>";
+        if (scorePoints == points)
+            html +=
+            '<input name="radio' +
+            serialNo +
+            '" type="radio" value="' +
+            points +
+            '" checked="">';
+        else
+            html +=
+            '<input name="radio' +
+            serialNo +
+            '" type="radio" value="' +
+            points +
+            '">';
+        html += "</div>";
+        html +=
+            '<div id="' +
+            instance_id +
+            '" value="0" class="mui-input-row mui-radio mui-left div-radio">';
+        html += "<label>否</label>";
+        if (scorePoints == 0)
+            html +=
+            '<input name="radio' +
+            serialNo +
+            '" type="radio" value="0" checked="">';
+        else
+            html += '<input name="radio' + serialNo + '" type="radio" value="0">';
+        html += "</div>";
+        html += "</form>";
+        return html;
+    }
+
+    function getIdea(value) {
+        for (var i = 0; i < surveyList.length; i++) {
+            if (surveyList[i].orderCode == index) {
+                surveyList[i].idea = value;
+            }
+        }
+    }
+
+    function getAdvice(value) {
+        for (var i = 0; i < surveyList.length; i++) {
+            if (surveyList[i].orderCode == index) {
+                surveyList[i].advice = value;
+            }
+        }
+    }
+
+    mui("body").on("tap", "div.div-radio", function() {
+        var instance_id_s = this.id;
+        var goal = parseInt($(this).attr("value"));
+        var selectNum = 0,
+            goals = 0,
+            totalNum = 0;
+        for (var i = 0; i < surveyList.length; i++) {
+            if (surveyList[i].orderCode == index) {
+                totalNum++;
+                if (surveyList[i].instance_id == instance_id_s)
+                    surveyList[i].scorePoints = goal;
+
+                if (surveyList[i].scorePoints > -1) selectNum++;
+            }
+            if (surveyList[i].scorePoints != -1)
+                goals = goals + parseInt(surveyList[i].scorePoints);
+        }
+        $("#questionNum").html(selectNum + "\/" + totalNum);
+        $("#scoreGoal").html(goals + "分");
+    });
+
+    document.getElementById("next").addEventListener("tap", function() {
+        if (index < surveyNum) {
+            index++;
+            dealData();
+            btnControl();
+        } else {
+            showMsg("已经是最后一页了");
+        }
+    });
+
+    document.getElementById("prev").addEventListener("tap", function() {
+        if (index > 1) {
+            index--;
+            dealData();
+            btnControl();
+        } else {
+            showMsg("当前页是第一页");
+        }
+    });
+
+    function btnControl() {
+        if (index >= surveyNum) {
+            $("#prev").removeClass("btn-unable");
+            $("#next").addClass("btn-unable");
+        } else if (index <= 1) {
+            $("#prev").addClass("btn-unable");
+            $("#next").removeClass("btn-unable");
+        } else {
+            $("#prev").removeClass("btn-unable");
+            $("#next").removeClass("btn-unable");
+        }
+    }
+
+    document.getElementById("submit").addEventListener("tap", function() {
+        var goalArray = [],
+            readySubmit = true;
+        for (var i = 0; i < surveyList.length; i++) {
+            var json = {
+                instanceId: surveyList[i].instance_id,
+                score: surveyList[i].scorePoints,
+                instanceCode: surveyList[i].instance_code,
+                idea: surveyList[i].idea,
+                advice: surveyList[i].advice,
+            };
+            goalArray.push(json);
+            if (surveyList[i].scorePoints == -1) readySubmit = false;
+        }
+        if (!readySubmit) {
+            showMsg("存在未选择项，请选择后再次提交");
+            return;
+        }
+        $("#loading").show();
+
+        var prame = {
+            LoginUser: workNo,
+            billNo: billNo,
+            instanceArray: JSON.stringify(goalArray),
+        };
+
+        prame = JSON.stringify(prame);
+
+        $.ajax({
+            //url: baseUrl + 'app_assessController.do?saveAssessProjectInstance',
+            url: baseUrl + "MobileAgentService",
+            type: "post",
+            headers: {
+                methodName: "saveAssessProjectInstance",
+                serviceName: "SQAP01",
+            },
+            /*data: {
+					LoginUser: workNo,
+					billNo: billNo,
+					instanceArray: JSON.stringify(goalArray)
+				},*/
+            data: {
+                prames: prame,
+            },
+            success: function(data) {
+                console.log(data);
+                if (data.msgKey == "200") {
+                    showMsg("提交成功");
+                    //console.log(goalArray)
+                    setTimeout("location.href = 'main.html'", 2000);
+                } else {
+                    showMsg(data.msg);
+                }
+            },
+        });
+    });
+</script>
+
+</html>

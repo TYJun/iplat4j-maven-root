@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PRGL03">
+
+
+
+	<!-- 查询安全问题分类 -->
+	<select id="querySafty"
+		resultClass="com.baosight.wilp.pr.gl.domain.PRGL03"
+		parameterClass="java.util.HashMap">
+		SELECT
+		typename AS typeName,
+		typecode AS typeCode
+		FROM
+		t_s_type
+		WHERE
+		typegroupid = ( SELECT id FROM
+		t_s_typegroup WHERE typegroupcode =
+		'SAFTY_ROUGH_TYPE' )
+	</select>
+	
+	
+	<!-- 查询安全问题等级 -->
+	<select id="queryGrade"
+		resultClass="com.baosight.wilp.pr.gl.domain.PRGL03"
+		parameterClass="java.util.HashMap">
+		SELECT
+		typename AS typeName,
+		typecode AS typeCode
+		FROM
+		t_s_type
+		WHERE
+		typegroupid = ( SELECT id FROM
+		t_s_typegroup WHERE typegroupcode =
+		'SAFTY_GRADE_TYPE' )
+		ORDER BY 
+		typeCode
+	</select>
+
+
+	
+	
+
+
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.pr.gl.domain.PRGL03">
+		SELECT
+		d.id AS id,
+		CASE
+		WHEN d.status_code = '30' THEN
+		'已整改'
+		WHEN d.status_code = '39' THEN
+		'整改被驳回'
+		END "statusCode",
+		d.dangerCode AS dangerCode,
+		d.contentDesc AS dangerclassfullname,
+		d.localTypeName AS typeName,
+		d.dangerWhere AS dangerWhere,
+		d.contentDesc AS contentdesc,
+		d.createMan  AS realname,
+		d.createTime AS createTime,
+		r.writeTime AS writetime,
+		d.requireDesc AS requireDesc,
+		d.requiredTime AS requiredTime
+		FROM
+		pr_safty_danger d
+		LEFT JOIN pr_safty_danger_result r ON d.id = r.dangerID
+		WHERE
+		status_code<![CDATA[ >= ]]>'30'
+		and
+		status_code <![CDATA[ <= ]]>'39'
+		<isNotEmpty prepend="AND" property="localTypeCode">
+			d.localTypeCode = #localTypeCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="beginDate">
+		<![CDATA[
+			d.createTime >= #beginDate#
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="endDate">
+			<![CDATA[
+			d.createTime <= #endDate#
+			]]>
+		</isNotEmpty>
+		group by d.id
+	</select>
+
+
+
+
+
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM iplat_v5demo_business.t_safty_danger_result WHERE 1=1
+		<isNotEmpty prepend=" AND " property="dangerresultid">
+			dangerResultID =
+			#dangerresultid#
+		</isNotEmpty>
+	</select>
+
+
+	<insert id="insert">
+		INSERT INTO iplat_v5demo_business.t_safty_danger_result (dangerResultID,  <!-- 主键 -->
+		dangerID,  <!-- 所属的隐患 -->
+		manageMan,  <!-- 负责人姓名 -->
+		managePhone,  <!-- 负责人电话 -->
+		finishTime,  <!-- 完成时间 -->
+		contentDesc,  <!-- 整改内容 -->
+		resultStatus,  <!-- 总体状态 -->
+		auditStatus,  <!-- 审核状态 -->
+		auditContent,  <!-- 审核内容 -->
+		writeMan,  <!-- 登记人 -->
+		writeIP,  <!-- 登记IP -->
+		writeTime,
+		auditMan,  <!-- 审核人 -->
+		auditIP,  <!-- 审核IP -->
+		auditTime,
+		globalID,
+		auditFromID,
+		dangerClassFullName,  <!-- 问题分类名称 -->
+		dangerClassTypeCode,  <!-- 问题分类类型的代码 -->
+		dangerClassTypeName,  <!-- 问题分类类型的名称 -->
+		localTypeCode  <!-- 本院问题分类的代码 -->
+		)
+		VALUES (#dangerresultid#, #dangerid#, #manageman#, #managephone#,
+		#finishtime#, #contentdesc#, #resultstatus#, #auditstatus#,
+		#auditcontent#, #writeman#, #writeip#, #writetime#, #auditman#,
+		#auditip#, #audittime#, #globalid#, #auditfromid#,
+		#dangerclassfullname#, #dangerclasstypecode#, #dangerclasstypename#,
+		#localtypecode#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM iplat_v5demo_business.t_safty_danger_result WHERE
+		dangerResultID = #dangerresultid#
+	</delete>
+
+	<update id="update">
+		UPDATE iplat_v5demo_business.t_safty_danger_result
+		SET
+		dangerID = #dangerid#,   <!-- 所属的隐患 -->
+		manageMan = #manageman#,   <!-- 负责人姓名 -->
+		managePhone = #managephone#,   <!-- 负责人电话 -->
+		finishTime = #finishtime#,   <!-- 完成时间 -->
+		contentDesc = #contentdesc#,   <!-- 整改内容 -->
+		resultStatus = #resultstatus#,   <!-- 总体状态 -->
+		auditStatus = #auditstatus#,   <!-- 审核状态 -->
+		auditContent = #auditcontent#,   <!-- 审核内容 -->
+		writeMan = #writeman#,   <!-- 登记人 -->
+		writeIP = #writeip#,   <!-- 登记IP -->
+		writeTime = #writetime#,
+		auditMan = #auditman#,   <!-- 审核人 -->
+		auditIP = #auditip#,   <!-- 审核IP -->
+		auditTime = #audittime#,
+		globalID = #globalid#,
+		auditFromID = #auditfromid#,
+		dangerClassFullName = #dangerclassfullname#,   <!-- 问题分类名称 -->
+		dangerClassTypeCode = #dangerclasstypecode#,   <!-- 问题分类类型的代码 -->
+		dangerClassTypeName = #dangerclasstypename#,   <!-- 问题分类类型的名称 -->
+		localTypeCode = #localtypecode#  <!-- 本院问题分类的代码 -->
+		WHERE
+		dangerResultID = #dangerresultid#
+	</update>
+
+</sqlMap>

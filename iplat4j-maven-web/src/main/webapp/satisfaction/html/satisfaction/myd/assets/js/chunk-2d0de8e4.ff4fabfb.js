@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([["chunk-2d0de8e4"],{"85c4":function(n,e,o){"use strict";o.r(e);var t={name:"global-flex",props:{},render:function(){return(0,arguments[0])("div")},data:function(){return{}},methods:{},mounted:function(){}},o=o("2877"),t=Object(o.a)(t,void 0,void 0,!1,null,"6629d373",null);e.default=t.exports}}]);

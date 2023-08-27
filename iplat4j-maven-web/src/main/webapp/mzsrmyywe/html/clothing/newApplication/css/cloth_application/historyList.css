@@ -1,0 +1,415 @@
+body {
+  background-color: #eee;
+  margin: auto;
+  padding: auto;
+}
+
+[v-cloak] {
+  display: none;
+}
+
+.historylist .list_card > li {
+  overflow: hidden;
+}
+
+/* 遮罩 */
+.mui-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 998;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* 浮标 */
+#newApplication {
+  position: fixed;
+  top: 550px;
+  right: 35px;
+  z-index: 997;
+  width: 50px;
+  height: 50px;
+  background-color: #d6f9e0;
+  color: #57b175;
+  font-size: 40px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 50px;
+  border-radius: 50%;
+}
+/* 顶部选项卡 */
+.Tab {
+  z-index: 997;
+  width: 100%;
+  height: 40px;
+  position: fixed;
+  top: 44px;
+  background-color: #fff;
+}
+.sure_Y,
+.sure_N {
+  display: inline-block;
+  width: 49%;
+  text-align: center;
+  line-height: 40px;
+  color: #74d390;
+  background-color: #fff;
+}
+.active {
+  border-bottom: #4db56c 2px solid;
+}
+
+/* 根据卡片已确认和未确认隐藏编辑和取消按钮 */
+.sureNone {
+  display: none;
+}
+
+/* 头部区域 */
+
+.top {
+  position: fixed;
+  width: 100%;
+  height: 44px;
+  background-color: #4db56c;
+  text-align: center;
+  top: 0;
+  z-index: 999;
+}
+
+#top-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  background-color: #4db56c;
+}
+
+#icon-left-back {
+  float: left;
+  position: relative;
+  margin-right: 107px;
+  width: 28px;
+  height: 100%;
+  line-height: 44px;
+  color: #fff;
+  margin-left: 12px;
+  font-weight: 400;
+  font-size: 30px;
+}
+
+.title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 280px;
+  margin: 0 auto;
+  line-height: 44px;
+  font-size: 17px;
+  font-weight: 500;
+  color: #fff;
+}
+
+#icon-right-search {
+  float: right;
+  position: relative;
+  width: 28px;
+  height: 100%;
+  line-height: 44px;
+  color: #fff;
+  margin-right: 26px;
+  font-weight: 700;
+  font-size: 25px;
+}
+
+/* 查询盒子 */
+.searchDiv {
+  z-index: 999;
+  position: fixed;
+  top: 44px;
+  width: 100%;
+  background-color: #fff;
+  height: 120px;
+}
+.time {
+  position: relative;
+  margin: 0 auto;
+  width: 90%;
+  height: 50px;
+}
+.timeText {
+  position: absolute;
+  height: 30px;
+  left: 5px;
+  top: 15px;
+  font-size: 16px;
+  color: black;
+}
+#beginTime {
+  width: 100px;
+  height: 30px;
+  position: absolute;
+  top: 10px;
+  left: 105px;
+  line-height: 30px;
+  text-align: center;
+  font-size: 16px;
+  color: rgb(78, 78, 78);
+}
+.text {
+  position: absolute;
+  top: 10px;
+  left: 215px;
+  color: black;
+  font-size: 18px;
+  line-height: 30px;
+  text-align: center;
+}
+#endTime {
+  width: 100px;
+  height: 30px;
+  position: absolute;
+  top: 10px;
+  left: 230px;
+  line-height: 30px;
+  text-align: center;
+  font-size: 16px;
+  color: rgb(78, 78, 78);
+}
+.dept {
+  position: relative;
+  margin: 10px auto;
+  height: 50px;
+  width: 90%;
+}
+.deptText {
+  position: absolute;
+  height: 30px;
+  left: 5px;
+  top: 15px;
+  color: black;
+  font-size: 16px;
+}
+#deptChoose {
+  text-align: right;
+  line-height: 36px;
+  width: 70%;
+  height: 36px;
+  position: absolute;
+  right: 7px;
+  top: 7px;
+  font-size: 16px;
+  text-align: right;
+  color: rgb(78, 78, 78);
+}
+#reset,
+#search {
+  top: 10px;
+  width: 84px;
+  height: 35px;
+  margin-bottom: 7px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px;
+  font-size: 16px;
+}
+#reset {
+  position: relative;
+  left: 52px;
+  background-color: #fff;
+  color: #4db56c;
+  border: #4db56c 2px solid;
+}
+#search {
+  position: relative;
+  left: 153px;
+  background-color: #4db56c;
+  color: #fff;
+}
+/* 历史记录列表区 */
+
+ul {
+  list-style: none;
+}
+
+.list_card {
+  padding: 0 19px;
+}
+
+.list_card > li {
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.card {
+  background-color: #fff;
+  padding: 0 0px 0px 0;
+  border: 1px solid rgb(192, 192, 192);
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+}
+
+/* 上部分 */
+
+.historylist {
+  position: relative;
+  top: 80px;
+}
+
+.historylist .list_card #top {
+  width: 100%;
+  height: 40px;
+  background-color: #4db56c;
+}
+
+.historylist .list_card #top .mui-icon-list {
+  font-size: 23px;
+  vertical-align: middle;
+  margin-left: 18px;
+  margin-right: 2px;
+  line-height: 47px;
+  color: #fff;
+}
+
+.historylist .list_card #top .ordNum {
+  font-size: 16px;
+  color: #fff;
+  line-height: 40px;
+  font-size: 16px;
+}
+
+.deptname {
+  float: right;
+  color: #fff;
+  line-height: 40px;
+  font-size: 16px;
+  margin-right: 28px;
+  font-family: "STHeiti";
+}
+
+/* 下部分 */
+
+.content_t {
+  height: 100px;
+  width: 300px;
+  margin: 0px auto;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 0px 10px;
+  overflow: hidden;
+  border-bottom: 1px solid #b6b4b4;
+}
+
+.applyTime .Name,
+.count .Name,
+.giveoutTime .Name,
+.count .Name {
+  float: left;
+  width: 30%;
+  margin-top: 10px;
+}
+
+.applyTime .value,
+.giveoutTime .value {
+  float: right;
+  width: 70%;
+  text-align: right;
+  margin-top: 10px;
+}
+
+.count .value {
+  float: right;
+  width: 10%;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.content_b {
+  width: 300px;
+  margin: 0px auto;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 5px 10px 12px 10px;
+  overflow: hidden;
+}
+
+.content_b .Name {
+  float: left;
+  width: 70%;
+  margin-top: 10px;
+}
+
+.content_b .value {
+  float: right;
+  width: 10%;
+  margin-top: 10px;
+  position: relative;
+  right: 25px;
+  text-align: center;
+}
+
+.gong {
+  position: relative;
+  float: right;
+  margin-top: 10px;
+  right: 50px;
+}
+
+.jian {
+  position: relative;
+  float: right;
+  margin-top: 10px;
+  left: 30px;
+}
+
+.count .jian {
+  position: relative;
+  float: right;
+  margin-top: 10px;
+  left: 46px;
+}
+
+/* 按钮 */
+
+.btton {
+  margin-bottom: 60px;
+}
+
+#cancel,
+#edit {
+  width: 85px;
+  height: 36px;
+  margin-bottom: 7px;
+  margin-top: 10px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px;
+  font-size: 16px;
+  text-align: center;
+  line-height: 36px;
+}
+
+#edit {
+  float: left;
+  margin-left: 29px;
+  background-color: #fff;
+  border: 2px #4db56c solid;
+  color: black;
+}
+
+#cancel {
+  float: right;
+  margin-right: 29px;
+  background-color: #4db56c;
+  color: #fff;
+}

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CMBG01">
+
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		t1.REC_CREATOR as "recCreator",
+		t1.REC_CREATE_TIME as
+		"recCreateTime",
+		t1.REC_REVSIOR
+		as "recRevsior",
+		t1.REC_REVISE_TIME as
+		"recReviseTime",
+		t1.ARCHIVE_FLAG
+		as "archiveFlag",  <!-- 归档标记 -->
+		t1.ID as "id",
+		t1.CONT_NO as "contNo",  <!-- 合同号 -->
+		t1.ORIGIN_BILL_NO as "originBillNo",  <!-- 来源单据号 -->
+		t1.ORIGIN_BILL_TYPE as "originBillType",  <!-- 来源单据类型 -->
+		t1.CONT_NAME as "contName",  <!-- 合同名称 -->
+		t01.CONT_TYPE_NAME as "contTypeNum",  <!-- 合同类型 -->
+		t1.CONT_SIGN_TIME as "contSignTime",  <!-- 合同签订日期 -->
+		t1.PLAN_TAKEEF_TIME as "planTakeefTime",  <!-- 计划生效日期 -->
+		t1.PLAN_FINISH_TIME as "planFinishTime",  <!-- 计划终止日期 -->
+		<!-- t25.SURP_NAME as "surpNum", -->
+		CASE
+		WHEN t1.CURR_TYPE='rmb' THEN
+		'人民币'
+		END
+		currType,  <!-- 币种 -->
+		t1.CONT_TAX_EXCLUDE_AMOUNT as "contTaxExcludeAmount",  <!-- 合同不含税金额 -->
+		t1.CONT_TAX_INCLUDE_AMOUNT as "contTaxIncludeAmount",  <!-- 合同含税金额 -->
+		t1.CONT_TAX_RATE as "contTaxRate",  <!-- 税率 -->
+		t1.CONT_TAX_AMOUNT as "contTaxAmount",  <!-- 合同税额 -->
+		t1.CONT_FEE_AMOUNT as "contFeeAmount",  <!-- 合同费用总金额 -->
+		t1.INVOICE_TAX_EXCLUDE_AMOUNT as "invoiceTaxExcludeAmount",  <!-- 发票金额 不含税 -->
+		t1.INVOICE_TAX_INCLUDE_AMOUNT as "invoiceTaxIncludeAmount",  <!-- 发票金额 含税 -->
+		t1.INVOICE_TAX_AMOUNT as "invoiceTaxAmount",  <!-- 发票税额 -->
+		t1.SETTLE_TAX_EXCLUDE_AMOUNT as "settleTaxExcludeAmount",  <!-- 结算金额 不含税 -->
+		t1.SETTLE_TAX_INCLUDE_AMOUNT as "settleTaxIncludeAmount",  <!-- 结算金额 含税 -->
+		t1.SETTLE_TAX_AMOUNT as "settleTaxAmount",  <!-- 结算税额 -->
+		t1.SETTLE_TIME as "settleTime",  <!-- 结算时间 -->
+		t1.PAY_AGRE_NUM as "payAgreNum",  <!-- 付款协议 -->
+		CASE
+		WHEN t1.CONT_STATUS='0'THEN '登记'
+		WHEN t1.CONT_STATUS='1'THEN '执行'
+		WHEN t1.CONT_STATUS='2'THEN '冻结'
+		WHEN t1.CONT_STATUS='3'THEN '终止'
+		WHEN t1.CONT_STATUS='4'THEN '结案'
+		END "contStatus",  <!-- 合同状态 -->
+		t1.CONT_ADMIN_NAME as "contAdmin",  <!-- 合同管理员 -->
+		t1.BILL_MAKER as "billMaker",  <!-- 制单人 -->
+		DATE_FORMAT(t1.BILL_MAKE_TIME,'%Y-%m-%d') as "billMakeTime",<!-- 制表时间 -->
+		DATE_FORMAT(t1.CHECK_TIME ,'%Y-%m-%d') as "checkTime",  <!-- 审批时间 -->
+		t1.CHECK_MAKER as "checkMaker",  <!-- 审批人 -->
+		t1.FINISH_MAKER as "finishMaker",  <!-- 结案人 -->
+		t1.FINISH_TIME as "finishTime",  <!-- 结案时间 -->
+		t1.END_MAKER as "endMaker",  <!-- 终止人 -->
+		t1.END_TIME as "endTime",  <!-- 终止时间 -->
+		t1.QUAR_PERIOD as "quarPeriod",  <!-- 质保期 -->
+		t1.BUDGET as "budget",  <!-- 预算 -->
+		t1.PRE_PAY_DATE as "prePayDate",
+		t1.proNO as "prono",  <!-- 项目号 -->
+		t1.CHECK_MONEY as "checkMoney",  <!-- 审计后金额 -->
+		t1.yesorno as "yesorno",  <!-- 是否发送短信 -->
+		t1.xuqian_contNo as "xuqianContno",  <!-- 续签主合同号 -->
+		t1.msg_status as "msgStatus",
+		t1.device_num as "deviceNum",
+		t1.sms_config1 as "smsConfig1" <!-- 是否发送过 -->
+		FROM cm_contract_bill t1
+		LEFT JOIN cm_contract_type t01 on t1.CONT_TYPE_NUM = t01.CONT_TYPE_NUM
+		WHERE t1.CONT_STATUS in (1,2)
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="contNo">
+			CONT_NO like
+			concat('%',#contNo#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contName">
+			CONT_NAME like
+			concat('%',#contName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contTypeNum">
+			t1.CONT_TYPE_NUM=#contTypeNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contSignTime">
+			t1.CONT_SIGN_TIME  <![CDATA[ >= ]]>  #contSignTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contSignTime1">
+			t1.CONT_SIGN_TIME  <![CDATA[ <= ]]> #contSignTime1#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="contDeptNum">
+			t1.CONT_DEPT_NUM = #contDeptNum#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				t1.BILL_MAKE_TIME DESC
+			</isEmpty>
+		</dynamic>
+
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM cm_contract_bill WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO cm_contract_bill (REC_CREATOR,
+		REC_CREATE_TIME,
+		REC_REVSIOR,
+		REC_REVISE_TIME,
+		ARCHIVE_FLAG,  <!-- 归档标记 -->
+		ID,
+		CONT_NO,  <!-- 合同号 -->
+		ORIGIN_BILL_NO,  <!-- 来源单据号 -->
+		ORIGIN_BILL_TYPE,  <!-- 来源单据类型 -->
+		CONT_NAME,  <!-- 合同名称 -->
+		CONT_TYPE_NUM,  <!-- 合同类型 -->
+		CONT_SIGN_TIME,  <!-- 合同签订日期 -->
+		PLAN_TAKEEF_TIME,  <!-- 计划生效日期 -->
+		PLAN_FINISH_TIME,  <!-- 计划终止日期 -->
+		SUPR_NUM,  <!-- 供应商 -->
+		CURR_TYPE,  <!-- 币种 -->
+		CONT_TAX_EXCLUDE_AMOUNT,  <!-- 合同不含税金额 -->
+		CONT_TAX_INCLUDE_AMOUNT,  <!-- 合同含税金额 -->
+		CONT_TAX_RATE,  <!-- 税率 -->
+		CONT_TAX_AMOUNT,  <!-- 合同税额 -->
+		CONT_FEE_AMOUNT,  <!-- 合同费用总金额 -->
+		INVOICE_TAX_EXCLUDE_AMOUNT,  <!-- 发票金额 不含税 -->
+		INVOICE_TAX_INCLUDE_AMOUNT,  <!-- 发票金额 含税 -->
+		INVOICE_TAX_AMOUNT,  <!-- 发票税额 -->
+		SETTLE_TAX_EXCLUDE_AMOUNT,  <!-- 结算金额 不含税 -->
+		SETTLE_TAX_INCLUDE_AMOUNT,  <!-- 结算金额 含税 -->
+		SETTLE_TAX_AMOUNT,  <!-- 结算税额 -->
+		SETTLE_TIME,  <!-- 结算时间 -->
+		PAY_AGRE_NUM,  <!-- 付款协议 -->
+		CONT_STATUS,  <!-- 合同状态 -->
+		CONT_ADMIN,  <!-- 合同管理员 -->
+		CONT_ADMIN_NAME,<!-- 合同管理员名字 -->
+		BILL_MAKER,  <!-- 制单人 -->
+		BILL_MAKE_TIME,  <!-- 制表时间 -->
+		CHECK_TIME,  <!-- 审批时间 -->
+		CHECK_MAKER,  <!-- 审批人 -->
+		FINISH_MAKER,  <!-- 结案人 -->
+		FINISH_TIME,  <!-- 结案时间 -->
+		END_MAKER,  <!-- 终止人 -->
+		END_TIME,  <!-- 终止时间 -->
+		QUAR_PERIOD,  <!-- 质保期 -->
+		BUDGET,  <!-- 预算 -->
+		PRE_PAY_DATE,
+		proNO,  <!-- 项目号 -->
+		CHECK_MONEY,  <!-- 审计后金额 -->
+		CONT_DEPT_NUM,
+		yesorno,  <!-- 是否发送短信 -->
+		CONT_DEPT_NAME,
+		xuqian_contNo,  <!-- 续签主合同号 -->
+		msg_status,
+		device_num,
+		sms_config1  <!-- 是否发送过 -->
+		)
+		VALUES (#recCreator#, #recCreateTime#, #recRevsior#, #recReviseTime#,
+		#archiveFlag#, #id#, #contNo#, #originBillNo#, #originBillType#,
+		#contName#, #contTypeNum#, #contSignTime#, #planTakeefTime#,
+		#planFinishTime#, #suprNum#, #currType#, #contTaxExcludeAmount#,
+		#contTaxIncludeAmount#, #contTaxRate#, #contTaxAmount#,
+		#contFeeAmount#, #invoiceTaxExcludeAmount#, #invoiceTaxIncludeAmount#,
+		#invoiceTaxAmount#, #settleTaxExcludeAmount#,
+		#settleTaxIncludeAmount#, #settleTaxAmount#, #settleTime#,
+		#payAgreNum#, #contStatus#, #contAdmin#, #contAdminName#,#billMaker#, #billMakeTime#,
+		#checkTime#, #checkMaker#, #finishMaker#, #finishTime#, #endMaker#,
+		#endTime#, #quarPeriod#, #budget#, #prePayDate#, #prono#,
+		#checkMoney#, #contDeptNum#, #yesorno#, #contDeptName#,
+		#xuqianContno#, #msgStatus#, #deviceNum#, #smsConfig1#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM cm_contract_bill WHERE
+		ID = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE cm_contract_bill
+		SET
+		REC_CREATOR = #recCreator#,
+		REC_CREATE_TIME =
+		#recCreateTime#,
+		REC_REVSIOR = #recRevsior#,
+		REC_REVISE_TIME =
+		#recReviseTime#,
+		ARCHIVE_FLAG = #archiveFlag#,   <!-- 归档标记 -->
+		CONT_NO = #contNo#,   <!-- 合同号 -->
+		ORIGIN_BILL_NO = #originBillNo#,   <!-- 来源单据号 -->
+		ORIGIN_BILL_TYPE = #originBillType#,   <!-- 来源单据类型 -->
+		CONT_NAME = #contName#,   <!-- 合同名称 -->
+		CONT_TYPE_NUM = #contTypeNum#,   <!-- 合同类型 -->
+		CONT_SIGN_TIME = #contSignTime#,   <!-- 合同签订日期 -->
+		PLAN_TAKEEF_TIME = #planTakeefTime#,   <!-- 计划生效日期 -->
+		PLAN_FINISH_TIME = #planFinishTime#,   <!-- 计划终止日期 -->
+		SUPR_NUM = #suprNum#,   <!-- 供应商 -->
+		CURR_TYPE = #currType#,   <!-- 币种 -->
+		CONT_TAX_EXCLUDE_AMOUNT = #contTaxExcludeAmount#,   <!-- 合同不含税金额 -->
+		CONT_TAX_INCLUDE_AMOUNT = #contTaxIncludeAmount#,   <!-- 合同含税金额 -->
+		CONT_TAX_RATE = #contTaxRate#,   <!-- 税率 -->
+		CONT_TAX_AMOUNT = #contTaxAmount#,   <!-- 合同税额 -->
+		CONT_FEE_AMOUNT = #contFeeAmount#,   <!-- 合同费用总金额 -->
+		INVOICE_TAX_EXCLUDE_AMOUNT = #invoiceTaxExcludeAmount#,   <!-- 发票金额 不含税 -->
+		INVOICE_TAX_INCLUDE_AMOUNT = #invoiceTaxIncludeAmount#,   <!-- 发票金额 含税 -->
+		INVOICE_TAX_AMOUNT = #invoiceTaxAmount#,   <!-- 发票税额 -->
+		SETTLE_TAX_EXCLUDE_AMOUNT = #settleTaxExcludeAmount#,   <!-- 结算金额 不含税 -->
+		SETTLE_TAX_INCLUDE_AMOUNT = #settleTaxIncludeAmount#,   <!-- 结算金额 含税 -->
+		SETTLE_TAX_AMOUNT = #settleTaxAmount#,   <!-- 结算税额 -->
+		SETTLE_TIME = #settleTime#,   <!-- 结算时间 -->
+		PAY_AGRE_NUM = #payAgreNum#,   <!-- 付款协议 -->
+		CONT_STATUS = #contStatus#,   <!-- 合同状态 -->
+		CONT_ADMIN = #contAdmin#,   <!-- 合同管理员 -->
+		CONT_ADMIN_NAME = #contAdminName#,
+		BILL_MAKER = #billMaker#,   <!-- 制单人 -->
+		BILL_MAKE_TIME = #billMakeTime#,   <!-- 制表时间 -->
+		CHECK_TIME = #checkTime#,   <!-- 审批时间 -->
+		CHECK_MAKER = #checkMaker#,   <!-- 审批人 -->
+		FINISH_MAKER = #finishMaker#,   <!-- 结案人 -->
+		FINISH_TIME = #finishTime#,   <!-- 结案时间 -->
+		END_MAKER = #endMaker#,   <!-- 终止人 -->
+		END_TIME = #endTime#,   <!-- 终止时间 -->
+		QUAR_PERIOD = #quarPeriod#,   <!-- 质保期 -->
+		BUDGET = #budget#,   <!-- 预算 -->
+		PRE_PAY_DATE = #prePayDate#,
+		proNO = #prono#,   <!-- 项目号 -->
+		CHECK_MONEY = #checkMoney#,   <!-- 审计后金额 -->
+		CONT_DEPT_NUM = #contDeptNum#,
+		yesorno = #yesorno#,   <!-- 是否发送短信 -->
+		CONT_DEPT_NAME = #contDeptName#,
+		xuqian_contNo = #xuqianContno#,   <!-- 续签主合同号 -->
+		msg_status = #msgStatus#,
+		device_num = #deviceNum#,
+		sms_config1 =
+		#smsConfig1#  <!-- 是否发送过 -->
+		WHERE
+		ID = #id#
+	</update>
+	<!-- 冻结 -->
+	<update id="freezr" parameterClass="java.util.HashMap">
+		UPDATE cm_contract_bill
+		SET
+		CONT_STATUS
+		= '2'
+		WHERE
+		ID = #id#
+	</update>
+	<!-- 冻结恢复 -->
+	<update id="fecover" parameterClass="java.util.HashMap">
+		UPDATE cm_contract_bill
+		SET
+		CONT_STATUS = '1'
+		WHERE
+		ID = #id#
+	</update>
+	<!-- 终止 -->
+	<update id="stop" parameterClass="java.util.HashMap">
+		UPDATE cm_contract_bill
+		SET
+		CONT_STATUS =
+		'3'
+		WHERE
+		ID = #id#
+	</update>
+
+
+</sqlMap>

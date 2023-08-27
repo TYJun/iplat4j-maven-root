@@ -1,0 +1,680 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../../reference/mui/css/mui.css">
+    <link rel="stylesheet" href="css/platform.css" />
+</head>
+<STYLE TYPE="text/css">
+    body {
+        background: #eee;
+    }
+    
+    .icon-logo {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .mui-content>.mui-table-view:first-child {
+        margin-top: 0px;
+    }
+    
+    #tabbar-with-gear .mui-table-view {
+        margin-top: 20px;
+    }
+    
+    .mui-page-content {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #eee;
+    }
+    
+    .round {
+        border: 1px solid #bbb;
+        width: 60px;
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+        color: #fff;
+        background-color: #666666;
+        filter: alpha(opacity=80);
+        /* 用于IE浏览器－透明度为20%*/
+        -moz-opacity: 0.8;
+        /*  用于Moz + Firefox－透明度为20%*/
+        opacity: 0.8;
+        -webkit-border-radius: 60px;
+        -moz-border-radius: 60px;
+        -o-border-radius: 60px;
+        border-radius: 60px;
+    }
+    
+    .mui-card-header {
+        font-size: 14px;
+        color: #0090bb;
+        font-weight: 500;
+    }
+    
+    .mui-card-header.mui-card-media .mui-media-body {
+        font-size: 14px;
+        font-weight: 500;
+        color: #0090bb;
+    }
+    
+    * {
+        margin: 0;
+        padding: 0;
+        font-size: 13px;
+    }
+    
+    li {
+        list-style: none;
+    }
+    /*.box {
+  width:100%;
+  height:80px;
+  background:#fff;
+  padding: 10px;
+  overflow: hidden;
+}*/
+    /*.box ul li {
+  color:#585858;
+  height:70px;
+}*/
+    
+    .img_alt {
+        background: rgba(0, 0, 0, 0.7);
+        filter: progid: DXImageTransform.Microsoft.gradient(startcolorstr=#7F000000, endcolorstr=#7F000000);
+        position: relative;
+        z-index: 10;
+        top: 170px;
+        height: 30px;
+        line-height: 30px;
+        color: #fff;
+        padding-left: 15px;
+        padding-right: 15px;
+        width: 100%;
+    }
+    
+    .box .positionDivs {
+        width: 34px;
+        height: 34px;
+        line-height: 37px;
+        margin: 0 auto;
+        text-align: center;
+        font-weight: bold;
+        font-size: 18px;
+    }
+</STYLE>
+
+<body>
+    <header id="header" class="mui-bar mui-bar-nav">
+        <button onclick="location.href='../../menu.html'" class=" mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+      	首页
+      </button>
+        <h1 class="mui-title">安全问题上报</h1>
+    </header>
+
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div id="upload" class="transparent" hidden>
+        <div id="waiting" class="loader loading-position">
+            <div class="loader-inner line-spin-fade-loader">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        <div style="color:#fff;position:relative;width:100%;text-align:center;top:40%;">正在提交，请稍候...</div>
+    </div>
+
+    <nav class="mui-bar mui-bar-tab" style="background-color:#fff;">
+        <a id="home" class="mui-tab-item mui-active" href="#tabbar">
+            <span class="mui-icon mui-icon-home"></span>
+            <span class="mui-tab-label">主页</span>
+        </a>
+        <!-- <a id="message" class="mui-tab-item" href="#tabbar-with-chat">
+            <span id="noticeNum" class="mui-icon mui-icon-email">
+        	<div class="messages" style="width: 18px;height: 18px;position: absolute;background: red;top: -2px;right: -7px;border-radius: 10px;">100</div>
+        </span>
+            <span class="mui-tab-label">消息</span>
+        </a> -->
+        <a class="mui-tab-item" id="newBuild">
+            <span class="mui-icon mui-icon-plusempty"></span>
+            <span class="mui-tab-label">快速新建</span>
+        </a>
+    </nav>
+
+    <div class="mui-content">
+        <div id="tabbar" class="mui-control-content mui-active">
+            <!--<div id="menuPic" style="width:100%;height:200px;background:url(img/img.jpg);background-size:cover;">
+					<div id="hosName" class="img_alt">安全台账管理平台</div>
+				</div>-->
+            <div style="width:100%;height:40px;line-height:40px;padding-left:15px;background:#989898;color:#fff;">
+                常用应用
+            </div>
+
+            <ul id="comApplication" class="mui-table-view mui-grid-view mui-grid-9">
+                <!-- <li id="REGISTER" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="javascript:void(0)">
+							<div class="mui-media-body">问题登记</div>
+						</a>
+					</li>
+					<li id="QUESTION" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="javascript:void(0)">
+							<div class="mui-media-body">问题池</div>
+						</a>
+					</li>
+					<li id="GUAQUESTION" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<a href="javascript:void(0)">
+							<div class="mui-media-body">挂账问题</div>
+						</a>
+					</li> -->
+                <li id="TAIZHANG" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+                    <a href="javascript:void(0)">
+                        <div class="mui-media-body">问题台账</div>
+                    </a>
+                </li>
+            </ul>
+            <div style="width:100%;height:40px;line-height:40px;padding-left:15px;background:#989898;color:#fff;">
+                数据统计
+            </div>
+
+            <div class="box">
+                <ul class="mui-table-view mui-grid-view mui-grid-9 tongNum">
+                    <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+                        <a href="javascript:void(0)">
+                            <div id="newBuildes" class="positionDivs" style="color: #0090BB;">0</div>
+                            <div class="mui-media-body">新建</div>
+                        </a>
+                    </li>
+                    <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+                        <a href="javascript:void(0)">
+                            <div id="new1" class="positionDivs" style="color: darkgreen;">0</div>
+                            <div class="mui-media-body">已认领</div>
+                        </a>
+                    </li>
+                    <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+                        <a href="javascript:void(0)">
+                            <div id="newGai" class="positionDivs" style="color: #000000;">0</div>
+                            <div class="mui-media-body">已整改</div>
+                        </a>
+                    </li>
+                    <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+                        <a href="javascript:void(0)">
+                            <div id="newSure" class="positionDivs" style="color: gray;">0</div>
+                            <div class="mui-media-body">已结束</div>
+                        </a>
+                    </li>
+                    <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+                        <a href="javascript:void(0)">
+                            <div id="newGua" class="positionDivs" style="color: red;">0</div>
+                            <div class="mui-media-body">已挂账</div>
+                        </a>
+                    </li>
+                    <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+                        <a href="javascript:void(0)">
+                            <div id="newHui" class="positionDivs" style="color: red;">0</div>
+                            <div class="mui-media-body">整改被驳回</div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- 消息 -->
+        <div id="tabbar-with-chat" class="mui-control-content">
+            <div style="padding: 10px 10px;">
+                <div id="segmentedControl" class="mui-segmented-control">
+                    <a class="mui-control-item mui-active" href="#item2">
+							待整改
+						</a>
+                    <a class="mui-control-item" href="#item3">
+							已挂账
+						</a>
+                    <a class="mui-control-item" href="#item1">
+							已整改
+						</a>
+                </div>
+            </div>
+
+            <div>
+                <div id="item1" class="mui-control-content">
+                    <!--<div class="mui-card">
+          		<div class="mui-card-header" style="color:#1fca6a;height: 55px;padding-top: 22px;">
+          			<div>单号：20170311<p>2016-12-27 09:36:10</p></div>
+          		</div>
+          		<div class="mui-card-content">
+          			<div id="notice_content" class="mui-card-content-inner" style="min-height:50px;">
+          				已完成整改
+								</div>
+          		</div>
+          	</div>-->
+                </div>
+                <div id="item2" class="mui-control-content mui-active">
+                    <!--<div class="mui-card">
+          		<div class="mui-card-header" style="color:#1fca6a;height: 55px;padding-top: 22px;">
+          			<div>单号：20180923<p>2016-12-27 09:36:10</p></div>
+          		</div>
+          		<div class="mui-card-content">
+          			<div id="notice_content" class="mui-card-content-inner" style="min-height:50px;">
+          				已结束
+								</div>
+          		</div>
+          	</div>-->
+                </div>
+                <div id="item3" class="mui-control-content">
+                    <!--<div class="mui-card">
+          		<div class="mui-card-header" style="color:#1fca6a;height: 55px;padding-top: 22px;">
+          			<div>单号：20190923<p>2016-12-27 09:36:10</p></div>
+          		</div>
+          		<div class="mui-card-content">
+          			<div id="notice_content" class="mui-card-content-inner" style="min-height:50px;">
+          				已挂账
+								</div>
+          		</div>
+          	</div>-->
+                </div>
+            </div>
+        </div>
+
+        <div id="sign_div" style="position:fixed;z-index:9999;top:0;bottom:0;right:0;left:0;background:#eee;overflow:scroll;" hidden>
+            <h5 style="padding:15px;">点击左侧楼层名称展开或隐藏具体选项</h5>
+            <div id="showSignPicker"></div>
+            <!-- <div>
+      <h5 class="mui-content-padded">公共区域</h5>
+      <div class="mui-card">
+          <form class="mui-input-group">
+            <div class="mui-input-row mui-checkbox">
+              <label>一层</label>
+              <input name="checkbox1" value="Item 3" type="checkbox">
+            </div>
+            <div class="mui-input-row mui-checkbox">
+              <label>一层</label>
+              <input name="checkbox1" value="Item 4" type="checkbox" checked="">
+            </div>
+          </form>
+        </div>
+    </div> -->
+            <div style="position:fixed;z-index:999;bottom:80px;right:10px;padding:15px;">
+                <div id="signOut" class="round">返回</div>
+                <!-- <button id='signOpt' class="mui-btn mui-btn-block mui-btn-primary">确定</button> -->
+            </div>
+
+            <div style="position:fixed;z-index:999;bottom:10px;right:10px;padding:15px;">
+                <div id="signOpt" class="round">确认</div>
+                <!-- <button id='signOpt' class="mui-btn mui-btn-block mui-btn-primary">确定</button> -->
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+<script src="../reference/mui/js/mui.js" type="text/javascript"></script>
+<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="js/jquery.qrcode.min.js" type="text/javascript"></script>
+<!--<script src="../../cordova.js" type="text/javascript"></script>-->
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem('url');
+    var workNo = localStorage.getItem('workNo');
+    var hosPitalName = localStorage.getItem('hospitalName');
+    var deptName = localStorage.getItem("deptName");
+    var name = localStorage.getItem("name");
+    var jobs = localStorage.getItem('deptName');
+    var jobName = localStorage.getItem('jobName');
+
+    var hospitalId = document.getElementById("hospitalId");
+    var qrcodeParents = document.getElementById("qrcodeParent");
+    var myModals = document.getElementById("myModal");
+    var aboveBacks = document.getElementById("aboveBack");
+    var rowss = 10000000;
+    var page = 1;
+
+    $('#head-img').attr('src', localStorage.getItem("img"));
+    $('#hosPital').text(hosPitalName);
+    $('#name').text(name);
+    $('#workNo').text(jobName);
+    $('#deptName').text(deptName);
+
+    //消息数量统计
+    //ajaxNum0('20'); //待整改；
+    //ajaxNum1('30'); //待整改；
+    //ajaxNum2('80'); //已经整改；
+    //ajaxNum3('99'); //已结束；
+    //ajaxNum4('31'); //已经挂账;
+
+    ajaxNum0('00'); //待认领；
+    ajaxNum1('10'); //已认领；
+    ajaxNum2('30'); //已整改；
+    ajaxNum3('99'); //已结束；
+    ajaxNum4('20'); //已经挂账;
+    ajaxNum5('01'); //整改被驳回;
+
+    //新建
+    function ajaxNum0(statusCode) {
+        var prame = {
+            flowStatusCode: statusCode,
+            row: '',
+            page: '',
+            workNo: workNo
+        };
+        prame = JSON.stringify(prame);
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            headers: {
+                serviceName: 'PRAP02',
+                methodName: 'queryDangerAmount'
+            },
+            data: {
+                prames: prame
+            },
+            success: function(data) {
+                var mountNum1 = data.attr.param;
+                $('#newBuildes').text(mountNum1);
+                //console.log(mountNum1,'新建');
+            }
+        })
+    }
+
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        /**
+         * 系统返回键监听
+         */
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+        location.href = "../../menu.html";
+    }
+    //待整改
+    function ajaxNum1(statusCode) {
+        var prame = {
+            flowStatusCode: statusCode,
+            row: '',
+            page: '',
+            workNo: workNo
+        };
+        prame = JSON.stringify(prame);
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            headers: {
+                serviceName: 'PRAP02',
+                methodName: 'queryDangerAmount'
+            },
+            data: {
+                prames: prame
+            },
+            success: function(data) {
+                var mountNum1 = data.attr.param;
+                $('#new1').text(mountNum1);
+                //console.log(mountNum1,'新建');
+            }
+        })
+    }
+    //已整改
+    function ajaxNum2(statusCode) {
+        var prame = {
+            flowStatusCode: statusCode,
+            row: '',
+            page: '',
+            workNo: workNo
+        };
+        prame = JSON.stringify(prame);
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            headers: {
+                serviceName: 'PRAP02',
+                methodName: 'queryDangerAmount'
+            },
+            data: {
+                prames: prame
+            },
+            success: function(data) {
+                var mountNum2 = data.attr.param;
+                $('#newGai').text(mountNum2);
+                //console.log(mountNum2,'已整改');
+            }
+        })
+    }
+    //已结束
+    function ajaxNum3(statusCode) {
+        var prame = {
+            flowStatusCode: statusCode,
+            row: '',
+            page: '',
+            workNo: workNo
+        };
+        prame = JSON.stringify(prame);
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            headers: {
+                serviceName: 'PRAP02',
+                methodName: 'queryDangerAmount'
+            },
+            data: {
+                prames: prame
+            },
+            success: function(data) {
+                var mountNum3 = data.attr.param;
+                $('#newSure').text(mountNum3);
+                //console.log(mountNum3,'已经确认');
+            }
+        })
+    }
+    //挂账
+    function ajaxNum4(statusCode) {
+        var prame = {
+            flowStatusCode: statusCode,
+            row: '',
+            page: '',
+            workNo: workNo
+        };
+        prame = JSON.stringify(prame);
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            headers: {
+                serviceName: 'PRAP02',
+                methodName: 'queryDangerAmount'
+            },
+            data: {
+                prames: prame
+            },
+            success: function(data) {
+                var mountNum4 = data.attr.param;
+                $('#newGua').text(mountNum4);
+                //console.log(mountNum4,'已挂账');
+            }
+        })
+    }
+    //整改被驳回
+    function ajaxNum5(statusCode) {
+        var prame = {
+            flowStatusCode: statusCode,
+            row: '',
+            page: '',
+            workNo: workNo
+        };
+        prame = JSON.stringify(prame);
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            headers: {
+                serviceName: 'PRAP02',
+                methodName: 'queryDangerAmount'
+            },
+            data: {
+                prames: prame
+            },
+            success: function(data) {
+                var mountNum5 = data.attr.param;
+                $('#newHui').text(mountNum5);
+            }
+        })
+    }
+
+    //dataFunM('80');
+    //dataFunM('31');
+    //dataFunM('30');
+    dataFunM('10');
+    dataFunM('20');
+    dataFunM('30');
+
+
+    function dataFunM(statusCodesss) {
+        var prame = {
+            flowStatusCode: statusCodesss,
+            row: '',
+            page: '',
+            workNo: workNo
+        };
+        prame = JSON.stringify(prame);
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            headers: {
+                serviceName: 'PRAP02',
+                methodName: 'queryDangerList'
+            },
+            data: {
+                prames: prame
+            },
+            success: function(data) {
+                var list = data.attr.param;
+                var html = '';
+                //console.log(data);
+
+                if (data.msgKey == 200 || data.msgKey == '200') {
+                    for (var i = 0; i < list.length; i++) {
+                        var dangerCode = list[i].dangerCode;
+                        var createTime = list[i].createTime;
+                        var flowStatusCode = list[i].flowStatusCode;
+                        html += poolFunss(dangerCode, createTime, flowStatusCode);
+                    }
+                    //根据状态值来判断显示
+                    if (statusCodesss == '80') {
+                        $('#item1').html(html);
+                    } else if (statusCodesss == '30') {
+                        $('#item2').html(html);
+                    } else if (statusCodesss == '31') {
+                        $('#item3').html(html);
+                    }
+
+                }
+            },
+            complete: function(XMLHttpRequest, status) {
+                if (status == 'timeout') {
+                    /*$("#loading").hide();*/
+                    $('#rounditem1').hide();
+                    $('#rounditem3').hide();
+                    $('#warn small').html('加载失败！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);　
+                } else if (status == 'error') {
+                    /*$("#loading").hide();*/
+                    $('#rounditem1').hide();
+                    $('#rounditem3').hide();
+                    $('#warn small').html('网络异常！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                }
+            }
+        })
+    }
+
+    function poolFunss(dangerCode, createTime, flowStatusCode) {
+        var html = '';
+        html += '<div class="mui-card">';
+        html += '<div class="mui-card-header" style="color:#1fca6a;height: 55px;padding-top: 22px;">';
+        html += '<div>单号：' + dangerCode + '<p>' + createTime + '</p></div>';
+        html += '</div>';
+        html += '<div class="mui-card-content">';
+        html += '<div id="notice_content" class="mui-card-content-inner" style="min-height:50px;">';
+        if (flowStatusCode == '80') {
+            html += '已整改';
+        } else if (flowStatusCode == '30') {
+            html += '待整改';
+        } else if (flowStatusCode == '31') {
+            html += '已挂账';
+        }
+        html += '</div></div></div>';
+        return html;
+    }
+
+    //生成二维码
+    $(function() {
+        //更详细的配置
+        $('#qrcode').qrcode({
+            text: encodeURIComponent(hosPitalName),
+            width: 250,
+            height: 250,
+            background: "#FFFFFF",
+            foreground: "black"
+        });
+    })
+
+    //jquery
+    document.getElementById("newBuild").addEventListener('tap', function() {
+        location.href = "problemRegister.html";
+    }, false)
+
+    //常用应用
+    $('#comApplication').on('click', 'li', function(e) {
+        e.preventDefault();
+
+        var liText = $(this).attr('id');
+        if (liText == 'REGISTER') {
+            location.href = "problemRegister.html";
+        } else if (liText == 'QUESTION') {
+            location.href = "problemPool.html";
+        } else if (liText == 'GUAQUESTION') {
+            location.href = "debtsQuestion.html";
+        } else if (liText == 'TAIZHANG') {
+            location.href = "problemAccount.html";
+        }
+    })
+    $('.tongNum').on('click', 'li.mui-table-view-cell', function(e) {
+        var dataLi = $(this).find('.mui-media-body').text();
+        //console.log(dataLi);
+        if (dataLi == '新建') {
+            location.href = 'problemPool.html?' + encodeURIComponent(dataLi);
+        } else if (dataLi == '已认领') {
+            location.href = 'problemPool.html?' + encodeURIComponent(dataLi);
+        } else if (dataLi == '已整改') {
+            location.href = 'problemPool.html?' + encodeURIComponent(dataLi);
+        } else if (dataLi == '已结束') {
+            location.href = 'problemMakesure.html';
+        } else if (dataLi == '已挂账') {
+            location.href = 'accountQuestion.html';
+        } else {
+            location.href = 'rejectQuestion.html';
+        }
+    })
+</script>
+
+</html>

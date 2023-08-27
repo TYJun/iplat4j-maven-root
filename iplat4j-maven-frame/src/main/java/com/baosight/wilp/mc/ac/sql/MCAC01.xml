@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+		
+<sqlMap namespace="MCAC01">
+
+	<select id="queryApp" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		  id id,
+		  app_code appCode,
+		  app_name appName,
+		  app_key appKey,
+		  app_id appId,
+		  master_secret masterSecret,
+		  rec_creater recCreater,
+		  rec_create_time recCreateTime,
+		  rec_revisor recRevisor,
+		  rec_revise_time recReviseTime
+		FROM $projectSchema$.mc_app
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="appCode">
+			app_code like concat('%', #appCode#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="appName">
+			app_name like concat('%', #appName#, '%')
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  rec_create_time desc
+			</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="queryAppCount" resultClass="int">
+		SELECT count(*)
+		FROM $projectSchema$.mc_app
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="appCode">
+			app_code like concat('%', #appCode#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="appName">
+			app_name like concat('%', #appName#, '%')
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				rec_create_time desc
+			</isEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="queryLastAppCode" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+		SELECT app_code as "appCode"
+		FROM $projectSchema$.mc_app
+		ORDER BY rec_create_time DESC
+		LIMIT 1
+	</select>
+	
+	<insert id="insertApp" parameterClass="java.util.HashMap">
+		INSERT INTO $projectSchema$.mc_app (id,  				<!-- 主键 -->
+												app_code,		<!-- app编码 -->
+												app_name,	 <!-- app名称 -->
+												app_key, <!-- app_key -->
+												app_id,  <!-- app_id -->
+												master_secret,  <!-- master_secret -->
+												rec_creater,  <!-- 创建人 -->
+												rec_create_time,  <!-- 创建时间 -->
+												rec_revisor,  <!-- 修改人 -->
+												rec_revise_time  <!-- 修改时间 -->
+												)		 
+	    VALUES (#id#, #appCode#, #appName#,#appKey#, #appId#, #masterSecret#, #recCreater#, #recCreateTime#, #recRevisor#, #recReviseTime#)
+	</insert>
+	
+	<delete id="delete" parameterClass="java.util.HashMap">
+		DELETE FROM $projectSchema$.mc_app WHERE
+			id IN
+		<iterate property="list" conjunction="," open="(" close=")">
+			#list[]#
+		</iterate>
+	</delete>
+	
+  	<update id="update"  parameterClass="java.util.HashMap" >
+		UPDATE $projectSchema$.mc_app
+		SET 
+			app_name	= #appName#, <!-- 模板名称 -->
+			app_key	= #appKey#,  <!-- app_key -->
+			app_id = #appId#,   <!-- app_id -->
+			master_secret = #masterSecret#,  <!-- master_secret -->
+			rec_revisor	= #recRevisor#<!-- 修改人 -->  
+			<!--,  rec_revise_time	= #recReviseTime#   修改时间 -->  
+		WHERE 	
+		id = #id#
+	</update>
+</sqlMap>

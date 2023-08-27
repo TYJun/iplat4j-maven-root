@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="CIDB01">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.ci.db.domain.CiTrans">
+		SELECT
+				REC_CREATOR	as "recCreator",  <!-- 记录创建责任者 -->
+				REC_CREATE_TIME	as "recCreateTime",  <!-- 记录创建时间 -->
+				REC_REVISOR	as "recRevisor",  <!-- 记录修改责任者 -->
+				REC_REVISE_TIME	as "recReviseTime",  <!-- 记录修改时间 -->
+				DATA_GROUP_CODE	as "dataGroupCode",  <!-- 院区（账套） -->
+				ARCHIVE_FLAG	as "archiveFlag",  <!-- 归档标记 -->
+				ID	as "id",  <!-- 主键 -->
+				TRANS_BILL_NO	as "transBillNo",  <!-- 调拨单号 -->
+				TRANS_TYPE	as "transType",  <!-- 调拨类别 -->
+				OUT_DEPT_NUM	as "outDeptNum",  <!-- 调出部门编码 -->
+				OUT_DEPT_NAME	as "outDeptName",  <!-- 调出部门名称 -->
+				OUT_WARE_HOUSE_NO	as "outWareHouseNo",  <!-- 调出仓库 -->
+				OUT_WARE_HOUSE_NAME	as "outWareHouseName",  <!-- 调出仓库 -->
+				OUT_STORAGE_NO	as "outStorageNo",  <!-- 调出库位 -->
+				OUT_STACK_NO	as "outStackNo",  <!-- 调出货位 -->
+				IN_DEPT_NUM	as "inDeptNum",  <!-- 调入部门 -->
+				IN_DEPT_NAME	as "inDeptName",  <!-- 调入名称 -->
+				IN_WARE_HOUSE_NO	as "inWareHouseNo",  <!-- 调入仓库 -->
+				IN_WARE_HOUSE_NAME	as "inWareHouseName",  <!-- 调入仓库 -->
+				IN_STORAGE_NO	as "inStorageNo",  <!-- 调入库位 -->
+				IN_STACK_NO	as "inStackNo",  <!-- 调入货位 -->
+				BILL_MAKE_TIME	as "billMakeTime",  <!-- 制单日期 -->
+				BILL_MAKER	as "billMaker",  <!-- 制单人员 -->
+				BILL_MAKER_NO	as "billMakerNo",  <!-- 制单人 -->
+				IS_CHECK   as "isCheck",  <!-- 审核标记 -->
+				BILL_CHECK_TIME	as "billCheckTime",  <!-- 审核日期 -->
+				BILL_CHECKER	as "billChecker",  <!-- 审核人员 -->
+				receiver	as "receiver" <!-- 接收人 -->
+		FROM ci_trans WHERE 1=1
+		<isNotEmpty prepend=" AND " property="transBillNo"> <!-- 调拨单号 -->
+			TRANS_BILL_NO = #transBillNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outWareHouseNo"> <!-- 调出仓库 -->
+			OUT_WARE_HOUSE_NO = #outWareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="inWareHouseNo">  <!-- 调入仓库 -->
+			IN_WARE_HOUSE_NO = #inWareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">   <!-- 制单日期（>=） -->
+			date_format(BILL_MAKE_TIME,'%Y-%m-%d') >= #beginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">    <!-- 制单日期止（<=） -->
+			date_format(BILL_MAKE_TIME,'%Y-%m-%d') <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+	         <isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		 </isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  TRANS_BILL_NO desc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM ci_trans WHERE 1=1
+		<isNotEmpty prepend=" AND " property="transBillNo"> <!-- 调拨单号 -->
+			TRANS_BILL_NO = #transBillNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outWareHouseNo"> <!-- 调出仓库 -->
+			OUT_WARE_HOUSE_NO = #outWareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="inWareHouseNo">  <!-- 调入仓库 -->
+			IN_WARE_HOUSE_NO = #inWareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">   <!-- 制单日期（>=） -->
+			date_format(BILL_MAKE_TIME,'%Y-%m-%d') >= #beginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">    <!-- 制单日期止（<=） -->
+			date_format(BILL_MAKE_TIME,'%Y-%m-%d') <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+	</select>
+	
+	<insert id="insert" parameterClass="com.baosight.wilp.ci.db.domain.CiTrans">
+		INSERT INTO ci_trans (REC_CREATOR,  <!-- 记录创建责任者 -->
+										REC_CREATE_TIME,  <!-- 记录创建时间 -->
+										REC_REVISOR,  <!-- 记录修改责任者 -->
+										REC_REVISE_TIME,  <!-- 记录修改时间 -->
+										DATA_GROUP_CODE,  <!-- 院区（账套） -->
+										ARCHIVE_FLAG,  <!-- 归档标记 -->
+										ID,  <!-- 主键 -->
+										TRANS_BILL_NO,  <!-- 调拨单号 -->
+										TRANS_TYPE,  <!-- 调拨类别 -->
+										OUT_DEPT_NUM,  <!-- 调出部门编码 -->
+										OUT_DEPT_NAME,  <!-- 调出部门名称 -->
+										OUT_WARE_HOUSE_NO,  <!-- 调出仓库 -->
+										OUT_WARE_HOUSE_NAME,  <!-- 调出仓库 -->
+										OUT_STORAGE_NO,  <!-- 调出库位 -->
+										OUT_STACK_NO,  <!-- 调出货位 -->
+										IN_DEPT_NUM,  <!-- 调入部门 -->
+										IN_DEPT_NAME,  <!-- 调入名称 -->
+										IN_WARE_HOUSE_NO,  <!-- 调入仓库 -->
+										IN_WARE_HOUSE_NAME,  <!-- 调入仓库 -->
+										IN_STORAGE_NO,  <!-- 调入库位 -->
+										IN_STACK_NO,  <!-- 调入货位 -->
+										BILL_MAKE_TIME,  <!-- 制单日期 -->
+										BILL_MAKER,  <!-- 制单人员 -->
+										BILL_MAKER_NO,  <!-- 制单人 -->
+										BILL_CHECK_TIME,  <!-- 审核日期 -->
+										BILL_CHECKER,  <!-- 审核人员 -->
+										receiver  <!-- 接收人 -->
+										)		 
+	    VALUES (#recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#, #archiveFlag#, #id#, #transBillNo#, #transType#, #outDeptNum#, #outDeptName#, #outWareHouseNo#, #outWareHouseName#, #outStorageNo#, #outStackNo#, #inDeptNum#, #inDeptName#, #inWareHouseNo#, #inWareHouseName#, #inStorageNo#, #inStackNo#, #billMakeTime#, #billMaker#, #billMakerNo#, #billCheckTime#, #billChecker#, #receiver#) 
+	</insert>
+  
+	<update id="update" parameterClass="com.baosight.wilp.ci.db.domain.CiTrans">
+		UPDATE ci_trans 
+		SET 
+			REC_REVISOR	= #recRevisor#,   <!-- 记录修改责任者 -->  
+			REC_REVISE_TIME	= #recReviseTime#,   <!-- 记录修改时间 -->  
+			IS_CHECK = #isCheck#,  <!-- 审核标记 -->
+			BILL_CHECK_TIME	= #billCheckTime#,   <!-- 审核日期 -->  
+			BILL_CHECKER	= #billChecker#,   <!-- 审核人员 -->  
+			receiver	= #receiver#  <!-- 审核人员 -->  
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="transBillNo"> <!-- 调拨单号 -->
+			TRANS_BILL_NO = #transBillNo#
+		</isNotEmpty>
+	</update>
+  
+</sqlMap>

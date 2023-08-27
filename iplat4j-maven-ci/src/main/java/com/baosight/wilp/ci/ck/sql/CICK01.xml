@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="CICK01">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.ci.ck.domain.CiOut">
+		SELECT
+				rec_creator	as "recCreator",  <!-- 记录创建责任者 -->
+				rec_create_time	as "recCreateTime",  <!-- 记录创建时间 -->
+				rec_revisor	as "recRevisor",  <!-- 记录修改责任者 -->
+				rec_revise_time	as "recReviseTime",  <!-- 记录修改时间 -->
+				data_group_code	as "dataGroupCode",  <!-- 院区（账套） -->
+				archive_flag	as "archiveFlag",  <!-- 归档标记 -->
+				id	as "id",  <!-- 主键 -->
+				out_bill_no	as "outBillNo",  <!-- 出库单号 -->
+				out_type	as "outType",  <!-- 出库类别 -->
+				out_type_name	as "outTypeName",  <!-- 出库类型名称 -->
+				origin_bill_no	as "originBillNo",  <!-- 来源单据号 -->
+				origin_bill_type	as "originBillType",  <!-- 来源单据类型 -->
+				ware_house_no	as "wareHouseNo",  <!-- 仓库号 -->
+				ware_house_name	as "wareHouseName",  <!-- 仓库名称 -->
+				storage_no	as "storageNo",  <!-- 库位号 -->
+				stack_no	as "stackNo",  <!-- 货位号 -->
+				bill_make_time	as "billMakeTime",  <!-- 制单日期 -->
+				bill_maker	as "billMaker",  <!-- 制单人员 -->
+				bill_maker_name	as "billMakerName",  <!-- 制单人名字 -->
+				bill_check_time	as "billCheckTime",  <!-- 审核日期 -->
+				bill_checker	as "billChecker",  <!-- 审核人员 -->
+				bill_checker_name	as "billCheckerName",  <!-- 审核人名字 -->
+				user_worker_no	as "userWorkerNo",  <!-- 领用人 -->
+				user_worker_name	as "userWorkerName",  <!-- 领用人名称 -->
+				user_dept_num	as "userDeptNum",  <!-- 领用科室 -->
+				user_dept_name	as "userDeptName",  <!-- 领用科室名称 -->
+				is_check	as "isCheck", <!-- 是否已经审核(0/否,1/是) -->
+				case is_check
+				when '0' then '待审批'
+				when '1' then '已审批'
+				when '2' then '驳回'
+				end as "applySign"
+		FROM ci_out WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outBillNo">  <!-- 出库单号 -->
+			out_bill_no like concat('%', #outBillNo#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outBillNoEQ">  <!-- 出库单号（精确） -->
+			out_bill_no = #outBillNoEQ#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="userDeptName">
+			user_dept_name like concat('%', #userDeptName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outType">  <!-- 出库类别 -->
+			out_type = #outType#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">   <!-- 制单日期（>=） -->
+			date_format(bill_make_time,'%Y-%m-%d %H:%i:%s') >= #beginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="startTime">   <!-- 制单日期（>=） -->
+			date_format(bill_make_time,'%Y-%m-%d %H:%i:%s') >= #startTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">    <!-- 制单日期止（<=） -->
+			date_format(bill_make_time,'%Y-%m-%d %H:%i:%s') <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">  <!-- 院区（账套） -->
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+	    	<isNotEmpty property="orderBy">
+	    		  $orderBy$
+	   		</isNotEmpty>
+	   		<isEmpty property="orderBy">
+	    		  out_bill_no desc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM ci_out WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outBillNo">  <!-- 出库单号 -->
+			out_bill_no like concat('%', #outBillNo#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outBillNoEQ">  <!-- 出库单号（精确） -->
+			out_bill_no = #outBillNoEQ#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="userDeptName">
+			user_dept_name like concat('%', #userDeptName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outType">  <!-- 出库类别 -->
+			out_type = #outType#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">   <!-- 制单日期（>=） -->
+			date_format(bill_make_time,'%Y-%m-%d %H:%i:%s') >= #beginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="startTime">   <!-- 制单日期（>=） -->
+			date_format(bill_make_time,'%Y-%m-%d %H:%i:%s') >= #startTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">    <!-- 制单日期止（<=） -->
+			date_format(bill_make_time,'%Y-%m-%d %H:%i:%s') <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">  <!-- 院区（账套） -->
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+	</select>
+
+	<select id="queryItem" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+			id as id,
+			out_bill_no as outBillNo,
+			mat_num as matNum,
+			mat_name as matName,
+			mat_spec as matSpec,
+			mat_model as matModel,
+			unit as unit,
+			unit_name as unitName,
+			out_num as outNum,
+			out_price as outPrice,
+			out_amount as outAmount,
+			out_date as outDate,
+			out_time as outTime,
+			rec_creator as recCreator,
+			rec_create_time as recCreateTime
+		FROM ci_out_detail
+		where out_bill_no = #outBillNo#
+
+	</select>
+
+
+	<insert id="insert" parameterClass="com.baosight.wilp.ci.ck.domain.CiOut">
+		INSERT INTO ci_out (rec_creator,  <!-- 记录创建责任者 -->
+										rec_create_time,  <!-- 记录创建时间 -->
+										rec_revisor,  <!-- 记录修改责任者 -->
+										rec_revise_time,  <!-- 记录修改时间 -->
+										data_group_code,  <!-- 院区（账套） -->
+										archive_flag,  <!-- 归档标记 -->
+										id,  <!-- 主键 -->
+										out_bill_no,  <!-- 出库单号 -->
+										out_type,  <!-- 出库类别 -->
+										out_type_name,  <!-- 出库类型名称 -->
+										origin_bill_no,  <!-- 来源单据号 -->
+										origin_bill_type,  <!-- 来源单据类型 -->
+										ware_house_no,  <!-- 仓库号 -->
+										ware_house_name,  <!-- 仓库名称 -->
+										storage_no,  <!-- 库位号 -->
+										stack_no,  <!-- 货位号 -->
+										bill_make_time,  <!-- 制单日期 -->
+										bill_maker,  <!-- 制单人员 -->
+										bill_maker_name,  <!-- 制单人名字 -->
+										bill_check_time,  <!-- 审核日期 -->
+										bill_checker,  <!-- 审核人员 -->
+										bill_checker_name,  <!-- 审核人名字 -->
+										user_worker_no,  <!-- 领用人 -->
+										user_worker_name,  <!-- 领用人名称 -->
+										user_dept_num,  <!-- 领用科室 -->
+										user_dept_name,  <!-- 领用科室名称 -->
+										is_check  <!-- 是否已经审核(0/否,1/是) -->
+										)		 
+	    VALUES (#recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#, #archiveFlag#, #id#, #outBillNo#, #outType#, #outTypeName#, #originBillNo#, #originBillType#, #wareHouseNo#, #wareHouseName#, #storageNo#, #stackNo#, #billMakeTime#, #billMaker#, #billMakerName#, #billCheckTime#, #billChecker#, #billCheckerName#, #userWorkerNo#, #userWorkerName#, #userDeptNum#, #userDeptName#, #isCheck#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM ci_out WHERE
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE ci_out
+		SET 
+		rec_creator	= #recCreator#,   <!-- 记录创建责任者 -->  
+					rec_create_time	= #recCreateTime#,   <!-- 记录创建时间 -->  
+					rec_revisor	= #recRevisor#,   <!-- 记录修改责任者 -->  
+					rec_revise_time	= #recReviseTime#,   <!-- 记录修改时间 -->  
+					data_group_code	= #dataGroupCode#,   <!-- 院区（账套） -->  
+					archive_flag	= #archiveFlag#,   <!-- 归档标记 -->  
+					out_bill_no	= #outBillNo#,   <!-- 出库单号 -->  
+					out_type	= #outType#,   <!-- 出库类别 -->  
+					out_type_name	= #outTypeName#,   <!-- 出库类型名称 -->  
+					origin_bill_no	= #originBillNo#,   <!-- 来源单据号 -->  
+					origin_bill_type	= #originBillType#,   <!-- 来源单据类型 -->  
+					ware_house_no	= #wareHouseNo#,   <!-- 仓库号 -->  
+					ware_house_name	= #wareHouseName#,   <!-- 仓库名称 -->  
+					storage_no	= #storageNo#,   <!-- 库位号 -->  
+					stack_no	= #stackNo#,   <!-- 货位号 -->  
+					bill_make_time	= #billMakeTime#,   <!-- 制单日期 -->  
+					bill_maker	= #billMaker#,   <!-- 制单人员 -->  
+					bill_maker_name	= #billMakerName#,   <!-- 制单人名字 -->  
+					bill_check_time	= #billCheckTime#,   <!-- 审核日期 -->  
+					bill_checker	= #billChecker#,   <!-- 审核人员 -->  
+					bill_checker_name	= #billCheckerName#,   <!-- 审核人名字 -->  
+					user_worker_no	= #userWorkerNo#,   <!-- 领用人 -->  
+					user_worker_name	= #userWorkerName#,   <!-- 领用人名称 -->  
+					user_dept_num	= #userDeptNum#,   <!-- 领用科室 -->  
+					user_dept_name	= #userDeptName#,   <!-- 领用科室名称 -->  
+					is_check	= #isCheck#  <!-- 是否已经审核(0/否,1/是) -->  
+			WHERE 	
+			id = #id#
+	</update>
+
+	<update id="updateApplySignS">
+		update ci_out set is_check ='1' where id =#id#
+	</update>
+
+	<update id="updateReject" >
+		UPDATE ci_out
+		SET
+			is_check='2',
+			emo =#emo#
+		WHERE
+			id = #id#
+	</update>
+  
+</sqlMap>

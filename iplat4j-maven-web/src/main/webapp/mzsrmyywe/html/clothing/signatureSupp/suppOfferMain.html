@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.css" />
+    <link rel="stylesheet" href="../reference/css/iconfont.css" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="../reference/css/colorGreen.css" />
+    <link rel="stylesheet" href="../reference/css/loading.css" />
+    <link rel="stylesheet" href="../../reference/css/common.css" />
+    <link rel="stylesheet" href="../reference/css/clothCommon.css" />
+  </head>
+  <style>
+    .main {
+      margin-top: 95px;
+      background-color: white;
+    }
+
+    .total {
+      float: right;
+      margin-right: 10%;
+    }
+
+    .scan {
+      position: fixed;
+      bottom: 15px;
+      right: 15px;
+      width: 60px;
+      z-index: 11;
+    }
+
+    .round {
+      border: 1px solid #ccc;
+      width: 60px;
+      height: 60px;
+      line-height: 29px;
+      text-align: center;
+      color: #fff;
+      background-color: #ccc;
+      filter: alpha(opacity=80);
+      /* 用于IE浏览器－透明度为20%*/
+      -moz-opacity: 0.8;
+      /*  用于Moz + Firefox－透明度为20%*/
+      opacity: 0.8;
+      -webkit-border-radius: 60px;
+      -moz-border-radius: 60px;
+      -o-border-radius: 60px;
+      border-radius: 60px;
+    }
+
+    .round img {
+      margin-top: 4px;
+      margin-left: 2px;
+    }
+
+    .mui-card {
+      background-color: #30c37c;
+      color: white;
+    }
+
+    .mui-card-content {
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .mask {
+      height: 70%;
+    }
+
+    .ulForward li {
+      text-align: center;
+      border-bottom: 1px solid #999;
+      font-size: 18px;
+      line-height: 50px;
+      width: 33%;
+      float: left;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    input.mui-input-clear.deptSearch {
+      margin-bottom: 0;
+    }
+
+    #list {
+      position: absolute;
+    z-index: 1;
+    width: 100%;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    min-height: 20px;
+    }
+  </style>
+
+  <body>
+    <header class="mui-bar mui-bar-nav backColor" style="width: 100%;">
+      <h1 class="mui-title">补签</h1>
+      <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+      </button>
+      <button
+        id="search"
+        class="mui-btn mui-btn-link mui-btn-nav mui-pull-right"
+      >
+        <span class="mui-icon mui-icon-search"></span>
+      </button>
+    </header>
+    <!-- tab页 -->
+    <div class="top-part backColor">
+      <div class="top-bar">
+        <span id="1" class="choose">发放</span>
+        <span id="3">回收</span>
+      </div>
+    </div>
+    <!-- 扫码 -->
+    <div class="scan" id="scan" hidden>
+      <div class="round" id="round">
+        <!-- <span>扫描</span>
+            <span>科室</span> -->
+        <img src="../../../img/相机48.png" alt="" />
+      </div>
+    </div>
+    <div class="main">
+      <!-- <div id="chooseDept">
+            <input type="text" placeholder="输入科室" readonly id="initDept">
+        </div> -->
+      <div class="list">
+        <ul id="list">
+          <!-- <li class="mui-table-view-cell">
+                    <div class="mui-card">
+            
+                        <div class="mui-card-header">信息科</div>
+                
+                        <div class="mui-card-content">
+                            <span>2020-07-17</span>
+                            <span>发放数量：20</span>
+                        </div>
+                    </div>
+                </li>
+                <li class="mui-table-view-cell">
+                    <div class="mui-card">
+               
+                        <div class="mui-card-header">信息科</div>
+         
+                        <div class="mui-card-content">
+                            <span>2020-07-17</span>
+                            <span>发放数量：30</span>
+                        </div>
+                    </div>
+                </li>
+                <li class="mui-table-view-cell">
+                    <div class="mui-card">
+              
+                        <div class="mui-card-header">信息科</div>
+            
+                        <div class="mui-card-content">
+                            <span>2020-07-17</span>
+                            <span>发放数量：20</span>
+                        </div>
+                    </div>
+                </li> -->
+        </ul>
+      </div>
+    </div>
+    <!-- 遮罩 -->
+    <div class="mask"></div>
+    <!-- 查询条件 -->
+    <!-- <div class="searchDiv">
+      <header class="mui-bar mui-bar-nav backColor">
+        <h1 class="mui-title">查询</h1>
+      </header>
+      时间
+      <div class="mui-row row-content" style="margin-top: 50px;">
+        <div class="mui-col-sm-4 mui-col-xs-8">时间</div>
+        <div class="mui-col-sm-3 mui-col-xs-3">
+          <input type="text" id="beginTime" placeholder="请选择时间" readonly />
+        </div>
+         <div class="mui-col-sm-1 mui-col-xs-1 middle">-</div>
+            <div class="mui-col-sm-3 mui-col-xs-3">
+                <input type="text" id="endTime" placeholder="截止时间" readonly>
+            </div> -->
+        <!-- <div class="mui-col-sm-1 mui-col-xs-1 middle">
+          <span class="mui-icon mui-icon-arrowright fontColor"></span>
+        </div>
+      </div> --> 
+      <!-- 状态 -->
+      <!-- <div class="mui-row row-content">
+        <div class="mui-col-sm-8 mui-col-xs-8">科室</div>
+        <div class="mui-col-sm-3 mui-col-xs-3">
+          <input
+            type="text"
+            style="margin-left:-10px;width:104px;border-left:none;border-top:none;border-right:none;"
+            id="deptSearch"
+            placeholder="请输入科室"
+            oninput="search(this.value)"
+          />
+        </div> -->
+        <!-- <div class="mui-col-sm-1 mui-col-xs-1 middle">
+          <span class="mui-icon mui-icon-arrowright fontColor"></span>
+        </div>
+      </div>
+      <!-模糊查询弹框 -->
+      <!-- <div
+        id="ulForward"
+        style="position: fixed;z-index: 4200;width: 100%;bottom: -10px;"
+        hidden
+      >
+        <ul
+          class="ulForward"
+          style="background:#E1E1E1;width: 100%;height:0px;overflow-y: auto;padding: 0;"
+        >
+          <span
+            id="roundWait"
+            class="mui-spinner"
+            style="height: 60px;width: 60px;"
+          ></span>
+        </ul> -->
+      <!-- </div>  -->
+      <!-- 确认按钮 -->
+      <!-- <div class="searchBtn">
+        <span class="reset">重置</span>
+        <span class="sure backColor">查询</span>
+      </div>
+    </div> -->
+    <!-- 查询条件 -->
+    <div class="searchDiv">
+      <header class="mui-bar mui-bar-nav backColor">
+        <h1 class="mui-title">查询</h1>
+      </header>
+      <!-- 时间 -->
+      <div class="mui-row row-content" style="margin-top: 50px;">
+        <div class="mui-col-sm-4 mui-col-xs-4">时间</div>
+        <div class="mui-col-sm-3 mui-col-xs-3">
+          <input type="text" id="beginTime" placeholder="开始时间" readonly />
+        </div>
+        <div class="mui-col-sm-1 mui-col-xs-1 middle">-</div>
+        <div class="mui-col-sm-3 mui-col-xs-3">
+          <input type="text" id="endTime" placeholder="截止时间" readonly />
+        </div>
+        <div class="mui-col-sm-1 mui-col-xs-1 middle">
+          <span class="mui-icon mui-icon-arrowright fontColor"></span>
+        </div>
+      </div>
+      <!-- 状态 -->
+      <!-- <div class="mui-row row-content">
+            <div class="mui-col-sm-8 mui-col-xs-8">状态</div>
+            <div class="mui-col-sm-3 mui-col-xs-3">
+                <input type="text" id="statusSearch" placeholder="请选择状态" readonly>
+            </div>
+            <div class="mui-col-sm-1 mui-col-xs-1 middle">
+                <span class="mui-icon mui-icon-arrowright fontColor"></span>
+            </div>
+        </div> -->
+      <!-- 确认按钮 -->
+      <div class="searchBtn">
+        <span class="reset">重置</span>
+        <span class="sure backColor">查询</span>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript" src="../reference/mui/js/mui.min.js"></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/jquery-2.1.4.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/mui.picker.min.js"
+  ></script>
+  <script type="text/javascript" src="../reference/mui/js/baseInfo.js"></script>
+  <script
+    type="text/javascript"
+    src="../../reference/js/mui.loading.js"
+  ></script>
+  <!-- <script type="text/javascript" src="../../../cordova.js"></script> -->
+  <script>
+    var baseUrl = localStorage.getItem("url");
+    var dataGroupCode = localStorage.getItem("dataGroupCode");
+    var url = decodeURI(window.location.href.split("?")[1]);
+    var deptNameInit = url.split("&")[0];
+    var deptNumInit = url.split("&")[1];
+    var deptName = url.split("&")[0];
+    var deptNum = url.split("&")[1];
+    var workNo = localStorage.getItem("workNo");
+    var date = "";
+    var issueNum = 0;
+    var status = "";
+    var issueNo = "";
+    var deptSign = "";
+    var thirdPartySign = "";
+    // var flag = false;
+    $(function() {
+      init();
+    });
+
+    var params= {
+        keyWord:"",
+//         "type":"1",
+        userNo:workNo,
+        userName:"",
+        deptNo:"",
+        deptName:"",
+        limit:"10", 
+        offset:"0"
+    };
+    var paramsStr = JSON.stringify(params);
+    console.log(paramsStr)
+
+    function init() {
+      // mui.showLoading("正在加载", "div");
+      if (deptNumInit == null || deptNumInit == undefined) {
+        deptNumInit = "";
+        deptNameInit = "";
+      }
+      $("#initDept").val(deptNameInit);
+      var listHtml = "";
+      $.ajax({
+        type: "post",
+        url: baseUrl + "medical/fabric",
+        data: {
+           requestParam:'{"signType":"GIVE","deptNo":"","limit":"20", "offset":"0","startDate":"","endDate":""}' 
+        },
+        headers: {
+          methodName: "querySupplementSignature",
+          serviceName:"OMMFSignature"
+
+        },
+        success: function(data) {
+          mui.hideLoading();
+          // var data = JSON.parse(data);
+          console.log(data);
+          if (data.statusCode != "0") {
+            mui.toast(data.msg);
+            return;
+          }
+          var list = data.data;
+          if (list.length == 0) {
+            mui.toast("当前没有数据！");
+            return;
+          }
+          for (var i = 0; i < list.length; i++) {
+            deptName = list[i].deptName;
+            deptNum = list[i].deptNo;
+            date = list[i].operaDate;
+            number = list[i].number;
+            billNo = list[i].billNo;
+            listHtml += createHtml(deptName, deptNum, date, number, billNo);
+          }
+          $("#list").html(listHtml);
+        }
+      });
+
+      
+
+      //查询当前登录人信息
+      $.ajax({
+        url: baseUrl + "medical/fabric",
+        type: "post",
+        data: {
+          requestParam: paramsStr
+        },
+        headers: {
+            methodName: "queryUserInfo",
+            serviceName:"OMMF01"
+        },
+        success: function(data) {
+          var userName = data.data[0].userName;
+          $("#sqr").val(userName);
+          $("#ks").val(deptName);
+          deptNo = data.data[0].deptNo;
+          localStorage.setItem("deptNo", deptNo);
+          localStorage.setItem("userName", userName);
+        //   console.log($("#sqr").val())
+        //   var data = JSON.parse(data);
+        //   deptName = data.obj.obj[0].deptName;
+        //   console.log(deptName);
+        //   localStorage.setItem("detailDeptName", deptName);
+        //   location.href = "detailListAPP.html";
+        //   $("#sqr").text("李雷");
+        },
+        error: function(XMLHttpRequest) {
+          var text = JSON.parse(XMLHttpRequest.responseText);
+          mui.toast(text.message);
+          return;
+        }
+      });
+
+    
+    }
+
+    //列表html
+    function createHtml(deptName, deptNum, date, number, billNo) {
+      var html = "";
+      html =
+        '<li class="mui-table-view-cell" billNo="' +
+        billNo +
+        '"> <div class="mui-card"> <div class="mui-card-header" deptNum="' +
+        deptNum +
+        '">' +
+        deptName +
+        '</div> <div class="mui-card-content"><span>' +
+        date +
+        "</span> <span>发放数量：" +
+        number +
+        "</span> </div> </div> </li>";
+      return html;
+    }
+    //移动扫码框
+    // touchMove("scan");
+
+    //卡片详情跳转
+    $("#list").on("click", ".mui-table-view-cell", function() {
+      var detailDeptNum = $(this)
+        .find(".mui-card-header")
+        .attr("deptNum");
+      var detailDeptName = $(this)
+        .find(".mui-card-header")
+        .html();
+      var billNo = $(this).attr("billNo");
+      // var deptSign = $(this).attr("deptSign");
+      // var thirdPartySign = $(this).attr("thirdPartySign");
+      // console.log(detailDeptNum);
+      // console.log(detailDeptName);
+      // console.log(billNo);
+      localStorage.setItem("detailDeptNum", detailDeptNum);
+      localStorage.setItem("detailDeptName", detailDeptName);
+      localStorage.setItem("billNo", billNo);
+      //跳转到补签详情页面
+      // location.href =
+      //   "suppOfferDetail.html?" +
+      //   "&" +
+      //   issueNo +
+      //   "&" +
+      //   deptSign +
+      //   "&" +
+      //   thirdPartySign;
+      location.href =
+        "suppOfferDetail.html?" +
+        "&" +
+        billNo;
+    });
+
+    //搜索框
+    // $("#search").click(function() {
+    //   $(".searchDiv").show();
+    //   $(".mask").css("height", "100%");
+    //   $(".mask").show();
+    // });
+    // //时间条件
+    // mui("body").on("tap", "#beginTime", function() {
+    //   var options = {
+    //     type: "date"
+    //   };
+    //   var pickerDate = new mui.DtPicker(options);
+    //   pickerDate.show(function(rs) {
+    //     $("#beginTime").val(rs.text);
+    //   });
+    // });
+
+    // //模糊查询科室名
+    // mui("body").on("tap", "#deptSearch", function() {
+    //   $(".deptSearch").val("");
+    //   getDept(name);
+    //   $("#ulForward").show();
+    //   $(".ulForward").animate(
+    //     {
+    //       height: "100px"
+    //     },
+    //     200
+    //   );
+    // });
+
+    // var timeId = null;
+
+    // function search(name) {
+    //   console.log(name);
+    //   clearTimeout(timeId);
+    //   timeId = setTimeout(function() {
+    //     getDept(name);
+    //   }, 1000);
+    // }
+
+    // function getDept(name) {
+    //   $.ajax({
+    //     type: "get",
+    //     url: baseUrl + "app_clothCommomQuery.do?queryDept",
+    //     data: {
+    //       dataGroupCode: dataGroupCode,
+    //       deptName: name
+    //     },
+    //     success: function(data) {
+    //       var data = JSON.parse(data);
+    //       var list = data.obj.obj;
+    //       var html = "";
+    //       if (list.length == 0) {
+    //         mui.toast("无此科室，请重新选择！");
+    //         // flag = false;
+    //       }
+    //       for (var i = 0; i < list.length; i++) {
+    //         var deptName = list[i].deptName;
+    //         var deptNum = list[i].deptNum;
+    //         html +=
+    //           '<li class="mui-table-view-cells"><a href="#"  num="' +
+    //           deptNum +
+    //           '">' +
+    //           '<span class="name">' +
+    //           deptName +
+    //           "</span>" +
+    //           "</a></li>";
+    //       }
+    //       $(".ulForward").html(html);
+    //     },
+    //     error: function(XMLHttpRequest) {
+    //       var text = JSON.parse(XMLHttpRequest.responseText);
+    //       mui.toast(text.message);
+    //       return;
+    //     }
+    //   });
+    // }
+
+    // // 选择科室
+    // $("#ulForward").on("click", "li", function() {
+    //   flag = true;
+    //   var name = $(this)
+    //     .find("a .name")
+    //     .html();
+    //   var num = $(this)
+    //     .find("a")
+    //     .attr("num");
+    //   console.log(name);
+    //   console.log(num);
+    //   $("#deptSearch").val(name);
+    //   deptNameInit = name;
+    //   deptNumInit = num;
+    //   // $("#newSize").html(type);
+    //   $("#ulForward").hide();
+    //   $(".ulForward").css({
+    //     height: "0px"
+    //   });
+    // });
+
+    // //查询
+    // mui("body").on("tap", ".sure", function() {
+    //   // if (flag == true) {
+    //   var timeStart = $("#beginTime").val();
+    //   var aa = new Date(timeStart).getTime();
+
+    //   $(".searchDiv").hide();
+    //   $(".mask").hide();
+    //   console.log($("#deptSearch").val());
+
+    //   beginTime = timeStart;
+
+    //   var listHtml = "";
+    //   $.ajax({
+    //     url: baseUrl + "app_ManualController.do?getConfirmNeat",
+    //     type: "get",
+    //     data: {
+    //       dataGroupCode: dataGroupCode,
+    //       beginTime: beginTime,
+    //       endTime: beginTime,
+    //       issueStatus: "0",
+    //       deptNum: deptNumInit
+    //     },
+    //     success: function(data) {
+    //       $("#list").html("");
+    //       mui.hideLoading();
+    //       var data = JSON.parse(data);
+    //       if (data.respCode != "200") {
+    //         mui.toast(data.respMsg);
+    //         return;
+    //       }
+    //       var list = data.obj.rows;
+    //       if (list.length == 0) {
+    //         mui.toast("当前没有数据！");
+    //         return;
+    //       }
+    //       for (var i = 0; i < list.length; i++) {
+    //         deptName = list[i].deptName;
+    //         deptNum = list[i].deptNum;
+    //         date = list[i].date;
+    //         issueNum = list[i].issueNum;
+    //         issueNo = list[i].issueNo;
+    //         status = list[i].issueStatus;
+    //         deptSign = list[i].deptSign;
+    //         thirdPartySign = list[i].thirdpartySign;
+    //         listHtml += createHtml(
+    //           deptName,
+    //           deptNum,
+    //           date,
+    //           issueNum,
+    //           issueNo,
+    //           status,
+    //           deptSign,
+    //           thirdPartySign
+    //         );
+    //       }
+    //       $("#list").html(listHtml);
+    //     }
+    //   });
+    //   $("#deptSearch").val("");
+    //   $("#beginTime").val("");
+    //   $("#endTime").val("");
+    //   // } else {
+    //   //     mui.toast("请选择科室！");
+    //   // }
+    // });
+
+    // //重置
+    // mui("body").on("tap", ".reset", function() {
+    //   $("#deptSearch").val("");
+    //   $("#beginTime").val("");
+    //   $("#endTime").val("");
+    //   $(".searchDiv").hide();
+    //   $(".mask").hide();
+    // });
+
+    // //关闭弹窗
+    // $(".mask").click(function() {
+    //   $("#deptSearch").val("");
+    //   $("#beginTime").val("");
+    //   $("#endTime").val("");
+    //   $(".searchDiv").hide();
+    //   $(".mask").hide();
+    // });
+
+    //扫描科室
+    mui("body").on("tap", "#round", function() {
+      cordova.plugins.barcodeScanner.scan(
+        function(result) {
+          var info = result.text;
+          localStorage.setItem("initDeptNum", info);
+          // alert(info);
+          getDeptName(info);
+        },
+        function(error) {
+          mui.toast("获取信息失败！");
+          return;
+        }
+      );
+    });
+
+    function getDeptName(num) {
+      $.ajax({
+        url: baseUrl + "app_clothCommomQuery.do?queryDept",
+        type: "get",
+        data: {
+          dataGroupCode: dataGroupCode,
+          deptNum: num,
+          deptName: ""
+        },
+        success: function(data) {
+          var data = JSON.parse(data);
+          deptName = data.obj.obj[0].deptName;
+          console.log(deptName);
+          // alert(deptName);
+          localStorage.setItem("initDeptName", deptName);
+          location.href = "detailListYAPP.html";
+        },
+        error: function(XMLHttpRequest) {
+          var text = JSON.parse(XMLHttpRequest.responseText);
+          mui.toast(text.message);
+          return;
+        }
+      });
+    }
+
+    // tab页
+    $("#3").click(function() {
+      location.href = "suppRecycleMain.html";
+    });
+    /**
+     * @desc   点击返回按钮
+     * @author huoke
+     */
+    mui("body").on("tap", "#back", function() {
+      console.log(".....");
+      location.href = "../menuAPP.html";
+    });
+
+    /**
+     * @desc   手机系统返回键
+     * @author huoke
+     */
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+      document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+      location.href = "../menuAPP.html";
+    }
+
+    //搜索框
+    $("#search").click(function() {
+      $(".searchDiv").show();
+      $(".mask").css("height", "100%");
+      $(".mask").show();
+    });
+    //时间条件
+    mui("body").on("tap", "#beginTime", function() {
+      var options = {
+        type: "date"
+      };
+      var pickerDate = new mui.DtPicker(options);
+      pickerDate.show(function(rs) {
+        $("#beginTime").val(rs.text);
+      });
+    });
+
+    mui("body").on("tap", "#endTime", function() {
+      var options = {
+        type: "date"
+      };
+      var pickerDate = new mui.DtPicker(options);
+      pickerDate.show(function(rs) {
+        $("#endTime").val(rs.text);
+      });
+    });
+
+    //查询
+    mui("body").on("tap", ".sure", function() {
+      var timeStart = $("#beginTime").val();
+      // var timeEnd = $("#endTime").val();
+      // var aa = new Date(timeStart).getTime();
+      // var bb = new Date(timeEnd).getTime();
+
+      $(".searchDiv").hide();
+      $(".mask").hide();
+      // console.log($("#statusSearch").val());
+      // if($("#statusSearch")=='未确认'){
+      //      applyStatus=0;
+      // }
+      // else if($("#statusSearch")=='已确认'){
+      //     applyStatus=1;
+      // }
+      beginTime = timeStart;
+      // endTime = timeEnd;
+
+      var listHtml = "";
+      var param = {
+        // deptNo: deptNumInit,
+        startDate: $("#beginTime").val(),
+        endDate: $("#endTime").val(),
+        limit: "100",
+        offset: "0",
+        signType:"GIVE",
+        deptNo:""
+      };
+      param = JSON.stringify(param);
+      $.ajax({
+        url: baseUrl + "medical/fabric",
+        type: "post",
+        data: {
+          requestParam: param
+          // dataGroupCode: dataGroupCode,
+          // beginTime: beginTime,
+          // endTime: beginTime,
+          // issueStatus: "1",
+          // deptNum: deptNumInit
+        },
+        headers: {
+          methodName: "querySupplementSignature",
+          serviceName: "OMMFSignature"
+        },
+        success: function(data) {
+          $("#list").html("");
+          mui.hideLoading();
+
+          // var data = JSON.parse(data);
+          // console.log(data);
+          if (data.statusCode != "0") {
+            mui.toast(data.msg);
+            return;
+          }
+          var list = data.data;
+          if (list.length == 0) {
+            mui.toast("当前没有数据！");
+            return;
+          }
+          var deptDiryItemBills = "";
+          console.log(list);
+          for (var i = 0; i < list.length; i++) {
+            deptName = list[i].deptName;
+            deptNum = list[i].deptNo;
+            date = list[i].operaDate;
+            number = list[i].number;
+            billNo = list[i].billNo;
+            listHtml += createHtml(deptName, deptNum, date, number, billNo);
+          }
+          $("#list").html(listHtml);
+        }
+      });
+      // }
+      // $("#statusSearch").val("");
+      $("#beginTime").val("");
+      $("#endTime").val("");
+    });
+
+    //重置
+    mui("body").on("tap", ".reset", function() {
+      // $("#statusSearch").val("");
+      $("#beginTime").val("");
+      $("#endTime").val("");
+      $(".searchDiv").hide();
+      $(".mask").hide();
+    });
+
+    //关闭弹窗
+    $(".mask").click(function() {
+      // $("#statusSearch").val("");
+      $("#beginTime").val("");
+      $("#endTime").val("");
+      $(".searchDiv").hide();
+      $(".mask").hide();
+    });
+  </script>
+</html>

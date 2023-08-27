@@ -1,0 +1,173 @@
+body {
+    background-color: #eee;
+    margin: auto;
+    padding: auto;
+}
+/* 遮罩 */
+.mui-backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 998;
+    background-color: rgba(238, 238, 238, 0.3);
+  }
+.historylist .list_card>li {
+    overflow: hidden;
+    box-shadow: 1px 1px 5px 0 #BBBBBB;
+}
+
+/* 头部区域 */
+.top {
+    position: relative;
+    width:100%;
+    height: 44px;
+    background-color: #4DB56C;
+    text-align: center;
+}
+#top-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    background-color: #4DB56C;
+}
+#icon-left-back {
+    float: left;
+    position: relative;
+    margin-right: 107px;
+    width: 28px;
+    height: 100%;
+    line-height: 44px;
+    color: #fff;
+    margin-left: 12px;
+    font-weight: 400;
+    font-size: 30px;
+}
+#title {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 60%;
+    line-height: 44px;
+    font-size: 17px;
+    font-weight: 500;
+    color: #fff;
+    
+}
+#add {
+    float: right;
+    position: relative;
+    line-height: 44px;
+    color: #fff;
+    margin-right: 26px;
+    font-weight: 500;
+    font-size: 17px;
+}
+/* 查询区域 */
+.search_area>span {
+    font-size: 18px;
+    font-weight: 500;
+    color: black;
+    position: relative;
+    left: 12px;
+    top: 8px;
+}
+.search {
+    display: inline-block;
+    width: 175px;
+    height: 38px;
+    background-color: pink;
+    overflow: hidden;
+    position: relative;
+    top: 20px;
+    left: 15px;
+    border: none;
+}
+.search input {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    line-height: 38px;
+    border: #BBBBBB 1px solid;
+    padding: 0 10px;
+}
+.search_btn {
+    position: fixed;
+    right: 16px;
+    top: 64px;
+    width: 70px;
+    height: 39px;
+    border-radius: 7px;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    -ms-border-radius: 7px;
+    -o-border-radius: 7px;
+    background-color: #4DB56C;
+    color: #fff;
+    font-size: 15px;
+    line-height: 26px;
+}
+/* 选择表格 */
+.select_table {
+    width: 95%;
+    margin: 0 auto;
+    /* border-radius: 10px; */
+    position: relative;
+    top: 50px;
+}
+.select_table thead tr,
+.select_table tbody tr {
+    width: 100%;
+    height: 50px;
+    background-color: pink;
+}
+.select_table thead tr th,
+.select_table tbody tr td {
+    width: 33.3%;
+}
+.select_table thead tr {
+    background-color: #8A8A8A;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 400;
+}
+.select_table tbody tr:nth-child(n + 1) {
+    background-color: #FDFEFD;
+    color: black;
+}
+.select_table tbody tr:nth-child(2n) {
+    background-color: #EAEAEA;
+    color: black;
+}
+.select_table tbody tr {
+    font-size: 16px;
+    font-weight: 400;
+    color: black;
+    line-height: 50px;
+    text-align: center;
+}
+/* 复选按钮框 */
+#checkbox {
+    text-align: center;
+    line-height: 50px;
+}
+#checkbox label {
+    height: 100%;
+}
+.mui-checkbox input[type=checkbox], .mui-radio input[type=radio] {
+    position: absolute;
+    top: 12px!important;
+    right: 40px!important;
+    display: inline-block;
+    width: 28px;
+    height: 26px;
+    border: 0;
+    outline: 0!important;
+    background-color: transparent;
+    -webkit-appearance: none;
+}

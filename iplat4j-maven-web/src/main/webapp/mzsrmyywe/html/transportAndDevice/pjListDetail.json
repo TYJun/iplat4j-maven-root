@@ -1,0 +1,24 @@
+{
+  "respCode": "200",
+  "respMsg": "",
+  "map": {
+    "obj": [
+      {
+        "accompanyClassName": "检查项目1",
+        "bedNo": "12 36",
+        "accompanyContent": "备注1",
+        "billStatus": "02",
+        "accompanyClassNo": "bb9aff7d-9db4-11eb-85d9-00ffbf402787",
+        "billId": "25db46dc-572e-47f6-9861-499ec48ba545"
+      },
+      {
+        "accompanyClassName": "检查项目2",
+        "bedNo": "12 36",
+        "accompanyContent": "备注2",
+        "billStatus": "02",
+        "accompanyClassNo": "bb9aff7d-9db4-11eb-85d9-00ffbf402787",
+        "billId": "25db46dc-572e-47f6-9861-499ec48ba545"
+      }
+    ]
+  }
+}

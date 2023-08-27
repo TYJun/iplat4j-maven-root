@@ -1,0 +1,476 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="../reference/mui/css/mui.min.css">
+  <link rel="stylesheet" href="../reference/mui/css/iconfont.css">
+  <link rel="stylesheet" href="../reference/css/common.css" />
+  <link rel="stylesheet" href="../../../css/colorGreen.css"/>
+  <link rel="stylesheet" href="../../../css/colorBlue.css"/>
+  <link rel="stylesheet" href="../reference/css/fontawesome-stars.css" />
+  <link rel="stylesheet" href="../reference/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css">
+</head>
+<STYLE TYPE="text/css">
+body{
+  background:#F1F1F1;
+}
+.br-theme-fontawesome-stars .br-widget {
+  height:0px;
+}
+.br-theme-fontawesome-stars .br-widget a.br-selected:after {
+    color: #F51A1A;
+}
+.br-theme-fontawesome-stars .br-widget a{
+  padding: 3px;
+}
+hr{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.navbar {
+  margin-bottom: 0px;
+}
+h1 {
+  margin: 0 0 0rem;
+}
+.div-child {
+  width: 100%;
+  background: #fff;
+  border: 0px solid #ABABAB;
+  margin-bottom: 15px;
+  border-radius: 2px;
+}
+.row {
+  margin-right: 0px;
+  margin-left: 0px;
+}
+.btn-sb{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  text-align:center;
+  height:50px;
+  line-height: 50px;
+  color:#fff;
+  font-size: 18px;
+}
+.top50 {
+  padding-top: 40px;
+}
+.div-child .titleD {
+  //background: #289EBBFF;
+  height:35px;
+  line-height:35px;
+  padding-left:15px;
+  color:#000;
+}
+.div-child .bottomD {
+  background:#F1F1F1;
+  height:5px;
+  line-height:5px;
+  padding-left:15px;
+  margin-bottom:0px;
+}
+.div-child .mui-row {
+  padding-left:15px;
+  padding-right:15px;
+  padding-bottom:5px;
+  padding-top:2px;
+  font-size:15px;
+  background:#fff;
+}
+.div-child textarea {
+  border:none;
+  outline:none;
+  height:100px;
+}
+.seviceTitle {
+  background:#BDBDBD;
+  height:35px;
+  line-height:35px;
+  padding-left:15px;
+  color:#fff;
+}
+#sendTime {
+  width: 50%;
+  height: 24px;
+  margin-bottom: 0px;
+  padding: 10px 0;
+  text-align: right;
+  border:none;
+  outline:none;
+
+}
+.div-child .row {
+  padding-left:15px;
+  padding-right:15px;
+  padding-bottom:10px;
+  padding-top:6px;
+  font-size:15px;
+  background:#fff;
+  border-bottom: 1px solid #DEDEDE;
+}
+</STYLE>
+<body>
+  <header class="mui-bar mui-bar-nav">
+      <h1 class="mui-title">评价</h1>
+      <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+            <span class="mui-icon mui-icon-left-nav"></span>
+          </button>
+    </header>
+
+  <div id="warn" class="warn" hidden>
+    <small></small>
+  </div>
+  <div id="loading" class="spinner" style="position:fixed;z-index:9999;text-align:center;width:100%;" hidden>
+    <div class="bounce1"></div>
+    <div class="bounce2"></div>
+    <div class="bounce3"></div>
+  </div>
+  <div id="upload" class="transparent" hidden>
+      <div id="waiting" class="loader loading-position">
+        <div class="loader-inner line-spin-fade-loader">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+      <div style="color:#fff;position:relative;width:100%;text-align:center;top:40%;">正在提交，请稍候...</div>
+
+      <div id="succeed" class="result-window" hidden>
+          <span class="glyphicon glyphicon-ok-circle" style="font-size:40px;color:#25F706;"></span>
+          <span style="color:#25F706;">提交成功</span>
+      </div>
+      <div id="failed" class="result-window" hidden>
+          <span class="glyphicon glyphicon-remove-circle" style="font-size:40px;color:#FF7C7C;"></span>
+          <span style="color:#FF7C7C;">提交失败了</span>
+      </div>
+  </div>
+
+  <div id="content" class="top50">
+    <!-- <div class='div-child'>
+      <h5 class="titleD">
+        黑椒牛柳套餐饭
+      </h5>
+      <div class='mui-row'>
+      <div class="mui-col-xs-4 mui-col-sm-4 mui-col-md-4 mui-col-lg-4 left-nopadding">
+          菜品质量
+      </div>
+      <div class="mui-col-xs-6 mui-col-sm-6 mui-col-md-6 mui-col-lg-6 all-nopadding">
+          <select class='eval evalApearance' name='rating' onchange='hehe(this)'>
+            <option value=''></option>
+            <option value='2'>非常差</option>
+            <option value='4'>差</option>
+            <option value='6'>一般</option>
+            <option value='8'>好</option>
+            <option value='10'>非常好</option>
+          </select>
+      </div>
+      <div class='mui-col-xs-2 mui-col-sm-2 mui-col-md-2 mui-col-lg-2 all-nopadding' style="color:#F51A1A;"></div>
+    </div>
+    <h5 class="bottomD">
+    </h5>
+    <textarea class="form-control" placeholder="写一些缺陷或建议帮助我们更好的提高菜品和服务质量"></textarea>
+    </div>
+
+    <div class='div-child'>
+      <h5 class="titleD">
+        鱼香肉丝套餐饭
+      </h5>
+      <div class='mui-row'>
+      <div class="mui-col-xs-4 mui-col-sm-4 mui-col-md-4 mui-col-lg-4 left-nopadding">
+          菜品质量
+      </div>
+      <div class="mui-col-xs-6 mui-col-sm-6 mui-col-md-6 mui-col-lg-6 all-nopadding">
+          <select class='eval evalApearance' name='rating' onchange='hehe(this)'>
+            <option value=''></option>
+            <option value='2'>非常差</option>
+            <option value='4'>差</option>
+            <option value='6'>一般</option>
+            <option value='8'>好</option>
+            <option value='10'>非常好</option>
+          </select>
+      </div>
+      <div class='mui-col-xs-2 mui-col-sm-2 mui-col-md-2 mui-col-lg-2 all-nopadding' style="color:#F51A1A;"></div>
+    </div>
+    <h5 class="bottomD">
+    </h5>
+    <textarea class="form-control" placeholder="写一些缺陷或建议帮助我们更好的提高菜品和服务质量"></textarea>
+    </div> -->
+  </div>
+
+  <div class='div-child' style="margin-bottom: 60px;">
+      <h5 class="seviceTitle">
+        服务评价
+      </h5>
+      <div class='mui-row row'>
+      <div class="mui-col-xs-4 mui-col-sm-4 mui-col-md-4 mui-col-lg-4" style='color:#8E8E8E;line-height:23px;'>
+          送达时间
+      </div>
+      <div class="mui-col-xs-7 mui-col-sm-7 mui-col-md-7 mui-col-lg-7">
+        <span class="mui-col-xs-6 mui-col-sm-6 mui-col-md-6 mui-col-lg-6" id="date"></span>
+        <input class="mui-col-xs-6 mui-col-sm-6 mui-col-md-6 mui-col-lg-6" id="sendTime" type='text' placeholder="点击选择日期" readonly />
+      </div>
+      <div class="mui-col-xs-1 mui-col-sm-1 mui-col-md-1 mui-col-lg-1" style="line-height:23px;">
+        <span class="mui-icon mui-icon-forward fontColor"></span>
+      </div>
+      </div>
+      <!-- <hr> -->
+      <div class='mui-row' style="padding-top: 8px">
+      <div class="mui-col-xs-4 mui-col-sm-4 mui-col-md-4 mui-col-lg-4" style='color:#8E8E8E;'>
+          服务质量
+      </div>
+      <div class="mui-col-xs-6 mui-col-sm-6 mui-col-md-6 mui-col-lg-6">
+          <select id="service" class='eval evalApearance' name='rating' onchange='hehe(this)'>
+            <option value=''></option>
+            <option value='2'>很差</option>
+            <option value='4'>差</option>
+            <option value='6'>一般</option>
+            <option value='8'>满意</option>
+            <option value='10'>很满意</option>
+          </select>
+      </div>
+      <div class='mui-col-xs-2 mui-col-sm-2 mui-col-md-2 mui-col-lg-2 font13' style="color:#F51A1A;line-height:21px;"></div>
+    </div>
+    <h5 style='background:#F1F1F1;height:5px;line-height:5px;padding-left:15px;margin-bottom:0px;'>
+      
+    </h5>
+    <textarea id="evalText" class="form-control" placeholder="说点什么..." style="border:none;outline:none;height:100px;margin-bottom:50px;"></textarea>
+    </div>
+
+
+  <div class="btn-sb backColor">
+    提交评价
+  </div>
+</body>
+<script type="text/javascript" src="../../../js/color.js"></script>
+<script src="../reference/mui/js/mui.js" type="text/javascript"></script>
+<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../reference/js/common.js" type="text/javascript"></script>
+<script src="../reference/js/math.js" type="text/javascript"></script>
+<script src="../reference/js/jquery.barrating.js" type="text/javascript"></script>
+<script src="../reference/mui/js/mui.picker.min.js" type="text/javascript"></script>
+<!-- <script src="../../../cordova.js" type="text/javascript"></script> -->
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var url = location.search;
+    var billNo = url.substring(1, url.length);
+    var canteenNum = "";
+    var isSubmit = false;
+
+    $(function() {
+      $('#loading').show();
+      $.ajax({
+         // url: baseUrl + 'app_billInfoController.do?queryBill',
+        url: baseUrl + 'workmeal',
+        type: 'post',
+        headers:{
+          className : 'AppWorkBaseInfoService',
+          methodName : 'queryWorkBill'
+        },
+        data:{
+          billNo:billNo,
+        },
+        success: function(data) {
+          $("#loading").hide();
+          canteenNum = data.obj[0].canteenNum;
+
+          var html = "";
+          var list = new Array();
+          list = data.obj[0].billDetail;
+          $("#date").html(data.obj[0].reqSendTime.split(" ")[0]);
+          $("#sendTime").val(data.obj[0].reqSendTime.split(" ")[1]);
+          for(var i=0;i<list.length;i++){
+            menuName = list[i].menuName;
+            menuNum = list[i].menuNum;
+            html += createHtml(menuName,menuNum);
+          }
+          $("#content").html(html);
+
+          $('.eval').barrating({
+            theme: 'fontawesome-stars',
+            showSelectedRating: false,
+            initialRating: ''
+          });
+        }
+      });
+
+
+      $('#sendTime').click(function(){
+          var dtpicker = new mui.DtPicker({ 
+            "type": "time",
+          })
+          dtpicker.show(function(e) { 
+              $('#sendTime').val(e.text);
+          })
+      })
+      
+    });
+
+    // $('.eval').barrating({
+    //   theme: 'fontawesome-stars',
+    //   showSelectedRating: false,
+    //   initialRating: ''
+    // });
+
+    function createHtml(menuName,menuNum) {
+      var html = "<div class='div-child'>";
+      html += "<h5 class='titleD'>"+menuName+"</h5>";
+      html += "<div class='mui-row'>";
+      html += "<div class='mui-col-xs-4 mui-col-sm-4 mui-col-md-4 mui-col-lg-4 left-nopadding' style='color:#8E8E8E;'>菜品质量</div>";
+      html += "<div class='mui-col-xs-6 mui-col-sm-6 mui-col-md-6 mui-col-lg-6 all-nopadding'>";
+      html += "<select id='"+menuNum+"' class='eval evalApearance' name='rating' onchange='hehe(this)'>";
+      html += "<option value=''></option>";
+      html += "<option value='2'>很差</option>";
+      html += "<option value='4'>差</option>";
+      html += "<option value='6'>一般</option>";
+      html += "<option value='8'>满意</option>";
+      html += "<option value='10'>很满意</option>";
+      html += "</select></div>";
+      html += "<div class='mui-col-xs-2 mui-col-sm-2 mui-col-md-2 mui-col-lg-2 font13 all-nopadding' style='color:#F51A1A;line-height:21px;'></div>";
+      html += "</div>";
+      html += "<h5 class='bottomD'></h5>";
+      html += "<textarea class='form-control' placeholder='菜品评价'></textarea>";
+      html += "</div>";
+      return html;
+    }
+
+    function hehe(_this) {
+      var index = _this.selectedIndex;
+      var text = _this.options[index].text;
+      _this.parentNode.parentNode.nextElementSibling.innerHTML = text;
+    }
+
+    $("#back").click(function(){
+      location.href = "../meal_order.html";
+    });
+
+    //提交评价
+    $("div.btn-sb").click(function(){
+      // $("div.btn-sb").css({'pointer-events':'none'});
+      if(isSubmit) return;
+      isSubmit = true;
+      
+      var service = $("#service").val()==""?"0":$("#service").val();
+      var sendTime = $("#date").html() + " " + $("#sendTime").val();
+      var evalContent = $("#evalText").val();
+      var evalData = [];
+      $("#content div.div-child").each(function(index,element){
+        evalData[index] = {
+          "menuNum":$(this).find("select").attr("id"),
+          "evalLevel":$(this).find("select").val()==""?"0":$(this).find("select").val(),
+          "evalContent":$(this).find("textarea").val()
+        }
+      });
+      var jsonbak = {
+        "sendDate":sendTime,
+        "billNo":billNo,
+        "evalLevel":service,
+        "evalContent":evalContent,
+        "evalTypeName":"服务质量",
+        "evalType":"00",
+        "userCode":workNo,
+        "canteenNum":canteenNum,
+        "billMenuList":evalData,
+        "dataGroupCode":localStorage.getItem("dataGroupCode")
+      }
+      console.log(jsonbak);
+
+      if(checkData(jsonbak)){
+        var json = JSON.stringify(jsonbak);
+        console.log(json);
+        saveEval(json);
+      }else{
+        isSubmit = false;
+        //$("div.btn-sb").css({'pointer-events':'auto'});
+        $("#upload").hide();
+      }
+    });
+
+    //数据校验
+    function checkData(data){
+      var star = true;
+      $.each(data.billMenuList,function(i,obj){
+        if(obj.evalLevel== 0){
+          star = false;
+          return;
+        }
+      });
+
+      if(!star){
+        $("#warn small").html("请对菜品质量进行评价");
+          $('#warn').fadeIn(500);
+          setTimeout("$('#warn').fadeOut(500)", 2000);
+          return false;
+      }
+
+      if(data.evalLevel == 0){
+        $("#warn small").html("请对服务质量进行评价");
+        $('#warn').fadeIn(500);
+        setTimeout("$('#warn').fadeOut(500)", 2000);
+        return false;
+      }
+      return true;
+    }
+
+    //保存评价数据
+    function saveEval(json){
+      // debugger
+      $("#upload").show();
+      $.ajax({
+        //url:baseUrl + 'app_workBillInfoController.do?saveEval',
+        url: baseUrl + 'workmeal',
+        type: 'post',
+        headers:{
+          className : 'AppWorkOrderService',
+          methodName : 'saveWorkEval'
+        },
+        data:{
+          json:json
+        },
+        success:function(data){
+          //var data = JSON.parse(data);
+          if (data.success) {
+            $("#upload").hide();
+            $("#waiting").hide();
+            $("#succeed").fadeIn(1000);
+            location.href='../meal_order.html';
+            //$("div.btn-sb").css({'pointer-events':'auto'});
+          } else {
+            isSubmit = false;
+            $("#upload").hide();
+            $("#warn small").html(data.respMsg);
+            $('#warn').fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 2000);
+            //$("div.btn-sb").css({'pointer-events':'auto'});
+          }
+        },
+      });
+    }
+
+    // APP系统键回退
+    document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady() {
+      /**
+       * 系统返回键监听
+       */
+      document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+    //返回
+    function onBackKeyDown() {
+       location.href = "../meal_order.html";
+    }
+
+</script>
+</html>

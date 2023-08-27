@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="FACF01">
+    <insert id="saveSplitByNumberInfo" parameterClass="java.util.HashMap">
+        insert into fa_split(
+            id,
+            goods_id,
+            goods_num,
+            amount,
+            price,
+            buyCost,
+            total_depreciation,
+            net_asset_value,
+            estimated_residual_value,
+            split_way,
+            status_code
+        ) values
+            <iterate conjunction="," property="splitList">
+                (#splitList[].goodsId#,#faInfoId#,#splitList[].goodsNum#,#splitList[].amount#,#splitList[].price#,#splitList[].buyCost#,
+                #splitList[].totalDepreciation#,#splitList[].netAssetValue#,#splitList[].estimatedResidualValue#,#splitWay#,"01")
+            </iterate>
+    </insert>
+
+    <insert id="saveSplitByValueInfo" parameterClass="java.util.HashMap">
+        insert into fa_split(
+            id,
+            goods_id,
+            goods_num,
+            amount,
+            price,
+            buyCost,
+            total_depreciation,
+            net_asset_value,
+            estimated_residual_value,
+            split_way,
+            status_code
+        ) values
+        <iterate conjunction="," property="splitList">
+            (#splitList[].goodsId#,#faInfoId#,#splitList[].goodsNum#,#splitList[].amount#,#splitList[].price#,#splitList[].buyCost#,
+            #splitList[].totalDepreciation#,#splitList[].netAssetValue#,#splitList[].estimatedResidualValue#,#splitWay#,"01")
+        </iterate>
+    </insert>
+
+    <select id="querySplitTab" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            id splitId,
+            goods_id goodsId,
+            goods_num goodsNum,
+            amount,
+            price,
+            buyCost,
+            total_depreciation totalDepreciation,
+            net_asset_value netAssetValue,
+            estimated_residual_value estimatedResidualValue,
+            split_way splitWay,
+            status_code statusCode
+        from fa_split
+        where
+            goods_id = #faInfoId#
+        order by LENGTH(goods_num),goods_num
+    </select>
+
+    <update id="splitByNumberOfApproval" parameterClass="java.util.HashMap">
+        update fa_split set status_code = "02" where goods_id = #faInfoId#
+    </update>
+    
+    <delete id="remove" parameterClass="java.util.HashMap">
+        delete from fa_split where status_code = "01" and goods_id = #faInfoId#
+    </delete>
+    
+    <!-- 不翻译 -->
+    <select id="queryFaInfoDO" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.fa.da.domain.FaInfoDO">
+        SELECT
+        id	as "faInfoId",
+        enter_bill_no as "enterBillNo",
+        out_bill_no as "outBillNo",
+        mat_num as "matNum",
+        mat_name as "matName",
+        goods_num	as "goodsNum",
+        goods_name	as "goodsName",
+        goods_classify_code	as "goodsClassifyCode",
+        goods_classify_name	as "goodsClassifyName",
+        goods_type_code	as "goodsTypeCode",
+        goods_type_name	as "goodsTypeName",
+        model	as "model",
+        spec	as "spec",
+        amount	as "amount",
+        price	as "price",
+        buy_cost	as "buyCost",
+        manufacturer	as "manufacturer",
+        manufacturer_naty_code as "manufacturerNatyCode",
+        surp_num	as "surpNum",
+        surp_name	as "surpName",
+        DATE_FORMAT( buy_date, '%Y-%m-%d' ) AS "buyDate",
+        DATE_FORMAT( use_date, '%Y-%m-%d' ) AS "useDate",
+        build	as "build",
+        floor	as "floor",
+        install_location	as "installLocation",
+        install_location_num as "installLocationNum",
+        dept_num	as "deptNum",
+        dept_name	as "deptName",
+        status_code	as "statusCode",
+        CASE status_code
+        WHEN '010' THEN '待用'
+        WHEN '020' THEN '在用'
+        WHEN '030' THEN '现场停用'
+        WHEN '050' THEN '预报废'
+        WHEN '060' THEN '报废'
+        END AS "statusCodeMean",
+        unit_num	as "unitNum",
+        unit_name	as "unitName",
+        residual_rate	as "residualRate",
+        estimated_residual_value	as "estimatedResidualValue",
+        use_years	as "useYears",
+        fundingSource_num	as "fundingSourceNum",
+        asset_use_code as "assetUseCode",
+        asset_get_way_code as "assetGetWayCode",
+        deprect_code as "deprectCode",
+        finace_class_num	as "finaceClassNum",
+        DATE_FORMAT( in_account_date, '%Y-%m-%d' ) AS "inAccountDate",
+        invoice_no	as "invoiceNo",
+        DATE_FORMAT( invoice_date, '%Y-%m-%d' ) AS "invoiceDate",
+        device_id	as "deviceId",
+        device_name	as "deviceName",
+        device_type_name	as "deviceTypeName",
+        rfid_code	as "rfidCode",
+        net_asset_value	as "netAssetValue",
+        estimate_cost	as "estimateCost",
+        remark	as "remark",
+        depreciation_way	as "depreciationWay",
+        total_depreciation	as "totalDepreciation",
+        month_depreciation	as "monthDepreciation",
+        in_account_status	as "inAccountStatus",
+        CASE in_account_status
+        WHEN '1' THEN '已启用'
+        WHEN '0' THEN '未启用'
+        END as "inAccountStatusMean",
+        lock_flag	as "lockFlag",
+        card_status	as "cardStatus",
+        CASE card_status
+        WHEN '1' THEN '已发卡'
+        WHEN '0' THEN '未发卡'
+        END AS "cardStatusMean",
+        cont_no AS "contNo",
+        rec_creator	as "recCreator",
+        rec_create_name	as "recCreateName",
+        DATE_FORMAT( rec_create_time, '%Y-%m-%d %H:%i:%S' ) as "recCreateTime",
+        rec_revisor	as "recRevisor",
+        rec_revise_name	as "recReviseName",
+        DATE_FORMAT( rec_revise_time, '%Y-%m-%d %H:%i:%S' ) as "recReviseTime",
+        data_group_code	as "dataGroupCode",
+        CASE lock_flag
+        WHEN "2" THEN "变更"
+        ELSE NULL END AS "modificationMean",
+        archive_flag	as "archiveFlag",
+        split_reason as splitReason
+        FROM fa_info
+        WHERE lock_flag not in ("4")
+        <isEqual prepend="and" property="isCall" compareValue="true">
+            lock_flag = "0" and in_account_status = "1" and status_code in ("20","30")
+        </isEqual>
+        <isEqual prepend="and" property="split" compareValue="true">
+            lock_flag not in ("2","4") and status_code in ("20","30")
+        </isEqual>
+        <isEqual prepend="and" property="modify" compareValue="true">
+            status_code in ("20","30")
+        </isEqual>
+        <isNotEmpty prepend=" AND " property="faInfoId">
+            id = #faInfoId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsNum">
+            goods_num like concat ('%',trim(#goodsNum#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsName">
+            goods_name like concat ('%',trim(#goodsName#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsClassifyCode">
+            goods_classify_code = #goodsClassifyCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsTypeCode">
+            goods_type_code = #goodsTypeCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptName">
+            dept_name like concat ('%',trim(#deptName#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCode">
+            status_code = #statusCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="cardStatus">
+            card_status = #cardStatus#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="rfidCode">
+            rfid_code like concat ('%',trim(#rfidCode#),'%')
+        </isNotEmpty>
+    </select>
+
+    <!--  查询资产信息  -->
+    <select id="queryFaInfoDOInfo" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.fa.da.domain.FaInfoDO">
+        SELECT
+            id,
+            id AS "faInfoId",
+            goods_num	AS "goodsNum",
+            goods_name	AS "goodsName",
+            goods_classify_code	AS "goodsClassifyCode",
+            goods_classify_name	AS "goodsClassifyName",
+            goods_type_code	AS "goodsTypeCode",
+            goods_type_name	AS "goodsTypeName",
+            model	AS "model",
+            amount	AS "amount",
+            price	AS "price",
+            buy_cost	AS "buyCost",
+            manufacturer	AS "manufacturer",
+            surp_name	AS "surpName",
+            DATE_FORMAT( buy_date, '%Y-%m-%d' ) AS "buyDate",
+            DATE_FORMAT( use_date, '%Y-%m-%d' ) AS "useDate",
+            build	AS "build",
+            floor	AS "floor",
+            install_location	AS "installLocation",
+            install_location_num AS "installLocationNum",
+            dept_num	AS "deptNum",
+            dept_name	AS "deptName",
+            CASE status_code
+            WHEN '010' THEN '待用'
+            WHEN '020' THEN '在用'
+            WHEN '030' THEN '现场停用'
+            WHEN '050' THEN '预报废'
+            WHEN '060' THEN '报废'
+            END AS "statusCode",
+            unit_num	AS "unitNum",
+            unit_name	AS "unitName",
+            residual_rate	AS "residualRate",
+            estimated_residual_value	AS "estimatedResidualValue",
+            use_years	AS "useYears",
+            fundingSource_num AS "fundingSourceNum",
+            finace_class_num	AS "finaceClassNum",
+            DATE_FORMAT( in_account_date, '%Y-%m-%d' ) AS "inAccountDate",
+            invoice_no	AS "invoiceNo",
+            DATE_FORMAT( invoice_date, '%Y-%m-%d' ) AS "invoiceDate",
+            device_id	AS "deviceId",
+            device_name	AS "deviceName",
+            device_type_name	AS "deviceTypeName",
+            rfid_code	AS "rfidCode",
+            net_asset_value	AS "netAssetValue",
+            estimate_cost	AS "estimateCost",
+            remark	AS "remark",
+            depreciation_way	AS "depreciationWay",
+            total_depreciation	AS "totalDepreciation",
+            month_depreciation	AS "monthDepreciation",
+            in_account_status AS "inAccountStatus",
+            card_status AS "cardStatus",
+            rec_creator	AS "recCreator",
+            rec_create_name	AS "recCreateName",
+            DATE_FORMAT( rec_create_time, '%Y-%m-%d %H:%i:%S' ) AS "recCreateTime",
+            rec_revisor	AS "recRevisor",
+            rec_revise_name	AS "recReviseName",
+            DATE_FORMAT( rec_revise_time, '%Y-%m-%d %H:%i:%S' ) AS "recReviseTime",
+            data_group_code	AS "dataGroupCode",
+            lock_flag AS "lockFlag",
+            archive_flag	AS "archiveFlag",
+            split_reason AS "splitReason"
+        FROM fa_info
+        WHERE lock_flag NOT IN ("4")
+        AND status_code = "020"
+        <isNotEmpty prepend=" AND " property="faInfoId">
+            id = #faInfoId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsNum">
+            goods_num like concat ('%',trim(#goodsNum#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsName">
+            goods_name like concat ('%',trim(#goodsName#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="surpName">
+            surp_name like concat ('%',trim(#surpName#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="remark">
+            remark like concat ('%',trim(#remark#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="useYear">
+            use_years = #useYear#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyCostS">
+            buy_cost >= #buyCostS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyCostE">
+            #buyCostE# >= buy_cost
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="netAssetValueS">
+            net_asset_value >= #netAssetValueS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="netAssetValueE">
+            #netAssetValueE# >= net_asset_value
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyDateS">
+            DATE_FORMAT( buy_date, '%Y-%m-%d' )  >= #buyDateS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyDateE">
+            #buyDateE# >= DATE_FORMAT( buy_date, '%Y-%m-%d' )
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="useDateS">
+            DATE_FORMAT( use_date, '%Y-%m-%d' )  >= #useDateS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="useDateE">
+            #useDateE# >= DATE_FORMAT( use_date, '%Y-%m-%d' )
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsClassifyCode">
+            goods_classify_name like concat ('%',trim(#goodsClassifyCode#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsTypeCode">
+            goods_type_name like concat ('%',trim(#goodsTypeCode#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="fundingSourceNum">
+            fundingSource_num = #fundingSourceNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptName">
+            dept_name like concat ('%',trim(#deptName#),'%')
+        </isNotEmpty>
+        order by dept_name,rec_revise_time DESC,rec_create_time DESC,LENGTH(goods_num),goods_num
+    </select>
+
+    <select id="countqueryFaInfoDOInfo" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM fa_info
+        WHERE lock_flag NOT IN ("4")
+        AND status_code = "20"
+        <isNotEmpty prepend=" AND " property="faInfoId">
+            id = #faInfoId#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsNum">
+            goods_num like concat ('%',trim(#goodsNum#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsName">
+            goods_name like concat ('%',trim(#goodsName#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="surpName">
+            surp_name like concat ('%',trim(#surpName#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="remark">
+            remark like concat ('%',trim(#remark#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="useYear">
+            use_years = #useYear#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyCostS">
+            buy_cost >= #buyCostS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyCostE">
+            #buyCostE# >= buy_cost
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="netAssetValueS">
+            net_asset_value >= #netAssetValueS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="netAssetValueE">
+            #netAssetValueE# >= net_asset_value
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyDateS">
+            DATE_FORMAT( buy_date, '%Y-%m-%d' )  >= #buyDateS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="buyDateE">
+            #buyDateE# >= DATE_FORMAT( buy_date, '%Y-%m-%d' )
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="useDateS">
+            DATE_FORMAT( use_date, '%Y-%m-%d' )  >= #useDateS#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="useDateE">
+            #useDateE# >= DATE_FORMAT( use_date, '%Y-%m-%d' )
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsClassifyCode">
+            goods_classify_name like concat ('%',trim(#goodsClassifyCode#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="goodsTypeCode">
+            goods_type_name like concat ('%',trim(#goodsTypeCode#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="fundingSourceNum">
+            fundingSource_num = #fundingSourceNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptName">
+            dept_name like concat ('%',trim(#deptName#),'%')
+        </isNotEmpty>
+    </select>
+    <!--    -->
+
+    <!--  资产拆分查询  -->
+    <select id="queryFaSplitVOInfo" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.fa.cf.domain.FaSplitVO">
+        SELECT
+          `id`,
+          `split_no` AS "splitNo",
+          `faInfo_id` AS "faInfoId",
+          `goods_num` AS "goodsNum",
+          `goods_name` AS "goodsName",
+          `amount`,
+          `buyCost`,
+          `total_depreciation` AS "totalDepreciation",
+          `net_asset_value` AS "netAssetValue",
+          CASE `split_way`
+          WHEN '00' THEN '价值拆分'
+          WHEN '10' THEN '数量拆分'
+          END AS "splitWay",
+          CASE `status_code`
+          WHEN '00' THEN '草稿'
+          WHEN '20' THEN '驳回'
+          WHEN '100' THEN '通过'
+          END AS "statusCode",
+          `split_reason` AS "splitReason"
+        FROM
+          fa_split
+        WHERE 1 = 1
+        <isEqual prepend="and" property="statusCode" compareValue="apply">
+            status_code = '00'
+        </isEqual>
+    </select>
+    <!--    -->
+
+    <!-- 资产按价值拆分保存方法 -->
+    <update id="updateSplitInfoToFaInfo" parameterClass="com.baosight.wilp.fa.da.domain.FaInfoDO">
+        UPDATE fa_info SET `goods_num` = #goodsNum#,`goods_name` = #goodsName#,
+        `buy_cost` = #buyCost#,`total_depreciation` = #totalDepreciation#,
+        `net_asset_value` = #netAssetValue#
+        WHERE id = #faInfoId#
+    </update>
+
+    <insert id="insertSplitInfoToFaInfo" parameterClass="java.util.ArrayList">
+        INSERT INTO fa_info(
+        id,goods_num,goods_name,contract_no,goods_classify_code,goods_classify_name,goods_type_code,
+        goods_type_name,model,spec,amount,price,buy_cost,manufacturer,manufacturer_naty_code,surp_num,surp_name,buy_date,use_date,build,floor,
+        install_location_num,install_location,dept_num,dept_name,status_code,unit_num,unit_name,residual_rate,
+        estimated_residual_value,use_years,fundingSource_num,fundingSource_name,asset_use_code,asset_use_name,
+        asset_get_way_code,asset_get_way_name,deprect_code,month_depreciation,finace_class_num,in_account_date,
+        mat_num,mat_name,mat_type_num,mat_type_name,cont_no,
+        invoice_no,invoice_date,device_id,device_name,device_type_name,rfid_code,net_asset_value,estimate_cost,
+        remark,depreciation_way,total_depreciation,in_account_status,rec_creator,rec_create_name,
+        rec_create_time,data_group_code,archive_flag,card_status,lock_flag
+        )
+        VALUES
+        <iterate conjunction=",">
+            (
+            #faInfoDOList[].id#, #faInfoDOList[].goodsNum#, #faInfoDOList[].goodsName#, #faInfoDOList[].contractNo#,#faInfoDOList[].goodsClassifyCode#,
+            #faInfoDOList[].goodsClassifyName#, #faInfoDOList[].goodsTypeCode#,#faInfoDOList[].goodsTypeName#,
+            #faInfoDOList[].model#, #faInfoDOList[].spec#, #faInfoDOList[].amount#, #faInfoDOList[].price#, #faInfoDOList[].buyCost#,
+            #faInfoDOList[].manufacturer#, #faInfoDOList[].manufacturerNatyCode#, #faInfoDOList[].surpNum#, #faInfoDOList[].surpName#, #faInfoDOList[].buyDate#, #faInfoDOList[].useDate#,
+            #faInfoDOList[].build#, #faInfoDOList[].floor#, #faInfoDOList[].installLocationNum#,
+            #faInfoDOList[].installLocation#, #faInfoDOList[].deptNum#, #faInfoDOList[].deptName#,
+            #faInfoDOList[].statusCode#, #faInfoDOList[].unitNum#, #faInfoDOList[].unitName#, #faInfoDOList[].residualRate#,
+            #faInfoDOList[].estimatedResidualValue#, #faInfoDOList[].useYears#, #faInfoDOList[].fundingSourceNum#,#faInfoDOList[].fundingSourceName#,
+            #faInfoDOList[].assetUseCode#,#faInfoDOList[].assetUseName#, #faInfoDOList[].assetGetWayCode#, #faInfoDOList[].assetGetWayName#,
+            #faInfoDOList[].deprectCode#, #faInfoDOList[].monthDepreciation#,	#faInfoDOList[].finaceClassNum#, #faInfoDOList[].inAccountDate#,
+            #faInfoDOList[].matNum#,  #faInfoDOList[].matName#,  #faInfoDOList[].matTypeNum#,  #faInfoDOList[].matTypeName#, #faInfoDOList[].contNo#,
+            #faInfoDOList[].invoiceNo#, #faInfoDOList[].invoiceDate#, #faInfoDOList[].deviceId#, #faInfoDOList[].deviceName#,
+            #faInfoDOList[].deviceTypeName#, #faInfoDOList[].rfidCode#, #faInfoDOList[].netAssetValue#,
+            #faInfoDOList[].estimateCost#, #faInfoDOList[].remark#, #faInfoDOList[].depreciationWay#,
+            #faInfoDOList[].totalDepreciation#, #faInfoDOList[].inAccountStatus#, #faInfoDOList[].recCreator#,
+            #faInfoDOList[].recCreateName#, #faInfoDOList[].recCreateTime#,	#faInfoDOList[].dataGroupCode#,
+            #faInfoDOList[].archiveFlag#, #faInfoDOList[].cardStatus#, #faInfoDOList[].lockFlag#
+            )
+        </iterate>
+    </insert>
+
+    <insert id="insertSplitInfoToFaSplit" parameterClass="com.baosight.wilp.fa.cf.domain.FaSplitVO">
+        INSERT INTO fa_split
+        (
+            `id`,`split_no`,`split_way`,`status_code`,`split_reason`,`rec_create_name`,`rec_create_time`,
+            `audit_person`,`audit_time`
+        )
+        VALUES
+        (
+            #id#,#splitNo#,#splitWay#,#statusCode#,#splitReason#,#recCreateName#,#recCreateTime#,
+            #auditPerson#,#auditTime#
+        )
+    </insert>
+
+    <insert id="insertSplitInfoToFaSplitDetail" parameterClass="java.util.ArrayList">
+        INSERT INTO fa_split_detail
+        (
+            `id`,
+            `split_no`,
+            `faInfo_id`,
+            `goods_num`,
+            `goods_name`,
+            `buy_cost`,
+            `total_depreciation`,
+            `net_asset_value`,
+            `split_time`
+        )
+        VALUES
+        <iterate conjunction=",">
+            (
+                #collect[].id#,#collect[].splitNo#,#collect[].faInfoId#,#collect[].goodsNum#,
+                #collect[].goodsName#,#collect[].buyCost#,#collect[].totalDepreciation#,
+                #collect[].netAssetValue#,#collect[].splitTime#
+            )
+        </iterate>
+    </insert>
+    <!--  -->
+
+    <!--  查询拆分价值tab记录  -->
+    <select id="querySplitByValue" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+        SELECT distinct
+            t2.goods_num AS "goodsNum",
+            t2.goods_name AS "goodsName",
+            t2.buy_cost AS "buyCost",
+            t2.net_asset_value AS "netAssetValue",
+            t2.total_depreciation AS "totalDepreciation",
+            DATE_FORMAT(  t1.split_time, '%Y-%m-%d %H:%i:%S' ) AS "splitTime"
+        FROM
+            `fa_split_detail` t1
+                INNER JOIN fa_split_detail t2 ON t1.split_no = t2.split_no
+        WHERE
+            t1.faInfo_id = #value#
+        ORDER BY
+            t1.split_time desc,t2.buy_cost desc,t2.goods_num
+    </select>
+    <!--    -->
+
+    <!-- 查询今日类别号 -->
+    <select id="queryMaxCode" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+        SELECT
+            split_no typeCode
+        FROM
+            fa_split
+        WHERE
+            split_no like concat('%', #value#, '%')
+        ORDER BY
+            split_no
+        DESC
+    </select>
+</sqlMap>

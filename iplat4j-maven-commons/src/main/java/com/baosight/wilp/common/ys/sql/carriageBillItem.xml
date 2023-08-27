@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-02-09 9:13:21
+   		Version :  6.0.731.201809200158
+		tableName :iplat_v5demo_business.ot_bill_item 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 bill_id  VARCHAR   NOT NULL, 
+		 dected_class  VARCHAR, 
+		 dected_class_name  VARCHAR, 
+		 address_order_no  VARCHAR, 
+		 execute_user_no  VARCHAR, 
+		 freight  VARCHAR, 
+		 accept_time  VARCHAR, 
+		 finish_time  VARCHAR, 
+		 elapsed_time  VARCHAR, 
+		 dispath_no  VARCHAR, 
+		 dispath_time  VARCHAR, 
+		 bill_status  VARCHAR, 
+		 bill_item_no  VARCHAR
+	-->
+<sqlMap namespace="carriageBillItem">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.common.ys.domain.CarriageBillItem">
+		SELECT
+				id	as "id",  <!-- 运送条目表主键（UUID） -->
+				bill_id	as "billId",  <!-- 运送主表主键 -->
+				dected_class	as "dectedClass",  <!-- 运送地址编号 -->
+				dected_class_name	as "dectedClassName",  <!-- 运送地址 -->
+				address_order_no	as "addressOrderNo",  <!-- 运送地址排序 -->
+				execute_user_no	as "executeUserNo",  <!-- 运送执行人工号 -->
+				freight	as "freight",  <!-- 运送物品 -->
+				accept_time	as "acceptTime",  <!-- 运送接单时间 -->
+				finish_time	as "finishTime",  <!-- 运送完成时间 -->
+				elapsed_time	as "elapsedTime",  <!-- 运送耗时 -->
+				dispath_no	as "dispathNo",  <!-- 运送派工人工单 -->
+				dispath_time	as "dispathTime",  <!-- 运送派单时间 -->
+				bill_status	as "billStatus",  <!-- 状态 -->
+				bill_item_no	as "billItemNo" <!-- 批次号 -->
+		FROM iplat_v5demo_business.ot_bill_item WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM iplat_v5demo_business.ot_bill_item WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="billId">
+			bill_id = #billId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dectedClass">
+			dected_class = #dectedClass#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dectedClassName">
+			dected_class_name = #dectedClassName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="addressOrderNo">
+			address_order_no = #addressOrderNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="executeUserNo">
+			execute_user_no = #executeUserNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="freight">
+			freight = #freight#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="acceptTime">
+			accept_time = #acceptTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="finishTime">
+			finish_time = #finishTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="elapsedTime">
+			elapsed_time = #elapsedTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dispathNo">
+			dispath_no = #dispathNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dispathTime">
+			dispath_time = #dispathTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="billStatus">
+			bill_status = #billStatus#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="billItemNo">
+			bill_item_no = #billItemNo#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO iplat_v5demo_business.ot_bill_item (id,  <!-- 运送条目表主键（UUID） -->
+										bill_id,  <!-- 运送主表主键 -->
+										dected_class,  <!-- 运送地址编号 -->
+										dected_class_name,  <!-- 运送地址 -->
+										address_order_no,  <!-- 运送地址排序 -->
+										execute_user_no,  <!-- 运送执行人工号 -->
+										freight,  <!-- 运送物品 -->
+										accept_time,  <!-- 运送接单时间 -->
+										finish_time,  <!-- 运送完成时间 -->
+										elapsed_time,  <!-- 运送耗时 -->
+										dispath_no,  <!-- 运送派工人工单 -->
+										dispath_time,  <!-- 运送派单时间 -->
+										bill_status,  <!-- 状态 -->
+										bill_item_no  <!-- 批次号 -->
+										)		 
+	    VALUES (#id#, #billId#, #dectedClass#, #dectedClassName#, #addressOrderNo#, #executeUserNo#, #freight#, #acceptTime#, #finishTime#, #elapsedTime#, #dispathNo#, #dispathTime#, #billStatus#, #billItemNo#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM iplat_v5demo_business.ot_bill_item WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE iplat_v5demo_business.ot_bill_item 
+		SET 
+					bill_id	= #billId#,   <!-- 运送主表主键 -->  
+					dected_class	= #dectedClass#,   <!-- 运送地址编号 -->  
+					dected_class_name	= #dectedClassName#,   <!-- 运送地址 -->  
+					address_order_no	= #addressOrderNo#,   <!-- 运送地址排序 -->  
+					execute_user_no	= #executeUserNo#,   <!-- 运送执行人工号 -->  
+					freight	= #freight#,   <!-- 运送物品 -->  
+					accept_time	= #acceptTime#,   <!-- 运送接单时间 -->  
+					finish_time	= #finishTime#,   <!-- 运送完成时间 -->  
+					elapsed_time	= #elapsedTime#,   <!-- 运送耗时 -->  
+					dispath_no	= #dispathNo#,   <!-- 运送派工人工单 -->  
+					dispath_time	= #dispathTime#,   <!-- 运送派单时间 -->  
+					bill_status	= #billStatus#,   <!-- 状态 -->  
+					bill_item_no	= #billItemNo#  <!-- 批次号 -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

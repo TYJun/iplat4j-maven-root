@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="no-js">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="stylesheet" type="text/css" href="./css/example.css">
+		<link rel="stylesheet" type="text/css" href="./css/weui.css">
+		<title>选择套餐</title>
+	</head>
+	<style type="text/css">
+		* {
+			box-sizing: border-box;
+		}
+		
+		body,
+		#app {
+			/*background: #fff;*/
+			width: 100%;
+			height: 100%;
+		}
+		
+		.white-div {
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			z-index: 999;
+			background: #fff;
+		}
+	</style>
+
+	<body ref="body">
+		<div id="app">
+			<!-- 页面过渡div -->
+			<div v-if="whiteShow" class="white-div"></div>
+			<div id="toastMsg" style="display: none;">
+				<div class="weui-mask_transparent"></div>
+				<div class="weui-toast">
+					<i class="weui-icon-cancel weui-icon_toast" style="font-size: 35px;"></i>
+					<p class="weui-toast__content">{{toastMsg}}</p>
+				</div>
+			</div>
+			<div class="weui-panel__bd">
+				<div class="weui-media-box weui-media-box_small-appmsg">
+					<div class="weui-cells">
+						<a @click="packageSelected(item)" v-for="item in packages" :key="item.id" class="weui-cell weui-cell_access" href="javascript:;">
+							<div class="weui-cell__bd weui-cell_primary">
+								<h4 class="weui-media-box__title">{{item.comboName}}</h4>
+								<p class="weui-media-box__desc">{{item.comboRuleDetail[0].comboRuleNum}}{{item.comboRuleDetail[0].comboRuleDesc}}{{item.comboRuleDetail[1].comboRuleNum}}{{item.comboRuleDetail[1].comboRuleDesc}}</p>
+							</div>
+							<span class="weui-cell__ft"></span>
+						</a>
+
+					</div>
+				</div>
+			</div>
+
+			<!--<div class="dish-list-div am-list" style="padding: 0 0;">
+				<div class="am-list-body">
+					<a @click="packageSelected(item)" v-for="item in packages" :key="item.id" href="javascript:void(0)" class="am-list-item">
+						<div class="am-list-content">
+							<div class="am-list-title">{{item.comboName}}</div>
+							<div class="am-list-brief">{{item.comboRuleDetail[0].comboRuleNum}}{{item.comboRuleDetail[0].comboRuleDesc}}{{item.comboRuleDetail[1].comboRuleNum}}{{item.comboRuleDetail[1].comboRuleDesc}}</div>
+						</div>
+						<div class="am-list-arrow" aria-hidden="true"><span class="am-icon arrow horizontal"></span></div>
+					</a>
+				</div>
+			</div>-->
+		</div>
+	</body>
+	<script src="./js/vue.min.js"></script>
+	<script src="./js/jquery-2.1.4.min.js"></script>
+	<script src="./js/zepto.min.js"></script>
+	<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+	<script type="text/javascript" src="./js/big.min.js"></script>
+	<script type="text/javascript">
+		new Vue({
+			el: '#app',
+			data: {
+				whiteShow: true,
+				baseUrl: '',
+				canteenCode: '',
+				canteenName: '',
+				packages: []
+			},
+			methods: {
+				init: function() {
+					var _this = this;
+					_this.baseUrl = localStorage.getItem("baseUrl");
+					_this.canteenCode = localStorage.getItem("canteenCode");
+					_this.canteenName = localStorage.getItem("canteenName");
+					_this.loadPackages();
+				},
+				loadPackages: function() {
+					var _this = this;
+					$.ajax({
+						url: _this.baseUrl + 'app_comboMealRuleController.do?getComboRuleList',
+						type: 'post',
+						data: {
+							canteenNum: _this.canteenCode
+						},
+						success: function(data) {
+							var resp = JSON.parse(data);
+							console.log(resp);
+							if(resp.respCode == "200") {
+								_this.packages = resp.obj.data;
+							} else {
+
+								_this.showMsg(resp.respMsg)
+							}
+						}
+					});
+				},
+				showMsg: function(msg) {
+					var _this = this
+					_this.toastMsg = msg
+					var $toast = $("#toastMsg")
+					if($toast.css('display') != 'none') return;
+
+					$toast.fadeIn(100);
+					setTimeout(function() {
+						$toast.fadeOut(100);
+					}, 2000);
+
+				},
+				packageSelected: function(item) {
+					var json = {
+						"package_id": item.comboNum,
+						"package_name": item.comboName,
+						"package_price": item.comboPrice,
+						"rules": item.comboRuleDetail
+					}
+					localStorage.setItem("package", JSON.stringify(json))
+
+					location.href = "comboDishes.html";
+				},
+				GetQueryString: function(paramKey) {
+
+					var reg = new RegExp("(^|&)" + paramKey + "=([^&]*)(&|$)");
+					var r = window.location.search.substr(1).match(reg);
+					if(r != null)
+						return unescape(r[2]);
+					else
+						return null;
+
+				},
+				getOppenId: function(code) {
+					var _this = this;
+					_this.loadShow = true
+					$.ajax({
+						url: _this.baseUrl + 'app_patientBillInfoController.do?getWeChatOpenId',
+						type: 'post',
+						data: {
+							canteenNum: _this.canteenCode,
+							canteenName: _this.canteenName,
+							dataGroupCode: _this.dataGroupCode,
+							code: code
+						},
+						success: function(data) {
+							_this.loadShow = false
+							var resp = JSON.parse(data);
+							if(resp.success) {
+								// alert(resp.obj);
+								localStorage.setItem("userId", resp.obj);
+
+							} else {
+								_this.showMsg("openId获取失败")
+							}
+						}
+					});
+				}
+			},
+			mounted: function() {
+				this.$nextTick(function() {
+					this.init()
+					this.whiteShow = false
+
+					if(localStorage.getItem("userId") == null)
+						this.getOppenId(this.GetQueryString("code"))
+				})
+			}
+		});
+	</script>
+
+</html>

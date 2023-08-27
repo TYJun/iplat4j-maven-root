@@ -1,0 +1,102 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-color: #f7f7f7 !important;
+  overflow: scroll;
+}
+[v-cloak] {
+  display: none;
+}
+
+/* 头部区域 */
+.top {
+  position: relative;
+  width: 100%;
+  height: 44px;
+  background-color: #4db56c;
+  text-align: center;
+}
+#top-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  background-color: #4db56c;
+}
+#icon-left-back {
+  float: left;
+  position: relative;
+  margin-right: 107px;
+  width: 28px;
+  height: 100%;
+  line-height: 44px;
+  color: #fff;
+  margin-left: 12px;
+  font-weight: 400;
+  font-size: 30px;
+}
+#title {
+  position: absolute;
+  width: 280px;
+  line-height: 44px;
+  font-size: 17px;
+  font-weight: 500;
+  color: #fff;
+  margin: 0 auto;
+}
+/* 分类表格 */
+.selecttable {
+  position: relative;
+  top: 30px;
+  width: 95%;
+  margin: 0 auto;
+  color: #fff;
+  border-radius: 10px;
+  /* border: 1px solid #8a8a8a; */
+}
+.selecttable th {
+  background-color: #8a8a8a;
+  font-size: 16px;
+  font-weight: 600;
+  height: 50px;
+  text-align: center;
+  width: 33.3%;
+}
+.selecttable td {
+  font-size: 14px;
+  height: 50px;
+  text-align: center;
+  width: 33.3%;
+}
+.selecttable tbody tr:nth-child(n + 1) {
+  background-color: #fdfefd;
+  color: #101010;
+}
+.selecttable tbody tr:nth-child(2n) {
+  background-color: #eaeaea;
+  color: #101010;
+}
+/* '提交'按钮 */
+#btn_submit {
+  display: block;
+  width: 200px;
+  height: 40px;
+  background-color: #4db56c;
+  border-radius: 7px;
+  border: 1px solid #4db56c;
+  margin: 0 auto;
+  left: 88px;
+  bottom: calc(1vh);
+  position: fixed;
+}
+#btn_submit span {
+  color: #eee;
+  font-size: 20px;
+  line-height: 24px;
+  text-align: center;
+  margin: auto;
+}

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!-- table information Generate time : 2021-06-15 9:16:47 Version : 6.0.731.201809200158 
+	tableName :sc_qrcode_dept id VARCHAR NOT NULL primarykey, REC_CREATE_TIME DATETIME, 
+	REC_CREATOR VARCHAR, REC_REVISE_TIME DATETIME, REC_REVISOR VARCHAR, dept_name 
+	VARCHAR, dept_code VARCHAR, type_code VARCHAR, status VARCHAR, datagroup_code 
+	VARCHAR, datagroup_treecode VARCHAR, quote_address VARCHAR -->
+<!-- 二维码病区信息 -->
+<sqlMap namespace="SSBMBqgl01">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.bm.domain.SSBMBqgl01">
+		SELECT
+        c.id as "id",  <!-- 主键 -->
+        c.REC_CREATE_TIME as "recCreateTime",  <!-- 创建时间 -->
+        c.REC_CREATOR as "recCreator",  <!-- 创建人 -->
+        c.REC_REVISE_TIME as "recReviseTime",  <!-- 修改时间 -->
+        c.REC_REVISOR as "recRevisor",  <!-- 修改人 -->
+        c.dept_name as "deptName",  <!-- 科室名称 -->
+        c.dept_code as "deptCode",  <!-- 科室编码 -->
+        c.type_code as "typeCode",  <!-- 业务类型(zg/职工;bh/病患) -->
+        c.status as "status",  <!-- 状态 -->
+        c.datagroup_code as "datagroupCode",  <!-- 账套 -->
+        d.typename as datagroupName,
+        c.datagroup_treecode as "datagroupTreecode",  <!-- 根账套 -->
+        c.quote_address as "quoteAddress" <!-- 是否被address引用; 0/1未引用/已引用 -->
+        FROM sc_qrcode_dept c
+        LEFT JOIN sc_type d ON c.datagroup_code = d.typecode
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="areaCode">
+			datagroup_code = #areaCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="multiCode">
+			datagroup_code = #multiCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="ids">
+			id in ($ids$)
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name LIKE
+			CONCAT('%', #deptName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="bingqu">
+			dept_name LIKE
+			CONCAT('%', #bingqu#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptCode">
+			dept_code LIKE
+			CONCAT('%', #deptCode#, '%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="addNum">
+			add_num = #addNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floor">
+			floor = #floor#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="building">
+			building = #building#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="quoteAddress">
+			quote_address =
+			#quoteAddress#
+		</isNotEmpty>
+		ORDER BY rec_create_time desc
+
+	</select>
+
+<!-- 	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_qrcode_dept WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select> -->
+
+	<!-- <isNotEmpty prepend=" AND " property="id"> id = #id# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="recCreateTime"> REC_CREATE_TIME = #recCreateTime# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="recCreator"> REC_CREATOR 
+		= #recCreator# </isNotEmpty> <isNotEmpty prepend=" AND " property="recReviseTime"> 
+		REC_REVISE_TIME = #recReviseTime# </isNotEmpty> <isNotEmpty prepend=" AND 
+		" property="recRevisor"> REC_REVISOR = #recRevisor# </isNotEmpty> <isNotEmpty 
+		prepend=" AND " property="deptName"> dept_name = #deptName# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="deptCode"> dept_code = #deptCode# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="typeCode"> type_code = #typeCode# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="status"> status = #status# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="datagroupCode"> datagroup_code = #datagroupCode# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="datagroupTreecode"> datagroup_treecode 
+		= #datagroupTreecode# </isNotEmpty> <isNotEmpty prepend=" AND " property="quoteAddress"> 
+		quote_address = #quoteAddress# </isNotEmpty> -->
+
+	<insert id="insert">
+		INSERT INTO sc_qrcode_dept (id,  <!-- 主键 -->
+		REC_CREATE_TIME,  <!-- 创建时间 -->
+		REC_CREATOR,  <!-- 创建人 -->
+		REC_REVISE_TIME,  <!-- 修改时间 -->
+		REC_REVISOR,  <!-- 修改人 -->
+		dept_name,  <!-- 科室名称 -->
+		dept_code,  <!-- 科室编码 -->
+		type_code,  <!-- 业务类型(zg/职工;bh/病患) -->
+		status,  <!-- 状态 -->
+		datagroup_code,  <!-- 账套 -->
+		datagroup_treecode,  <!-- 根账套 -->
+		quote_address  <!-- 是否被address引用; 0/1未引用/已引用 -->
+		)
+		VALUES (#id#, #recCreateTime#, #recCreator#, #recReviseTime#,
+		#recRevisor#,
+		#deptName#, #deptCode#, #typeCode#, #status#,
+		#datagroupCode#,
+		#datagroupTreecode#, #quoteAddress#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM sc_qrcode_dept WHERE
+		id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_qrcode_dept
+		SET
+		REC_CREATE_TIME = #recCreateTime#,   <!-- 创建时间 -->
+		REC_CREATOR = #recCreator#,   <!-- 创建人 -->
+		REC_REVISE_TIME = #recReviseTime#,   <!-- 修改时间 -->
+		REC_REVISOR = #recRevisor#,   <!-- 修改人 -->
+		dept_name = #deptName#,   <!-- 科室名称 -->
+		dept_code = #deptCode#,   <!-- 科室编码 -->
+		type_code = #typeCode#,   <!-- 业务类型(zg/职工;bh/病患) -->
+		status = #status#,   <!-- 状态 -->
+		datagroup_code = #datagroupCode#,   <!-- 账套 -->
+		datagroup_treecode = #datagroupTreecode#,   <!-- 根账套 -->
+		quote_address = #quoteAddress#  <!-- 是否被address引用; 0/1未引用/已引用 -->
+		WHERE
+		id = #id#
+	</update>
+
+	<!-- 同步 -->
+	<update id="synchroDept1">
+		update sc_qrcode_dept dept set quote_address = '0' where
+		(select count(1) from
+		 sc_qrcode_address addr where addr.dept_code = dept.dept_code) = 0
+	</update>
+	<update id="synchroDept2">
+		update sc_qrcode_dept dept set quote_address = '1' where 
+		(select count(1) from
+		 sc_qrcode_address addr where addr.dept_code = dept.dept_code) > 0
+	</update>
+	
+		<select id="queryByDeptCode" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.bm.domain.SSBMBqgl01">
+		SELECT
+		id as "id",  <!-- 主键 -->
+		REC_CREATE_TIME as "recCreateTime",  <!-- 创建时间 -->
+		REC_CREATOR as "recCreator",  <!-- 创建人 -->
+		REC_REVISE_TIME as "recReviseTime",  <!-- 修改时间 -->
+		REC_REVISOR as "recRevisor",  <!-- 修改人 -->
+		dept_name as "deptName",  <!-- 科室名称 -->
+		dept_code as "deptCode",  <!-- 科室编码 -->
+		type_code as "typeCode",  <!-- 业务类型(zg/职工;bh/病患) -->
+		status as "status",  <!-- 状态 -->
+		datagroup_code as "datagroupCode",  <!-- 账套 -->
+		datagroup_treecode as "datagroupTreecode",  <!-- 根账套 -->
+		quote_address as "quoteAddress" <!-- 是否被address引用; 0/1未引用/已引用 -->
+		FROM sc_qrcode_dept WHERE 1=1
+		<isNotEmpty prepend=" AND " property="deptCode">
+			dept_code = #deptCode#
+		</isNotEmpty>
+		ORDER BY rec_create_time desc
+
+	</select>
+
+</sqlMap>

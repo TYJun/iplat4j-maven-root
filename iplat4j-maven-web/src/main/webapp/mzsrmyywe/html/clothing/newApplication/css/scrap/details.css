@@ -1,0 +1,115 @@
+body {
+    background-color: #eee;
+    margin: auto;
+    padding: auto;
+}
+.historylist .list_card>li {
+    overflow: hidden;
+    box-shadow: 1px 1px 5px 0 #BBBBBB;
+}
+/* 头部区域 */
+.top {
+    position: relative;
+    width:100%;
+    height: 44px;
+    background-color: #4DB56C;
+    text-align: center;
+}
+#top-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    background-color: #4DB56C;
+}
+#icon-left-back {
+    float: left;
+    position: relative;
+    margin-right: 107px;
+    width: 28px;
+    height: 100%;
+    line-height: 44px;
+    color: #fff;
+    margin-left: 12px;
+    font-weight: 400;
+    font-size: 30px;
+}
+#title {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    line-height: 44px;
+    font-size: 17px;
+    font-weight: 500;
+    color: #fff;
+    
+}
+#select_class {
+    float: right;
+    position: relative;
+    line-height: 44px;
+    color: #fff;
+    margin-right: 26px;
+    font-weight: 500;
+    font-size: 17px;
+}
+/* 次品详情单号 */
+.ord_title {
+    position: fixed;
+    left: 0px;
+    top: 50px;
+    display: inline-block;
+    height: 36px;
+    line-height: 36px;
+    font-size: 18px;
+    font-weight: 500;
+    margin: 21px ;
+}
+.ord_input {
+    position: fixed;
+    left: 110px;
+    top: 70px;
+    right: 0;
+    /* width: 190px; */
+    height: 40px;
+    border: #BBBBBB 1px solid;
+    line-height: 40px;
+    color: black;
+    font-size: 18px;
+    font-weight: 500;
+}
+/* 详情表格 */
+.table_details {
+    width: 95%;
+    margin: 0 auto;
+    color: #fff;
+    border-radius: 10px;
+    /* border: 1px solid #8a8a8a; */
+    position: relative;
+    top: 90px;
+}
+.table_details th {
+    background-color: #8a8a8a;
+    font-size: 16px;
+    font-weight: 600;
+    height: 50px;
+    text-align: center;
+    width: 33.3%;
+  }
+.table_details td {
+  font-size: 14px;
+  height: 50px;
+  text-align: center;
+  width: 33.3%;
+}
+.table_details tbody tr:nth-child(n + 1) {
+    background-color: #fdfefd;
+    color: #101010;
+}
+.table_details tbody tr:nth-child(2n) {
+    background-color: #eaeaea;
+    color: #101010;
+}

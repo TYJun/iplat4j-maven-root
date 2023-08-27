@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-07-15 17:26:50
+   		Version :  6.0.731.201809200158
+		tableName :.df_special_plan 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 task_no  VARCHAR   NOT NULL, 
+		 machine_id  VARCHAR   NOT NULL, 
+		 machine_code  VARCHAR, 
+		 machine_name  VARCHAR, 
+		 inner_machine_code  VARCHAR, 
+		 check_type  VARCHAR, 
+		 this_check_date  DATETIME, 
+		 this_finish_date  DATETIME, 
+		 next_check_date  DATETIME, 
+		 status_code  VARCHAR, 
+		 rec_creator  VARCHAR, 
+		 rec_create_time  VARCHAR, 
+		 rec_revisor  VARCHAR, 
+		 rec_revise_time  VARCHAR, 
+		 data_group_code  VARCHAR
+	-->
+<sqlMap namespace="DFSB02">
+	<!--查询上传的文件-->
+	<select id="queryFile" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+				dsf.id	as "id",  <!-- 设备零部件ID -->
+				dsf.doc_id	as "docId",  <!-- 平台附件表ID -->
+				dsf.relate_id	as "relateId",  <!-- 关联id(设备id或检验单id) -->
+				dsf.file_module	as "fileModule",  <!-- 附件所属模块(0=设备附件,1=检验附件) -->
+				dsf.file_type	as "fileType",  <!-- 附件类型(0=图片,1=文档) -->
+				dsf.file_name	as "fileName",  <!-- 附件名称 -->
+				dsf.file_path	as "filePath",  <!-- 附件存路径 -->
+				dsf.rec_creator	as "recCreator",  <!-- 创建人 -->
+				dsf.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+				dsf.rec_revisor	as "recRevisor",  <!-- 修改人 -->
+				dsf.rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+				dsf.data_group_code	as "dataGroupCode" <!-- 账套 -->
+		FROM df_special_file  dsf
+		LEFT JOIN df_special_device_part  dsdp ON dsf.relate_id = dsdp.id
+		where dsf.relate_id = #relateId#
+and file_module=#module#
+	</select>
+	<!--查询检验工单-->
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+				id	as "id",  <!-- 检校计划主键ID -->
+				task_no	as "taskNo",  <!-- 工单号 -->
+				machine_id	as "machineId",  <!-- 设备id -->
+				machine_code	as "machineCode",  <!-- 检验设备编码 -->
+				machine_name	as "machineName",  <!-- 检验设备名称 -->
+				inner_machine_code	as "innerMachineCode",  <!-- 内部设备编码 -->
+				check_type	as "checkType",  <!-- 检校类别编码 -->
+				DATE_FORMAT(this_check_date,'%Y-%m-%d') as "thisCheckDate",  <!-- 本次检验日 -->
+				DATE_FORMAT(this_finish_date,'%Y-%m-%d') as "thisFinishDate",  <!-- 本次检验完工日 -->
+				DATE_FORMAT(next_check_date,'%Y-%m-%d') as "nextCheckDate",  <!-- 下次检验日 -->
+				status_code	as "statusCode",  <!-- 工单状态(0=新建，-1=待审核，1=已审核) -->
+				rec_creator	as "recCreator",  <!-- 创建人 -->
+				DATE_FORMAT(rec_create_time,'%Y-%m-%d') as "recCreateTime",  <!-- 创建时间 -->
+				rec_revisor	as "recRevisor",  <!-- 修改作人 -->
+				DATE_FORMAT(rec_revise_time, '%Y-%m-%d') as "recReviseTime",  <!-- 修改时间 -->
+				data_group_code	as "dataGroupCode" <!-- 账套 -->
+		FROM df_special_plan WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="taskNo">
+			task_no	like concat('%', #taskNo#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			status_code	like concat('%', #statusCode#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineCode">
+			machine_code like concat('%', #machineCode#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineName">
+			machine_name like concat('%', #machineName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="checkType">
+			check_type = #checkType#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="thisCheckDateS">
+			date_format(this_check_date,'%Y-%m-%d') >= #thisCheckDateS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="thisCheckDateE">
+			date_format(this_check_date,'%Y-%m-%d') <![CDATA[<=]]> #thisCheckDateE#
+		</isNotEmpty>
+		order by task_no desc
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+	
+	<select id="query03" parameterClass="java.util.HashMap" 
+			resultClass="java.util.HashMap">
+		SELECT
+				id	as "id",  <!-- 检校计划主键ID -->
+				task_no	as "taskNo",  <!-- 工单号 -->
+				machine_id	as "machineId",  <!-- 设备id -->
+				machine_code	as "machineCode",  <!-- 检验设备编码 -->
+				machine_name	as "machineName",  <!-- 检验设备名称 -->
+				inner_machine_code	as "innerMachineCode",  <!-- 内部设备编码 -->
+				check_type	as "checkType",  <!-- 检校类别编码 -->
+				DATE_FORMAT(this_check_date,'%Y-%m-%d') as "thisCheckDate",  <!-- 本次检验日 -->
+				DATE_FORMAT(this_finish_date,'%Y-%m-%d') as "thisFinishDate",  <!-- 本次检验完工日 -->
+				DATE_FORMAT(next_check_date,'%Y-%m-%d')	as "nextCheckDate",  <!-- 下次检验日 -->
+				status_code	as "statusCode",  <!-- 工单状态(0=新建，-1=待审核，1=已审核) -->
+				rec_creator	as "recCreator",  <!-- 创建人 -->
+				DATE_FORMAT(rec_create_time,'%Y-%m-%d')	as "recCreateTime",  <!-- 创建时间 -->
+				rec_revisor	as "recRevisor",  <!-- 修改作人 -->
+				DATE_FORMAT(rec_revise_time,'%Y-%m-%d')	as "recReviseTime",  <!-- 修改时间 -->
+				data_group_code	as "dataGroupCode" <!-- 账套 -->
+		FROM df_special_plan WHERE 1=1 AND
+		DATE(next_check_date)-CURDATE()>=0
+		and
+		date_add(next_check_date,interval -30 DAY) <![CDATA[ <= ]]>CURDATE()
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="nowS">
+			next_check_date	= #nowS#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="nowE">
+			next_check_date = #nowE#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="statusCode">
+			status_code	= #statusCode#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="machineCode">
+			machine_code like concat('%', #machineCode#, '%')
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="machineName">
+			machine_name like concat('%', #machineName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="checkType">
+			check_type = #checkType#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="thisFinishDateS">
+			date_format(this_finish_date,'%Y-%m-%d') >= #thisFinishDateS#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="thisFinishDateE">
+			date_format(this_finish_date,'%Y-%m-%d') <![CDATA[<=]]> #thisFinishDateE#
+		</isNotEmpty>
+	
+		</select>
+	
+	<select id="queryId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap" >
+		SELECT
+				id	as "id",  <!-- 检校计划主键ID -->
+				task_no	as "taskNo",  <!-- 工单号 -->
+				machine_id	as "machineId",  <!-- 设备id -->
+				machine_code	as "machineCode",  <!-- 检验设备编码 -->
+				machine_name	as "machineName",  <!-- 检验设备名称 -->
+				inner_machine_code	as "innerMachineCode",  <!-- 内部设备编码 -->
+				ifnull(check_type,'') as "checkType",  <!-- 检校类别编码 -->
+				DATE_FORMAT(this_check_date,'%Y-%m-%d') as "thisCheckDate",  <!-- 本次检验日 -->
+				DATE_FORMAT(this_finish_date,'%Y-%m-%d') as "thisFinishDate",  <!-- 本次检验完工日 -->
+				DATE_FORMAT(next_check_date,'%Y-%m-%d') as "nextCheckDate",   <!-- 下次检验日 -->
+				status_code	as "statusCode",  <!-- 工单状态(0=新建，-1=待审核，1=已审核) -->
+				rec_creator	as "recCreator",  <!-- 创建人 -->
+				DATE_FORMAT(rec_create_time,'%Y-%m-%d') as "recCreateTime",    <!-- 创建时间 -->
+				rec_revisor	as "recRevisor",  <!-- 修改作人 -->
+				DATE_FORMAT(rec_revise_time,'%Y-%m-%d') as "recReviseTime",  <!-- 修改时间 -->
+				data_group_code	as "dataGroupCode" <!-- 账套 -->
+		FROM df_special_plan WHERE  id=#id#		
+	
+	</select>
+
+	<!--查询检验设备编码设备-->
+	<select id="queryMachineId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			SELECT *  FROM
+		(
+			 SELECT
+				sd.id AS "machineId",
+				sd.machine_name AS "machineName",
+				sd.machine_code AS "machineCode",
+				sd.inner_machine_code	as "innerMachineCode"
+			FROM
+				df_special_device sd 
+			UNION 
+				SELECT
+					sp.id AS "machineId",
+					sp.machine_name AS "machineName",
+					sp.machine_code AS "machineCode",
+					'' as "innerMachineCode"
+				FROM
+					df_special_device_part sp
+		) tt
+	WHERE
+		1 = 1
+		<isNotEmpty prepend="and" property="machineCode">
+			tt.machineCode like concat('%', #machineCode#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="machineName">
+			tt.machineName like concat('%', #machineName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="innerMachineCode">
+			tt.innerMachineCode like concat('%', #innerMachineCode#, '%')
+		</isNotEmpty>
+
+	</select>
+	<!--查询检验设备编码设备计数-->
+	<select id="querycount" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+				SELECT *  FROM
+		(
+			 SELECT
+				sd.id AS "machineId",
+				sd.machine_name AS "machineName",
+				sd.machine_code AS "machineCode",
+				sd.inner_machine_code	as "innerMachineCode"
+			FROM
+				df_special_device sd 
+			UNION 
+				SELECT
+					sp.id AS "machineId",
+					sp.machine_name AS "machineName",
+					sp.machine_code AS "machineCode",
+					'' as "innerMachineCode"
+				FROM
+					df_special_device_part sp
+		) tt
+	WHERE
+		1 = 1
+		<isNotEmpty prepend="and" property="machineCode">
+			tt.machineCode like concat('%', #machineCode#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="machineName">
+			tt.machineName like concat('%', #machineName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="innerMachineCode">
+			tt.innerMachineCode like concat('%', #innerMachineCode#, '%')
+		</isNotEmpty>
+	</select>
+	
+	<select id="queryMachineName" parameterClass="java.util.HashMap">
+		SELECT
+				id	as "id",  <!-- 检校计划主键ID -->
+				task_no	as "taskNo",  <!-- 工单号 -->
+				machine_id	as "machineId",  <!-- 设备id -->
+				machine_code	as "machineCode",  <!-- 检验设备编码 -->
+				machine_name	as "machineName",  <!-- 检验设备名称 -->
+				inner_machine_code	as "innerMachineCode",  <!-- 内部设备编码 -->
+				check_type	as "checkType",  <!-- 检校类别编码 -->
+				this_check_date	as "thisCheckDate",  <!-- 本次检验日 -->
+				this_finish_date	as "thisFinishDate",  <!-- 本次检验完工日 -->
+				next_check_date	as "nextCheckDate",  <!-- 下次检验日 -->
+				status_code	as "statusCode",  <!-- 工单状态(0=新建，-1=待审核，1=已审核) -->
+				rec_creator	as "recCreator",  <!-- 创建人 -->
+				rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+				rec_revisor	as "recRevisor",  <!-- 修改作人 -->
+				rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+				data_group_code	as "dataGroupCode" <!-- 账套 -->
+		FROM df_special_plan WHERE 1=1	
+</select>
+	<!--计数-->
+	<select id="count" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT id FROM df_special_plan WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="taskNo">
+			task_no	like concat('%', #taskNo#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			status_code	like concat('%', #statusCode#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineCode">
+			machine_code like concat('%', #machineCode#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineName">
+			machine_name like concat('%', #machineName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="checkType">
+			check_type = #checkType#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="thisCheckDateS">
+			date_format(this_check_date,'%Y-%m-%d') >= #thisCheckDateS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="thisCheckDateE">
+			date_format(this_check_date,'%Y-%m-%d') <![CDATA[<=]]> #thisCheckDateE#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="taskNo">
+			task_no = #taskNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineId">
+			machine_id = #machineId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineCode">
+			machine_code = #machineCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineName">
+			machine_name = #machineName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="innerMachineCode">
+			inner_machine_code = #innerMachineCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="checkType">
+			check_type = #checkType#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="thisCheckDate">
+			this_check_date = #thisCheckDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="thisFinishDate">
+			this_finish_date = #thisFinishDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="nextCheckDate">
+			next_check_date = #nextCheckDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			status_code = #statusCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreator">
+			rec_creator = #recCreator#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTime">
+			rec_create_time = #recCreateTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recRevisor">
+			rec_revisor = #recRevisor#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recReviseTime">
+			rec_revise_time = #recReviseTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert" parameterClass="java.util.HashMap">
+		INSERT INTO .df_special_plan (id,  <!-- 检校计划主键ID -->
+										task_no,  <!-- 工单号 -->
+										machine_id,  <!-- 设备id -->
+										machine_code,  <!-- 检验设备编码 -->
+										machine_name,  <!-- 检验设备名称 -->
+										inner_machine_code,  <!-- 内部设备编码 -->
+										check_type,  <!-- 检校类别编码 -->
+										this_check_date,  <!-- 本次检验日 -->
+										this_finish_date,  <!-- 本次检验完工日 -->
+										next_check_date,  <!-- 下次检验日 -->
+										status_code,  <!-- 工单状态(0=新建，-1=待审核，1=已审核) -->
+										rec_creator,  <!-- 创建人 -->
+										rec_create_time,  <!-- 创建时间 -->
+										rec_revisor,  <!-- 修改作人 -->
+										rec_revise_time,  <!-- 修改时间 -->
+										data_group_code  <!-- 账套 -->
+										)		 
+	    VALUES (#id#, #taskNo#, #machineId#, #machineCode#, #machineName#, #innerMachineCode#, #checkType#, #thisCheckDate#, #thisFinishDate#, #nextCheckDate#, #statusCode#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#) 
+	</insert>
+  
+	<!--删除按钮 -->
+	<delete id="delete" parameterClass="java.util.List">
+		DELETE FROM df_special_plan WHERE id IN 
+		<iterate conjunction="," open="(" close=")">
+			#[]#
+		</iterate>
+	</delete>
+	
+	<!-- 获取该工单是否是新建 -->
+	<select id="queryStatusCode" parameterClass="java.util.HashMap"
+		resultClass="int">
+		SELECT
+		count(1)  count
+		FROM df_special_plan WHERE 
+		id=#value#
+		 and  status_code = '0' 
+	</select>
+	
+		<!-- 提交按钮 -->
+	  <update id="tiJiao"  parameterClass="java.util.List">
+	   update df_special_plan set status_code='-1' where id IN
+	   <iterate conjunction="," open="(" close=")">
+	    #[]#
+	  </iterate>
+ 	 </update>
+ 	 
+ 	
+	  <!-- 审核按钮 -->
+	  <update id="shenHe" parameterClass="java.util.List">
+	   update df_special_plan set status_code="1" where id IN
+	   <iterate conjunction="," open="(" close=")">
+	    #[]#
+	    </iterate>
+	  </update>
+	
+	<!-- 查询之前最大任务号 -->
+	<select id="queryTaskNumber" parameterClass="java.lang.String" resultClass="java.lang.String">
+	    select type_num from cu_model_number
+	    where type=#value#
+    </select>
+    
+    <update id="updateTaskNo" parameterClass="java.util.HashMap">
+	    update cu_model_number set type_num=#taskNo#,update_time=#updateTime#
+	    where type=#type#
+    </update>
+
+	<update id="update" parameterClass="java.util.HashMap">
+		UPDATE df_special_plan 
+		SET 		
+					task_no	= #taskNo#,   <!-- 工单号 -->  
+					machine_id	= #machineId#,   <!-- 设备id -->  
+					machine_code	= #machineCode#,   <!-- 检验设备编码 -->  
+					machine_name	= #machineName#,   <!-- 检验设备名称 -->  
+					inner_machine_code	= #innerMachineCode#,   <!-- 内部设备编码 -->  
+					check_type	= #checkType#,   <!-- 检校类别编码 -->  
+					this_check_date	= #thisCheckDate#,   <!-- 本次检验日 -->  
+					this_finish_date	= #thisFinishDate#,   <!-- 本次检验完工日 -->  
+					next_check_date	= #nextCheckDate#,   <!-- 下次检验日 -->  
+					status_code	= #statusCode#,   <!-- 工单状态(0=新建，-1=待审核，1=已审核) -->
+					rec_creator	= #recCreator#,   <!-- 创建人 -->  
+					rec_create_time	= #recCreateTime#,   <!-- 创建时间 -->  
+					rec_revisor	= #recRevisor#,   <!-- 修改作人 -->  
+					rec_revise_time	= #recReviseTime#,   <!-- 修改时间 -->  
+					data_group_code	= #dataGroupCode#  <!-- 账套 -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

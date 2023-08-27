@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+	<bean id="platformAuthenticationProvider"
+		class="com.baosight.iplat4j.core.security.authentication.PlatformAuthenticationProvider">
+	 <property name="userDetailsService" ref="userDetailsService"/>
+	 <property name="forcePrincipalAsString" value="true"/>
+	 <property name="passwordEncoder" ref="platformPasswordEncoder"/>
+	 <property name="loginRestrictors">
+		 <list>
+<!--			 <bean class="com.baosight.iplat4j.core.security.login.CaptchaRestrictor"/>-->
+			 <!-- <>'%;()&+ 
+			 <bean class="com.baosight.iplat4j.core.security.login.UserNameRestrictor">
+			 <property name="illegalChar" value="${iplat.core.security.illegalLoginNameChar}"/>
+			 </bean>-->
+			 <!--<bean class="com.baosight.iplat4j.security.login.EmployeeNoRestrictor" /> -->
+			 <!--<bean class="com.baosight.iplat4j.security.login.KeyAuthenticationRestrictor" /> -->
+		 </list>
+	 </property>
+	</bean>
+	
+</beans>

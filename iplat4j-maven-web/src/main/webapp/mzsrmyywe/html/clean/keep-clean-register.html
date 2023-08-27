@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>保洁登记</title>
+  <link rel="stylesheet" href="../../reference/mui/css/mui.min.css" />
+  <link rel="stylesheet" href="../../reference/mui/css/mui.picker.css" />
+  <link rel="stylesheet" href="../../js/vant/vant.css" />
+  <link rel="stylesheet" href="../../reference/css/loading.css" />
+  <link rel="stylesheet" href="../../reference/mui/css/mui.dtpicker.css" />
+</head>
+<style>
+  body {
+    background-color: #eee;
+    margin: auto;
+    padding: auto;
+  }
+
+  input,
+  textarea {
+    -webkit-user-select: auto !important;
+
+    -khtml-user-select: auto !important;
+
+    -moz-user-select: auto !important;
+
+    -ms-user-select: auto !important;
+
+    -o-user-select: auto !important;
+
+    user-select: auto !important;
+
+  }
+
+  [v-cloak] {
+    display: none !important;
+  }
+
+  #app {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 头部区域 */
+
+  .top {
+    position: fixed;
+    width: 100%;
+    height: 45px;
+    background-color: #32c27d;
+  }
+
+  #icon-left-back {
+    float: left;
+    width: 28px;
+    height: 100%;
+    line-height: 44px;
+    color: #fff;
+    margin-left: 12px;
+    font-weight: 400;
+    font-size: 30px;
+  }
+
+  .title {
+    margin: 0 auto;
+    font-size: 18px;
+    line-height: 45px;
+    font-weight: 500;
+    width: 35%;
+    text-align: center;
+    color: #fff;
+  }
+
+  /* content */
+  .content {
+    margin-top: 45px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .popup-box {
+    position: relative;
+    margin-bottom: 45px;
+  }
+
+  .clean-sure,
+  .dept-sure,
+  .save-sure {
+    position: fixed;
+    bottom: 0;
+    letter-spacing: 2px;
+    width: 100%;
+    height: 45px;
+    background-color: #32c27d;
+    color: #fff;
+    font-size: 18px;
+  }
+
+  .dept-choose {
+    background-color: #32c27d;
+  }
+
+  .list-li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    width: 100%;
+    padding: 12px 15px;
+    border-bottom: rgb(181 181 181) 1px solid;
+    margin: 0 auto;
+    font-size: 16px;
+  }
+
+  .list-li-content {
+    flex: 1;
+    text-align: right;
+    padding-left: 50px;
+  }
+
+  .list-icon {
+    display: flex;
+    align-items: center;
+  }
+
+  .mui-icon-compose,
+  .mui-icon-location {
+    color: #e58115;
+    font-size: 20px;
+    padding-left: 5px;
+  }
+
+  .site_input,
+  .clean_item_input {
+    border: none;
+    width: 165px;
+    right: 35px;
+    position: absolute;
+    text-align: right;
+  }
+
+  .clean-item-li {
+    display: flex;
+    align-items: center;
+  }
+
+  .remarks_input {
+    border: none;
+    width: 165px;
+    text-align: right;
+  }
+
+  input::-webkit-input-placeholder {
+    text-align: right;
+  }
+
+
+  .van-search {
+    padding: 0;
+  }
+
+  .van-field__control[type=search] {
+    margin-bottom: 0;
+  }
+
+  .van-field__left-icon {
+    line-height: 34px;
+  }
+
+  .van-loading--vertical {
+    top: 50px
+  }
+
+  .van-field__control:disabled {
+    -webkit-text-fill-color: black
+  }
+</style>
+
+<body>
+  <!-- 顶部区域 -->
+  <header>
+    <div id="app" v-cloak>
+      <!-- 保洁事项弹出层 -->
+      <van-popup position="bottom" :style="{ height: '50%' }" v-model="clean_item_show" lazy-render="true">
+        <div class="popup-box">
+          <van-loading size="30px" style="top: 100px;" vertical v-show="clean_loading_ifShow">加载中...</van-loading>
+          <!-- 保洁事项多选框 -->
+          <van-checkbox-group v-model="clean_item_result">
+            <van-cell-group>
+              <van-cell v-for="(item, index) in clean_item_list" clickable :key="item" :title="item.itemName"
+                @click="toggle(index)">
+                <template #right-icon>
+                  <van-checkbox :name="item" ref="checkboxes" />
+                </template>
+              </van-cell>
+            </van-cell-group>
+          </van-checkbox-group>
+        </div>
+        <van-button @click="clean_item_sure()" class="clean-sure">确定</van-button>
+      </van-popup>
+      <!-- 选择科室弹出层 -->
+      <van-popup position="bottom" :style="{ height: '60%' }" v-model="dept_show" lazy-render="true">
+        <div>
+          <van-search v-model="dept_search_value" show-action placeholder="请输入搜索关键词" @search="onSearch">
+            <template #action>
+              <div @click="onSearch">搜索</div>
+            </template>
+          </van-search>
+        </div>
+        <div class="popup-box">
+          <van-loading size="30px" vertical v-show="dept_loading_ifShow">加载中...</van-loading>
+          <van-radio-group v-model="dept_radio">
+            <van-cell-group>
+              <van-cell v-for="(item, index) in dept_list" :key="item" :title="item.deptName" clickable
+                @click="dept_click(item)">
+                <template #right-icon>
+                  <van-radio :name="item" />
+                </template>
+              </van-cell>
+            </van-cell-group>
+          </van-radio-group>
+        </div>
+        <van-button @click="dept_sure()" class="dept-sure">确定</van-button>
+      </van-popup>
+      <!-- 选择楼层地点弹出层 -->
+      <van-popup v-model="building_floor_site_show" round position="bottom">
+        <div class="popup-box">
+          <van-loading size="30px" vertical style="top: 250px;" v-show="building_floor_site_loading_ifShow">加载中...
+          </van-loading>
+          <van-cascader v-model="cascaderValue" title="请选择楼/层/地点" :options="building_select_list"
+            @close="building_floor_site_show = false" @finish="onFinish" />
+        </div>
+      </van-popup>
+      <!-- 遮罩 -->
+      <div class="mui-backdrop" style="display: none" id="zzc" @click="zzShow()"></div>
+      <div class="top">
+        <span @click="back()" id="icon-left-back" class="mui-icon mui-icon-arrowleft"></span>
+        <h1 class="title">保洁登记</h1>
+      </div>
+      <!-- content部分 -->
+      <div class="content">
+        <div class="list-li">
+          <div class="list-li-title">登记人</div>
+          <div class="list-li-content">{{staff}}</div>
+        </div>
+        <div class="list-li" style="display: flex; align-items: center;">
+          <div class="list-li-title">登记科室</div>
+          <div style="display: flex; align-items: center;">
+            <div class="list-li-content" style="padding: 0 5px;" id="dept-value">{{dept}}</div>
+            <div v-show="dept_select_show">
+              <van-button @click="dept_show_popup()" type="primary" style="width: 50px; height:30px;">选择
+              </van-button>
+            </div>
+            <!-- <button disabled type="button" class="mui-btn" @click="dept_show_popup()"
+              style="background-color: #32c27d; color: #fff; height: 40px;">选择</button> -->
+          </div>
+        </div>
+        <div class="list-li">
+          <div class="list-li-title">联系电话</div>
+          <div class="list-li-content" style="max-width:350px;width:66.6%;max-height:30px;text-align:right">{{tel}}
+          </div>
+        </div>
+        <div class="list-li">
+          <div class="list-li-title">楼/层/地点</div>
+          <div class="list-li-content" @click="select_building_floor_site()">{{building_office_site}}</div>
+        </div>
+        <div class="list-li">
+          <div class="list-li-title clean-item-li">保洁事项</div>
+          <div class="list-icon">
+            <van-field v-model="clean_item_input_value" rows="1" autosize type="textarea" disabled="true" />
+            </van-field>
+            <button type="button" class="mui-btn" @click="clean_item_show_popup()"
+              style="background-color: #32c27d; color: #fff; height: 40px; ">选择</button>
+          </div>
+        </div>
+        <div class="list-li">
+          <div class="list-li-title">事项分类</div>
+          <div class="list-li-content">{{clean_classify}}</div>
+        </div>
+        <div class="list-li">
+          <div class="list-li-title">备注</div>
+          <input class="list-li-content remarks_input" v-model="remarks_input_value" placeholder="请点击输入"></input>
+        </div>
+      </div>
+      <!-- 底部按钮 -->
+      <van-button @click="save()" class="save-sure">确认登记</van-button>
+    </div>
+  </header>
+  <script src="../reference/js/jquery-2.1.4.js"></script>
+  <script src="../../reference/mui/js/mui.js"></script>
+  <script src="../../reference/mui/js/mui.picker.js"></script>
+  <script src="../../js/vue.js"></script>
+  <script src="../../js/vant/vant.min.js"></script>
+  <script src="../../reference/mui/js/mui.loading.js"></script>
+  <script>
+    var app = new Vue({
+      el: "#app",
+      data: function () {
+        _this = this;
+        return {
+          baseUrl: localStorage.getItem("url"),
+          workNo: localStorage.getItem("workNo"),
+          staff: localStorage.getItem("name"),
+          dept: localStorage.getItem("deptName"),
+          tel: localStorage.getItem("telPhone"),
+          dataGroupCode: "",
+          site: "",
+          clean_item: "",
+          clean_classify: "",
+          clean_item_show: false, //控制保洁事项弹出层显示与隐藏
+          clean_item_list: [], //保洁事项列表
+          clean_item_result: [], //保洁事项选择结果
+          clean_item_input_value: "", //保洁事项输入框的值
+          clean_item_text: [], //获取的保洁事项的text数组
+          clean_item_values: [], //获取的保洁事项的values数组
+          clean_item_classify: [], //获取的保洁事项的classify数组
+          clean_item_all: [], //选择的保洁事项内容
+          dept_show: false, //控制科室popup层的显示与隐藏
+          dept_list: [], //科室列表
+          dept_radio: {}, //点击科室cell获取对应item
+          dept_no: localStorage.getItem("deptCode"), //科室编码
+          remarks_input_value: "", //备注输入框的值
+          dept_search_value: "", //科室搜索框内容
+          dept_loading_ifShow: false, //控制科室选择loading是否显示
+          clean_loading_ifShow: false, //控制保洁事项loading是否显示
+          building_floor_site_show: false, //控制楼层地点弹出层是否展示
+          cascaderValue: '', //楼层地点选择的最后一项
+          building_select_list: [],  // 楼层地点选项列表，children 代表子选项，支持多级嵌套
+          building_office_site: "请选择", //楼层地点选择的值
+          building_floor_site_loading_ifShow: false, //控制楼层地点选择loading是否显示
+          building_name: "", //选择的楼名称
+          floor_name: "", //选择的层名称
+          site_name: "", //选择的地点名称
+          site_value: "", //选择的地点value
+          dept_select_show: false, //控制科室选择按钮的显示与隐藏
+        };
+      },
+      methods: {
+        init() {
+          this.dept == "请选择" && (this.dept_select_show = true)
+        },
+        // 选择科室 展示弹出层
+        dept_show_popup() {
+          this.dept_loading_ifShow = true
+          this.dept_show = true;
+          this.dept_list = []
+          this.dept_search_value = ""
+          this.dept_radio = {}
+          $.ajax({
+            url: this.baseUrl + "cleanService",
+            type: "post",
+            headers: {
+              methodName: "getDeptInfo",
+              serviceName: "AppLinkService"
+            },
+            data: {
+              deptNum: "",
+              deptName: "",
+              datagroupCode: this.dataGroupCode
+            },
+            success: function (data) {
+              _this.dept_loading_ifShow = false
+              _this.$nextTick(function () {
+                _this.dept_list = data.obj
+              });
+            }
+          })
+        },
+        // 选择科室弹出层 点击科室cell
+        dept_click(item) {
+          this.dept_radio = item
+        },
+        //选择科室 确定按钮
+        dept_sure() {
+          this.dept_show = false;
+          this.dept = this.dept_radio.deptName
+          this.dept_no = this.dept_radio.deptNum
+        },
+        // 选择科室时点击搜索
+        onSearch() {
+          this.clean_loading_ifShow = true
+          $.ajax({
+            url: this.baseUrl + "cleanService",
+            type: "post",
+            headers: {
+              methodName: "getDeptInfo",
+              serviceName: "AppLinkService"
+            },
+            data: {
+              deptNum: "",
+              deptName: this.dept_search_value,
+              datagroupCode: this.dataGroupCode
+            },
+            success: function (data) {
+              _this.clean_loading_ifShow = false
+              _this.$nextTick(function () {
+                _this.dept_list = data.obj
+              });
+            }
+          })
+        },
+        // 保洁事项 展示弹出层
+        clean_item_show_popup() {
+          this.clean_item_list = []
+          this.clean_item_result = []
+          this.clean_item_text = []
+          this.clean_item_values = []
+          this.clean_item_classify = []
+          this.clean_classify = ""
+          this.clean_item_show = true;
+          this.clean_loading_ifShow = true
+          $.ajax({
+            url: this.baseUrl + "cleanService",
+            type: "post",
+            headers: {
+              methodName: "getItemInfo",
+              serviceName: "AppLinkService"
+            },
+            data: {
+              typeName: "",
+              itemCode: "",
+              itemName: ""
+            },
+            success: function (data) {
+              _this.clean_loading_ifShow = false
+              _this.$nextTick(function () {
+                _this.clean_item_list = data.obj
+              });
+            }
+          })
+        },
+        //保洁事项 checkbox切换
+        toggle(index) {
+          this.$refs.checkboxes[index].toggle();
+        },
+        //保洁事项确定
+        clean_item_sure() {
+          this.clean_item_show = false;
+          this.clean_item_result.forEach(function (item, index) {
+            var _obj = {
+              typeCode: item.typeCode,
+              typeName: item.typeName,
+              itemCode: item.itemCode,
+              itemName: item.itemName,
+              comments: item.comments,
+              serviceDeptNum: item.serviceDeptNum,
+              serviceDeptName: item.serviceDeptName
+            }
+            app.clean_item_all.push(_obj)
+            app.clean_item_text.push(item.itemName)
+            app.clean_item_values.push(item.itemCode)
+            app.clean_item_classify.push(item.typeName)
+          })
+          app.clean_item_input_value = this.clean_item_text.join(",")
+          var _clean_classify = this.unique(this.clean_item_classify) //数组去重
+          app.clean_classify = _clean_classify.join(",")
+        },
+        //点击选择楼层地点
+        select_building_floor_site() {
+          this.building_select_list = []
+          this.building_office_site = "请选择"
+          this.building_floor_site_show = true
+          this.building_floor_site_loading_ifShow = true
+          $.ajax({
+            url: this.baseUrl + "cleanService",
+            type: "post",
+            headers: {
+              methodName: "getSoptInfo",
+              serviceName: "AppLinkService"
+            },
+            data: {
+              dataGroupCode: this.dataGroupCode
+            },
+            success: function (data) {
+              _this.building_floor_site_loading_ifShow = false
+              _this.building_select_list = data.obj
+            }
+          })
+        },
+        // 选择楼层地点 全部选项选择完毕后，会触发 finish 事件
+        onFinish({ selectedOptions }) {
+          this.building_floor_site_show = false;
+          this.building_office_site = selectedOptions.map((item) => item.text).join('/');
+          this.building_name = selectedOptions[0].text
+          this.floor_name = selectedOptions[1].text
+          this.site_name = selectedOptions[2].text
+          this.site_value = selectedOptions[2].value
+        },
+        //数组去重
+        unique(arr) {
+          for (var i = 0; i < arr.length; i++) {
+            for (var j = i + 1; j < arr.length; j++) {
+              if (arr[i] == arr[j]) {         //第一个等同于第二个，splice方法删除第二个
+                arr.splice(j, 1);
+                j--;
+              }
+            }
+          }
+          return arr;
+        },
+        // 登记保存
+        save() {
+          if (this.dept == "请选择") {
+            mui.toast("请选择科室")
+            return
+          }
+          if (this.building_office_site == "请选择") {
+            mui.toast("请选择楼/层/地点")
+            return
+          }
+          if (this.clean_item_input_value == "") {
+            mui.toast("请选择保洁事项")
+            return
+          }
+          param = {
+            workNo: this.workNo,
+            reqStaffId: this.workNo,
+            reqStaffName: this.staff,
+            statusCode: "01",
+            reqTelNum: this.tel,
+            reqDeptNum: this.dept_no,
+            reqDeptName: this.dept,
+            building: this.building_name,
+            floor: this.floor_name,
+            reqSpotNum: this.site_value,
+            reqSpotName: this.site_name,
+            comments: this.remarks_input_value,
+            dataItems: this.clean_item_all
+          }
+          $.ajax({
+            url: this.baseUrl + "MobileAgentService",
+            type: "post",
+            headers: {
+              methodName: "insert",
+              serviceName: "CSRE0101"
+            },
+            data: {
+              prames: JSON.stringify(param)
+            },
+            success: function (data) {
+              data.status == 0 ? (mui.toast("保存成功"), setTimeout(function () {
+                location.href = "./taskList.html"
+              }, 1500)) : mui.toast(data.msg)
+            }
+          })
+        },
+        //获取地址栏中的参数
+        GetQueryString(name) {
+          var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+          var r = window.location.search.substr(1).match(reg);
+          if (r != null) return unescape(r[2]);
+          return null;
+        },
+        //左上角返回事件
+        back() {
+          location.href = "./taskList.html";
+        },
+      },
+      created() {
+
+      },
+      mounted() {
+        this.init()
+      },
+    });
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2022-05-23 10:48:23
+   		Version :  6.0.731.201809200158
+		tableName :.dorms_contrast_table 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 dorm_properties  VARCHAR, 
+		 employment_nature  VARCHAR, 
+		 rec_creator  VARCHAR, 
+		 rec_create_name  VARCHAR, 
+		 rec_create_time  VARCHAR, 
+		 rec_revisor  VARCHAR, 
+		 rec_revise_name  VARCHAR, 
+		 rec_revise_time  VARCHAR
+	-->
+<sqlMap namespace="DMXX02">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.dm.xx.domain.DormsContrastTable">
+		SELECT
+				id	as "id",  <!-- 主键 -->
+				dorm_properties	as "dormProperties",  <!-- 宿舍属性(学生宿舍/职工宿舍) -->
+				employment_nature	as "employmentNature",  <!-- 职工性质 -->
+				rec_creator	as "recCreator",  <!-- 创建人工号 -->
+				rec_create_name	as "recCreateName",  <!-- 创建人姓名 -->
+				rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+				rec_revisor	as "recRevisor",  <!-- 修改人工号 -->
+				rec_revise_name	as "recReviseName",  <!-- 修改人姓名 -->
+				rec_revise_time	as "recReviseTime" <!-- 修改时间 -->
+		FROM .dorms_contrast_table WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .dorms_contrast_table WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dormProperties">
+			dorm_properties = #dormProperties#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="employmentNature">
+			employment_nature = #employmentNature#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreator">
+			rec_creator = #recCreator#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateName">
+			rec_create_name = #recCreateName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTime">
+			rec_create_time = #recCreateTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recRevisor">
+			rec_revisor = #recRevisor#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recReviseName">
+			rec_revise_name = #recReviseName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recReviseTime">
+			rec_revise_time = #recReviseTime#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO .dorms_contrast_table (id,  <!-- 主键 -->
+										dorm_properties,  <!-- 宿舍属性(学生宿舍/职工宿舍) -->
+										employment_nature,  <!-- 职工性质 -->
+										rec_creator,  <!-- 创建人工号 -->
+										rec_create_name,  <!-- 创建人姓名 -->
+										rec_create_time  <!-- 创建时间 -->
+										)		 
+	    VALUES (#id#, #dormProperties#, #employmentNature#, #recCreator#, #recCreateName#, #recCreateTime#)
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM .dorms_contrast_table WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE .dorms_contrast_table 
+		SET 
+					dorm_properties	= #dormProperties#,   <!-- 宿舍属性(学生宿舍/职工宿舍) -->  
+					employment_nature	= #employmentNature#,   <!-- 职工性质 -->
+					rec_revisor	= #recRevisor#,   <!-- 修改人工号 -->  
+					rec_revise_name	= #recReviseName#,   <!-- 修改人姓名 -->  
+					rec_revise_time	= #recReviseTime#  <!-- 修改时间 -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

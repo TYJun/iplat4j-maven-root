@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-02-09 9:13:04
+   		Version :  6.0.731.201809200158
+		tableName :iplat_v5demo_business.ot_bill 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 bill_no  VARCHAR, 
+		 carriage_class_name  VARCHAR, 
+		 tool_no  VARCHAR, 
+		 from_dept_no  VARCHAR, 
+		 execute_user_no  VARCHAR, 
+		 execute_time  VARCHAR, 
+		 rec_creator_no  VARCHAR, 
+		 rec_create_time  VARCHAR, 
+		 total_excute_no  VARCHAR, 
+		 total_excute_time  VARCHAR, 
+		 carriage_address_no  VARCHAR, 
+		 carriage_address_acount  VARCHAR, 
+		 urgent  VARCHAR, 
+		 bill_type  VARCHAR, 
+		 replenishment  VARCHAR, 
+		 elapsed_time  VARCHAR
+	-->
+<sqlMap namespace="carriageBill">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.common.ys.domain.CarriageBill">
+		SELECT
+				id	as "id",  <!-- 运送主表主键（UUID） -->
+				bill_no	as "billNo",  <!-- 运送单据号 -->
+				carriage_class_name	as "carriageClassName",  <!-- 运送类型名称 -->
+				tool_no	as "toolNo",  <!-- 工具编号 -->
+				from_dept_no	as "fromDeptNo",  <!-- 取件科室编号 -->
+				execute_user_no	as "executeUserNo",  <!-- 运送执行人工号 -->
+				execute_time	as "executeTime",  <!-- 运送执行时间 -->
+				rec_creator_no	as "recCreatorNo",  <!-- 下单人工号 -->
+				rec_create_time	as "recCreateTime",  <!-- 下单时间 -->
+				total_excute_no	as "totalExcuteNo",  <!-- 最终确认人工号 -->
+				total_excute_time	as "totalExcuteTime",  <!-- 最终确认时间 -->
+				carriage_address_no	as "carriageAddressNo",  <!-- 运送地址编号 -->
+				carriage_address_acount	as "carriageAddressAcount",  <!-- 运送地址数量 -->
+				urgent	as "urgent",  <!-- 是否加急 -->
+				bill_type	as "billType",  <!-- 单据类型APP/PC -->
+				replenishment	as "replenishment",  <!-- 是否补单 -->
+				elapsed_time	as "elapsedTime" <!-- 运送耗时 -->
+		FROM iplat_v5demo_business.ot_bill WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM iplat_v5demo_business.ot_bill WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="billNo">
+			bill_no = #billNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="carriageClassName">
+			carriage_class_name = #carriageClassName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="toolNo">
+			tool_no = #toolNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="fromDeptNo">
+			from_dept_no = #fromDeptNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="executeUserNo">
+			execute_user_no = #executeUserNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="executeTime">
+			execute_time = #executeTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreatorNo">
+			rec_creator_no = #recCreatorNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTime">
+			rec_create_time = #recCreateTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="totalExcuteNo">
+			total_excute_no = #totalExcuteNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="totalExcuteTime">
+			total_excute_time = #totalExcuteTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="carriageAddressNo">
+			carriage_address_no = #carriageAddressNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="carriageAddressAcount">
+			carriage_address_acount = #carriageAddressAcount#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="urgent">
+			urgent = #urgent#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="billType">
+			bill_type = #billType#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="replenishment">
+			replenishment = #replenishment#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="elapsedTime">
+			elapsed_time = #elapsedTime#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO iplat_v5demo_business.ot_bill (id,  <!-- 运送主表主键（UUID） -->
+										bill_no,  <!-- 运送单据号 -->
+										carriage_class_name,  <!-- 运送类型名称 -->
+										tool_no,  <!-- 工具编号 -->
+										from_dept_no,  <!-- 取件科室编号 -->
+										execute_user_no,  <!-- 运送执行人工号 -->
+										execute_time,  <!-- 运送执行时间 -->
+										rec_creator_no,  <!-- 下单人工号 -->
+										rec_create_time,  <!-- 下单时间 -->
+										total_excute_no,  <!-- 最终确认人工号 -->
+										total_excute_time,  <!-- 最终确认时间 -->
+										carriage_address_no,  <!-- 运送地址编号 -->
+										carriage_address_acount,  <!-- 运送地址数量 -->
+										urgent,  <!-- 是否加急 -->
+										bill_type,  <!-- 单据类型APP/PC -->
+										replenishment,  <!-- 是否补单 -->
+										elapsed_time  <!-- 运送耗时 -->
+										)		 
+	    VALUES (#id#, #billNo#, #carriageClassName#, #toolNo#, #fromDeptNo#, #executeUserNo#, #executeTime#, #recCreatorNo#, #recCreateTime#, #totalExcuteNo#, #totalExcuteTime#, #carriageAddressNo#, #carriageAddressAcount#, #urgent#, #billType#, #replenishment#, #elapsedTime#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM iplat_v5demo_business.ot_bill WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE iplat_v5demo_business.ot_bill 
+		SET 
+					bill_no	= #billNo#,   <!-- 运送单据号 -->  
+					carriage_class_name	= #carriageClassName#,   <!-- 运送类型名称 -->  
+					tool_no	= #toolNo#,   <!-- 工具编号 -->  
+					from_dept_no	= #fromDeptNo#,   <!-- 取件科室编号 -->  
+					execute_user_no	= #executeUserNo#,   <!-- 运送执行人工号 -->  
+					execute_time	= #executeTime#,   <!-- 运送执行时间 -->  
+					rec_creator_no	= #recCreatorNo#,   <!-- 下单人工号 -->  
+					rec_create_time	= #recCreateTime#,   <!-- 下单时间 -->  
+					total_excute_no	= #totalExcuteNo#,   <!-- 最终确认人工号 -->  
+					total_excute_time	= #totalExcuteTime#,   <!-- 最终确认时间 -->  
+					carriage_address_no	= #carriageAddressNo#,   <!-- 运送地址编号 -->  
+					carriage_address_acount	= #carriageAddressAcount#,   <!-- 运送地址数量 -->  
+					urgent	= #urgent#,   <!-- 是否加急 -->  
+					bill_type	= #billType#,   <!-- 单据类型APP/PC -->  
+					replenishment	= #replenishment#,   <!-- 是否补单 -->  
+					elapsed_time	= #elapsedTime#  <!-- 运送耗时 -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

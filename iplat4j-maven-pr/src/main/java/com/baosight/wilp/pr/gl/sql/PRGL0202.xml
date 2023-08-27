@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-05-03 17:08:49
+   		Version :  6.0.731.201809200158
+		tableName :.t_safty_danger_logs 
+		 dangerLogsID  VARCHAR   NOT NULL, 
+		 dangerID  INTEGER, 
+		 logsMan  VARCHAR, 
+		 logsTime  VARCHAR, 
+		 rejectStatus  VARCHAR, 
+		 rejectReason  VARCHAR, 
+		 ID  INTEGER   NOT NULL   primarykey
+	-->
+<sqlMap namespace="PRGL0202">
+
+	
+	<!-- 查询问题编码 -->
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.pr.gl.domain.PRGL0202">
+		SELECT
+			dangerCode as dangercode,
+			id as dangerid
+		FROM
+			pr_safty_danger 
+		WHERE
+			id = #id#
+	</select>
+	
+	<!-- 修改问题状态 -->
+	<update id="updateStatusCode" parameterClass="java.util.HashMap">
+		update pr_safty_danger set status_code = #statusCode# where id = #id#
+	</update>
+
+	<!-- 记录日志  -->
+	<insert id="logs" parameterClass="java.util.HashMap">
+			INSERT INTO pr_safty_danger_logs ( id, dangerID,logsNo, logsMan, logsTime, rejectStatus, rejectReason, dataGroupCode )
+		VALUES
+			( UUID(), #dangerID#,#logsNo#, #logsMan#, #logsTime#, #rejectStatus#, #rejectReason#, #dataGroupCode# )
+	</insert>
+
+  
+	<delete id="delete">
+		DELETE FROM pr_safty_danger_logs WHERE 
+			ID = #id#
+	</delete>
+
+  
+</sqlMap>

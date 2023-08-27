@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CISQ01">
+
+	<select id="query" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.ci.sq.domain.CiReceive">
+		SELECT
+		REC_CREATOR	as "recCreator",  <!-- 记录创建责任者 -->
+		REC_CREATE_TIME	as "recCreateTime",  <!-- 记录创建时间 -->
+		REC_REVISOR	as "recRevisor",  <!-- 记录修改责任者 -->
+		REC_REVISE_TIME	as "recReviseTime",  <!-- 记录修改时间 -->
+		DATA_GROUP_CODE	as "dataGroupCode",  <!-- 院区（账套） -->
+		ARCHIVE_FLAG	as "archiveFlag",  <!-- 归档标记 -->
+		ID	as "id",  <!-- 主键 -->
+		APPLY_BILL_NO	as "applyBillNo",  <!-- 申请单号 -->
+		APPLY_TYPE_NUM	as "applyTypeNum",  <!-- 领用类型编码 -->
+		APPLY_TYPE_NAME	as "applyTypeName",  <!-- 领用类型名称 -->
+		APPLY_CANTEEN_NUM	as "applyCanteenNum",  <!-- 申请科室编码 -->
+		APPLY_CANTEEN_NAME	as "applyCanteenName",  <!-- 申请科室编码 -->
+		APPLY_STAFF_ID	as "applyStaffId",  <!-- 申请人员 -->
+		BILL_MAKE_TIME	as "billMakeTime",  <!-- 制单日期 -->
+		BILL_MAKER	as "billMaker",  <!-- 制单人员 -->
+		BILL_CHECK_TIME	as "billCheckTime",  <!-- 审核日期 -->
+		BILL_CHECKER	as "billChecker",  <!-- 审核人员 -->
+		case APPLY_SIGN
+		when '0' then '新建'
+		when '1' then '已提交'
+		end as"applySign",                 <!-- 申请状态 -->
+		WARE_HOUSE_NO	as "wareHouseNo",  <!-- 仓库号 -->
+		WARE_HOUSE_NAME	as "wareHouseName" <!-- 仓库名称 -->
+		FROM ci_receive WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="startTime">
+			REC_CREATE_TIME >= #startTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">
+			REC_CREATE_TIME <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			APPLY_SIGN = #statusCode#
+		</isNotEmpty>
+			ORDER BY REC_CREATE_TIME desc
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+
+	</select>
+
+	<select id="count" resultClass="int" parameterClass="java.util.HashMap">
+		SELECT
+		REC_CREATOR	as "recCreator",  <!-- 记录创建责任者 -->
+		REC_CREATE_TIME	as "recCreateTime",  <!-- 记录创建时间 -->
+		REC_REVISOR	as "recRevisor",  <!-- 记录修改责任者 -->
+		REC_REVISE_TIME	as "recReviseTime",  <!-- 记录修改时间 -->
+		DATA_GROUP_CODE	as "dataGroupCode",  <!-- 院区（账套） -->
+		ARCHIVE_FLAG	as "archiveFlag",  <!-- 归档标记 -->
+		ID	as "id",  <!-- 主键 -->
+		APPLY_BILL_NO	as "applyBillNo",  <!-- 申请单号 -->
+		APPLY_TYPE_NUM	as "applyTypeNum",  <!-- 领用类型编码 -->
+		APPLY_TYPE_NAME	as "applyTypeName",  <!-- 领用类型名称 -->
+		APPLY_CANTEEN_NUM	as "applyCanteenNum",  <!-- 申请科室编码 -->
+		APPLY_CANTEEN_NAME	as "applyCanteenName",  <!-- 申请科室编码 -->
+		APPLY_STAFF_ID	as "applyStaffId",  <!-- 申请人员 -->
+		BILL_MAKE_TIME	as "billMakeTime",  <!-- 制单日期 -->
+		BILL_MAKER	as "billMaker",  <!-- 制单人员 -->
+		BILL_CHECK_TIME	as "billCheckTime",  <!-- 审核日期 -->
+		BILL_CHECKER	as "billChecker",  <!-- 审核人员 -->
+		case APPLY_SIGN
+		when '0' then '新建'
+		when '1' then '已提交'
+		end as"applySign",                 <!-- 申请状态 -->
+		WARE_HOUSE_NO	as "wareHouseNo",  <!-- 仓库号 -->
+		WARE_HOUSE_NAME	as "wareHouseName" <!-- 仓库名称 -->
+		FROM ci_receive WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="startTime">
+			REC_CREATE_TIME >= #startTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">
+			REC_CREATE_TIME <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			APPLY_SIGN = #statusCode#
+		</isNotEmpty>
+	</select>
+
+	<!--
+		<isNotEmpty prepend=" AND " property="recCreator">
+			REC_CREATOR = #recCreator#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTime">
+			REC_CREATE_TIME = #recCreateTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recRevisor">
+			REC_REVISOR = #recRevisor#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recReviseTime">
+			REC_REVISE_TIME = #recReviseTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			DATA_GROUP_CODE = #dataGroupCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="archiveFlag">
+			ARCHIVE_FLAG = #archiveFlag#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="applyBillNo">
+			APPLY_BILL_NO = #applyBillNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="applyTypeNum">
+			APPLY_TYPE_NUM = #applyTypeNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="applyTypeName">
+			APPLY_TYPE_NAME = #applyTypeName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="applyDeptNum">
+			APPLY_DEPT_NUM = #applyDeptNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="applyDeptName">
+			APPLY_DEPT_NAME = #applyDeptName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="applyStaffId">
+			APPLY_STAFF_ID = #applyStaffId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="billMakeTime">
+			BILL_MAKE_TIME = #billMakeTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="billMaker">
+			BILL_MAKER = #billMaker#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="billMakerName">
+			BILL_MAKER_NAME = #billMakerName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="billCheckTime">
+			BILL_CHECK_TIME = #billCheckTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="billChecker">
+			BILL_CHECKER = #billChecker#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="billCheckerName">
+			BILL_CHECKER_NAME = #billCheckerName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="applySign">
+			APPLY_SIGN = #applySign#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNo">
+			WARE_HOUSE_NO = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseName">
+			WARE_HOUSE_NAME = #wareHouseName#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO ci_receive (REC_CREATOR,  <!-- 记录创建责任者 -->
+		REC_CREATE_TIME,  <!-- 记录创建时间 -->
+		REC_REVISOR,  <!-- 记录修改责任者 -->
+		REC_REVISE_TIME,  <!-- 记录修改时间 -->
+		DATA_GROUP_CODE,  <!-- 院区（账套） -->
+		ARCHIVE_FLAG,  <!-- 归档标记 -->
+		ID,  <!-- 主键 -->
+		APPLY_BILL_NO,  <!-- 申请单号 -->
+		APPLY_TYPE_NUM,  <!-- 领用类型编码 -->
+		APPLY_TYPE_NAME,  <!-- 领用类型名称 -->
+		APPLY_CANTEEN_NUM,  <!-- 申请科室编码 -->
+		APPLY_CANTEEN_NAME,  <!-- 申请科室编码 -->
+		APPLY_STAFF_ID,  <!-- 申请人员 -->
+		BILL_MAKE_TIME,  <!-- 制单日期 -->
+		BILL_MAKER,  <!-- 制单人员 -->
+		BILL_CHECK_TIME,  <!-- 审核日期 -->
+		BILL_CHECKER,  <!-- 审核人员 -->
+		APPLY_SIGN,  <!-- 申请状态 -->
+		WARE_HOUSE_NO,  <!-- 仓库号 -->
+		WARE_HOUSE_NAME  <!-- 仓库名称 -->
+		)
+		VALUES (#recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#, #archiveFlag#, #id#, #applyBillNo#, #applyTypeNum#, #applyTypeName#, #applyCanteenNum#,#applyCanteenName#, #applyStaffId#, #billMakeTime#, #billMaker#,  #billCheckTime#, #billChecker#, #applySign#, #wareHouseNo#, #wareHouseName#)
+	</insert>
+
+	<delete id="delete" parameterClass="java.util.List">
+		DELETE FROM ci_apply WHERE ID IN
+		<iterate conjunction="," open="(" close=")">
+			#[]#
+		</iterate>
+	</delete>
+
+	<update id="update" >
+		UPDATE ci_receive
+		SET
+		REC_REVISOR	= #recRevisor#,   <!-- 记录修改责任者 -->
+		REC_REVISE_TIME	= #recReviseTime#,   <!-- 记录修改时间 -->
+		DATA_GROUP_CODE	= #dataGroupCode#,   <!-- 院区（账套） -->
+		APPLY_CANTEEN_NUM	= #applyCanteenNum#,   <!-- 申请科室编码 -->
+		APPLY_CANTEEN_NAME	= #applyCanteenName#,   <!-- 申请科室编码 -->
+		APPLY_STAFF_ID	= #applyStaffId#,   <!-- 申请人员 -->
+		BILL_MAKER	= #billMaker#   <!-- 制单人员 -->
+		WHERE
+		ID = #id#
+	</update>
+
+   <update id="updateApplySign" parameterClass="java.util.List" >
+	   update ci_receive set APPLY_SIGN ='1' where ID IN
+	   <iterate conjunction="," open="(" close=")">
+		   #[]#
+	   </iterate>
+   </update>
+
+	<select id="getApplyBillNo" parameterClass="java.util.List" resultClass="java.util.HashMap">
+		select APPLY_BILL_NO as "applyBillNo"
+		FROM  ci_receive where ID IN
+		<iterate conjunction="," open="(" close=")">
+		#[]#
+		</iterate>
+	</select>
+
+	<select id="getApplyBillNoById" parameterClass="String" resultClass="java.util.HashMap">
+		select APPLY_BILL_NO as "applyBillNo"
+		FROM  ci_receive where ID =#id#
+	</select>
+
+	<select id="queryMat" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+			REC_CREATOR	as "recCreator",
+			REC_CREATE_TIME	as "recCreateTime",
+			REC_REVISOR	as "recRevisor",
+			REC_REVISE_TIME	as "recReviseTime",
+			ARCHIVE_FLAG	as "archiveFlag",
+			ID	as "id",
+			WARE_HOUSE_NO	as "wareHouseNo",
+			ware_house_name	as "wareHouseName",
+			STORAGE_NO	as "storageNo",
+			STACK_NO	as "stackNo",
+			MAT_TYPE_NUM	as "matTypeNum",
+			mat_type_name	as "matTypeName",
+			MAT_NUM	as "matNum",
+			MAT_NAME	as "matName",
+			MAT_MODEL	as "matModel",
+			MAT_SPEC	as "matSpec",
+			UNIT	as "unit",
+			UNIT_NAME	as "unitName",
+			TOTAL_NUM	as "totalNum",
+			TOTAL_AMOUNT	as "totalAmount",
+			BATCH_NO	as "batchNo",
+			MIN_NUM	as "minNum",
+			MAX_NUM	as "maxNum",
+			PRICE	as "price",
+			remind_flag	as "remindFlag",
+			bill_checker_name	as "billCheckerName",
+			bill_maker_name	as "billMakerName",
+			enter_type_name	as "enterTypeName",
+			origin_bill_type_name	as "originBillTypeName",
+			surp_num	as "surpNum",
+			surp_name	as "surpName",
+			sum(TOTAL_NUM) as "zongNum"
+		FROM ci_storge WHERE 1=1
+		<isNotEmpty prepend=" AND " property="matNum"> <!-- 物资编码 -->
+			MAT_NUM like concat('%', #matNum#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNumEQ"> <!-- 物资编码(精确) -->
+			MAT_NUM = #matNumEQ#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matName"> <!-- 物资名称 -->
+			MAT_NAME like concat('%', #matName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="AppMatName"> <!-- app物资名称 -->
+			MAT_NAME like concat('%', #AppMatName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="AppMatModel"> <!-- app物资型号 -->
+			MAT_MODEL like concat('%', #AppMatModel#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="AppMatSpec"> <!-- app物资规格 -->
+			MAT_SPEC like concat('%', #AppMatSpec#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeNums"> <!-- 物资分类编码字符串 -->
+			find_in_set(MAT_TYPE_NUM, #matTypeNums#)
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			DATA_GROUP_CODE = #dataGroupCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeNum">
+			MAT_TYPE_NUM = #matTypeNum#
+		</isNotEmpty>
+		GROUP BY MAT_NUM
+        <isNotEmpty property="offset">
+            limit #offset#,#limit#
+        </isNotEmpty>
+	</select>
+
+    <select id="countMat" resultClass="int" parameterClass="java.util.HashMap">
+        SELECT
+        REC_CREATOR	as "recCreator",
+        REC_CREATE_TIME	as "recCreateTime",
+        REC_REVISOR	as "recRevisor",
+        REC_REVISE_TIME	as "recReviseTime",
+        ARCHIVE_FLAG	as "archiveFlag",
+        ID	as "id",
+        WARE_HOUSE_NO	as "wareHouseNo",
+        ware_house_name	as "wareHouseName",
+        STORAGE_NO	as "storageNo",
+        STACK_NO	as "stackNo",
+        MAT_TYPE_NUM	as "matTypeNum",
+        mat_type_name	as "matTypeName",
+        MAT_NUM	as "matNum",
+        MAT_NAME	as "matName",
+        MAT_MODEL	as "matModel",
+        MAT_SPEC	as "matSpec",
+        UNIT	as "unit",
+        UNIT_NAME	as "unitName",
+        TOTAL_NUM	as "totalNum",
+        TOTAL_AMOUNT	as "totalAmount",
+        BATCH_NO	as "batchNo",
+        MIN_NUM	as "minNum",
+        MAX_NUM	as "maxNum",
+        PRICE	as "price",
+        remind_flag	as "remindFlag",
+        bill_checker_name	as "billCheckerName",
+        bill_maker_name	as "billMakerName",
+        enter_type_name	as "enterTypeName",
+        origin_bill_type_name	as "originBillTypeName",
+        surp_num	as "surpNum",
+        surp_name	as "surpName",
+        sum(TOTAL_NUM) as "zongNum"
+        FROM ci_storge WHERE 1=1
+        <isNotEmpty prepend=" AND " property="matNum"> <!-- 物资编码 -->
+            MAT_NUM like concat('%', #matNum#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="matNumEQ"> <!-- 物资编码(精确) -->
+            MAT_NUM = #matNumEQ#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="matName"> <!-- 物资名称 -->
+            MAT_NAME like concat('%', #matName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="AppMatName"> <!-- app物资名称 -->
+            MAT_NAME like concat('%', #AppMatName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="AppMatModel"> <!-- app物资型号 -->
+            MAT_MODEL like concat('%', #AppMatModel#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="AppMatSpec"> <!-- app物资规格 -->
+            MAT_SPEC like concat('%', #AppMatSpec#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="matTypeNums"> <!-- 物资分类编码字符串 -->
+            find_in_set(MAT_TYPE_NUM, #matTypeNums#)
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="dataGroupCode">
+            DATA_GROUP_CODE = #dataGroupCode#
+        </isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeNum">
+			MAT_TYPE_NUM = #matTypeNum#
+		</isNotEmpty>
+    </select>
+
+
+
+
+</sqlMap>

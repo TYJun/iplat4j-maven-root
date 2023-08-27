@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CMTK0101">
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			ID as "id",
+			REC_CREATOR as "recCreator",
+			REC_CREATE_TIME as "recCreateTime",
+			REC_REVSIOR as "recRevsior",
+			REC_REVISE_TIME as "recReviseTime",
+			ARCHIVE_FLAG as "archiveFlag",  <!-- 归档标记 -->
+			CONT_TERM_NUM as "contTermNum",  <!-- 合同条款编码 -->
+			NO as "no",
+			CONTENT as "content"
+		FROM
+			cm_contract_terms_details
+		WHERE
+			CONT_TERM_NUM=#contTermNum#
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				CONT_TERM_NUM DESC
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="count" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT * FROM cm_contract_terms_details WHERE CONT_TERM_NUM = #contTermNum#
+	</select>
+
+	<insert id="insert" parameterClass="java.util.HashMap">
+		INSERT INTO cm_contract_terms_details
+		(
+			ID,
+			REC_CREATOR,
+			REC_CREATE_TIME,
+			REC_REVSIOR,
+			REC_REVISE_TIME,
+			ARCHIVE_FLAG,
+			CONT_TERM_NUM,
+			CONTENT
+		)
+		VALUES
+		(
+			#id#,
+			#recCreator#,
+			#recCreateTime#,
+			#recRevsior#,
+			#recReviseTime#,
+			#archiveFlag#,
+			#contTermNum#,
+			#content#
+		)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM cm_contract_terms_details WHERE CONT_TERM_NUM = #value#
+	</delete>
+
+	<update id="update">
+		UPDATE
+			cm_contract_terms_details
+		SET
+			REC_CREATOR = #recCreator#,
+			REC_CREATE_TIME = #recCreateTime#,
+			REC_REVSIOR = #recRevsior#,
+			REC_REVISE_TIME = #recReviseTime#,
+			ARCHIVE_FLAG = #archiveFlag#,   <!-- 归档标记 -->
+			CONT_TERM_NUM = #contTermNum#,   <!-- 合同条款编码 -->
+			NO = #no#,
+			CONTENT = #content#
+		WHERE
+			ID = #id#
+	</update>
+</sqlMap>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="SSBMDZ02">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.bm.domain.ScPatientAddress">
+		SELECT
+		id as "id",  <!-- 主键 -->
+		building as "building",
+		floor as "floor",
+		dept_name as "deptName",
+		dept_num as "deptNum",
+		dept_num_parent as "deptNumParent",
+		dept_name_parent as "deptNameParent",
+		(case take_effect
+		when '1' then '生效'
+		when '2' then '未生效'
+		END) as "takeEffect"
+		FROM sc_patient_address WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floor">
+			floor like concat('%',#floor#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="building">
+			building like concat('%',#building#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name like concat('%',#deptName#,'%')
+		</isNotEmpty>
+
+	</select>
+	<update id="update">
+		UPDATE sc_patient_address
+		SET
+		take_effect= '2'
+		WHERE
+		id = #id#
+	</update>
+
+	<select id="queryBuilding" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.ss.bm.domain.ScPatientAddress">
+		SELECT
+		name as "building"
+		FROM sc_location_tree
+		where type = "building"
+		group by building
+
+	</select>
+
+	<select id="queryFloor" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.ss.bm.domain.ScPatientAddress">
+		SELECT
+		name as "floor"
+		FROM sc_location_tree
+		where type = "floor"
+		group by floor
+	</select>
+
+	<select id="queryDeptName" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.ss.bm.domain.ScPatientAddress">
+		SELECT
+		dept_name as "deptName"
+		FROM bona_frame_mzsrmyy.ac_department
+		group by dept_name
+	</select>
+
+	<select id="queryAcDepartment" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.ss.bm.domain.ScPatientAddress">
+		SELECT
+		dept_name as "deptName",
+		dept_num as "deptNum",
+		dept_num_parent as deptNumParent,
+		dept_name_parent as deptNameParent
+		FROM bona_frame_mzsrmyy.ac_department
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name = #deptName#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert">
+	    INSERT INTO `sc_patient_address` (
+		   `id`,
+		  `dept_name_parent`,
+		  `dept_num_parent`,
+		  `dept_name`,
+		  `dept_num`,
+		  `building`,
+		  `floor`,
+		  `take_effect`
+		)
+		VALUES
+		  (
+			#id#,
+			#deptNameParent#,
+			#deptNumParent#,
+			#deptName#,
+			#deptNum#,
+			#building#,
+			#floor#,
+			#takeEffect#
+		  ) ;
+	</insert>
+	<update id="update1">
+		UPDATE sc_patient_address
+		SET
+		`building`=#building#,
+		  `floor`= #floor#,
+		  `dept_name`=#deptName#
+		WHERE
+		id = #id#
+	</update>
+
+	<update id="update2">
+		UPDATE sc_patient_address
+		SET
+		take_effect= '1'
+		WHERE
+		id = #id#
+	</update>
+
+
+</sqlMap>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!-- table information Generate time : 2021-03-11 16:17:31 Version : 6.0.731.201809200158 
+	tableName :sc_pic pic_id VARCHAR NOT NULL primarykey, file_id VARCHAR, 
+	meal_id VARCHAR, file_url VARCHAR, file_type VARCHAR -->
+<sqlMap namespace="SSBMTyTmealPic">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.bm.domain.SSBMTyTmealPic">
+		SELECT
+		pic_id as "picId",
+		file_id as "fileId",
+		meal_id as "mealId",
+		file_url as "fileUrl",
+		file_type as "fileType" <!-- 0－图片；1－文档； -->
+		FROM sc_pic WHERE 1=1
+		<isNotEmpty prepend=" AND " property="picId">
+			pic_id = #picId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="mealId">
+			meal_id = #mealId#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				pic_id asc
+			</isEmpty>
+		</dynamic>
+
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_pic WHERE 1=1
+		<isNotEmpty prepend=" AND " property="picId">
+			pic_id = #picId#
+		</isNotEmpty>
+	</select>
+
+	<!-- <isNotEmpty prepend=" AND " property="picId"> pic_id = #picId# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="fileId"> file_id = #fileId# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="mealId"> meal_id = #mealId# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="fileUrl"> file_url = #fileUrl# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="fileType"> file_type = #fileType# </isNotEmpty> -->
+
+	<insert id="insert">
+		INSERT INTO sc_pic (pic_id,
+		file_id,
+		meal_id,
+		file_url,
+		file_type  <!-- 0－图片；1－文档； -->
+		)
+		VALUES (#picId#, #fileId#, #mealId#, #fileUrl#, #fileType#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM sc_pic WHERE
+		pic_id = #picId#
+	</delete>
+	
+	<delete id="deleteByMealId">
+		DELETE FROM sc_pic WHERE
+		meal_id = #mealId#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_pic
+		SET
+		file_id = #fileId#,
+		meal_id = #mealId#,
+		file_url = #fileUrl#,
+		file_type = #fileType#  <!-- 0－图片；1－文档； -->
+		WHERE
+		pic_id = #picId#
+	</update>
+
+</sqlMap>

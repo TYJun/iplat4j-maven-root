@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="renderer" content="webkit" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="reference/mui/css/mui.css" />
+  <link rel="stylesheet" href="reference/css/common.css" />
+</head>
+<style type="text/css">
+  body {
+    background: #eee;
+  }
+
+  .task {
+    background: #fff;
+    width: 100%;
+    margin-top: 5px;
+    color: #666;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-weight: bold;
+    border-bottom: 1px solid #d2d2d2;
+    border-top: 1px solid #d2d2d2;
+  }
+
+  .info {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  .task-info {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 15px;
+    padding-right: 15px;
+    background: #75450d;
+    color: #fff;
+  }
+
+  .item {
+    background: #fff;
+    width: 100%;
+    box-shadow: 2px 2px 2px #cecece;
+    margin-top: 5px;
+    color: #4a4a4a;
+  }
+
+  .item-info {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 15px;
+    padding-right: 15px;
+    background: #2589ad;
+    color: #fff;
+    font-weight: bold;
+  }
+
+  .div-radio {
+    width: 33.33%;
+    display: inline-block;
+    float: left;
+    margin-top: 8px;
+  }
+
+  .mui-input-row {
+    clear: none;
+  }
+
+  .status {
+    width: 100%;
+    height: 50px;
+  }
+
+  .abnormal-div {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    background: #fff;
+  }
+
+  .abnormal-content {
+    width: 100%;
+    padding-top: 44px;
+  }
+
+  .abnormal-title {
+    width: 100%;
+    color: #2196f3;
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .abnormal-list {
+    width: 100%;
+    overflow: scroll;
+    overflow-x: hidden;
+  }
+
+  .div-picture {
+    width: 100%;
+    /*height: 100px;*/
+  }
+
+  .picture-btn {
+    width: 100%;
+    text-align: center;
+    height: 50px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .picture-btn button {
+    margin: 8px 10px 0 0;
+  }
+
+  .pictures {
+    padding-left: 15px;
+    /*padding-right: 15px;*/
+    border-top: 1px solid #eee;
+  }
+
+  .picture {
+    height: 43px;
+    line-height: 43px;
+  }
+
+  .picture-name {
+    border-bottom: 1px solid #eee;
+    color: #2196f3;
+  }
+
+  .remove-pic {
+    background: #d6645c;
+    color: #fff;
+    text-align: center;
+    border-bottom: 1px solid #fff;
+  }
+
+  .pic-show {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 99;
+    background: #000;
+  }
+
+  .flex {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+  }
+
+  .flex-align-center {
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+  }
+
+  .flex-pack-justify {
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+  }
+</style>
+
+<body>
+  <header class="mui-bar mui-bar-nav">
+    <h1 class="mui-title">维护详情</h1>
+    <button class="mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+      返回
+    </button>
+  </header>
+
+  <div id="warn" class="warn" hidden>
+    <small></small>
+  </div>
+
+  <div class="mui-content">
+    <div class="mui-row task">
+      <div class="mui-col mui-col-xs-12 info">
+        任务编号：<span id="task_code"></span>
+      </div>
+      <div class="mui-col mui-col-xs-12 info">
+        设备编码：<span id="machine_code"></span>
+      </div>
+      <div class="mui-col mui-col-xs-12 info">
+        任务名称：<span id="task_name"></span>
+      </div>
+      <div class="mui-col mui-col-xs-12 info">
+        作业描述：<span id="task_desc"></span>
+      </div>
+    </div>
+
+    <div id="item"></div>
+  </div>
+
+  <!-- 异常描述选择框 -->
+  <div class="abnormal-div" hidden>
+    <header class="mui-bar mui-bar-nav">
+      <h1 class="mui-title">异常描述</h1>
+      <button id="review" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+        返回
+      </button>
+    </header>
+    <div class="abnormal-content">
+      <div class="abnormal-title">请选择符合本项目的异常描述</div>
+      <div class="abnormal-list">
+        <ul id="abnormal_list" class="mui-table-view mui-table-view-chevron"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="pic-show" hidden>
+    <div class="flex flex-align-center flex-pack-justify" style="width:100%;height:100%;">
+      <img id="picture" src="" style="width:100%;height:auto;" />
+    </div>
+  </div>
+</body>
+<script src="reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="reference/js/common.js" type="text/javascript"></script>
+<script src="../../cordova.js" type="text/javascript"></script>
+<!-- <script src="./reference/js/vconsole.min.js"></script> -->
+<script type="text/javascript">
+  // var vConsole = new VConsole();
+  var baseUrl = localStorage.getItem("url");
+  var workNo = localStorage.getItem("workNo");
+  var url = location.search;
+  var taskId = url.substring(1, url.length);
+  var _this = "";
+  $(".abnormal-list").height($(window).height() - 96);
+  // alert("taskId:" + taskId);
+  document.addEventListener("deviceready", onDeviceReady, false);
+  function onDeviceReady() {
+    var db = window.sqlitePlugin.openDatabase({
+      name: "one-stop.db",
+      location: "default"
+    });
+
+    db.transaction(
+      function (tx) {
+
+        //获取详情
+        tx.executeSql(
+          "SELECT * FROM device_task_list1 WHERE task_id=?",
+          [taskId],
+          function (tx, resultSet) {
+
+
+            // alert("task_desc:" + resultSet.rows.item(0).task_desc);
+            var num = resultSet.rows.length;
+            $("#task_code").html(resultSet.rows.item(0).task_code);
+            $("#task_name").html(resultSet.rows.item(0).task_name);
+            $("#machine_code").html(resultSet.rows.item(0).machine_code);
+            $("#task_desc").html(resultSet.rows.item(0).task_desc);
+          },
+          function (e) {
+            showMsg("获取数据失败：" + e.message);
+          }
+        );
+
+
+        // "SELECT * FROM device_task_detail1 WHERE task_id=? ORDER BY sort_no ASC",
+        // [taskId],
+        // function(tx, resultSet) {
+        tx.executeSql("SELECT t1.*,group_concat(t2.file_path) file_path FROM device_task_detail1 t1 LEFT JOIN device_file1 t2 ON t1.item_id=t2.item_id WHERE t1.task_id=? GROUP BY t1.item_id ORDER BY t1.sort_no ASC", [taskId], function (tx, resultSet) {
+          var num = resultSet.rows.length;
+          var item = "";
+          for (var i = 0; i < num; i++) {
+            item += createItem(
+              resultSet.rows.item(i).item_id,
+              resultSet.rows.item(i).item_name,
+              resultSet.rows.item(i).status,
+              resultSet.rows.item(i).reference_value,
+              resultSet.rows.item(i).item_record,
+              resultSet.rows.item(i).abnormal_reference,
+              resultSet.rows.item(i).abnormal_desc,
+              resultSet.rows.item(i).file_path
+            );
+          }
+          $("#item").html(item);
+        },
+          function (e) {
+            showMsg("获取数据失败：" + e.message);
+          }
+        )
+      },
+      function (e) {
+        showMsg(e.message);
+
+        db.close(successcb, errorcb);
+      },
+      function () {
+        db.close(successcb, errorcb);
+      }
+    );
+  }
+
+  function createItem(
+    item_id,
+    item_name,
+    status,
+    reference_value,
+    item_record,
+    abnormal_reference,
+    abnormal_desc,
+    file_path
+  ) {
+    var html = '<div id="' + item_id + '" class="mui-row item">';
+    html += '<div class="item-info">' + item_name + "</div>";
+    html += '<div class="status">';
+
+    html += '<div class="mui-input-row mui-radio mui-left div-radio">';
+    html += "<label>正常</label>";
+    if (status != "-1" && status != "2") {
+      html +=
+        '<input name="' +
+        item_id +
+        '" value="1" type="radio" checked="" disabled>';
+    } else {
+      html +=
+        '<input name="' + item_id + '" value="1" type="radio" disabled>';
+    }
+    html += "</div>";
+    html += '<div class="mui-input-row mui-radio mui-left div-radio" >';
+    html += "<label>异常</label>";
+    if (status == "-1") {
+      html +=
+        '<input name="' +
+        item_id +
+        '" value="-1" type="radio" checked="" disabled>';
+    } else {
+      html +=
+        '<input name="' + item_id + '" value="-1" type="radio" disabled>';
+    }
+    html += "</div>";
+    html += '<div class="mui-input-row mui-radio mui-left div-radio">';
+    html += "<label>停用</label>";
+    if (status == "2") {
+      html +=
+        '<input name="' +
+        item_id +
+        '" value="2" type="radio" checked="" disabled>';
+    } else {
+      html +=
+        '<input name="' + item_id + '" value="2" type="radio" disabled>';
+    }
+    html += "</div>";
+    html += "</div>";
+    html += '<form class="mui-input-group">';
+    html += '<div class="mui-input-row">';
+    html += "<label>参考结果</label>";
+    html +=
+      '<input type="text" placeholder="" value="' +
+      reference_value +
+      '" readonly>';
+    html += "</div>";
+    if (status != "-1")
+      html += '<div class="mui-input-row abnormals" hidden>';
+    else html += '<div class="mui-input-row abnormals">';
+    html += "<label>异常描述</label>";
+    html +=
+      '<input id="' +
+      item_id +
+      "\" name='" +
+      abnormal_reference +
+      '\' class="abnormal_desc" type="text" placeholder="异常状态下输入异常描述" value="' +
+      abnormal_desc +
+      '" readonly>';
+    html += "</div>";
+    html += '<div class="mui-input-row">';
+    html += "<label>结果记录</label>";
+    var itemRecord = item_record == null ? "" : item_record;
+    html +=
+      '<input class="item_record" type="text" placeholder="异常状态下必填" value="' +
+      itemRecord +
+      '" readonly>';
+    html += "</div>";
+    html += "</form>";
+    html += pictureElement(item_id, file_path);
+    html += "</div>";
+    return html;
+  }
+
+  function pictureElement(item_id, file_path) {
+    var html = '<div id="' + item_id + '" class="div-picture">';
+    html += '<div class="picture-btn">';
+    html +=
+      '<button type="button" class="mui-btn mui-btn-primary mui-btn-link camera">';
+    html +=
+      '<span class="mui-icon mui-icon-camera"></span> 拍摄照片</button>';
+    html +=
+      '<button type="button" class="mui-btn mui-btn-primary mui-btn-link album">';
+    html += '<span class="mui-icon mui-icon-image"></span> 本地图片</button>';
+    html += "</div>";
+
+    html += '<div class="pictures">';
+
+    if (file_path != null && file_path != "null") {
+      var file_array = file_path.split(",");
+      for (var i = 0; i < file_array.length; i++) {
+        // var imgName = file_array[i].substring(
+        //   file_array[i].lastIndexOf("/") + 1,
+        //   file_array[i].length
+        // );
+        var imgName = "照片";
+        html += '<div id="' + item_id + '" class="picture mui-row">';
+        html +=
+          '<div id="' +
+          file_array[i] +
+          '" class="mui-col-xs-9 picture-name">' +
+          imgName +
+          "</div>";
+        html += '<div class="mui-col-xs-3 remove-pic">删除</div>';
+        html += "</div>";
+      }
+    }
+
+    html += "</div>";
+
+    html += "</div>";
+    return html;
+  }
+
+  function successcb() { }
+
+  function errorcb() {
+    alert("数据库关闭失败");
+  }
+
+  mui("body").on("tap", "button.camera", function () {
+    showMsg("详情界面不能进行本操作");
+  });
+
+  mui("body").on("tap", "button.album", function () {
+    showMsg("详情界面不能进行本操作");
+  });
+
+  mui("body").on("tap", "div.remove-pic", function () {
+    showMsg("详情界面不能进行删除操作");
+  });
+
+  mui("body").on("tap", "div.picture-name", function () {
+    $("input").blur();
+    $("#picture").attr("src", this.id);
+    $(".pic-show").show();
+  });
+
+  mui("body").on("tap", "div.pic-show", function () {
+    $("input").blur();
+    $(".pic-show").hide();
+  });
+</script>
+
+</html>

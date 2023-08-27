@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>申请</title>
+    <link rel="stylesheet" href="../reference/mui/css/mui.css" />
+    <link rel="stylesheet" href="../reference/css/iconfont.css" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="../reference/css/colorGreen.css" />
+    <link rel="stylesheet" href="../reference/css/loading.css" />
+    <link rel="stylesheet" href="../reference/css/clothCommon.css" />
+    <style>
+      ul {
+        list-style-type: none;
+      }
+
+      #list {
+        background-color: #fff;
+        font-size: 16px;
+      }
+
+      .shen {
+        margin-top: 10px;
+      }
+
+      .shen li span {
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 16px;
+        height: 40px;
+        margin-left: 20px;
+      }
+
+      .shen li {
+        overflow: hidden;
+        height: 40px;
+        line-height: 40px;
+        margin-top: 10px;
+      }
+
+      .shen li input {
+        width: 200px;
+        float: right;
+        margin-right: 40px;
+      }
+
+      .feilei {
+        margin-left: 20px;
+      }
+
+      table {
+        width: 350px;
+        margin: 10px auto;
+      }
+
+      table td {
+        border: 1px solid #ccc;
+        border-collapse: collapse;
+        text-align: center;
+        font-size: 16px;
+      }
+
+      .confirm {
+        float: right;
+      }
+
+      .dh {
+        color: #3da1fd;
+      }
+
+      #searchList {
+        display: none;
+        margin-top: -40px;
+      }
+
+      .scan {
+
+
+        position: fixed;
+    right: 20px;
+    bottom: 90px;
+    z-index: 111;
+      }
+
+      .round {
+        border: 1px solid #bbb;
+        width: 60px;
+        height: 60px;
+        line-height: 26px;
+        text-align: center;
+        color: yellow;
+        background-color: #666666;
+        filter: alpha(opacity=80);
+        /* 用于IE浏览器－透明度为20%*/
+        -moz-opacity: 0.8;
+        /*  用于Moz + Firefox－透明度为20%*/
+        opacity: 0.8;
+        -webkit-border-radius: 60px;
+        -moz-border-radius: 60px;
+        -o-border-radius: 60px;
+        border-radius: 60px;
+      }
+
+      .mask {
+        height: 70%;
+      }
+
+      .deptArea {
+        width: 100%;
+        height: 110px;
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        background-color: #fff;
+        padding: 10px;
+      }
+
+      .date {
+        font-size: 18px;
+        margin-right: 15px;
+      }
+
+      .total {
+        font-size: 18px;
+      }
+
+      .taskNo {
+        font-size: 18px;
+        margin-right: 10px;
+        color: black;
+      }
+
+      .deptArea h2 {
+        display: inline-block;
+        margin-top: 12px;
+      }
+
+      .del {
+        float: right;
+        margin-right: 18px;
+        margin-top: -20px;
+      }
+
+      .detail {
+        margin: 5px 5px 5px 0px;
+        width: 100%;
+        background-color: #fff;
+      }
+
+      .detail li {
+        height: 80px;
+        margin-bottom: 20px;
+        padding-top: 10px;
+        border-bottom: 1px solid #ccc;
+        background-color: #30c37c;
+      }
+
+      .detail li .cloth {
+        font-size: 24px;
+        margin-top: 5px;
+        color: #f7f7f7;
+        margin-left: 20px;
+      }
+
+      .detail li .number {
+        font-size: 20px;
+        margin-top: 5px;
+        color: #f7f7f7;
+        float: right;
+        margin-right: 16px;
+      }
+
+      #update {
+        position: fixed;
+        bottom: 0;
+        background-color: white;
+        width: 100%;
+        height: 30%;
+      }
+      .mui-card {
+      background-color: #30c37c;
+      color: white;
+      }
+      .mui-card-content {
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      }
+      .bottom {
+    background: #eee;
+    box-shadow: none;
+    border-top: 1px solid #eee;
+}
+    </style>
+  </head>
+
+  <body>
+    <header class="mui-bar mui-bar-nav backColor">
+      <h1 class="mui-title">布草申请</h1>
+      <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+      </button>
+      <button
+        id="search"
+        class="mui-btn mui-btn-link mui-btn-nav mui-pull-right"
+      >
+        <span class="mui-icon mui-icon-search"></span>
+      </button>
+    </header>
+    <!-- tab页 -->
+    <div class="top-part backColor">
+      <div class="top-bar">
+        <span id="Y1" class="center">已确认</span>
+        <span id="N1" class="choose center">未确认</span>
+      </div>
+    </div>
+
+    <!-- 主内容 -->
+    <div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+      <div class="mui-scroll" id="content">
+        <!-- <div class="area"> -->
+        <!-- <div class="deptArea" id="dept1">
+                    <div class="up">
+                        <span class="date">5-28</span>
+                        <span style="font-size: 18px;">共<span class="total">36</span><span style="font-size: 18px;">件</span style="font-size: 18px;"></span>
+                        <p style="font-size: 18px;margin-top:5px;color:black;margin-bottom: -20px;">编号:
+                            <span class="taskNo">11111111111111111</span>
+                        </p>
+                    </div>
+                    <h2>普外科</h2>
+                    <img class="del" src="../../../img/del.png" alt="加载中">
+                </div>
+                <ul class="detail">
+                    <li>
+                        <p class="cloth">病员服-均码</p>
+                        <p class="number">申请数量:<span class="num" id="1">20</span></p>
+                    </li>
+                    <li>
+                        <p class="cloth">病员服-均码</p>
+                        <p class="number">申请数量:<span class="num" id="2">20</span></p class="number">
+                    </li>
+                </ul> -->
+        <!-- </div> -->
+      </div>
+    </div>
+    <!-- 查询结果容器 -->
+    <div id="searchList" class="mui-content mui-scroll-wrapper">
+      <div class="mui-scroll" id="content">
+        <ul class="list-ul" id="slist"></ul>
+      </div>
+    </div>
+    <!-- 新增 -->
+    <nav class="mui-bar mui-bar-tab bottom">
+      <div id="add">
+        <span class="iconfont icon-zengjia"></span>
+      </div>
+    </nav>
+    <!-- 应急 -->
+    <div class="scan" id="scan">
+      <div class="round" id="round">
+        <div style="font-size:15px;">应急</div>
+        <div style="font-size:15px;">申请</div>
+      </div>
+    </div>
+    <!-- 遮罩 -->
+    <div class="mask"></div>
+    <!-- 修改 -->
+    <div id="update" hidden>
+      <div class="hideHtml">
+        <span id="updateType" style="margin: 25px;font-size: 24px;"
+          >布草上装-均码</span
+        >
+        <div class="mui-numbox" data-numbox-min="0" style="margin: 10px;">
+          <button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
+          <input class="mui-numbox-input" type="number" id="updateNum" />
+          <button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
+        </div>
+        <div
+          style="display: flex;justify-content: space-between; width: 68%;margin-top: 30px;margin-left: 55px;"
+        >
+          <button
+            style="background-color: #30c37c;color: white;"
+            onclick="cancel()"
+          >
+            取消
+          </button>
+          <button
+            style="background-color: #30c37c;color: white;"
+            onclick="affirm()"
+          >
+            确认
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="searchDiv">
+      <header class="mui-bar mui-bar-nav backColor">
+        <h1 class="mui-title">查询</h1>
+      </header>
+      <!-- 时间 -->
+      <div class="mui-row row-content" style="margin-top: 50px;">
+        <div class="mui-col-sm-4 mui-col-xs-4">时间</div>
+        <div class="mui-col-sm-3 mui-col-xs-3">
+          <input type="text" id="beginTime" placeholder="开始时间" readonly />
+        </div>
+        <div class="mui-col-sm-1 mui-col-xs-1 middle">-</div>
+        <div class="mui-col-sm-3 mui-col-xs-3">
+          <input type="text" id="endTime" placeholder="截止时间" readonly />
+        </div>
+        <div class="mui-col-sm-1 mui-col-xs-1 middle">
+          <span class="mui-icon mui-icon-arrowright fontColor"></span>
+        </div>
+      </div>
+      <!-- 状态 -->
+      <!-- <div class="mui-row row-content">
+            <div class="mui-col-sm-8 mui-col-xs-8">状态</div>
+            <div class="mui-col-sm-3 mui-col-xs-3">
+                <input type="text" id="statusSearch" placeholder="请选择状态" readonly>
+            </div>
+            <div class="mui-col-sm-1 mui-col-xs-1 middle">
+                <span class="mui-icon mui-icon-arrowright fontColor"></span>
+            </div>
+        </div> -->
+      <!-- 确认按钮 -->
+      <div class="searchBtn">
+        <span class="reset">重置</span>
+        <span class="sure backColor">查询</span>
+      </div>
+    </div>
+  </body>
+</html>
+<script type="text/javascript" src="../reference/mui/js/mui.min.js"></script>
+<script
+  type="text/javascript"
+  src="../reference/mui/js/jquery-2.1.4.js"
+></script>
+<script
+  type="text/javascript"
+  src="../reference/mui/js/mui.picker.min.js"
+></script>
+<script type="text/javascript" src="../reference/mui/js/baseInfo.js"></script>
+<script
+    type="text/javascript"
+    src="../../reference/js/mui.loading.js"
+  ></script>
+<!-- <script type="text/javascript" src="../../../cordova.js"></script> -->
+<script>
+  // localStorage.setItem("url",  "http://yapi.bonawise.com/mock/154/smp/");
+  //localStorage.setItem("url", "http://192.168.1.53:8092/smp/");
+  //localStorage.setItem("url","http://49.4.71.205:6100/smp/");
+  var baseUrl = localStorage.getItem("url");
+  var workNo = localStorage.getItem("workNo");
+  // var dataGroupCode = "BONA";
+  var beginTime = "";
+  var endTime = "";
+  var taskNo;
+  var applyStatus = "0"; //未确认
+  var deptNum = localStorage.getItem("deptCode");
+  var isUrgentApply = ""; //是否为紧急申请
+  var html = "";
+  var htmlList = "";
+  var configItem = "is_urgent_apply";
+  // var isUrgentApply = 0; //普通申请
+  var total = 0;
+  var applyNo = "";
+  var applyTime = "";
+  var isUrgentApply = 0;
+  // var deptNum = localStorage.getItem("deptCode");
+  var deptName = localStorage.getItem("deptName");
+  // var dataGroupCode = "BONA";
+  var recCreator = workNo;
+  var array = [];
+  var applicationNo = "";
+  var deptNo = "";
+
+  //console.log(baseUrl,dataGroupCode,deptNum,isUrgentApply);
+  $(function() {
+    init();
+    // alert(deptNum);
+  });
+  // touchMove("scan");
+
+  applicationNo = applicationNo?applicationNo:"";
+  deptNo = deptNo?deptNo:"";
+  function init() {
+    //申请查询
+    $.ajax({
+      url: baseUrl + "medical/fabric",
+      type: "post",
+      data: {
+        requestParam:'{"applicationNo":"'+applicationNo+'","deptNo":"'+deptNo+'","limit":"20", "offset":"0", "status":"1"}' 
+      },
+      headers: {
+          methodName: "queryApplicationInfo",
+          serviceName:"OMMFApplication"
+        },
+        success: function(data) {
+        // var data = JSON.parse(data);
+        console.log(data);
+        var list = data.data;
+        console.log(list)
+        if(list.length == 0) {
+          mui.toast('暂无数据！');
+        }
+        for (var i = 0; i < list.length; i++) {
+          total = 0;
+          var applicationNo = list[i].applicationNo;
+          var applyTime = list[i].giveOutDate;
+          var deptName = list[i].deptName;
+          var number = list[i].number;
+          // var applyItems = 8;
+          // var applyItems = list[i].applyItems;
+          // for (var j = 0; j < applyItems.length; j++) {
+          //   total += applyItems[j].applyNum;
+          //   // total = 1;
+          // }
+          html += create(deptName, applyTime, number, applicationNo);
+          // html += create(applyNo, applyTime, deptName, applyItems);
+        }
+        $("#content").html(html);
+      }
+    });
+
+    //查询配置项 是否有紧急申请
+    // $.ajax({
+    //   url: baseUrl + "medical/fabric",
+    //   type: "post",
+    //   data: {
+    //     dataGroupCode: dataGroupCode,
+    //     configItem: configItem
+    //   },
+    //   headers: {
+    //       methodName: "queryApplicationInfo",
+    //       serviceName: ""
+    //   },
+    //   success: function(data) {
+    //     // var data = JSON.parse(data);
+    //     // console.log(data.obj.obj);
+    //     isUrgentApply = data.data;
+    //     // localStorage.setItem('isUrgentApply', isUrgentApply);
+    //     if (isUrgentApply == "N") {
+    //       $("#scan").hide();
+    //     }
+    //   }
+    // });
+  }
+
+  function create(deptName, applyTime, number, applicationNo) {
+      var html = "";
+      html =
+        '<li class="mui-table-view-cell" applicationNo="' +
+        applicationNo +
+        '"> <div class="mui-card"> <div class="mui-card-header">' +
+        deptName +
+        '</div> <div class="mui-card-content"><span>申请发放时间：' +
+        applyTime +
+        "</span> <span>申请数量：" +
+        number +
+        "</span> </div> </div> </li>";
+      return html;
+    }
+
+  // function create(applyNo, applyTime, deptName, applyItems, total, i, j) {
+  //   var html = "";
+  //   html += `
+  //              <div class="area" id=${i}>
+  //              <div class="deptArea">
+  //                  <div class="up"> 
+  //                      <span class="date">${applyTime}</span>
+  //                      <span style="font-size: 18px;">共<span class="total">${total}</span><span style="font-size: 18px;">件</span style="font-size: 18px;"></span>
+  //                      <p style="font-size: 18px;margin-top:5px;color:black;margin-bottom: -20px;">编号:
+  //                        <span class="taskNo">${applyNo}</span>
+  //                      </p>
+  //                   </div>
+  //                   <h2 class="deptName">${deptName}</h2>
+  //                   <img class="del" src="../../../img/del.png" alt="加载中">
+  //               </div>
+
+  //               <ul class="detail">
+  //       `;
+  //   applyItems.forEach((element, j) => {
+  //     html += `
+  //                   <li>
+  //                       <p class="cloth">${element.clothTypeName}-${element.clothModel}</p>
+  //                       <p class="number">申请数量：<span class="num" clothType="${element.clothType} + ${j}">${element.applyNum}</span></p>   
+  //                   </li>
+  //                   `;
+  //   });
+
+  //   html += `
+  //               </ul>
+  //               </div>
+  //               `;
+
+  //   return html;
+  // }
+
+  // 卡片跳转事件
+  $("#content").on("click", ".mui-table-view-cell", function() {
+      var applicationNo = $(this)
+        // .find(".mui-table-view-cell")
+        .attr("applicationNo");
+        var deptName = $(this)
+        .find(".mui-card-header")
+        .html();
+      console.log(applicationNo);
+      console.log(deptName);
+      localStorage.setItem("applicationNo", applicationNo);
+      localStorage.setItem("deptName", deptName);
+      location.href = "./detailListNAPP1.html?" + "&" + applicationNo;
+  });
+
+  // 删除订单
+  mui("body").on("click", ".del", function() {
+    $(this)
+      .parent()
+      .parent()
+      .remove();
+    taskNo = $(this)
+      .parent()
+      .parent()
+      .find(".taskNo")
+      .html();
+    deleteData(taskNo);
+  });
+
+  // function deleteData(applyNo) {
+  //   $.ajax({
+  //     url: baseUrl + "app_ManualController.do?deleteClothApply",
+  //     type: "get",
+  //     data: {
+  //       dataGroupCode: dataGroupCode,
+  //       applyNo: applyNo,
+  //       deptNum: deptNum
+  //     },
+  //     contentType: "application/json",
+  //     success: function(data) {
+  //       // var data = JSON.parse(data);
+  //       console.log(data.obj);
+  //     }
+  //   });
+  // }
+  // 修改申请布草数量
+  // mui("#list").on("click", "li", function() {
+  //   $(".mask").show();
+  //   $("#update").css("z-index", 999);
+  //   $("#update").show();
+  //   $("#scan").hide();
+  //   $("#add").hide();
+  //   var index = $(this)
+  //     .parent()
+  //     .parent()
+  //     .attr("id");
+  //   var num = $(this)
+  //     .find(".num")
+  //     .html();
+  //   var type = $(this)
+  //     .find(".num")
+  //     .attr("clothType");
+  //   localStorage.setItem("type", type);
+  //   localStorage.setItem("oldNum", num);
+  //   localStorage.setItem("i", index);
+  //   $("#updateNum").val(
+  //     $(this)
+  //       .find(".num")
+  //       .html()
+  //   );
+  //   $("#updateType").html(
+  //     $(this)
+  //       .find(".cloth")
+  //       .html()
+  //   );
+  // });
+
+  // $(".mask").click(function() {
+  //   $(".mask").hide();
+  //   $("#update").hide();
+  //   $("#scan").show();
+  //   $("#add").show();
+  // });
+
+  //取消
+  function cancel() {
+    $(".mask").hide();
+    $("#update").hide();
+    // $("#scan").show();
+    $("#add").show();
+  }
+
+  //保存
+  function affirm() {
+    var index = localStorage.getItem("i");
+    var array = localStorage.getItem("array");
+    var arr = JSON.parse(array);
+    console.log(arr[index]);
+    console.log(arr[index].list);
+    var oldNum = localStorage.getItem("oldNum");
+    var type = localStorage.getItem("type");
+    var num = $("#updateNum").val();
+    // lxy
+    // if (num == 0) {
+    //     mui.toast("申请数量不可为0！");
+    //     return;
+    // }
+    var arr1 = $("#" + index).find(".num");
+    var arr2 = [];
+    for (var i = 0; i < arr1.length; i++) {
+      arr[index].list[i].applyNum = arr[index].list[i].applyNum + "";
+      if (arr1.eq(i).attr("clothType") == type) {
+        arr1.eq(i).html(num);
+        arr[index].list[i].applyNum = num;
+        console.log(arr[index].list[i].applyNum);
+      }
+      arr2.push(arr1.eq(i).attr("clothType"));
+    }
+    console.log(arr[index].list);
+    console.log("------------------------");
+    // $("#" + index).find(".num").html(num);
+    total = parseInt(
+      $("#" + index)
+        .find(".total")
+        .html()
+    );
+    total = total + parseFloat(num) - parseFloat(oldNum);
+    $("#" + index)
+      .find(".total")
+      .html(total);
+    $(".mask").hide();
+    $("#update").hide();
+    $("#add").show();
+    $("#scan").show();
+    var arrList = [];
+    for (var i = 0; i < arr[index].list.length; i++) {
+      if (arr[index].list[i].applyNum != "0") {
+        arrList.push(arr[index].list[i]);
+      }
+    }
+    console.log(arrList);
+    arr[index].list = arrList;
+    if (arr[index].list.length > 0) {
+      save(arr[index]);
+    } else {
+      $("#" + index).remove();
+      taskNo = arr[index].applyNo;
+      deleteData(taskNo);
+    }
+  }
+
+  // function save(json) {
+  //   var clothListStr = JSON.stringify(json.list);
+  //   var params = {
+  //     applyNo: json.applyNo,
+  //     applyTime: json.applyTime,
+  //     isUrgentApply: json.isUrgentApply,
+  //     deptNum: json.deptNum,
+  //     deptName: json.deptName,
+  //     dataGroupCode: json.dataGroupCode,
+  //     recCreator: json.recCreator,
+  //     clothListStr: clothListStr
+  //   };
+  //   $.ajax({
+  //     url: baseUrl + "app_clothApply.do?saveApply",
+  //     type: "post",
+  //     data: JSON.stringify(params),
+  //     contentType: "application/json",
+  //     success: function(data) {
+  //       // var data = JSON.parse(data);
+  //       mui.toast(data.respMsg);
+  //       location.href = "./notConfirmAPP.html";
+  //     },
+  //     error: function(XMLHttpRequest) {
+  //       var text = JSON.parse(XMLHttpRequest.responseText);
+  //       mui.toast(text.message);
+  //       return;
+  //     },
+  //     complete: function(XMLHttpRequest, status) {
+  //       if (status == "timeout") {
+  //         $("#loading").hide();
+  //         mui.toast("网速不给力，请重试！");
+  //         return;
+  //       } else if (status == "error") {
+  //         $("#loading").hide();
+  //         mui.toast("当前网络不可用，请查看网络是否畅通！");
+  //         return;
+  //       }
+  //     }
+  //   });
+  // }
+
+  //普通申请
+  mui(".bottom").on("tap", "#add", function() {
+    location.href = "./sqAPP.html";
+  });
+  //确认申请单
+  // mui("body").on("tap", ".confirm", function() {
+  //   var applyNo = $(this)
+  //     .prev()
+  //     .html();
+  //   console.log(applyNo);
+  //   var approveMan = localStorage.getItem("workNo");
+  //   console.log(applyNo);
+  //   var params = {
+  //     dataGroupCode: dataGroupCode,
+  //     applyNo: applyNo,
+  //     approveMan: approveMan
+  //   };
+  //   $.ajax({
+  //     url: baseUrl + "app_clothApply.do?confirmApply",
+  //     type: "post",
+  //     data: JSON.stringify(params),
+  //     contentType: "application/json",
+  //     success: function(data) {
+  //       var data = JSON.parse(data);
+  //       console.log(data);
+  //       mui.toast(data.respMsg);
+  //       location.href = "./notConfirmAPP.html";
+  //     }
+  //   });
+  // });
+  //应急申请
+  mui("body").on("tap", "#scan", function() {
+    location.href = "./ugsqAPP.html";
+  });
+  mui("#back").on("tap", ".mui-icon-left-nav", function() {
+    location.href = "../menuAPP.html";
+  });
+  // mui('body').on('tap','#list',function(){
+  //     location.href='./sqdetail.html';
+  // })
+  //切换
+  mui(".top-bar").on("tap", ".center", function() {
+    var idText = this.getAttribute("id");
+    if (idText == "N1") {
+      location.reload();
+    } else if (idText == "Y1") {
+      location.href = "./confirmAPP.html";
+    }
+  });
+  //搜索框
+  $("#search").click(function() {
+      $(".searchDiv").show();
+      $(".mask").css("height", "100%");
+      $(".mask").show();
+    });
+    //时间条件
+    mui("body").on("tap", "#beginTime", function() {
+      var options = {
+        type: "date"
+      };
+      var pickerDate = new mui.DtPicker(options);
+      pickerDate.show(function(rs) {
+        $("#beginTime").val(rs.text);
+      });
+    });
+
+    mui("body").on("tap", "#endTime", function() {
+      var options = {
+        type: "date"
+      };
+      var pickerDate = new mui.DtPicker(options);
+      pickerDate.show(function(rs) {
+        $("#endTime").val(rs.text);
+      });
+    });
+    //状态选择
+    // mui("body").on("tap", "#statusSearch", function() {
+    //     var picker = new mui.PopPicker();
+    //     picker.setData([{
+    //         value: "first",
+    //         text: "已确认"
+    //     }, {
+    //         value: "second",
+    //         text: "未确认"
+    //     }])
+    //     picker.show(function(getSelectedItems) {
+    //         //console.log(getSelectedItems)
+    //         $("#statusSearch").val(getSelectedItems[0].text);
+    //     })
+    // });
+
+    //查询
+    mui("body").on("tap", ".sure", function() {
+      var timeStart = $("#beginTime").val();
+      // var timeEnd = $("#endTime").val();
+      // var aa = new Date(timeStart).getTime();
+      // var bb = new Date(timeEnd).getTime();
+
+      $(".searchDiv").hide();
+      $(".mask").hide();
+      console.log($("#statusSearch").val());
+      // if($("#statusSearch")=='未确认'){
+      //      applyStatus=0;
+      // }
+      // else if($("#statusSearch")=='已确认'){
+      //     applyStatus=1;
+      // }
+      beginTime = timeStart;
+      // endTime = timeEnd;
+
+      var listHtml = "";
+      var param = {
+        // deptNo: deptNumInit,
+        startDate: $("#beginTime").val(),
+        endDate: $("#endTime").val(),
+        limit: "100",
+        offset: "0"
+      };
+      param = JSON.stringify(param);
+      $.ajax({
+        url: baseUrl + "medical/fabric",
+        type: "post",
+        data: {
+          requestParam: param
+          // dataGroupCode: dataGroupCode,
+          // beginTime: beginTime,
+          // endTime: beginTime,
+          // issueStatus: "1",
+          // deptNum: deptNumInit
+        },
+        headers: {
+          methodName: "queryApplicationInfo",
+          serviceName: "OMMFApplication"
+        },
+        success: function(data) {
+          $("#list").html("");
+          mui.hideLoading();
+
+          // var data = JSON.parse(data);
+          // console.log(data);
+          if (data.statusCode != "0") {
+            mui.toast(data.msg);
+            return;
+          }
+          var list = data.data;
+          if (list.length == 0) {
+            mui.toast("当前没有数据！");
+            return;
+          }
+          var deptDiryItemBills = "";
+          console.log(list);
+          for (var i = 0; i < list.length; i++) {
+            var deptRecycleNo = list[i].recoveryNo;
+            deptName = list[i].deptName;
+            deptNum = list[i].deptNo;
+            recycleNum = list[i].number;
+            date = list[i].recCreateTime;
+            // deptDiryItemBills = list[i].deptDiryItemBills;
+            // deptDiryItemBills.forEach(element => {
+            //     totalNum += Number(element.recycleNum)
+            // });
+            if (recycleNum != 0) {
+              listHtml += createHtml(
+                deptName,
+                deptNum,
+                recycleNum,
+                deptRecycleNo,
+                date
+              );
+            }
+          }
+          console.log('listHtml:',listHtml);
+          $("#list").html(listHtml);
+        }
+      });
+      // }
+      $("#statusSearch").val("");
+      $("#beginTime").val("");
+      $("#endTime").val("");
+    });
+
+    //重置
+    mui("body").on("tap", ".reset", function() {
+      $("#statusSearch").val("");
+      $("#beginTime").val("");
+      $("#endTime").val("");
+      $(".searchDiv").hide();
+      $(".mask").hide();
+    });
+
+  //关闭弹窗
+  $(".mask").click(function() {
+    $("#statusSearch").val("");
+    $("#beginTime").val("");
+    $("#endTime").val("");
+    $(".searchDiv").hide();
+    $(".mask").hide();
+  });
+</script>

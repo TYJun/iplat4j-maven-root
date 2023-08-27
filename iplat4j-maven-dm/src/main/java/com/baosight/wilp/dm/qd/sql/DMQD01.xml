@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2022-03-15 14:58:58
+   		Version :  6.0.731.201809200158
+		tableName :.dorms_check_list 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 room_man_id  VARCHAR,
+		 serial_number  VARCHAR,
+		 item_name  VARCHAR, 
+		 existence  VARCHAR, 
+		 is_intact  VARCHAR, 
+		 extra_charges  DECIMAL, 
+		 note  VARCHAR, 
+		 operator  VARCHAR, 
+		 operation_name  VARCHAR, 
+		 operation_time  VARCHAR
+	-->
+<sqlMap namespace="DMQD01">
+
+	<select id="queryByRoomManId" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+				id	as "id",  <!-- 主键 -->
+				room_man_id	as "roomManId",  <!-- 宿舍人员绑定关系表id -->
+				serial_number	as "serialNumber",  <!-- 序号 -->
+				item_name	as "itemName",  <!-- 物品/项目名称 -->
+				existence	as "existence",  <!-- 是否有该物品 -->
+				is_intact	as "isIntact",  <!-- 是否完好/损坏 -->
+				extra_charges	as "extraCharges",  <!-- 其他费用 -->
+				note	as "note",  <!-- 备注信息 -->
+				operator	as "operator",  <!-- 操作人工号 -->
+				operation_name	as "operationName",  <!-- 操作人人姓名 -->
+				operation_time	as "operationTime" <!-- 操作时间 -->
+		FROM .dorms_check_list WHERE 1=1
+		<isNotEmpty prepend=" AND " property="roomManId">
+			room_man_id = #roomManId#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+			serial_number asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .dorms_check_list WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomManId">
+			room_man_id = #roomManId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="serialNumber">
+			serial_number = #serialNumber#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="itemName">
+			item_name = #itemName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="existence">
+			existence = #existence#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="isIntact">
+			is_intact = #isIntact#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="extraCharges">
+			extra_charges = #extraCharges#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="note">
+			note = #note#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="operator">
+			operator = #operator#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="operationName">
+			operation_name = #operationName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="operationTime">
+			operation_time = #operationTime#
+		</isNotEmpty>
+	-->
+
+ 	<!-- 批量插入数据-->
+	<insert id="insertDormsCheckList" parameterClass="java.util.List">
+		INSERT INTO .dorms_check_list (id,  <!-- 主键 -->
+										room_man_id,  <!-- 宿舍人员绑定关系表id -->
+										serial_number,  <!-- 序号 -->
+										item_name,  <!-- 物品/项目名称 -->
+										existence,  <!-- 是否有该物品 -->
+										is_intact,  <!-- 是否完好/损坏 -->
+										extra_charges,  <!-- 其他费用 -->
+										note,  <!-- 备注信息 -->
+										operator,  <!-- 操作人工号 -->
+										operation_name,  <!-- 操作人人姓名 -->
+										operation_time  <!-- 操作时间 -->
+										)		 
+	    VALUES
+		<iterate conjunction=",">
+			(
+			#list[].id#,
+			#list[].roomManId#,
+			#list[].serialNumber#,
+			#list[].itemName#,
+			#list[].existence#,
+			#list[].isIntact#,
+			#list[].extraCharges#,
+			#list[].note#,
+			#list[].operator#,
+			#list[].operationName#,
+			#list[].operationTime#
+			)
+		</iterate>
+	</insert>
+
+	<update id="update">
+		UPDATE .dorms_check_list 
+		SET 
+					room_man_id	= #roomManId#,   <!-- 宿舍人员绑定关系表id -->
+					serial_number	= #serialNumber#,   <!-- 序号 -->
+					item_name	= #itemName#,   <!-- 物品/项目名称 -->
+					existence	= #existence#,   <!-- 是否有该物品 -->  
+					is_intact	= #isIntact#,   <!-- 是否完好/损坏 -->  
+					extra_charges	= #extraCharges#,   <!-- 其他费用 -->  
+					note	= #note#,   <!-- 备注信息 -->  
+					operator	= #operator#,   <!-- 操作人工号 -->  
+					operation_name	= #operationName#,   <!-- 操作人人姓名 -->  
+					operation_time	= #operationTime#  <!-- 操作时间 -->  
+			WHERE 	
+			id = #id#
+	</update>
+
+	<!-- 批量更新数据-->
+	<update id = "updateDormsCheckList" parameterClass="java.util.List">
+		update dorms_check_list
+		set existence =
+		<iterate conjunction="" open="CASE id" close="END">
+			<![CDATA[
+            WHEN #list[].id# THEN #list[].existence#
+        ]]>
+		</iterate>,
+		is_intact =
+		<iterate conjunction="" open="CASE id" close="END">
+			<![CDATA[
+            WHEN #list[].id# THEN #list[].isIntact#
+        ]]>
+		</iterate>,
+		extra_charges =
+		<iterate conjunction="" open="CASE id" close="END">
+			<![CDATA[
+            WHEN #list[].id# THEN #list[].extraCharges#
+        ]]>
+		</iterate>,
+		note =
+		<iterate conjunction="" open="CASE id" close="END">
+			<![CDATA[
+            WHEN #list[].id# THEN #list[].note#
+        ]]>
+		</iterate>,
+		operator =
+		<iterate conjunction="" open="CASE id" close="END">
+			<![CDATA[
+            WHEN #list[].id# THEN #list[].operator#
+        ]]>
+		</iterate>,
+		operation_name =
+		<iterate conjunction="" open="CASE id" close="END">
+			<![CDATA[
+            WHEN #list[].id# THEN #list[].operationName#
+        ]]>
+		</iterate>,
+		operation_time =
+		<iterate conjunction="" open="CASE id" close="END">
+			<![CDATA[
+            WHEN #list[].id# THEN #list[].operationTime#
+        ]]>
+		</iterate>
+		WHERE id IN
+		<iterate conjunction="," open="(" close=")">
+			#list[].id#
+		</iterate>
+	</update>
+  
+</sqlMap>

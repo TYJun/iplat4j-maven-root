@@ -1,0 +1,342 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.min.css">
+    <link rel="stylesheet" href="../reference/mui/css/iconfont.css">
+    <link rel="stylesheet" href="../reference/css/common.css" />
+    <link rel="stylesheet" href="../../../css/colorGreen.css" />
+    <link rel="stylesheet" href="../../../css/colorBlue.css" />
+</head>
+<style type="text/css">
+    body {
+        background: #e7e7e7;
+    }
+    
+    .mealInfo {
+        margin-bottom: 10px;
+        width: 100%;
+        background: #fff;
+        border: 1px solid #eee;
+    }
+    
+    .mealInfo>.row {
+        margin-top: 10px;
+        padding: 0 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    #mealList {
+        margin-top: 10px;
+        color: #949494;
+        font-size: 13px;
+    }
+    
+    .detail {
+        width: 100%;
+        background: #fff;
+        border: 1px solid #eee;
+    }
+    
+    .mui-table-view input {
+        display: inline-block;
+        float: right;
+        width: 60%;
+        text-align: right;
+        outline: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        height: 22px;
+    }
+</style>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">订单详情</h1>
+        <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+      返回
+    </button>
+    </header>
+
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div id="loading" class="spinner" style="position:fixed;z-index:9999;text-align:center;width:100%;" hidden>
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    <div class="top50 mui-content">
+        <div class="mealInfo">
+            <div class="row">
+                <div style="font-weight:bold;color:#EF8915;">
+                    菜品信息
+                </div>
+            </div>
+            <div id="mealList" class="row">
+
+            </div>
+            <div class="row mui-row">
+                <div class="mui-col-xs-6 mui-col-sm-6 mui-col-md-6 mui-col-lg-6 left" style="color:#FF8800;">
+                    合计
+                </div>
+                <div id="totalPrice" class="mui-col-xs-6 mui-col-sm-6 mui-col-md-6 mui-col-lg-6 right" style="color:#FF8800;">
+                </div>
+            </div>
+        </div>
+
+        <div class="detail">
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                    <a>订单号<input type="text" id='billNo' readonly value="DC8812307127381"></a>
+                </li>
+                <li class="mui-table-view-cell">
+                    <a>订餐人<input type="text" id='userName' readonly></a>
+                </li>
+                <li class="mui-table-view-cell">
+                    <a>联系电话<input type="text" id='userTelNumber' readonly></a>
+                </li>
+                <li class="mui-table-view-cell">
+                    <a>送达时间</span><input type="text" id='reqSendTime' readonly></a>
+                </li>
+                <li class="mui-table-view-cell">
+                    <a>地址<input type="text" id='bedNo' readonly></a>
+                </li>
+                <li class="mui-table-view-cell">
+                    <a>食堂<input type="text" id='canteenName' readonly></a>
+                </li>
+                <li class="mui-table-view-cell" hidden>
+                    <a>下单时间<input type="text" id='recCreateTime'></a>
+                </li>
+                <li class="mui-table-view-cell">
+                    <a>订单状态<input type="text" id="statusName" readonly></a>
+                </li>
+                <li class="mui-table-view-cell" hidden>
+                    <a>取餐码<input type="text" id="selfCode" readonly></a>
+                </li>
+                <li class="mui-table-view-cell">
+                    <a>备注<input type="text" id="billRemark" readonly></a>
+                </li>
+            </ul>
+
+
+            <!-- <div class="row" style="margin-top:10px;">
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                订单号
+              </div>
+              <div id="billNo" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                DC8812307127381
+              </div>
+          </div>
+
+           <div class="row" style="margin-top:10px;">
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                订餐人
+              </div>
+              <div id="userName" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                
+              </div>
+          </div>
+
+          <div class="row" style="margin-top:10px;">
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                联系电话
+              </div>
+              <div id="userTelNumber" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                
+              </div>
+          </div>
+          <hr style="margin-top:10px;">
+
+          <div class="row" style="margin-top:10px;">
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                送达时间
+              </div>
+              <div id="reqSendTime" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                
+              </div>
+          </div>
+          <hr style="margin-top:10px;">
+
+          <div class="row" style="margin-top:10px;">
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                地址
+              </div>
+              <div id="bedNo" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;word-break: break-all;">
+                
+              </div>
+          </div>
+          <hr style="margin-top:10px;">
+
+          <div class="row" style="margin-top:10px;">
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                食堂
+              </div>
+              <div id="canteenName" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                
+              </div>
+          </div>
+          <hr style="margin-top:10px;">
+
+          <div class="row" style="margin-top:10px;">
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                下单时间
+              </div>
+              <div id="recCreateTime" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                
+              </div>
+          </div>
+          <hr style="margin-top:10px;">
+
+          <div class="row" style="margin-top:10px;">
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                订单状态
+              </div>
+              <div id="statusName" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;">
+                
+              </div>
+          </div>
+          <hr style="margin-top:10px;">
+
+          <div class="row" style="margin-top:10px;">
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                备注
+              </div>
+              <div id="billRemark" class="col-xs-8 col-sm-8 col-md-8 col-lg-8" style="text-align:right;word-break: break-all;">
+                
+              </div>
+          </div>
+          <hr style="margin-top:10px;"> -->
+
+
+        </div>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../../../js/color.js"></script>
+<script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../reference/js/common.js" type="text/javascript"></script>
+<script src="../../../cordova.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var url = location.search;
+    var billNo = url.substring(1, url.length);
+
+    $.ajax({
+        //url: baseUrl + 'app_workBillInfoController.do?queryBill',
+        url: baseUrl + 'workmeal',
+        type: 'post',
+        headers:{
+            className : 'AppWorkBaseInfoService',
+            methodName : 'queryWorkBill'
+        },
+        data: {
+            billNo: billNo,
+        },
+        beforeSend: function() {
+            $('#loading').show();
+        },
+        success: function(data) {
+            $("#loading").hide();
+            //var data = eval("(" + data + ")");
+            console.log(data);
+            var billNoS = data.obj[0].billNo == "";
+            var canteenName = data.obj[0].canteenName;
+            var statusName = data.obj[0].statusName;
+            var needDate = data.obj[0].needDate;
+            var reqSendTime = data.obj[0].reqSendTime;
+            var userTelNumber = data.obj[0].userTelNumber;
+            var billTotalPrice = data.obj[0].billTotalPrice;
+            var recCreateTime = data.obj[0].recCreateTime.split(":")[0] + ":" + data.obj[0].recCreateTime.split(":")[1];
+            var bedNo = data.obj[0].bedNo;
+            var userName = data.obj[0].userName;
+            var selfCode = data.obj[0].selfCode;
+            var billRemark = data.obj[0].billRemark == "" ? "无" : data.obj[0].billRemark;
+            $("#billNo").val(billNo);
+            $("#statusName").val(statusName);
+            $("#reqSendTime").val(needDate + ' ' + reqSendTime);
+            $("#userTelNumber").val(userTelNumber);
+            $("#totalPrice").html("￥" + parseFloat(billTotalPrice).toFixed(2));
+            $("#recCreateTime").val(recCreateTime);
+            $("#bedNo").val(data.obj[0].address);
+            //$("#bedNo").val(data.obj[0].building + '/' + data.obj[0].floor + '/' + data.obj[0].deptName + '/' + data.obj[0].bedNo);
+            $("#userName").val(userName);
+            
+            $("#selfCode").val(selfCode);
+            if(selfCode){
+            	$("#selfCode").closest(".mui-table-view-cell").attr("hidden",false);
+            }else{
+            	$("#selfCode").closest(".mui-table-view-cell").attr("hidden",true);
+            }
+            $("#billRemark").val(billRemark);
+            $("#canteenName").val(canteenName);
+
+
+            var list = new Array();
+            list = data.obj[0].billDetail;
+            var menuNumber, menuPrice, menuName, html = "";
+            for (var i = 0; i < list.length; i++) {
+                menuNumber = list[i].menuNumber;
+                menuPrice = list[i].menuPrice;
+                menuName = list[i].menuName;
+                html += mealList(menuNumber, menuPrice, menuName);
+            }
+            $("#mealList").html(html);
+
+        },
+        complete: function(XMLHttpRequest, status) { //请求完成后最终执行参数
+            if (status == 'timeout') {
+                $("#loading").hide();
+                $('#warn small').html('网速不给力，请重试！');
+                $('#warn').fadeIn(500);
+                setTimeout("$('#warn').fadeOut(500)", 3000);　　　　
+            } else if (status == 'error') {
+                $("#loading").hide();
+                $('#warn small').html('当前网络不可用，请查看网络是否畅通！');
+                $('#warn').fadeIn(500);
+                setTimeout("$('#warn').fadeOut(500)", 3000);　
+            }　
+        }
+    });
+
+    function mealList(menuNumber, menuPrice, menuName) {
+        var html = "";
+        html += "<div class='row mui-row' style='padding-top:5px;padding-bottom:5px;'>";
+        html += "<div class='mui-col-xs-8 mui-col-sm-8 mui-col-md-8 mui-col-lg-8'>" + menuName + "</div>";
+        html += "<div class='mui-col-xs-2 mui-col-sm-2 mui-col-md-2 mui-col-lg-2 left-nopadding left'>×" + menuNumber + "</div>";
+        html += "<div class='mui-col-xs-2 mui-col-sm-2 mui-col-md-2 mui-col-lg-2 left-nopadding right'>￥" + parseFloat(menuPrice).toFixed(2) + "</div></div>";
+        return html;
+    }
+
+    $("#back").click(function() {
+        location.href = "../meal_order.html";
+    });
+
+    // APP系统键回退
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        /**
+         * 系统返回键监听
+         */
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+    //返回
+    function onBackKeyDown() {
+        location.href = "../meal_order.html";
+    }
+</script>
+
+</html>

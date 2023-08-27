@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>次品申报</title>
+    <link rel="stylesheet" href="../../css/defective/declare.css" />
+    <link
+      rel="stylesheet"
+      href="../../../../../html\reference\mui\css\mui.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../../../html\reference\mui\css\mui.picker.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../../../html\reference\mui\css\mui.picker.min.css"
+    />
+  </head>
+  <body>
+    <div id="app" v-clock>
+      <!-- 顶部区域 -->
+      <header>
+        <div class="top">
+          <div id="top-bar">
+            <h1 id="title">次品申报</h1>
+            <span
+              id="icon-left-back"
+              class="mui-icon mui-icon-arrowleft"
+            ></span>
+            
+            <span id="select_class" @click="select_class">分类选择</span>
+          </div>
+        </div>
+      </header>
+      <!-- 下拉选择框 -->
+      <div class="pulldown">
+        <ul class="mui-table-view">
+          <li class="mui-table-view-cell mui-collapse">
+            <a class="mui-navigate-right" href="#" id="choose">选择科室名/洁物库</a>
+            <div class="mui-collapse-content">
+              <p>面板1子内容</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <!-- 分类表格 -->
+      
+
+        
+      <!-- '提交'按钮 -->
+      <div>
+          <button id="btn_submit" type="button">
+              <span>提交</span>
+          </button>
+      </div>
+    </div>
+  </body>
+
+  <script src="../../../../../reference/assets/js/jquery.min.js"></script>
+  <script src="../../../../../html/reference/mui/js/mui.min.js"></script>
+  <script src="../../../../../html/reference/mui/js/mui.picker.min.js"></script>
+  <script src="../../../../../js/vue.js"></script>
+  <script>
+     $("#icon-left-back").click(function(){
+            console.log(1);
+            location.href = './historyList.html';
+        });
+      $("#select_class").click(function(){
+        location.href='./categoryAPP.html'
+      })
+
+      $("#choose").click(function(){
+            location.href='./chooseDept2.html';
+        })
+  </script>
+</html>

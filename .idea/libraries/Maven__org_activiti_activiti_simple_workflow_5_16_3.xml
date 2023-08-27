@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.activiti:activiti-simple-workflow:5.16.3">
+    <CLASSES>
+      <root url="jar://F:/Work/apache-maven-3.8.5/.m2/repository/org/activiti/activiti-simple-workflow/5.16.3/activiti-simple-workflow-5.16.3.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://F:/Work/apache-maven-3.8.5/.m2/repository/org/activiti/activiti-simple-workflow/5.16.3/activiti-simple-workflow-5.16.3-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://F:/Work/apache-maven-3.8.5/.m2/repository/org/activiti/activiti-simple-workflow/5.16.3/activiti-simple-workflow-5.16.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

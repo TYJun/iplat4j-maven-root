@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="ITFL01">
+    <!--  ServiceITFL01  -->
+    <select id="queryItClassifyTree" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            `id`,
+            classify_num classifyNum,
+            classify_name classifyName,
+            parent_id parentId,
+            is_leaf isLeaf
+        from
+            it_classify
+        <dynamic prepend="where">
+            <isNotEmpty prepend="and" property="dataGroupCode" open="(">
+                data_group_code in
+                <iterate open="(" close=")" conjunction="," property="dataGroupCode">
+                    #dataGroupCode[]#
+                </iterate>
+            </isNotEmpty>
+            <isPropertyAvailable prepend="or" property="dataGroupCodeAll" close=")">
+                data_group_code = #dataGroupCodeAll#
+            </isPropertyAvailable>
+            <isNotPropertyAvailable prepend="and" property="dataGroupCode" open="(">
+                data_group_code is NULL
+            </isNotPropertyAvailable>
+            <isNotPropertyAvailable prepend="or" property="dataGroupCodeAll" close=")">
+                0
+            </isNotPropertyAvailable>
+            <isNotEmpty prepend="and" property="parentEname">
+                parent_id = #parentEname#
+            </isNotEmpty>
+        </dynamic>
+            order by classify_num
+    </select>
+
+    <select id="queryItClassifyInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            a.`id` itClassifyId,
+            a.classify_num classifyNum,
+            a.classify_name classifyName,
+            a.parent_id parentId,
+            CASE a.parent_id
+            WHEN "root" THEN "根节点"
+            ELSE b.classify_name
+            END parentName,
+            a.`level`,
+            a.is_leaf isLeaf,
+            a.remark,
+            a.archive_flag archiveFlag
+        from
+            it_classify a
+        left join it_classify b on b.id = a.parent_id
+        <dynamic prepend="where">
+            <isNotEmpty prepend="and" property="dataGroupCode" open="(">
+                a.data_group_code in
+                <iterate open="(" close=")" conjunction="," property="dataGroupCode">
+                    #dataGroupCode[]#
+                </iterate>
+            </isNotEmpty>
+            <isPropertyAvailable prepend="or" property="dataGroupCodeAll" close=")">
+                a.data_group_code = #dataGroupCodeAll#
+            </isPropertyAvailable>
+            <isNotPropertyAvailable prepend="and" property="dataGroupCode" open="(">
+                a.data_group_code is NULL
+            </isNotPropertyAvailable>
+            <isNotPropertyAvailable prepend="or" property="dataGroupCodeAll" close=")">
+                0
+            </isNotPropertyAvailable>
+            <isNotEmpty property="itClassifyId" prepend="and">
+                a.id = #itClassifyId#
+            </isNotEmpty>
+            <isNotEmpty property="parentId" prepend="and">
+                a.parent_id = #parentId#
+            </isNotEmpty>
+            <isNotEmpty property="classifyNum" prepend="and">
+                a.classify_num like concat ('%',trim(#classifyNum#),'%')
+            </isNotEmpty>
+            <isNotEmpty property="classifyName" prepend="and">
+                a.classify_name like concat ('%',trim(#classifyName#),'%')
+            </isNotEmpty>
+        </dynamic>
+            order by a.classify_num
+    </select>
+
+    <select id="whetherExistTask" parameterClass="java.util.List" resultClass="java.lang.String">
+        select
+            id itTaskId
+        from it_task
+        where classify_id in
+        <iterate open="(" close=")" conjunction=",">
+            #list[]#
+        </iterate>
+    </select>
+
+    <select id="queryChildNodes" parameterClass="java.util.List" resultClass="java.lang.String">
+        select
+            id itClassifyId
+        from
+            it_classify
+        where
+            parent_id in
+        <iterate open="(" close=")" conjunction=",">
+            #list[]#
+        </iterate>
+    </select>
+
+    <delete id="removeAllNodes" parameterClass="java.util.List">
+        delete from it_classify where id in
+        <iterate open="(" close=")" conjunction=",">
+            #list[]#
+        </iterate>
+    </delete>
+    <!--  ServiceITFL0101  -->
+    <insert id="saveItClassifyInfo" parameterClass="java.util.HashMap">
+        insert into it_classify (
+            `id`,classify_num,classify_name,parent_id,`level`,is_leaf,`remark`,sort_no,
+            rec_creator,rec_create_time,data_group_code,archive_flag
+        ) values (
+            #itClassifyId#,#classifyNum#,#classifyName#,#parentId#,#level#,#isLeaf#,#remark#,#sortNo#,
+            #recCreator#,#recCreateTime#,#dataGroupCode#,#archiveFlag#
+        )
+    </insert>
+
+    <update id="updateItClassifyInfo" parameterClass="java.util.HashMap">
+        update it_classify set
+            classify_name = #classifyName#,parent_id = #parentId#,remark = #remark#,rec_revisor = #recRevisor#,rec_revise_time = #recReviseTime#,
+            archive_flag = CONVERT(#archiveFlag#,SIGNED) + 1
+        where
+            id = #itClassifyId#
+    </update>
+
+    <!--  CreateNum  -->
+    <select id="queryMaxCode" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+        select
+            classify_num num
+        from
+            it_classify
+        where
+            classify_num like concat('%', #value#, '%')
+        order by
+            classify_num desc
+    </select>
+</sqlMap>

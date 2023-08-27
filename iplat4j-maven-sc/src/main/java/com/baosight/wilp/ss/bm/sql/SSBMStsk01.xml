@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="SSBMStsk01">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.bm.domain.SSBMStsk01">
+		SELECT
+		ID as "id",  <!-- UUID -->
+		companyId as "companyid",  <!-- 单位编码 -->
+		companyName as "companyname",  <!-- 单位名称 -->
+		moduleCode as "modulecode",  <!-- 模块编码，如职工订餐、病患订餐 -->
+		moduleName as "modulename",  <!-- 模块名称 -->
+		businessCode as "businesscode",  <!-- 业务编码，如食堂编码 -->
+		businessName as "businessname",  <!-- 业务名称，如食堂名称 -->
+		partner as "partner",  <!-- 合作者身份(PID) -->
+		seller_id as "sellerId",
+		check_key as "checkKey",  <!-- 安全校验码(Key) -->
+		private_key as "privateKey",  <!-- 商户的私钥 -->
+		ali_public_key as "aliPublicKey",  <!-- 支付宝的公钥 -->
+		creator as "creator",
+		createName as "createname",
+		createDate as "createdate",
+		updator as "updator",
+		updateName as "updatename",
+		updateDate as "updatedate",
+		remark as "remark" <!-- 备注信息 -->
+		FROM sc_account_config WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				createDate asc
+			</isEmpty>
+		</dynamic>
+
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_account_config WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+	</select>
+
+
+	<insert id="insert">
+		INSERT INTO sc_account_config (ID,  <!-- UUID -->
+		companyId,  <!-- 单位编码 -->
+		companyName,  <!-- 单位名称 -->
+		moduleCode,  <!-- 模块编码，如职工订餐、病患订餐 -->
+		moduleName,  <!-- 模块名称 -->
+		businessCode,  <!-- 业务编码，如食堂编码 -->
+		businessName,  <!-- 业务名称，如食堂名称 -->
+		partner,  <!-- 合作者身份(PID) -->
+		seller_id,
+		check_key,  <!-- 安全校验码(Key) -->
+		private_key,  <!-- 商户的私钥 -->
+		ali_public_key,  <!-- 支付宝的公钥 -->
+		creator,
+		createName,
+		createDate,
+		updator,
+		updateName,
+		updateDate,
+		remark  <!-- 备注信息 -->
+		)
+		VALUES (#id#, #companyid#, #companyname#, #modulecode#, #modulename#,
+		#businesscode#, #businessname#, #partner#, #sellerId#, #checkKey#,
+		#privateKey#, #aliPublicKey#, #creator#, #createname#, #createdate#,
+		#updator#, #updatename#, #updatedate#, #remark#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM sc_account_config WHERE
+		ID = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_account_config
+		SET
+		companyId = #companyid#,   <!-- 单位编码 -->
+		companyName = #companyname#,   <!-- 单位名称 -->
+		moduleCode = #modulecode#,   <!-- 模块编码，如职工订餐、病患订餐 -->
+		moduleName = #modulename#,   <!-- 模块名称 -->
+		businessCode = #businesscode#,   <!-- 业务编码，如食堂编码 -->
+		businessName = #businessname#,   <!-- 业务名称，如食堂名称 -->
+		partner = #partner#,   <!-- 合作者身份(PID) -->
+		seller_id = #sellerId#,
+		check_key = #checkKey#,   <!-- 安全校验码(Key) -->
+		private_key = #privateKey#,   <!-- 商户的私钥 -->
+		ali_public_key = #aliPublicKey#,   <!-- 支付宝的公钥 -->
+		creator = #creator#,
+		createName = #createname#,
+		createDate = #createdate#,
+		updator = #updator#,
+		updateName = #updatename#,
+		updateDate = #updatedate#,
+		remark = #remark#  <!-- 备注信息 -->
+		WHERE
+		ID = #id#
+	</update>
+
+</sqlMap>

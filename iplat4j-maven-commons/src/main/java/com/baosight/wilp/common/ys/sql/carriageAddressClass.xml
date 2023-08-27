@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-02-09 9:12:44
+   		Version :  6.0.731.201809200158
+		tableName :iplat_v5demo_business.ot_address_class 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 class_id  VARCHAR, 
+		 class_name  VARCHAR, 
+		 dept_num  VARCHAR, 
+		 dept_name  VARCHAR, 
+		 building  VARCHAR, 
+		 floor  VARCHAR, 
+		 address_no  VARCHAR, 
+		 address  VARCHAR, 
+		 times  VARCHAR
+	-->
+<sqlMap namespace="carriageAddressClass">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.common.ys.domain.CarriageAddressClass">
+		SELECT
+				id	as "id",  <!-- 地址分类主键（UUID） -->
+				class_id	as "classId",  <!-- 地址分类 -->
+				class_name	as "className",  <!-- 地址分类名称 -->
+				dept_num	as "deptNum",  <!-- 关联科室编号 -->
+				dept_name	as "deptName",  <!-- 关联科室名称 -->
+				building	as "building",  <!-- 楼 -->
+				floor	as "floor",  <!-- 层 -->
+				address_no	as "addressNo",  <!-- 地址编号 -->
+				address	as "address",  <!-- 地址名称 -->
+				times	as "times" <!-- 模板时间（min） -->
+		FROM iplat_v5demo_business.ot_address_class WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM iplat_v5demo_business.ot_address_class WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="classId">
+			class_id = #classId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="className">
+			class_name = #className#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			dept_num = #deptNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name = #deptName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="building">
+			building = #building#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="floor">
+			floor = #floor#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="addressNo">
+			address_no = #addressNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="address">
+			address = #address#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="times">
+			times = #times#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO iplat_v5demo_business.ot_address_class (id,  <!-- 地址分类主键（UUID） -->
+										class_id,  <!-- 地址分类 -->
+										class_name,  <!-- 地址分类名称 -->
+										dept_num,  <!-- 关联科室编号 -->
+										dept_name,  <!-- 关联科室名称 -->
+										building,  <!-- 楼 -->
+										floor,  <!-- 层 -->
+										address_no,  <!-- 地址编号 -->
+										address,  <!-- 地址名称 -->
+										times  <!-- 模板时间（min） -->
+										)		 
+	    VALUES (#id#, #classId#, #className#, #deptNum#, #deptName#, #building#, #floor#, #addressNo#, #address#, #times#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM iplat_v5demo_business.ot_address_class WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE iplat_v5demo_business.ot_address_class 
+		SET 
+					class_id	= #classId#,   <!-- 地址分类 -->  
+					class_name	= #className#,   <!-- 地址分类名称 -->  
+					dept_num	= #deptNum#,   <!-- 关联科室编号 -->  
+					dept_name	= #deptName#,   <!-- 关联科室名称 -->  
+					building	= #building#,   <!-- 楼 -->  
+					floor	= #floor#,   <!-- 层 -->  
+					address_no	= #addressNo#,   <!-- 地址编号 -->  
+					address	= #address#,   <!-- 地址名称 -->  
+					times	= #times#  <!-- 模板时间（min） -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.css">
+    <link rel="stylesheet" href="../reference/css/iconfont.css">
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css">
+    <link rel="stylesheet" href="../reference/css/colorGreen.css" />
+    <link rel="stylesheet" href="../reference/css/loading.css" />
+    <link rel="stylesheet" href="../../reference/css/common.css">
+    <link rel="stylesheet" href="../reference/css/clothCommon.css" />
+</head>
+<style>
+    .main {
+        margin-top: 55px;
+        background-color: white;
+    }
+    
+    .total {
+        float: right;
+        margin-right: 10%;
+    }
+    
+    .scan {
+        position: fixed;
+        /*bottom: 15px;*/
+        left: 15px;
+        width: 60px;
+        z-index: 11;
+    }
+    
+    .round {
+        border: 1px solid #30c37c;
+        width: 60px;
+        height: 60px;
+        line-height: 29px;
+        text-align: center;
+        color: #fff;
+        background-color: #30c37c;
+        filter: alpha(opacity=100);
+        /* 用于IE浏览器－透明度为20%*/
+        -moz-opacity: 1;
+        /*  用于Moz + Firefox－透明度为20%*/
+        opacity: 1;
+        -webkit-border-radius: 60px;
+        -moz-border-radius: 60px;
+        -o-border-radius: 60px;
+        border-radius: 60px;
+        /* display: flex;
+        flex-direction: column; */
+    }
+    
+    .round img {
+        margin-top: 4px;
+        margin-left: 2px;
+    }
+    
+    .mui-card {
+        background-color: #30c37c;
+        color: white;
+    }
+    
+    .mui-card-content {
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
+
+<body>
+    <header class="mui-bar mui-bar-nav backColor">
+        <h1 class="mui-title">盘库</h1>
+        <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+            <span class="mui-icon mui-icon-left-nav"></span>
+        </button>
+        <!-- <button id="search" class="mui-btn mui-btn-link mui-btn-nav mui-pull-right">
+            <span class="mui-icon mui-icon-search"></span>
+        </button> -->
+    </header>
+    <!-- tab页 -->
+    <!-- <div class="top-part backColor">
+        <div class="top-bar">
+            <span id="1" class="choose">未交接</span>
+            <span id="3">已交接</span>
+        </div>
+    </div> -->
+    <!-- 扫码 -->
+    <!-- <div class="scan" id="scan">
+        <div class="round" id="round">
+            <img src="../../../img/加号.png" alt="">
+        </div>
+    </div> -->
+    <div class="main">
+        <div id="chooseDept">
+            <input type="text" placeholder="输入科室" readonly id="initDept">
+        </div>
+        <div class="list">
+            <ul id="list">
+                <li class="mui-table-view-cell">
+                    <div class="mui-card">
+                        <!--页眉，放置标题-->
+                        <div class="mui-card-header">
+                            <span>信息科</span>
+                            <span>张三</span>
+                        </div>
+                        <!--内容区-->
+                        <div class="mui-card-content">
+                            <span>2020-07-17</span>
+                            <span>数量：20</span>
+                        </div>
+                    </div>
+                </li>
+                <li class="mui-table-view-cell">
+                    <div class="mui-card">
+                        <!--页眉，放置标题-->
+                        <div class="mui-card-header">
+                            <span>信息科</span>
+                            <span>张三</span>
+                        </div>
+                        <!--内容区-->
+                        <div class="mui-card-content">
+                            <span>2020-07-17</span>
+                            <span>数量：30</span>
+                        </div>
+                    </div>
+                </li>
+                <li class="mui-table-view-cell">
+                    <div class="mui-card">
+                        <!--页眉，放置标题-->
+                        <div class="mui-card-header">
+                            <span>信息科</span>
+                            <span>张三</span>
+                        </div>
+                        <!--内容区-->
+                        <div class="mui-card-content">
+                            <span>2020-07-17</span>
+                            <span>数量：20</span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../reference/mui/js/mui.min.js"></script>
+<script type="text/javascript" src="../reference/mui/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="../reference/mui/js/mui.picker.min.js"></script>
+<script type="text/javascript" src="../reference/mui/js/baseInfo.js"></script>
+<script type="text/javascript" src="../../reference/js/mui.loading.js"></script>
+<!-- <script type="text/javascript" src="../../../cordova.js"></script> -->
+<script>
+    var baseUrl = localStorage.getItem("url");
+    var deptNum = "";
+    var deptName = "";
+    $(function() {
+        init()
+    })
+
+    function init() {
+        mui.showLoading("正在加载", "div");
+        // $("#initDept").value = initdeptName;
+        mui.hideLoading();
+    }
+
+    //移动扫码框
+    // touchMove("scan")
+    //选择科室
+    $("#chooseDept").click(function() {
+        location.href = "chooseDept.html"
+    })
+
+    //扫描科室
+    mui("body").on('tap', '#round', function() {
+        location.href = "detailListAPP.html"
+        cordova.plugins.barcodeScanner.scan(
+            function(result) {
+                var info = result.text;
+                localStorage.setItem("initDeptNum", info);
+                getDeptName(info);
+                location.href = "detailListAPP.html"
+            },
+            function(error) {
+                mui.toast('获取信息失败！');
+                return;
+            }
+        );
+    });
+
+    function getDeptName(num) {
+        $.get({
+            url: baseUrl + "app_clothCommomQuery.do?queryDept",
+            type: "get",
+            data: {
+                dataGroupCode: dataGroupCode,
+                deptNum: num,
+                deptName: ""
+            },
+            success: function(data) {
+                // var data = JSON.parse(data);
+                deptName = data.obj.obj.deptName;
+                console.log(deptName);
+                localStorage.setItem("initDeptName", deptName);
+            },
+            error: function(XMLHttpRequest) {
+                var text = JSON.parse(XMLHttpRequest.responseText);
+                mui.toast(text.message);
+                return
+            }
+        })
+    }
+
+    /**
+     * @desc   点击返回按钮
+     * @author huoke
+     */
+    mui("body").on("tap", "#back", function() {
+        console.log(".....")
+        location.href = '../menuApp.html';
+    })
+
+    /**
+     * @desc   手机系统返回键
+     * @author huoke
+     */
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+        location.href = '../menuApp.html';
+    }
+</script>
+
+</html>

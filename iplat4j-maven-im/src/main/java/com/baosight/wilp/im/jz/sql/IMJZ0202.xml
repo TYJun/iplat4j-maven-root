@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="IMJZ0202">
+
+	<!-- 查询设备包信息 -->
+	<select id="query" parameterClass="String" resultClass="com.baosight.wilp.im.jz.domain.ImDevicePacket">
+	
+		SELECT
+			id as id,
+			packet_code as packetCode,
+			packet_name as packetName,
+			memo as memo
+		FROM
+			im_device_packet dpi 
+		WHERE
+			id = #value#
+	</select>
+
+	<!-- 查询设备包详细设备信息 -->
+	<select id="queryDetail" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.im.jz.domain.ImDevicePacket">
+	SELECT
+		device_id as id,
+		machine_code as paramKey,
+		machine_name as paramName,
+		fixed_place as classifyName
+	FROM
+		im_device_packet_relation 
+	WHERE
+		packet_id = #id#
+		<!-- <isNotEmpty property="offset"> 	分页			
+			<isNotEmpty property="limit"> 	分页			
+			 limit #offset#,#limit#
+			</isNotEmpty>
+		</isNotEmpty> -->
+		limit 0,300
+	</select>
+
+	
+	<!-- 保存设备包 -->
+	<insert id="insertPack" parameterClass="java.util.HashMap">
+	INSERT INTO im_device_packet (id,packet_code,packet_name,memo,createTime,createMan,status)
+		VALUES
+	(UUID(),#packet_code#,#packet_name#,#memo#,#createTime#,#createMan#,"0")
+	</insert>
+  
+
+
+	<!-- 查询当天生成的编码数量 -->
+	<select id="dangerCodeCount" parameterClass="String" resultClass="int">
+			select count(1) from im_device_packet where packet_code like concat(#value#,'%')
+	</select>
+	
+	
+	<!-- 删除设备包明细表中信息 -->
+	<delete id="deleteDetail" parameterClass="String">
+		delete from im_device_packet_relation where packet_id = #value#
+	</delete>
+	
+	
+	<!-- 保存设备包明细 -->
+	<insert id="insertPackDetail" parameterClass="java.util.HashMap">
+	INSERT INTO im_device_packet_relation (packet_id,device_id,machine_code,machine_name,fixed_place)
+		VALUES
+	(#packet_id#,UUID(),#machine_code#,#machine_name#,#fixed_place#)
+	</insert>
+	
+	<!--  -->
+	<update id="updateInspection" parameterClass="java.util.HashMap">
+	UPDATE im_device_packet 
+	SET modifyMan = #modifyMan#,
+		modifyTime = #modifyTime#
+	WHERE
+		id = #id#
+	</update>
+	
+  
+</sqlMap>

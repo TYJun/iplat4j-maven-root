@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="SICK04">
+
+    <select id="query" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.si.ck.domain.WzUser">
+        SELECT
+            id	as "id",  <!-- 主键 -->
+            work_no	as "workNo",  <!-- 工号 -->
+            name	as "name",  <!-- 姓名 -->
+            gender	as "gender",  <!-- 性别 -->
+            dept_code	as "deptCode",  <!-- 科室编码 -->
+            dept_id	as "deptId",  <!-- 所属科室ID -->
+            dept_name	as "deptName",  <!-- 所属科室 -->
+            type	as "type",  <!-- 类型 -->
+            is_service	as "isService",  <!-- 是否是服务类型 -->
+            status	as "status",  <!-- 状态 -->
+            source	as "source",  <!-- 出处 -->
+            cid	as "cid",  <!-- CID -->
+            cancellation	as "cancellation",  <!-- 注销 -->
+            biz_id	as "bizId",  <!-- 平台科室id -->
+            post	as "post",
+            vocational_post	as "vocationalPost",  <!-- 业务科室职务 -->
+            leader	as "leader" <!-- 负责人 -->
+        FROM $frameSchema$.wz_user WHERE work_no = #workNo#
+        <isNotEmpty prepend=" and " property="deptName">
+            dept_name like concat ('%', #deptName#, '%')
+        </isNotEmpty>
+        <dynamic prepend="ORDER BY">
+            <isEmpty property="orderBy">
+                dept_code asc
+            </isEmpty>
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+        </dynamic>
+
+    </select>
+
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM $frameSchema$.wz_user  WHERE work_no = #workNo#
+        <isNotEmpty prepend=" and " property="deptName">
+            dept_name like concat ('%', #deptName#, '%')
+        </isNotEmpty>
+    </select>
+
+    <update id="updateClaimStatus" parameterClass="java.util.List">
+        update rm_claim set status_code = '80', status_name = '已签收' where status_code = '70'
+        and claim_no in (select origin_bill_no from si_out where out_type = '06' and out_bill_no in
+            <iterate open="(" conjunction="," close=")">#list[]#</iterate>
+        )
+    </update>
+
+    <update id="overClaimStatus" parameterClass="java.util.List">
+        update rm_claim set status_code = '90', status_name = '已结束' where claim_no in (
+            select origin_bill_no from si_out where out_type = '06' and out_bill_no in
+                <iterate open="(" conjunction="," close=")">#list[]#</iterate>
+        )
+    </update>
+  
+</sqlMap>

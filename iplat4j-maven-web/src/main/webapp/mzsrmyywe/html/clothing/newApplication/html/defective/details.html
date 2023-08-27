@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>单条详情</title>
+    <link rel="stylesheet" href="../../css/defective/details.css" />
+    <link
+      rel="stylesheet"
+      href="../../../../../html\reference\mui\css\mui.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../../../html\reference\mui\css\mui.picker.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../../../html\reference\mui\css\mui.picker.min.css"
+    />
+  </head>
+  <body>
+    <div id="app" v-clock>
+      <!-- 顶部区域 -->
+      <header>
+        <div class="top">
+          <div id="top-bar">
+            <span
+              id="icon-left-back"
+              class="mui-icon mui-icon-arrowleft"
+            ></span>
+            <h1 id="title">次品详情</h1>
+          </div>
+        </div>
+      </header>
+      <!-- 次品单号输入框 -->
+      <div class="ordNum">
+        <span class="ord_title">次品单号:</span>
+        <input class="ord_input" readonly />
+      </div>
+      <!-- 详情表格 -->
+      <table class="table_details">
+        <thead>
+          <tr>
+            <th>医用织物分类</th>
+            <th>规格</th>
+            <th>数量</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item,index) in details_list" :key="index">
+            <td>{{item.a}}</td>
+            <td>{{item.b}}</td>
+            <td>{{item.c}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+
+  <script src="../../../../../reference/assets/js/jquery.min.js"></script>
+  <script src="../../../../../html/reference/mui/js/mui.min.js"></script>
+  <script src="../../../../../html/reference/mui/js/mui.picker.min.js"></script>
+  <script src="../../../../../js/vue.js"></script>
+  <script>
+    var app = new Vue({
+        el: "#app",
+        data: {
+            details_list: []
+        },
+        methods: {
+            get_details_list() {
+                //获取表格中的list数据
+                this.details_list = [{
+                    a: "大枕头",
+                    b: "均码",
+                    c: 1
+                },
+                {
+                  a: " 床笠（白）",
+                  b: "均码",
+                  c: 2
+                },
+                {
+                  a: "大单",
+                  b: "均码",
+                  c: 3
+                }]
+            },
+            
+        },
+        created() {
+            this.get_details_list(); //获取表格list
+        },
+    })
+  </script>
+</html>

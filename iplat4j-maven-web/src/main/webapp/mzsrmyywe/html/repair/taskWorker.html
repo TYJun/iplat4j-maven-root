@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="renderer" content="webkit" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="../../reference/bootstrap-3.3.5/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../../reference/bootstrap-3.3.5/css/bootstrap-theme.min.css" />
+  <link rel="stylesheet" href="../../css/loading.css" />
+  <link rel="stylesheet" href="../../reference/mui/css/mui.css" />
+  <link rel="stylesheet" href="../../css/common.css" />
+  <link rel="stylesheet" href="css/colorGreen.css" />
+</head>
+<style type="text/css">
+  body {
+    background-color: #f1f1f1;
+  }
+
+  .br-theme-bootstrap-stars .br-widget a {
+    margin-right: 17px;
+  }
+
+  .br-theme-bootstrap-stars .br-widget {
+    font-size: 25px;
+  }
+
+  .panel {
+    border-radius: 0px;
+  }
+
+  .panel-heading {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+  }
+
+  hr {
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+  .navbar {
+    margin-bottom: 0px;
+  }
+
+  h1 {
+    margin: 0 0 0rem;
+  }
+
+  .row {
+    margin-right: 0px;
+    margin-left: 0px;
+  }
+
+  .div-child {
+    width: 100%;
+    background: #fff;
+    border: 0px solid #ababab;
+    margin-bottom: 15px;
+    border-radius: 2px;
+  }
+
+  input[type="text"] {
+    padding: 0 0;
+    height: 21px;
+    margin-bottom: 0px;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  a:link {
+    text-decoration: none;
+  }
+
+  a:visited {
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+
+  a:active {
+    text-decoration: none;
+  }
+
+  .round {
+    border: 1px solid #2aabd2;
+    -moz-box-shadow: 3px 3px 4px #2aabd2;
+    -webkit-box-shadow: 3px 3px 4px #2aabd2;
+    box-shadow: 3px 3px 4px #2aabd2;
+    width: 75%;
+    height: 250px;
+    position: absolute;
+    overflow: scroll;
+    overflow-x: hidden;
+    background-color: #ffffff;
+    border-radius: 3px;
+  }
+
+  .send {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2200;
+    /*background-color:#111111; 
+    filter:alpha(opacity=30);            
+    -moz-opacity:0.3;                    
+    opacity: 0.3;*/
+    background: rgba(0, 0, 0, 0.5);
+    filter: progid: DXImageTransform.Microsoft.gradient(startcolorstr=#7F000000, endcolorstr=#7F000000);
+  }
+
+  /*.col-xs-6 ,.col-sm-6 ,.col-md-6 ,.col-lg-6{
+  padding:0;
+  margin:0;
+}*/
+
+  .quanxuan {
+    width: 30%;
+    border-radius: 4px;
+    background: #54bddc;
+    height: 40px;
+    line-height: 40px;
+    margin-top: 5px;
+    float: right;
+    margin-right: 13px;
+    color: #ffffff;
+    text-align: center;
+  }
+</style>
+
+<body>
+  <div>
+    <nav class="navbar navbar-fixed-top navbar-inverse nav-height">
+      <div class="glyphicon-btn-left" onclick="goBack()">
+        <span class="glyphicon glyphicon-triangle-left userBtn" style="margin-left:1rem;"></span>
+      </div>
+      <div id="add" class="glyphicon-btn-right">
+        <span class="glyphicon glyphicon-plus userBtn" style="width:50px;text-align:center;"></span>
+      </div>
+      <div>
+        <h1 class="title-middle">派工</h1>
+      </div>
+    </nav>
+  </div>
+
+  <div id="warn" class="warn" hidden>
+    <small></small>
+  </div>
+
+  <div class="top50" id="contentDiv">
+    <div class="row" id="topDiv"
+      style="height:40px;line-height:40px;background:#ABABAB;color:#fff;font-weight:bold;border-bottom:1px solid #FFFFFF;">
+      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+        工号
+      </div>
+      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+        姓名
+      </div>
+      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+        科室
+      </div>
+      <!-- <span style="margin-left:-13px;">短信</span> -->
+    </div>
+    <div id="list"></div>
+    <div class="row">
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"></div>
+      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 right" id="allSelect"
+        style="margin-left:4px;border-radius:4px;;background:#54BDDC;height:38px;width:20%;line-height:38px;color:#FFFFFF;float:right;">
+        取消
+      </div>
+      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" id="cancelAll"
+        style="border-radius:4px;;background:#54BDDC;height:38px;width:20%;text-align:center;line-height:38px;color:#FFFFFF;float:right;">
+        全删
+      </div>
+    </div>
+    <div id="content" style="height:950px;overflow-y:scroll;clear:both;border-top:1px solid #FFFFFF;"></div>
+    <button id="tijiaoSure" type="button" class="btn btn-info btn-block"
+      style="height:45px;border-radius:2px;position: fixed;bottom: 0px;background:#4BB9DA;">
+      提交
+    </button>
+  </div>
+
+  <div id="btn" hidden>
+    <button id="submit" type="button" class="btn btn-info btn-block" style="border-radius:2px;">
+      提交
+    </button>
+  </div>
+
+  <div id="getMaterial" class="round" hidden>
+    <ul id="shoeRen" class="nav nav-pills nav-justified getMaterial"></ul>
+  </div>
+
+  <!--员工选择-->
+  <div class="top50" id="win-two" hidden>
+    <div class="row" id="topDiv"
+      style="height:40px;line-height:40px;background:#ABABAB;color:#fff;font-weight:bold;border-bottom:1px solid #FFFFFF;">
+      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+        工号
+      </div>
+      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 right">
+        姓名
+      </div>
+      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 right">
+        科室
+      </div>
+      <div id="allSelectss" class="col-xs-3 col-sm-3 col-md-3 col-lg-3 center"
+        style="background:#54BDDC;height:38px;width:70px;float:right;">
+        全选
+        <!--<input type="checkbox" id="messageSend" style="margin-left:-7px;"/> -->
+      </div>
+    </div>
+    <div id="contentBody" style="height:950px;overflow-y:scroll;background:#F1F1F1;">
+      <!--<div class="row" id="0" name="'+deptNum+'" style="height:40px;line-height:40px;background:#FFFFFF;border-bottom:1px solid #F1F1F1;font-size:13px;">
+  	  <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 left" id="NAME" name="15005173072" style="font-size:13px;">1111111111</div>
+  	  <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" id="WORK" style="font-size:13px;">你猜</div>
+  	  <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" id="DEPT" style="margin-left:-4px;font-size:13px;">呃呃呃</div>
+  	  <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 center">是</div>-->
+      <!--</div>-->
+    </div>
+    <div id="loading" class="spinner"
+      style="position:fixed;z-index:9999;text-align:center;width:100%;height:100%;top:20px">
+      <div class="bounce1"></div>
+      <div class="bounce2"></div>
+      <div class="bounce3"></div>
+    </div>
+    <div id="loadMore" class="alert" role="alert"
+      style="background-color:#F5F5F5;text-align:center;position: fixed;bottom: 20px;width: 100%;">
+      加载更多
+    </div>
+    <button id="submitSelect" type="button" class="btn btn-info btn-block"
+      style="height:45px;border-radius:2px;position: fixed;bottom: 0px;background:#44B6D8;">
+      确定
+    </button>
+  </div>
+  <!--<div class="modal" id="win-two" tabindex="0" role="dialog" 
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content" style="margin:0 auto;margin-top:21%;height:33rem;width:93%;border-radius:10px;background:#FFFFFF;">
+        <div class="row" style="border-bottom:2px solid #F0EFEE;padding-bottom:5px;position:relative;">
+      	  <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="padding-top:10px;">
+      	    <h4 class="modal-title" id="myModalLabel" style="margin-top:4px;">员工选择</h4>
+      	  </div>
+      	  <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 quanxuan">
+                          全选
+          </div>
+        </div>
+        <div class='row' id="topDiv" style='height:40px;line-height:40px;background:#ABABAB;color:#fff;font-weight:bold;border-bottom:1px solid #FFFFFF;'>
+      	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+      	   <span>工号</span>
+      	   <span style="float:right;margin-right:-4px;">姓名</span>
+      	</div>
+      	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+      	   <span style="margin-left:25px;">科室</span>
+      	   <span id="allSelect" style="float:right;margin-right:-10px;">服务人</span>
+      	</div>
+    </div>
+        <div id="contentBody" style='height:20rem;overflow-y:scroll;background:#F1F1F1;'>
+            
+        </div>
+        <div class="modal-footer row"  style="color:#FFFFFF;"> 
+      	  <div id="overSure" class="col-xs-6 col-sm-6 col-md-6 col-lg-6 center" style="border-radius:4px;background:#54BDDC;height:40px;line-height:40px;border-right:1px solid #FFFFFF;">
+                          确定
+          </div>
+          <div id="underClose" class="col-xs-6 col-sm-6 col-md-6 col-lg-6 center" style="border-radius:4px;background:#54BDDC;height:40px;line-height:40px;">
+                          关闭
+          </div>
+        </div>
+      </div> /.modal -->
+  <!--  </div> /.modal-content -->
+  <!--</div>-->
+  <!-- /.modal -->
+</body>
+<script src="../../reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../../reference/bootstrap-3.3.5/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="js/jq-signature.js"></script>
+<script src="reference/mui/js/mui.min.js"></script>
+<script src="reference/mui/js/mui.picker.min.js" type="text/javascript"></script>
+
+<script src="../../reference/mui/js/mui.js" type="text/javascript"></script>
+<script type="text/javascript">
+  function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
+  }
+  var baseUrl = localStorage.getItem("url");
+  var url = location.search;
+  var hosId = localStorage.getItem("hosId");
+  var workNo = localStorage.getItem("workNo");
+  var jsonStr = url.substring(1, url.length);
+  jsonStr = decodeURIComponent(jsonStr);
+  var json = JSON.parse(jsonStr);
+  var taskNo = json.taskNo;
+  var wxks = json.wgroupnum;
+
+  var wgroupNum = localStorage.getItem("deptCode");
+  var deptName = localStorage.getItem("deptName");
+  var role = localStorage.getItem("role");
+  var dataGroupCode = localStorage.getItem("dataGroupCode");
+  var page = 0
+  //console.log(taskNo);
+  $(function () {
+    $("#loading").hide()
+    $("#loadMore").click(function () {
+      $("#add").click()
+    });
+
+  })
+
+  var prame = {
+    taskNo,
+    dataGroupCode,
+    role,
+
+  };
+  prame = JSON.stringify(prame);
+
+
+  //默认加载的耗材列表
+  $.ajax({
+    url: baseUrl + "MobileAgentService",
+    type: "post",
+    data: {
+      prames: prame
+    },
+    headers: {
+      methodName: "query",
+      serviceName: "MTAC0103"
+    },
+    success: function (data) {
+console.log(data)
+      var list = data.blocks.excutor.rows;
+      console.log(list)
+      var workNo, name, deptName, html = "";
+      if (list.length > 0) {
+        list.forEach((item, index) => {
+          workNo = item.workNo;
+          matNum = item.matNum;
+          name = item.name;
+          deptName = item.deptName;
+          html += createHtml(workNo, name, deptName);
+        })
+
+        $("#list").append(html);
+      }
+
+    }
+  })
+  function createHtml(workNo, name, deptName) {
+    var html = `
+        <div class="row" id="topDiv" style="height:40px;line-height:40px;background:#ABABAB;color:#fff;font-weight:bold;border-bottom:1px solid #FFFFFF;">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                ${workNo}
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+              ${name}
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+              ${deptName}
+            </div>
+            
+        </div>
+        `
+    return html;
+  }
+  function paiYuan(
+    acceptPeopleNum,
+    acceptPeopleName,
+    supportorMobiless,
+    deptName,
+    whetherss
+  ) {
+    //console.log(supportorss,supportorMobiless,whetherss,deptName,whetherss);
+    // if (supportorss != "") {
+    var html =
+      '<div class="row" whetherss = "' +
+      whetherss +
+      '" name="' +
+      deptName +
+      '" supportorMobiless="' +
+      supportorMobiless +
+      '" id="1" style="background:#54BDDC;color:#FFFFFF;padding-top:8px;padding-bottom:8px;border-bottom:1px solid #EEEEEE;">';
+    html += '<div onclick="message(this)">';
+    html +=
+      '<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" id="dept" style="font-size:13px;">' +
+      acceptPeopleNum +
+      "</div>";
+    html +=
+      '<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" id="sup" style="font-size:13px;">' +
+      acceptPeopleName +
+      "</div>";
+    html +=
+      '<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" id="wgr" style="margin-left:-30px;font-size:13px;">' +
+      deptName +
+      "</div>";
+    html += "</div>";
+    html +=
+      "<span class='glyphicon glyphicon-remove-circle' style='font-size:17px;line-height:25px;margin-left:-7px;margin-top:2px;' onclick='cancel(this)'></span>";
+    /*html += '<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-top:-4px;padding-left:35px;"><input type="checkbox" class="0" name="'+supportorMobiless+'" id="checkInput" onclick="inputChecked(this)"/></div>';*/
+    html += "</div>";
+    return html;
+    // } else {
+    //   var html = "";
+    //   return html;
+    // }
+  }
+
+  function message(src) {
+    if (
+      $(src)
+        .parent()
+        .attr("id") == "0" ||
+      $(src)
+        .parent()
+        .attr("id") == ""
+    ) {
+      $(src)
+        .parent()
+        .attr("id", "1");
+      $(src)
+        .parent()
+        .attr("whetherss", "1");
+      $(src)
+        .parent()
+        .css({
+          background: "#54BDDC",
+          color: "#FFFFFF"
+        });
+    } else {
+      $(src)
+        .parent()
+        .attr("id", "0");
+      $(src)
+        .parent()
+        .attr("whetherss", "0");
+      $(src)
+        .parent()
+        .css({
+          background: "#FFFFFF",
+          color: "#000000"
+        });
+      if (
+        $("#allSelect")
+          .text()
+          .trim() == "取消"
+      ) {
+        $("#allSelect").text("全选");
+      }
+    }
+  }
+
+  //移除父级元素
+  function cancel(src) {
+    $(src)
+      .parent()
+      .remove();
+  }
+
+  //删除全部
+  $("#cancelAll").bind("click", function () {
+    $("#content div.row").remove();
+  });
+
+  //全选
+  $("#allSelect").click(function () {
+    //alert($(this).text().trim());
+    if (
+      $(this)
+        .text()
+        .trim() == "全选"
+    ) {
+      $("#content div.row").each(function (index, element) {
+        $(this).attr("id", "1");
+        $(this).attr("whetherss", "1");
+        $(this).css({
+          background: "#54BDDC",
+          color: "#FFFFFF"
+        });
+        $("#allSelect").text("取消");
+      });
+    } else {
+      $("#content div.row").each(function (index, element) {
+        $(this).attr("id", "0");
+        $(this).attr("whetherss", "0");
+        $(this).css({
+          background: "#FFFFFF",
+          color: "#000000"
+        });
+        $("#allSelect").text("全选");
+      });
+    }
+  });
+
+  $("#add").click(function () {
+    $("#loading").show();
+    page++
+    $(".mui-title").text("人员选择");
+    $("#win-two").show();
+    $("#contentDiv").hide();
+    $("#allSelectss").text("全选");
+    $("#contentBody .row").each(function () {
+      var value = $(this).attr("id", "0");
+      $(this).css("background", "#FFFFFF");
+      $(this).css("color", "black");
+    });
+    loadData()
+
+  });
+
+  function loadData() {
+
+    var prame = {
+      // wgroupNum: "jdwx001"
+      wgroupNum: json.wgroupnum,
+      dataGroupCode,
+      role,
+      page,
+      // wgroupNum:getQueryString()
+    };
+
+    prame = JSON.stringify(prame);
+    // console.log(prame);
+    $.ajax({
+      url: baseUrl + "MobileAgentService",
+      type: "post",
+      headers: {
+        methodName: "queryPersonnel",
+        serviceName: "MTRE01"
+      },
+      data: {
+        prames: prame
+      },
+      success: function (data) {
+        //var data = eval("("+data+")");
+        $("#loading").hide();
+        var list = data.blocks.person.rows;
+        var html = "";
+        //console.log(list);
+        for (var i = 0; i < list.length; i++) {
+          var contactTel = list[i].contactTel;
+          //  deptName = deptName;
+          var deptNum = wgroupNum;
+          //var id = list[i].id;
+          //var jpName  = list[i].jpName;
+          var serviceStaff = "";
+          var staffTypeName = "";
+          var workNo = list[i].workNo;
+          var name = list[i].name;
+          html += paiYuan222(
+            contactTel,
+            list[i].deptName,
+            deptNum,
+            serviceStaff,
+            staffTypeName,
+            workNo,
+            name
+          );
+        }
+        $("#contentBody").append(html);
+      },
+      complete: function (XMLHttpRequest, status) {
+        //请求完成后最终执行参数
+        if (status == "timeout") {
+          $("#loading").hide();
+          $("#warn small").html("提交超时！请检查网络并重试！");
+          $("#warn").fadeIn(500);
+          setTimeout("$('#warn').fadeOut(500)", 3000);
+        } else if (status == "error") {
+          $("#loading").hide();
+          $("#warn small").html("网络异常！");
+          $("#warn").fadeIn(500);
+        }
+      }
+    });
+  }
+
+  //新增服务人员
+  function paiYuan222(
+    contactTel,
+    deptName,
+    deptNum,
+    serviceStaff,
+    staffTypeName,
+    workNo,
+    name
+  ) {
+    var html =
+      '<div class="row" name="' +
+      deptNum +
+      '" id="0" style="padding-top:6px;padding-bottom:6px;background:#FFFFFF;border-bottom:1px solid #F1F1F1;font-size:13px;">';
+    html +=
+      '<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 left" id="NAME" name="' +
+      contactTel +
+      '" style="font-size:13px;">' +
+      workNo +
+      "</div>";
+    html +=
+      '<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 center" id="WORK" style="font-size:13px;">' +
+      name +
+      "</div>";
+    html +=
+      '<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 center" id="DEPT" style="margin-left:-40px;font-size:13px;">' +
+      deptName +
+      "</div>";
+    /*html += '<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 center">是</div>';*/
+    html += "</div>";
+    return html;
+  }
+
+  $("#contentBody").on("click", "div.row", function () {
+    if ($(this).attr("id") == "0" || $(this).attr("id") == "") {
+      $(this).css({
+        background: "#54BDDC",
+        color: "#FFFFFF"
+      });
+      $(this).attr("id", "1");
+    } else {
+      $(this).attr("id", "0");
+      $(this).css({
+        background: "#FFFFFF",
+        color: "#000000"
+      });
+      if (
+        $("#allSelectss")
+          .text()
+          .trim() == "取消"
+      ) {
+        $("#allSelectss").text("全选");
+      }
+    }
+  });
+  //全选
+  $("#allSelectss").click(function () {
+    //alert($(this).text().trim());
+    if (
+      $(this)
+        .text()
+        .trim() == "全选"
+    ) {
+      $("#contentBody div.row").each(function (index, element) {
+        $(this).attr("id", "1");
+        $(this).css({
+          background: "#54BDDC",
+          color: "#FFFFFF"
+        });
+        $("#allSelectss").text("取消");
+      });
+    } else {
+      $("#contentBody div.row").each(function (index, element) {
+        $(this).attr("id", "0");
+        $(this).css({
+          background: "#FFFFFF",
+          color: "#000000"
+        });
+        $("#allSelectss").text("全选");
+      });
+    }
+  });
+
+  $("#submitSelect")
+    .unbind("click")
+    .click(function () {
+      $("#contentBody .row").each(function () {
+        var value = $(this).attr("id");
+        if (value == "1") {
+          var acceptPeopleName = $(this)
+            .find("#WORK")
+            .text();
+          var deptName = $(this)
+            .find("#DEPT")
+            .text();
+          var acceptPeopleNum = $(this)
+            .find("#NAME")
+            .text();
+          var whetherss = "1";
+          var supportorMobiless = $(this)
+            .find("#NAME")
+            .attr("name");
+          // console.log(supportorMobiless);
+          // return;
+          $("#content").append(
+            paiYuan(
+              acceptPeopleNum,
+              acceptPeopleName,
+              supportorMobiless,
+              deptName,
+              whetherss
+            )
+          );
+          $("#win-two").hide();
+          $("#contentDiv").show();
+          $(".mui-title").text("派工");
+        }
+      });
+    });
+
+  //提交派工人元
+  $("#tijiaoSure")
+    .unbind("click")
+    .click(function () {
+      if ($("#content div").length != 0) {
+        processDiv();
+        var jsonbar = new Array();
+        $("#content div.row").each(function (index, element) {
+          var deptNo = $(this)
+            .find("#dept")
+            .text();
+          var Name = $(this)
+            .find("#sup")
+            .text();
+          var contactNum = $(this).attr("supportorMobiless");
+          var whetherNum = $(this).attr("whetherss");
+          var deptName = $('#wgr').text();
+          if (whetherNum != 0) {
+            jsonbar.push({
+              workNo: deptNo,
+              name: Name,
+              deptNum: wgroupNum,
+              deptName,
+              contactTel: contactNum ? contactNum : "",
+              whether: whetherNum,
+              statusCode: "03"
+            });
+            console.log(jsonbar)
+          }
+        });
+        // json = JSON.stringify(jsonbar);
+        var prame = {
+          taskNo: taskNo,
+          workNo: workNo,
+          dataGroupCode,
+          role,
+          deptNum:wgroupNum,
+          list: jsonbar,
+          statusCode: "03",
+          isCurrent: "1",
+          isActual: "1"
+        };
+        prame = JSON.stringify(prame);
+        // console.log(prame);
+
+        // return;
+        $.ajax({
+          url: baseUrl + "MobileAgentService",
+          type: "post",
+          data: {
+            prames: prame
+          },
+          headers: {
+            methodName: "saveWorks",
+            serviceName: "MTDP0101"
+          },
+          success: function (data) {
+            $("#evalModal").modal("hide");
+            //var data = eval("(" + data + ")");
+            //console.log(data);
+
+            if (data.status != "-1") {
+              if ($("#content div").length != 0) {
+                location.href = "taskList.html";
+              } else {
+                $("#warn small").html("请选择执行人员！");
+                $("#warn").fadeIn(500);
+                setTimeout("$('#warn').fadeOut(500)", 3000);
+              }
+            } else {
+              $("#warn small").html("派工失败！");
+              $("#warn").fadeIn(500);
+              setTimeout("$('#warn').fadeOut(500)", 3000);
+            }
+          }
+        });
+      } else {
+        $("#warn small").html("请选择执行人员！");
+        $("#warn").fadeIn(500);
+        setTimeout("$('#warn').fadeOut(500)", 3000);
+        return;
+      }
+    });
+  /*<input type="checkbox" name="0" id="checkInput" onclick="nameInput(this)"/>*/
+  //返回
+  function goBack() {
+    location.href = "taskList.html";
+  }
+  //进度条
+  function processDiv() {
+    mui("body")
+      .progressbar({
+        progress: undefined
+      })
+      .show();
+    //10秒后自动消失
+    setTimeout(function () {
+      mui("body")
+        .progressbar()
+        .hide();
+    }, 20000);
+  }
+</script>
+
+</html>

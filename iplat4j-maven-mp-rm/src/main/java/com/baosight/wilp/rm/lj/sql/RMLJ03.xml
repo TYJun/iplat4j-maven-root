@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="RMLJ03">
+
+	<select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.rm.lj.domain.RmBackOut">
+		SELECT
+			id	as "id",  <!-- 主键 -->
+			back_out_no	as "backOutNo",  <!-- 领用单号 -->
+			status_code	as "statusCode",  <!-- 状态编码 -->
+			status_name	as "statusName",  <!-- 状态名称 -->
+			back_out_num	as "backOutNum",  <!-- 退库数量 -->
+			out_num	as "outNum",  <!-- 已退库数量 -->
+			dept_num	as "deptNum",  <!-- 申请科室编码 -->
+			dept_name	as "deptName",  <!-- 申请科室编码 -->
+			cost_dept_num as "costDeptNum", <!-- 成本归集科室编码 -->
+			cost_dept_name as "costDeptName", <!-- 成本归集科室名称 -->
+		    back_reason as "backReason", <!-- 退库原因 -->
+			rec_creator	as "recCreator",  <!-- 创建（申请）人 -->
+			rec_creator_name	as "recCreatorName",  <!-- 创建（申请）人姓名 -->
+			rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+			DATE_FORMAT(rec_create_time, '%Y-%m-%d %H:%i:%s')	as "recCreateTimeStr",  <!-- 创建时间 -->
+			rec_revisor	as "recRevisor",  <!-- 修改人 -->
+			rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
+			data_group_code	as "dataGroupCode",  <!-- 账套 -->
+			archive_flag	as "archiveFlag" <!-- 归档标记 -->
+		FROM rm_back_out WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="backOutNo">
+			back_out_no like concat('%', #backOutNo#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			status_code = #statusCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCodes">
+			status_code in
+			<iterate property="statusCodes" open="(" conjunction="," close=")">
+				#statusCodes[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			dept_num = #deptNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name like concat('%', #deptName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">
+			rec_create_time >= concat(#beginTime#,' 00:00:00')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">
+			rec_create_time <![CDATA[<=]]> concat(#endTime#, ' 23:59:59')
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+         	<isNotEmpty property="orderBy">
+    		  	$orderBy$
+   		 	</isNotEmpty>
+   			<isEmpty property="orderBy">
+				back_out_no desc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .rm_back_out WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="backOutNo">
+			back_out_no like concat('%', #backOutNo#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			status_code = #statusCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCodes">
+			status_code in
+			<iterate property="statusCodes" open="(" conjunction="," close=")">
+				#statusCodes[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			dept_num = #deptNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name like concat('%', #deptName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">
+			data_group_code = #dataGroupCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">
+			rec_create_time >= concat(#beginTime#,' 00:00:00')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">
+			rec_create_time <![CDATA[<=]]> concat(#endTime#, ' 23:59:59')
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert" parameterClass="com.baosight.wilp.rm.lj.domain.RmBackOut">
+		INSERT INTO rm_back_out (
+			id,  <!-- 主键 -->
+			back_out_no,  <!-- 领用单号 -->
+			status_code,  <!-- 状态编码 -->
+			status_name,  <!-- 状态名称 -->
+			back_out_num,  <!-- 退库数量 -->
+			out_num,  <!-- 已退库数量 -->
+			dept_num,  <!-- 申请科室编码 -->
+			dept_name,  <!-- 申请科室编码 -->
+			cost_dept_num,  <!-- 成本归集科室编码 -->
+			cost_dept_name,  <!-- 成本归集科室编码 -->
+			back_reason, <!-- 退库原因 -->
+			rec_creator,  <!-- 创建（申请）人 -->
+			rec_creator_name,  <!-- 创建（申请）人姓名 -->
+			rec_create_time,  <!-- 创建时间 -->
+			rec_revisor,  <!-- 修改人 -->
+			rec_revise_time,  <!-- 修改时间 -->
+			data_group_code,  <!-- 账套 -->
+			archive_flag  <!-- 归档标记 -->
+		)
+	    VALUES (#id#, #backOutNo#, #statusCode#, #statusName#, #backOutNum#, #outNum#, #deptNum#, #deptName#,#costDeptNum#, #costDeptName#, #backReason#, #recCreator#, #recCreatorName#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#, #archiveFlag#)
+	</insert>
+  
+	<delete id="delete" parameterClass="string">
+		DELETE FROM rm_back_out WHERE id = #id# and status_code = '01'
+	</delete>
+
+	<update id="update" parameterClass="com.baosight.wilp.rm.lj.domain.RmBackOut">
+		UPDATE rm_back_out
+		SET 
+			<isNotEmpty property="statusCode">status_code = #statusCode#,</isNotEmpty>   <!-- 状态编码 -->
+			<isNotEmpty property="statusName">status_name = #statusName#,</isNotEmpty>   <!-- 状态名称 -->
+			<isNotEmpty property="backReason">back_reason = #backReason#,</isNotEmpty>   <!-- 退库原因 -->
+			<isGreaterThan property="backOutNum" compareValue="0">back_out_num = #backOutNum#,</isGreaterThan>   <!-- 退库数量 -->
+			<isGreaterThan property="outNum" compareValue="0">out_num = out_num + #outNum#,</isGreaterThan>   <!-- 已退库数量 -->
+			rec_revisor	= #recRevisor#,   <!-- 修改人 -->
+			rec_revise_time	= #recReviseTime#   <!-- 修改时间 -->
+		WHERE id = #id#
+	</update>
+
+	<select id="queryDetail" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.rm.lj.domain.RmBackOutDetail">
+		SELECT
+			id	as "id",  <!-- 主键 -->
+			back_out_id	as "backOutId",  <!-- 物资退库申请表ID -->
+			claim_no	as "claimNo",  <!-- 物资领用ID -->
+			mat_num	as "matNum",  <!-- 物资编码 -->
+			mat_name	as "matName",  <!-- 物资名称 -->
+			mat_type_id	as "matTypeId",  <!-- 物资分类ID -->
+			mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+			mat_spec	as "matSpec",  <!-- 物资规格 -->
+			mat_model	as "matModel",  <!-- 物资型号 -->
+			unit	as "unit",  <!-- 计量单位 -->
+			unit_name	as "unitName",  <!-- 计量单位 -->
+			price	as "price",  <!-- 单价 -->
+			num	as "num",  <!-- 退库数量 -->
+			out_num	as "outNum", <!-- 已退库数量 -->
+		    (select out_num from rm_claim_detail rcd where rcd.mat_num = rbod.mat_num
+			   and rcd.claim_id = (select id from rm_claim rc where rc.claim_no = rbod.claim_no)) actualClaimNum,
+			picture_uri	as "pictureUri" <!-- 图片地址 -->
+		FROM rm_back_out_detail rbod WHERE back_out_id = #backOutId#
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				mat_num asc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="countDetail" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT COUNT(*) FROM rm_back_out_detail WHERE back_out_id = #backOutId#
+	</select>
+
+	<insert id="insertDetail" parameterClass="java.util.List">
+		INSERT INTO rm_back_out_detail (
+			id,  <!-- 主键 -->
+			back_out_id,  <!-- 物资退库申请表ID -->
+			claim_no,  <!-- 物资领用单号 -->
+			mat_num,  <!-- 物资编码 -->
+			mat_name,  <!-- 物资名称 -->
+			mat_type_id,  <!-- 物资分类ID -->
+			mat_type_name,  <!-- 物资分类名称 -->
+			mat_spec,  <!-- 物资规格 -->
+			mat_model,  <!-- 物资型号 -->
+			unit,  <!-- 计量单位 -->
+			unit_name,  <!-- 计量单位 -->
+			price,  <!-- 单价 -->
+			num,  <!-- 退库数量 -->
+			out_num,  <!-- 已退库数量 -->
+			picture_uri  <!-- 图片地址 -->
+		)
+		VALUES
+	   	<iterate conjunction=",">
+	   	(
+			#list[].id#,
+			#list[].backOutId#,
+			#list[].claimNo#,
+			#list[].matNum#,
+			#list[].matName#,
+			#list[].matTypeId#,
+			#list[].matTypeName#,
+			#list[].matSpec#,
+			#list[].matModel#,
+			#list[].unit#,
+			#list[].unitName#,
+			#list[].price#,
+			#list[].num#,
+			#list[].outNum#,
+			#list[].pictureUri#
+		)
+	   	</iterate>
+	</insert>
+
+	<delete id="deleteDetail" parameterClass="string">
+		DELETE FROM rm_back_out_detail WHERE back_out_id = #value#
+	</delete>
+
+	<update id="updateDetail" parameterClass="com.baosight.wilp.rm.lj.domain.RmBackOutDetail">
+		UPDATE rm_back_out_detail SET out_num = out_num + #curOutNum#
+		WHERE back_out_id = #backOutId# and mat_num	= #matNum# and mat_type_id	= #matTypeId#
+			and num >= out_num + #curOutNum#
+	</update>
+
+	<select id="hasAllBackOut" parameterClass="string" resultClass="int">
+		select id from rm_back_out_detail where back_out_id = #value# and num > out_num
+	</select>
+
+	<select id="queryBackOutDetailListByClaimNo" parameterClass="string" resultClass="java.util.HashMap">
+		select concat(mat_num, mat_type_id) as "key",
+			sum(num) sumNum
+		from rm_back_out_detail where claim_no = #claimNo#
+		group by mat_num,mat_type_id
+	</select>
+  
+</sqlMap>

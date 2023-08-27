@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-06-16 14:29:40
+   		Version :  6.0.731.201809200158
+		tableName :sc_sender_dept 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 work_name  VARCHAR, 
+		 work_no  VARCHAR   NOT NULL, 
+		 dept_num  VARCHAR   NOT NULL, 
+		 dept_name  VARCHAR   NOT NULL, 
+		 create_time  DATETIME   NOT NULL, 
+		 datagroup_code  VARCHAR, 
+		 datagroup_treecode  VARCHAR, 
+		 dept_type  VARCHAR
+	-->
+<sqlMap namespace="SSBMSCGL01">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.ss.bm.domain.SSBMSCGL01">
+		SELECT
+				id	as "id",  
+				work_name	as "workName",  
+				work_no	as "workNo",  <!-- 工号 -->
+				dept_num	as "deptNum",  <!-- 部门编码 -->
+				dept_name	as "deptName",  <!-- 部门名称 -->
+				create_time	as "createTime",  
+				datagroup_code	as "datagroupCode",  
+				datagroup_treecode	as "datagroupTreecode",  <!-- 根账套 -->
+				dept_type	as "deptType" 
+		FROM sc_sender_dept WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend=" AND " property="workName">
+			work_name like  ('%$workName$%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name like ('%$deptName$%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptType">
+			dept_type = #deptType#
+		</isNotEmpty>
+         order by create_time desc,work_no,id
+			
+	</select>
+
+<!-- 	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_sender_dept WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select> -->
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workName">
+			work_name = #workName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workNo">
+			work_no = #workNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			dept_num = #deptNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name = #deptName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="createTime">
+			create_time = #createTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="datagroupCode">
+			datagroup_code = #datagroupCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="datagroupTreecode">
+			datagroup_treecode = #datagroupTreecode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptType">
+			dept_type = #deptType#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert" parameterClass="java.util.HashMap">
+		INSERT INTO sc_sender_dept (id,
+										work_name,
+										work_no,  <!-- 工号 -->
+										dept_num,  <!-- 部门编码 -->
+										dept_name,  <!-- 部门名称 -->
+										create_time,
+										datagroup_code,
+										datagroup_treecode,  <!-- 根账套 -->
+										dept_type
+										)		 
+	    VALUES (#id#, #workName#, #workNo#, #deptNum#, #deptName#, #createTime#, #datagroupCode#, #datagroupTreecode#, #deptType#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM sc_sender_dept WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_sender_dept 
+		SET 
+					work_name	= #workName#,   
+					work_no	= #workNo#,   <!-- 工号 -->  
+					dept_num	= #deptNum#,   <!-- 部门编码 -->  
+					dept_name	= #deptName#,   <!-- 部门名称 -->  
+					create_time	= #createTime#,   
+					datagroup_code	= #datagroupCode#,   
+					datagroup_treecode	= #datagroupTreecode#,   <!-- 根账套 -->  
+					dept_type	= #deptType#  
+			WHERE 	
+			id = #id#
+	</update>
+	
+	<select id="getSignedDepts" resultClass="String" parameterClass="HashMap">
+		SELECT dept_num 
+		FROM sc_sender_dept 
+		WHERE work_no = #workNo#
+	</select>
+  
+</sqlMap>

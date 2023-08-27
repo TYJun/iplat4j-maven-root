@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="reference/mui/css/mui.min.css" />
+    <link rel="stylesheet" href="css/common.css" />
+    <link rel="stylesheet" href="./reference/mui/css/mui.picker.min.css">
+</head>
+<style type="text/css">
+    body {
+        background: #efeff4;
+    }
+
+    .area {
+        margin: 20px auto 0px auto;
+    }
+
+    .mui-input-group {
+        margin-top: 10px;
+    }
+
+    .mui-input-group:first-child {
+        margin-top: 20px;
+    }
+
+    .mui-input-group label {
+        width: 22%;
+    }
+
+    .mui-input-row label~input,
+    .mui-input-row label~select,
+    .mui-input-row label~textarea {
+        width: 78%;
+    }
+
+    .mui-checkbox input[type="checkbox"],
+    .mui-radio input[type="radio"] {
+        top: 6px;
+    }
+
+    .mui-content-padded {
+        margin-top: 25px;
+    }
+
+    .mui-btn {
+        padding: 10px;
+    }
+
+    .link-area {
+        display: block;
+        margin-top: 25px;
+        text-align: center;
+    }
+
+    .spliter {
+        color: #bbb;
+        padding: 0px 8px;
+    }
+
+    .oauth-area {
+        position: absolute;
+        bottom: 20px;
+        left: 0px;
+        text-align: center;
+        width: 100%;
+        padding: 0px;
+        margin: 0px;
+    }
+
+    .oauth-area .oauth-btn {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        background-size: 30px 30px;
+        background-position: center center;
+        background-repeat: no-repeat;
+        margin: 0px 20px;
+        /*-webkit-filter: grayscale(100%); */
+        border: solid 1px #ddd;
+        border-radius: 25px;
+    }
+
+    .oauth-area .oauth-btn:active {
+        border: solid 1px #aaa;
+    }
+
+    .oauth-area .oauth-btn.disabled {
+        background-color: #ddd;
+    }
+    .toast {
+        display: none;
+        position: fixed;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 10rem;
+        height: 10rem;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0,0,0,0.2);
+        border-radius: 1rem;
+        color: #FFFFFF;
+        font-size: 1.5rem;
+    }
+</style>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">登录</h1>
+        <!-- <button id="BACK"
+            class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+            <span class="mui-icon mui-icon-left-nav"></span>
+            地区
+        </button> -->
+    </header>
+    <div class="toast" id="toast">
+        <span class="load"></span>
+        <span>加载中...</span>
+    </div>
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+    <p id="progress" class="mui-progressbar mui-progressbar-in"
+        data-progress="20" style="display:none;">
+        <span></span>
+    </p>
+    <div class="mui-content">
+        <div class="mui-row">
+            <div id="hosImg" class="mui-col mui-col-xs-3"
+                style="padding-left:15px;padding-right:15px;padding-top:15px;">
+                <img style="width:100%;height:auto;" />
+            </div>
+            <div class="mui-col mui-col-xs-9">
+                <div id="hosName">
+                    <h4></h4>
+                </div>
+                <div>
+                    <h5>南京博纳睿通软件科技有限公司</h5>
+                </div>
+            </div>
+        </div>
+        <form id="login-form" class="mui-input-group">
+
+            <div class="mui-input-row">
+                <label>就诊卡号</label>
+                <input id="cardNum" type="text" class="mui-input-clear mui-input"
+                    placeholder="请输入就诊卡号" />
+            </div>
+            <div class="mui-input-row">
+                <label>姓名</label>
+                <input id="name" type="text"
+                    class="mui-input-clear mui-input" placeholder="请输入姓名" />
+            </div>
+        </form>
+        <div class="mui-content-padded">
+            <button id="login" class="mui-btn mui-btn-block mui-btn-primary">
+                绑卡
+            </button>
+        </div>
+        <div class="mui-content-padded oauth-area"></div>
+    </div>
+</body>
+<script src="reference/mui/js/mui.js" type="text/javascript"></script>
+<script src="reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="./reference/mui/js/mui.picker.min.js"></script>
+ <script src="./cordova.js"></script>
+<script type="text/javascript">
+    //可当成一个公用方法
+    function getQueryObject(url) {
+        url = url == null ? window.location.href : url;
+        let search = url.substring(url.lastIndexOf("?") + 1);
+        let obj = {};
+        let reg = /([^?&=]+)=([^?&=]*)/g;
+        search.replace(reg, function(rs, $1, $2) {
+            let name = decodeURIComponent($1);
+            let val = decodeURIComponent($2);
+            val = String(val);
+            obj[name] = val;
+            return rs;
+        });
+        // alert(JSON.stringify(obj))
+        return obj;
+    };
+
+
+    getCode()
+    function getCode(){
+        let code = this.getQueryObject().code;//获取url中的code值
+        let appId = 'wxaed039cd4bc423fe';//填写公众号APPID
+        let local = 'http://lch520.nat200.top/mzsrmyy/login1.html';//当前地址
+
+        if(code == null || code == ''){//没有授权的code
+            window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appId}&redirect_uri=${encodeURIComponent(local)}&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect`  //跳转授权链接
+
+            //scope=snsapi_base这句是静默授权的意思
+        } else{//获取到授权的code
+
+            $.ajax({
+                url: 'http://lch520.nat200.top/' + "getopenid",
+                type: 'GET',
+                headers: {
+
+                },
+                data: {
+                    code: code
+                },
+                success: function (data) {
+                    console.log(data);
+                    localStorage.setItem("openId", data);
+                    queryOpenId();
+
+                }
+            });
+            //do something 请求后台，获取到对应的openId进行全局存储（如须全局用到的话）
+        }
+    };
+
+</script>
+<script type="text/javascript">
+   var baseUrl = 'http://lch520.nat200.top/';
+   var fileNum = '';
+
+    $(function () {
+        var height = $("img").width() - 28;
+        $("img").height($("img").width());
+        $("#hosName").css("margin-top", height);
+        $("img").attr("src", localStorage.getItem("img"));
+        $("h4").html(localStorage.getItem("hosName"));
+    });
+
+    var progress = mui("#progress");
+//登录按钮点击事件
+    $("#login").click(function () {
+        delu();
+    });
+
+    function delu(){
+        var cardNum = $("#cardNum").val();
+        var name = $("#name").val();
+        var nums = '00000'
+        if(cardNum.length != '12'){
+            cardNum = document.getElementById('cardNum').value=nums + $("#cardNum").val();
+            alert(cardNum);
+        }
+
+        if(cardNum == '' || $("#cardNum").val() == undefined){
+            alert("请您输入就诊卡号！！！")
+            return  false;
+        }
+        if(name == '' || $("#name").val() == undefined){
+            alert("请您输入姓名！！！")
+            return  false;
+        }
+        $("#progress").css("display", "");
+        mui(progress)
+            .progressbar()
+            .setProgress(30);
+        $.ajax({
+            url: 'http://lch520.nat200.top/' + "meal",
+            type: 'post',
+            headers: {
+                "methodName": "checkCardInfo",
+                "className": "AppBaseInfoService",
+            },
+            data: {
+                cardNum: cardNum,
+                name: name
+            },
+            success: function (data) {
+                console.log(data);
+                if(data.obj.Response.Result.Code == '0'){
+                    alert("该就诊卡号不存在！！！！");
+                }else{
+                    localStorage.setItem("fileNum", data.obj.Response.Data);
+                    loadPeo(localStorage.getItem("fileNum"));
+                }
+            }
+        });
+    }
+
+    //加载病患信息
+    function loadPeo(fileNum) {
+        $('.toast').css({display: 'flex'})
+        $.ajax({
+                url: 'http://lch520.nat200.top/' + "meal",
+                type: 'post',
+                headers: {
+                    "methodName": "inPatientInfoQuery",
+                    "className": "AppBaseInfoService",
+                },
+                data: {
+                    fileNum: fileNum
+                },
+                success: function (data) {
+                     console.log(data);
+                     if(data.obj.Response.Result.Code == '0'){
+                        alert("不存在信息！！！");
+                     }else if(data.obj.Response.Data == undefined || data.obj.Response.Data == null){
+                        alert("不存在信息！！！");
+                     }else{
+                        localStorage.setItem("name", data.obj.Response.Data.PATIENT.MEDICAL_RECORD.PATIENT_NAME);
+                        localStorage.setItem("telPhone", data.obj.Response.Data.PATIENT.MEDICAL_RECORD.TELEPHONE_NUMBER);
+                        localStorage.setItem("deptName", data.obj.Response.Data.PATIENT.MEDICAL_RECORD.CURR_DEP_NAME);
+                        localStorage.setItem("bedNo", data.obj.Response.Data.PATIENT.MEDICAL_RECORD.WARD_BED_NUMBER);
+                        // getCode();
+                        saveOpenId();
+                        // console.log(localStorage.getItem("deptName"));
+                         $('.toast').css({display: 'none'})
+                        location.href = "index.html";
+                     }
+                    
+                }
+            });
+    }
+
+    //保存当前公众号这个用户的openId
+   function saveOpenId(){
+           $.ajax({
+               url: 'http://lch520.nat200.top/' + "meal",
+               type: 'post',
+               headers: {
+                   "methodName": "saveOpenId",
+                   "className": "AppUserInfoService",
+               },
+               data: {
+                   openId: localStorage.getItem("openId"),
+                   name: localStorage.getItem("name"),
+                   phone: localStorage.getItem("telPhone"),
+                   cardNum: $("#cardNum").val()
+               },
+               success: function (data) {
+                   console.log(data);
+               }
+           });
+   };
+
+   //获取当前公众号这个用户的openId
+   // queryOpenId()
+   function queryOpenId(){
+
+       $.ajax({
+           url: 'http://lch520.nat200.top/' + "meal",
+           type: 'post',
+           headers: {
+               "methodName": "queryOpenId",
+               "className": "AppUserInfoService",
+           },
+           data: {
+               openId: localStorage.getItem("openId")
+           },
+           success: function (data) {
+               console.log(data);
+                // alert(data.obj.length)
+               if(data.obj.length == '0'){
+                   alert("您未绑卡，请先绑卡，谢谢！");
+                   // alert(data.obj)
+               }else {
+                   document.getElementById('cardNum').value= data.obj[0].cardNum;
+                   document.getElementById('name').value= data.obj[0].name;
+                   delu();
+
+               }
+           }
+       });
+   };
+
+    // mui("body").on("tap", "#BACK", function () {
+    //     location.href = localStorage.getItem("appURL") + "www/hosArea.html";
+    // });
+</script>
+
+</html>

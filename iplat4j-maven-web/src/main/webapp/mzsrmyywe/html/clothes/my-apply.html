@@ -1,0 +1,1471 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="../reference/mui/css/mui.min.css">
+  <link rel="stylesheet" href="../reference/css/common.css" />
+  <link rel="stylesheet" href="css/buttom.css" />
+  <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css">
+</head>
+<STYLE TYPE="text/css">
+  body,
+  html {
+    height: 100%;
+  }
+
+  .submit {
+    position: fixed;
+    bottom: 0px;
+    left: 0;
+    right: 0;
+    background: #2AABD2;
+    text-align: center;
+    line-height: 50px;
+    height: 50px;
+    color: #FFFFff;
+    font-size: 19px;
+  }
+
+  .row-content {
+    height: 40px;
+    line-height: 40px;
+    padding: 0 15px;
+    border-bottom: 1px solid #EEEEEE;
+    font-size: 16px;
+    color: #666666;
+  }
+
+  .row-left {}
+
+  .row-right {
+    text-align: right;
+    color: #333333;
+  }
+
+  .carSelect {
+    height: 26px;
+    line-height: 25px;
+    text-align: center;
+    margin-top: 7px;
+    border: 1px solid #2AABD2;
+    border-radius: 15px;
+    color: #2AABD2;
+    font-size: 14px;
+    width: 80%;
+    margin-left: 10%;
+  }
+
+  .oldClothButton {
+    height: 26px;
+    line-height: 25px;
+    text-align: center;
+    margin-top: 7px;
+    border: 1px solid #2AABD2;
+    border-radius: 15px;
+    color: #2AABD2;
+    font-size: 14px;
+    width: 80%;
+    margin-left: 10%;
+  }
+
+  .row-content {
+    color: #999999;
+  }
+
+  ul,
+  li {
+    margin: 0;
+    padding: 0px 5px;
+  }
+
+  .ulChoose a {
+    display: inline-block;
+    height: 35px;
+    line-height: 35px;
+    color: #2AABD2;
+    font-size: 17px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .ulChoose {
+    height: 300px;
+    overflow-y: auto;
+  }
+
+  li {
+    list-style: none;
+    border-bottom: 1px solid #EEEEEE;
+  }
+
+  .diceng {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 250;
+    background: black;
+    opacity: 0.5;
+    display: none;
+  }
+
+  .dicengTime {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 250;
+    background: black;
+    opacity: 0.5;
+    display: none;
+  }
+
+  .realMoney {
+    position: fixed;
+    z-index: 251;
+    width: 90%;
+    left: 5%;
+    top: 15%;
+    height: 400px;
+    /*bottom: 260px;*/
+    background: #FFFFFF;
+    display: none;
+  }
+
+  .applyTitle {
+    height: 50px;
+    line-height: 50px;
+    border-bottom: 1px solid #e1e1e1;
+    text-align: center;
+    font-size: 20px;
+    color: #666666;
+  }
+
+  .editButtons {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 19px;
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 5px;
+    border-radius: 10px;
+    background: #2AABD2;
+    color: #FFFFFF;
+  }
+
+  .realMoney-repair {
+    position: fixed;
+    z-index: 251;
+    width: 90%;
+    left: 5%;
+    top: 15%;
+    height: 400px;
+    /*bottom: 260px;*/
+    background: #FFFFFF;
+    display: none;
+  }
+
+  .applyTitle-repair {
+    height: 50px;
+    line-height: 50px;
+    border-bottom: 1px solid #e1e1e1;
+    text-align: center;
+    font-size: 20px;
+    color: #666666;
+  }
+
+  .editButtons-repair {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 19px;
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 5px;
+    border-radius: 10px;
+    background: #2AABD2;
+    color: #FFFFFF;
+  }
+
+  .return {
+    height: 26px;
+    line-height: 25px;
+    text-align: center;
+    margin-top: 7px;
+    border: 1px solid #2AABD2;
+    border-radius: 15px;
+    color: #2AABD2;
+    font-size: 14px;
+    width: 40%;
+    margin-left: 10%;
+    /*width: 35%;
+			margin-left: 15%;*/
+    float: left;
+  }
+
+  .shangjiaoreturn {
+    height: 26px;
+    line-height: 25px;
+    text-align: center;
+    margin-top: 7px;
+    border: 1px solid #2AABD2;
+    border-radius: 15px;
+    color: #2AABD2;
+    font-size: 14px;
+    width: 90%;
+    margin-left: 5%;
+    float: left;
+  }
+
+  /*模糊查询框*/
+
+  .closeUl {
+    margin-top: 34px;
+    background: #FFFFFF;
+    overflow-y: auto;
+    height: 190px;
+  }
+
+  .closeWord {
+    position: absolute;
+    top: 84px;
+    right: 5px;
+    height: 34px;
+    line-height: 34px;
+    width: 10%;
+    text-align: center;
+    z-index: 555;
+    color: #FFFFFF;
+    font-size: 15px;
+  }
+
+  .close {
+    width: 50%;
+    position: fixed;
+    top: 84px;
+    right: 0px;
+    z-index: 99;
+    background: #2aabd2;
+    box-shadow: 0px 2px 5px #2AABD2;
+    /*background-image: url(img/test.png);*/
+  }
+
+  .dicengClose {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+  }
+
+  .dicengtimeSelf {
+    position: fixed;
+    left: 10%;
+    width: 80%;
+    top: 35%;
+    height: 180px;
+    z-index: 300;
+    background: #FFFFFF;
+    display: none;
+  }
+
+  .buttonSelf {
+    /*width: 60%;*/
+    width: 100%;
+    background: #2aabd2;
+    color: #fff;
+    text-align: center;
+    margin: 5px 0;
+  }
+
+  /*
+		 * 扫码的布局
+		 * */
+
+  .mui-content>.mui-table-view:first-child {
+    margin-top: 0px;
+  }
+
+  .mui-table-view,
+  .mui-table-views {
+    clear: both;
+    background: #929292;
+    color: #FFFFFF;
+    height: 40px;
+    line-height: 40px;
+    font-size: 17px;
+  }
+
+  .mui-table-views:nth-child(odd) {
+    background: #FFFFFF;
+  }
+
+  .mui-table-views:nth-child(even) {
+    background: #DDDDDD;
+  }
+
+  .mui-table-view li,
+  .mui-table-views li {
+    float: left;
+    text-align: center;
+    list-style: none;
+  }
+
+  .mui-table-views {
+    padding: 0;
+    margin: 0;
+  }
+
+  .huanfuUl {
+    height: 90px;
+    overflow-y: auto;
+  }
+
+  .huanfuUl li {
+    height: 30px;
+    line-height: 30px;
+    color: #2aabd2;
+    text-align: center;
+    font-size: 15px;
+  }
+
+  .mui-table-view,
+  .mui-table-views {
+    font-size: 14px;
+  }
+</STYLE>
+
+<body>
+  <header class="mui-bar mui-bar-nav" style="background-color: #2AABD2;">
+    <h1 class="mui-title">工作服申请</h1>
+    <button onclick="location.href = 'clothList.html';"
+      class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+      返回
+    </button>
+  </header>
+
+  <div id="warn" class="warn" hidden>
+    <small></small>
+  </div>
+
+  <div id="loading" class="loading1" hidden>
+    <div class="loading2">
+      <span class="mui-spinner" style="width:80px;height:80px;"></span>
+    </div>
+  </div>
+
+  <div class="mui-content" style="margin-bottom: 50px;">
+    <div class="mui-row row-content">
+
+      <div class="mui-col-sm-5 mui-col-xs-5">
+        员工工号
+      </div>
+      <div class="mui-col-sm-7 mui-col-xs-7 row-right">
+        <input type="text" id="taskNo" oninput="getNameNum(this.value)"
+          style="width:100%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;"
+          placeholder="请输入员工工号" readonly="readonly" />
+      </div>
+    </div>
+    <div class="mui-row row-content">
+
+      <div class="mui-col-sm-5 mui-col-xs-5">
+        员工姓名
+      </div>
+      <div class="mui-col-sm-7 mui-col-xs-7 row-right">
+        <input type="text" id="name"
+          style="width: 80%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;"
+          readonly="readonly" placeholder="请输入员工姓名" />
+      </div>
+    </div>
+    <div class="mui-row row-content">
+
+      <div class="mui-col-sm-5 mui-col-xs-5">
+        联系电话
+      </div>
+      <div class="mui-col-sm-7 mui-col-xs-7 row-right">
+        <input type="text" id="phoneNum"
+          style="width: 80%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;"
+          oninput="this.value=this.value.replace(/\D/g,'')" placeholder="请输入联系电话" />
+      </div>
+    </div>
+    <div class="mui-row row-content">
+
+      <div class="mui-col-sm-5 mui-col-xs-5">
+        员工科室
+      </div>
+      <div class="mui-col-sm-7 mui-col-xs-7 row-right">
+        <input type="text" id="workDept"
+          style="width: 80%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;"
+          readonly="readonly" placeholder="请输入员工科室" />
+        <p id="workDeptNum" hidden="hidden"></p>
+      </div>
+    </div>
+    <div class="mui-row row-content">
+
+      <div class="mui-col-sm-5 mui-col-xs-5">
+        工服分类
+      </div>
+      <div class="mui-col-sm-7 mui-col-xs-7 row-right" id="addIcon1">
+        <input type="text" id="clothType" placeholder="请选择工服分类"
+          style="width: 80%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;"
+          readonly="readonly" />
+        <span class="mui-icon iconfont icon-icon" style="color:#2AABD2;font-weight: bold;"></span>
+        <p id="clothTypeHide" hidden="hidden"></p>
+      </div>
+    </div>
+    <div class="mui-row row-content">
+
+      <div class="mui-col-sm-5 mui-col-xs-5">
+        工服名称
+      </div>
+      <div class="mui-col-sm-7 mui-col-xs-7 row-right" id="addIcon2">
+        <input type="text" id="clothName" placeholder="请选择工服名称"
+          style="width: 80%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;"
+          readonly="readonly" />
+        <span class="mui-icon iconfont icon-icon" style="color:#2AABD2;font-weight: bold;"></span>
+        <p id="clothNameHide" hidden="hidden"></p>
+      </div>
+    </div>
+    <div class="mui-row row-content">
+
+      <div class="mui-col-sm-5 mui-col-xs-5">
+        申请数量
+      </div>
+      <div class="mui-col-sm-7 mui-col-xs-7 row-right">
+        <input type="number" id="clothNum" oninput="getMoney(this.value)"
+          style="width: 80%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;"
+          placeholder="请输入申请数量" />
+      </div>
+      <p id="maxNum" hidden="hidden"></p>
+      <p id="maxXinghao" hidden="hidden"></p>
+    </div>
+    <div class="mui-row row-content">
+
+      <div class="mui-col-sm-5 mui-col-xs-5">
+        工服价格
+      </div>
+      <div class="mui-col-sm-7 mui-col-xs-7 row-right">
+        <input type="text" id="clothPrice"
+          style="width: 80%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;"
+          readonly="readonly" placeholder="0" />
+        <span>元</span>
+      </div>
+    </div>
+    <div class="mui-row row-content">
+
+      <div class="mui-col-sm-5 mui-col-xs-5">
+        工服型号
+      </div>
+      <div class="mui-col-sm-7 mui-col-xs-7 row-right">
+        <input type="text" id="reqDeptName"
+          style="width: 80%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;"
+          readonly="readonly" />
+      </div>
+    </div>
+    <div class="mui-row row-content xinghao">
+
+      <!--<div class="mui-col-sm-2 mui-col-xs-2">
+					<div class="carSelect" data-num="S" style="color: #FFFFFF;background: #2AABD2;">S</div>
+				</div>
+				<div class="mui-col-sm-2 mui-col-xs-2">
+					<div class="carSelect" data-num="M">M</div>
+				</div>
+				<div class="mui-col-sm-2 mui-col-xs-2">
+					<div class="carSelect" data-num="L">L</div>
+				</div>
+				<div class="mui-col-sm-2 mui-col-xs-2">
+					<div class="carSelect" data-num="XL">XL</div>
+				</div>
+				<div class="mui-col-sm-2 mui-col-xs-2">
+					<div class="carSelect" data-num="XXL">XXL</div>
+				</div>
+				<div class="mui-col-sm-2 mui-col-xs-2">
+					<div class="carSelect" data-num="XXXL">XXXL</div>
+				</div>-->
+
+    </div>
+    <div class="mui-row row-content oldCloth" style="display: none;">
+
+      <div class="mui-col-sm-5 mui-col-xs-5">
+        上交旧服
+      </div>
+      <div class="mui-col-sm-7 mui-col-xs-7 row-right">
+        <div class="return" data-num="1">扫码</div>
+        <div class="return" data-num="2">添加</div>
+        <!--<div class="return" data-num="0" style="color: #FFFFFF;background: #2AABD2;">否</div>-->
+
+      </div>
+    </div>
+    <div class="shangjiaoAdd">
+      <!--<div class="mui-row row-content ">
+					<div class="mui-col-sm-6 mui-col-xs-6 row-right">
+						<p style="text-align: left;">申请时间</p>
+					</div>
+					<div class="mui-col-sm-3 mui-col-xs-3 row-right">
+						<p style="text-align: left;">申请数量</p>
+					</div>
+					<div class="mui-col-sm-3 mui-col-xs-3 row-right">
+						<div class="shangjiaoreturn">删除</div>
+					</div>
+				</div>-->
+    </div>
+    <div class="shangjiaoScan" style="display: none;">
+      <ul class="mui-table-view">
+        <li style="width: 30%;">编码</li>
+        <li style="width: 20%;">原价</li>
+        <li style="width: 35%;">日期</li>
+        <li style="width: 15%;">操作</li>
+      </ul>
+      <div class="list_blew" style=""></div>
+    </div>
+
+    <div class="submit">提交</div>
+
+    <!--楼层地点-->
+    <div class="diceng"></div>
+    <div class="realMoney">
+      <div class="applyTitle">工服分类</div>
+      <ul class="ulChoose">
+
+      </ul>
+      <div class="editButtons">关闭</div>
+    </div>
+    <!--员工工号模糊查询-->
+    <div class="dicengClose" style="" hidden="hidden"></div>
+    <div class="close" style="" hidden="hidden">
+
+      <ul class="closeUl">
+
+      </ul>
+    </div>
+    <div class="closeWord" style="" hidden="hidden">关闭</div>
+    <div id="getItemByName" class="round" hidden>
+      <div class="row"
+        style="width:100%;height:35px;line-height:35px;padding-left:15px;padding-right:15px;background:#2aabd2;color:#FFFFFF;">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">地址选择<span id="closediv" style="float:right;">关闭</span>
+        </div>
+      </div>
+
+      <ul class="nav nav-pills nav-justified getItemByName">
+      </ul>
+    </div>
+    <!--还服添加方式-->
+    <div class="dicengTime"></div>
+    <div class="dicengtimeSelf">
+      <div class="mui-row row-content">
+        <div class="mui-col-sm-12 mui-col-xs-12" style="text-align: center;">
+          还服添加
+        </div>
+      </div>
+      <ul class="huanfuUl">
+        <!--<li> 1</li>
+					<li> 12</li>-->
+      </ul>
+      <!--<div class="mui-row row-content ">
+					<div class="mui-col-sm-5 mui-col-xs-5">
+						申请时间
+					</div>
+					<div class="mui-col-sm-7 mui-col-xs-7 row-right">
+						<input type="text" id="timeSelect" style="width: 80%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;" placeholder="请输入申请四时间" />
+					</div>
+				</div>
+				<div class="mui-row row-content ">
+					<div class="mui-col-sm-5 mui-col-xs-5">
+						申请数量
+					</div>
+					<div class="mui-col-sm-7 mui-col-xs-7 row-right">
+						<input type="number" class="numberSelf" style="width: 80%;border:0;outline:none;font-size:14px;padding:0px;text-align:right;margin-bottom:0;height:21px;" placeholder="请输入还服数量" />
+					</div>
+				</div>-->
+      <div class="mui-row row-content" style="border-bottom: 0;">
+        <!--<div class="mui-col-sm-6 mui-col-xs-6">
+						<div class="buttonSelf sureSelf">确定</div>
+					</div>-->
+        <div class="mui-col-sm-12 mui-col-xs-12">
+          <div class="buttonSelf cancelSelf">取消</div>
+        </div>
+      </div>
+    </div>
+
+</body>
+<script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../reference/js/common.js" type="text/javascript"></script>
+<script src="../reference/mui/js/mui.picker.min.js" type="text/javascript"></script>
+<script src="../../cordova.js" type="text/javascript"></script>
+<script type="text/javascript">
+  var baseUrl = localStorage.getItem("url");
+  var workNo = localStorage.getItem("workNo");
+  //01：自申请 02：代申请
+  var operate_type = localStorage.getItem("operate_type");
+  console.log(operate_type)
+  if (operate_type == "02")
+    $("#taskNo").removeAttr("readonly");
+  else if (operate_type == "01")
+    $("#taskNo").attr("readonly", "readonly");
+  var pageNum = 1;
+  var mat_model = "";
+  var is_handon = 0;
+  var beifubianhao = "",
+    appLyNum = "",
+    chooseType = 0,
+    realNum = 0;
+  var shangjiaoAddArry = [],
+    shangjiaoScanArry = [];
+  var clearTime = null,
+    clearTimeMoney = null;
+  var num = 0;
+  var GF_flag = 0
+  /*
+   *个人信息初始化 
+   * */
+  //加载个人信息
+  loadInf();
+
+  function loadInf() {
+    $("#loading").show();
+    $.ajax({
+      url: baseUrl + 'queryGf/queryAllGf',
+      type: 'post',
+      headers: {
+        serviceName: "MFGZ01",
+        methodName: "getUserInfo"
+      },
+      data: {
+        requestParam: JSON.stringify({
+          apply_work_no: workNo
+        })
+      },
+      success: function (data) {
+        $("#loading").hide();
+        //					var data = eval("(" + data + ")");
+        console.log(data)
+        var list = data.data[0];
+        var taskList = "";
+        if (data.statusCode == "0") {
+          $('#taskNo').val(list.apply_work_no);
+          $('#name').val(list.apply_work_name);
+          $("#phoneNum").val(list.apply_phone);
+          $("#workDept").val(list.apply_dept_name);
+          $("#workDeptNum").text(list.apply_dept_num)
+        } else {
+          showMsg(data.respMsg)
+        }
+
+      }
+    });
+
+  }
+  /*
+   *通过员工工号模糊插叙新的信息 
+   * 
+   * * */
+  //员工工号模糊查询带出其他信息
+  mui("body").on('tap', ".closeUl li", function () {
+    var params = JSON.parse(this.id);
+    console.log(params)
+    $('#taskNo').val(params.patientNum);
+    $('#name').val(params.patientName);
+    $("#phoneNum").val(params.patientTel);
+    $("#workDept").val(params.dpetName);
+    $("#workDeptNum").text(params.deptNum);
+    hideSelect();
+  });
+  mui("body").on('tap', ".dicengClose", function () {
+    hideSelect();
+    qingkongClose();
+  });
+  mui("body").on('tap', ".closeWord", function () {
+    hideSelect();
+    qingkongClose();
+  });
+
+  function getNameNum(value) {
+    clearTimeout(clearTime);
+    clearTime = setTimeout("indirectFunc(\"" + value + "\")", 1500)
+  }
+
+  function indirectFunc(value) {
+    var bedCode = value.replace(/\s+/g, "");
+    if (bedCode != "") {
+      $.ajax({
+        url: baseUrl + 'app_pellmellBillController.do?getUserInfo',
+        type: 'post',
+        data: {
+          apply_work_no: bedCode
+        },
+        success: function (data) {
+
+          console.log(data)
+          var list = data.obj;
+          var taskList = "";
+          if (data.respCode == 200) {
+            for (var i = 0; i < list.length; i++) {
+              taskList += createVi(list[i].apply_work_no, list[i].apply_work_name, list[i].apply_phone, list[i].apply_dept_name, list[i].apply_dept_num);
+            }
+            showSelect();
+            $(".closeUl").html(taskList);
+
+          } else {
+            hideSelect();
+            qingkongClose();
+          }
+
+        }
+      });
+
+    } else {
+      hideSelect();
+    }
+  }
+
+  //工号模糊查询
+  function showSelect() {
+    $(".dicengClose").show();
+    $(".close").show();
+    $(".closeWord").show();
+  }
+
+  function qingkongClose() {
+    $('#taskNo').val("");
+    $('#name').val("");
+    $("#phoneNum").val("");
+    $("#workDept").val("");
+    $("#workDeptNum").text("");
+  }
+
+  function hideSelect() {
+    $(".dicengClose").hide();
+    $(".close").hide();
+    $(".closeWord").hide();
+  }
+
+  function createVi(patientNum, patientName, patientTel, dpetName, deptNum) {
+    var json = {
+      "patientNum": patientNum,
+      "patientName": patientName,
+      "patientTel": patientTel,
+      "dpetName": dpetName,
+      "deptNum": deptNum
+
+    }
+    var jsonStr = JSON.stringify(json);
+    var html = "";
+    html += '<li  id=\'' + jsonStr + '\' class="closeLi" style="padding:7px 0px;color:#2aabd2;padding-left:10px;font-size:14px;">' + patientName + "&nbsp;&nbsp;" + patientNum + '</li>';
+    return html;
+
+  }
+  //工服分类清空
+  function qingkong() {
+    $("#clothName").val("");
+    $("#clothNameHide").text("");
+    $("#maxNum").text("");
+    $("#maxXinghao").text("");
+  }
+
+  /*
+   * 选择工服的分类
+   * */
+  $("#addIcon1").click(function () {
+    GF_flag = 0
+    $("#applyTitle").html("工服分类");
+    $("#loading").show();
+    $.ajax({
+      url: baseUrl + 'queryGf/queryAllGf',
+      type: 'post',
+      headers: {
+        serviceName: "MFGZ01",
+        methodName: "getFabricTypeList"
+      },
+      data: {
+        requestParam: JSON.stringify({
+          typegroup: "yyhq.mf.gz.fabricTypeName"
+        })
+      },
+      success: function (data) {
+        $("#loading").hide();
+        console.log(data);
+        if (data.statusCode == "0") {
+          var html = '',
+            list = data.data;
+          for (var i = 0; i < list.length; i++) {
+            html += "<li onclick='typeClick(\"" + list[i].typeCode + "\",\"" + list[i].typeName + "\",\"type\")'><a href='#'>" + list[i].typeName + "</a></li>";
+          }
+          $(".ulChoose").html(html);
+          qingkong();
+          showDiceng();
+        } else {
+          showMsg(data.respMsg);
+          hideDiceng();
+
+        }
+
+      }
+    });
+  });
+
+  /*
+   * 选择工服名称
+   * */
+  $("#addIcon2").click(function () {
+    if ($("#clothType").val() == "") {
+      showMsg("请先选择工服分类");
+      return;
+    }
+    GF_flag = 1
+    $("#applyTitle").html("工服名称");
+    $("#loading").show();
+    $.ajax({
+      url: baseUrl + 'queryGf/queryAllGf',
+      type: 'post',
+      headers: {
+        serviceName: "MFGZ01",
+        methodName: "queryFbaricList"
+      },
+      data: {
+        requestParam: JSON.stringify({
+          mat_type_name: $("#clothType").val()
+        })
+      },
+      success: function (data) {
+        $("#loading").hide();
+        var html = '',
+          list = data.data;
+        if (data.statusCode == "0") {
+          for (var i = 0; i < list.length; i++) {
+            var jsonStr = list[i].fabricCost + "/" + list[i].fabricModel + "/" + list[i].fabricName + "/" + list[i].fabricNum
+
+            html += "<li onclick='typeClick(\"" + jsonStr + "\",\"" + list[i].fabricName + "\",\"name\")'><a href='#'>" + list[i].fabricName + "</a></li>";
+          }
+          $(".ulChoose").html(html);
+          showDiceng();
+        } else {
+          showMsg(data.msg);
+          hideDiceng();
+        }
+
+      }
+    });
+  });
+
+  //  点击分类、名称后的选项
+  function typeClick(code, name, type) {
+    mat_model = "";
+    shangjiaoScanArry = [];
+    shangjiaoScan();
+    var _this = this;
+    if (type == "type") {
+      $("#clothType").val(name);
+      $("#clothTypeHide").text(code);
+      hideDiceng();
+    } else if (type == "name") {
+      console.log(code)
+      var shuliang1 = code.split("/")[0]; //数量
+      var xinghao1 = code.split("/")[1]; //型号
+      var mingcheng1 = code.split("/")[2]; //名称
+      var daihao1 = code.split("/")[3]; //代号
+      $("#clothName").val(name);
+      $("#clothNameHide").text(daihao1);
+      $("#maxNum").text(shuliang1);
+      $("#maxXinghao").text(xinghao1);
+      showXinghao(xinghao1);
+      loadOld();
+      hideDiceng();
+    }
+  }
+
+  //显示型号X,XL。。。
+  function showXinghao(xinghao) {
+    var xinghao = xinghao.split(",");
+    var html = "";
+    for (var f = 0; f < xinghao.length; f++) {
+      html += '<div class="mui-col-sm-2 mui-col-xs-2">';
+      html += '<div class="carSelect" data-num=' + xinghao[f] + ' style="">' + xinghao[f] + '</div>';
+      html += '</div>';
+    }
+
+    $(".xinghao").html(html);
+
+  }
+
+  /*
+   * 输入申请数量显示金额
+   * */
+  function getMoney(value) {
+    if (GF_flag != 1) {
+      return
+    }
+    clearTimeout(clearTimeMoney);
+    clearTimeMoney = setTimeout("loadMoney(\"" + value + "\")", 1500)
+  }
+
+  function loadMoney(value) {
+    var moneyCode = Number(value.replace(/\s+/g, ""));
+
+    if (moneyCode > 2) {
+      showMsg("输入数量不能大于2");
+      $("#clothNum").val("");
+      return;
+    }
+    if (moneyCode != "") {
+      $.ajax({
+        url: baseUrl + 'queryGf/queryAllGf',
+        type: 'post',
+        headers: {
+          serviceName: "MFGZ01",
+          methodName: "getReceFees"
+        },
+        data: {
+          requestParam: JSON.stringify({
+            apply_work_no: $('#taskNo').val(),
+            mat_num: $("#clothNameHide").text(),
+            apply_num: $("#clothNum").val(),
+            repay_type: chooseType, //上交旧工作服方式
+            repay_num: realNum, //上交件数
+            repay_bar_code: shangjiaoScanArry //旧被服编码 （多件,分隔）
+          })
+        },
+        success: function (data) {
+          if (data.statusCode == "0") {
+            $("#clothPrice").val(data.data[0].realFee);
+          } else {
+            showMsg(data.respMsg)
+          }
+
+        }
+      });
+
+    } else {
+      console.log("没有输入数量不能加载金额");
+
+    }
+  }
+
+  //判断输入的最大数量
+  function judgeMax(maxNum) {
+    var aa = $("#maxNum").text(); //获取的组大数量
+    if (maxNum > Number(aa)) {
+      showMsg("请校验最大数量");
+
+    }
+  }
+
+  //点击新增旧服
+  mui("body").on('tap', "#oldClothAdd", function () {
+    loadOld();
+  });
+  //查询是否有还工服
+  function loadOld() {
+    $("#loading").show();
+    $.ajax({
+      url: baseUrl + 'queryGf/queryAllGf',
+      type: 'post',
+      headers: {
+        serviceName: "MFGZ01",
+        methodName: "getBarCodeList"
+      },
+      data: {
+        requestParam: JSON.stringify({
+          apply_work_no: $('#taskNo').val(),
+          mat_num: $("#clothNameHide").text()
+        })
+      },
+      success: function (data) {
+        $("#loading").hide();
+        var list = data.data;
+        if (data.statusCode == "0") {
+          if (list.length == 0) {
+            //showMsg("暂无旧服！");
+            $(".oldCloth").hide();
+            return;
+          }
+          var bbb = "";
+          for (var f = 0; f < list.length; f++) {
+            bbb += creaOldVie(list[f].barCode, list[f].fabricCost, list[f].applyTime);
+          }
+          $(".huanfuUl").html(bbb);
+          $(".oldCloth").show();
+        } else {
+          showMsg(data.respMsg);
+        }
+
+      }
+    });
+
+  }
+
+  function creaOldVie(bar_code, mat_cost, rec_create_time) {
+    var json = {
+      "bar_code": bar_code,
+      "mat_cost": mat_cost,
+      "rec_create_time": rec_create_time
+    }
+    var jsonStr = JSON.stringify(json);
+    var html = "";
+    html += '<li  id=\'' + jsonStr + '\'   class="newAddLi">' + bar_code + '</li>'
+    return html;
+  }
+
+  function showOldCloth() {
+    var html = "";
+    html += '<div class="mui-row row-content ">';
+    html += '<div class="mui-col-sm-6 mui-col-xs-6 row-right">';
+    html += '<input type="text" style="width: 100%;border:0;outline:none;font-size:14px;padding:0px;text-align:left;margin-bottom:0;height:21px;" readonly="readonly" placeholder="请扫描编码" />';
+    html += '</div>';
+    html += '<div class="mui-col-sm-3 mui-col-xs-3">';
+    html += '<div class="oldClothButton  scan">扫描</div>';
+    html += '</div>';
+    html += '<div class="mui-col-sm-3 mui-col-xs-3">';
+    html += '<div class="oldClothButton shanchu">删除</div>';
+    html += '</div>';
+
+    html += '</div>';
+    html += '<div class="mui-row row-content ">';
+    html += '<div class="mui-col-sm-3 mui-col-xs-3">';
+    html += '<div class="">原价：</div>';
+    html += '</div>';
+    html += '<div class="mui-col-sm-3 mui-col-xs-3">';
+    html += '<div class="oldPrice"></div>';
+    html += '</div>';
+    html += '<div class="mui-col-sm-3 mui-col-xs-3">';
+    html += '<div class="oldDiscount">折扣：</div>';
+    html += '</div>';
+    html += '<div class="mui-col-sm-3 mui-col-xs-3">';
+    html += '<div class=""></div>';
+    html += '</div>';
+    html += '</div>';
+
+    return html;
+
+  }
+  //隐藏选择分类和名称
+  mui("body").on('tap', ".diceng", function () {
+    hideDiceng();
+  });
+
+  mui("body").on('tap', ".editButtons", function () {
+    hideDiceng();
+  });
+
+  // 显示和隐藏遮罩
+  function showDiceng() {
+    $(".diceng").show();
+    $(".realMoney").show();
+  }
+
+  function hideDiceng() {
+    $(".diceng").hide();
+    $(".realMoney").hide();
+  }
+
+  //选择工服的类型
+  mui("body").on('tap', ".carSelect", function () {
+    $(".carSelect").css({ "color": "#2aabd2", "background": "#ffffff" });
+    $(this).css({ "background": "#2aabd2", "color": "#ffffff" });
+    mat_model = $(this).attr("data-num");
+
+  });
+
+  /*
+   * 所有数据的提交
+   * */
+  document.querySelector(".submit").addEventListener('tap', function () {
+    submitSelf();
+  });
+
+  function submitSelf() {
+    //校验工号
+    if ($('#taskNo').val() == "") {
+      showMsg("工号不能为空！");
+      return;
+    }
+    if ($("#name").val() == "") {
+      showMsg("姓名不能为空！");
+      return;
+    }
+    if ($("#workDept").val() == "") {
+      showMsg("科室不能为空！");
+      return;
+    }
+    if ($("#workDeptNum").text() == "") {
+      showMsg("科室信息错误！");
+      return;
+    }
+    if ($("#clothName").val() == "") {
+      showMsg("工作服不能为空！");
+      return;
+    }
+    if ($("#clothNameHide").text() == "") {
+      showMsg("工作服编号错误！");
+      return;
+    }
+
+    if (mat_model == "") {
+      showMsg("工作服型号不能为空！");
+      return;
+    }
+
+    if ($("#clothNum").val() == "") {
+      showMsg("输入申请数量不能为空！");
+      return;
+    }
+    if ($("#clothNum").val() > 2) {
+      showMsg("输入申请数量不能大于2！");
+      return;
+    }
+    //			if($("#clothPrice").val() == '') {
+    //				showMsg("请校验价格！");
+    //				return;
+    //			}
+
+    $("#loading").show();
+    $.ajax({
+      url: baseUrl + 'queryGf/queryAllGf',
+      type: 'post',
+      headers: {
+        serviceName: "MFGZ01",
+        methodName: "saveAppFabricBill"
+      },
+      data: {
+        requestParam: JSON.stringify({
+          bill_no: "", //单号；（编辑or 申请）
+          apply_work_no: $('#taskNo').val(),
+          apply_work_name: $("#name").val(),
+          apply_dept_num: $("#workDeptNum").text(),
+          apply_dept_name: $("#workDept").val(),
+          apply_phone: $("#phoneNum").val(), //    申请人电话
+          mat_num: $("#clothNameHide").text(), //工作服编码
+          mat_name: $("#clothName").val(), //   工作服名称
+          mat_model: mat_model, //  工作服型号
+          apply_num: $("#clothNum").val(), //申请数量
+          rece_fees: $("#clothPrice").val(), // 应收费用
+          //is_handon: is_handon, // 是否上交工作服 0： 不上交 1： 上交
+          repay_type: chooseType, //上交旧工作服方式   
+          repay_num: realNum, //上交件数
+          //repay_apply_time: , //  上交工作服的申请时间
+          repay_bar_code: JSON.stringify(shangjiaoScanArry), // 旧被服编码（ 多件,分隔）
+          operate_type: operate_type,
+          rec_creator: workNo
+        })
+      },
+      success: function (data) {
+        console.log("提交");
+        console.log(data)
+        if (data.statusCode == "0") {
+          mui.toast("提交成功!")
+          setTimeout('location.href="clothList.html"', 2000);
+        } else {
+          $("#loading").hide();
+          showMsg(data.respMsg);
+        }
+      }
+    });
+
+  }
+
+  /*
+   * 这部分是还工服方式
+   * */
+  //选择是否上交旧服：0：否；1：扫码；2：直接添加
+  mui("body").on('tap', ".return", function () {
+    $(".return").css({ "color": "#2aabd2", "background": "#ffffff" });
+    $(this).css({ "background": "#2aabd2", "color": "#ffffff" });
+    chooseType = $(this).attr("data-num");
+    if (chooseType == "1")
+      addScan();
+    if (chooseType == "2")
+      tianjia();
+
+  });
+
+  //扫描方式
+  var ribbonCode = "";
+
+  function addScan() {
+    if ($("#clothNameHide").text() == "") {
+      showMsg("请选择工服！");
+      return;
+    }
+    //			corScanSelf();
+    cordova.plugins.barcodeScanner.scan(
+      function (result) {
+        if (result.text != "") {
+          ribbonCode = result.text;
+          corScanSelf();
+        } else {
+          showMsg("扫描错误")
+          $('#warn').fadeIn(500);
+          setTimeout("$('#warn').fadeOut(500)", 3000);
+        }
+      },
+      function (warn) {
+        $('#warn small').html('获取二维码失败');
+        $('#warn').fadeIn(500);
+        setTimeout("$('#warn').fadeOut(500)", 3000);
+      }
+    );
+
+  }
+  function corScanSelf() {
+    $.ajax({
+      url: baseUrl + 'queryGf/queryAllGf',
+      type: 'post',
+      headers: {
+        serviceName: "MFGZ01",
+        methodName: "getBarCodeList"
+      },
+      data: {
+        requestParam: JSON.stringify({
+          apply_work_no: $('#taskNo').val(),
+          mat_num: $("#clothNameHide").text(),
+          bar_code: ribbonCode
+        })
+      },
+      success: function (data) {
+        var dataObj = data.data[0];
+        if (data.statusCode == "0") {
+          if (dataObj.barCode == "undefined" || dataObj.barCode == undefined) { } else {
+            var zdList = $('.list_blew ul');
+            var isNew = true;
+            var aa = {
+              "bar_code": dataObj.barCode,
+              "mat_cost": dataObj.fabricCost,
+              "rec_create_time": dataObj.recCreateTime
+            }
+            for (var i = 0; i < zdList.length; i++) {
+              var _thisVal = zdList.eq(i).find('li.ribbonde').text();
+              if (_thisVal == ribbonCode) {
+                showMsg("请勿重复扫描");
+                isNew = false;
+              }
+              console.log(_thisVal);
+            }
+            if (isNew) {
+              shangjiaoScanArry.push(aa);
+              shangjiaoScan();
+            }
+          }
+        } else {
+          mui.toast(dataObj.respMsg);
+          return;
+        }
+      }
+    });
+  }
+
+  function shangjiaoScan() {
+    var vv = "";
+    for (var v = 0; v < shangjiaoScanArry.length; v++) {
+      vv += shangjiaoScanShow(shangjiaoScanArry[v].bar_code, shangjiaoScanArry[v].mat_cost, shangjiaoScanArry[v].rec_create_time);
+    }
+    $('.list_blew').html(vv);
+    if (shangjiaoScanArry.length == 0)
+      $(".shangjiaoScan").hide();
+    else
+      $(".shangjiaoScan").show();
+    loadMoney($("#clothNum").val());
+  }
+  mui("body").on('tap', ".allNumCancel", function () {
+
+    var _this = this;
+    var comText = JSON.parse(_this.id).bar_code;
+    var comArr = [];
+    console.log(shangjiaoScanArry);
+    console.log(comText)
+    for (var z = 0; z < shangjiaoScanArry.length; z++) {
+      var bb = {
+        bar_code: "",
+        mat_cost: "",
+        rec_create_time: ''
+      };
+      if (shangjiaoScanArry[z].bar_code == comText) {
+
+      } else {
+        bb.bar_code = shangjiaoScanArry[z].bar_code;
+        bb.mat_cost = shangjiaoScanArry[z].mat_cost;
+        bb.rec_create_time = shangjiaoScanArry[z].rec_create_time;
+        comArr.push(bb);
+      }
+    }
+    shangjiaoScanArry = comArr;
+    shangjiaoScan();
+    loadMoney($("#clothNum").val());
+  })
+
+  function shangjiaoScanShow(bar_code, mat_cost, rec_create_time) {
+    var json = {
+      "bar_code": bar_code,
+      "mat_cost": mat_cost,
+      "rec_create_time": rec_create_time
+    }
+    var jsonStr = JSON.stringify(json);
+    var html = "";
+    html += '<ul class="mui-table-views" style="color: #000000;">';
+    html += '<li class="ribbonde" style="width:30%;">' + bar_code + '</li>';
+    html += '<li class="styleShip" style="width:20%;">' + mat_cost + '元</li>';
+    html += '<li class="styleShip" style="width:35%;">' + rec_create_time.substring(0, 10) + '</li>';
+    html += '<li id=\'' + jsonStr + '\'  class="styleShip  allNumCancel" style="width:15%;">删除</li>';
+    html += '</ul>';
+    return html;
+  }
+  //直接添加方式
+  //点击工服添加选择时间和数量
+  function tianjia() {
+    if ($("#clothName").val() == "") {
+      showMsg("请选择工服名称");
+      return;
+    }
+    if ($("#clothNum").val() > 2) {
+      showMsg("申请数量不能大于2");
+      return;
+    }
+    if ($("#clothNum").val() == "") {
+      showMsg("请输入申请数量");
+      return;
+    }
+
+    showdicengTime();
+  }
+  //确认时间和数量添加到数组中
+  mui("body").on('tap', ".sureSelf", function () {
+    var dd = $("#timeSelect").val();
+    var vv = $(".numberSelf").val();
+    if (dd == "") {
+      showMsg("请选择时间！");
+      return;
+    }
+    if (vv == "") {
+      showMsg("请输入数量！");
+      return;
+    }
+    if (vv > 2) {
+      showMsg("数量不能大于2！");
+      return;
+    }
+    var aa = {
+      applyTime: aa,
+      applyNum: vv
+    }
+    shangjiaoAddArry.push(aa);
+    shangjiaoAdd();
+    hidedicengTime();
+  });
+  mui("body").on('tap', ".newAddLi", function () {
+    var _this = this;
+    var comText = JSON.parse(_this.id).bar_code;
+    var cost = JSON.parse(_this.id).mat_cost;
+    var time = JSON.parse(_this.id).rec_create_time;
+    var bb = {
+      "bar_code": "",
+      "mat_cost": "",
+      "rec_create_time": ""
+    };
+    for (var z = 0; z < shangjiaoScanArry.length; z++) {
+
+      if (shangjiaoScanArry[z].bar_code == comText) {
+        showMsg("请勿重复提交");
+        shangjiaoScan();
+        hidedicengTime();
+        return;
+      }
+    }
+    bb.bar_code = comText;
+    bb.mat_cost = cost;
+    bb.rec_create_time = time;
+    shangjiaoScanArry.push(bb);
+    shangjiaoScan();
+    hidedicengTime();
+
+  });
+
+  mui("body").on('tap', ".cancelSelf", function () {
+    shangjiaoScan();
+    hidedicengTime();
+  });
+  mui("body").on('tap', ".dicengTime", function () {
+    shangjiaoScan();
+    hidedicengTime();
+  });
+
+  //点击添加后选择时间
+  //		document.querySelector("#timeSelect").addEventListener('tap', function() {
+  //			showTime();
+  //		});
+
+  //还旧服添加方式
+  function shangjiaoAdd() {
+    console.log(shangjiaoAddArry);
+    var taskList = "",
+      a = "";
+    for (var i = 0; i < shangjiaoAddArry.length; i++) {
+      taskList += shangjiaoAddShow(shangjiaoAddArry[i].applyTime, shangjiaoAddArry[i].applyNum, i);
+      a += Number(shangjiaoAddArry[i].applyNum);
+    }
+    realNum = a;
+    $(".shangjiaoAdd").html(taskList);
+    loadMoney($("#clothNum").val());
+  }
+
+  function shangjiaoAddShow(applyTime, applyNum, index) {
+    //			var json = {
+    //				"patientNum": patientNum,
+    //				"patientName": patientName,
+    //				"patientTel": patientTel,
+    //				"dpetName": dpetName,
+    //				"deptNum": deptNum
+    //
+    //			}
+    //			var jsonStr = JSON.stringify(json);
+    var html = '';
+    html += '<div class="mui-row row-content ">';
+    html += '<div class="mui-col-sm-6 mui-col-xs-6 row-right">';
+    html += '<p style="text-align: left;">申请时间</p>';
+    html += '</div>';
+    html += '<div class="mui-col-sm-3 mui-col-xs-3 row-right">';
+    html += '<p style="text-align: left;">申请数量</p>';
+    html += '</div>';
+    html += '<div class="mui-col-sm-3 mui-col-xs-3 row-right">';
+    html += '<div class="shangjiaoreturn">删除</div>';
+    html += '</div>';
+    html += '</div>';
+    return html;
+
+  }
+
+  function showTime() {
+
+    var options = {
+      "type": "datetime"
+    };
+    var pickerDate = new mui.DtPicker(options);
+    pickerDate.show(function (rs) {
+      Month = rs.text;
+      $("#timeSelect").val(Month);
+    });
+  }
+  //隐藏显示增加时间和数量
+  function showdicengTime() {
+    loadOld();
+    $(".dicengtimeSelf").show();
+    $(".dicengTime").show();
+  }
+
+  function showhuanfuUl() { }
+
+  function hidedicengTime() {
+    $(".dicengtimeSelf").hide();
+    $(".dicengTime").hide();
+  }
+</script>
+
+</html>

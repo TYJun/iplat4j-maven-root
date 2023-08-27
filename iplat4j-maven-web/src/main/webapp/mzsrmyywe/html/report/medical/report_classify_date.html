@@ -1,0 +1,474 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="reference/mui/css/mui.min.css">
+  <link rel="stylesheet" href="reference/mui/css/mui.picker.min.css">
+  <link rel="stylesheet" href="reference/css/common.css" />
+</head>
+<STYLE TYPE="text/css">
+  .search-div {
+    width: 100%;
+    color: #787464;
+    font-weight: bold;
+  }
+
+  .tab {
+    height: 40px;
+    line-height: 40px;
+    font-weight: bold;
+    /*background: #1bb2d8;*/
+    color: #787464;
+    border-top: 1px solid #787464;
+    border-bottom: 1px solid #787464;
+  }
+
+  .list-tab {
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .select-div {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 99;
+    background: #fff;
+  }
+
+  .select-content {
+    width: 100%;
+    padding-top: 44px;
+  }
+
+  .dept-tab-div {
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+  }
+
+  .dept-div {
+    width: 100%;
+    overflow: scroll;
+    overflow-x: hidden;
+  }
+
+  .dept-tab {
+    color: #0087f3;
+  }
+</STYLE>
+
+<body>
+  <header class="mui-bar mui-bar-nav">
+    <h1 class="mui-title">医废分类汇总(日)</h1>
+    <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+      返回
+    </button>
+  </header>
+
+  <div class="mui-content">
+    <div class="search-div">
+      <form class="mui-input-group">
+        <div class="mui-input-row">
+          <label>院区</label>
+          <a class="mui-navigate-right" id="handelPicker"></a><i id="dataGroupCodeName"
+            style="float: left;line-height: 40px;" class="mui-pull-right update"></i>
+        </div>
+    </div>
+    <div class="mui-input-row">
+      <label>科室</label>
+      <input id="dept" type="text" placeholder="请选择科室" readonly>
+    </div>
+    <div class="mui-input-row">
+      <label>日期</label>
+      <input id="date" type="text" placeholder="请选择日期" readonly>
+    </div>
+    </form>
+  </div>
+  <div id="echarts" style="width:100%;height:280px;margin-top:20px;"></div>
+  <div class="mui-row tab">
+    <div class="mui-col-xs-3 center">类型</div>
+    <div class="mui-col-xs-3 center">总重(kg)</div>
+    <div class="mui-col-xs-3 center">数量(袋)</div>
+    <div class="mui-col-xs-3 center">金额(元)</div>
+  </div>
+  <div id="list"></div>
+  </div>
+
+  <div class="select-div" hidden>
+    <header class="mui-bar mui-bar-nav">
+      <h1 class="mui-title">选择科室</h1>
+      <button id="review" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+        返回
+      </button>
+      <button id="confirm" class="mui-btn mui-btn-blue mui-btn-link mui-pull-right">确认</button>
+    </header>
+    <div class="select-content">
+      <div class="mui-row dept-tab-div">
+        <div class="mui-col mui-col-xs-9 dept-name">科室名称</div>
+        <div class="mui-col mui-col-xs-3 right dept-tab">全选</div>
+      </div>
+      <div class="dept-div">
+        <form id="dept_list" class="mui-input-group">
+          <!--2021-12-15新增-->
+          <div style="width:100%;height:40px;overflow:hidden;background-color:white;border: 1px solid;">
+            <input type="text" placeholder="点击选择科室" id="selectButton" onclick="myclick();" readonly="true" style="width:100%;height:35px;">
+          </div>
+          <div id="fuzzysearchdiv" style="display:none;width:100%;z-index:3;height:35px;background-color:white;border: 1px solid;"
+              onMouseOver="mousein()" onMouseOut="mouseout()">
+            <input type="text" placeholder="请输入查询科室名称" id="fuzzysearch" onkeyup="myfuzzysearch()" style="width:100%;"/>
+          </div>
+          <div id="selectdiv" style="display:none;border:1px solid #A9A9A9;width:100%;z-index:2;position:absolute;overflow-y :scroll;height:600px;background-color:gray;font-size: 16px; color: #000;"
+              onMouseOver="mousein()" onMouseOut="mouseout()">
+          </div>
+          <!-- <br>
+          <input type="button" value="提交" onclick="mysubmit();"/> -->
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="reference/mui/js/mui.picker.min.js" type="text/javascript"></script>
+<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="reference/echarts/echarts.min.js" type="text/javascript"></script>
+<script src="reference/js/common.js" type="text/javascript"></script>
+<!--2021-12-15新增-->
+<script src="reference/js/Select.js" type="text/javascript"></script>
+<!-- <script type="module">
+  import Menu from './reference/js/Menu.js';
+  var arr=[
+	{name:"今日爆款",category:[
+			{name:"热销商品",href:"https://blog.csdn.net/Charissa2017/article/details/103855079"},{name:"店长推荐",href:"https://blog.csdn.net/Charissa2017/article/details/103855079"}
+		]},
+	{name:"新品上市",category:[
+			{name:"施华洛世奇联名故宫宫廷文化",category:[
+					{name:"故宫文创",category:[
+							{name:"御猫",href:"https://blog.csdn.net/Charissa2017/article/details/103855079"},{name:"紫禁城里过大年",href:"https://blog.csdn.net/Charissa2017/article/details/103855079"}
+						]},
+					{name:"故宫博物馆",href:"https://blog.csdn.net/Charissa2017/article/details/103855079"}
+				]},{name:"12月新品",href:"https://blog.csdn.net/Charissa2017/article/details/103855079"}
+		]},
+	{name:"折扣专区",category:[]},
+	{name:"专柜爆款",category:[
+			{name:"时尚尖货",href:"https://blog.csdn.net/Charissa2017/article/details/103855079"},{name:"专柜爆款",href:"https://blog.csdn.net/Charissa2017/article/details/103855079"}
+		]},
+	{name:"品牌畅销系列",category:[
+			{name:"BEE A QUEEN女王系列",href:""},
+			{name:"蓝色天鹅专区",category:[
+					{name:"白天鹅",href:""},{name:"黑天鹅",href:""},{name:"蓝色天鹅",href:""}
+				]},{name:"MY HERO",href:""},{name:"LISABEL蜜蜂",href:""},
+			{name:"Sparkling Dance",href:""},{name:"Remix系列",href:""},{name:"Magic唯美雪花",href:""},{name:"MICKEY&MINNIE系列",href:""}
+		]},
+]
+init();
+function init(){
+	let menu=new Menu(arr);
+	menu.appendTo("#dept_list");
+}
+
+</script> -->
+<script type="text/javascript">
+  
+  var baseUrl = localStorage.getItem("url");
+  var workNo = localStorage.getItem('workNo');
+  var deptName = localStorage.getItem("deptName");
+  var deptCode = localStorage.getItem("deptCode");
+  var deptCodes = '';
+  var deptNames = '';
+  this.getDeptList();//2021-12-15新增功能
+  loadYiYuanCode();
+  zuData();
+  $("#handelPicker").on('tap', function () {
+    getYqlb()
+
+  })
+
+  function loadYiYuanCode() {
+    $("#dataGroupCodeName").html('山西省人民医院');
+    deptCodes = "NO00001";
+  }
+  function getYqlb() {
+
+    var yqlbPicker = new mui.PopPicker();
+    var yqlb = [
+      {
+        text: "山西省人民医院",
+        value: "NO00001"
+
+      },
+      // {
+      //   text: "龙湾院区",
+      //   value: "NO00003"
+      // },
+      // {
+      //   text: "化工院区",
+      //   value: "NO00004"
+      // },
+      // {
+      //   text: "传染病院",
+      //   value: "NO00005"
+      // }
+    ]
+    yqlbPicker.setData(yqlb)
+    yqlbPicker.show(function (selectItems) {
+      // localStorage.setItem("dataGroupCode", selectItems[0].value)
+      deptCodes = selectItems[0].value;
+      $("#dataGroupCodeName").html(selectItems[0].text);
+      zuData();
+      //$("#deptName").html("")
+      // getHosLists();
+    })
+
+  }
+  function zuData() {
+    var deptArrStr = localStorage.getItem('yiyunadataAttr');
+    var blogJson = eval("(" + deptArrStr + ")");
+    console.log(deptCodes);
+    var deptArr = blogJson['' + deptCodes + ''];
+    deptCode = '';
+    var deptName = "";
+    var dept_html = '';
+    if (deptArr != undefined) {
+      for (var i = 0; i < deptArr.length; i++) {
+        dept_html += '<div class="mui-input-row mui-checkbox">';
+        dept_html += '<label>' + deptArr[i].deptName + '</label>';
+        dept_html += '<input name="' + deptArr[i].deptName + '" value="' + deptArr[i].deptNum + '" type="checkbox" checked="">';
+
+        dept_html += '</div>';
+        if (deptCode != '') {
+          deptCode += "," + deptArr[i].deptNum;
+          deptName += "," + deptArr[i].deptName;
+        } else {
+          deptCode += deptArr[i].deptNum;
+          deptName += deptArr[i].deptName;
+        }
+      }
+    }
+    //2021-12-15修改
+    // $('#dept_list').html(dept_html);
+    $('.dept-div').height($(window).height() - 94);
+
+    deptNames = deptCode, month = date_YMD();
+    $('#dept').val(deptName);
+    $('#date').val(month);
+    loadData();
+
+  }
+
+
+  //科室选择
+  document.getElementById("dept").addEventListener('tap', function () {
+    $('.select-div').show();
+  });
+
+  document.getElementById("confirm").addEventListener('tap', function () {
+    if ($("input[type=checkbox]:checked").length == 0) {
+      mui.toast("请选择科室");
+      return;
+    }
+    $("input[type=checkbox]:checked").each(function (index, element) {
+      if (index == 0) {
+        deptName = $(this).attr("name");
+        deptNames = $(this).val();
+      } else {
+        deptName = deptName + "," + $(this).attr("name");
+        deptNames = deptNames + "," + $(this).val();
+      }
+    });
+    $('#dept').val(deptName);
+    $('.select-div').hide();
+    loadData();
+  });
+
+  document.getElementById("review").addEventListener('tap', function () {
+    $('.select-div').hide();
+  });
+
+  //日期选择
+  document.getElementById("date").addEventListener('tap', function () {
+    var options = {
+      "type": "date"
+    };
+    var picker = new mui.DtPicker(options);
+    picker.show(function (rs) {
+      month = rs.text;
+      $('#date').val(month);
+      loadData();
+    });
+  });
+  var colors = ['#59c4e6', '#8d98b3', '#a0a7e6', '#96dee8', '#93b7e3'];
+
+  function loadData() {
+    $.ajax({
+      url: baseUrl + 'MobileAgentService',
+      type: 'post',
+      headers: {
+        methodName: "getTableData",
+        serviceName: "MWAP07",
+      },
+      data: {
+        prames: JSON.stringify({
+          dataYiCode: deptCodes,
+          deptNum: deptNames,
+          yearMonthDay: month
+        })
+
+      },
+      success: function (data) {
+        if (data.status == "0") {
+          var list = data.attr.result;
+          var data = [],
+            title = [],
+            html = '';
+          var sumWeight = 0.00;
+          var sumNum = 0;
+          var sumPrice = 0.00;
+          for (var i = 0; i < list.length; i++) {
+            var json = {
+              "value": list[i].weight,
+              "name": list[i].trashTypeName
+            }
+            title.push(list[i].trashTypeName);
+            data.push(json);
+            sumWeight += list[i].weight;
+            sumNum += list[i].num;
+            sumPrice += Number(list[i].price);
+
+            html += '<div class="mui-row list-tab" style="font-weight:bold;color:' + colors[i] + '">';
+            html += '<div class="mui-col-xs-3 center">' + list[i].trashTypeName + '</div>';
+            html += '<div class="mui-col-xs-3 center">' + list[i].weight + '</div>';
+            html += '<div class="mui-col-xs-3 center">' + list[i].num + '</div>';
+            html += '<div class="mui-col-xs-3 center">' + keepTwoDecimalFull(list[i].price) + '</div>';
+            html += '</div>';
+          }
+          html += '<div class="mui-row list-tab" style="font-weight:bold;color:#0000a0">';
+          html += '<div class="mui-col-xs-3 center"><b>汇总</b></div>';
+          html += '<div class="mui-col-xs-3 center"><b>' + sumWeight.toFixed(2) + '</b></div>';
+          html += '<div class="mui-col-xs-3 center"><b>' + sumNum + '</b></div>';
+          html += '<div class="mui-col-xs-3 center"><b>' + sumPrice.toFixed(2) + '</b></div>';
+          html += '</div>';
+          $('#list').html(html);
+          showCharts(data, title);
+        } else {
+          mui.toast("获取数据失败");
+        }
+      }
+    });
+  }
+  function keepTwoDecimalFull(num) {
+    var result = parseFloat(num);
+    if (isNaN(result)) {
+      alert('传递参数错误，请检查！');
+      return false;
+    }
+    result = Math.round(num * 100) / 100;
+    var s_x = result.toString();
+    var pos_decimal = s_x.indexOf('.');
+    if (pos_decimal < 0) {
+      pos_decimal = s_x.length;
+      s_x += '.';
+    }
+    while (s_x.length <= pos_decimal + 2) {
+      s_x += '0';
+    }
+    return s_x;
+  }
+
+  function showCharts(data, title) {
+    var myChart = echarts.init(document.getElementById('echarts'));
+    option = {
+      title: {
+        text: '医废分类汇总',
+        x: 'center'
+      },
+      color: colors,
+      tooltip: {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+      },
+      legend: {
+        orient: 'vertical',
+        x: 'left',
+        data: title
+      },
+      toolbox: {
+        show: false,
+        feature: {
+          mark: {
+            show: true
+          },
+          dataView: {
+            show: true,
+            readOnly: false
+          },
+          magicType: {
+            show: true,
+            type: ['pie', 'funnel'],
+            option: {
+              funnel: {
+                x: '25%',
+                width: '50%',
+                funnelAlign: 'left',
+                max: 1548
+              }
+            }
+          },
+          restore: {
+            show: true
+          },
+          saveAsImage: {
+            show: true
+          }
+        }
+      },
+      calculable: true,
+      series: [{
+        name: '医废类型',
+        type: 'pie',
+        radius: '40%',
+        center: ['62%', '55%'],
+        data: data
+      }]
+    };
+    myChart.setOption(option);
+  }
+
+  mui("body").on('tap', 'div.dept-tab', function () {
+    var operateValue = this.innerHTML;
+    if (operateValue == "全选") {
+      $("#dept_list").find("input[type=checkbox]").prop("checked", "true");
+      $('div.dept-tab').html("取消全选");
+      //2021-12-15新增功能
+      document.getElementById("selectButton").value = "已选全部科室";
+    } else if (operateValue == "取消全选") {
+      $("#dept_list").find("input[type=checkbox]").prop("checked", "");
+      $('div.dept-tab').html("全选");
+      //2021-12-15新增功能
+      document.getElementById("selectButton").value = "";
+    }
+    //清空之前选中数据 //2021-12-15新增功能
+    selectedlist = [];
+    selectednamelist=[];
+    
+  });
+  $('#back').click(function () {
+    location.href = 'report.html'
+  })
+</script>
+
+</html>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="DMRZ0102">
+
+    <!-- 更新人员入住信息表的相关信息 -->
+    <update id="updateRZApplyInfo" parameterClass="java.util.HashMap">
+        update dorms_man
+        set
+        <isNotNull property="statusCode">
+            status_code = #statusCode#,  <!-- 工单状态(00待审核，01待分配，02待选房，03待入住，04已入住，10申请换宿，98申请退宿，99流程结束) -->
+        </isNotNull>
+        <isNotNull property="manNo">
+            man_no = #manNo#,  <!-- 工号 -->
+        </isNotNull>
+        <isNotNull property="manName">
+            man_name = #manName#,  <!-- 姓名 -->
+        </isNotNull>
+        <isNotNull property="sex">
+            sex = #sex#,  <!-- 性别 -->
+        </isNotNull>
+        <isNotNull property="age">
+            age = #age#,  <!-- 员工年龄 -->
+        </isNotNull>
+        <isNotNull property="phone">
+            phone = #phone#,  <!-- 电话 -->
+        </isNotNull>
+        <isNotNull property="identityCard">
+            identity_card = #identityCard#,  <!-- 身份证 -->
+        </isNotNull>
+        <isNotNull property="educationBackground">
+            education_background = #educationBackground#,  <!-- 学历 -->
+        </isNotNull>
+        <isNotNull property="academicYear">
+            academic_year = #academicYear#,  <!-- 学年 -->
+        </isNotNull>
+        <isNotNull property="maritalStatus">
+            marital_status = #maritalStatus#,  <!-- 婚否:是，否 -->
+        </isNotNull>
+        <isNotNull property="deptNum">
+            dept_num = #deptNum#,  <!-- 部门科室编码 -->
+        </isNotNull>
+        <isNotNull property="deptName">
+            dept_name = #deptName#,  <!-- 部门科室名称 -->
+        </isNotNull>
+        <isNotNull property="employmentNature">
+            employment_nature = #employmentNature#,  <!-- 职工性质 -->
+        </isNotNull>
+        <isNotNull property="cashPledge">
+            cash_pledge = #cashPledge#,  <!-- 押金编号 -->
+        </isNotNull>
+        <isNotNull property="isNetwork">
+            is_network = #isNetwork#,  <!-- 是否联网 -->
+        </isNotNull>
+        <isNotNull property="isStay">
+            is_stay = #isStay#,  <!-- 是否办暂住证 -->
+        </isNotNull>
+        <isNotNull property="permanentResidence">
+            permanent_residence = #permanentResidence#,  <!-- 户口所在地 -->
+        </isNotNull>
+        <isNotNull property="hiredate">
+            hiredate = #hiredate#,  <!-- 入职时间 -->
+        </isNotNull>
+        <isNotNull property="estimatedInDate">
+            estimated_in_date = #estimatedInDate#,  <!-- 预计入住时间 -->
+        </isNotNull>
+        <isNotNull property="estimatedOutDate">
+            estimated_out_date = #estimatedOutDate#,  <!-- 预计退房时间 -->
+        </isNotNull>
+        <isNotNull property="note">
+            note = #note#,  <!-- 备注信息 -->
+        </isNotNull>
+        <isNotNull property="recRevisor">
+            rec_revisor = #recRevisor#,  <!-- 修改人工号 -->
+        </isNotNull>
+        <isNotNull property="recRevisorName">
+            rec_revise_name = #recRevisorName#,  <!-- 修改人 -->
+        </isNotNull>
+        <isNotNull property="recReviseTime">
+            rec_revise_time = #recReviseTime#,  <!-- 修改时间 -->
+        </isNotNull>
+        spouse_name = #spouseName#,
+        id=#manId# <!-- 主键 -->
+        where id=#manId#
+    </update>
+  
+</sqlMap>

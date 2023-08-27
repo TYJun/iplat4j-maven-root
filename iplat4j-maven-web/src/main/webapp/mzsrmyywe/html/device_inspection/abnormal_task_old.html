@@ -1,0 +1,224 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="reference/mui/css/mui.css">
+    <link rel="stylesheet" href="reference/css/common.css" />
+</head>
+<STYLE TYPE="text/css">
+    body {
+        background: #eee;
+    }
+    
+    .task {
+        width: 100%;
+        background: #fff;
+        margin: 0 auto;
+        box-shadow: 1px 1px 10px #b9b9b9;
+        margin-bottom: 10px;
+        /*border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;*/
+        margin-top: 5px;
+    }
+    
+    .task-title {
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 15px;
+        padding-right: 15px;
+        color: #2196f3;
+        border-bottom: 1px solid #eee;
+        font-weight: bold;
+    }
+    
+    .task-info {
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-bottom-right-radius: 4px;
+        border-bottom-left-radius: 4px;
+        color: #666;
+    }
+</STYLE>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">异常任务列表</h1>
+        <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+        返回
+      </button>
+    </header>
+
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+        <div class="mui-scroll">
+            <ul class="mui-table-view mui-table-view-chevron" style="background-color:#eee;">
+
+                <!-- <div class="task">
+            <div class="task-title">所属任务：612070240</div>
+            <div class="mui-row task-info">
+              <div class="mui-col mui-col-xs-12">任务名称：<span>撒了金德拉克</span></div>
+              <div class="mui-col mui-col-xs-12">设备名称：</div>
+              <div class="mui-col mui-col-xs-12">异常描述：</div>
+              <div class="mui-col mui-col-xs-12">结果记录：</div>
+            </div>
+          </div>
+
+          <div class="task">
+            <div class="task-title">所属任务：612070240</div>
+            <div class="mui-row task-info">
+              <div class="mui-col mui-col-xs-12">任务名称：<span>撒了金德拉克</span></div>
+              <div class="mui-col mui-col-xs-12">设备名称：</div>
+              <div class="mui-col mui-col-xs-12">异常描述：</div>
+              <div class="mui-col mui-col-xs-12">结果记录：</div>
+            </div>
+          </div> -->
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="error-div">
+
+    </div>
+</body>
+<script src="reference/mui/js/mui.js" type="text/javascript"></script>
+<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="reference/js/common.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var page = 1;
+    var html = '';
+
+    loadTask();
+
+    function loadTask() {
+        $.ajax({
+            url: baseUrl + 'app_InspectionController.do?getDevExceptionTask',
+            type: 'post',
+            data: {
+                userID: workNo,
+                page: page
+            },
+            success: function(data) {
+                if (data.respCode == "200") {
+                    console.log(data);
+
+                    var errorItem = data.obj;
+                    for (var i = 0; i < errorItem.length; i++) {
+                        var jsonStr = JSON.stringify(errorItem[i])
+                        html += createTask(errorItem[i].itemID, errorItem[i].jitemName, errorItem[i].taskID, errorItem[i].taskCode, errorItem[i].schemeName, errorItem[i].machine_name, errorItem[i].errorContent, errorItem[i].writeValue, jsonStr);
+                    }
+                    $('ul').html(html);
+                }
+            }
+        });
+
+    }
+
+    mui("body").on('tap', 'div.task', function(e) {
+        var params = this.id;
+        location.href = "abnormal_execute.html?" + encodeURIComponent(params);
+    });
+
+    // function dealTask(itemId,dealResult){
+    //   $.ajax({
+    //     url:baseUrl + 'app_InspectionController.do?handDevExceptionTask',
+    //     type:'post',
+    //     data:{
+    //       itemID:itemId,
+    //       exceptionResult:dealResult
+    //     },
+    //     success:function(data){
+    //       console.log(data);
+    //       if(data.respCode=="200"){
+    //         showMsg("已成功提交处理结果");
+    //         setTimeout("location.reload()",1500);
+    //       }else{
+    //         showMsg(data.respMsg);
+    //       }
+    //     }
+    //   });
+    // }
+
+    mui.init({
+        pullRefresh: {
+            container: '#pullrefresh',
+            down: {
+                callback: pulldownRefresh,
+                contentrefresh: "正在刷新",
+            },
+            up: {
+                contentrefresh: "加载中，请稍后",
+                contentnomore: '暂无更多数据',
+                callback: pullupRefresh
+            }
+        }
+    });
+
+    /**
+     * 下滑刷新
+     * @return {[type]} [description]
+     */
+    function pulldownRefresh() {
+        setTimeout(function() {
+            html = '';
+            page = 1;
+            loadTask();
+            mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+        }, 1500);
+    }
+
+    /**
+     * 上滑加载更多
+     * @return {[type]} [description]
+     */
+    function pullupRefresh() {
+        page++;
+        loadTask();
+        setTimeout(function() {
+            //关闭加载框
+            mui('#pullrefresh').pullRefresh().endPullupToRefresh();
+        }, 1500);
+    }
+
+    //调试代码
+    // var html = '';
+    // html = createTask("1","2","3","4","5","6","7","8","9","0");
+    // $(".mui-content").html(html);
+    //调试代码
+
+    function createTask(itemID, itemName, taskID, taskCode, schemeName, machine_name, errorContent, writeValue, jsonStr) {
+        var htmls = '<div id=\'' + jsonStr + '\' class="task">';
+        htmls += '<div class="task-title">所属任务：<span class="task_code">' + taskCode + '</span></div>';
+        htmls += '<div class="mui-row task-info">';
+        htmls += '<div class="mui-col mui-col-xs-12">任务名称：<span>' + schemeName + '</span></div>';
+        htmls += '<div class="mui-col mui-col-xs-12">设备名称：<span class="machine">' + machine_name + '</span></div>';
+        htmls += '<div class="mui-col mui-col-xs-12">项目名称：<span>' + itemName + '</span></div>';
+        htmls += '<div class="mui-col mui-col-xs-12">异常描述：<span class="abnormal">' + errorContent + '</span></div>';
+        htmls += '<div class="mui-col mui-col-xs-12">结果记录：<span>' + writeValue + '</span></div>';
+        htmls += '</div>';
+        htmls += '</div>';
+        return htmls;
+    }
+
+    mui("body").on('tap', '#back', function() {
+        location.href = "main.html"
+    });
+</script>
+
+</html>

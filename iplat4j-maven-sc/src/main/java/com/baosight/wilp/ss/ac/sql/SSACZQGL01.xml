@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!-- 职工自取餐管理 -->
+<sqlMap namespace="SSACZQGL01">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.ac.domain.SSACZQGL01">
+		SELECT DISTINCT
+	    a.id AS "id",
+	    a.bill_no AS "billNo",
+	    a.open_id AS "openId",
+	    a.dept_name deptName,
+	    ( CASE WHEN e.NAME IS NULL THEN a.user_name ELSE e.NAME END ) AS "userName",
+	    a.user_tel_number AS "userTelNumber",
+	    a.address AS "address",
+	    b.status_name AS "statusName",
+	    mcl.canteen_name AS canteenName,
+	    a.meal_num AS "mealNum",
+	    DATE_FORMAT( a.REC_CREATE_TIME, '%Y-%m-%d %H:%i:%s' ) AS "billDate",
+	    a.req_send_time AS "reqSendTime",
+	    a.bill_total_price AS "billTotalPrice",
+	    a.bill_remark AS "billRemark",
+	    a.pay_type AS "payType",
+	    a.status_code AS "statusCode",
+	    a.current_dealer AS "currentDealer",
+	    a.process_inst_id AS "processInstId",
+	    a.print_flag AS "printFlag",
+	    a.order_way AS "orderWay",
+	    a.canteen_num AS "canteenNum",
+	    ( CASE WHEN e.NAME IS NULL THEN a.REC_CREATOR ELSE e.NAME END ) AS "recCreator",
+	    a.REC_CREATE_TIME AS "recCreateTime",
+	    c.meal_Name AS "mealName",
+	    ( SELECT SUM( menu_number ) FROM sc_work_order_bill_detail f WHERE f.bill_no = a.bill_no ) AS "menuNumber" 
+	FROM sc_work_order_bill a
+	    LEFT JOIN ( SELECT meal_num, meal_name FROM sc_order_time UNION SELECT meal_Type_num AS meal_num, meal_type_name AS meal_name FROM sc_order_type ) c ON a.meal_num = c.meal_num
+	    LEFT JOIN v_frame_ac_personnel e ON e.work_no = a.open_id
+    LEFT JOIN v_frame_ac_department t01 ON t01.id = e.dept_id
+	    JOIN sc_canteen_liaison_conf clc ON clc.canteen_num = a.canteen_num
+	    LEFT JOIN sc_operation_status b ON a.status_code = b.status_code
+	    LEFT JOIN sc_canteen_liaison_conf mcl ON a.canteen_num = mcl.canteen_num
+	    JOIN (
+	    SELECT
+	        a.bill_no 
+	    FROM
+	        sc_work_order_bill a
+	        LEFT JOIN sc_operation_status b ON a.status_code = b.status_code
+	        JOIN sc_canteen_liaison_conf clc ON clc.canteen_num = a.canteen_num 
+	    WHERE
+	        a.reject_code IS NULL 
+	    AND b.pbo_code = 'MEAL' 
+	    AND a.status_code = '02'
+		<isNotEmpty prepend=" AND " property="canteenNum">
+			a.canteen_num = #canteenNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="mealNum">
+			a.meal_num = #mealNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="id">
+			a.id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="userName">
+			a.user_name = #userName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="selfCode">
+			a.self_code like concat('%',#selfCode#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="billNo">
+			a.bill_no like concat('%',#billNo#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginDate">
+            <![CDATA[ DATE_FORMAT(a.need_date,'%Y-%m-%d') >= #beginDate# ]]>
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endDate">
+            <![CDATA[ DATE_FORMAT(a.need_date,'%Y-%m-%d') <= #endDate# ]]>
+		</isNotEmpty>
+		) bn ON bn.bill_no = a.bill_no
+		WHERE
+		b.pbo_code = 'MEAL'
+		order by
+		a.bill_no desc
+	</select>
+
+    <select id="query2" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.ss.ac.domain.SSACZQGL01">
+        SELECT
+        distinct  a.id AS "id",
+        a.bill_no AS "billNo",
+        a.open_id AS "openId",
+        t01.dept_name deptName,
+        (CASE   WHEN e. NAME IS NULL THEN   a.user_name ELSE e. NAME END) AS "userName",
+        a.user_tel_number AS "userTelNumber",
+        a.address AS "address",
+        b.status_name AS "statusName",
+        mcl.canteen_name AS canteenName,
+        a.meal_num AS "mealNum",
+        DATE_FORMAT(a.REC_CREATE_TIME,'%Y-%m-%d %H:%i:%s') AS "billDate",
+        a.req_send_time AS "reqSendTime",
+        a.bill_total_price AS "billTotalPrice",
+        a.bill_remark AS "billRemark",
+        a.pay_type AS "payType",
+        a.status_code AS "statusCode",
+        a.current_dealer AS "currentDealer",
+        a.process_inst_id AS "processInstId",
+        a.print_flag AS "printFlag",
+        a.order_way AS "orderWay",
+        a.canteen_num AS "canteenNum",
+        (CASE   WHEN e. NAME IS NULL THEN   a.REC_CREATOR   ELSE e. NAME END) AS "recCreator",
+        a.REC_CREATE_TIME AS "recCreateTime",
+        c.meal_Name AS "mealName",
+        (
+        SELECT
+        SUM(menu_number)
+        FROM
+        sc_work_order_bill_detail f
+        WHERE
+        f.bill_no = a.bill_no
+        ) AS "menuNumber"
+        FROM
+        sc_work_order_bill a
+        LEFT JOIN (
+        SELECT
+        meal_num,
+        meal_name
+        FROM
+        sc_order_time
+        UNION
+        SELECT
+        meal_Type_num AS meal_num,
+        meal_type_name AS meal_name
+        FROM
+        sc_orderl_type
+        ) c ON a.meal_num = c.meal_num
+        LEFT JOIN v_frame_ac_personnel e ON e.work_no = a.open_id
+	    LEFT JOIN v_frame_ac_department t01 ON t01.id = e.dept_id
+        JOIN sc_canteen_liaison_conf clc ON clc.canteen_num = a.canteen_num
+        LEFT JOIN sc_operation_status b ON a.status_code = b.status_code
+        LEFT JOIN sc_canteen_liaison_conf mcl ON a.canteen_num = mcl.canteen_num
+        JOIN (
+        SELECT  
+        a.bill_no
+        FROM
+        sc_work_order_bill a
+        LEFT JOIN sc_operation_status b ON a.status_code = b.status_code
+        JOIN sc_canteen_liaison_conf clc ON clc.canteen_num = a.canteen_num
+
+        WHERE
+        a.reject_code IS NULL and b.pbo_code = 'MEAL' and a.status_code > '02'
+        <isNotEmpty prepend=" AND " property="selfOrderEntity.canteenNum">
+            a.canteen_num = #selfOrderEntity.canteenNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="selfOrderEntity.mealNum">
+            a.meal_num = #selfOrderEntity.mealNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="selfOrderEntity.id">
+            a.id = #selfOrderEntity.id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="selfOrderEntity.userName">
+            a.user_name = #selfOrderEntity.userName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="selfOrderEntity.selfCode">
+            a.self_code  like concat('%',#selfOrderEntity.selfCode#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="selfOrderEntity.billNo">
+            a.bill_no like concat('%',#selfOrderEntity.billNo#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="beginDate">
+            <![CDATA[ DATE_FORMAT(a.need_date,'%Y-%m-%d') >= #beginDate# ]]>
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="endDate">
+            <![CDATA[ DATE_FORMAT(a.need_date,'%Y-%m-%d') <= #endDate# ]]>
+        </isNotEmpty>
+        ) bn ON bn.bill_no = a.bill_no
+        WHERE
+        b.pbo_code = 'MEAL'
+        order by  a.bill_no desc
+    </select>
+
+	<insert id="insert">
+		INSERT INTO sc_work_order_bill (id,
+		REC_CREATOR,  <!-- 
+			创建人工号 -->
+		REC_CREATE_NAME,  <!-- 创建人姓名 -->
+		REC_REVISE_TIME,  <!-- 修改时间 -->
+		REC_REVISOR,  <!-- 修改人 -->
+		REC_CREATE_TIME,  <!-- 创建时间 -->
+		ARCHIVE_FLAG,  <!-- 来源：APP POS -->
+		bill_no,  <!-- 订单号：ZQ12020042700005 规则 ： ZQ+年月日+5位递增 -->
+		open_id,  <!-- 微信的openId -->
+		user_name,  <!-- 用户姓名 -->
+		user_tel_number,  <!-- 联系电话 -->
+		meal_num,  <!-- 餐次编码：001 早餐；002 中餐；003 晚餐 -->
+		meal_num_name,  <!-- 餐次名称 -->
+		address,  <!-- 取餐地址，下单时选择的取餐地址 -->
+		req_send_time,  <!-- 取餐时间 -->
+		bill_total_price,  <!-- 订单总价 -->
+		canteen_num,  <!-- 食堂编码 -->
+		canteen_name,  <!-- 食堂名称 -->
+		bill_remark,  <!-- 备注 -->
+		pay_type,  <!-- 支付方式：0000-现金支付；0101-支付宝；0201-微信 -->
+		pay_type_name,  <!-- 支付方式名称 -->
+		status_code,  <!-- 状态：00-草稿；02-待食堂确认；03-待制作；04-待取餐；05-待评价；99-已结束 -->
+		self_code,  <!-- 长度4位，由0-9，A-Z，随机生成4为数 -->
+		current_dealer,  <!-- 当前处理人 -->
+		process_inst_id,  <!-- 流程实例ID -->
+		print_flag,  <!-- 打印标记 -->
+		order_way,
+		need_date,  <!-- 取餐日期 -->
+		reject_code,  <!-- 作废状态 -->
+		reject_reason,  <!-- 作废原因 -->
+		pay_no,  <!-- 支付宝userId或微信的openId -->
+		card_id,
+		dept_name,  <!-- 科室 -->
+		dept_num  <!-- 科室编码 -->
+		)
+		VALUES (#id#, #recCreator#, #recCreateName#, #recReviseTime#,
+		#recRevisor#,
+		#recCreateTime#, #archiveFlag#, #billNo#, #openId#,
+		#userName#,
+		#userTelNumber#, #mealNum#, #mealNumName#, #address#,
+		#reqSendTime#,
+		#billTotalPrice#, #canteenNum#, #canteenName#,
+		#billRemark#,
+		#payType#, #payTypeName#, #statusCode#, #selfCode#,
+		#currentDealer#,
+		#processInstId#, #printFlag#, #orderWay#, #needDate#,
+		#rejectCode#,
+		#rejectReason#, #payNo#, #cardId#, #deptName#, #deptNum#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM sc_work_order_bill
+		WHERE
+		id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_work_order_bill
+		SET
+		REC_CREATOR =
+		#recCreator#,   <!-- 创建人工号 -->
+		REC_CREATE_NAME = #recCreateName#,   <!-- 创建人姓名 -->
+		REC_REVISE_TIME = #recReviseTime#,   <!-- 修改时间 -->
+		REC_REVISOR = #recRevisor#,   <!-- 修改人 -->
+		REC_CREATE_TIME = #recCreateTime#,   <!-- 创建时间 -->
+		ARCHIVE_FLAG = #archiveFlag#,   <!-- 来源：APP POS -->
+		bill_no = #billNo#,   <!-- 订单号：ZQ12020042700005 规则 ： ZQ+年月日+5位递增 -->
+		open_id = #openId#,   <!-- 微信的openId -->
+		user_name = #userName#,   <!-- 用户姓名 -->
+		user_tel_number = #userTelNumber#,   <!-- 联系电话 -->
+		meal_num = #mealNum#,   <!-- 餐次编码：001 早餐；002 中餐；003 晚餐 -->
+		meal_num_name = #mealNumName#,   <!-- 餐次名称 -->
+		address = #address#,   <!-- 取餐地址，下单时选择的取餐地址 -->
+		req_send_time = #reqSendTime#,   <!-- 取餐时间 -->
+		bill_total_price = #billTotalPrice#,   <!-- 订单总价 -->
+		canteen_num = #canteenNum#,   <!-- 食堂编码 -->
+		canteen_name = #canteenName#,   <!-- 食堂名称 -->
+		bill_remark = #billRemark#,   <!-- 备注 -->
+		pay_type = #payType#,   <!-- 支付方式：0000-现金支付；0101-支付宝；0201-微信 -->
+		pay_type_name = #payTypeName#,   <!-- 支付方式名称 -->
+		status_code = #statusCode#,   <!-- 状态：00-草稿；02-待食堂确认；03-待制作；04-待取餐；05-待评价；99-已结束 -->
+		self_code = #selfCode#,   <!-- 长度4位，由0-9，A-Z，随机生成4为数 -->
+		current_dealer = #currentDealer#,   <!-- 当前处理人 -->
+		process_inst_id = #processInstId#,   <!-- 流程实例ID -->
+		print_flag = #printFlag#,   <!-- 打印标记 -->
+		order_way = #orderWay#,
+		need_date = #needDate#,   <!-- 取餐日期 -->
+		reject_code = #rejectCode#,   <!-- 作废状态 -->
+		reject_reason = #rejectReason#,   <!-- 作废原因 -->
+		pay_no = #payNo#,   <!-- 支付宝userId或微信的openId -->
+		card_id = #cardId#,
+		dept_name = #deptName#,   <!-- 科室 -->
+		dept_num = #deptNum#  <!-- 科室编码 -->
+		WHERE
+		id = #id#
+	</update>
+
+</sqlMap>

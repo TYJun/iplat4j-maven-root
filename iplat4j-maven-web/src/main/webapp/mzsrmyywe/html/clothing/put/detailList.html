@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.css" />
+    <link rel="stylesheet" href="../reference/css/iconfont.css" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="../reference/css/colorGreen.css" />
+    <link rel="stylesheet" href="../reference/css/loading.css" />
+    <link rel="stylesheet" href="../../reference/css/common.css" />
+    <link rel="stylesheet" href="../reference/css/clothCommon.css" />
+  </head>
+  <style>
+    .main {
+      margin-top: 55px;
+      background-color: white;
+    }
+
+    .total {
+      float: right;
+      margin-right: 10%;
+    }
+
+    .scan {
+      position: fixed;
+      /*bottom: 15px;*/
+      left: 15px;
+      width: 60px;
+      z-index: 11;
+    }
+
+    .round {
+      border: 1px solid #8ca498;
+      width: 60px;
+      height: 60px;
+      line-height: 29px;
+      text-align: center;
+      color: #fff;
+      background-color: #636b67;
+      filter: alpha(opacity=80);
+      /* 用于IE浏览器－透明度为20%*/
+      -moz-opacity: 0.8;
+      /*  用于Moz + Firefox－透明度为20%*/
+      opacity: 0.8;
+      -webkit-border-radius: 60px;
+      -moz-border-radius: 60px;
+      -o-border-radius: 60px;
+      border-radius: 60px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .round img {
+      margin-top: 4px;
+      margin-left: 2px;
+    }
+
+    .mui-card {
+      background-color: #30c37c;
+      color: white;
+    }
+
+    .mui-card-content {
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 18px;
+    }
+
+    .mui-numbox {
+      width: 160px;
+      height: 38px;
+    }
+
+    .mask {
+      height: 50%;
+    }
+
+    .hideBody {
+      position: fixed;
+      bottom: 0;
+      background-color: white;
+      width: 100%;
+      height: 50%;
+    }
+
+    .hideHtml {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      align-items: center;
+    }
+
+    .sureBtn button {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 40px;
+      font-size: 18px;
+      color: white;
+      background-color: #30c37c;
+    }
+
+    .save {
+      /* margin-left: 37%; */
+      width: 50%;
+    }
+
+    .add {
+      margin-left: 14%;
+    }
+
+    #chipResult {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 35%;
+      background-color: white;
+      padding: 10px;
+      width: 200px;
+      height: 160px;
+      box-shadow: 0px 0px 10px #30c37c;
+    }
+
+    /* #chipNum {
+      font-size: 60px;
+      margin-top: 40px;
+      font-weight: 600;
+      width: 100%;
+      text-align: center;
+    } */
+
+    #scanStop {
+      margin-left: 34px;
+      margin-top: 40px;
+      font-size: 20px;
+      box-shadow: 0px 0px 10px #30c37c;
+    }
+
+    .ulForward li {
+      text-align: center;
+      border-bottom: 1px solid #999;
+      font-size: 18px;
+      line-height: 50px;
+      width: 33%;
+      float: left;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    input.mui-input-clear.deptSearch {
+      margin-bottom: 0;
+    }
+  </style>
+
+  <body>
+    <header class="mui-bar mui-bar-nav backColor">
+      <h1 class="mui-title">洁物入库</h1>
+      <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+      </button>
+    </header>
+    <div class="main">
+      <div class="list">
+        <ul id="list"></ul>
+      </div>
+    </div>
+
+    <!-- 遮罩 -->
+  </body>
+  <script type="text/javascript" src="../reference/mui/js/mui.min.js"></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/jquery-2.1.4.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="../reference/mui/js/mui.picker.min.js"
+  ></script>
+  <script type="text/javascript" src="../reference/mui/js/baseInfo.js"></script>
+  <script
+    type="text/javascript"
+    src="../../reference/js/mui.loading.js"
+  ></script>
+  <script>
+    var url = decodeURI(window.location.href.split("?")[1]);
+    var billNo = url.split("&")[1];
+    var dataGroupCode = localStorage.getItem("dataGroupCode");
+    var submitArray = [];
+    var totalIndex = 0;
+    var baseUrl = localStorage.getItem("url");
+    console.log(billNo)
+
+    $(function() {
+      init();
+    });
+
+    function init() {
+      mui.showLoading("正在加载", "div");
+      var listHtml = "";
+      $.ajax({
+        type: "post",
+        url: baseUrl + "medical/fabric",
+        data: {
+          requestParam: '{"billNo": "'+billNo+'"}'
+        },
+        headers: {
+          methodName: 'queryCleanEnterWarehouseDeatil',
+          serviceName: 'OMMFCleanEnter'
+        },
+        success: function(data) {
+          mui.hideLoading();
+          // var data = JSON.parse(data);
+          if (data.statusCode != "0") {
+            mui.toast(data.msg);
+            return;
+          }
+          var list = data.data;
+          if (list.length == 0) {
+            mui.toast("当前没有数据！");
+            return;
+          }
+          for (var i = 0; i < list.length; i++) {
+            // list.forEach((element, index) => {
+            var obj = {
+              clothType: "",
+              clothTypeName: "",
+              clothModel: "",
+              num: ""
+              // beforeNum: ""
+            };
+            obj.clothType = list[i].clothType;
+            obj.clothTypeName = list[i].fabric_name;
+            obj.clothModel = list[i].fabricModel;
+            obj.num = list[i].number + "";
+            // objObj.beforeNum = list[i].sortingNum + "";
+            submitArray.push(obj);
+
+            if (obj.num != "0") {
+              listHtml += createHtml(obj.clothTypeName, obj.num, i);
+            }
+          }
+          // });
+          $("#list").html(listHtml);
+        }
+      });
+    }
+
+    //listHTML
+    function createHtml(clothTypeName, num, index) {
+      totalIndex++;
+      var html = "";
+      html =
+        '<li class="mui-table-view-cell"> <div class="mui-card"> <div class="mui-card-content"> <span class="clothType"> <span class ="clothTypeName">' +
+        clothTypeName +
+        '</span></span> <span>入库数量：<span class="num" id=' +
+        index +
+        ">" +
+        num +
+        "</span></span></div> </div> </li>";
+      return html;
+    }
+
+    /**
+     * @desc   点击返回按钮
+     * @author huoke
+     */
+    mui("body").on("tap", "#back", function() {
+      location.href = "./putHistory.html";
+    });
+
+    /**
+     * @desc   手机系统返回键
+     * @author huoke
+     */
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+      document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+      // window.history.back(-1)
+      location.href = "./putHistory.html";
+    }
+  </script>
+</html>

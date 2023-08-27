@@ -1,0 +1,190 @@
+.classify .icon{
+    width: 5rem;
+    height: 5rem;
+    text-align: center;
+    line-height: 5rem;
+    border-radius: 0.3rem;
+}
+.classify .icon img{
+    width: 2.3rem;
+}
+.classify .REPAIR .icon{
+  background-image: -moz-linear-gradient( 90deg, rgb(0, 52, 243) 0%, rgb(106, 186, 232) 100%);
+  background-image: -webkit-linear-gradient( 90deg, rgb(0, 52, 243) 0%, rgb(106, 186, 232) 100%);
+  background-image: -ms-linear-gradient( 90deg, rgb(0, 52, 243) 0%, rgb(106, 186, 232) 100%);
+}
+.classify .ORDER .icon{
+  background-image: -moz-linear-gradient( 90deg, rgb(246,84,34) 0%, rgb(252,185,114) 100%);
+  background-image: -webkit-linear-gradient( 90deg, rgb(246,84,34) 0%, rgb(252,185,114) 100%);
+  background-image: -ms-linear-gradient( 90deg, rgb(246,84,34) 0%, rgb(252,185,114) 100%);
+}
+.classify .CLEAN .icon{
+  background-image: -moz-linear-gradient( 90deg, rgb(0,140,175) 0%, rgb(28,192,234) 100%);
+  background-image: -webkit-linear-gradient( 90deg, rgb(0,140,175) 0%, rgb(28,192,234) 100%);
+  background-image: -ms-linear-gradient( 90deg, rgb(0,140,175) 0%, rgb(28,192,234) 100%);
+}
+
+.classify .MEAL .icon{
+  background-image: -moz-linear-gradient( 90deg, rgb(251, 81, 12) 0%, rgb(245, 201, 122) 100%);
+  background-image: -webkit-linear-gradient( 90deg, rgb(251, 81, 12) 0%, rgb(245, 201, 122) 100%);
+  background-image: -ms-linear-gradient( 90deg, rgb(251, 81, 12) 0%, rgb(245, 201, 122) 100%);
+}
+
+.classify .DEVICE .icon{
+  background-image: -moz-linear-gradient( 90deg, rgb(4, 129, 136) 0%, rgb(2, 233, 255) 100%);
+  background-image: -webkit-linear-gradient( 90deg, rgb(4, 129, 136) 0%, rgb(2, 233, 255) 100%);
+  background-image: -ms-linear-gradient( 90deg, rgb(4, 129, 136) 0%, rgb(2, 233, 255) 100%);
+}
+
+.classify .DEVICE_INSPECTION .icon{
+  background-image: -moz-linear-gradient( 90deg, rgb(20, 170, 185) 0%, rgb(10, 71, 121) 100%);
+  background-image: -webkit-linear-gradient( 90deg, rgb(20, 170, 185) 0%, rgb(10, 71, 121) 100%);
+  background-image: -ms-linear-gradient( 90deg, rgb(20, 170, 185) 0%, rgb(10, 71, 121) 100%);
+}
+
+.classify .ENV_INSPECTION .icon{
+  background-image: -moz-linear-gradient( 90deg, rgb(21, 197, 35) 0%, rgb(14, 78, 21) 100%);
+  background-image: -webkit-linear-gradient( 90deg, rgb(21, 197, 35) 0%, rgb(14, 78, 21) 100%);
+  background-image: -ms-linear-gradient( 90deg, rgb(21, 197, 35) 0%, rgb(14, 78, 21) 100%);
+}
+
+.classify .MAINTAIN .icon{
+  background-image: -moz-linear-gradient( 90deg, rgb(117, 138, 0) 0%, rgb(226, 232, 123) 100%);
+  background-image: -webkit-linear-gradient( 90deg, rgb(117, 138, 0) 0%, rgb(226, 232, 123) 100%);
+  background-image: -ms-linear-gradient( 90deg, rgb(117, 138, 0) 0%, rgb(226, 232, 123) 100%);
+}
+
+.classify .DECISION .icon{
+  background-image: -moz-linear-gradient( 90deg, rgb(120, 0, 195) 0%, rgb(217, 145, 255) 100%);
+  background-image: -webkit-linear-gradient( 90deg, rgb(120, 0, 195) 0%, rgb(217, 145, 255) 100%);
+  background-image: -ms-linear-gradient( 90deg, rgb(120, 0, 195) 0%, rgb(217, 145, 255) 100%);
+}
+
+.classify .TRANSPORT .icon{
+  background-image: -moz-linear-gradient( 90deg, rgb(24, 146, 13) 0%, rgb(30, 208, 125) 100%);
+  background-image: -webkit-linear-gradient( 90deg, rgb(24, 146, 13) 0%, rgb(30, 208, 125) 100%);
+  background-image: -ms-linear-gradient( 90deg, rgb(24, 146, 13) 0%, rgb(30, 208, 125) 100%);
+}
+
+.classify .CAR .icon{
+  background-image: -moz-linear-gradient( 90deg, rgb(247, 30, 30) 0%, rgb(241, 151, 151) 100%);
+  background-image: -webkit-linear-gradient( 90deg, rgb(247, 30, 30) 0%, rgb(241, 151, 151) 100%);
+  background-image: -ms-linear-gradient( 90deg, rgb(247, 30, 30) 0%, rgb(241, 151, 151) 100%);
+}
+
+.classify .ESCORT .icon{
+  background-image: -moz-linear-gradient( 90deg, rgb(255, 0, 247) 0%, rgb(249, 179, 237) 100%);
+  background-image: -webkit-linear-gradient( 90deg, rgb(255, 0, 247) 0%, rgb(249, 179, 237) 100%);
+  background-image: -ms-linear-gradient( 90deg, rgb(255, 0, 247) 0%, rgb(249, 179, 237) 100%);
+}
+
+.classify .WASTE .icon{
+  background-image: -moz-linear-gradient( 90deg, rgb(183, 175, 4) 0%, rgb(252, 241, 3) 100%);
+  background-image: -webkit-linear-gradient( 90deg, rgb(183, 175, 4) 0%, rgb(252, 241, 3) 100%);
+  background-image: -ms-linear-gradient( 90deg, rgb(183, 175, 4) 0%, rgb(252, 241, 3) 100%);
+}
+
+.classify .CLOTHES .icon{
+  background-image: -moz-linear-gradient( 90deg, rgb(37, 195, 255) 0%, rgb(56, 234, 251) 100%);
+  background-image: -webkit-linear-gradient( 90deg, rgb(37, 195, 255) 0%, rgb(56, 234, 251) 100%);
+  background-image: -ms-linear-gradient( 90deg, rgb(37, 195, 255) 0%, rgb(56, 234, 251) 100%);
+}
+
+.classify .OPERATION .icon{
+  background-image: -moz-linear-gradient( 90deg, rgb(86, 86, 86) 0%, rgb(204, 204, 204) 100%);
+  background-image: -webkit-linear-gradient( 90deg, rgb(86, 86, 86) 0%, rgb(204, 204, 204) 100%);
+  background-image: -ms-linear-gradient( 90deg, rgb(86, 86, 86) 0%, rgb(204, 204, 204) 100%);
+}
+.classify .MEDICAL .icon{
+  background-image: -moz-linear-gradient( 90deg, rgb(4, 130, 200) 0%, rgb(2, 233, 255) 100%);
+  background-image: -webkit-linear-gradient( 90deg, rgb(4, 130, 200) 0%, rgb(2, 233, 255) 100%);
+  background-image: -ms-linear-gradient( 90deg, rgb(4, 130, 200) 0%, rgb(2, 233, 255) 100%);
+}
+
+.classify .SAFTY_INSPECTION .icon{
+  background-image: -moz-linear-gradient( 90deg, rgb(209, 224, 85) 0%, rgb(255, 106, 2) 100%);
+  background-image: -webkit-linear-gradient( 90deg, rgb(209, 224, 85) 0%, rgb(255, 106, 2) 100%);
+  background-image: -ms-linear-gradient( 90deg, rgb(209, 224, 85) 0%, rgb(255, 106, 2) 100%);
+}
+
+.classify .DISTRIBUTION .icon{
+  background-image: -moz-linear-gradient( 90deg, rgb(2, 23, 255) 0%, rgb(85, 173, 224) 100%);
+  background-image: -webkit-linear-gradient( 90deg, rgb(2, 23, 255) 0%, rgb(85, 173, 224) 100%);
+  background-image: -ms-linear-gradient( 90deg, rgb(2, 23, 255) 0%, rgb(85, 173, 224) 100%);
+}
+
+.classify .AROUND .icon{
+  background-image: -moz-linear-gradient( 90deg, rgb(84, 140, 42) 0%, rgb(94, 241, 32) 100%);
+  background-image: -webkit-linear-gradient( 90deg, rgb(84, 140, 42) 0%, rgb(94, 241, 32) 100%);
+  background-image: -ms-linear-gradient( 90deg, rgb(84, 140, 42) 0%, rgb(94, 241, 32) 100%);
+}
+.classify .title{
+    font-size: 1.6rem;
+    font-family:"方正正准黑简体";
+}
+
+.mainContent .picture img{
+    width: 100%;
+    margin: 1rem 0;
+}
+
+
+.selfNav{
+  margin-top:1rem;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.topBar{
+    height: 4rem;
+    background-color: #0a58ad;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    color: #fff;
+    background-color:#286090;
+    border-color:#204d74;
+}
+.topBar .btn:hover,
+.topBar .btn:focus,
+.topBar .btn.focus{
+    color: #fff;
+}
+
+.btn:active{
+    background-color: rgba(255,255,255,0.4);
+}
+.topBar bottom{
+  line-height:3rem;
+  }
+.topBar .title{
+    position: absolute;
+    height: 3.8rem;
+    line-height: 4rem;
+    font-size: 2.7rem;
+    text-align: center;
+    left: 4rem;
+    right: 4rem;
+    top: 0;
+    font-family:"方正正准黑简体";
+}
+
+.userBtn{
+    font-size: 2rem;
+    margin-top: 1.3rem;
+}
+
+.navbar-inverse{
+  /*background-image: linear-gradient(to bottom,#2aabd2 0,#5bc0de 100%);*/
+  
+  background-image: -webkit-linear-gradient(top,#2aabd2 0,#5bc0de 100%);
+  background-image: -o-linear-gradient(top,#2aabd2 0,#5bc0de 100%);
+  background-image: -webkit-gradient(linear,left top,left bottom,from(#2aabd2),to(#5bc0de));
+  background-image: linear-gradient(to bottom,#2aabd2 0,#5bc0de 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff2aabd2', endColorstr='#ff5bc0de', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+
+  background-color: #2aabd2;
+  border-color: #2aabd2;
+}

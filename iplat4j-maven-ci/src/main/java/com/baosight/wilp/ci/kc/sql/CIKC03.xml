@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CIKC03">
+
+    <select id="getStorge" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT ware_house_no   wareHouseNo,
+               ware_house_name wareHouseName,
+               mat_num         matNum,
+               mat_name        matName,
+               sum(total_num)  totalNum
+        FROM ci_storge
+        group by ware_house_no, mat_num
+    </select>
+
+    <select id="getEnterNum" parameterClass="java.util.HashMap" resultClass="String">
+        SELECT ifnull( sum( after_num )- sum( before_num ), 0 ) enterNum
+        FROM `ci_storge_record`
+        where origin_bill_type_name LIKE '%入库%'
+          and ware_house_no = #wareHouseNo#
+          and mat_num = #matCode#
+          and rec_create_time like concat(#month#, '%')
+    </select>
+
+    <select id="getOutNum" parameterClass="java.util.HashMap" resultClass="String">
+        SELECT
+            ifnull( sum( before_num )- sum( after_num ), 0 ) outNum
+        FROM
+            `ci_storge_record`
+        WHERE origin_bill_type_name LIKE '%出库%'
+          and ware_house_no = #wareHouseNo#
+          and mat_num = #matCode#
+          and rec_create_time like concat(#month#, '%')
+    </select>
+
+    <select id="query" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.ci.kc.domain.CiStatistics">
+        select
+        id as "id",   <!--uuid-->
+        create_time as "createTime",   <!--创建时间-->
+        month as "month",   <!--月份-->
+        ware_house_no as "wareHouseNo",   <!--仓库号-->
+        mat_code as "matCode",   <!--物资编码-->
+        start_balance as "startBalance",   <!--期初数据-->
+        end_balance as "endBalance",   <!--期末数据-->
+        enter_num as "enterNum",   <!--入库数据-->
+        out_num as "outNum"  <!--出库数据-->
+        from ci_statistics WHERE 1=1
+        <isNotEmpty prepend=" AND " property="month">
+            month = #month#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="wareHouseNo">
+            ware_house_no = #wareHouseNo#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="matCode">
+            mat_code = #matCode#
+        </isNotEmpty>
+    </select>
+
+    <!--
+     <isNotEmpty prepend=" AND " property="id">
+        id = #id#
+    </isNotEmpty>
+     <isNotEmpty prepend=" AND " property="createTime">
+        create_time = #createTime#
+    </isNotEmpty>
+     <isNotEmpty prepend=" AND " property="month">
+        month = #month#
+    </isNotEmpty>
+     <isNotEmpty prepend=" AND " property="wareHouseNo">
+        ware_house_no = #wareHouseNo#
+    </isNotEmpty>
+     <isNotEmpty prepend=" AND " property="matCode">
+        mat_code = #matCode#
+    </isNotEmpty>
+     <isNotEmpty prepend=" AND " property="startBalance">
+        start_balance = #startBalance#
+    </isNotEmpty>
+     <isNotEmpty prepend=" AND " property="endBalance">
+        end_balance = #endBalance#
+    </isNotEmpty>
+     <isNotEmpty prepend=" AND " property="enterNum">
+        enter_num = #enterNum#
+    </isNotEmpty>
+     <isNotEmpty prepend=" AND " property="outNum">
+        out_num = #outNum#
+    </isNotEmpty>
+     -->
+
+    <insert id="insert">
+        insert into ci_statistics(
+        id,   <!--uuid-->
+        create_time,   <!--创建时间-->
+        month,   <!--月份-->
+        ware_house_no,   <!--仓库号-->
+        ware_house_name,
+        mat_code,   <!--物资编码-->
+        mat_name,
+        start_balance,   <!--期初数据-->
+        enter_num,   <!--入库数据-->
+        out_num,   <!--出库数据-->
+        end_balance  <!--期末数据-->
+        )
+        values (
+        #id# ,
+        #createTime# ,
+        #month# ,
+        #wareHouseNo# ,
+        #wareHouseName# ,
+        #matCode# ,
+        #matName# ,
+        #startBalance# ,
+        #enterNum# ,
+        #outNum# ,
+        #endBalance#
+        )
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update ci_statistics
+        set
+        enter_num = #enterNum# , <!--入库数据-->
+        out_num = #outNum# , <!--出库数据-->
+        end_balance = #endBalance#  <!--期末数据-->
+        where id = #id#
+    </update>
+
+
+</sqlMap>

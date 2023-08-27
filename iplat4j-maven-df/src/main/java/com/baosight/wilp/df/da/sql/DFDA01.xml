@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFDA01">
+
+	<!-- 设备档案查询 -->
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		dd.id,
+		dd.machine_code machineCode,
+		dd.machine_name machineName,
+		dd.machine_type_id machineTypeId,
+		dm.classify_name machineTypeName,
+		dd.maker_brand makerBrand,
+		dd.models,
+		dd.fixed_place fixedPlace,
+		dd.spot_id spotId,
+		dd.spot_code spotCode,
+		dms.spot_name spotName,
+		dd.fixed_time fixedTime,
+		dd.quailty_time quailtyTime,
+		dd.manufacturer_name manufacturerName,
+		dd.supplier_id supplierId,
+		dd.supplier_name supplierName,
+		dd.buy_time buyTime,
+		dd.use_limit useLimit,
+		dd.last_maintain_time lastMaintainTime,
+		dd.manager_depart_id managerDepartId,
+		dd.manager_depart_name managerDepartName,
+		dd.manager_man_id managerManId,
+		dd.use_deaprt_id useDeaprtId,
+		dd.use_deaprt_name useDeaprtName,
+		dd.memo,
+		dd.create_time createTime,
+		dd.create_man createMan,
+		dd.create_ip createIp,
+		dd.modify_time modifyTime,
+		dd.modify_man modifyMan,
+		dd.modify_ip modifyIp,
+		dd.invalid_time invalidTime,
+		dd.invalid_man invalidMan,
+		dd.invalid_ip invalidIp,
+		dd.invalid_bill_no invalidBillNo,
+		dd.status,
+		dd.machine_mobile_flag machineMobileFlag,
+		dd.machine_folder_id machineFolderId,
+		dd.machine_level machineLevel,
+		dd.fixedX,
+		dd.fixedY,
+		dd.fixedZ,
+		dd.building,
+		dd.floor,
+		dd.use_time useTime,
+		dd.maintain_round maintainRound,
+		dd.use_for useFor,
+		dd.need_scan needScan,
+		dd.maint_unit maintUnit,
+		dd.out_factory_no outFactoryNo,
+		dd.mat_num matNum,
+		dd.mat_name matName,
+		dd.type_flag typeFlag,
+		dd.asset_price assetPrice,
+		dd.warranty_date warrantyDate,
+		dd.buy_mode buyMode,
+		dd.device_num deviceNum,
+		dd.nfcCardNo,
+		dd.nfcFlag,
+		dd.hexCode,
+		dd.machine_code_old machineCodeOld
+		FROM
+		df_devicemachine dd
+		LEFT JOIN df_modulebaseclassfy dm ON dd.machine_type_id = dm.id
+		LEFT JOIN df_machine_spot dms ON dd.spot_id = dms.spot_id
+		WHERE 1 = 1
+		<isNotEmpty prepend=" AND " property="machineCode">
+			dd.machine_code like concat('%', #machineCode#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineName">
+			dd.machine_name like concat('%', #machineName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="classifyName">
+			dm.classify_name like concat('%', #classifyName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="models">
+			dd.models like concat('%', #models#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="warrantyDateS">
+			date_format(dd.warranty_date,'%Y-%m-%d') >= #warrantyDateS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="warrantyDateE">
+			date_format(dd.warranty_date,'%Y-%m-%d') <![CDATA[<=]]> #warrantyDateE#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="buyMode">
+			dd.buy_mode = #buyMode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="useDeaprtName">
+			dd.use_deaprt_name like concat('%', #useDeaprtName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="managerDepartName">
+			dd.manager_depart_name like concat('%', #managerDepartName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineId">
+			dd.id = #machineId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spotId">
+			dd.spot_id = #spotId#
+		</isNotEmpty>
+		GROUP BY dd.id
+		order by dd.machine_code asc
+		<isNotEmpty property="offset">
+			limit #offset#,#limit#
+		</isNotEmpty>
+	</select>
+
+	<!-- 设备档案查询 -->
+	<select id="count" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT
+		dd.id
+		FROM
+		df_devicemachine dd
+		LEFT JOIN df_modulebaseclassfy dm ON dd.machine_type_id = dm.id
+		LEFT JOIN df_machine_spot dms ON dd.spot_id = dms.spot_id
+		WHERE 1 = 1
+		<isNotEmpty prepend=" AND " property="machineCode">
+			dd.machine_code like concat('%', #machineCode#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineName">
+			dd.machine_name like concat('%', #machineName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="classifyName">
+			dm.classify_name like concat('%', #classifyName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="models">
+			dd.models like concat('%', #models#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="warrantyDateS">
+			date_format(dd.warranty_date,'%Y-%m-%d') >= #warrantyDateS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="warrantyDateE">
+			date_format(dd.warranty_date,'%Y-%m-%d') <![CDATA[<=]]> #warrantyDateE#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="buyMode">
+			dd.buy_mode = #buyMode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="useDeaprtName">
+			dd.use_deaprt_name like concat('%', #useDeaprtName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="managerDepartName">
+			dd.manager_depart_name like concat('%', #managerDepartName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineId">
+			dd.id = #machineId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spotId">
+			dd.spot_id = #spotId#
+		</isNotEmpty>
+		GROUP BY dd.id
+	</select>
+
+	<!-- 查询指定设备信息 -->
+	<select id="queryId" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		SELECT
+			dd.id,
+			dd.machine_code machineCode,
+			dd.machine_name machineName,
+			dd.machine_type_id machineTypeId,
+			dm.classify_name machineTypeName,
+			dd.maker_brand makerBrand,
+			dd.models,
+			dd.spot_id spotId,
+			dd.spot_code spotCode,
+			dd.fixed_place fixedPlace,
+			dd.fixed_time fixedTime,
+			dd.quailty_time quailtyTime,
+			dd.manufacturer_name manufacturerName,
+			dd.supplier_id supplierId,
+			dd.buy_time buyTime,
+			dd.use_limit useLimit,
+			dd.last_maintain_time lastMaintainTime,
+			dd.manager_depart_id managerDepartId,
+			dd.manager_depart_name managerDepartName,
+			dd.manager_man_id managerManId,
+			dd.manager_man managerMan,
+			dd.use_deaprt_id useDeaprtId,
+			dd.use_deaprt_name useDeaprtName,
+			dd.memo,
+			dd.create_time createTime,
+			dd.create_man createTime,
+			dd.create_ip createIp,
+			dd.modify_time modifyTime,
+			dd.modify_man modifyMan,
+			dd.modify_ip modifyIp,
+			dd.invalid_time invalidTime,
+			dd.invalid_man invalidMan,
+			dd.invalid_ip invalidIp,
+			dd.invalid_bill_no invalidBillNo,
+			dd.status,
+			dd.machine_mobile_flag machineMobileFlag,
+			dd.machine_folder_id machineFolderId,
+			dd.machine_level machineLevel,
+			dd.fixedX,
+			dd.fixedY,
+			dd.fixedZ,
+			dd.building,
+			dd.floor,
+			dd.use_time useTime,
+			dd.maintain_round maintainRound,
+			dd.use_for useFor,
+			dd.need_scan needScan,
+			dd.maint_unit maintUnit,
+			dd.out_factory_no outFactoryNo,
+			dd.mat_num matNum,
+			dd.mat_name matName,
+			dd.type_flag typeFlag,
+			dd.asset_price assetPrice,
+			dd.warranty_date warrantyDate,
+			dd.buy_mode buyMode,
+			dd.device_num deviceNum,
+			dd.nfcCardNo,
+			dd.nfcFlag,
+			dd.hexCode,
+			dd.machine_code_old machineCodeOld,
+			dd.supplier_name supplierName,
+		    dd.energy_form  energyForm,
+		    dd.factory_tel factoryTel,
+		    dd.in_storage_time inStorageTime,
+			dd.goods_code goodsCode,
+			dd.goods_name goodsName,
+			dd.goods_no goodsNo,
+			dd.asset_belongs  assetBelongs,
+			dd.out_storage_time   outStorageTime
+		FROM
+			df_devicemachine dd
+				LEFT JOIN
+			df_modulebaseclassfy dm ON dd.machine_type_id = dm.id
+		WHERE
+			dd.id = #value#
+	</select>
+
+	<!-- 设备档案插入 -->
+	<insert id="insert" parameterClass="java.util.HashMap">
+		insert into df_devicemachine
+		(
+			id,
+			spot_id,
+			spot_code,
+			machine_code,
+			machine_name,
+			models,
+			machine_type_id,
+			status,
+			need_scan,
+			buy_time,
+			fixed_time,
+			use_time,
+			fixed_place,
+			building,
+			floor,
+			warranty_date,
+			maker_brand,
+			supplier_id,
+			supplier_name,
+			manufacturer_name,
+			maint_unit,
+			last_maintain_time,
+			maintain_round,
+			manager_man_id,
+			manager_man,
+			manager_depart_id,
+			manager_depart_name,
+			use_deaprt_id,
+			use_deaprt_name,
+			mat_num,
+			mat_name,
+			out_factory_no,
+			use_limit,
+			use_for,
+			machine_folder_id,
+			buy_mode,
+			asset_price,
+			memo,
+			energy_form,
+			factory_tel,
+			in_storage_time,
+			goods_code,
+			goods_name,
+			goods_no,
+			asset_belongs,
+			out_storage_time
+		)
+		values
+		(
+			#id#,
+			#spotId#,
+			#spotCode#,
+			#machineCode#,
+			#machineName#,
+			#models#,
+			#machineTypeId#,
+			#status#,
+			#needScan#,
+			#buyTime#,
+			#fixedTime#,
+			#useTime#,
+			#fixedPlace#,
+			#building#,
+			#floor#,
+			#warrantyDate#,
+			#makerBrand#,
+			#supplierId#,
+			#supplierName#,
+			#manufacturerName#,
+			#maintUnit#,
+			#lastMaintainTime#,
+			#maintainRound#,
+			#managerManId#,
+			#managerMan#,
+			#managerDepartId#,
+			#managerDepartName#,
+			#useDeaprtId#,
+			#useDeaprtName#,
+			#matNum#,
+			#matName#,
+			#outFactoryNo#,
+			#useLimit#,
+			#useFor#,
+			#machineFolderId#,
+			#buyMode#,
+			#assetPrice#,
+			#memo#,
+			#energyForm#,
+			#factoryTel#,
+			#inStorageTime#,
+			#goodsCode#,
+			#goodsName#,
+			#goodsNo#,
+			#assetBelongs#,
+			#outStorageTime#
+		)
+	</insert>
+
+	<!-- 导入新增设备档案-->
+	<insert id="insertImport" parameterClass="java.util.HashMap">
+		insert into df_devicemachine
+		(
+			id,
+			spot_id,
+			spot_code,
+			machine_code,
+			machine_name,
+			machine_type_id,
+			fixed_place,
+			supplier_name,
+			manufacturer_name,
+			maint_unit,
+			manager_man_id,
+			manager_man,
+			manager_depart_id,
+			manager_depart_name,
+			use_deaprt_id,
+			use_deaprt_name
+		)
+		values
+			(
+				#id#,
+				#spotId#,
+				#spotCode#,
+				#machineCode#,
+				#machineName#,
+				#machineTypeId#,
+				#fixedPlace#,
+				#supplierName#,
+				#manufacturerName#,
+				#maintUnit#,
+				#managerManId#,
+				#managerMan#,
+				#managerDepartId#,
+				#managerDepartName#,
+				#useDeaprtId#,
+				#useDeaprtName#
+			)
+	</insert>
+
+	<!-- 插入设备地点信息 -->
+	<insert id="insertMachineSpot" parameterClass="java.util.HashMap">
+		insert into df_machine_spot
+		(
+			id,
+			spot_id,
+			spot_code,
+			spot_name,
+			building,
+			floor,
+			rec_creator,
+			rec_create_time,
+			data_group_code
+		)
+		values
+		(
+			#id#,
+			#spotId#,
+			#spotCode#,
+			#spotName#,
+			#building#,
+			#floor#,
+			#recCreator#,
+			#recCreateTime#,
+			#datagroupCode#
+		)
+	</insert>
+
+	<!-- 启用设备 -->
+	<update id="startRow" parameterClass="java.util.List">
+		update df_devicemachine set status='启用' WHERE id IN
+		<iterate conjunction="," open="(" close=")">
+			#[]#
+		</iterate>
+	</update>
+
+	<!-- 停用设备 -->
+	<update id="stopRow" parameterClass="java.util.List">
+		update df_devicemachine set status='停用' WHERE id IN
+		<iterate conjunction="," open="(" close=")">
+			#[]#
+		</iterate>
+	</update>
+
+	<!-- 删除设备 -->
+	<delete id="deleteDevicemachine" parameterClass="java.util.List">
+		DELETE FROM df_devicemachine WHERE id IN
+		<iterate conjunction="," open="(" close=")">
+			#[]#
+		</iterate>
+	</delete>
+
+
+	<!-- 插入文件 -->
+	<insert id="insertFile" parameterClass="java.util.HashMap">
+		insert into df_machine_file
+		(
+			id,
+			machineId,
+			fileId,
+			fileName,
+			fileSize,
+			fileDesc,
+			fileNum
+		)
+		values
+		(
+			#id#,
+			#machineId#,
+			#fileId#,
+			#fileName#,
+			#fileSize#,
+			#fileDesc#,
+			#fileNum#
+		)
+	</insert>
+	
+	<!-- 通过设备id获取该设备的文件 -->
+	<select id="queryFile" parameterClass="String" resultClass="java.util.HashMap">
+	    select
+	        id,
+	        fileId,
+	        fileName,
+	        fileSize,
+	        fileDesc,
+	        fileNum
+	       from df_machine_file where
+			machineId=#value#
+			order by fileNum desc
+	</select>
+	
+	<!-- 删除文件 -->
+	<delete id="deleteFile" parameterClass="String">
+	  delete from df_machine_file where machineId=#value#
+	  
+	</delete>
+
+	<!-- 是否存在设备档案编号 -->
+	<select id="isExist" parameterClass="java.lang.String" resultClass="int">
+		select id from df_devicemachine where machine_code=#value#
+	</select>
+
+	<!-- 巡检基准是否关联设备 -->
+	<select id="isDiRelationDevice" parameterClass="java.lang.String" resultClass="int">
+		SELECT count(1) FROM di_scheme WHERE machineID = #value#
+	</select>
+
+	<!-- 巡检基准是否关联设备 -->
+	<select id="isDkRelationDevice" parameterClass="java.lang.String" resultClass="int">
+		SELECT count(1) FROM dk_scheme WHERE machineID = #value#
+	</select>
+
+
+
+	<!-- ===============================================旧版兼容代码(开始)============================================ -->
+	<!-- 查询人员count -->
+	<select id="queryDeptAndWorkCount" parameterClass="java.util.Map" resultClass="int">
+		select t1.DEPT_NUM deptNum,t1.DEPT_NAME deptName,t2.name workName,t2.work_no workNum
+		from tbmbd01 t1 left join tbmbd02 t2 on t1.DEPT_NUM = t2.dept_num
+		where 1=1
+		<isNotEmpty prepend=" AND " property="deptNum">
+			t1.DEPT_NUM like concat('%', #deptNum#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			t1.DEPT_NAME like concat('%', #deptName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workName">
+			t2.name like concat('%', #workName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workNum">
+			t2.work_no  like concat('%', #workNum#, '%')
+		</isNotEmpty>
+	</select>
+
+	<!-- 查询科室和人员 -->
+	<select id="queryDeptAndWork" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select t1.DEPT_NUM deptNum,t1.DEPT_NAME deptName,t2.name workName,t2.work_no workNum
+		from tbmbd01 t1 left join tbmbd02 t2 on t1.DEPT_NUM = t2.dept_num
+		where 1=1
+		<isNotEmpty prepend=" AND " property="deptNum">
+			t1.DEPT_NUM like concat('%', #deptNum#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			t1.DEPT_NAME like concat('%', #deptName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workName">
+			t2.name like concat('%', #workName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workNum">
+			t2.work_no  like concat('%', #workNum#, '%')
+		</isNotEmpty>
+
+	</select>
+
+	<!-- ===============================================旧版兼容代码(结束)============================================ -->
+
+</sqlMap>

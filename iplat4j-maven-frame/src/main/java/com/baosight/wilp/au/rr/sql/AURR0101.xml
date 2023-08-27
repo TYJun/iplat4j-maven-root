@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="AURR0101">
+
+	
+	<select id="queryResource" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			
+			SELECT id,
+				resource_ename AS resourceEname,
+				resource_name AS resourceName,
+				type,
+				status,
+				rec_creator AS recCreator,
+				rec_create_time AS recCreateTime,
+				rec_revisor,
+				rec_revise_time 
+			FROM $projectSchema$.ac_resource
+			WHERE status='1'
+			
+			<isNotEmpty prepend=" AND " property="resourceEname">
+				resource_ename = #resourceEname#
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="resourceName">
+				resource_name like concat('%', #resourceName#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend=" AND " property="type">
+				type = #type#
+			</isNotEmpty>
+			
+	</select>
+						
+	<!--  -->			
+	<select id="queryResourceCount" parameterClass="java.util.HashMap"  resultClass="int">
+			SELECT COUNT(1) FROM (
+				SELECT id,
+					resource_ename AS resourceEname,
+					resource_name AS resourceName,
+					type,
+					status,
+					rec_creator AS recCreator,
+					rec_create_time AS recCreateTime,
+					rec_revisor,
+					rec_revise_time 
+				FROM $projectSchema$.ac_resource
+				WHERE status='1'
+				<isNotEmpty prepend=" AND " property="resourceEname">
+					resource_ename = #resourceEname#
+				</isNotEmpty>
+				<isNotEmpty prepend=" AND " property="resourceName">
+					resource_name like concat('%', #resourceName#, '%')
+				</isNotEmpty>
+				<isNotEmpty prepend=" AND " property="type">
+					type = #type#
+				</isNotEmpty>
+		    ) t
+			WHERE 1=1
+			
+	</select>
+	
+	<insert id="bindingResource" parameterClass="java.util.HashMap">
+		INSERT INTO $projectSchema$.ac_rr 
+			(id,role_id,resource_id)
+		VALUES
+		<iterate conjunction="," property="list">
+			(
+			#list[].id#,
+			#list[].roleId#,
+			#list[].resourceId#
+			)
+		</iterate>
+	</insert>
+	
+	
+
+</sqlMap>

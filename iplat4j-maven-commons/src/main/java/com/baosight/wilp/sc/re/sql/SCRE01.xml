@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SCRE01">
+    <!--物资库存量预警列表-->
+    <select id="siMatNum" resultClass="java.util.HashMap">
+        SELECT mat_name,mat_type_name,mat_spec,unit_name
+        FROM `si_storge`
+        where total_num = 0
+    </select>
+
+    <!--月进出库物资数量统计-->
+    <select id="siInOutCount" resultClass="java.util.HashMap">
+        select ROUND(sum(enternum),2) enterNum,
+               ROUND(sum(outnum),2) outNum,
+               concat(DATE_FORMAT(bill_make_time,'%c'),'月') month
+        from
+            (SELECT bill_make_time,total_num enternum,'0' outnum FROM `si_enter`
+             union
+             SELECT bill_make_time,'0' enternum,total_num outnum FROM `si_out`)t
+        group by month limit 9
+    </select>
+
+    <!--物资数量统计-->
+    <select id="siMatCount" resultClass="java.util.HashMap">
+        SELECT mat_name,mat_type_name,mat_spec,unit_name,total_num
+        FROM `si_storge`
+        order by total_num desc limit 5
+    </select>
+
+<!--    采购单状态统计-->
+    <select id="mpOrderStatus" resultClass="java.util.HashMap">
+        SELECT count(*) num,status_name
+        FROM `mp_purchase_order`
+        group by status_name
+    </select>
+
+<!--    采购物资种类统计-->
+    <select id="mpOrderType" resultClass="java.util.HashMap">
+        SELECT sum(enter_num) num,mat_type_name
+        FROM `mp_purchase_order_detail`
+        group by mat_type_name
+    </select>
+
+<!--    月度采购金额统计-->
+    <select id="mpOrderMoney" resultClass="java.util.HashMap">
+        SELECT sum(order_cost) money,
+               concat(DATE_FORMAT(rec_create_time,'%c'),'月') month
+        FROM `mp_purchase_order`
+        group by DATE_FORMAT(rec_create_time,'%Y-%m')desc limit 9
+    </select>
+
+<!--    近七天订餐人次-->
+    <select id="scOrderCount" resultClass="java.util.HashMap">
+        select IFNULL(b.num,0) num,DATE_FORMAT(a.weekday,'%m-%d') date from (
+               select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 1 DAY) as weekday
+               union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 2 DAY)
+               union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 3 DAY)
+               union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 4 DAY)
+               union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 5 DAY)
+               union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 6 DAY)
+               union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 7 DAY)) a
+        left join (SELECT count(*) num,need_date
+                 FROM `sc_work_order_bill`
+                 where status_code >= '02' and reject_code is null
+                 group by need_date) b
+        on a.weekday = b.need_date
+        order by a.weekday
+    </select>
+
+<!--    热门点餐区域-->
+    <select id="scOrderArea" resultClass="java.util.HashMap">
+        SELECT count(*) num,building
+        FROM `sc_work_order_bill`
+        where status_code >= '02' and reject_code is null and building is not null
+        group by building order by num desc limit 5
+    </select>
+
+<!--    本周菜品销量排行-->
+    <select id="scMealSale" resultClass="java.util.HashMap">
+        SELECT count(*) num,b.menu_name FROM `sc_work_order_bill` a
+        left join sc_work_order_bill_detail b
+        on a.bill_no=b.bill_no
+        where a.need_date >= TIMESTAMPADD(week,-1,CURRENT_DATE)
+        and a.need_date <![CDATA[<=]]> CURRENT_DATE
+        and a.status_code >= '02' and a.reject_code is null
+        group by b.menu_name
+        order by num desc
+    </select>
+
+<!--    当天保洁工单状态统计-->
+    <select id="csStatusCount" resultClass="java.util.HashMap">
+        SELECT
+            ifnull(sum(case when status_code = '01' then 1 else 0 end),0) as '待接单',
+                ifnull(sum(case when status_code = '02' then 1 else 0 end),0) as '执行量',
+                ifnull(sum(case when status_code = '03' then 1 else 0 end),0) as '完工量',
+                ifnull(sum(case when status_code = '99' then 1 else 0 end),0) as '已评价'
+        FROM `cs_gd`
+        where task_no like concat('%',DATE_FORMAT(CURRENT_DATE,'%y%m%d'),'%')
+    </select>
+
+<!--    当天保洁工单响应时间、处理时间、工单完成率、工单评价率统计-->
+    <select id="csTimeCount" resultClass="java.util.HashMap">
+        SELECT
+            IFNULL(sum(if(TIMESTAMPDIFF(minute,rec_create_time,confirm_time) is null,0,TIMESTAMPDIFF(minute,rec_create_time,confirm_time)))/count(*),0) as '平均响应时间',
+                IFNULL(sum(if(TIMESTAMPDIFF(minute,rec_create_time,finish_time) is null,0,TIMESTAMPDIFF(minute,rec_create_time,finish_time)))/count(*),0) as '平均处理时间',
+                IFNULL(sum(case when status_code = '03' or status_code = '99' then 1 else 0 end)/sum(case when status_code != '98' then 1 else 0 end),0) as '工单完成率',
+                IFNULL(sum(case when status_code = '99' then 1 else 0 end)/sum(case when status_code != '98' then 1 else 0 end),0) as '工单评价率'
+        FROM `cs_gd`
+        where task_no like concat('%',DATE_FORMAT(CURRENT_DATE,'%y%m%d'),'%')
+    </select>
+
+<!--    保洁服务热点科室-->
+    <select id="csDeptCount" resultClass="java.util.HashMap">
+        SELECT count(*) num,req_dept_name
+        FROM `cs_gd`
+        where req_dept_name is not null
+        group by req_dept_name
+        order by num limit 5
+    </select>
+
+<!--    保洁事项统计-->
+    <select id="csItemCount" resultClass="java.util.HashMap">
+        SELECT count(*) num,item_name
+        FROM `cs_gd_mx`
+        where item_name is not null
+        group by item_name
+        order by num limit 5
+    </select>
+
+<!--    近七天保洁工单数量-->
+    <select id="csTaskCount" resultClass="java.util.HashMap">
+        select IFNULL(b.receive,0) receive,IFNULL(b.execute,0) execute,IFNULL(b.finish,0) finish,DATE_FORMAT(a.weekday,'%m-%d') date from (
+            select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 1 DAY) as weekday
+            union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 2 DAY)
+            union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 3 DAY)
+            union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 4 DAY)
+            union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 5 DAY)
+            union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 6 DAY)
+            union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 7 DAY)) a
+            left join (SELECT
+            sum(case when status_code = '01' then 1 else 0 end) as receive,
+            sum(case when status_code = '02' then 1 else 0 end) as execute,
+            sum(case when status_code in ('03','99') then 1 else 0 end) as finish,
+            DATE_FORMAT(rec_create_time,'%Y-%m-%d') date
+            FROM `cs_gd`
+            where status_code != '98'
+            group by date) b
+        on a.weekday = b.date
+        order by a.weekday
+    </select>
+
+<!--    各部门第三方人员数量统计-->
+    <select id="hrManCount" resultClass="java.util.HashMap">
+        SELECT count(*) num,dept_num FROM `hr_man`
+        where dept_num is not null
+        group by dept_num
+        order by num desc limit 10
+    </select>
+
+<!--    服务投诉统计-->
+    <select id="cpStatusCount" resultClass="java.util.HashMap">
+        SELECT complaint_dept,complaint_content,
+               DATE_FORMAT(rec_create_time,'%m-%d') date,
+                CASE  status_code
+                WHEN '1'THEN '待处理'
+                WHEN '2'THEN '待回访'
+                WHEN '3'THEN '待评价' END AS status_code
+        FROM `cp_bill`
+		where status_code in ('1','2','3')
+		order by date desc
+    </select>
+
+<!--    本月上月各项目满意度统计-->
+    <select id="sqScoreCount" resultClass="java.util.HashMap">
+        select b.standard_name name,
+               if(b.score is null,0,ROUND(b.score,2)) last_score,
+               if(a.score is null,0,ROUND(a.score,2)) this_score
+        from (SELECT a.standard_name,
+                     sum(score)/sum(point)*100 score,a.batch_no,'上月' type
+                FROM `sq_manage` a
+                    left join sq_manage_score b on a.batch_no = b.batch_no
+                where a.batch_no like concat('%',DATE_FORMAT(TIMESTAMPADD(month,-3,CURRENT_DATE),'%y%m'),'%')
+                group by a.batch_no)b
+        left join
+            (SELECT a.standard_name,
+                    sum(score)/sum(point)*100 score,a.batch_no,'本月' type
+            FROM`sq_manage` a
+                left join sq_manage_score b on a.batch_no = b.batch_no
+            where a.batch_no like concat('%',DATE_FORMAT(TIMESTAMPADD(month,-2,CURRENT_DATE),'%y%m'),'%')
+            group by a.batch_no)a
+        on a.standard_name = b.standard_name
+    </select>
+
+<!--    固定资产台账-->
+    <select id="faInfo" resultClass="java.util.HashMap">
+        SELECT ifnull(sum(case when status_code != '060' then 1 else 0 end),0) as '在库量',
+                ifnull(sum(case when status_code = '060' then 1 else 0 end),0) as '报废量',
+                ifnull(sum(case when status_code = '020' then 1 else 0 end),0) as '使用量'
+        FROM `fa_info`
+    </select>
+
+<!--    固定资产各分类数量统计-->
+    <select id="faTypeCount" resultClass="java.util.HashMap">
+        select round(sum(case when asset_type = 'A' then 1 else 0 end)/count(*)*100,2) as '医疗资产占比',
+                round(sum(case when asset_type = 'B' then 1 else 0 end)/count(*)*100,2) as '无形资产占比',
+                round(sum(case when asset_type = 'C' then 1 else 0 end)/count(*)*100,2) as '固定资产占比'
+        from fa_info
+    </select>
+
+<!--    月度固定资产增加量统计-->
+    <select id="faSumCount" resultClass="java.util.HashMap">
+        select IFNULL(b.num,0) num,DATE_FORMAT(a.weekday,'%Y-%m') month from (
+             select date_sub(CURRENT_DATE,INTERVAL 1 MONTH) as weekday
+             union select date_sub(CURRENT_DATE,INTERVAL 2 MONTH)
+             union select date_sub(CURRENT_DATE,INTERVAL 3 MONTH)
+             union select date_sub(CURRENT_DATE,INTERVAL 4 MONTH)
+             union select date_sub(CURRENT_DATE,INTERVAL 5 MONTH)
+             union select date_sub(CURRENT_DATE,INTERVAL 6 MONTH)
+             union select date_sub(CURRENT_DATE,INTERVAL 7 MONTH)) a
+        left join (SELECT count(*) num,DATE_FORMAT(rec_create_time,'%Y-%m') month FROM `fa_info`
+                    where rec_create_time is not null
+                    group by month) b
+        on DATE_FORMAT(a.weekday,'%Y-%m') = b.month
+        order by a.weekday
+    </select>
+
+<!--    日班组巡检工作量统计-->
+    <select id="diTaskCountDay" resultClass="java.util.HashMap">
+        SELECT count(*) num,departName FROM `di_task`
+        where DATE_FORMAT(createTime,'%Y-%m-%d') = DATE_FORMAT(CURRENT_DATE,'%Y-%m-%d')
+        group by departName
+    </select>
+
+    <!--    周班组巡检工作量统计-->
+    <select id="diTaskCountWeek" resultClass="java.util.HashMap">
+        SELECT count(*) num,departName FROM `di_task`
+        where DATE_FORMAT(createTime,'%Y-%m-%d') >= DATE_FORMAT(TIMESTAMPADD(week,-1,CURRENT_DATE),'%Y-%m-%d')
+        and DATE_FORMAT(createTime,'%Y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(CURRENT_DATE,'%Y-%m-%d')
+        group by departName
+    </select>
+
+    <!--    月班组巡检工作量统计-->
+    <select id="diTaskCountMonth" resultClass="java.util.HashMap">
+        SELECT count(*) num,departName FROM `di_task`
+        where DATE_FORMAT(createTime,'%Y-%m') = DATE_FORMAT(CURRENT_DATE,'%Y-%m')
+        group by departName
+    </select>
+
+    <!--    日班组保养工作量统计-->
+    <select id="dkTaskCountDay" resultClass="java.util.HashMap">
+        SELECT count(*) num,departName FROM `dk_task`
+        where DATE_FORMAT(createTime,'%Y-%m-%d') = DATE_FORMAT(CURRENT_DATE,'%Y-%m-%d')
+        group by departName
+    </select>
+
+    <!--    周班组保养工作量统计-->
+    <select id="dkTaskCountWeek" resultClass="java.util.HashMap">
+        SELECT count(*) num,departName FROM `dk_task`
+        where DATE_FORMAT(createTime,'%Y-%m-%d') >= DATE_FORMAT(TIMESTAMPADD(week,-1,CURRENT_DATE),'%Y-%m-%d')
+          and DATE_FORMAT(createTime,'%Y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(CURRENT_DATE,'%Y-%m-%d')
+        group by departName
+    </select>
+
+    <!--    月班组保养工作量统计-->
+    <select id="dkTaskCountMonth" resultClass="java.util.HashMap">
+        SELECT count(*) num,departName FROM `dk_task`
+        where DATE_FORMAT(createTime,'%Y-%m') = DATE_FORMAT(CURRENT_DATE,'%Y-%m')
+        group by departName
+    </select>
+
+<!--    巡检、保养未完工任务详情-->
+    <select id="didkDetail" resultClass="java.util.HashMap">
+        SELECT SUBSTRING_INDEX(schemeName,'--',-1) name,SUBSTRING_INDEX(schemeName,'--',1) spot,
+               DATE_FORMAT(dt.createTime,'%m-%d %H:%i') createTime,dt.departName,dt.activeTime,'巡检' type FROM `di_task` dt
+        left join di_scheme ds on ds.schemeID = dt.schemeID
+        where dt.`status` = 1
+        union
+        SELECT SUBSTRING_INDEX(schemeName,'--',-1) name,SUBSTRING_INDEX(schemeName,'--',1) spot,
+               DATE_FORMAT(dt.createTime,'%m-%d %H:%i') createTime,dt.departName,dt.activeTime,'保养' type FROM `dk_task` dt
+        left join dk_scheme ds on ds.schemeID = dt.schemeID
+        where dt.`status` = 1
+        order by createTime
+    </select>
+
+<!--    近七天巡检/保养任务完成量-->
+    <select id="didkTaskCount" resultClass="java.util.HashMap">
+        select IFNULL(b.num,0) dinum,IFNULL(c.num,0) dknum,DATE_FORMAT(a.weekday,'%m-%d') date from (
+            select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 2 DAY) as weekday
+            union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 3 DAY)
+            union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 4 DAY)
+            union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 5 DAY)
+            union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 6 DAY)
+            union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 7 DAY)) a
+            left join (select count(*) num,DATE_FORMAT(finishTime,'%Y-%m-%d') date from di_task
+            where status = 2
+            group by date) b
+        on a.weekday = b.date
+            left join (select count(*) num,DATE_FORMAT(finishTime,'%Y-%m-%d') date from dk_task
+            where status = 2
+            group by date) c
+            on a.weekday = c.date
+        order by a.weekday
+    </select>
+
+<!--    设备类型数量统计-->
+    <select id="dfTypeCount" resultClass="java.util.HashMap">
+        select ifnull(a.num,0) '特种设备数量',ifnull(b.num,0) '通用设备数量' from
+        (SELECT count(*) num FROM `df_special_device`)a,(SELECT count(*) num FROM `df_devicemachine`)b
+    </select>
+
+<!--    设备状态统计-->
+    <select id="dfStatusCount" resultClass="java.util.HashMap">
+        select ifnull(sum(case when status = 1 then 1 else 0 end),0) '运行中',
+        ifnull(sum(case when status = 0 then 1 else 0 end),0) '其他'
+        from
+            (SELECT case when status_code = 1 then 1 else 0 end status,id FROM `df_special_device`
+             union
+             SELECT case when status = '正常' then 1 else 0 end status,id FROM `df_devicemachine`)b
+    </select>
+
+<!--    通用设备类型前五-->
+    <select id="dfTypeTop" resultClass="java.util.HashMap">
+        SELECT b.classify_name name,count(*) num FROM `df_devicemachine` a
+        left join df_modulebaseclassfy b
+        on a.machine_type_id = b.id
+        group by a.machine_type_id
+        order by num desc limit 5
+    </select>
+
+<!--    本季度工程项目统计-->
+    <select id="pmStatusCount" resultClass="java.util.HashMap">
+        select ifnull(sum(case when PROJECT_STATUS = 01 then 1 else 0 end),0) '立项',
+                ifnull(sum(case when PROJECT_STATUS = 02 then 1 else 0 end),0) '执行',
+                ifnull(sum(case when PROJECT_STATUS = 06 then 1 else 0 end),0) '验收',
+                ifnull(sum(case when PROJECT_STATUS = 07 then 1 else 0 end),0) '完结'
+        from pm01
+        where QUARTER(REC_CREATE_TIME)=QUARTER(CURRENT_DATE) and YEAR(REC_CREATE_TIME) = YEAR(CURRENT_DATE)
+    </select>
+
+<!--    工程项目季度环比增长量-->
+    <select id="pmIncrease" resultClass="java.util.HashMap">
+        select IFNULL(a.lixiang,0)-IFNULL(b.lixiang,0) '立项增长',
+                IFNULL(a.zhixing,0)-IFNULL(b.zhixing,0) '执行增长',
+                IFNULL(a.yanshou,0)-IFNULL(b.yanshou,0) '验收增长',
+                IFNULL(a.wanjie,0)-IFNULL(b.wanjie,0) '完结增长'
+        from (select sum(case when PROJECT_STATUS = 01 then 1 else 0 end) lixiang,
+                     sum(case when PROJECT_STATUS = 02 then 1 else 0 end) zhixing,
+                     sum(case when PROJECT_STATUS = 06 then 1 else 0 end) yanshou,
+                     sum(case when PROJECT_STATUS = 07 then 1 else 0 end) wanjie
+              from pm01
+              where QUARTER(REC_CREATE_TIME)=QUARTER(CURRENT_DATE) and YEAR(REC_CREATE_TIME) = YEAR(CURRENT_DATE))a,(select sum(case when PROJECT_STATUS = 01 then 1 else 0 end) lixiang,
+            sum(case when PROJECT_STATUS = 02 then 1 else 0 end) zhixing,
+            sum(case when PROJECT_STATUS = 06 then 1 else 0 end) yanshou,
+            sum(case when PROJECT_STATUS = 07 then 1 else 0 end) wanjie
+        from pm01
+        where case when QUARTER(CURRENT_DATE) = 1 then
+            QUARTER(REC_CREATE_TIME)=4 and YEAR(REC_CREATE_TIME) = YEAR(CURRENT_DATE)-1
+            else QUARTER(REC_CREATE_TIME) = QUARTER(CURRENT_DATE)-1 and YEAR(REC_CREATE_TIME) = YEAR(CURRENT_DATE) end)b
+    </select>
+
+<!--    合同月度统计-->
+    <select id="cmStatusCount" resultClass="java.util.HashMap">
+        SELECT ifnull(sum(case when CONT_STATUS = 0
+            and DATE_FORMAT(REC_CREATE_TIME,'%Y-%m') = DATE_FORMAT(CURRENT_DATE,'%Y-%m')
+                                   then 1 else 0 end),0) '本月新增',
+                ifnull(sum(case when CONT_STATUS = 0
+                    and DATE_FORMAT(REC_CREATE_TIME,'%Y-%m') = DATE_FORMAT(DATE_ADD(CURRENT_DATE,INTERVAL -1 month),'%Y-%m')
+                                    then 1 else 0 end),0) '上月新增',
+                ifnull(sum(case when CONT_STATUS = 4
+                    and DATE_FORMAT(FINISH_TIME,'%Y-%m') = DATE_FORMAT(CURRENT_DATE,'%Y-%m')
+                                    then 1 else 0 end),0) '本月结案',
+                ifnull(sum(case when CONT_STATUS = 4
+                    and DATE_FORMAT(FINISH_TIME,'%Y-%m') = DATE_FORMAT(DATE_ADD(CURRENT_DATE,INTERVAL -1 month),'%Y-%m')
+                                    then 1 else 0 end),0) '上月结案'
+        FROM `cm_contract_bill`
+    </select>
+
+<!--    合同列表-->
+    <select id="cmExecute" resultClass="java.util.HashMap">
+        SELECT CONT_NAME name,PLAN_TAKEEF_TIME time,SURP_NAME supplier FROM `cm_contract_bill`
+        where CONT_STATUS = 1
+    </select>
+
+<!--    独立任务状态统计-->
+    <select id="itStatusCount" resultClass="java.util.HashMap">
+        SELECT ifnull(sum(case when status = '01' then 1 else 0 end),0) as '执行量',
+                ifnull(sum(case when status = '02' then 1 else 0 end),0) as '完工量',
+                ifnull(sum(case when status = '03' then 1 else 0 end),0) as '完结量'
+        FROM `it_task`
+    </select>
+
+<!--    独立任务、工作计划数量统计-->
+    <select id="itwpSumCount" resultClass="java.util.HashMap">
+        select IFNULL(b.num,0) itnum,IFNULL(c.num,0) wpnum,DATE_FORMAT(a.weekday,'%m-%d') date from (
+            select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 2 DAY) as weekday
+            union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 3 DAY)
+            union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 4 DAY)
+            union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 5 DAY)
+            union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 6 DAY)
+            union select date_add(CURRENT_DATE,INTERVAL WEEKDAY(CURRENT_DATE) - 7 DAY)) a
+            left join (select count(*) num,DATE_FORMAT(rec_create_time,'%Y-%m-%d') date from it_task group by date) b
+        on a.weekday = b.date
+            left join (select count(*) num,DATE_FORMAT(rec_create_time,'%Y-%m-%d') date from wp_workplan group by date) c
+            on a.weekday = c.date
+        order by a.weekday
+    </select>
+
+<!--    工作计划状态统计-->
+    <select id="wpStatusCount" resultClass="java.util.HashMap">
+        SELECT ifnull(sum(case when status_code = '01' then 1 else 0 end),0) as '执行量',
+               ifnull(sum(case when status_code = '02' then 1 else 0 end),0) as '完工量',
+               ifnull(sum(case when status_code = '03' then 1 else 0 end),0) as '完结量'
+        FROM `wp_workplan`
+    </select>
+
+<!--    医院标识所在区域统计-->
+    <select id="hiAreaCount" resultClass="java.util.HashMap">
+        SELECT ifnull(sum(case when status = 01 then 1 else 0 end),0) '使用',
+        ifnull(count(*),0) '全部',building FROM `hi_icon`
+        group by building
+    </select>
+
+<!--    医院标识类型统计-->
+    <select id="hiClassifyCount" resultClass="java.util.HashMap">
+        SELECT count(*) num,classify_name name FROM `hi_icon`
+        where status != 02
+        group by classify_name
+        order by num desc
+    </select>
+
+<!--    医院标识状态统计-->
+    <select id="hiStatusCount" resultClass="java.util.HashMap">
+        SELECT ifnull(sum(case when status in ('01','02','03','04','05','06','07','08') then 1 else 0 end),0) as '审批中',
+                ifnull(sum(case when status in ('09','10','11','12') then 1 else 0 end),0) as '制作中',
+                ifnull(sum(case when status in ('13','14') then 1 else 0 end),0) as '已验收'
+        FROM `hi_apply`
+    </select>
+
+<!--    安全问题上报类型统计-->
+    <select id="prTypeCount" resultClass="java.util.HashMap">
+        SELECT localTypeName name,count(*) num FROM `pr_safty_danger`
+        where DATE_FORMAT(createTime,'%Y-%m') = DATE_FORMAT(CURRENT_DATE,'%Y-%m')
+        group by localTypeName
+    </select>
+
+<!--    安全问题上报人员统计-->
+    <select id="prManCount" resultClass="java.util.HashMap">
+        SELECT createMan name,count(*) num FROM `pr_safty_danger`
+        where DATE_FORMAT(createTime,'%Y-%m') = DATE_FORMAT(CURRENT_DATE,'%Y-%m')
+        group by createMan
+    </select>
+
+<!--    安全问题上报数据统计-->
+    <select id="prSumCount" resultClass="java.util.HashMap">
+        select DATE_FORMAT(a.month,'%y-%m') month,ifnull(b.qb,0) '报单量',
+        ifnull(b.jd,0) '接单量',ifnull(b.zg,0) '已整改'
+        from (SELECT CURRENT_DATE as month
+             union SELECT DATE_ADD(CURRENT_DATE,INTERVAL -1 month)
+             union SELECT DATE_ADD(CURRENT_DATE,INTERVAL -2 month)
+             union SELECT DATE_ADD(CURRENT_DATE,INTERVAL -3 month)
+             union SELECT DATE_ADD(CURRENT_DATE,INTERVAL -4 month)
+             union SELECT DATE_ADD(CURRENT_DATE,INTERVAL -5 month)
+             union SELECT DATE_ADD(CURRENT_DATE,INTERVAL -6 month)
+             union SELECT DATE_ADD(CURRENT_DATE,INTERVAL -7 month)
+             union SELECT DATE_ADD(CURRENT_DATE,INTERVAL -8 month)
+             union SELECT DATE_ADD(CURRENT_DATE,INTERVAL -9 month)
+             union SELECT DATE_ADD(CURRENT_DATE,INTERVAL -10 month)
+             union SELECT DATE_ADD(CURRENT_DATE,INTERVAL -11 month))a
+        left join (select sum(case when status_code in('30','99') then 1 else 0 end) zg,sum(case when status_code in('10','01','20') then 1 else 0 end) jd,createTime,count(*) qb from pr_safty_danger) b
+        on DATE_FORMAT(a.month,'%Y-%m') = DATE_FORMAT(b.createTime,'%Y-%m')
+    </select>
+
+<!--    安全巡查班组工作量-->
+    <select id="imTaskCount" resultClass="java.util.HashMap">
+        SELECT departName,count(*) '全部',
+                sum(case when status = 1 then 1 else 0 end) '执行中',
+                sum(case when status = 2 and exceptionFlag = 1 then 1 else 0 end) '已完工',
+                sum(case when status = -1 then 1 else 0 end) '已超时',
+                sum(case when status = 3 then 1 else 0 end) '已关闭',
+                sum(case when exceptionFlag = -1 then 1 else 0 end) '异常数据',
+                sum(case when status = 2 and exceptionFlag = 1 then 1 else 0 end) / count(*) '完成率'
+        FROM `im_task`
+        where DATE_FORMAT(recCreateTime,'%Y-%m') = DATE_FORMAT(CURRENT_DATE,'%Y-%m')
+        group by departName
+    </select>
+
+<!--    安全巡查区域工单量-->
+    <select id="imAreaTaskCount" resultClass="java.util.HashMap">
+        SELECT sum(case when status = 1 then 1 else 0 end) '执行中',
+                sum(case when status = 2 and exceptionFlag = 1 then 1 else 0 end) '已完工',
+                sum(case when status = -1 or status = 3 then 1 else 0 end) '未处理',
+                schemeName
+        FROM `im_task` a left join (SELECT schemeID,case when schemeName like '%楼%' then concat(SUBSTRING_INDEX(schemeName,'楼',1),'楼') else SUBSTRING_INDEX(schemeName,'1',1) end schemeName from im_scheme) b on a.schemeID=b.schemeID
+        where DATE_FORMAT(recCreateTime,'%Y-%m') = DATE_FORMAT(CURRENT_DATE,'%Y-%m')
+        group by schemeName
+        order by count(*) desc limit 3
+    </select>
+    
+<!--    供配电状态-->
+    <select id="mxStatus" resultClass="java.util.HashMap">
+        SELECT classify_name name,if (id in
+                                      (SELECT t_area_classify_id FROM `t_alarm_log`
+                                      where process_start_time in (select max(process_start_time)
+                                      from t_alarm_log)),'异常','正常') status
+        FROM `t_area_classify`
+    </select>
+
+</sqlMap>

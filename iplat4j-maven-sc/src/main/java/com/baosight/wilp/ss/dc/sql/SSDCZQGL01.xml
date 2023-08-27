@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd"> 
+<!-- 职工自取餐管理 -->
+<sqlMap namespace="SSDCZQGL01">
+	<!-- 待处理 -->
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.dc.domain.SSDCZQGL01">
+		SELECT
+        a.id as "id",
+        a.REC_CREATOR as "recCreator",  <!-- 创建人工号 -->
+        a.REC_CREATE_NAME as "recCreateName",  <!-- 创建人姓名 -->
+        a.REC_REVISE_TIME as "recReviseTime",  <!-- 修改时间 -->
+        a.REC_REVISOR as "recRevisor",  <!-- 修改人 -->
+        a.REC_CREATE_TIME as "recCreateTime",  <!-- 创建时间 -->
+        a.ARCHIVE_FLAG as "archiveFlag",  <!-- 来源：APP POS -->
+        a.bill_no as "billNo",  <!-- 订单号：ZQ12020042700005 规则 ： ZQ+年月日+5位递增 -->
+        a.open_id as "openId",  <!-- 微信的openId -->
+        a.user_name as "userName",  <!-- 用户姓名 -->
+        a.user_tel_number as "userTelNumber",  <!-- 联系电话 -->
+        a.meal_num as "mealNum",  <!-- 餐次编码：001 早餐；002 中餐；003 晚餐 -->
+        a.meal_num_name as "mealNumName",  <!-- 餐次名称 -->
+        a.address as "address",  <!-- 取餐地址，下单时选择的取餐地址 -->
+        a.req_send_time as "reqSendTime",  <!-- 取餐时间 -->
+        a.bill_total_price as "billTotalPrice",  <!-- 订单总价 -->
+        a.canteen_num as "canteenNum",  <!-- 食堂编码 -->
+        clc.canteen_name as "canteenName",  <!-- 食堂名称 -->
+        a.bill_remark as "billRemark",  <!-- 备注 -->
+        a.pay_type as "payType",  <!-- 支付方式：0000-现金支付；0101-支付宝；0201-微信 -->
+        a.pay_type_name as "payTypeName",  <!-- 支付方式名称 -->
+        a.status_code as "statusCode",  <!-- 状态：00-草稿；02-待食堂确认；03-待制作；04-待取餐；05-待评价；99-已结束 -->
+        CASE
+        WHEN ( a.reject_code = '2' AND a.status_code != '00' ) THEN
+        '已退款'
+        WHEN ( a.reject_code = '3' AND a.status_code != '00' ) THEN
+        '超时未支付，已取消!'
+        WHEN ( a.reject_code = '4' AND a.status_code != '00' ) THEN
+        '用户手动取消!'
+        WHEN ( a.reject_code IS NULL AND a.status_code = '00' ) THEN
+        '已下单，未支付'
+        WHEN ( a.reject_code IS NULL AND a.status_code = '02' ) THEN
+        '已支付，待取餐'
+        WHEN ( a.reject_code IS NULL AND a.status_code = '99' ) THEN
+        '已支付，已取餐'
+        END AS statusName,
+        a.self_code as "selfCode",  <!-- 长度4位，由0-9，A-Z，随机生成4为数 -->
+        a.current_dealer as "currentDealer",  <!-- 当前处理人 -->
+        a.process_inst_id as "processInstId",  <!-- 流程实例ID -->
+        a.print_flag as "printFlag",  <!-- 打印标记 -->
+        a.order_way as "orderWay",
+        a.need_date as "needDate",  <!-- 取餐日期 -->
+        a.reject_code as "rejectCode",  <!-- 作废状态 -->
+        a.reject_reason as "rejectReason",  <!-- 作废原因 -->
+        a.pay_no as "payNo",  <!-- 支付宝userId或微信的openId -->
+        a.card_id as "cardId",
+        a.dept_name as "deptName",  <!-- 科室 -->
+        a.dept_num as "deptNum" <!-- 科室编码 -->
+		FROM sc_work_order_bill a
+		JOIN sc_canteen_liaison_conf clc ON clc.canteen_num = a.canteen_num
+        LEFT JOIN sc_operation_status b ON a.status_Code = b.status_code
+		WHERE 1=1 
+		and self_code is not null
+		and b.pbo_code = 'MEAL'
+		AND a.status_Code <![CDATA[<]]>'03'
+		AND a.status_Code > '00'
+		<isNotEmpty prepend=" AND " property="userId">
+               FIND_IN_SET( #userId#, clc.liaison_id ) > 0 
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="beginDate">
+            a.need_date >= #beginDate#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="selfCode">
+            self_code = #selfCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="endDate">
+            a.need_date <![CDATA[<=]]> #endDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="userCode">
+            a.open_id LIKE CONCAT('%', #userCode#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="patientName">
+            a.user_name LIKE CONCAT('%', #patientName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="needDate">
+            a.need_date = #needDate#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="canteenNum">
+            a.canteen_num = #canteenNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="code">
+            clc.datagroup_code like concat('%',#code#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="mealNum">
+            a.meal_num = #mealNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="id">
+            a.id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="userName">
+            a.user_Name = #userName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="archiveFlag">
+            a.ARCHIVE_FLAG = #archiveFlag#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptName">
+            a.dept_name LIKE CONCAT('%',#deptName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="billNo">
+            a.bill_No like concat(#billNo#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="spotName">
+            a.address like concat(#spotName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="building">
+            a.building like concat(#building#,'%')
+        </isNotEmpty>
+        order by a.bill_no desc
+	</select>
+
+	<!-- 已处理 -->
+	<select id="query2" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.dc.domain.SSDCZQGL01">
+		SELECT
+        a.id as "id",
+        a.REC_CREATOR as "recCreator",  <!-- 创建人工号 -->
+        a.REC_CREATE_NAME as "recCreateName",  <!-- 创建人姓名 -->
+        a.REC_REVISE_TIME as "recReviseTime",  <!-- 修改时间 -->
+        a.REC_REVISOR as "recRevisor",  <!-- 修改人 -->
+        a.REC_CREATE_TIME as "recCreateTime",  <!-- 创建时间 -->
+        a.ARCHIVE_FLAG as "archiveFlag",  <!-- 来源：APP POS -->
+        a.bill_no as "billNo",  <!-- 订单号：ZQ12020042700005 规则 ： ZQ+年月日+5位递增 -->
+        a.open_id as "openId",  <!-- 微信的openId -->
+        a.user_name as "userName",  <!-- 用户姓名 -->
+        a.user_tel_number as "userTelNumber",  <!-- 联系电话 -->
+        a.meal_num as "mealNum",  <!-- 餐次编码：001 早餐；002 中餐；003 晚餐 -->
+        a.meal_num_name as "mealNumName",  <!-- 餐次名称 -->
+        a.address as "address",  <!-- 取餐地址，下单时选择的取餐地址 -->
+        a.req_send_time as "reqSendTime",  <!-- 取餐时间 -->
+        a.bill_total_price as "billTotalPrice",  <!-- 订单总价 -->
+        a.canteen_num as "canteenNum",  <!-- 食堂编码 -->
+        clc.canteen_name as "canteenName",  <!-- 食堂名称 -->
+        a.bill_remark as "billRemark",  <!-- 备注 -->
+        a.pay_type as "payType",  <!-- 支付方式：0000-现金支付；0101-支付宝；0201-微信 -->
+        a.pay_type_name as "payTypeName",  <!-- 支付方式名称 -->
+        a.status_code as "statusCode",  <!-- 状态：00-草稿；02-待食堂确认；03-待制作；04-待取餐；05-待评价；99-已结束 -->
+        CASE
+        WHEN ( a.reject_code = '2' AND a.status_code != '00' ) THEN
+        '已退款'
+        WHEN ( a.reject_code = '3' AND a.status_code != '00' ) THEN
+        '超时未支付，已取消!'
+        WHEN ( a.reject_code = '4' AND a.status_code != '00' ) THEN
+        '用户手动取消!'
+        WHEN ( a.reject_code IS NULL AND a.status_code = '00' ) THEN
+        '已下单，未支付'
+        WHEN ( a.reject_code IS NULL AND a.status_code = '02' ) THEN
+        '已支付，待取餐'
+        WHEN ( a.reject_code IS NULL AND a.status_code = '99' ) THEN
+        '已支付，已取餐'
+        END AS statusName,
+        a.self_code as "selfCode",  <!-- 长度4位，由0-9，A-Z，随机生成4为数 -->
+        a.current_dealer as "currentDealer",  <!-- 当前处理人 -->
+        a.process_inst_id as "processInstId",  <!-- 流程实例ID -->
+        a.print_flag as "printFlag",  <!-- 打印标记 -->
+        a.order_way as "orderWay",
+        a.need_date as "needDate",  <!-- 取餐日期 -->
+        a.reject_code as "rejectCode",  <!-- 作废状态 -->
+        a.reject_reason as "rejectReason",  <!-- 作废原因 -->
+        a.pay_no as "payNo",  <!-- 支付宝userId或微信的openId -->
+        a.card_id as "cardId",
+        a.dept_name as "deptName",  <!-- 科室 -->
+        a.dept_num as "deptNum" <!-- 科室编码 -->
+		FROM sc_work_order_bill a
+		JOIN sc_canteen_liaison_conf clc ON clc.canteen_num = a.canteen_num
+        LEFT JOIN sc_operation_status b ON a.status_Code = b.status_code
+		WHERE 1=1 
+		and self_code is not null
+		and b.pbo_code = 'MEAL'
+		AND a.status_Code <![CDATA[>]]> '02' 
+		<isNotEmpty prepend=" AND " property="userId">
+               FIND_IN_SET( #userId#, clc.liaison_id ) > 0 
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="beginDate">
+            a.need_date >= #beginDate#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="selfCode">
+            self_code = #selfCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="endDate">
+            a.need_date <![CDATA[<=]]> #endDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="userCode">
+            a.open_id LIKE CONCAT('%', #userCode#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="patientName">
+            a.user_name LIKE CONCAT('%', #patientName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="needDate">
+            a.need_date = #needDate#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="canteenNum">
+            a.canteen_num = #canteenNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="code">
+            clc.datagroup_treecode like concat('%',#code#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="mealNum">
+            a.meal_num = #mealNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="id">
+            a.id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="userName">
+            a.user_Name = #userName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="archiveFlag">
+            a.ARCHIVE_FLAG = #archiveFlag#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptName">
+            a.dept_name LIKE CONCAT('%',#deptName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="billNo">
+            a.bill_No like concat(#billNo#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="spotName">
+            a.address like concat(#spotName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="building">
+            a.building like concat(#building#,'%')
+        </isNotEmpty>
+        order by a.bill_no desc
+	</select>
+
+
+	<insert id="insert">
+		INSERT INTO sc_work_order_bill (id,
+		REC_CREATOR,  <!-- 创建人工号 -->
+		REC_CREATE_NAME,  <!-- 创建人姓名 -->
+		REC_REVISE_TIME,  <!-- 修改时间 -->
+		REC_REVISOR,  <!-- 修改人 -->
+		REC_CREATE_TIME,  <!-- 创建时间 -->
+		ARCHIVE_FLAG,  <!-- 来源：APP POS -->
+		bill_no,  <!-- 订单号：ZQ12020042700005 规则 ： ZQ+年月日+5位递增 -->
+		open_id,  <!-- 微信的openId -->
+		user_name,  <!-- 用户姓名 -->
+		user_tel_number,  <!-- 联系电话 -->
+		meal_num,  <!-- 餐次编码：001 早餐；002 中餐；003 晚餐 -->
+		meal_num_name,  <!-- 餐次名称 -->
+		address,  <!-- 取餐地址，下单时选择的取餐地址 -->
+		req_send_time,  <!-- 取餐时间 -->
+		bill_total_price,  <!-- 订单总价 -->
+		canteen_num,  <!-- 食堂编码 -->
+		canteen_name,  <!-- 食堂名称 -->
+		bill_remark,  <!-- 备注 -->
+		pay_type,  <!-- 支付方式：0000-现金支付；0101-支付宝；0201-微信 -->
+		pay_type_name,  <!-- 支付方式名称 -->
+		status_code,  <!-- 状态：00-草稿；02-待食堂确认；03-待制作；04-待取餐；05-待评价；99-已结束 -->
+		self_code,  <!-- 长度4位，由0-9，A-Z，随机生成4为数 -->
+		current_dealer,  <!-- 当前处理人 -->
+		process_inst_id,  <!-- 流程实例ID -->
+		print_flag,  <!-- 打印标记 -->
+		order_way,
+		need_date,  <!-- 取餐日期 -->
+		reject_code,  <!-- 作废状态 -->
+		reject_reason,  <!-- 作废原因 -->
+		pay_no,  <!-- 支付宝userId或微信的openId -->
+		card_id,
+		dept_name,  <!-- 科室 -->
+		dept_num  <!-- 科室编码 -->
+		)
+		VALUES (#id#, #recCreator#, #recCreateName#, #recReviseTime#, #recRevisor#,
+		#recCreateTime#, #archiveFlag#, #billNo#, #openId#, #userName#,
+		#userTelNumber#, #mealNum#, #mealNumName#, #address#, #reqSendTime#,
+		#billTotalPrice#, #canteenNum#, #canteenName#, #billRemark#,
+		#payType#, #payTypeName#, #statusCode#, #selfCode#, #currentDealer#,
+		#processInstId#, #printFlag#, #orderWay#, #needDate#, #rejectCode#,
+		#rejectReason#, #payNo#, #cardId#, #deptName#, #deptNum#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM sc_work_order_bill
+		WHERE
+		id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_work_order_bill
+		SET
+		REC_CREATOR = #recCreator#,   <!-- 创建人工号 -->
+		REC_CREATE_NAME = #recCreateName#,   <!-- 创建人姓名 -->
+		REC_REVISE_TIME = #recReviseTime#,   <!-- 修改时间 -->
+		REC_REVISOR = #recRevisor#,   <!-- 修改人 -->
+		REC_CREATE_TIME = #recCreateTime#,   <!-- 创建时间 -->
+		ARCHIVE_FLAG = #archiveFlag#,   <!-- 来源：APP POS -->
+		bill_no = #billNo#,   <!-- 订单号：ZQ12020042700005 规则 ： ZQ+年月日+5位递增 -->
+		open_id = #openId#,   <!-- 微信的openId -->
+		user_name = #userName#,   <!-- 用户姓名 -->
+		user_tel_number = #userTelNumber#,   <!-- 联系电话 -->
+		meal_num = #mealNum#,   <!-- 餐次编码：001 早餐；002 中餐；003 晚餐 -->
+		meal_num_name = #mealNumName#,   <!-- 餐次名称 -->
+		address = #address#,   <!-- 取餐地址，下单时选择的取餐地址 -->
+		req_send_time = #reqSendTime#,   <!-- 取餐时间 -->
+		bill_total_price = #billTotalPrice#,   <!-- 订单总价 -->
+		canteen_num = #canteenNum#,   <!-- 食堂编码 -->
+		canteen_name = #canteenName#,   <!-- 食堂名称 -->
+		bill_remark = #billRemark#,   <!-- 备注 -->
+		pay_type = #payType#,   <!-- 支付方式：0000-现金支付；0101-支付宝；0201-微信 -->
+		pay_type_name = #payTypeName#,   <!-- 支付方式名称 -->
+		status_code = #statusCode#,   <!-- 状态：00-草稿；02-待食堂确认；03-待制作；04-待取餐；05-待评价；99-已结束 -->
+		self_code = #selfCode#,   <!-- 长度4位，由0-9，A-Z，随机生成4为数 -->
+		current_dealer = #currentDealer#,   <!-- 当前处理人 -->
+		process_inst_id = #processInstId#,   <!-- 流程实例ID -->
+		print_flag = #printFlag#,   <!-- 打印标记 -->
+		order_way = #orderWay#,
+		need_date = #needDate#,   <!-- 取餐日期 -->
+		reject_code = #rejectCode#,   <!-- 作废状态 -->
+		reject_reason = #rejectReason#,   <!-- 作废原因 -->
+		pay_no = #payNo#,   <!-- 支付宝userId或微信的openId -->
+		card_id = #cardId#,
+		dept_name = #deptName#,   <!-- 科室 -->
+		dept_num = #deptNum#  <!-- 科室编码 -->
+		WHERE
+		id = #id#
+	</update>
+
+</sqlMap>

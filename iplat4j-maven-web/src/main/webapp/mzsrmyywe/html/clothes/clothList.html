@@ -1,0 +1,522 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="format-detection" content="telephone=no" />
+  <link rel="stylesheet" href="../reference/mui/css/mui.min.css">
+  <link rel="stylesheet" href="../reference/css/common.css" />
+</head>
+<STYLE TYPE="text/css">
+  body {
+    background: #eee;
+  }
+
+  .task-div {
+    width: 96%;
+    margin: 10px auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background: #fff;
+    border-radius: 2px;
+    box-shadow: 0px 2px 5px #d4d4d4;
+  }
+
+  .task-title {
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 1px solid #eee;
+    font-weight: bold;
+  }
+
+  .status-applying {
+    color: #ff9800;
+  }
+
+  .status-accept {
+    color: #0dc515;
+  }
+
+  .status-remove {
+    color: #f5675c;
+  }
+
+  .status-unknown {
+    color: #f5675c;
+  }
+
+  .task-info {
+    padding-top: 10px;
+    color: #999999;
+  }
+
+  .word-omit {
+    color: #333333;
+  }
+
+  .info-title {
+    color: #5d5d5d;
+  }
+
+  .mui-table-view:before {
+    background-color: #eee;
+  }
+
+  .mui-table-view:after {
+    background-color: #eee;
+  }
+
+  .btn-div {
+    width: 100%;
+    text-align: right;
+    border-top: 1px solid #eee;
+    margin-top: 10px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+  }
+
+  .btn-div button {
+    margin-left: 10px;
+  }
+
+  .btn-views {
+    width: 80px;
+    border-radius: 15px;
+    border: 1px solid #2aabd2;
+    color: #2aabd2;
+  }
+
+  .title-deal {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    opacity: 0.77;
+    font-size: 17px;
+    float: left;
+    width: 40%;
+  }
+
+  .submit {
+    position: fixed;
+    bottom: 0px;
+    left: 0;
+    right: 0;
+    background: #2AABD2;
+    text-align: center;
+    line-height: 50px;
+    height: 50px;
+    color: #FFFFff;
+    font-size: 19px;
+  }
+
+  .diceng {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 250;
+    background: black;
+    opacity: 0.5;
+  }
+
+  .applyMoney {
+    position: fixed;
+    z-index: 251;
+    width: 90%;
+    left: 5%;
+    top: 180px;
+    background: #FFFFFF;
+  }
+
+  .realMoney {
+    position: fixed;
+    z-index: 251;
+    width: 90%;
+    left: 5%;
+    top: 130px;
+    background: #FFFFFF;
+  }
+
+  .applyTitle {
+    height: 50px;
+    line-height: 50px;
+    border-bottom: 1px solid #e1e1e1;
+    text-align: center;
+    font-size: 20px;
+    color: #666666;
+  }
+
+  .applyInput {
+    height: 80px;
+    line-height: 80px;
+    padding: 22.5px 15px;
+  }
+
+  .realInput {
+    padding: 22.5px 15px;
+    padding-top: 0px;
+  }
+
+  .setInput {
+    color: #333333;
+    width: 100%;
+    border: 0;
+    outline: none;
+    text-align: left;
+    font-size: 15px;
+  }
+
+  .editButtons {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 19px;
+  }
+
+  .noTask {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 204px;
+    bottom: 60px;
+    z-index: 999;
+    text-align: center;
+    font-size: 17px;
+  }
+
+  .mui-bar-nav~.mui-content .mui-pull-top-pocket {
+    top: 0;
+  }
+
+  .return {
+    height: 26px;
+    line-height: 25px;
+    text-align: center;
+    margin-top: 7px;
+    border: 1px solid #2AABD2;
+    border-radius: 15px;
+    color: #2AABD2;
+    font-size: 14px;
+    width: 47%;
+    float: left;
+    margin-left: 3%;
+  }
+</STYLE>
+
+<body>
+  <header class="mui-bar mui-bar-nav" style="background-color: #2AABD2;">
+    <h1 class="mui-title">任务列表</h1>
+    <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+      主页
+    </button>
+    <button onclick="location.href='my-apply.html';"
+      class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-right" style="margin-right: 0;">
+      申请
+    </button>
+  </header>
+
+  <div id="warn" class="warn" hidden>
+    <small></small>
+  </div>
+
+  <div id="loading" class="loading1" hidden="hidden">
+    <div class="loading2">
+      <span class="mui-spinner" style="width:80px;height:80px;"></span>
+    </div>
+  </div>
+
+  <div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="margin-top: 54px;padding-top: 0px;">
+    <div class="mui-scroll">
+      <ul class="mui-table-view mui-table-view-chevron" style="background-color:#eee;margin-top: -10px;">
+        <!--<div class="task-div">
+						<div class="mui-row task-title">
+							<div class="mui-col mui-col-xs-8 task-no">申请单号：212018393809</div>
+							<div class="mui-col mui-col-xs-4 right status-applying">待完工</div>
+						</div>
+						<div class="task-content ">
+							<div class="mui-row task-info">
+								<div class="mui-col mui-col-xs-4">出发地</div>
+								<div class="mui-col mui-col-xs-8 right word-omit">1706多功能会议室</div>
+							</div>
+							<div class="mui-row task-info">
+								<div class="mui-col mui-col-xs-4">目的地</div>
+								<div class="mui-col mui-col-xs-8 right word-omit">会议室</div>
+							</div>
+							<div class="mui-row task-info">
+								<div class="mui-col mui-col-xs-4">使用人</div>
+								<div class="mui-col mui-col-xs-8 right word-omit">总务处周列会</div>
+							</div>
+						</div>
+						<div class="task-content ">
+							<div class="mui-row task-info">
+								<div class="mui-col mui-col-xs-4">用车时间</div>
+								<div class="mui-col mui-col-xs-8 right word-omit">12</div>
+							</div>
+							<div class="mui-row task-info">
+								<div class="mui-col mui-col-xs-4">申请事由</div>
+								<div class="mui-col mui-col-xs-8 right word-omit">陈红</div>
+							</div>
+							<div class="mui-row task-info">
+								<div class="mui-col mui-col-xs-4">预估费用</div>
+								<div class="mui-col mui-col-xs-8 right word-omit">57712</div>
+							</div>
+							<div class="mui-row task-info">
+								<div class="mui-col mui-col-xs-4">用车费用</div>
+								<div class="mui-col mui-col-xs-8 right word-omit">总务处</div>
+							</div>
+
+						</div>
+						<div class="btn-div">
+							<button type="button" class="mui-btn mui-btn-outlined btn-views">预约</button>
+							<button type="button" class="mui-btn mui-btn-outlined btn-views">预约</button>
+						</div>
+					</div>-->
+
+      </ul>
+    </div>
+  </div>
+
+</body>
+<script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../reference/js/common.js" type="text/javascript"></script>
+<!--<script src="../../cordova.js" type="text/javascript"></script>-->
+<script type="text/javascript">
+  //		localStorage.setItem("url", "http://192.168.1.106:8080/smp/");
+  var baseUrl = localStorage.getItem("url");
+  var workNo = localStorage.getItem("workNo");
+  var workName = localStorage.getItem("name");
+  var page = 1;
+  var taskListAppend = "";
+  loadViews();
+
+  //返回
+  document.getElementById("back").addEventListener('tap', function () {
+    location.href = 'main.html';
+  });
+
+  function loadViews() {
+    $("#loading").show();
+    $.ajax({
+      url: baseUrl + 'queryGf/queryAllGf',
+      type: 'post',
+      headers: {
+        serviceName: "MFGZ01",
+        methodName: "queryApplicationInfo"
+      },
+      data: {
+        requestParam: JSON.stringify({
+          bill_no: "",
+          apply_work_no: workNo,
+          page: page,
+          rows: 10
+        })
+      },
+      success: function (data) {
+        $("#loading").hide();
+        if (data.statusCode == "0") {
+          var list = data.data;
+          for (var i = 0; i < list.length; i++) {
+            taskListAppend += createView1(list[i].billNo, list[i].statusCode, list[i].applyTime, list[i].number, list[i].fabricName, list[i].realFee, list[i].statusName, list[i].signatureFlag, list[i].applyUserCode, list[i].applyUserName, list[i].applyPhone, list[i].applyDeptName, list[i].applyDeptNum, list[i].fabricTypeName, list[i].fabricNum, list[i].fabricModel)
+          }
+          $('ul').html(taskListAppend);
+        } else {
+          showMsg(data.respMsg);
+        }
+      }
+    });
+  }
+
+  function createView1(billNo, statusCode, apply_time, apply_num, mat_name, real_fees, status_name, signature_flag, apply_work_no, apply_work_name, apply_phone, apply_dept_name, apply_dept_num, mat_type_name, mat_num, mat_model) {
+    var json = {
+      "billNo": billNo,
+      "status_code": statusCode,
+      "apply_time": apply_time,
+      "apply_num": apply_num,
+      "mat_name": mat_name,
+      "real_fees": real_fees,
+      "status_name": status_name,
+      "signature_flag": signature_flag,
+      "apply_work_no": apply_work_no,
+      "apply_work_name": apply_work_name,
+      "apply_phone": apply_phone,
+      "apply_dept_name": apply_dept_name,
+      "apply_dept_num": apply_dept_num,
+      "mat_type_name": mat_type_name,
+      "mat_num": mat_num,
+      "mat_model": mat_model
+    }
+
+    var jsonStr = JSON.stringify(json);
+    var html = "";
+    html += '   <div class="task-div">';
+    html += ' <div class="mui-row task-title">';
+    html += ' <div id=\'' + jsonStr + '\' class="task-no" style="display: flex;justify-content: space-between; "><div>申请单号：<span style="color:#2aabd2;">' + billNo + '</span></div>';
+    if (statusCode == "01")
+      html += ' <div class="right status-applying">' + status_name + '</div>';
+    else if (statusCode == "00")
+      html += ' <div class="right status-accept">' + status_name + '</div>';
+    else if (statusCode == "02")
+      html += ' <div class="right status-applying">' + status_name + '</div>';
+    else if (statusCode == "03")
+      html += ' <div class="right status-applying">' + status_name + '</div>';
+    else if (statusCode == "04")
+      html += ' <div class="right status-applying">' + status_name + '</div>';
+
+    else if (statusCode == "98")
+      html += ' <div class="right status-remove">' + status_name + '</div>';
+    else if (statusCode == "99" && signature_flag == "0")
+      html += ' <div class="right status-applying">待签收</div>';
+    else if (statusCode == "99" && signature_flag == "1")
+      html += ' <div class="right status-accept">已签收</div>';
+
+    html += '</div>';
+    html += '</div>';
+    html += ' <div class="task-content ">';
+    html += ' <div class="mui-row task-info">';
+    html += ' <div class="mui-col mui-col-xs-4">申请时间</div>';
+    html += ' <div class="mui-col mui-col-xs-8 right word-omit">' + apply_time + '</div>';
+    html += ' </div>';
+    html += ' <div class="mui-row task-info">';
+    html += ' <div class="mui-col mui-col-xs-4">申请数量</div>';
+    html += ' <div class="mui-col mui-col-xs-8 right word-omit">' + apply_num + '</div>';
+    html += ' </div>';
+    html += ' <div class="mui-row task-info">';
+    html += ' <div class="mui-col mui-col-xs-4">缴费金额</div>';
+    html += ' <div class="mui-col mui-col-xs-8 right word-omit" style="color:#f44336;"><span style="font-size:11px;">￥</span><span id="end">' + real_fees + '</span></div>';
+    html += ' </div>';
+    html += ' </div>';
+    html += ' <div class="task-content ">';
+    html += ' <div class="mui-row task-info">';
+    html += ' <div class="mui-col mui-col-xs-4">工服名称</div>';
+    html += ' <div class="mui-col mui-col-xs-8 right word-omit">' + mat_name + '</div>';
+    html += ' 	</div>';
+
+    html += ' </div>';
+    if (statusCode == "01") {
+      html += ' <div class="btn-div">';
+      html += ' <button id=\'' + jsonStr + '\' type="button" class="mui-btn mui-btn-outlined btn-views edit">编辑</button>';
+      html += ' <button id=\'' + jsonStr + '\' type="button" class="mui-btn mui-btn-outlined btn-views cancel">撤销</button>';
+      html += ' </div>';
+    }
+    if (statusCode == "99" && signature_flag == "0") {
+      html += ' <div class="btn-div">';
+      html += ' <button id=\'' + jsonStr + '\' type="button" class="mui-btn mui-btn-outlined btn-views sureGet">确认签收</button>';
+      html += ' </div>';
+    }
+    html += ' </div>';
+
+    return html;
+  }
+
+  //取消
+  mui("body").on('tap', ".cancel", function () {
+    location.href = "returnReason.html?" + encodeURIComponent(this.id);
+  });
+  //编辑
+  mui("body").on('tap', ".edit", function () {
+    location.href = "my-apply-edit.html?" + encodeURIComponent(this.id);
+  });
+  //确认签收
+  mui("body").on('tap', ".sureGet", function () {
+    var _this = this;
+    var btnArray = ['否', '是'];
+    mui.confirm('是否确认验收？', '信息提示', btnArray, function (e) {
+      if (e.index == 1) {
+        sureGet(JSON.parse(_this.id).billNo);
+      } else { }
+    })
+
+  });
+
+  function sureGet(billNo) {
+    $("#loading").show();
+    $.ajax({
+      url: baseUrl + 'queryGf/queryAllGf',
+      type: 'post',
+      headers: {
+        serviceName: "MFGZ01",
+        methodName: "confirmSignature"
+      },
+      data: {
+        requestParam: JSON.stringify({
+          bill_no: billNo
+        })
+
+      },
+      success: function (data) {
+        $("#loading").hide();
+        if (data.statusCode == "0") {
+          setTimeout("location.reload()", 2000);
+        } else {
+          showMsg(data.respMsg);
+        }
+      }
+    });
+
+  }
+  //系统返回监听
+  document.addEventListener("deviceready", onDeviceReady, false);
+
+  function onDeviceReady() {
+    /**
+     * 系统返回键监听
+     */
+    document.addEventListener("backbutton", onBackKeyDown, false);
+  }
+
+  function onBackKeyDown() {
+    location.href = "../../menu.html";
+  }
+
+  /**
+   * 下滑刷新
+   * @return {[type]} [description]
+   */
+  function pulldownRefresh() {
+    setTimeout(function () {
+      taskListAppend = "";
+      page = 1;
+      loadViews();
+      mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+    }, 1500);
+  }
+
+  /**
+   * 上滑加载更多
+   * @return {[type]} [description]
+   */
+  function pullupRefresh() {
+    page++;
+    loadViews();
+    setTimeout(function () {
+      //关闭加载框
+      mui('#pullrefresh').pullRefresh().endPullupToRefresh();
+    }, 1500);
+  }
+
+  mui.init({
+    pullRefresh: {
+      container: '#pullrefresh',
+      down: {
+        callback: pulldownRefresh,
+        contentrefresh: "正在刷新",
+      },
+      up: {
+        contentrefresh: "加载中，请稍后",
+        contentnomore: '暂无更多数据',
+        callback: pullupRefresh
+      }
+    }
+  });
+</script>
+
+</html>

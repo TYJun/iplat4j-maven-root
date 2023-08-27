@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'"> -->
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link
+      rel="stylesheet"
+      href="../../../reference/bootstrap-3.3.5/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../../reference/bootstrap-3.3.5/css/bootstrap-theme.min.css"
+    />
+    <link rel="stylesheet" href="../../../reference/mui/css/mui.css" />
+    <link rel="stylesheet" href="../../../css/common.css" />
+  </head>
+  <style type="text/css">
+    body {
+      background: #f1f1f1;
+    }
+
+    hr {
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+
+    h3 {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    .navbar {
+      margin-bottom: 0px;
+    }
+
+    .popover {
+      max-width: 310px;
+    }
+
+    .row {
+      margin-right: 0px;
+      margin-left: 0px;
+    }
+
+    h1 {
+      margin: 0 0 0rem;
+    }
+
+    .area {
+      background: #adadad;
+      color: #fff;
+      font-size: 20px;
+      border: 1px solid #fff;
+    }
+  </style>
+
+  <body>
+    <header class="mui-bar mui-bar-nav">
+      <h1 class="mui-title">科室</h1>
+      <button id="back" class="mui-btn mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+      </button>
+    </header>
+    <div class="top55 row">
+      <div class="mui-input-row mui-search">
+        <input
+          type="search"
+          class="mui-input-clear"
+          placeholder="输入中文筛选"
+          id="load"
+        />
+      </div>
+    </div>
+    <div
+      class="row"
+      style="
+        margin-top: -5px;
+        background: #cacaca;
+        height: 40px;
+        line-height: 40px;
+        color: #fff;
+      "
+    >
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">显示的科室</div>
+    </div>
+    <div class="row">
+      <div
+        id="province"
+        style="width: 100%; background: #fff; border: 1px solid #eee"
+      >
+        <!-- <div class="row" style="margin-top:10px;">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            姓名
+          </div>
+        </div>
+        <hr style="margin-top:10px;">
+        <div class="row" style="margin-top:10px;">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            姓名
+          </div>
+        </div>
+        <hr style="margin-top:10px;">
+        <div class="row" style="margin-top:10px;">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            姓名
+          </div>
+        </div>
+        <hr style="margin-top:10px;"> -->
+      </div>
+    </div>
+  </body>
+  <script
+    src="../../../reference/mui/js/jquery-2.1.4.js"
+    type="text/javascript"
+  ></script>
+  <script
+    src="../../../reference/bootstrap-3.3.5/js/bootstrap.min.js"
+    type="text/javascript"
+  ></script>
+  <script
+    src="../../../reference/mui/js/mui.js"
+    type="text/javascript"
+  ></script>
+  <script type="text/javascript">
+    // localStorage.setItem("url", "http://yapi.bonawise.com/mock/132/");
+    var baseUrl = localStorage.getItem("url");
+    var dataGroupCode = localStorage.getItem("dataGroupCode");
+    // var deptNum = "";
+    // var deptName = data.data.deptName;
+    // var deptNum = data.data.deptNo;
+    var url = decodeURI(window.location.href.split("?")[1]);
+    var offerStatus = url.split("&")[0];
+
+    // var a = baseUrl+'app/clothCommomQuery.do?queryDept';
+    $(function () {
+      loadData();
+    });
+
+    /**
+     * @desc   初始化数据
+     * @author huoke
+     */
+
+    function loadData(deptName) {
+      (deptName = deptName ? deptName : ""),
+        $.ajax({
+          url: baseUrl + "ommf/queryBydeptNameToFaulty",
+          type: "post",
+
+          success: function (data) {
+            var list = data;
+            console.log(data);
+            // console.log(list)
+            var html = "";
+            for (var i = 0; i < list.length; i++) {
+              html += createHtml(list[i].deptName, list[i].deptNo);
+            }
+            $("#province").html(html);
+
+            // console.log( $("#province div.row"));
+            // 打印和渲染列表
+            $("#province").on("click", "div.row", function () {
+              var deptName = $(this).find("div.province").text();
+              var deptNo = $(this).find("div.province").attr("value");
+              console.log(deptName);
+              console.log(deptNo);
+              localStorage.setItem("deptName", deptName);
+              localStorage.setItem("deptNo", deptNo);
+              location.href = "search.html?" + deptName + "&" + deptNo;
+            });
+            
+          },
+        });
+
+      //   $.get(baseUrl + "medical/fabric", params, function(data) {
+      //     var data = JSON.parse(data);
+      //     var list = data.obj.obj;
+      //     var html = "";
+      //     for (var i = 0; i < list.length; i++) {
+      //       html += createHtml(list[i].deptName, list[i].deptNo);
+      //     }
+      //     $("#province").html(html);
+
+      //选择科室单击事件
+      //     console.log( $("#province div.row"));
+      //       $("#province").on('click','div.row',
+      // function() {
+      //           var deptName = $(this)
+      //             .find("div.province")
+      //             .text();
+      //           var deptNo = $(this)
+      //             .find("div.province")
+      //             .attr("value");
+      //           console.log(deptName);
+      //           console.log(deptNo);
+      //           localStorage.setItem("deptName", deptName);
+      //           localStorage.setItem("deptNo", deptNo);
+      //           location.href = "offerMainNAPP.html?" + deptName + "&" + deptNo;
+      //           // location.href = "barCodeResult.html?" + name + "&" + num;
+      //           // if (offerStatus == "1") {
+      //           //   location.href = "offerMainYAPP.html?" + name + "&" + num;
+      //           // } else {
+      //           //   location.href = "offerMainNAPP.html?" + name + "&" + num;
+      //           // }
+      //         });
+      //   })
+      //     .fail(function(XMLHttpRequest) {
+      //       var text = JSON.parse(XMLHttpRequest.responseText);
+      //       mui.toast(text.message);
+      //       return;
+      //     })
+      //     .complete(function(XMLHttpRequest, status) {
+      //       if (status == "timeout") {
+      //         $("#loading").hide();
+      //         mui.toast("网速不给力，请重试！");
+      //         return;
+      //       } else if (status == "error") {
+      //         $("#loading").hide();
+      //         mui.toast("当前网络不可用，请查看网络是否畅通！");
+      //         return;
+      //       }
+      //     });
+      //初始化列表
+    }
+    /**
+     * @desc   延时调用方法
+     * @author huoke
+     */
+    function thorttle(callback, delay) {
+      var timeout = 0;
+      var now = new Date() - 0;
+      return function (e) {
+        console.log("now", now);
+        var last = new Date() - 0;
+        clearTimeout(timeout);
+        if (last - now >= delay) {
+          console.log("时间间隔", last - now);
+          callback(e);
+          now = last; //将上执行的时间赋值给 now
+        } else {
+          //将 delay 时间内多次触发事件，目标函数合并到这里执行
+          timeout = setTimeout(function () {
+            callback(e);
+          }, delay);
+        }
+      };
+    }
+    var write = thorttle(function (e) {
+      console.log(e.target.value);
+      loadData(e.target.value);
+    }, 500);
+    // let thorttle = (callback, delay) => {
+    //   let timeout = 0;
+    //   let now = new Date() - 0;
+    //   return e => {
+    //     console.log("now", now);
+    //     let last = new Date() - 0;
+    //     clearTimeout(timeout);
+    //     if (last - now >= delay) {
+    //       console.log("时间间隔", last - now);
+    //       callback(e);
+    //       now = last; //将上执行的时间赋值给 now
+    //     } else {
+    //       //将 delay 时间内多次触发事件，目标函数合并到这里执行
+    //       timeout = setTimeout(() => {
+    //         callback(e);
+    //       }, delay);
+    //     }
+    //   };
+    // };
+    // let write = thorttle(e => {
+    //   console.log(e.target.value);
+    //   loadData(e.target.value);
+    // }, 500);
+    document.querySelector("#load").addEventListener("input", write, false);
+    /**
+     * @desc   生成页面
+     * @author huoke
+     */
+    function createHtml(deptName, deptNo) {
+      var html = "<div class='row' style='margin-top:10px;'>";
+      html +=
+        "<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 province' value = '" +
+        deptNo +
+        "'>" +
+        deptName +
+        "</div>";
+      html += "</div>";
+      html += "<hr style='margin-top:10px;'>";
+      return html;
+    }
+
+    /**
+     * mui清除按钮事件(ps:自定义的，不加此方法页面会报错，如果不需要，方法体为空就行)
+     */
+    function clearFunc() {
+      loadData("");
+    }
+
+    /**
+     * @desc   点击返回按钮
+     * @author huoke
+     */
+    mui("body").on("tap", "#back", function () {
+      // location.href = '../clothing_menu.html'
+      window.history.back(-1);
+    });
+
+    /**
+     * @desc   手机系统返回键
+     * @author huoke
+     */
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+      document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function onBackKeyDown() {
+      window.history.back(-1);
+    }
+  </script>
+</html>

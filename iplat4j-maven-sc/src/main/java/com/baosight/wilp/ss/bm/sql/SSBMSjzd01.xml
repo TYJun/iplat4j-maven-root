@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!-- table information Generate time : 2021-05-25 18:45:18 Version : 6.0.731.201809200158 
+	tableName :sc_typegroup ID VARCHAR NOT NULL primarykey, typegroupcode 
+	VARCHAR, typegroupname VARCHAR, moduleId VARCHAR -->
+<sqlMap namespace="SSBMSjzd01">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.ss.bm.domain.SSBMSJZD01">
+		SELECT
+		ID as "id",
+		typegroupcode as "typegroupcode",
+		typegroupname as "typegroupname",
+		moduleId as "moduleid"
+		FROM sc_typegroup WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				ID asc
+			</isEmpty>
+		</dynamic>
+
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM sc_typegroup WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+	</select>
+
+	<!-- <isNotEmpty prepend=" AND " property="id"> ID = #id# </isNotEmpty> 
+		<isNotEmpty prepend=" AND " property="typegroupcode"> typegroupcode = #typegroupcode# 
+		</isNotEmpty> <isNotEmpty prepend=" AND " property="typegroupname"> typegroupname 
+		= #typegroupname# </isNotEmpty> <isNotEmpty prepend=" AND " property="moduleid"> 
+		moduleId = #moduleid# </isNotEmpty> -->
+
+	<insert id="insert">
+		INSERT INTO sc_typegroup (ID,
+		typegroupcode,
+		typegroupname,
+		moduleId
+		)
+		VALUES (#id#, #typegroupcode#, #typegroupname#, #moduleid#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM sc_typegroup WHERE
+		ID = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE sc_typegroup
+		SET
+		typegroupcode = #typegroupcode#,
+		typegroupname = #typegroupname#,
+		moduleId = #moduleid#
+		WHERE
+		ID = #id#
+	</update>
+
+</sqlMap>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CMJD01">
+    <select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            id nodeId,
+            node_auto_no nodeAutoNo,
+            node_name nodeName,
+            node_remark nodeRemark,
+            rec_creator recCreator,
+            DATE_FORMAT(rec_create_time,'%Y-%m-%d') recCreateTime,
+            rec_revisor recRevisor,
+            DATE_FORMAT(rec_revise_time,'%Y-%m-%d') recReviseTime
+        from
+            cm_node
+        where
+            1=1
+        <isNotEmpty prepend="and" property="nodeId">
+            id = #nodeId#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="nodeAutoNo">
+            node_auto_no like concat('%', #nodeAutoNo#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="nodeName">
+            node_name like concat('%', #nodeName#, '%')
+        </isNotEmpty>
+        order by
+            rec_revise_time DESC,
+            rec_create_time DESC
+    </select>
+
+    <insert id="save" parameterClass="java.util.HashMap">
+        insert into
+            cm_node
+        (
+            id,
+            node_auto_no,
+            node_name,
+            node_remark,
+            rec_creator_no,
+            rec_creator,
+            rec_create_time
+        )
+        values
+        (
+            #id#,
+            #nodeAutoNo#,
+            #nodeName#,
+            #nodeRemark#,
+            #recCreatorNo#,
+            #recCreator#,
+            #recCreateTime#
+        )
+    </insert>
+
+    <update id="update" parameterClass="java.util.HashMap">
+        update
+            cm_node
+        set
+            node_name = #nodeName#,
+            node_remark = #nodeRemark#,
+            rec_revisor_no = #recRevisorNo#,
+            rec_revisor = #recRevisor#,
+            rec_revise_time = #recReviseTime#
+        where
+            id = #nodeId#
+    </update>
+
+    <delete id="delete" parameterClass="java.lang.String">
+        delete from cm_node where id = #value#
+    </delete>
+</sqlMap>

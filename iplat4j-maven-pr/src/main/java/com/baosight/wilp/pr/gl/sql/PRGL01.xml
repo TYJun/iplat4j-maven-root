@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="PRGL01">
+
+	<select id="query" parameterClass="java.util.HashMap"
+		resultClass="com.baosight.wilp.pr.gl.domain.PRGL01">
+		SELECT
+		dangerID as "dangerid",
+		dangerCode as "dangercode",
+		dnagerName as "dnagername",
+		dangerWhere as "dangerwhere",
+		dangerLevel as "dangerlevel",
+		requireDesc as "requiredesc",
+		dangerClassID as "dangerclassid",
+		taskClass as "taskclass",
+		taskCode as "taskcode",
+		contentDesc as "contentdesc",
+		requiredTime as "requiredtime",
+		hospitalID as "hospitalid",
+		dangerName as "dangername",
+		departName as "departname",
+		taskDepartName as "taskdepartname",
+		status as "status",
+		status2 as "status2",
+		createTime as "createtime",
+		createMan as "createman",
+		createIP as "createip",
+		modifyTime as "modifytime",
+		modifyMan as "modifyman",
+		modifyIP as "modifyip",
+		auditTime as "audittime",
+		auditMan as "auditman",
+		auditIP as "auditip",
+		globalID as "globalid",
+		addFromID as "addfromid",
+		taskDepartId as "taskdepartid",
+		dangerType as "dangertype",
+		fromBillID as "frombillid",
+		answerMan as "answerman",
+		answerIP as "answerip",
+		answerTime as "answertime",
+		answerType as "answertype",
+		addID as "addid",
+		bakCreateTime as "bakcreatetime",
+		bakRequriedTime as "bakrequriedtime",
+		fromSouceClass as "fromsouceclass",
+		fromSouceObject as "fromsouceobject",
+		dangerClassFullName as "dangerclassfullname",
+		dangerClassName as "dangerclassname",
+		previousDangerGlobalID as "previousdangerglobalid",
+		activitiKey as "activitikey",
+		dispatchMan as "dispatchman",
+		selfFlag as "selfflag",
+		current_dealer as "currentDealer",
+		status_code as "statusCode",
+		rec_revisor as "recRevisor",
+		rec_revise_time as "recReviseTime",
+		create_date as "createDate",
+		creator_id as "creatorId",
+		creator_name as "creatorName",
+		creator_phone as "creatorPhone",
+		update_date as "updateDate",
+		updator_id as "updatorId",
+		updator_name as "updatorName",
+		operate_type as "operateType",
+		dangerClassTypeCode as "dangerclasstypecode",
+		dangerClassTypeName as "dangerclasstypename",
+		createType as "createtype",
+		localTypeCode as "localtypecode",
+		warningTime as "warningtime",
+		warning2Time as "warning2time",
+		source as "source",
+		accept_type as "acceptType",
+		msgStatus as "msgstatus"
+		FROM pr_safty_danger WHERE 1=1
+		<isNotEmpty prepend=" AND " property="dangerid">
+			dangerID = #dangerid#
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				dangerID asc
+			</isEmpty>
+		</dynamic>
+
+	</select>
+
+	
+	<!-- 记录日志  -->
+	<insert id="logs" parameterClass="java.util.HashMap">
+		INSERT INTO pr_safty_danger_logs ( id, dangerID,logsNo, logsMan, logsTime, rejectStatus, rejectReason, dataGroupCode )
+		VALUES
+			( UUID(), #dangerID#,#createNo#, #createMan#, #createTime#, #rejectStatus#, #rejectReason#, #dataGroupCode# )
+	</insert>
+
+
+	<!-- 保存需要整改的问题 -->
+	<insert id="insert" parameterClass="java.util.HashMap">
+		INSERT INTO pr_safty_danger (
+			id,
+		dangerWhere,
+		contentDesc,
+		requiredTime,
+		dangerLevel,
+		status_code,
+		localTypeName,
+		localTypeCode,
+		createTime,
+		createNo,
+		createMan,
+		dangerCode,
+		requiredesc,
+		dataGroupCode
+		)
+		VALUES (
+		#id#,
+		#dangerWhere#,
+		#contentDesc#,
+		#requiredTime#,
+		#dangerLevel#,
+		#statusCode#,
+		#localTypeName#,
+		#localTypeCode#,
+		#createTime#,
+		#createNo#,
+		#createMan#,
+		#dangerCode#,
+		#requiredesc#,
+		#dataGroupCode#
+		)
+	</insert>
+
+
+	<!-- 保存图片信息 -->
+	<insert id="insertPic" parameterClass="java.util.HashMap">
+		INSERT INTO pr_common_file ( ID, fileID, fileName, storagePath )
+		VALUES
+		( UUID(), #picId#, #fileName#, #storagePath#)
+	
+	</insert>
+
+
+	<!-- 查询问题自增键 -->
+	<select id="queryProblem" parameterClass="java.util.HashMap" resultClass="String">
+		select dangerID from pr_safty_danger where 1=1
+	<isNotEmpty prepend=" AND " property="localTypeCode">
+		localTypeCode = #localTypeCode#
+	</isNotEmpty>
+	<isNotEmpty prepend=" AND " property="dangerWhere">
+		dangerWhere = #dangerWhere#
+	</isNotEmpty>
+	<isNotEmpty prepend=" AND " property="requiredTime">
+		requiredTime = #requiredTime#
+	</isNotEmpty>
+	<isNotEmpty prepend=" AND " property="dangerLevel">
+		dangerLevel = #dangerLevel#
+	</isNotEmpty>
+	<isNotEmpty prepend=" AND " property="contentDesc">
+		contentDesc = #contentDesc#
+	</isNotEmpty>
+	</select>
+
+	
+	<!-- 查询问题图片自增键 -->
+	<select id="queryProblemPic" parameterClass="java.util.HashMap" resultClass="String">
+		select fileID from pr_common_file where fileName = #fileName#
+	</select>
+	
+	<!-- 图片关联 -->
+	<insert id="picParam">
+		insert into pr_safty_danger_pic (id, dangerID,fileID) VALUES ( UUID(), #dangerID#,#fileID#)
+	</insert>
+
+	<!-- 查询当天生成的编码数量 -->
+	<select id="dangerCodeCount" parameterClass="String" resultClass="int">
+		select count(1) from pr_safty_danger where dangerCode like concat(#value#,'%')
+	</select>
+
+
+</sqlMap>

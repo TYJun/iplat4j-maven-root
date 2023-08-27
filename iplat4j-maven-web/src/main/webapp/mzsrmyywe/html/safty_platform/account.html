@@ -1,0 +1,791 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../../reference/mui/css/mui.css">
+    <link rel="stylesheet" href="../reference/mui/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="css/platform.css" />
+    <link rel="stylesheet" href="css/common.css" />
+</head>
+<STYLE TYPE="text/css">
+    body {
+        background: #eee;
+    }
+    
+    .content {
+        margin-top: 45px;
+        padding-bottom: 60px;
+        overflow: hidden;
+    }
+    
+    .content img {
+        height: 80px;
+        width: 80px;
+        margin-top: 7px;
+        margin-right: 8px;
+        border-radius: 6px;
+    }
+    
+    .content li.mui-table-view-cell span.nn {
+        float: right;
+        /*margin-left: 3px;*/
+    }
+    
+    .dealtop {
+        overflow: hidden;
+        width: 100%;
+        margin-top: -15px;
+        border-top: 1px solid #E1E1E1;
+    }
+    
+    textarea {
+        margin: 0;
+        margin-top: 6px;
+        height: 80px;
+        padding-left: 12px;
+    }
+    
+    .ulForward li {
+        height: 40px;
+        line-height: 40px;
+        list-style: none;
+        text-align: center;
+    }
+    
+    .btn_group button {
+        width: 47.5%;
+        height: 40px;
+        margin-top: 4px;
+    }
+    
+    .aboveDivs {
+        position: fixed;
+        z-index: 2000;
+        top: -40%;
+        width: 98%;
+        left: 1%;
+        background-color: #FFFFFF;
+        padding-bottom: 20px;
+        border-radius: 4px;
+    }
+</STYLE>
+
+<body>
+    <header id="header" class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">问题处理</h1>
+        <button class="mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+      	返回
+      </button>
+    </header>
+
+    <p id="progress" class="mui-progressbar mui-progressbar-in" data-progress="20" style="display:none;"><span></span></p>
+
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div id="warnsss" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div class="content">
+        <p style="padding-left: 15px;height: 46px;line-height: 46px;font-weight: bold;">整改前：</p>
+        <div class="dealtop">
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell"><span style="letter-spacing: 0.28rem;">问题号</span>：<span class="nn" id="questionNum"></span></li>
+                <li class="mui-table-view-cell">检查地点：<span class="nn" id="place"></span></li>
+                <li class="mui-table-view-cell">问题大类：<span class="nn" id="wenDalei"></span></li>
+                <!-- <li class="mui-table-view-cell">所属部门：<span class="nn" id="depart"></span></li> -->
+                <li class="mui-table-view-cell">问题说明：<span class="nn" id="introce"></span></li>
+                <li class="mui-table-view-cell">整改要求：<span class="nn" id="requireDesc"></span></li>
+                <li class="mui-table-view-cell">要求整改时间：<span class="nn" id="timeNeed"></span></li>
+                <li class="mui-table-view-cell">挂账原因：<span class="nn" id="reason"></span></li>
+                <!-- <li class="mui-table-view-cell">驳回原因：<span class="nn" id="rejectreason"></span></li> -->
+                <li class="mui-table-view-cell">整改前照片：
+                    <div id="picturePrv">
+                        <!--<img src="../img/img.jpg"/>-->
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <p style="padding-left: 15px;height: 46px;line-height: 46px;font-weight: bold;">整改后：</p>
+
+        <div class="dealtop">
+            <ul class="mui-table-view">
+                <!--<li class="mui-table-view-cell" id="time">整改日期：<input id="timeSelect" style="float: right;text-align: right;border: none;" placeholder="选择整改日期" readonly/></li>-->
+                <!-- <li class="mui-table-view-cell" id="Checkforward">
+						<a class="mui-navigate-right">问题分类：
+							<input id="divideQuestion" style="float: right;text-align: right;margin-right: 20px;border: none;" placeholder="问题分类" readonly/>
+						</a>
+					</li> -->
+                <li class="mui-table-view-cell">整改说明：
+                    <textarea id="textareassss" placeholder="整改说明..."></textarea>
+                </li>
+                <li class="mui-table-view-cell">整改后照片：
+                    <div class="btn_group">
+                        <div id="picturesImg">
+                            <!--	<img src="img/img.jpg" />-->
+                        </div>
+                        <button type="button" id="btnCamera" class="mui-btn mui-btn-primary mui-icon mui-icon-camera" style="margin-right: 3%;">
+					       拍照
+					</button>
+                        <button type="button" id="btnPicture" class="mui-btn mui-btn-primary mui-icon mui-icon-image">
+					       本地相册
+					</button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div id="myModal" class="child-window" style="background: #000000;opacity: 0.7;display: none;"></div>
+        <div class="rangePictues" style="position: fixed;z-index:5000;top:42%;left:50%;width: 100%;display: none;">
+            <img id="imgshow" class="img" src="" style="width: 0;height: 0;" />
+            <button type="button" id="delPic" class="mui-btn mui-btn-primary mui-btn-block" style="width: 86%;height:50px;display: none;">删除</button>
+        </div>
+
+        <div id="myModalsss" class="child-window" style="background: #000000;opacity: 0.7;display: none;"></div>
+        <div id="ulForward" style="position: fixed;background:#FFFFFF;z-index: 4000;width: 100%;bottom: -14px;display: none;">
+            <ul class="ulForward" style="width: 100%;height:0px;overflow-y: auto;padding: 0;">
+                <!--<li class="mui-table-view-cells">
+					<a href="#">中控室</a>
+				</li>-->
+            </ul>
+        </div>
+
+        <div id="myModalGua" class="child-window" style="background: #000000;opacity: 0.7;" hidden></div>
+        <div class="aboveDivs" id="modalAbove" hidden>
+            <div class="mui-input-row" style="margin: 10px 5px;">
+                <p style="padding-left: 2px;margin-bottom: 2px;color: #000000;">挂账原因描述</p>
+                <textarea id="textarea" rows="8" placeholder="输入挂账原因..." style="height: 90px;"></textarea>
+            </div>
+
+            <!-- <div class="mui-input-row" style="margin: 10px 5px;">
+                <p style="padding-left: 2px;margin-bottom: 2px;color: #000000;">现阶段风险防控措施</p>
+                <textarea id="textarea2" rows="8" placeholder="输入现阶段风险防控措施..." style="height: 90px;"></textarea>
+            </div>
+
+            <div class="mui-input-row" style="margin: 10px 5px;">
+                <p style="padding-left: 2px;margin-bottom: 2px;color: #000000;">整改计划</p>
+                <textarea id="textarea3" rows="8" placeholder="输入整改计划..." style="height: 90px;"></textarea>
+            </div> -->
+
+            <button type="button" id="guaSure" class="mui-btn mui-btn-primary" style="width: 47%;height:42px;line-height:12px;margin-top: 5px;margin-left: 2%;">确定</button>
+            <button type="button" id="sureGua" class="mui-btn mui-btn-primary" style="width: 47%;height:42px;line-height:12px;margin-top: 5px;margin-left: 1%;">取消</button>
+
+        </div>
+
+        <nav id="navBottom" class="mui-bar mui-bar-tab" style="background-color:#fff;">
+            <a id="home" class="mui-tab-item home" style="background: #0090BB;color: #FFFFFF;padding-top: 4px;">
+                <span class="mui-tab-label">整改登记</span>
+            </a>
+            <a id="message" class="mui-tab-item message" style="padding-top: 4px;">
+                <span class="mui-tab-label">问题挂账</span>
+            </a>
+        </nav>
+
+    </div>
+</body>
+<script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../reference/mui/js/mui.picker.min.js"></script>
+<script src="../reference/mui/js/mui.poppicker.js"></script>
+<script src="../../cordova.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var url = location.search;
+    var baseUrl = localStorage.getItem('url');
+    var workNo = localStorage.getItem('workNo');
+    var name = localStorage.getItem('name');
+    var hospitalID = localStorage.getItem('hospitalID');
+
+    var jsonss = JSON.parse(decodeURIComponent(url.substring(1, url.length)));
+    console.log(jsonss);
+    var hospitalID = jsonss.hospitalID;
+    var dangerID = jsonss.dangerID;
+    if (hospitalID == "") {
+        $("#message").hide();
+    }
+    var cityData3 = new Array();
+    var pageNum = 9;
+    console.log(dangerID);
+    var id = ''; //问题id
+    var danger_id = '';
+
+    //问题详情
+    $(function() {
+        var prame = {
+            dangerID: dangerID
+        };
+        prame = JSON.stringify(prame);
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            headers: {
+                serviceName: 'PRAP02',
+                methodName: 'queryDangerDetial'
+            },
+            data: {
+                prames: prame
+            },
+            success: function(data) {
+                // debugger;
+                console.log(data);
+                if (data.msgKey == 200 || data.msgKey == '200') {
+                    var data = data.attr.param;
+
+                    $('#questionNum').text(data.dangerCode);
+                    $('#place').text(data.dangerWhere);
+                    $('#wenDalei').text(data.localTypeName);
+                    $('#depart').text(data.taskDepartName);
+                    $('#introce').text(data.dangerContent);
+                    $('#requireDesc').text(data.requireDesc);
+
+                    //要求整改时间
+                    var needTime = data.requiredTime;
+                    $('#timeNeed').text(needTime);
+
+                    $('#reason').text(data.rejectReason);
+
+                    id = data.id;
+                    danger_id = data.dangerId;
+
+                    //展示整改前图片
+                    var picList = data.pic;
+                    for (var j = 0; j < picList.length; j++) {
+                        var pic = picList[j];
+                        drawImg(pic.base64);
+                    }
+                } else {
+                    $('#warn small').html(data.respMsg);
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                    return;
+                }
+            },
+            complete: function(XMLHttpRequest, status) {
+                if (status == 'timeout') {
+                    $('#warn small').html('加载失败！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);　
+                } else if (status == 'error') {
+                    $('#warn small').html('网络异常！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                }
+            }
+        })
+
+        //3级问题分类
+        // $.ajax({
+        // 	url: baseUrl + 'app_safty_query.do?getDangerClassData&currentUser=' + workNo + '',
+        // 	type: 'post',
+        // 	success: function(data) {
+        // 		if(data.respCode == 200 || data.respCode == '200') {
+        // 			var data = data.obj;
+        // 			var list1 = data.nodes;
+        // 			var html = '';
+        // 			console.log(list1);
+
+        // 			for(var i = 0; i < list1.length; i++) {
+        // 				var classFullName = list1[i].classFullName;
+        // 				var nodes2 = list1[i].nodes;
+        // 				html += firstFunData(classFullName, nodes2);
+        // 			}
+        // 			$('.ulForward').html(html);
+
+        // 		} else {
+        // 			$('#warn small').html(data.respMsg);
+        // 			$("#warn").fadeIn(500);
+        // 			setTimeout("$('#warn').fadeOut(500)", 3000);
+        // 			return;
+        // 		}
+        // 	},
+        // 	complete: function(XMLHttpRequest, status) {
+        // 		if(status == 'timeout') {
+        // 			$('#warn small').html('加载失败！');
+        // 			$("#warn").fadeIn(500);
+        // 			setTimeout("$('#warn').fadeOut(500)", 3000);　
+        // 		} else if(status == 'error') {
+        // 			$('#warn small').html('网络异常！');
+        // 			$("#warn").fadeIn(500);
+        // 			setTimeout("$('#warn').fadeOut(500)", 3000);
+        // 		}
+        // 	}
+        // })
+    })
+
+    function firstFunData(classFullName, nodes2) {
+        var html = '<span class="hehe" style="color: #000000;"><li class="mui-table-view-cells">' + classFullName + '</li>';
+        html += '<div id="firstUl" style="width:100%;height:200px;overflow-y:auto;" hidden>';
+        for (var i = 0; i < nodes2.length; i++) {
+            html += '<ul>';
+            html += '<li class="mui-table-view-cellss" name="' + nodes2[i].nodes.length + '" id="' + nodes2[i].classFullName + '"><a style="color: gray;">' + nodes2[i].className + '</a></li>';
+            html += '<div id="secondUl" style="width:100%;height:200px;overflow-y:auto;" hidden>'
+            for (var k = 0; k < nodes2[i].nodes.length; k++) {
+                html += '<li class="mui-table-view-cellsss"><a href="#" name="' + nodes2[i].nodes[k].classFullName + '">' + nodes2[i].nodes[k].className + '</a></li>';
+            }
+            html += '</div>';
+            html += '</ul>';
+        }
+        html += '</div></span>';
+        return html;
+    }
+
+    $('.ulForward').on('click', 'li.mui-table-view-cells', function(e) {
+        e.preventDefault();
+        $(this).css({
+            'fontWeight': 'bold'
+        }).parent().siblings().find('li.mui-table-view-cells').css({
+            'fontWeight': ''
+        });
+        $(this).parent().find('div#firstUl').toggle().parent().siblings('span').find('div#firstUl').hide();
+        $(this).parent().siblings('span').find('li.mui-table-view-cellss').css({
+            'fontWeight': ''
+        });
+        $(this).parent().siblings('span').find('div#secondUl').hide();
+    })
+
+    $('.ulForward').on('click', 'li.mui-table-view-cellss', function(e) {
+        var lengthJudge = $(this).attr('name');
+        e.preventDefault();
+
+        if (lengthJudge > 0) {
+            $(this).css({
+                'fontWeight': 'bold'
+            }).parent().siblings().find('li.mui-table-view-cellss').css({
+                'fontWeight': ''
+            });
+            $(this).parent().find('div#secondUl').toggle().parent().siblings().find('div#secondUl').hide();
+        } else {
+            $('#divideQuestion').val($(this).attr('id'));
+            $('#myModalsss').hide();
+            $('#ulForward').hide();
+        }
+    })
+
+    $('.ulForward').on('click', 'li.mui-table-view-cellsss', function(e) {
+        e.preventDefault();
+        $('#divideQuestion').val($(this).find('a').attr('name'));
+        $('#myModalsss').hide();
+        $('#ulForward').hide();
+    })
+
+    //检查地点
+    $('#Checkforward').click(function() {
+        //隐藏第二级
+        $('.ulForward span.hehe').each(function() {
+            $(this).find('div#firstUl').hide();
+            $(this).find('li.mui-table-view-cells').css('fontWeight', '');
+        })
+
+        $('#myModalsss').show();
+        $('#ulForward').show();
+        $('.ulForward').animate({
+            height: '400px'
+        }, 200);
+    })
+
+    var progress = mui('#progress');
+
+    function register() {
+        //判断是否符合提交条件
+        if ($('#divideQuestion').val() == '') {
+            $('#warn small').html('请选择问题分类 ！');
+            $("#warn").fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return;
+        }
+        if ($('#textareassss').val().trim() == '') {
+            $('#warn small').html('请填写整改说明 ！');
+            $("#warn").fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return;
+        }
+        $('.home').attr('id', '');
+
+
+        //保存图片
+        var picLists = new Array();
+        $("#picturesImg img").each(function(index, element) {
+            picLists.push(getBase64Image(element));
+        });
+        if (picLists.length == 0) {
+            $('#warn small').html('请拍照 ！');
+            $("#warn").fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return;
+        }
+        $('#warnsss small').html('正在提交中...');
+        $("#warnsss").show();
+        $("#progress").css("display", "");
+        mui(progress).progressbar().setProgress(10);
+
+        // var data = {
+        //     'writeman': name,
+        //     'contentdesc': $('#textareassss').val().trim(),
+        //     'dangerid': danger_id,
+        //     'localTypeCode': $('#wenDalei').text(),
+        //     'id': id,
+        //     'pics': picLists
+        // }
+        // var jsonss = JSON.stringify(data);
+        // console.log(jsonss);
+
+        var prame = {
+            writeman: name,
+            contentdesc: $('#textareassss').val().trim(),
+            dangerid: danger_id,
+            localTypeCode: $('#wenDalei').text(),
+            id: id,
+            pics: JSON.stringify(picLists)
+        };
+        prame = JSON.stringify(prame);
+        $.ajax({
+            url: baseUrl + 'MobileAgentService',
+            type: 'post',
+            headers: {
+                serviceName: 'PRAP03',
+                methodName: 'insert'
+            },
+            data: {
+                prames: prame
+            },
+            success: function(data) {
+                //console.log(data);
+                if (data.msgKey == 200 || data.msgKey == '200') {
+                    $('.home').attr('id', 'home');
+                    $('#warnsss').fadeOut(500);
+                    $("#progress").css("display", "none");
+                    history.back()
+                } else {
+                    $('.home').attr('id', 'home');
+                    $('#warnsss').fadeOut(500);
+                    mui(progress).progressbar().setProgress(60);
+                    $('#warn small').html(data.msg);
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                    return;
+                }
+            },
+            complete: function(XMLHttpRequest, status) {
+                if (status == 'timeout') {
+                    $('#warnsss').fadeOut(500);
+                    $('.home').attr('id', 'home');
+                    $('#warn small').html('加载失败！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);　　　　
+                } else if (status == 'error') {
+                    $('#warnsss').fadeOut(500);
+                    $('.home').attr('id', 'home');
+                    $('#warn small').html('网络异常！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                }　
+            }
+        })
+    }
+
+    //问题挂账
+    $('#guaSure').click(function() {
+        if ($('#textarea').val() == '') {
+            $('#warn small').html('请填写挂账原因 ！');
+            $("#warn").fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return;
+        }
+
+        // if ($('#textarea2').val() == '') {
+        //     $('#warn small').html('请填写现阶段风险防控措施 ！');
+        //     $("#warn").fadeIn(500);
+        //     setTimeout("$('#warn').fadeOut(500)", 3000);
+        //     return;
+        // }
+
+        // if ($('#textarea3').val() == '') {
+        //     $('#warn small').html('请填写整改计划 ！');
+        //     $("#warn").fadeIn(500);
+        //     setTimeout("$('#warn').fadeOut(500)", 3000);
+        //     return;
+        // }
+
+        //保存进度条
+        $('#guaSure').attr('disabled', 'disabled');
+        $("#progress").css("display", "");
+
+        $('#warnsss small').html('正在提交中...');
+        $("#warnsss").show();
+        mui(progress).progressbar().setProgress(10);
+
+        var data = {
+            //'dangerID': dangerID,
+            'id': id,
+            'dangerID': danger_id,
+            'pauseMemo': $('#textarea').val().trim()
+                // 'pauseRisk': $('#textarea2').val().trim(),
+                // 'pauseScheme': $('#textarea3').val().trim()
+        }
+
+        var jsonss = JSON.stringify(data);
+
+        $.ajax({
+            //url: baseUrl + 'app_safty_flowservice.do?saveForProcessPause',
+            url: baseUrl + 'safty',
+            type: 'post',
+            headers: {
+                className: 'ServiceAQAP03',
+                methodName: 'ins'
+            },
+            data: {
+                currentUser: workNo,
+                parameter: jsonss
+            },
+            success: function(data) {
+                //console.log(data);
+                if (data.respCode == 200 || data.respCode == '200') {
+                    $("#warnsss").fadeOut(500);
+                    $('#guaSure').removeAttr('disabled');
+                    $("#progress").css("display", "none");
+                    location.href = "problemPool.html";
+                } else {
+                    $("#warnsss").fadeOut(500);
+                    $('#guaSure').removeAttr('disabled');
+                    mui(progress).progressbar().setProgress(60);
+                    $('#warn small').html(data.respMsg);
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                    return;
+                }
+            },
+            complete: function(XMLHttpRequest, status) {
+                if (status == 'timeout') {
+                    $("#warnsss").fadeOut(500);
+                    $('#guaSure').removeAttr('disabled');
+                    $('#warn small').html('加载失败！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);　　　　
+                } else if (status == 'error') {
+                    $("#warnsss").fadeOut(500);
+                    $('#guaSure').removeAttr('disabled');
+                    $('#warn small').html('网络异常！');
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                }　
+            }
+        })
+    })
+
+    //取消
+    $('#sureGua').click(function() {
+        $('#myModalGua').hide();
+        $('#modalAbove').hide();
+        $('#modalAbove').css('top', '-40%');
+    })
+
+    /*var btn = document.getElementById("time");
+	
+		btn.addEventListener('tap', function() {
+			var optionsJson = this.getAttribute('data-options') || '{}';
+			var options = JSON.parse(optionsJson);
+			var picker = new mui.DtPicker(options);
+			picker.show(function(rs) {
+				$('#timeSelect').val(rs);
+				picker.dispose();
+			});
+		}, false);	*/
+
+    mui('#navBottom').on('tap', 'a', function(e) {
+        e.stopPropagation();
+        var idText = $(this).attr('id');
+        if (idText == 'home') {
+            register();
+        } else if (idText == 'message') {
+            $('#myModalGua').show();
+            $('#modalAbove').show();
+            $('#modalAbove').animate({
+                top: '8%'
+            }, 300);
+        }
+    })
+
+    function drawImg(imageData) {
+        var img = $('<img class="img-circle">');
+        img.attr('src', "data:image/png;base64," + imageData);
+        img.appendTo('#picturePrv');
+    }
+
+    //拍摄照片
+    $("#btnCamera").click(function() {
+        if ($("#picturesImg").find("img").length == pageNum) {
+            $("#warn small").html("最多只能上传九张图片");
+            $("#warn").fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return;
+        };
+        navigator.camera.getPicture(onSuccess, onFail, {
+            quality: 50,
+            destinationType: Camera.DestinationType.FILE_URI,
+            sourceType: Camera.PictureSourceType.CAMERA,
+            allowEdit: false,
+            encodingType: Camera.EncodingType.JPEG,
+            popoverOptions: CameraPopoverOptions,
+            saveToPhotoAlbum: false
+        });
+    });
+
+    function onSuccess(imageData) {
+        var img = $('<img class="img-circle">');
+        img.attr('src', imageData);
+        img.appendTo('#picturesImg');
+    }
+
+    function onFail(message) {
+        /*alert('Failed because: ' + message);*/
+    }
+
+    //本地上传
+    $('#btnPicture').bind('touchstart', function() {
+        if ($("#picturesImg").find("img").length == pageNum) {
+            $("#warn small").html("最多只能上传九张图片");
+            $("#warn").fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return;
+        };
+        navigator.camera.getPicture(function(data) {
+            var img = $('<img class="img-circle">');
+            img.attr('src', data);
+            img.appendTo('#picturesImg');
+
+        }, function(error) {
+            //console.log('Error');
+        }, {
+            destinationType: Camera.DestinationType.FILE_URI,
+            sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+            allowEdit: false,
+            mediaType: Camera.MediaType.PICTURE
+        });
+    });
+
+    //获取图片base64
+    function getBase64Image(img) {
+        var canvas = document.createElement("canvas");
+        var image = new Image();
+        image.src = img.src;
+        var width;
+        var height;
+        if (image.width > image.height) {
+            width = 450;
+            height = image.height * 450 / image.width;
+        } else {
+            height = 450;
+            width = image.width * 450 / image.height;
+        }
+        canvas.width = width;
+        canvas.height = height;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(image, 0, 0, width, height);
+        var dataURL = canvas.toDataURL("image/JPEG");
+        return dataURL.substring(23, dataURL.length);
+
+
+        // return dataURL.replace("data:image/png;base64,", "");
+    }
+
+    //整改前照片
+    $('#picturePrv').on('click', 'img', function() {
+        $('#delPic').hide();
+        $('#myModal').show();
+        $('.rangePictues').show();
+        $('.rangePictues').animate({
+            top: '125px',
+            left: '8%'
+        }, 200);
+        $('.rangePictues img').attr('src', $(this).attr('src'));
+        $('.rangePictues img').animate({
+            height: '250px',
+            width: '85%'
+        }, 200);
+    })
+
+    //整改后照片
+    $('#picturesImg').on('click', 'img', function() {
+        $('#delPic').show();
+        _this = $(this);
+        $('#myModal').show();
+        $('.rangePictues').show();
+        $('.rangePictues').animate({
+            top: '125px',
+            left: '8%'
+        }, 200);
+        $('.rangePictues img').attr('src', $(this).attr('src'));
+        $('.rangePictues img').animate({
+            height: '250px',
+            width: '85%'
+        }, 200);
+    })
+
+    $('#myModal').click(function() {
+        $('#delPic').hide();
+        $('#myModal').hide();
+        $('.rangePictues').hide();
+        $('.rangePictues').css({
+            top: '42%',
+            left: '50%'
+        });
+        $('.rangePictues img').css({
+            height: '0',
+            width: '0'
+        });
+    })
+
+    $('img').click(function() {
+        $('#delPic').hide();
+        $('#myModal').hide();
+        $('.rangePictues').hide();
+        $('.rangePictues').css({
+            top: '42%',
+            left: '50%'
+        });
+        $('.rangePictues img').css({
+            height: '0',
+            width: '0'
+        });
+    })
+
+    //删除图片
+    $("#delPic").click(function() {
+        _this.remove();
+        $('#myModal').hide();
+        $('.rangePictues').hide();
+        $('.rangePictues img').css({
+            height: '0px',
+            width: '0'
+        });
+        $('.rangePictues').css({
+            bottom: '170px'
+        });
+    });
+
+    function firstShow(src) {
+        $(src).find('ul#firstDiv').show();
+    }
+
+    $('#myModalsss').click(function() {
+        $('#ulForward').hide();
+        $('#myModalsss').hide();
+        $('.ulForward').css({
+            height: '0px'
+        });
+    })
+
+    function goBack() {
+        location.href = "problemPool.html";
+    }
+</script>
+
+</html>

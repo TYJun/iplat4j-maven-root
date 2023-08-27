@@ -1,0 +1,950 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="reference/mui/css/mui.css">
+    <link rel="stylesheet" href="reference/mui/css/iconfont.css">
+    <link rel="stylesheet" href="css/common.css" />
+    <link rel="stylesheet" href="css/colorGreen.css">
+    <link rel="stylesheet" href="css/colorBlue.css">
+</head>
+<STYLE TYPE="text/css">
+    body {
+        background: #eee;
+    }
+    
+    .icon-logo {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .mui-content>.mui-table-view:first-child {
+        margin-top: 0px;
+    }
+    
+    .mui-page-content {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #eee;
+    }
+    
+    .round {
+        border: 1px solid #bbb;
+        width: 60px;
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+        color: #fff;
+        background-color: #666666;
+        filter: alpha(opacity=80);
+        /* 用于IE浏览器－透明度为20%*/
+        -moz-opacity: 0.8;
+        /*  用于Moz + Firefox－透明度为20%*/
+        opacity: 0.8;
+        -webkit-border-radius: 60px;
+        -moz-border-radius: 60px;
+        -o-border-radius: 60px;
+        border-radius: 60px;
+    }
+    
+    .mui-card-header {
+        font-size: 14px;
+        color: #0090bb;
+        font-weight: 500;
+    }
+    
+    .mui-card-header.mui-card-media .mui-media-body {
+        font-size: 14px;
+        font-weight: 500;
+        color: #0090bb;
+    }
+    
+    li {
+        list-style: none;
+    }
+    
+    .box {
+        width: 90%;
+        display: inline-block;
+        float: left;
+        height: 30px;
+        overflow: hidden;
+    }
+    
+    .box ul li {
+        /*line-height: 30px;*/
+        color: #30c37c;
+        height: 30px;
+    }
+    /*.box {
+  width:100%;
+  height:100px;
+  background:#fff;
+  padding: 10px;
+  overflow: hidden;
+}*/
+    
+    .notice {
+        width: 10%;
+        text-align: center;
+        color: #000;
+        display: inline-block;
+        float: left;
+        font-weight: bold;
+    }
+    
+    .img_alt {
+        background: rgba(0, 0, 0, 0.5);
+        filter: progid: DXImageTransform.Microsoft.gradient(startcolorstr=#7F000000, endcolorstr=#7F000000);
+        position: relative;
+        z-index: 2;
+        top: -30px;
+        height: 30px;
+        line-height: 30px;
+        color: #fff;
+        padding-left: 15px;
+        padding-right: 15px;
+        width: 100%;
+    }
+    
+    .update-windows {
+        /*position:fixed;*/
+        z-index: 999;
+        background: #fff;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.6);
+        filter: progid: DXImageTransform.Microsoft.gradient(startcolorstr=#7F000000, endcolorstr=#7F000000);
+    }
+    
+    .mui-grid-view.mui-grid-9 .mui-media-body {
+        letter-spacing: 1px;
+    }
+    
+    .mui-icon-pulldown {
+        margin-left: 24px;
+        padding-top: 18px;
+        transform: rotate(-90deg);
+    }
+    
+    canvas {
+        margin-top: 10px;
+    }
+    
+    .icon-gonggao {
+        font-size: 28px;
+        vertical-align: middle;
+        color: white;
+        padding-right: 4px;
+    }
+    
+    .rolediv {
+        width: 100%;
+        min-height: 100px;
+        background: #fff;
+        margin-top: 15px;
+    }
+    
+    .roleChild {
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 15px;
+        padding-right: 15px;
+        border-bottom: 1px solid #dcdcdc;
+    }
+    
+    nav.mui-bar-tab {
+        background-color: #fff;
+        margin-bottom: -3px;
+        box-shadow: 0 0 0.5px rgba(0, 0, 0, .2);
+    }
+    
+    .updateDiv {
+        width: 80%;
+        min-height: 40%;
+        position: absolute;
+        bottom: 30%;
+        left: 10%;
+    }
+    
+    .updateDiv .versionUpdate {
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        border-bottom: 1px solid #eee;
+        font-size: 18px;
+        font-weight: bold;
+        background: #30c37c;
+        color: #fff;
+    }
+    
+    .versionDiv {
+        min-height: 150px;
+        padding: 15px;
+        font-size: 16px;
+    }
+    
+    #update {
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        border-top: 1px solid #eee;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    
+    #menuPic {
+        width: 100%;
+        height: 297px;
+        background: url(/img/hospital.jpg);
+        background-size: cover;
+    }
+    
+    .hosNameDiv {
+        height: 40px;
+        line-height: 40px;
+        padding-left: 15px;
+        background: #ffffff;
+        /*color: #676767;*/
+        font-size: 16px;
+        font-weight: 550;
+        letter-spacing: 1px;
+        color: #7d7d7d;
+        border-radius: 8px 8px 0 0;
+    }
+    
+    #changeColor {
+        touch-action: none;
+    }
+    
+    #scrollGG {
+        margin: 0;
+        padding-left: 0;
+    }
+    
+    .noticeDiv {
+        width: 100%;
+        background: #fff;
+        height: 40px;
+        padding: 10px 15px;
+        margin-top: -30px;
+        margin-bottom: 10px;
+    }
+    
+    .noticeTime {
+        font-size: 14px;
+        margin-top: 0;
+        margin-bottom: 0px;
+        color: #f8f8f8;
+        background: #cacaca;
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 4px;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    .base {
+        margin-top: 10px;
+    }
+</STYLE>
+
+<body>
+    <header id="header" class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">首页</h1>
+        <button id="closeNotice" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-right" style="display: none;height: 40px;">
+        <span class="mui-icon iconfont icon-addition" style="transform: rotate(45deg);margin-top: 6px;"></span>
+      </button>
+    </header>
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+    <nav class="mui-bar mui-bar-tab" style="box-shadow: 0 0 0.5px rgba(0, 0, 0, .2);">
+        <a id="home" class="mui-tab-item mui-active">
+            <span class="mui-icon mui-icon-home"></span>
+            <span class="mui-tab-label">首页</span>
+        </a>
+        <!-- <a id="report" class="mui-tab-item" style="display:none;">
+        <span class="mui-icon iconfont icon-baobiaofenxi"></span>
+        <span class="mui-tab-label">报表</span>
+      </a> -->
+        <a id="mine" class="mui-tab-item" onclick="settingShow()">
+            <span class="mui-icon mui-icon-person"></span>
+            <span class="mui-tab-label">我的</span>
+        </a>
+    </nav>
+    <div class="update-windows" hidden>
+        <div class="updateDiv">
+            <div style="background:#fff;">
+                <div class="versionUpdate">版本更新</div>
+                <div class="versionDiv">检测到有新版本，请更新！</div>
+                <div id="update" onclick="versionUpdate()">
+                    更新
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mui-content">
+        <!-- 首页内容 -->
+        <div id="tabbar" class="mui-control-content mui-active">
+            <div id="menuPic"></div>
+            <div id="hosName" class="img_alt"></div>
+            <!-- 公告 -->
+            <div class="noticeDiv">
+                <div class="notice">
+                    <img src="img/notice.png" style="width:21px;height:auto;">
+                </div>
+                <div class="box">
+                    <ul id="scrollGG">
+                    </ul>
+                </div>
+            </div>
+            <!-- 业务模块分类 -->
+            <!-- 广医三先只上订餐，其他大的模块都隐藏掉 -->
+            <div class="baseService" style="display: none;">
+                <div class="hosNameDiv">运营保障</div>
+                <ul class="mui-table-view mui-grid-view mui-grid-9">
+                    <li id="REPAIR" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3" style="display:none;">
+                        <a href="html/repair/list_unfinished.html">
+                            <span><img src="img/repair.png" alt="" class="icon-logo"></span>
+                            <div class="mui-media-body">维修</div>
+                        </a>
+                    </li>
+                    <li id="DEVICE" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3" style="display:none;">
+                        <a href="html/device/XJ/deviceList.html">
+                            <span><img src="img/device.png" alt="" class="icon-logo"></span>
+                            <div class="mui-media-body">巡检</div>
+                        </a>
+                    </li>
+                    <li id="DEVICE_INSPECTION" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3" style="display:none;">
+                        <a href="html/device_inspection/main.html">
+                            <span><img src="img/device_inspection.png" alt="" class="icon-logo"></span>
+                            <div class="mui-media-body">设备巡检</div>
+                        </a>
+                    </li>
+                    <li id="ENV_INSPECTION" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3" style="display:none;">
+                        <a href="html/env_inspection/XJ/deviceList.html">
+                            <span><img src="img/env_inspection.png" alt="" class="icon-logo"></span>
+                            <div class="mui-media-body">环境巡检</div>
+                        </a>
+                    </li>
+                    <li id="MAINTAIN" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3" style="display:none;">
+                        <a href="html/device_maintain/main.html">
+                            <span><img src="img/maintain.png" alt="" class="icon-logo"></span>
+                            <div class="mui-media-body">保养</div>
+                        </a>
+                    </li>
+                    <li id="EQUIPMENT" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+                        <a href="javascript:void(0)">
+                            <span><img src="img/equipment.png" alt="" class="icon-logo"></span>
+                            <div class="mui-media-body">设备</div>
+                        </a>
+                    </li>
+                    <li id="CAR" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3" style="display:none;">
+                        <a href="html/car/taskList.html">
+                            <span><img src="img/car.png" alt="" class="icon-logo"></span>
+                            <div class="mui-media-body">车辆</div>
+                        </a>
+                    </li>
+                    <li id="CAR-REGISTER" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3" style="display:none;">
+                        <a href="html/car-register/taskList.html">
+                            <span><img src="img/car.png" alt="" class="icon-logo"></span>
+                            <div class="mui-media-body">车辆登记</div>
+                        </a>
+                    </li>
+                    <li id="CAR-OUT" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3" style="display: none;">
+                        <a href="html/car-out/taskList.html">
+                            <span><img src="img/car.png" alt="" class="icon-logo"></span>
+                            <div class="mui-media-body">外部派车</div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="lifeService base">
+                <div class="hosNameDiv">生活服务</div>
+                <ul class="mui-table-view mui-grid-view mui-grid-9">
+                    <li id="MEAL" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+                        <a>
+                            <span><img src="img/meal.png" alt="" class="icon-logo"></span>
+                            <div class="mui-media-body">在线点餐</div>
+                        </a>
+                    </li>
+<!--                    <li id="MEALORDER" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3" >-->
+<!--                        <a>-->
+<!--                            <span><img src="img/code.png" alt="" class="icon-logo"></span>-->
+<!--                            <div class="mui-media-body">堂食消费</div>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    <li id="DECISION" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" >-->
+<!--                        <a onclick="location.href='html/report/meal/meal_menu.html';">-->
+<!--                            <span><img src="img/decision.png" alt="" class="icon-logo"></span>-->
+<!--                            <div class="mui-media-body">报表</div>-->
+<!--                        </a>-->
+<!--                    </li>-->
+                    <li id="ALIPAY_NOTIFY" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3" style="display: none;">
+                        <a onclick="location.href='html/alipay-notify/main.html';">
+                            <span><img src="img/collections.png" alt="" class="icon-logo"></span>
+                            <div class="mui-media-body">门店收款</div>
+                        </a>
+                    </li>
+                    <!-- <li id="CLOTHES" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+                <a href="html/clothes/main.html">
+                  <span class="mui-icon iconfont icon-clothes-wash" style="color:#1e92ff;font-size:30px;height:40px;line-height:40px;"></span>
+                  <div class="mui-media-body">工作服</div>
+                </a>
+              </li>
+              <li id="BEDCLOTHES" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+                <a href="html/bed-clothes/main.html">
+                  <span class="mui-icon iconfont icon-beizi" style="color:#06a3b7;font-size:35px;height:40px;line-height:40px;"></span>
+                  <div class="mui-media-body">被服</div>
+                </a>
+              </li> -->
+                </ul>
+            </div>
+            <div class="propertyService base" style="display: none;">
+                <div class="hosNameDiv">物业服务</div>
+                <ul class="mui-table-view mui-grid-view mui-grid-9">
+                    <li id="WASTE" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3" style="display:none;">
+                        <a href="html/medical/main.html">
+                            <span><img src="img/waste.png" alt="" class="icon-logo"></span>
+                            <div class="mui-media-body">医废</div>
+                        </a>
+                    </li>
+                    <li id="TRANSPORT" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3" style="display:none;">
+                        <a href="html/transportAndDevice/sendList.html">
+                            <span><img src="img/transport.png" alt="" class="icon-logo"></span>
+                            <div class="mui-media-body">运送</div>
+                        </a>
+                    </li>
+                    <li id="Access" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+                        <a onclick="location.href='html/Access/main.html';">
+                            <span><img src="img/Access.png" class="icon-logo"></span>
+                            <div class="mui-media-body">门禁</div>
+                        </a>
+                    </li>
+                    <li id="MEETING" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+                        <a href="html/meeting/main.html">
+                            <span class="mui-icon iconfont icon-huiyiting" style="color:#607d8b;font-size:30px;height:40px;line-height:40px;"></span>
+                            <div class="mui-media-body">会议</div>
+                        </a>
+                    </li>
+                    <li id="GUIDE" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+                        <a href="html/guide/choose-main.html">
+                            <span><img src="img/daoyou.png" alt="" class="icon-logo"></span>
+                            <div class="mui-media-body">导游</div>
+                        </a>
+                    </li>
+                    <li id="MATERIAL_DISTRIBUTION" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+                        <a href="html/material-distribution/choose-main.html">
+                            <span><img src="img/wuzi.png" alt="" class="icon-logo"></span>
+                            <div class="mui-media-body">物资配送</div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="safyService base" style="display: none;">
+                <div class="hosNameDiv">安全保障</div>
+                <ul class="mui-table-view mui-grid-view mui-grid-9">
+                    <li id="CyberMonitor" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+                        <a href="javascript:void(0)">
+                            <span class="mui-icon iconfont icon-monitor" style="color:#3c9ba7;font-size:35px;height:40px;line-height:32px;"></span>
+                            <div class="mui-media-body">智能监控</div>
+                        </a>
+                    </li>
+                    <li id="EnergyExpend" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+                        <a href="javascript:void(0)">
+                            <span class="mui-icon iconfont icon-Analysis_01" style="color:#0db7a8;font-size:35px;height:40px;line-height:35px;"></span>
+                            <div class="mui-media-body">能耗</div>
+                        </a>
+                    </li>
+                    <li id="SAFTY_PLATFORM" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+                        <a onclick="location.href='html/safty_platform/homePage.html';">
+                            <span><img src="img/safty_platform.png" alt="" class="icon-logo"></span>
+                            <div class="mui-media-body">问题巡查</div>
+                        </a>
+                    </li>
+                    <li id="SATISFACTION" class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+                        <a href="html/satisfaction/main.html">
+                            <span class="mui-icon iconfont icon-manyidufenxi" style="color:#ff9800;font-size:35px;height:40px;line-height:40px;"></span>
+                            <div class="mui-media-body">满意度</div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="js/color.js"></script>
+<script src="reference/mui/js/mui.js" type="text/javascript"></script>
+<script src="reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/qrcode.js"></script>
+<script type="text/javascript" src="js/jquery.qrcode.js"></script>
+<!-- <script src="cordova.js" type="text/javascript"></script> -->
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var workNo = localStorage.getItem("workNo");
+    var deptNum = localStorage.getItem('deptCode');
+    var dataGroupCode = localStorage.getItem("dataGroupCode");
+    // alert(JSON.stringify(dataGroupCode))
+    var role = localStorage.getItem("role");
+    var hosId = localStorage.getItem("hosId");
+    var hosName = localStorage.getItem("hosName");
+    console.log("医院编号：" + hosId);
+    var menuImg = localStorage.getItem("menuImg");
+    var developer = localStorage.getItem("developer");
+    console.log("开发者模式：" + developer);
+    var appUrl = "";
+
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        if (sessionStorage.getItem("push") != "1")
+            registerPush();
+
+        /**
+         * 版本更新
+         * @param appID
+         */
+        $.ajax({
+            url: baseUrl + 'app_versionController.do?getAppVersion',
+            type: 'post',
+            data: {
+                appId: 'com.bonawise.yishenghuo'
+            },
+            timeout: 30000,
+            success: function(data) {
+                var data = eval("(" + data + ")");
+                var versions = data.app_version;
+                appUrl = data.app_url;
+                cordova.getAppVersion.getVersionNumber(function(version) {
+                    $("#currentVersion").html("V" + version);
+                    if (version < versions) {
+                        $(".update-windows").fadeIn(500);
+                    } else {
+                        source_update();
+                    }
+                });
+            }
+        });
+
+        /**
+         * 系统返回键监听
+         */
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+
+    function registerPush() {
+        cordova.exec(function(deviceId) {
+            $.ajax({
+                url: baseUrl + 'app_pushRegisterController.do?appPushRegister',
+                type: 'post',
+                data: {
+                    workNo: workNo,
+                    appId: 'com.bonawise.yishenghuo',
+                    appName: '医生活（医务版）',
+                    appType: 'Android',
+                    hospital: hosName,
+                    deviceId: deviceId
+                },
+                success: function(data) {
+                    sessionStorage.setItem("push", "1");
+                    mui.toast("推送注册成功");
+                }
+            });
+        }, function(error) {
+            // mui.toast(error);
+            setTimeout(registerPush, 2000);
+        }, "AliYun", "getDeviceId", []);
+    }
+
+    /**
+     * 资源文件更新
+     * @return {[type]} [description]
+     */
+    function source_update() {
+        $.ajax({
+            url: localStorage.getItem("serverUrl") + 'appPlatformControllder.do?queryAppVersion',
+            type: 'post',
+            data: {
+                appid: 'com.bonawise.yishenghuo',
+                hospital: hosId,
+                deviceType: 'android'
+            },
+            success: function(data) {
+                console.log(data);
+                var version_num = data.obj.version;
+                console.log(version_num);
+                if (version_num != undefined && version_num != localStorage.getItem("version_num")) {
+                    mui.alert('有新的资源文件需要更新，请先下载后再使用APP。', '提示', function() {
+                        var jsonStr = JSON.stringify(data.obj);
+                        location.href = localStorage.getItem("appURL") + "www/source_download.html?" + encodeURIComponent(jsonStr);
+                        // location.href = localStorage.getItem("appURL")+"www/hosArea.html";
+                    });
+                }
+            }
+        });
+    }
+
+    /**
+     * 打开浏览器更新app
+     * @return {[type]} [description]
+     */
+    function versionUpdate() {
+        cordova.InAppBrowser.open(appUrl, '_system', 'location=no');
+        // window.open(appUrl, '_self');
+    }
+
+    if (developer == "true") {
+        $("#REPAIR").css("display", "");
+        $("#DEVICE").css("display", "");
+        $("#DEVICE_INSPECTION").css("display", "");
+        $("#ENV_INSPECTION").css("display", "");
+        $("#MAINTAIN").css("display", "");
+        $("#MEAL").css("display", "");
+        $("#DISTRIBUTION").css("display", "");
+        $("#TRANSPORT").css("display", "");
+        $("#CAR").css("display", "");
+        $("#DECISION").css("display", "");
+        $("#CATERING").css("display", "");
+        $("#PHONE_PAGE").css("display", "");
+        $("#CLOTHES_PAGE").css("display", "");
+    }
+
+    $(function() {
+        console.log(role);
+        if (role.indexOf('MDSKY') > -1) {
+            $('#ALIPAY_NOTIFY').css("display", "");
+        }
+        if (role.indexOf("LEADER") > -1) {
+            $("#Energy").show();
+            $("#CyberMonitor").show();
+            $('#report').show()
+        }
+        if (role.indexOf("CAR_") > -1) {
+            $("#CAR").show();
+        }
+        // LS_CAR看见车辆登记
+        if (role.indexOf("LS_CAR") > -1) {
+            $("#CAR-REGISTER").show();
+        }
+        if (role.indexOf("ADMIN") > -1 || role.indexOf("CAR_DZ") > -1 || role.indexOf("CAR_WB") > -1) {
+            $("#CAR-OUT").css("display", "");
+        }
+
+        if (role.indexOf("LEADER") > -1 || role.indexOf("HSZ") > -1 || role.indexOf("DELIVERY_STAFF") > -1) {
+            $("#MATERIAL_DISTRIBUTION").css("display", "");
+        }
+
+
+        //模块权限
+        $.ajax({
+            url: 'http://wx.yyhq365.cn/smp_wx/invoke',
+            type: 'post',
+            data: {
+                method: 'enabledModule',
+                mobile: 'APP',
+                hosCode: hosId,
+                roleCodes: role
+            },
+            timeout: 15000,
+            success: function(data) {
+                var data = JSON.parse(data);
+                console.log(data);
+                var list = new Array();
+                var list = JSON.parse(data.respMsg);
+                console.log("模块权限");
+                console.log(list);
+                if (list.length != 0) {
+                    for (var i = 0; i < list.length; i++) {
+                        code = list[i].moduleCode;
+                        $("#" + code).css("display", "");
+                    }
+                }
+            }
+        });
+
+        if ($('.baseService ul li:visible').length == 0) {
+            $('.baseService').hide()
+        }
+        if ($('.lifeService ul li:visible').length == 0) {
+            $('.lifeService').hide()
+        }
+        if ($('.propertyService ul li:visible').length == 0) {
+            $('.propertyService').hide()
+        }
+        if ($('.safyService ul li:visible').length == 0) {
+            $('.safyService').hide()
+        }
+      //公告
+        //getNotice();
+    });
+
+    function getNotice(){
+    	//公告
+        $.ajax({
+            url: baseUrl + 'app_systemController.do?getEffectiveNotice',
+            // url: baseUrl + 'app_systemController.do?getAppSystemNotice',
+            type: 'post',
+            data: {
+                lastId: '1'
+            },
+            success: function(data) {
+                var data = eval("(" + data + ")");
+                console.log("公告");
+                console.log(data);
+                if (data.respCode == "200") {
+                    var list = new Array();
+                    var html = "";
+                    var scrollGG = "";
+                    list = data.obj;
+                    for (var i = 0; i < list.length; i++) {
+                        if (list[i].notice_title.length > 80)
+                            scrollGG += "<li>" + list[i].notice_title.substring(0, 80) + "...</li>";
+                        else
+                            scrollGG += "<li>" + list[i].notice_title + "</li>";
+                    }
+                    $("#scrollGG").html(scrollGG);
+                    scrollView();
+                } else {
+                    var scrollGG = "";
+                    scrollGG = "<li></li>";
+                    $("#scrollGG").html(scrollGG);
+                }
+
+            }
+        });
+    }
+    //基本信息
+    $('#name').html(localStorage.getItem("name"));
+    $('#workNo').html(localStorage.getItem("workNo"));
+    $('#telPhone').html(localStorage.getItem("telPhone") == "" ? "无" : localStorage.getItem("telPhone"));
+    $('#deptName').html(localStorage.getItem("deptName"));
+
+    //图片
+    if (menuImg != "" && menuImg != null && menuImg != "null") {
+        var imgUrl = "http://wx.yyhq365.cn/smp_wx" + menuImg;
+        $("#menuPic").css("background-image", "url(" + imgUrl + ")");
+    }
+    $("#hosName").html(hosName);
+
+    //公告点击事件
+    document.getElementById('scrollGG').addEventListener('tap', function() {
+        location.href = 'operate/notice.html'
+    });
+
+    document.getElementById('CyberMonitor').addEventListener('tap', function() {
+        $.ajax({
+            url: baseUrl + 'app_system_framework_controller.do?queryModuleParameter',
+            type: 'post',
+            data: {
+                module: 'interthings_ui',
+                key: 'appServerUrl'
+            },
+            success: function(data) {
+                if (data.respCode == "200") {
+
+                    if (data.obj.charAt(data.obj.length - 1) == "/") {
+                        deviceBaseUrl = data.obj;
+                    } else {
+                        deviceBaseUrl = data.obj + "/";
+                    }
+
+                    //deviceBaseUrl = "http://192.168.1.211:18080/smp/";
+                    localStorage.setItem("deviceBaseUrl", deviceBaseUrl);
+                    location.href = "html/CyberMonitor/index.html";
+                } else {
+                    showMsg("获取服务地址失败");
+                }
+                console.log(data);
+            }
+        });
+    });
+
+    document.getElementById('EnergyExpend').addEventListener('tap', function() {
+        $.ajax({
+            url: baseUrl + 'app_system_framework_controller.do?queryModuleParameter',
+            type: 'post',
+            data: {
+                module: 'interthings_ui',
+                key: 'appServerUrl'
+            },
+            success: function(data) {
+                if (data.respCode == "200") {
+
+                    if (data.obj.charAt(data.obj.length - 1) == "/") {
+                        deviceBaseUrl = data.obj;
+                    } else {
+                        deviceBaseUrl = data.obj + "/";
+                    }
+                    localStorage.setItem("deviceBaseUrl", deviceBaseUrl);
+                    location.href = "html/energy/index.html";
+                } else {
+                    showMsg("获取服务地址失败");
+                }
+                console.log(data);
+            }
+        });
+    });
+    // 设备码
+    document.getElementById('EQUIPMENT').addEventListener('tap', function() {
+        //设备码
+        cordova.plugins.barcodeScanner.scan(
+            function(result) {
+                if (result.text != "") {
+                    location.href = "html/equipment/equipment-list.html?" + result.text;
+                }
+            },
+            function(error) {}
+        );
+    });
+
+    /**
+     * mui返回方法(ps:自定义的,不加会报错,不需要的话方法体定义为空)
+     * [goBack description]
+     * @return {[type]} [description]
+     */
+    function goBack() {
+
+    }
+
+    /**
+     * 系统返回键方法
+     * @return {[type]} [description]
+     */
+    // function onBackKeyDown() {
+    //   if(('#closeNotice').is(':visible')){
+    //     $('nav.mui-bar').show()
+    //     $('#closeNotice').hide();
+    //     $("#tabbar").addClass("mui-active");
+    //     $("#tabbar-with-chat").removeClass("mui-active");
+    //     $('.mui-title').text('首页')
+    //     $('#home').addClass('mui-active')
+    //   }else {
+    //     navigator.app.exitApp();
+    //   } 
+    // }
+    function onBackKeyDown() {
+        navigator.app.exitApp();
+    }
+
+
+    mui('nav').on('tap', '#mine', function() {
+        location.href = 'setting.html';
+    })
+
+    mui('nav').on('tap', '#report', function() {
+        location.href = 'html/report/reportMenu.html';
+    })
+
+    // 堂食消费
+    $('#MEALORDER').click(function() {
+        // 如果维护了身份证
+        if (localStorage.getItem('IDYN') == 'Y') {
+            location.href = 'html/canteen_meal/code.html';
+        } else {
+            $("#warn small").html('请联系人力资源部维护身份证信息，否则无法使用！（此功能仅对职工开放）');
+            $("#warn").fadeIn(500);
+            setTimeout('$("#warn").fadeOut(500)', 3000);
+        }
+    });
+    //点击订餐时校验,如果没有身份证不让订餐，先去维护
+    $('#MEAL').click(function() {
+            // 如果维护了身份证
+            if (localStorage.getItem('IDYN') == 'Y') {
+                location.href = 'html/meal/main.html';
+            } else {
+                $("#warn small").html('请联系人力资源部维护身份证信息，否则无法使用！（此功能仅对职工开放）');
+                $("#warn").fadeIn(500);
+                setTimeout('$("#warn").fadeOut(500)', 3000);
+            }
+        })
+        // 先判定有没有身份证
+    $.ajax({
+        //url: baseUrl + 'app_payPasswordController.do?getIdNoByWorkNo',
+        url: baseUrl + 'meal',
+        type: 'post',
+        headers:{
+            className : 'AppUserInfoService',
+            methodName : 'getWorkInfoByWorkNo'
+        },
+        data: {
+            workNo: workNo
+        },
+        success: function(data) {
+            //var data = JSON.parse(data);
+            console.log(data);
+            if (data.success) {
+            	if(data.obj["idNo"]){
+	                localStorage.setItem('IDYN', 'Y');
+	                console.log('是否有身份证' + data.obj["idNo"])
+            	}
+                console.log(localStorage.getItem('IDYN'))
+                console.log('是否输过支付密码')
+                console.log(localStorage.getItem('pwdYN'))
+            }
+        }
+    })
+</script>
+<script type="text/javascript">
+    //公告滚动
+    function scrollView() {
+        (function($) {
+            $.fn.textSlider = function(options) {
+                var defaults = { //初始化参数
+                    scrollHeight: 50,
+                    line: 1,
+                    speed: 'normal',
+                    timer: 5000
+                };
+                var opts = $.extend(defaults, options);
+                this.each(function() {
+                    var timerID;
+                    var obj = $(this);
+                    var $ul = obj.children("ul");
+                    var $height = $ul.find("li").height();
+                    var $Upheight = 0 - opts.line * $height;
+                    obj.hover(function() {
+                        clearInterval(timerID);
+                    }, function() {
+                        timerID = setInterval(moveUp, opts.timer);
+                    });
+
+                    function moveUp() {
+                        $ul.animate({
+                            "margin-top": $Upheight
+                        }, opts.speed, function() {
+                            for (i = 0; i < opts.line; i++) { //只有for循环了才可以设置一次滚动的行数
+                                $ul.find("li:first").appendTo($ul);
+                            }
+                            $ul.css("margin-top", 0);
+                        });
+                    };
+                    timerID = setInterval(moveUp, opts.timer);
+                });
+            };
+        })(jQuery)
+
+        //设置滚动大小
+        $(function() {
+            $(".box").textSlider({
+                line: 1
+            });
+        })
+    }
+</script>
+
+</html>

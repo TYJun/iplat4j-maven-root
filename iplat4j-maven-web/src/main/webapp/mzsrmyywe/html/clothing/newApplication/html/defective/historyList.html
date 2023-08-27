@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>次品记录</title>
+    <link rel="stylesheet" href="../../css/defective/historyList.css">
+    <link rel="stylesheet" href="../../../../../html\reference\mui\css\mui.min.css">
+    <link rel="stylesheet" href="../../../../../html\reference\mui\css\mui.picker.css">
+    <link rel="stylesheet" href="../../../../../html\reference\mui\css\mui.picker.min.css">
+</head>
+<body>
+    <!-- 顶部区域 -->
+    <header>
+        <div class='top'>
+            <div id="top-bar">
+                <span id="icon-left-back" class="mui-icon mui-icon-arrowleft"></span>
+                <h1 id="title">次品记录</h1>
+                <span id="icon-right-search" class="mui-icon mui-icon-search"></span>
+            </div>
+        </div>
+    </header>
+    <!-- 列表项 -->
+    <div class="historylist">
+        <ul class="list_card">
+            <li>
+                <div class="card">
+                    <div id="top">
+                        <span class="mui-icon mui-icon-list"></span>
+                        <span class="ordNum">A20211314038</span>
+                    </div>
+                    <div id="bto">
+                        <ul>
+                            <li>
+                                <span class="Name">申报时间</span>
+                                <span class="value">2021-06-20</span>
+                            </li>
+                            <li>
+                                <span class="Name">申报地点</span>
+                                <span class="value">东苑仓库</span>
+                            </li>
+                            <li>
+                                <span class="Name">申报数量</span>
+                                <span class="value">共1件</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+
+            <li>
+                <div class="card">
+                    <div id="top">
+                        <span class="mui-icon mui-icon-list"></span>
+                        <span class="ordNum">A20211314038</span>
+                    </div>
+                    <div id="bto">
+                        <ul>
+                            <li>
+                                <span class="Name">申报时间</span>
+                                <span class="value">2021-06-20</span>
+                            </li>
+                            <li>
+                                <span class="Name">申报地点</span>
+                                <span class="value">东苑仓库</span>
+                            </li>
+                            <li>
+                                <span class="Name">申报数量</span>
+                                <span class="value">共1件</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!-- 底部'添加'按钮 -->
+    <div>
+        <button id="btn_add">
+            <span>添加</span>
+        </button>
+    </div>
+
+    <!-- <script src="html\clothing\reference\mui\js\jquery-2.1.4.js"></script> -->
+    <script src="../../../reference/mui/js/jquery-2.1.4.js"></script>
+    <script>
+        $("#icon-right-search").click(function(){
+            location.href = './search.html';
+        });
+        // $("#icon-left-back").click(function(){
+        //     location.href = './historyList.html';
+        // });
+        
+    </script>
+</body>
+</html>

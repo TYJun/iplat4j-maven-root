@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../../../reference/bootstrap-3.3.5/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../../css/android-ios.css" />
+    <!-- <link rel="stylesheet" href="../../../css/self_menu.css"> -->
+    <link rel="stylesheet" href="../../../css/colorGreen.css" />
+    <!-- <link rel="stylesheet" href="../../../css/colorBlue.css" /> -->
+</head>
+<style type="text/css">
+    hr {
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+    
+    .navbar {
+        margin-bottom: 0px;
+    }
+    
+    .badge {
+        padding: 5px 10px;
+    }
+    
+    .row {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+    
+    .mainContent .picture img {
+        margin: 0 0;
+    }
+    
+    h1 {
+        margin: 0 0 0rem;
+    }
+    
+    .mainContent .picture img {
+        width: 100%;
+        /* margin: 1rem 0; */
+    }
+</style>
+
+<body>
+    <div>
+        <nav class="navbar navbar-fixed-top navbar-inverse nav-height">
+            <div style="float: left">
+                <ul class="nav nav-pills ul-btn-right">
+                    <li>
+                        <a href="javascript:back();" style="color: #ffffff">返回</a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h1 class="title-right">维修报表</h1>
+            </div>
+        </nav>
+    </div>
+
+    <div class="mainContent" style="position: absolute; display: block; margin-top: 49px">
+        <div class="picture">
+            <img src="../../../img/reportS.jpg" />
+        </div>
+
+        <div id="app">
+            <div v-for="item in menu_list" @click="jump(item.url)" v-if="item.show">
+                <div class="row" style="margin-top: 10px">
+                    <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                        {{ item.text }}
+                    </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 right">
+                        <span class="glyphicon glyphicon-menu-right" style="color: #ef8915"></span>
+                    </div>
+                </div>
+                <hr style="margin-top: 10px" />
+            </div>
+        </div>
+    </div>
+</body>
+<!-- <script type="text/javascript" src="../../../js/color.js"></script> -->
+<script src="../../../reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../../../reference/bootstrap-3.3.5/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../../../js/vue.js"></script>
+<script type="text/javascript">
+    var app = new Vue({
+        el: "#app",
+        data() {
+            return {
+                menu_list: [{
+                    url: "repair_satisfaction.html",
+                    text: "后勤工作满意度统计",
+                    show: true,
+                }, {
+                    url: "repair_unfinished.html",
+                    text: "后勤维修工单未完成统计",
+                    show: true,
+                }, {
+                    url: "repair_work_count.html",
+                    text: "后勤维修班组工作量统计",
+                    show: true,
+                }, {
+                    url: "yiwu_depart.html",
+                    text: "医务科室报修量统计",
+                    show: true,
+                }, {
+                    url: "dispatch_center.html",
+                    text: "调度中心工作量统计",
+                    show: true,
+                }, {
+                    url: "repair_department.html",
+                    text: "报修科室使用材料统计",
+                    show: true,
+                }, {
+                    url: "repair_things.html",
+                    text: "维修事项与分类统计",
+                    show: true,
+                }, {
+                    url: "repair_team.html",
+                    text: "维修班组工作量统计",
+                    show: true,
+                }, {
+                    url: "worker_use.html",
+                    text: "维修员使用材料统计",
+                    show: true,
+                }, {
+                    url: "worker_repair.html",
+                    text: "员工维修工作量统计",
+                    show: false,
+                }, ],
+            };
+        },
+        methods: {
+            jump(url, call_back) {
+                call_back ? call_back() : (location.href = url);
+            },
+        },
+    });
+
+    function back() {
+        location.href = "../reportMenu.html";
+    }
+</script>
+
+</html>

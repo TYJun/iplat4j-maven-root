@@ -1,0 +1,821 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../reference/mui/css/mui.min.css">
+    <link rel="stylesheet" href="../reference/css/common.css" />
+    <link type="text/css" rel="stylesheet" href="../reference/css/time_css.css" />
+    <link rel="stylesheet" href="../../../css/colorGreen.css" />
+    <link rel="stylesheet" href="../../../css/colorBlue.css" />
+    <link rel="stylesheet" href="../reference/mui/css/iconfont.css">
+</head>
+<style type="text/css">
+    body {
+        background: #eee;
+    }
+    
+    main {
+        margin-top: 45px;
+        margin-bottom: 20px;
+    }
+    
+    .mealInfo {
+        width: 100%;
+        background: #fff;
+        border: 1px solid #eee;
+        margin-bottom: 10px;
+    }
+    
+    .mealInfo .row {
+        margin-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+        padding: 0 15px;
+        padding-bottom: 10px;
+    }
+    
+    #val1 {
+        margin: 8px 0;
+    }
+    
+    #val2 {
+        color: #949494;
+    }
+    
+    .payTitle {
+        padding-left: 15px;
+        padding-right: 15px;
+        font-size: 12px;
+        color: #828282;
+    }
+    
+    .payTypeSelf {
+        margin: 10px 0;
+        width: 100%;
+        background: #fff;
+        border: 1px solid #eee;
+    }
+    
+    .mui-input-group .mui-input-row {
+        height: 50px;
+    }
+    
+    .order {
+        padding-left: 15px;
+        padding-right: 15px;
+        font-size: 12px;
+        color: #828282;
+    }
+    
+    .orderDetail {
+        margin: 10px 0;
+        width: 100%;
+        background: #fff;
+        border: 1px solid #eee;
+    }
+    
+    .orderDetail>.row {
+        margin-top: 10px;
+        padding: 0 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    #val5 {
+        margin-top: 10px;
+        color: #949494;
+        font-size: 13px;
+    }
+    
+    #pay {
+        height: 40px;
+        line-height: 40px;
+        color: #fff;
+        text-align: center;
+        border-radius: 2px;
+        cursor: pointer;
+    }
+    /*支付密码*/
+    
+    .row-content1 {
+        height: 30px;
+        line-height: 30px;
+        padding: 0 30px;
+        font-size: 16px;
+        color: #666666;
+        background: #ffffff;
+    }
+    
+    .diceng {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 250;
+        background: black;
+        opacity: 0.5;
+    }
+    
+    .realMoney {
+        position: fixed;
+        z-index: 251;
+        width: 100%;
+        /*bottom: 0px;*/
+        background: #FFFFFF;
+        height: 300px;
+        padding: 0 10px;
+    }
+    
+    .setInput {
+        color: #333333;
+        width: 100%;
+        border: 0;
+        outline: none;
+        text-align: left;
+        font-size: 15px;
+    }
+    
+    .editButtons {
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        font-size: 19px;
+        width: 90%;
+        margin-left: 5%;
+        margin-bottom: 20px;
+        border-radius: 6px;
+    }
+    
+    .applyTitle {
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+        font-size: 18px;
+        color: #666666;
+        letter-spacing: 1px;
+    }
+    
+    .applyInput {
+        padding: 15px 15px;
+    }
+    
+    .mui-input-row .mui-input-clear~.mui-icon-clear,
+    .mui-input-row .mui-input-password~.mui-icon-eye,
+    .mui-input-row .mui-input-speech~.mui-icon-speech {
+        top: 6px;
+    }
+    
+    .mui-popup-title {
+        color: #1fbf71;
+    }
+    
+    .mui-popup-title+.mui-popup-text {
+        margin: 6px 0 0;
+        letter-spacing: 1.2px;
+    }
+    
+    .mui-popup-button.mui-popup-button-bold {
+        font-weight: normal;
+    }
+    
+    .mui-popup-button {
+        color: #1fbf71;
+    }
+    
+    .mask {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1;
+        display: none;
+    }
+    
+    .game_time {
+        width: 200px;
+        height: 200px;
+        z-index: 2;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: none;
+    }
+    
+    .time {
+        color: #fff;
+    }
+    
+    .register,
+    .backPwd,
+    .update {
+        display: inline-block;
+        margin: 0 10%;
+        margin-bottom: 5%;
+        color: #0a2ce6;
+        letter-spacing: 2px;
+        font-size: 17px;
+        /*text-decoration: underline;*/
+    }
+    
+    .update {
+        float: right;
+    }
+    
+    .pwdWrite .mui-input-row {
+        /*height: 40px;*/
+        font-size: 16px;
+    }
+    
+    .pwdWrite .mui-input-row label,
+    .pwdWrite .mui-input-row input {
+        height: 50px;
+        padding: 15px 15px;
+    }
+    /*.paySure {
+      		position: absolute;
+      		bottom: 10px;
+      		left: 0;
+      	}*/
+    
+    .mui-icon-closeempty {
+        display: inline-block;
+        float: right;
+        height: 60px;
+        line-height: 60px;
+        font-size: 40px;
+        color: #30c37c;
+    }
+      .wx-confirm-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 99;
+        background: rgba(0, 0, 0, 0.3);
+        /*display: none;*/
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .confirm-div {
+        width: 300px;
+        height: 200px;
+        background: #fff;
+        border-radius: 3px;
+        box-sizing: border-box;
+    }
+    
+    .confirm-title {
+        width: 100%;
+        height: 80px;
+        line-height: 80px;
+        text-align: center;
+        font-size: 16px;
+        color: #303133;
+        font-weight: bold;
+        border-bottom: 1px solid #EBEEF5;
+    }
+    
+    .confirm-ok {
+        width: 100%;
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+        font-size: 14px;
+        color: #67C23A;
+        border-bottom: 1px solid #EBEEF5;
+    }
+    
+    .confirm-not-ok {
+        width: 100%;
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+        font-size: 14px;
+        color: #909399;
+    }
+</style>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">付款</h1>
+        <button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+		        <span class="mui-icon mui-icon-left-nav"></span>
+	      	</button>
+    </header>
+
+    <div id="upload" class="transparent">
+        <div id="waiting" class="loader loading-position">
+            <div class="loader-inner line-spin-fade-loader">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <main>
+        <!-- 订餐人信息 -->
+        <div class="mealInfo">
+            <div class="row">
+                <div id="val1"></div>
+                <div id="val2"></div>
+            </div>
+            <div class="row mui-row" hidden>
+                <div class="mui-col-xs-4 mui-col-sm-4 mui-col-md-4 mui-col-lg-4">
+                    配送时间
+                </div>
+                <div id="val3" class="mui-col-xs-8 mui-col-sm-8 mui-col-md-8 mui-col-lg-8 right">
+                </div>
+            </div>
+        </div>
+
+        <!-- 支付方式 -->
+        <div class="payTitle">选择支付方式</div>
+        <div class="payTypeSelf">
+        </div>
+
+        <!-- 菜品详情 -->
+        <div class="order">订单明细</div>
+        <div class="orderDetail">
+            <div class="row">
+                <div id="val4">
+                </div>
+            </div>
+            <div id="val5" class="row">
+            </div>
+            <div class="mui-row row">
+                <div class="mui-col-xs-6 mui-col-sm-6 mui-col-md-6 mui-col-lg-6 left" style="color:#FF8800;">
+                    合计
+                </div>
+                <div id="val6" class="mui-col-xs-6 mui-col-sm-6 mui-col-md-6 mui-col-lg-6 right" style="color:#FF8800;">
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <div id="pay" type="button" class="backColor">确认付款</div>
+
+    <!-- 输入支付密码 -->
+    <div class="diceng" hidden="hidden"></div>
+    <div class="realMoney pwdWrite" hidden="hidden">
+        <div class="applyTitle">请输入支付密码<span class="mui-icon mui-icon-closeempty"></span></div>
+        <form class="mui-input-group" style="margin-bottom: 80px">
+            <div class="mui-input-row">
+                <label>工号</label>
+                <input id='workNumber' type="text" class="mui-input" readonly>
+            </div>
+            <div class="mui-input-row">
+                <label>支付密码</label>
+                <input id='password' type="password" class="mui-input-clear mui-input" placeholder="请输入支付密码">
+            </div>
+        </form>
+        <div class="editButtons paySure" style="background:#30c37c;color: #FFFFFF;margin-top: 6px;">确定</div>
+    </div>
+
+
+    <!-- 倒计时 -->
+    <div class="mask"></div>
+    <div class="game_time">
+        <div class="hold">
+            <div class="pie pie1"></div>
+        </div>
+        <div class="hold">
+            <div class="pie pie2"></div>
+        </div>
+        <div class="bg"> </div>
+        <div class="time"></div>
+    </div>
+    <div class="wx-confirm-container">
+        <div class="confirm-div">
+            <div class="confirm-title">请确认微信支付是否已完成</div>
+            <div class="confirm-ok">支付已完成</div>
+            <div class="confirm-not-ok">支付遇到问题，需重新支付</div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../../js/color.js"></script>
+<script src="../reference/mui/js/mui.js" type="text/javascript"></script>
+<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../reference/js/common.js" type="text/javascript"></script>
+<script type="text/javascript" src="../reference/js/time_js.js"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<!-- <script src="../../../cordova.js" type="text/javascript"></script>-->
+<script src="https://cdn.bootcss.com/vConsole/3.8.1/vconsole.min.js"></script>
+<script type="text/javascript">
+new VConsole();
+    var baseUrl = localStorage.getItem("url");
+    var url = location.search;
+    var billNo = url.substring(1, url.length);
+    var typePay = localStorage.getItem("typePay");
+    console.log("取餐类型", typePay)
+    var hosName = localStorage.getItem("hosName");
+    var listS = new Array();
+    var payTypeSelf = localStorage.getItem("payTypeSelf");
+    console.log(payTypeSelf)
+    console.log(billNo)
+    var payTypeArr = [];
+    var workNo = localStorage.getItem('workNo');
+    $('#workNumber').val(workNo);
+    $('#workNumberRegister').val(workNo);
+    $('#workNumberUpdate').val(workNo);
+
+    (function(win, doc) {
+        function change() {
+            var a = $(window).height() - $(".realMoney").height();
+            $(".realMoney").css("bottom", 0 / 2 + "px");
+        }
+        change();
+        win.addEventListener('resize', change, false);
+    })(window, document);
+
+    function showPayType(pay_type_name, pay_type_num, imgUrl) {
+        var html = '';
+        html += '<form class="mui-input-group">';
+        html += '<div class="mui-input-row mui-radio">';
+        html += '<label><img src="' + imgUrl + '" style="width: 34px;vertical-align: middle;padding-right: 6px">' + pay_type_name + '</label>';
+        html += '<input type="radio" name="payRadio" id="payRadio" checked value="' + pay_type_num + '" style="padding-top: 6px">';
+        html += '</div>';
+        html += '</form>';
+        return html;
+    }
+
+    var sendUrl = "";
+    if (typePay == "inDinner") {
+    	//sendUrl = baseUrl + 'app_selfOrder.do?queryBill';
+    	methodName = 'queryWorkBill';
+    } else {
+    	//sendUrl = baseUrl + 'app_workBillInfoController.do?queryBill';
+        methodName = 'queryConfirmeBill';
+    }
+    $.ajax({ 
+        url: baseUrl + 'workmeal',
+        type: 'post',
+        headers:{
+            className : 'AppWorkBaseInfoService',
+            methodName : 'queryWorkBill'
+        },
+        data: {
+            billNo: billNo,
+            // dataGroupCode: localStorage.getItem("dataGroupCode")
+        },
+        success: function(data) {
+            $("#upload").hide();
+            //var data = JSON.parse(data);
+            console.log(data);
+            if (data.success) {
+                payTypeArr = [];
+                var html = "";
+                if (data.obj[0].deptName == "null" || data.obj[0].deptName == null) {
+                    data.obj[0].deptName = "";
+                }
+                var area = hosName + "&nbsp;&nbsp;&nbsp;&nbsp;" + data.obj[0].deptName;
+                var user = data.obj[0].userName + "&nbsp;&nbsp;&nbsp;&nbsp;" + data.obj[0].userTelNumber;
+                $("#val1").html(area);
+                $("#val2").html(user);
+                $("#val3").html(data.obj[0].reqSendTime);
+                $("#val4").html(data.obj[0].canteenName);
+                var list = new Array();
+                list = data.obj[0].billDetail;
+                listS = list;
+                var taskList = "";
+                var pay_type_name = "",
+                    imgUrl = "";
+                for (var v = 0; v < data.obj.length; v++) {
+                    pay_type_num = data.obj[v].payType;
+                    //一卡通支付			0301
+                    //微信支付			0201
+                    //支付宝扫码在线支付	0103
+                    //支付宝扫码线下支付	0102
+                    //支付宝线上支付		0101
+                    //餐券支付			0001
+                    //现金支付			0000
+                    if (pay_type_num == "0101") {
+                        imgUrl = "../img/alipay.png";
+                        pay_type_name = "支付宝线上支付";
+                    } else if (pay_type_num == "0102") {
+                        imgUrl = "../img/cashpay.png";
+                    } else if (pay_type_num == "0103") {
+                        imgUrl = "../img/cashpay.png";
+                    } else if (pay_type_num == "0001") {
+                        imgUrl = "../img/canquan.png";
+                    } else if (pay_type_num == "0000") {
+                        imgUrl = "../img/xianjin.png";
+                    } else if (pay_type_num == "0401") {
+                        imgUrl = "../img/xuni.png";
+                        pay_type_name = "线上刷卡支付";
+                    } else if (pay_type_num == "0201") {
+                        imgUrl = "../img/wxpay.png";
+						pay_type_name = "微信支付";
+                    }else if (pay_type_num == "0501") {
+                        imgUrl = "../img/abc.png";
+						pay_type_name = "农行掌银支付";
+                    }
+
+                    taskList += showPayType(pay_type_name, pay_type_num, imgUrl);
+                }
+                $(".payTypeSelf").html(taskList);
+
+                var menuName, menuNumber, menuPrice,packagePrice;
+                for (var i = 0; i < list.length; i++) {
+                    menuName = list[i].menuName;
+                    menuNumber = list[i].menuNumber;
+                    menuPrice = list[i].menuPrice;
+                    packagePrice = list[i].packagePrice;
+                    html += createHtml(menuName, menuNumber, menuPrice,packagePrice);
+                }
+                $("#val5").html(html);
+                var htm = "￥" + data.obj[0].billTotalPrice;
+                if(data.obj[0].shipFee && data.obj[0].shipFee != "0"){
+                    htm += "(含配送费￥" + data.obj[0].shipFee + ")";
+                }
+                $("#val6").html(htm);
+            } else {
+                mui.toast(data.message);
+            }
+        }
+    });
+
+    function createHtml(name, num, price,packagePrice) {
+        var html = "";
+        html += "<div class='mui-row' style='padding-top:5px;padding-bottom:5px;'>";
+        html += "<div class='mui-col-xs-8 mui-col-sm-6 mui-col-md-8 mui-col-lg-8'>" + name + "</div>";
+        html += "<div class='mui-col-xs-2 mui-col-sm-1 mui-col-md-2 mui-col-lg-2 left-nopadding left'>×" + num + "</div>";
+        html += '<div class="mui-col-xs-2 mui-col-sm-5 mui-col-md-2 mui-col-lg-2 right">￥' + price;
+        if(packagePrice){
+            html += '<span>&nbsp;&nbsp;打包费￥'+packagePrice + '</span>';
+        }
+        html += '</div>';
+        html += '</div>';
+        return html;
+    }
+
+    var INFO = localStorage.getItem('marqueeInfo');
+    $("#pay").click(function() {
+        localStorage.setItem("payTypeSelf", $('input:radio:checked').val());
+        if (localStorage.getItem("payTypeSelf") == "0101") {
+            var btnArry = ['否', '是'];
+            mui.confirm(INFO, '公告', btnArry, function(e) {
+                if (e.index == 1) {
+                    $('.mask').show();
+                    $('.game_time').show();
+                    countDown();
+                    setTimeout('zhifuBao()', 3000);
+                }
+            })
+        } else if (localStorage.getItem("payTypeSelf") == "0401") {
+            writePassword();
+
+            // xunika();
+        }else if (localStorage.getItem("payTypeSelf") == "0201") {
+            wxPay();
+            //var payUrl = baseUrl + 'www/Payingv5meal.html?billNo=' + billNo +'&baseUrl='+baseUrl;
+            //var payUrl = baseUrl + 'workmealGet?className=AppWorkPayService&methodName=workAppPay&billNo=' + billNo + "&payType=" + localStorage.getItem('payTypeSelf');
+            /*console.log("发起微信支付" + billNo);
+            cordova.exec(function(data) {
+            	console.log(data);
+                $('.wx-confirm-container').css('display', 'flex');
+            }, function(error) {
+
+            }, "WeChat", "H5Pay", [{
+                "url": payUrl,
+                'referer': localStorage.getItem("wxPayUrl")
+            }]);*/
+        }
+    });
+
+// 微信支付
+function wxPay() {
+    //getOpenId(function(openId){
+        $.ajax({
+            url: baseUrl + "workmeal",
+            type: "post",
+            headers: {
+                className: "AppWorkPayService",
+                methodName: "workAppPay"
+            },
+            data: {
+                billNo: billNo,
+                payType: "0201",
+                openId: localStorage.getItem("openId"),
+                appFlag: "workWX"
+            },
+            success: function(data) {
+                //var resp = JSON.parse(data);
+                // alert(JSON.parse(data))
+                // alert(localStorage.getItem("openId"))
+                var resp = data;
+                if (data) {
+                    //alert(resp.obj);
+                    location.href = resp.obj;
+                    WeixinJSBridge.invoke(
+                        "getBrandWCPayRequest",
+                        resp.obj,
+                        function(res) {
+                            console.log(res);
+                            if (res.err_msg == "get_brand_wcpay_request:ok") {
+                                mui.toast("支付成功");
+                                //location.href = "../meal_order.html";
+                            } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+                                mui.toast("已取消付款");
+                                //location.href = "../meal_order.html";
+                            } else {
+                                mui.toast("支付失败");
+                                //location.href = "../meal_order.html";
+                            }
+                            // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+                        }
+                    );
+                } else {
+                    mui.toast(resp.respMsg);
+                    return;
+                }
+            }
+        });
+    //});
+
+
+}
+
+    mui("body").on('tap', '.confirm-ok', function() {
+        location.href = "../meal_order.html"
+    })
+
+    mui("body").on('tap', '.confirm-not-ok', function() {
+        $('.wx-confirm-container').css('display', 'none');
+    })
+    
+    // 输入支付密码
+    function writePassword() {
+        $('#password').val('');
+        $('.pwdWrite').show();
+        $('.diceng').show();
+    }
+
+    $('.paySure').click(function() {
+        if ($('#password').val() == '') {
+            mui.toast('密码不能为空');
+            $('#password').focus();
+            return
+        }
+        $.ajax({
+            //url: baseUrl + 'app_payPasswordController.do?verificationPassWord',
+            url: baseUrl + 'cardmeal',
+            type: 'post',
+            headers:{
+                className : 'CardWorkConsumeService',
+                methodName : 'checkPayPassword'
+            },
+            data: {
+                workNo: $('#workNumber').val(),
+                payPassword: $('#password').val()
+            },
+            success: function(data) {
+                //var data = JSON.parse(data);
+                console.log(data);
+                if (data.success) {
+                    mui.toast('密码输入正确！');
+                    setTimeout('xunika()', 1500);
+                    $('.pwdWrite').hide();
+                    $('.diceng').hide();
+                } else {
+                    mui.toast(data.respMsg);
+                    $('#password').val('');
+                    $('#password').focus();
+                }
+            }
+        })
+    })
+
+    $('.diceng,.mui-icon-closeempty').click(function() {
+        $('.pwdWrite').hide();
+        $('.diceng').hide();
+    })
+
+    var type = ''; //判断是外卖配送还是到店自取，01----外卖配送  02---到店自取
+
+    //一卡通
+    var flagTJ = true;
+    if (flagTJ) {
+        flagTJ = false;
+
+        function xunika() {
+            $("#upload").show();
+            // 电子账户支付
+            $.ajax({
+                //url: baseUrl + 'app_selfOrder.do?unionPay',
+                url: baseUrl + 'workmeal',
+                type: 'post',
+                headers:{
+                    className : 'AppWorkPayService',
+                    methodName : 'workAppPay'
+                },
+                data: {
+                    billNo: billNo,
+                    openId: workNo,
+                    payType: localStorage.getItem('payTypeSelf')
+                },
+                dataType: 'json',
+                success(data) {
+                    flagTJ = true;
+                    if (data.success) {
+                        $('.mask').show();
+                        $('.game_time').show();
+                        type = "02";
+                        countDown();
+                        setTimeout(function() {
+                            $("#warn small").html("下单成功，请凭姓名、单号或取餐码取餐");
+                            $('#warn').fadeIn(500);
+                            setTimeout("$('#warn').fadeOut(500)", 2500);
+                            setTimeout('location.href = "../meal_order.html"', 2500);
+                        }, 2500);
+                        // setTimeout('getPayStatus(1)', 3000);
+                    } else {
+                        $("#upload").hide();
+                        $('#warn small').html(data.respMsg);
+                        $('#warn').fadeIn(500);
+                        setTimeout("$('#warn').fadeOut(500)", 3000);　
+                    }
+
+                },
+                error: function(XMLHttpRequest) {
+                    flagTJ = true;
+                    var text = JSON.parse(XMLHttpRequest.responseText);
+                    $('#warn small').html(text.message);
+                    $('#warn').fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);　
+                    return
+                }
+            })
+               
+        }
+
+    }
+
+    //支付宝方式
+    function zhifuBao() {
+        //var payUrl = baseUrl + 'app_workBillInfoController.do?getMealCreateWapPay&billNo=' + billNo + "&typeNo=" + localStorage.getItem('payTypeSelf');
+        var payUrl = baseUrl + 'workmealGet?className=AppWorkPayService&methodName=workAppPay&billNo=' + billNo + "&payType=" + localStorage.getItem('payTypeSelf');
+        cordova.exec(function(data) {}, function(error) {}, "AliPay", "H5Pay",
+        		[{ "payUrl": payUrl}]);
+        payResult();
+    }
+    var timeID = null;
+
+    function payResult() {
+        clearTimeout(timeID);
+        timeID = null;
+        cordova.exec(function(data) {
+            if (data == "9000") {
+                // $('.mask').show();
+                // $('.game_time').show();
+                // countDown();
+                mui.toast('支付成功');
+                setTimeout('location.href = "../meal_order.html"', 1500);
+            } else {
+                timeID = setTimeout('payResult()', 1000);
+            }
+        }, function(error) {
+
+        }, "AliPay", "PayResult", []);
+    }
+
+    $("#back").click(function() {
+        // location.href = "../main.html";
+        location.href = "../meal_order.html";
+    });
+
+    // APP系统键回退
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        /**
+         * 系统返回键监听
+         */
+        document.addEventListener("backbutton", onBackKeyDown, false);
+    }
+    //返回
+    function onBackKeyDown() {
+        location.href = "../meal_order.html";
+    }
+</script>
+
+</html>

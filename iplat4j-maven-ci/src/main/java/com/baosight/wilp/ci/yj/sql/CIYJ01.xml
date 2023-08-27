@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<sqlMap namespace="CIYJ01">
+
+	<!-- 保存库存预警信息 -->
+	<update id="update" parameterClass="java.util.Map">
+		UPDATE ci_storge
+		<dynamic prepend="set">
+			<isGreaterThan prepend="," property="minNum" compareValue="0">
+				min_num = #minNum#
+			</isGreaterThan>
+			<isGreaterThan prepend="," property="maxNum" compareValue="0">
+				max_num =#maxNum#
+			</isGreaterThan>
+		</dynamic>
+		WHERE WARE_HOUSE_NO = #wareHouseNo# and MAT_NUM = #matNum#
+	</update>
+
+	<!-- 删除库存预警信息 -->
+	<update id="delete">
+		UPDATE ci_storge SET min_num = 0, max_num = 0 WHERE id = #id#
+	</update>
+
+	<!--商品保质期预警-->
+	<select id="query" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.ci.kc.domain.CiStorgeDetail">
+		SELECT
+		ID	as "id",  <!-- 主键 -->
+		REC_CREATOR	as "recCreator",  <!-- 记录创建责任者 -->
+		REC_CREATE_TIME	as "recCreateTime",  <!-- 记录创建时间 -->
+		REC_REVISOR	as "recRevisor",  <!-- 记录修改责任者 -->
+		REC_REVISE_TIME	as "recReviseTime",  <!-- 记录修改时间 -->
+		ARCHIVE_FLAG	as "archiveFlag",  <!-- 归档标记 -->
+		ENTER_BILL_DETAIL_NO	as "enterBillDetailNo",  <!-- 业务单明细号 -->
+		ENTER_BILL_NO	as "enterBillNo",  <!-- 入库单号 -->
+		ENTER_BILL_TYPE	as "enterBillType",  <!-- 入库类型 -->
+		enter_bill_type_name	as "enterBillTypeName",  <!-- 入库类型名称 -->
+		ORIGIN_BILL_NO	as "originBillNo",  <!-- 来源单据号 -->
+		ORIGIN_BILL_TYPE	as "originBillType",  <!-- 来源单据类型 -->
+		CONT_NO	as "contNo",  <!-- 合同号 -->
+		PURC_DEMAND_DETAIL_NO	as "purcDemandDetailNo",  <!-- 采购计划明细号 -->
+		WARE_HOUSE_NO	as "wareHouseNo",  <!-- 仓库号 -->
+		ware_house_name	as "wareHouseName",  <!-- 仓库名称 -->
+		STORAGE_NO	as "storageNo",  <!-- 库位号 -->
+		STACK_NO	as "stackNo",  <!-- 货位号 -->
+		mat_type_num	as "matTypeNum",  <!-- 物资分类编码 -->
+		mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+		MAT_NUM	as "matNum",  <!-- 物资编码 -->
+		MAT_NAME	as "matName",  <!-- 物资名称 -->
+		MAT_MODEL	as "matModel",  <!-- 物资型号 -->
+		MAT_SPEC	as "matSpec",  <!-- 物资规格 -->
+		UNIT	as "unit",  <!-- 计量单位编码 -->
+		UNIT_NAME	as "unitName",  <!-- 计量单位名称 -->
+		ENTER_NUM	as "enterNum",  <!-- 入库数量 -->
+		ENTER_PRICE	as "enterPrice",  <!-- 入库单价 -->
+		ENTER_AMOUNT	as "enterAmount",  <!-- 入库总价 -->
+		ENTER_DATE	as "enterDate",  <!-- 入库日期 -->
+		ENTER_TIME	as "enterTime",  <!-- 入库时间 -->
+		BAR_CODE	as "barCode",  <!-- 条码号 -->
+		MIN_NUM	as "minNum",  <!-- 最低存量 -->
+		expiration_date as "expirationDate",<!-- 到期时间 -->
+		batch_no	as "batchNo",  <!-- 批次号 -->
+		surp_num	as "surpNum",  <!-- 供应商编码 -->
+		surp_name	as "surpName",  <!-- 供应商名称 -->
+		valid_begin	as "validBegin",  <!-- 未知 -->
+		valid_end	as "validEnd" <!-- 未知 -->
+		FROM ci_storge_detail
+		WHERE enter_num > '0.00'
+		and adddate(date_format(now(),'%Y-%m-%d'), interval 3 day) >= date_format(expiration_date,'%Y-%m-%d')
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNo">
+			WARE_HOUSE_NO = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNum">
+			MAT_NUM = #matNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matName">
+			MAT_NAME = #matName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeNums">
+			mat_type_num in (#matTypeNums#)
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="enterBillNo">
+			ENTER_BILL_NO = #enterBillNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="batchNos">
+			FIND_IN_SET(batch_no, #batchNos#)
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="isNot0">
+			ENTER_NUM > 0
+		</isNotEmpty>
+
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				batch_no desc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="getMinNumSendSMS" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.ci.kc.domain.CiStorge">
+		SELECT
+		REC_CREATOR	as "recCreator",  <!-- 记录创建责任者 -->
+		REC_CREATE_TIME	as "recCreateTime",  <!-- 记录创建时间 -->
+		REC_REVISOR	as "recRevisor",  <!-- 记录修改责任者 -->
+		REC_REVISE_TIME	as "recReviseTime",  <!-- 记录修改时间 -->
+		ARCHIVE_FLAG	as "archiveFlag",  <!-- 归档标记 -->
+		ID	as "id",  <!-- 主键 -->
+		WARE_HOUSE_NO	as "wareHouseNo",  <!-- 仓库号 -->
+		ware_house_name	as "wareHouseName",  <!-- 仓库名称 -->
+		STORAGE_NO	as "storageNo",  <!-- 库位号 -->
+		STACK_NO	as "stackNo",  <!-- 货位号 -->
+		MAT_TYPE_NUM	as "matTypeNum",  <!-- 物资分类编码 -->
+		mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+		MAT_NUM	as "matNum",  <!-- 物资编码 -->
+		MAT_NAME	as "matName",  <!-- 物资名称 -->
+		MAT_MODEL	as "matModel",  <!-- 物资型号 -->
+		MAT_SPEC	as "matSpec",  <!-- 物资规格 -->
+		UNIT	as "unit",  <!-- 计量单位编码 -->
+		UNIT_NAME	as "unitName",  <!-- 计量单位名称 -->
+		TOTAL_NUM	as "totalNum",  <!-- 库存总量 -->
+		TOTAL_AMOUNT	as "totalAmount",  <!-- 库存总价 -->
+		BATCH_NO	as "batchNo",  <!-- 批次编码 -->
+		MIN_NUM	as "minNum",  <!-- 最低库存量 -->
+		MAX_NUM	as "maxNum",  <!-- 最高库存量 -->
+		PRICE	as "price",  <!-- 单价 -->
+		remind_flag	as "remindFlag",  <!-- 是否预警标记，N=不预警，Y=预警 -->
+		bill_checker_name	as "billCheckerName",  <!-- 审核人员姓名 -->
+		bill_maker_name	as "billMakerName",  <!-- 制单人员姓名 -->
+		enter_type_name	as "enterTypeName",  <!-- 入库类型名称 -->
+		origin_bill_type_name	as "originBillTypeName",  <!-- 来源单据类型名称 -->
+		surp_num	as "surpNum",  <!-- 供应商编码 -->
+		surp_name	as "surpName" <!-- 供应商名称 -->
+		FROM ci_storge
+		WHERE (MIN_NUM > 0 or MAX_NUM > 0)
+		and MIN_NUM > TOTAL_NUM
+	</select>
+	
+</sqlMap>

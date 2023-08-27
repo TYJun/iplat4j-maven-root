@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="../../reference/mui/css/mui.min.css" />
+    <link rel="stylesheet" href="../animate.css" />
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" /> -->
+</head>
+<style type="text/css">
+    #app {
+        height: 100vh;
+        background-color: #f5f5f5;
+    }
+
+    .content {
+        /* margin-top: 102px; */
+        position: relative;
+        top: 66px;
+        box-sizing: border-box;
+        padding: 0px 16px 16px 16px;
+        background-color: #f5f5f5;
+        margin-bottom: 64px;
+    }
+
+    .list {
+        box-sizing: border-box;
+        padding: 16px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px 5px #f2f2f2;
+        margin-bottom: 16px;
+        position: relative;
+    }
+
+    .list:last-child {
+        margin-bottom: 64px;
+    }
+
+    .list .title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-sizing: border-box;
+        padding-bottom: 14px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .delete {}
+
+    .bottom .item {
+        height: 28px;
+        font-size: 16px;
+        color: #333;
+    }
+
+    .bottom .item>span:first-child {
+        /* color: #888; */
+    }
+
+    .add {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        right: 0;
+    }
+
+    .add button {
+        width: 100%;
+        height: 44px;
+        border: none;
+        background-color: #30c37c;
+        /* background-image: linear-gradient(to bottom right, #4adf97,#0ab562); */
+        box-shadow: 0px 0px 10px 0px #afd3c2;
+        color: #fff;
+        font-size: 16px;
+    }
+
+    .delete {
+        width: 25px;
+        height: 25px;
+        background-color: rgb(234, 45, 27);
+        border-radius: 50%;
+        position: absolute;
+        right: -6px;
+        top: -9px;
+        text-align: center;
+        line-height: 24px;
+        color: #fff;
+    }
+
+    .mui-icon {
+        font-weight: 600;
+    }
+
+    .mui-popup-button {
+        color: #30c37c;
+    }
+
+    .mui-popup-button.mui-popup-button-bold {
+        font-weight: 500;
+    }
+
+    :root {
+        --animate-duration: .3s;
+    }
+</style>
+
+<body>
+    <div id="app">
+        <header class="mui-bar mui-bar-nav">
+            <h1 class="mui-title">领用单</h1>
+            <button id="back" onclick="onBackKeyDown()"
+                class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+                <span class="mui-icon mui-icon-left-nav"></span>
+                返回
+            </button>
+            <div id="deleteBtn" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-right"
+                style="position: relative;right: 12px;">
+                删除
+            </div>
+            <div id="finishBtn" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-right"
+                style="position: relative;right: 12px;display: none;">
+                取消
+            </div>
+        </header>
+        <div class="content">
+            <div class="list ">
+                <!-- animate__animated animate__bounce -->
+                <div class="delete animate__animated" onclick="deleteFn()" hidden>
+                    <span class="mui-icon mui-icon mui-icon-closeempty"></span>
+                </div>
+                <div class="title">
+                    <div class="taskNo" style="color: #30c37c;font-size:17px;font-weight:600;">MPY22000000001</div>
+                    <div class="status" style="color: #666;">已创建</div>
+                </div>
+                <div class="bottom" style="margin-top:16px;">
+                    <div class="item"><span>科室：</span><span>物业管理科</span></div>
+                    <div class="item"><span>领用总数：</span><span>2</span></div>
+                    <div class="item"><span>申请时间：</span><span>2022-9-10</span></div>
+                    <div class="item"><span>申请人：</span><span>张三</span></div>
+                    <div class="item"><span>备注：</span><span>备注一</span></div>
+                </div>
+            </div>
+            <div class="list">
+                <div class="delete animate__animated" onclick="deleteFn()" hidden>
+                    <span class="mui-icon mui-icon mui-icon-closeempty"></span>
+                </div>
+                <div class="title">
+                    <div class="taskNo" style="color: #30c37c;font-size:17px;font-weight:600;">MPY22000000001</div>
+                    <div class="status" style="color: #666;">已创建</div>
+                </div>
+                <div class="bottom" style="margin-top:16px;">
+                    <div class="item"><span>科室：</span><span>物业管理科</span></div>
+                    <div class="item"><span>领用总数：</span><span>2</span></div>
+                    <div class="item"><span>申请时间：</span><span>2022-9-10</span></div>
+                    <div class="item"><span>申请人：</span><span>张三</span></div>
+                    <div class="item"><span>备注：</span><span>备注一</span></div>
+                </div>
+            </div>
+
+        </div>
+        <div class="add">
+            <button onclick="toAdd()">新增</button>
+        </div>
+
+
+</body>
+<script src="../../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../../reference/mui//js/mui.js" type="text/javascript"></script>
+<script type="text/javascript">
+    // 新增
+    function toAdd() {
+        location.href = './approvalAdd.html';
+    }
+    // 右上角删除
+    $('#deleteBtn').click(function () {
+        $('#deleteBtn').css('display', 'none')
+        $('#finishBtn').css('display', '')
+        $('.delete').show()
+        $('.delete').addClass('animate__zoomIn')
+    })
+    // 长按删除
+    var list = document.getElementsByClassName('list')
+    let del = document.getElementsByClassName('delete')
+    let time = null
+    for (let i = 0; i < list.length; i++) {
+        list[i].ontouchstart = function () {
+            time = setTimeout(() => {
+                $('.delete').eq(i).show()
+                $('#deleteBtn').css('display', 'none')
+                $('#finishBtn').css('display', '')
+                $('.delete').addClass('animate__zoomIn')
+            }, 1500)
+        }
+        list[i].ontouchend = function () {
+            clearTimeout(time)
+        }
+
+    }
+    // 取消
+    $('#finishBtn').click(function () {
+        $('#deleteBtn').css('display', '')
+        $('#finishBtn').css('display', 'none')
+        $('.delete').hide()
+
+    })
+    // 删除
+    function deleteFn() {
+        mui.confirm('确定删除该条领用单?', ['提示'], function (e) {
+            if (e.index == 1) {
+                console.log('1');
+            }
+        })
+    }
+
+
+    // 返回
+    function onBackKeyDown() {
+        location.href = '../caigou.html';
+    }
+</script>
+
+</html>

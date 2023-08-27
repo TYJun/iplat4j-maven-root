@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" href="reference/mui/css/mui.min.css" />
+    <link rel="stylesheet" href="reference/mui/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="reference/css/common.css" />
+</head>
+<style type="text/css">
+    .list-tab {
+        height: 40px;
+        line-height: 40px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .first-tr {
+        background: #08c1a3;
+        height: 40px;
+        line-height: 40px;
+        color: #ffffff;
+        text-align: center;
+        /*border-radius: 5px;*/
+        box-shadow: 0px 5px #f7f7f7;
+    }
+    
+    .first-tr-other {
+        padding: 10px 0;
+        color: #333;
+        text-align: center;
+        border-bottom: 1px solid #a1e4d9;
+    }
+    
+    .total {
+        padding: 0px 8px;
+        width: 130%;
+        height: 50px;
+        line-height: 50px;
+    }
+    
+    .content-table {
+        background: #fff;
+        overflow-y: auto;
+        padding: 8px;
+        width: 220%;
+    }
+    
+    .no-views {
+        margin-top: 200px;
+    }
+    
+    .mui-input-row label {
+        font-family: "Helvetica Neue", Helvetica, sans-serif;
+        line-height: 1.3;
+        float: left;
+        width: 25%;
+        padding: 11px 15px;
+    }
+    
+    .mui-input-row .date {
+        float: left;
+        width: 25%;
+        margin-bottom: 0;
+        padding-left: 0;
+        border: 0;
+    }
+    
+    .center {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">出库明细</h1>
+        <button class="mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav"></span>
+        <a style="color: #ffffff">返回</a>
+      </button>
+    </header>
+
+    <div id="warn" class="warn" hidden>
+        <small></small>
+    </div>
+
+    <div id="loading" class="spinner" style="position: fixed; z-index: 9999; text-align: center; width: 100%">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+
+    <div class="mui-content">
+        <div class="search-div">
+            <form class="mui-input-group">
+                <div class="mui-input-row">
+                    <label>初始日期</label>
+                    <input id="startDate" class="date" type="text" placeholder="请选择日期" readonly />
+
+                    <label>截止日期</label>
+                    <input id="stopDate" class="date" type="text" placeholder="请选择日期" readonly />
+                </div>
+                <div class="mui-input-row">
+                    <label>物资名称</label>
+                    <input id="matName" type="text" oninput="change_source()" placeholder="请输入物资名称" />
+                </div>
+                <div class="mui-input-row">
+                    <label>仓库名称</label>
+                    <input id="wareHouseName" oninput="change_source()" type="text" placeholder="请输入仓库名称" />
+                </div>
+                <div class="mui-input-row">
+                    <label>出库方式</label>
+                    <input id="outTypeName" oninput="change_source()" type="text" placeholder="请输入出库方式" />
+                </div>
+            </form>
+        </div>
+
+        <div style="overflow-x: auto">
+            <div style="padding: 8px; padding-bottom: 0; width: 220%">
+                <div class="mui-row first-tr">
+                    <div class="mui-col mui-col-xs-2">
+                        <span>物资名称</span>
+                    </div>
+                    <div class="mui-col mui-col-xs-2">
+                        <span>物资规格</span>
+                    </div>
+                    <div class="mui-col mui-col-xs-1">
+                        <span>出库数量</span>
+                    </div>
+                    <div class="mui-col mui-col-xs-1">
+                        <span>单位</span>
+                    </div>
+                    <div class="mui-col mui-col-xs-2">
+                        <span>仓库名称</span>
+                    </div>
+                    <div class="mui-col mui-col-xs-2">
+                        <span>出库方式</span>
+                    </div>
+                    <div class="mui-col mui-col-xs-2">
+                        <span>出库时间</span>
+                    </div>
+                </div>
+            </div>
+            <div class="content-table" style=""></div>
+        </div>
+    </div>
+    <p class="no-views" style="display: none">
+        ———&nbsp;&nbsp;暂无数据&nbsp;&nbsp;———
+    </p>
+</body>
+<script src="reference/mui/js/mui.min.js" type="text/javascript"></script>
+<script src="reference/mui/js/mui.picker.min.js" type="text/javascript"></script>
+<script src="reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="reference/js/common.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var baseUrl = localStorage.getItem("url");
+    var beginDate = date_YM() + "-01";
+    var endDate = date_YMD();
+    $("#startDate").val(beginDate);
+    $("#stopDate").val(endDate);
+    loadData();
+    //起始日期选择
+    document.getElementById("startDate").addEventListener("tap", function() {
+        var options = {
+            type: "date",
+        };
+        var picker = new mui.DtPicker(options);
+        picker.show(function(rs) {
+            month = rs.text;
+            $("#startDate").val(month);
+            loadData();
+        });
+    });
+
+    //截止日期选择
+    document.getElementById("stopDate").addEventListener("tap", function() {
+        var options = {
+            type: "date",
+        };
+        var picker = new mui.DtPicker(options);
+        picker.show(function(rs) {
+            month = rs.text;
+            $("#stopDate").val(month);
+            loadData();
+        });
+    });
+    //加载列表
+    function loadData() {
+        startTime = $("#startDate").val();
+        endTime = $("#stopDate").val();
+        matName = $("#matName").val();
+        outTypeName = $("#outTypeName").val();
+        wareHouseName = $("#wareHouseName").val();
+        var pane = {
+            startTime,
+            endTime,
+            matName,
+            outTypeName,
+            wareHouseName,
+        };
+        // console.log(pane);
+        $.ajax({
+            url: baseUrl + "MobileAgentService",
+            type: "post",
+            data: {
+                prames: JSON.stringify(pane),
+            },
+            headers: {
+                serviceName: "SIJKApp",
+                methodName: "outWarehouseDetail",
+            },
+            success: function(data) {
+                console.log(data);
+                var list = new Array();
+                list = data.attr.list;
+                if (list.length == 0 || list == null) {
+                    mui.toast("未能查询到数据");
+                    $(".no-views").css("display", "");
+                    // return;
+                }
+                $(".no-views").css("display", "none");
+                createList(list);
+                $("#loading").hide();
+                // }
+            },
+            complete: function(XMLHttpRequest, status) {
+                //请求完成后最终执行参数
+                if (status == "timeout") {
+                    $("#loading").hide();
+                    $("#warn small").html("请求超时！");
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                } else if (status == "error") {
+                    $("#loading").hide();
+                    $("#warn small").html("网络异常！");
+                    $("#warn").fadeIn(500);
+                    setTimeout("$('#warn').fadeOut(500)", 3000);
+                }
+            },
+        });
+    }
+    //创建列表
+    function createList(list) {
+        var html = "";
+        var total_jgnum = 0;
+        for (var i = 0; i < list.length; i++) {
+            html += '<div class="mui-row list-tab">';
+            html +=
+                '<div class="mui-col-xs-2 center">' + list[i].matName + "</div>";
+            html +=
+                '<div class="mui-col-xs-2 center">' + list[i].matSpec + "</div>";
+            html += '<div class="mui-col-xs-1 center">' + list[i].outNum + "</div>";
+            html +=
+                '<div class="mui-col-xs-1 center">' + list[i].unitName + "</div>";
+            html +=
+                '<div class="mui-col-xs-2 center">' +
+                list[i].wareHouseName +
+                "</div>";
+            html +=
+                '<div class="mui-col-xs-2 center">' + list[i].outTypeName + "</div>";
+            html +=
+                '<div class="mui-col-xs-2 center">' + list[i].outTime + "</div>";
+            html += "</div>";
+            total_jgnum += list[i].enterNum;
+        }
+        $(".content-table").html(html);
+    }
+
+    function change_source() {
+        setTimeout(() => {
+            loadData();
+        }, 0);
+    }
+
+    function back() {
+        window.history.back(-1);
+    }
+</script>
+
+</html>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="MSPL03">
+
+    <select id="selectParamClassify" parameterClass="java.util.HashMap"
+            resultClass="java.util.HashMap">
+        select id,
+               classify_name
+        from t_param_classify
+        where parent_id='root'
+    </select>
+
+    <select id="selectParams" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select SUM(1) "count",
+               id
+        from tmspl01
+        where t_param_classify_id =#id#
+    </select>
+
+    <select id="selectByTag" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT value_,
+               grade
+        FROM t_alarm_log WHERE tag IN (SELECT tag FROM tmspl01 a WHERE a.t_param_classify_id =#id#)
+    </select>
+
+    <select id="selectByParam3" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT description_,
+               tag,
+               name_
+               FROM tmspl01 WHERE type ='3'
+    </select>
+
+    <select id="queryScreenTag" parameterClass="String" resultClass="java.util.HashMap">
+        SELECT description_ description,
+        tag,
+        name_ name,
+        SUBSTRING_INDEX(name_,' ',2) as `group`
+        FROM tmspl01
+        WHERE
+            1 = 1
+        <isNotEmpty prepend="and">
+            name_ like concat('',#value#,'%')
+        </isNotEmpty>
+        order by name_ asc
+    </select>
+
+    <!--去报警的页面查数据-->
+    <select id="selectByParam4" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT value_,
+               grade FROM t_alarm_log WHERE tag =#tag#
+    </select>
+
+    <!-- 查询当前正在报警的点位 -->
+    <select id="queryAlarmTag" resultClass="HashMap">
+        select tag, grade, description_ description, start_time `time`  from t_alarm_log where end_time is null
+    </select>
+
+</sqlMap>

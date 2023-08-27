@@ -1,0 +1,106 @@
+<!doctype html>
+<html class="no-js">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="stylesheet" href="../reference/mui/css/mui.css">
+  <link rel="stylesheet" href="../css/common.css" />
+</head>
+<STYLE TYPE="text/css">
+
+</STYLE>
+
+<body>
+  <header class="mui-bar mui-bar-nav">
+    <h1 class="mui-title">开发者模式</h1>
+    <button
+      class="mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+      <span class="mui-icon mui-icon-left-nav"></span>
+      返回
+    </button>
+  </header>
+
+  <div style="margin-top:50px;padding:15px;">
+    <h5>测试专用超级无敌人性化的功能</h5>
+    <textarea id="url" class="form-control"
+      style="height:150px;margin-bottom:0px;" placeholder='在此输入测试地址'></textarea>
+  </div>
+  <ul class="mui-table-view">
+    <li class="mui-table-view-cell">
+      <span>开发者模式</span>
+      <div class="mui-switch">
+        <div class="mui-switch-handle"></div>
+      </div>
+    </li>
+  </ul>
+  <div class="row"
+    style="margin-top:15px;padding-left:15px;padding-right:15px;">
+    <button id="http" type="button"
+      class="mui-btn mui-btn-royal mui-btn-outlined">
+      http://
+    </button>
+    <button id="yyhq" type="button"
+      class="mui-btn mui-btn-royal mui-btn-outlined">
+      .yyhq365.cn/
+    </button>
+  </div>
+
+  <div style="margin-top:0px;padding:15px;">
+    <button type="button"
+      class="btn mui-btn-primary mui-btn-block save">提交</button>
+  </div>
+
+</body>
+<script src="../reference/mui/js/mui.js" type="text/javascript"></script>
+<script src="../reference/bootstrap-3.3.5/js/jquery-2.1.4.js"
+  type="text/javascript"></script>
+<script type="text/javascript">
+  var developer = "false";
+
+  mui.init({
+    swipeBack: true //启用右滑关闭功能
+  });
+
+  $("button.save").click(function () {
+    var url = $("#url").val();
+    if (url == "姜平最帅") {
+      alert("没想到我隐藏的这么深都被你发现了，可惜我是个正经人，所以你还是放弃吧");
+      location.href = "../login.html";
+      return;
+    }
+    var ORC = $(".mui-switch").attr("class");
+    if (ORC.indexOf("mui-active") > -1)
+      developer = "true";
+    url.charAt(url.length - 1) != "/" && (url = url + "/")
+    localStorage.setItem("developer", developer);
+    localStorage.setItem("url", url);
+    location.href = "../login.html";
+  });
+
+
+  $("#http").click(function () {
+    $("#url").val("http://");
+  });
+
+  $("#yyhq").click(function () {
+    var text = $("#url").val();
+    text = text + ".yyhq365.cn/";
+    $("#url").val(text);
+  });
+
+  function goBack() {
+    location.href = "../login.html";
+  }
+
+</script>
+
+</html>

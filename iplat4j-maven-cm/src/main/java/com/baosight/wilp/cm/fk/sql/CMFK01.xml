@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CMFK01">
+    <select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            cp.payment_auto_no paymentAutoNo,
+            cp.payment_no paymentNo,
+            cp.payment_content paymentContent,
+            ci.surp_name surpName,
+            case cp.payment_type
+            when "FPFK" then "发票付款"
+            when "YFK" then "预付款"
+            end paymentType,
+            cp.cont_pk contPk,
+            cp.cont_no contNo,
+            ccb.cont_name contName,
+            case cp.curr_type
+            when "RMB" then "人民币"
+            end currType,
+            cp.payment_tax_exclude_amount paymentTaxExcludeAmount,
+            cp.payment_tax_amount paymentTaxAmount,
+            cp.payment_time paymentTime,
+            cp.remark,
+            case cp.payment_status
+            when "1" then "申请付款"
+            when "2" then "付款完成"
+            end paymentStatus
+        from cm_payment cp
+        left join cm_invoice ci on cp.invoice_auto_no = ci.invoice_auto_no
+        left join cm_contract_bill ccb on cp.cont_pk = ccb.id
+        where 1=1
+        <isNotEmpty prepend="and" property="paymentNo">
+            cp.payment_no like concat('%',#paymentNo#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="paymentStatus">
+            cp.payment_status = #paymentStatus#
+        </isNotEmpty>
+        ORDER BY
+            cp.rec_create_time DESC
+    </select>
+
+    <insert id="save" parameterClass="com.baosight.wilp.cm.domain.CmPayment">
+        insert into cm_payment(
+            id,
+            payment_auto_no,
+            payment_no,
+            payment_content,
+            payment_type,
+            cont_pk,
+            cont_no,
+            cont_name,
+            invoice_auto_no,
+            curr_type,
+            payment_tax_exclude_amount,
+            payment_tax_amount,
+            payment_time,
+            remark,
+            payment_status,
+            rec_creator,
+            rec_creator_no,
+            rec_create_time
+        )values (
+            #id#,
+            #paymentAutoNo#,
+            #paymentNo#,
+            #paymentContent#,
+            #paymentType#,
+            #contPk#,
+            #contNo#,
+            #contName#,
+            #invoiceAutoNo#,
+            #currType#,
+            #paymentTaxExcludeAmount#,
+            #paymentTaxAmount#,
+            #paymentTime#,
+            #remark#,
+            #paymentStatus#,
+            #recCreator#,
+            #recCreatorNo#,
+            #recCreateTime#
+        )
+    </insert>
+
+    <update id="update" parameterClass="com.baosight.wilp.cm.domain.CmPayment">
+        update cm_payment set
+            payment_no = #paymentNo#,
+            payment_content = #paymentContent#,
+            payment_type = #paymentType#,
+            cont_pk = #contPk#,
+            cont_no = #contNo#,
+            cont_name = #contName#,
+            invoice_auto_no = #invoiceAutoNo#,
+            curr_type = #currType#,
+            payment_tax_exclude_amount = #paymentTaxExcludeAmount#,
+            payment_tax_amount = #paymentTaxAmount#,
+            payment_time = #paymentTime#,
+            remark = #remark#,
+            payment_status = #paymentStatus#,
+            rec_revisor = #recRevisor#,
+            rec_revisor_no = #recRevisorNo#,
+            rec_revise_time = #recReviseTime#
+        where
+            payment_auto_no = #paymentAutoNo#
+    </update>
+
+    <select id="queryPaymentMsgByPaymentAutoNo" parameterClass="java.lang.String" resultClass="java.util.HashMap" >
+        select
+            cp.cont_pk contPk,
+            cp.payment_auto_no paymentAutoNo,
+            cp.payment_no paymentNo,
+            cp.payment_type paymentType,
+            cp.payment_content paymentContent,
+            cp.cont_no contNo,
+            ccb.cont_name contName,
+            cp.invoice_auto_no invoiceAutoNo,
+            ci.invoice_no invoiceNo,
+            cp.curr_type currType,
+            cp.payment_tax_exclude_amount paymentTaxExcludeAmount,
+            cp.payment_tax_amount paymentTaxAmount,
+            cp.payment_time paymentTime,
+            cp.remark
+        from
+            cm_payment cp
+        left join cm_contract_bill ccb on cp.cont_pk = ccb.id
+        left join cm_invoice ci on ci.invoice_auto_no = cp.invoice_auto_no
+        where
+            cp.payment_auto_no = #value#
+    </select>
+</sqlMap>

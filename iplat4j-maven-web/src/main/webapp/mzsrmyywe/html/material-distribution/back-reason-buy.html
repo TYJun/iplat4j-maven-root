@@ -1,0 +1,197 @@
+<!doctype html>
+<html class="no-js">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="../reference/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../reference/css/common.css" />
+		<link rel="stylesheet" href="css/tcj-font.css" />
+
+	</head>
+	<STYLE TYPE="text/css">
+		body {
+			background: #eee;
+		}
+		
+		.reason-write {
+			margin-top: 24px;
+			outline: none;
+			border: 0;
+			background: #F3F3F3;
+			height: 120px;
+			text-indent: 1em;
+			letter-spacing: 2px;
+			color: #acacac;
+		}
+		
+		.lanse {
+			background: #58d0f2;
+		}
+		
+		.huangse {
+			background: #f2ae3d;
+		}
+		
+		.reason-choose {
+			display: flex;
+			justify-content: space-around;
+		}
+		
+		.reason-choose-botton {
+			height: 32px;
+			width: 21%;
+			border: 1px solid #e6e6e6;
+			background: #fff;
+			color: #333333;
+			text-align: center;
+			line-height: 32px;
+			border-radius: 15px;
+			margin-top: 14px;
+		}
+		
+		.submit {
+			width: 96%;
+			margin: 15px 2%;
+			height: 50px;
+			line-height: 50px;
+			text-align: center;
+			background: #2aabd2;
+			color: #fff;
+			font-size: 18px;
+			box-shadow: 0 3px 3px #41bde2;
+			border-radius: 5px;
+		}
+	</STYLE>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">回退理由</h1>
+			<button id="back" class="mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+        <span class="mui-icon mui-icon-left-nav">
+        	
+        </span>
+       返回
+      </button>
+		</header>
+
+		<div id="warn" class="warn" hidden>
+			<small></small>
+		</div>
+		<div id="loading" class="loading1" hidden>
+			<div class="loading2">
+				<span class="mui-spinner" style="width:80px;height:80px;"></span>
+			</div>
+		</div>
+		<div class="mui-content" style="background: #FFFFFF;padding: 0 5px; margin-top: 64px;min-height: 340px;">
+			<textarea class="reason-write" placeholder="请写下回退的理由"></textarea>
+			<div class="reason-choose">
+				<!--<div class="reason-choose-botton">断货</div>
+				<div class="reason-choose-botton">暂时缺货</div>
+				<div class="reason-choose-botton">休息日</div>-->
+			</div>
+		</div>
+		<div class="submit">提交</div>
+	</body>
+	<script src="../reference/mui/js/mui.min.js" type="text/javascript"></script>
+	<script src="../reference/js/jquery-2.1.4.js" type="text/javascript"></script>
+	<script src="../reference/js/common.js" type="text/javascript"></script>
+	<script src="../../cordova.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		var baseUrl = localStorage.getItem("url");
+		var workNo = localStorage.getItem('workNo');
+		var url = location.search;
+		var matApplyBillNo = url.substring(1, url.length);
+		console.log(matApplyBillNo)
+		loadView();
+
+		function loadView() {
+
+			$.ajax({ //				url: "../json/buy-plan-apply.json",
+				//				type: "get",
+				url: baseUrl + "app_DeliveryController.do?queryPurchaseQuickOpinion",
+				type: "post",
+				data: {
+
+				},
+				success: function(data) {
+					var data = eval("(" + data + ")");
+					console.log(data)
+					var list = data.obj.data;
+					if(data.respCode == "200") {
+						var aa = "";
+						for(var i = 0; i < list.length; i++) {
+							aa += '<div class="reason-choose-botton">' + list[i] + '</div>';
+						}
+						$(".reason-choose").html(aa);
+					} else {
+						$("#loading").hide();
+						showMsg(data.respMsg);
+					}
+				}
+			});
+
+		}
+
+		mui("body").on("tap", ".submit", function() {
+			if($(".reason-write").val() == "") {
+
+				showMsg("请输入回退原因！");
+				return;
+			}
+			console.log($(".reason-write").val());
+
+			$("#loading").show();
+			$.ajax({ //				url: "../json/buy-plan-apply.json",
+				//				type: "get",
+				url: baseUrl + "app_DeliveryController.do?approvePurchasePlan",
+				type: "post",
+				data: {
+					id: matApplyBillNo,
+					reason: $(".reason-write").val(),
+					flag: 0
+				},
+				success: function(data) {
+					var data = eval("(" + data + ")");
+					console.log(data)
+
+					if(data.respCode == "200") {
+
+						setTimeout('location.href="buy-plan-apply.html";', 2000);
+
+					} else {
+						$("#loading").hide();
+						showMsg(data.respMsg);
+					}
+				}
+			});
+
+		});
+
+		mui("body").on("tap", ".reason-choose-botton", function() {
+			var _this = $(this);
+			$(".reason-choose-botton").css({ "border": "1px solid #e6e6e6", "color": " #333333", "background": "#fff" });
+			_this.css({ "border": "1px solid #e6e6e6", "color": " #fff", "background": "#ffb07b" });
+			$(".reason-write").text(_this.text());
+
+		});
+
+		document.getElementById('back').addEventListener('tap', function() {
+			location.href = "buy-plan-apply.html";
+		});
+		document.addEventListener("deviceready", onDeviceReady, false);
+
+		function onDeviceReady() {
+			document.addEventListener("backbutton", onBackKeyDown, false);
+		}
+
+		function onBackKeyDown() {
+			location.href = "buy-plan-apply.html";
+		}
+	</script>
+
+</html>

@@ -1,0 +1,708 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2022-02-09 19:41:24
+   		Version :  6.0.731.201809200158
+		tableName :.dorms_man 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 man_no  VARCHAR, 
+		 man_name  VARCHAR, 
+		 status_code  CHAR, 
+		 sex  VARCHAR, 
+		 age  INTEGER, 
+		 phone  VARCHAR, 
+		 identity_card  VARCHAR, 
+		 education_background  VARCHAR, 
+		 academic_year  VARCHAR, 
+		 marital_status  VARCHAR, 
+		 dept_num  VARCHAR, 
+		 dept_name  VARCHAR, 
+		 employment_nature  VARCHAR, 
+		 cash_pledge  VARCHAR, 
+		 is_network  VARCHAR, 
+		 is_stay  VARCHAR, 
+		 permanent_residence  VARCHAR, 
+		 note  VARCHAR, 
+		 hiredate  VARCHAR, 
+		 estimated_in_date  VARCHAR, 
+		 estimated_out_date  VARCHAR,
+		 eval_status  VARCHAR,
+		 eval_content  VARCHAR,
+		 eval_time  VARCHAR,
+		 rec_creator  VARCHAR, 
+		 rec_create_name  VARCHAR, 
+		 rec_create_time  VARCHAR, 
+		 rec_revisor  VARCHAR, 
+		 rec_revise_name  VARCHAR, 
+		 rec_revise_time  VARCHAR
+	-->
+<sqlMap namespace="DMRZ01">
+
+	<select id="queryRZInfoList" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		dm.id as "id",  <!-- 主键 -->
+		dm.id as "manId",  <!-- 主键 -->
+		dm.man_no	as "manNo",  <!-- 工号 -->
+		dm.man_name	as "manName",  <!-- 姓名 -->
+		dm.status_code	as "statusCode",  <!-- 工单状态(00待审核，01待分配，02待选房，03待入住，04已入住，10申请换宿，98申请退宿，99流程结束) -->
+		CASE dm.status_code
+		WHEN 00 THEN '待审核'
+		WHEN 01 THEN '待分配'
+		WHEN 02 THEN '待选房'
+		WHEN 03 THEN '待入住'
+		WHEN 04 THEN '已入住'
+		WHEN 10 THEN '申请换宿'
+		WHEN 98 THEN '申请退宿'
+		WHEN 99 THEN '流程结束'
+		END AS "statusCodeMeaning" ,
+		dm.sex	as "sex",  <!-- 性别 -->
+		CASE dm.sex
+		WHEN '1' THEN '男'
+		ELSE '女'
+		END AS "sexMeaning",
+		dm.age	as "age",  <!-- 员工年龄 -->
+		dm.phone	as "phone",  <!-- 电话 -->
+		dm.identity_card	as "identityCard",  <!-- 身份证 -->
+		dm.education_background	as "educationBackground",  <!-- 学历 -->
+		dm.academic_year	as "academicYear",  <!-- 学年 -->
+		dm.marital_status	as "maritalStatus",  <!-- 婚否:是，否 -->
+		dm.dept_num	as "deptNum",  <!-- 部门科室编码 -->
+		dm.dept_name	as "deptName",  <!-- 部门科室名称 -->
+		dm.employment_nature	as "employmentNature",  <!-- 职工性质 -->
+		dm.cash_pledge	as "cashPledge",  <!-- 押金编号 -->
+		dm.is_network	as "isNetwork",  <!-- 是否联网 -->
+		dm.is_stay	as "isStay",  <!-- 是否办暂住证 -->
+		dm.permanent_residence	as "permanentResidence",  <!-- 户口所在地 -->
+		dm.note	as "note",  <!-- 备注信息 -->
+		dm.hiredate	as "hiredate",  <!-- 入职时间 -->
+		dm.estimated_in_date	as "estimatedInDate",  <!-- 预计入住时间 -->
+		dm.estimated_out_date	as "estimatedOutDate",  <!-- 预计退房时间 -->
+		dm.eval_status	as "evalStatus",  <!-- 是否已经进行过评价(0为未评价，1已评价) -->
+		CASE dm.eval_status
+		WHEN '1' THEN '已评价'
+		ELSE '未评价'
+		END AS "evalStatusMeaning",
+		dm.rec_creator	as "recCreator",  <!-- 创建人工号 -->
+		dm.rec_create_name	as "recCreateName",  <!-- 创建人姓名 -->
+		dm.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		dm.rec_revisor	as "recRevisor",  <!-- 修改人工号 -->
+		dm.rec_revise_name	as "recReviseName",  <!-- 修改人姓名 -->
+		dm.rec_revise_time	as "recReviseTime", <!-- 修改时间 -->
+		dm.archive_flag as "archiveFlag", <!-- 归档标记(0：未归档，1：已归档) -->
+		CASE dm.archive_flag
+		WHEN '0' THEN '未归档'
+		ELSE '已归档'
+		END AS "archiveFlagMean",
+		drm.actual_in_date	as "actualInDate",  <!-- 实际入住时间 -->
+		drm.actual_out_date	as "actualOutDate",  <!-- 实际退房时间 -->
+		dm.school as school,
+		dm.major as major,
+		dm.dormitory_director as dormitoryDirector,
+		dm.address,
+		dr.room_name as roomName, <!-- 宿舍总称 -->
+		dm.room_id as dormId,
+		dm.spouse_name as spouseName
+		FROM dorms_man dm
+		LEFT JOIN dorms_room_man drm on drm.man_id = dm.id
+		LEFT JOIN dorms_room dr on dr.id = drm.room_id
+		WHERE 1=1
+		<dynamic prepend=" AND ">                                    <!-- 权限过滤数据 -->
+			<isEqual prepend=" AND " property="role" compareValue="DMADMIN">
+				1=1
+				<isNotEmpty prepend=" AND " property="manNatureList">
+					dm.employment_nature in
+					<iterate property="manNatureList" conjunction="," open="(" close=")">
+						#manNatureList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+			<isEqual prepend=" AND " property="role" compareValue="DMSPR">
+				1=1
+				<isNotEmpty prepend=" AND " property="manNatureList">
+					dm.employment_nature in
+					<iterate property="manNatureList" conjunction="," open="(" close=")">
+						#manNatureList[]#
+					</iterate>
+				</isNotEmpty>
+<!--				dm.employment_nature in-->
+<!--				<iterate property="natureList" conjunction="," open="(" close=")">-->
+<!--					#natureList[]#-->
+<!--				</iterate>-->
+			</isEqual>
+			<isEqual prepend=" AND " property="role" compareValue="DMZSR">
+				(dm.man_no = #workNo#
+				<isNotEmpty prepend=" AND " property="manNatureList">
+					dm.employment_nature in
+					<iterate property="manNatureList" conjunction="," open="(" close=")">
+						#manNatureList[]#
+					</iterate>
+				</isNotEmpty>
+				)
+			</isEqual>
+		</dynamic>
+		<isNotEmpty prepend=" AND " property="id">
+			dm.id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manNo">
+			dm.man_no = #manNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="sex">
+			dm.sex = #sex#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manName">
+			dm.man_name like concat('%',#manName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dm.dept_name like concat('%',#deptName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="employmentNature">
+			dm.employment_nature = #employmentNature#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			dm.status_code = #statusCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="archiveFlag">
+			dm.archive_flag = #archiveFlag#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomName">
+			dr.room_name like concat('%', #roomName#,'%')
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+			dm.status_code, dm.archive_flag asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="queryRZInfoListCount" resultClass="int">
+		SELECT COUNT(*) FROM (
+		SELECT
+		dm.id as "id",  <!-- 主键 -->
+		dm.id as "manId",  <!-- 主键 -->
+		dm.man_no	as "manNo",  <!-- 工号 -->
+		dr.room_name as roomName <!-- 宿舍总称 -->
+		FROM dorms_man dm
+		LEFT JOIN dorms_room_man drm on drm.man_id = dm.id
+		LEFT JOIN dorms_room dr on dr.id = drm.room_id
+		WHERE 1=1
+		<dynamic prepend=" AND ">                                    <!-- 权限过滤数据 -->
+			<isEqual prepend=" AND " property="role" compareValue="DMADMIN">
+				1=1
+				<isNotEmpty prepend=" AND " property="manNatureList">
+					dm.employment_nature in
+					<iterate property="manNatureList" conjunction="," open="(" close=")">
+						#manNatureList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+			<isEqual prepend=" AND " property="role" compareValue="DMSPR">
+				1=1
+				<isNotEmpty prepend=" AND " property="manNatureList">
+					dm.employment_nature in
+					<iterate property="manNatureList" conjunction="," open="(" close=")">
+						#manNatureList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+			<isEqual prepend=" AND " property="role" compareValue="DMZSR">
+				(dm.man_no = #workNo#
+				<isNotEmpty prepend=" AND " property="manNatureList">
+					dm.employment_nature in
+					<iterate property="manNatureList" conjunction="," open="(" close=")">
+						#manNatureList[]#
+					</iterate>
+				</isNotEmpty>
+				)
+			</isEqual>
+		</dynamic>
+		<isNotEmpty prepend=" AND " property="id">
+			dm.id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manNo">
+			dm.man_no = #manNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manName">
+			dm.man_name like concat('%',#manName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="sex">
+			dm.sex = #sex#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dm.dept_name like concat('%',#deptName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="employmentNature">
+			dm.employment_nature = #employmentNature#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			dm.status_code = #statusCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="archiveFlag">
+			dm.archive_flag = #archiveFlag#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="roomName">
+			dr.room_name like concat('%', #roomName#,'%')
+		</isNotEmpty>
+								 ) aaa
+	</select>
+
+	<!-- 获取入住申请表中已存在入住信息的所有人（工号列表） 流程结束(状态为99)的人除外 -->
+	<select id="queryRZApplyManNoList" resultClass="java.util.HashMap">
+		SELECT
+		man_no	as "manNo"  <!-- 工号 -->
+		FROM dorms_man WHERE status_code != '99'
+	</select>
+
+	<!-- 获取入住申请表中已存在该工号的入住信息 流程结束(状态为99)的人除外，得出该工号是否有入住信息 -->
+	<select id="queryRZApplyExistManNo" resultClass="java.util.HashMap">
+		SELECT
+		man_no	as "manNo"  <!-- 工号 -->
+		FROM dorms_man WHERE status_code != '99' AND man_no = #manNo#
+	</select>
+
+	<!-- 查询宿舍入住申请信息的详情 -->
+	<select id="queryRZApplyInfo" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		SELECT
+		dm.id as "id",  <!-- 主键 -->
+		dm.id as "manId",  <!-- 主键 -->
+		dm.man_no	as "manNo",  <!-- 工号 -->
+		dm.man_name	as "manName",  <!-- 姓名 -->
+		dm.status_code	as "statusCode",  <!-- 工单状态(00待审核，01待分配，02待选房，03待入住，04已入住，10申请换宿，98申请退宿，99流程结束) -->
+		CASE dm.status_code
+		WHEN 00 THEN '待审核'
+		WHEN 01 THEN '待分配'
+		WHEN 02 THEN '待选房'
+		WHEN 03 THEN '待入住'
+		WHEN 04 THEN '已入住'
+		WHEN 10 THEN '申请换宿'
+		WHEN 98 THEN '申请退宿'
+		WHEN 99 THEN '流程结束'
+		END AS "statusCodeMeaning" ,
+		dm.sex	as "sex",  <!-- 性别 -->
+		CASE dm.sex
+		WHEN '1' THEN '男'
+		ELSE '女'
+		END AS "sexMeaning",
+		concat(dm.age)	as "age",  <!-- 员工年龄 -->
+		dm.phone	as "phone",  <!-- 电话 -->
+		dm.identity_card	as "identityCard",  <!-- 身份证 -->
+		dm.education_background	as "educationBackground",  <!-- 学历 -->
+		dm.academic_year	as "academicYear",  <!-- 学年 -->
+		dm.marital_status	as "maritalStatus",  <!-- 婚否:是，否 -->
+		dm.dept_num	as "deptNum",  <!-- 部门科室编码 -->
+		dm.dept_name	as "deptName",  <!-- 部门科室名称 -->
+		dm.employment_nature	as "employmentNature",  <!-- 职工性质 -->
+		dm.cash_pledge	as "cashPledge",  <!-- 押金编号 -->
+		dm.is_network	as "isNetwork",  <!-- 是否联网 -->
+		dm.is_stay	as "isStay",  <!-- 是否办暂住证 -->
+		dm.permanent_residence	as "permanentResidence",  <!-- 户口所在地 -->
+		dm.note	as "note",  <!-- 备注信息 -->
+		dm.hiredate	as "hiredate",  <!-- 入职时间 -->
+		dm.estimated_in_date	as "estimatedInDate",  <!-- 预计入住时间 -->
+		dm.estimated_out_date	as "estimatedOutDate",  <!-- 预计退房时间 -->
+		dm.eval_status	as "evalStatus",  <!-- 是否已经进行过评价(0为未评价，1已评价) -->
+		dm.rec_creator	as "recCreator",  <!-- 创建人工号 -->
+		dm.rec_create_name	as "recCreateName",  <!-- 创建人姓名 -->
+		dm.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
+		dm.rec_revisor	as "recRevisor",  <!-- 修改人工号 -->
+		dm.rec_revise_name	as "recReviseName",  <!-- 修改人姓名 -->
+		dm.rec_revise_time	as "recReviseTime", <!-- 修改时间 -->
+		drm.id as "roomManId", <!-- 宿舍人员绑定关系表 id 主键-->
+	    drm.bed_no as "bedNo", <!-- 床位号 -->
+	    drm.change_room_note as "changeRoomNote", <!-- 调宿备注-->
+	    drm.apply_change_date as "applyChangeDate", <!-- 申请调宿时间 -->
+		drm.actual_in_date	as "actualInDate",  <!-- 实际入住时间 -->
+		drm.actual_out_date	as "actualOutDate",  <!-- 实际退房时间 -->
+		dr.id as roomId, <!-- 宿舍id -->
+		dr.room_name as roomName, <!-- 宿舍总称 -->
+		dr.remaining_bed_num as remainingBedNum <!-- 宿舍剩余床位 -->
+		FROM dorms_man dm
+		LEFT JOIN dorms_room_man drm on drm.man_id = dm.id
+		LEFT JOIN dorms_room dr on dr.id = drm.room_id
+		WHERE dm.id = #manId#
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manNo">
+			man_no = #manNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="manName">
+			man_name = #manName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			status_code = #statusCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="sex">
+			sex = #sex#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="age">
+			age = #age#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="phone">
+			phone = #phone#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="identityCard">
+			identity_card = #identityCard#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="educationBackground">
+			education_background = #educationBackground#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="academicYear">
+			academic_year = #academicYear#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="maritalStatus">
+			marital_status = #maritalStatus#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			dept_num = #deptNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			dept_name = #deptName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="employmentNature">
+			employment_nature = #employmentNature#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="cashPledge">
+			cash_pledge = #cashPledge#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="isNetwork">
+			is_network = #isNetwork#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="isStay">
+			is_stay = #isStay#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="permanentResidence">
+			permanent_residence = #permanentResidence#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="note">
+			note = #note#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="hiredate">
+			hiredate = #hiredate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="estimatedInDate">
+			estimated_in_date = #estimatedInDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="estimatedOutDate">
+			estimated_out_date = #estimatedOutDate#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="evalStatus">
+			eval_status = #evalStatus#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="evalContent">
+			eval_content = #evalContent#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="evalTime">
+			eval_time = #evalTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreator">
+			rec_creator = #recCreator#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateName">
+			rec_create_name = #recCreateName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTime">
+			rec_create_time = #recCreateTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recRevisor">
+			rec_revisor = #recRevisor#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recReviseName">
+			rec_revise_name = #recReviseName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recReviseTime">
+			rec_revise_time = #recReviseTime#
+		</isNotEmpty>
+	-->
+
+	<!-- 将操作流程信息插入到宿舍操作流程历史表 -->
+	<insert id="insertDMLCTable" parameterClass="java.util.HashMap">
+		INSERT INTO .dorms_process_history (
+		<isNotNull property="manId">
+			man_id,  <!-- 人员id -->
+		</isNotNull>
+		<isNotNull property="statusCode">
+			status_code,  <!-- 状态编码 -->
+		</isNotNull>
+		<isNotNull property="statusCodeMeaning">
+			status_code_meaning,  <!-- 状态含义 -->
+		</isNotNull>
+		<isNotNull property="isCurrent">
+			is_current,  <!-- 是否当前状态：1是0否 -->
+		</isNotNull>
+		<isNotNull property="operator">
+			operator,  <!-- 操作人工号 -->
+		</isNotNull>
+		<isNotNull property="operationName">
+			operation_name,  <!-- 操作人人 -->
+		</isNotNull>
+		<isNotNull property="operationTime">
+			operation_time,  <!-- 操作时间 -->
+		</isNotNull>
+		id  <!-- 主键 -->)
+		VALUES (
+		<isNotNull property="manId">
+			#manId#,
+		</isNotNull>
+		<isNotNull property="statusCode">
+			#statusCode#,
+		</isNotNull>
+		<isNotNull property="statusCodeMeaning">
+			#statusCodeMeaning#,
+		</isNotNull>
+		<isNotNull property="isCurrent">
+			#isCurrent#,
+		</isNotNull>
+		<isNotNull property="operator">
+			#operator#,
+		</isNotNull>
+		<isNotNull property="operationName">
+			#operationName#,
+		</isNotNull>
+		<isNotNull property="operationTime">
+			#operationTime#,
+		</isNotNull>
+		#id#  <!-- 主键 -->)
+	</insert>
+
+
+	<!-- 将操作流程信息批量插入到宿舍操作流程历史表 -->
+	<insert id="batchInsertDMLCTable" parameterClass="java.util.List">
+		INSERT INTO .dorms_process_history (
+			man_id,  <!-- 人员id -->
+			status_code,  <!-- 状态编码 -->
+			status_code_meaning,  <!-- 状态含义 -->
+			is_current,  <!-- 是否当前状态：1是0否 -->
+			operator,  <!-- 操作人工号 -->
+			operation_name,  <!-- 操作人 -->
+			operation_time,  <!-- 操作时间 -->
+		id  <!-- 主键 -->)
+		VALUES
+		<iterate conjunction=",">
+		(
+			#list[].manId#,
+			#list[].statusCode#,
+			#list[].statusCodeMeaning#,
+			#list[].isCurrent#,
+			#list[].operator#,
+			#list[].operationName#,
+			#list[].operationTime#,
+			#list[].id#
+		)
+		</iterate>
+	</insert>
+
+
+	<!-- 更新人员入住信息表的状态 -->
+	<update id="updateStatusCode" parameterClass="java.util.HashMap">
+		update dorms_man
+		set
+		<isNotNull property="statusCode">
+			status_code = #statusCode#,  <!-- 工单状态(00待审核，01待分配，02待选房，03待入住，04已入住，10申请换宿，98申请退宿，99流程结束) -->
+		</isNotNull>
+		id=#manId# <!-- 主键 -->
+		where id=#manId#
+	</update>
+
+	<!-- 更新人员入住信息表的评价状态-->
+	<update id="updateAboutEval" parameterClass="java.util.HashMap">
+		update dorms_man
+		set
+		<isNotNull property="evalStatus">
+			eval_status = #evalStatus#,  <!-- 是否已经进行过评价(0为未评价，1已评价) -->
+		</isNotNull>
+		id=#manId# <!-- 主键 -->
+		where id=#manId#
+	</update>
+
+	<!-- 批量更新人员入住信息表的状态 -->
+	<update id="batchUpdateStatusCode" parameterClass="java.util.HashMap">
+		update dorms_man
+		set
+		<isNotNull property="statusCode">
+			status_code = #statusCode# , <!-- 工单状态(00待审核，01待分配，02待选房，03待入住，04已入住，10申请换宿，98申请退宿，99流程结束) -->
+		</isNotNull>
+		actual_in_date = now()
+		where id IN
+		<iterate property="manIdList" conjunction="," open="(" close=")">
+			#manIdList[].manId#
+		</iterate>
+	</update>
+
+	<!-- 批量更新人员入住信息表的状态 -->
+	<update id="outUpdateStatusCode" parameterClass="java.util.HashMap">
+		update dorms_man
+		set
+		<isNotNull property="statusCode">
+			status_code = #statusCode# , <!-- 工单状态(00待审核，01待分配，02待选房，03待入住，04已入住，10申请换宿，98申请退宿，99流程结束) -->
+		</isNotNull>
+		actual_out_date = now()
+		where id IN
+		<iterate property="manIdList" conjunction="," open="(" close=")">
+			#manIdList[].manId#
+		</iterate>
+	</update>
+
+	<!-- 更新当前操作流程之前的状态为0,将之前存在的该状态不标注为当前状态. -->
+	<update id="updateLCStatusCode" parameterClass="java.util.HashMap">
+		update dorms_process_history
+		set
+			is_current = '0'
+		where man_id=#manId#
+		  and status_code = #statusCode#
+	</update>
+
+	<!-- 批量更新当前操作流程之前的状态为0,将之前存在的该状态不标注为当前状态. -->
+	<update id="batchUpdateLCStatusCode" parameterClass="java.util.HashMap">
+		update dorms_process_history
+		set
+			is_current = '0'
+		where status_code = #statusCode# and
+		man_id IN
+		<iterate property="manIdList" conjunction="," open="(" close=")">
+			#manIdList[].manId#
+		</iterate>
+	</update>
+
+<!---->
+<!--	&lt;!&ndash; 查询住宿申请人信息中状态为待分配的人员列表。 01:待分配 &ndash;&gt;-->
+<!--	<select id="queryStudentWaitFPList" parameterClass="java.util.HashMap"-->
+<!--			resultClass="java.util.HashMap">-->
+<!--		SELECT-->
+<!--		dm.id as "id",  &lt;!&ndash; 主键 &ndash;&gt;-->
+<!--		dm.id as "manId",  &lt;!&ndash; 主键 &ndash;&gt;-->
+<!--		dm.man_no	as "manNo",  &lt;!&ndash; 工号 &ndash;&gt;-->
+<!--		dm.man_name	as "manName",  &lt;!&ndash; 姓名 &ndash;&gt;-->
+<!--		dm.status_code	as "statusCode",  &lt;!&ndash; 工单状态(00待审核，01待分配，02待选房，03待入住，04已入住，10申请换宿，98申请退宿，99流程结束) &ndash;&gt;-->
+<!--		CASE dm.status_code-->
+<!--		WHEN 00 THEN '待审核'-->
+<!--		WHEN 01 THEN '待分配'-->
+<!--		WHEN 02 THEN '待选房'-->
+<!--		WHEN 03 THEN '待入住'-->
+<!--		WHEN 04 THEN '已入住'-->
+<!--		WHEN 10 THEN '申请换宿'-->
+<!--		WHEN 98 THEN '申请退宿'-->
+<!--		WHEN 99 THEN '流程结束'-->
+<!--		END AS "statusCodeMeaning" ,-->
+<!--		dm.sex	as "sex",  &lt;!&ndash; 性别 &ndash;&gt;-->
+<!--		CASE dm.sex-->
+<!--		WHEN '1' THEN '男'-->
+<!--		ELSE '女'-->
+<!--		END AS "sexMeaning",-->
+<!--		dm.age	as "age",  &lt;!&ndash; 员工年龄 &ndash;&gt;-->
+<!--		dm.phone	as "phone",  &lt;!&ndash; 电话 &ndash;&gt;-->
+<!--		dm.identity_card	as "identityCard",  &lt;!&ndash; 身份证 &ndash;&gt;-->
+<!--		dm.education_background	as "educationBackground",  &lt;!&ndash; 学历 &ndash;&gt;-->
+<!--		dm.academic_year	as "academicYear",  &lt;!&ndash; 学年 &ndash;&gt;-->
+<!--		dm.marital_status	as "maritalStatus",  &lt;!&ndash; 婚否:是，否 &ndash;&gt;-->
+<!--		dm.dept_num	as "deptNum",  &lt;!&ndash; 部门科室编码 &ndash;&gt;-->
+<!--		dm.dept_name	as "deptName",  &lt;!&ndash; 部门科室名称 &ndash;&gt;-->
+<!--		dm.employment_nature	as "employmentNature",  &lt;!&ndash; 职工性质 &ndash;&gt;-->
+<!--		dm.cash_pledge	as "cashPledge",  &lt;!&ndash; 押金编号 &ndash;&gt;-->
+<!--		dm.is_network	as "isNetwork",  &lt;!&ndash; 是否联网 &ndash;&gt;-->
+<!--		dm.is_stay	as "isStay",  &lt;!&ndash; 是否办暂住证 &ndash;&gt;-->
+<!--		dm.permanent_residence	as "permanentResidence",  &lt;!&ndash; 户口所在地 &ndash;&gt;-->
+<!--		dm.note	as "note",  &lt;!&ndash; 备注信息 &ndash;&gt;-->
+<!--		dm.hiredate	as "hiredate",  &lt;!&ndash; 入职时间 &ndash;&gt;-->
+<!--		dm.estimated_in_date	as "estimatedInDate",  &lt;!&ndash; 预计入住时间 &ndash;&gt;-->
+<!--		dm.estimated_out_date	as "estimatedOutDate",  &lt;!&ndash; 预计退房时间 &ndash;&gt;-->
+<!--		dm.eval_status	as "evalStatus",  &lt;!&ndash; 是否已经进行过评价(0为未评价，1已评价) &ndash;&gt;-->
+<!--		CASE dm.eval_status-->
+<!--		WHEN '1' THEN '已评价'-->
+<!--		ELSE '未评价'-->
+<!--		END AS "evalStatusMeaning",-->
+<!--		dm.rec_creator	as "recCreator",  &lt;!&ndash; 创建人工号 &ndash;&gt;-->
+<!--		dm.rec_create_name	as "recCreateName",  &lt;!&ndash; 创建人姓名 &ndash;&gt;-->
+<!--		dm.rec_create_time	as "recCreateTime",  &lt;!&ndash; 创建时间 &ndash;&gt;-->
+<!--		dm.rec_revisor	as "recRevisor",  &lt;!&ndash; 修改人工号 &ndash;&gt;-->
+<!--		dm.rec_revise_name	as "recReviseName",  &lt;!&ndash; 修改人姓名 &ndash;&gt;-->
+<!--		dm.rec_revise_time	as "recReviseTime", &lt;!&ndash; 修改时间 &ndash;&gt;-->
+<!--		dm.archive_flag as "archiveFlag", &lt;!&ndash; 归档标记(0：未归档，1：已归档) &ndash;&gt;-->
+<!--		CASE dm.archive_flag-->
+<!--		WHEN '0' THEN '未归档'-->
+<!--		ELSE '已归档'-->
+<!--		END AS "archiveFlagMean"-->
+<!--		FROM dorms_man dm-->
+<!--		WHERE dm.status_code = '01' AND dm.archive_flag != '1'-->
+<!--		<isNotEmpty prepend=" AND " property="manNatureList">-->
+<!--			dm.employment_nature IN-->
+<!--			<iterate property="manNatureList" conjunction="," open="(" close=")">-->
+<!--				#manNatureList[]#-->
+<!--			</iterate>-->
+<!--		</isNotEmpty>-->
+<!--	</select>-->
+
+
+	<!-- 导入数据操作 批量将入住信息插入到人员入住信息表 -->
+	<insert id="batchInsertByExcel"  parameterClass="java.util.List">
+		INSERT INTO .dorms_man(
+			man_no,  <!-- 工号 -->
+			man_name,  <!-- 姓名 -->
+			status_code,  <!-- 工单状态(00待审核，01待分配，02待选房，03待入住，04已入住，10申请换宿，98申请退宿，99流程结束) -->
+			sex,  <!-- 性别 -->
+			age,  <!-- 员工年龄 -->
+			phone,  <!-- 电话 -->
+			identity_card,  <!-- 身份证 -->
+			education_background,  <!-- 学历 -->
+			academic_year,  <!-- 学年 -->
+			marital_status,  <!-- 婚否:是，否 -->
+			dept_num,  <!-- 部门科室编码 -->
+			dept_name,  <!-- 部门科室名称 -->
+			employment_nature,  <!-- 职工性质 -->
+			is_network,  <!-- 是否联网 -->
+			is_stay,  <!-- 是否办暂住证 -->
+			permanent_residence,  <!-- 户口所在地 -->
+			hiredate,  <!-- 入职时间 -->
+			estimated_in_date,  <!-- 预计入住时间 -->
+			estimated_out_date,  <!-- 预计退房时间 -->
+			note,  <!-- 备注信息 -->
+			rec_creator,  <!-- 创建人工号 -->
+			rec_create_name,  <!-- 创建人姓名 -->
+			rec_create_time,
+		id  <!-- 主键 -->)
+		VALUES
+		<iterate conjunction=",">
+		(
+			#list[].manNo#,
+			#list[].manName#,
+			#list[].statusCode#,
+			#list[].sex#,
+			#list[].age#,
+			#list[].phone#,
+			#list[].identityCard#,
+			#list[].educationBackground#,
+			#list[].academicYear#,
+			#list[].maritalStatus#,
+			#list[].deptNum#,
+			#list[].deptName#,
+			#list[].employmentNature#,
+			#list[].isNetwork#,
+			#list[].isStay#,
+			#list[].permanentResidence#,
+			#list[].hiredate#,
+			#list[].estimatedInDate#,
+			#list[].estimatedOutDate#,
+			#list[].note#,
+			#list[].recCreator#,
+			#list[].recCreateName#,
+			#list[].recCreateTime#,
+			#list[].id#
+		)
+		</iterate>
+	</insert>
+
+	<select id="queryworkNo" resultClass="java.util.HashMap">
+	    SELECT man_name as manName,
+		       man_no as workNo
+		FROM dorms_man
+		where status_code = "04"
+		AND is_student != "1"
+	</select>
+
+</sqlMap>

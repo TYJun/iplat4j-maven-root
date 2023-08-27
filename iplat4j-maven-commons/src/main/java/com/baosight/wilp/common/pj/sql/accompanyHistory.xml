@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-03-23 14:36:26
+   		Version :  6.0.731.201809200158
+		tableName :iplat_v5demo_business.oi_history 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 accompany_id  VARCHAR, 
+		 rec_create_no  VARCHAR, 
+		 rec_create_time  VARCHAR, 
+		 process_node  VARCHAR
+	-->
+<sqlMap namespace="accompanyHistory">
+
+	<select id="query" parameterClass="java.util.HashMap" 
+			resultClass="com.baosight.wilp.common.pj.domain.AccompanyHistory">
+		SELECT
+				id	as "id",  
+				accompany_id	as "accompanyId",  
+				rec_create_no	as "recCreateNo",  
+				rec_create_time	as "recCreateTime",  
+				process_node	as "processNode" <!-- 流程节点 -->
+		FROM iplat_v5demo_business.oi_history WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+         <isNotEmpty property="orderBy">
+    		  $orderBy$
+   		 </isNotEmpty>
+   		<isEmpty property="orderBy">
+    		  id asc
+		</isEmpty>
+  		</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM iplat_v5demo_business.oi_history WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="accompanyId">
+			accompany_id = #accompanyId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateNo">
+			rec_create_no = #recCreateNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="recCreateTime">
+			rec_create_time = #recCreateTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="processNode">
+			process_node = #processNode#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO iplat_v5demo_business.oi_history (id,
+										accompany_id,
+										rec_create_no,
+										rec_create_time,
+										process_node  <!-- 流程节点 -->
+										)		 
+	    VALUES (#id#, #accompanyId#, #recCreateNo#, #recCreateTime#, #processNode#) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM iplat_v5demo_business.oi_history WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE iplat_v5demo_business.oi_history 
+		SET 
+					accompany_id	= #accompanyId#,   
+					rec_create_no	= #recCreateNo#,   
+					rec_create_time	= #recCreateTime#,   
+					process_node	= #processNode#  <!-- 流程节点 -->  
+			WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

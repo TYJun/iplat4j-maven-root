@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2021-05-02 22:13:44
+   		Version :  6.0.731.201809200158
+		tableName :classfy_param 
+		 id  VARCHAR   NOT NULL   primarykey, 
+		 module_id  VARCHAR, 
+		 param_name  VARCHAR, 
+		 param_key  VARCHAR, 
+		 param_value  VARCHAR, 
+		 param_unit  VARCHAR, 
+		 memo  VARCHAR
+	-->
+<sqlMap namespace="classfyParam">
+
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			id	as "id",  
+			module_id	as "moduleId",  <!-- 参数所属分类ID -->
+			param_name	as "paramName",  <!-- 参数名称 -->
+			param_key	as "paramKey",  <!-- 参数key 规则：所属模块CODE-0001/9999(序列号) -->
+			param_value	as "paramValue",  <!-- 参数值 -->
+			param_unit	as "paramUnit",  <!-- 参数单位 -->
+			memo	as "memo" <!-- 备注 -->
+		FROM
+			classfy_param
+		WHERE
+			1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+			<dynamic prepend="ORDER BY">
+				<isNotEmpty property="orderBy">
+					$orderBy$
+				</isNotEmpty>
+				<isEmpty property="orderBy">
+					id asc
+				</isEmpty>
+			</dynamic>
+			
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT
+			COUNT(*)
+		FROM
+			classfy_param
+		WHERE
+			1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+	
+	<!--  
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="moduleId">
+			module_id = #moduleId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="paramName">
+			param_name = #paramName#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="paramKey">
+			param_key = #paramKey#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="paramValue">
+			param_value = #paramValue#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="paramUnit">
+			param_unit = #paramUnit#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="memo">
+			memo = #memo#
+		</isNotEmpty>
+	-->
+
+	<insert id="insert">
+		INSERT INTO
+			classfy_param
+		(
+			id,
+			module_id,  <!-- 参数所属分类ID -->
+			param_name,  <!-- 参数名称 -->
+			param_key,  <!-- 参数key 规则：所属模块CODE-0001/9999(序列号) -->
+			param_value,  <!-- 参数值 -->
+			param_unit,  <!-- 参数单位 -->
+			memo  <!-- 备注 -->
+		)		 
+	    VALUES
+	    (
+	    	#id#, 
+	    	#moduleId#, 
+	    	#paramName#, 
+	    	#paramKey#, 
+	    	#paramValue#, 
+	    	#paramUnit#, 
+	    	#memo#
+	    ) 
+	</insert>
+  
+	<delete id="delete">
+		DELETE FROM
+			classfy_param
+		WHERE 
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE
+			classfy_param 
+		SET
+			module_id	= #moduleId#,   <!-- 参数所属分类ID -->  
+			param_name	= #paramName#,   <!-- 参数名称 -->  
+			param_key	= #paramKey#,   <!-- 参数key 规则：所属模块CODE-0001/9999(序列号) -->  
+			param_value	= #paramValue#,   <!-- 参数值 -->  
+			param_unit	= #paramUnit#,   <!-- 参数单位 -->  
+			memo	= #memo#  <!-- 备注 -->  
+		WHERE 	
+			id = #id#
+	</update>
+  
+</sqlMap>

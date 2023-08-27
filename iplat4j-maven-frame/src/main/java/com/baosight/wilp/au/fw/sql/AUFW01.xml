@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="AUFW01">
+
+    <!--  -->
+	<select id="getUserGroups" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			SELECT DISTINCT arp.perl_id AS Id,ad.hospital_district AS value ,adt.dept_name AS text
+			FROM  $projectSchema$.ac_rd ard
+			LEFT JOIN $projectSchema$.ac_rp arp  ON ard.role_id = arp.role_id
+			LEFT JOIN $projectSchema$.ac_department ad ON ard.dept_id = ad.id
+			LEFT JOIN $projectSchema$.ac_department adt ON adt.dept_num = ad.hospital_district
+			where arp.perl_id = (select id from $projectSchema$.ac_personnel where work_no = #workNo#)
+		
+	</select>
+	
+	 <!--  -->
+	<select id="getUserDepts" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			select DISTINCT arp.perl_id,ard.dept_id,ad.dept_num,ad.dept_name,ad.hospital_district
+			from $projectSchema$.ac_rp arp
+			LEFT JOIN $projectSchema$.ac_rd ard ON ard.role_id = arp.role_id
+			LEFT JOIN $projectSchema$.ac_department ad ON ard.dept_id = ad.id
+			where arp.perl_id = (select id from $projectSchema$.ac_personnel where work_no = #workNo#)
+			and ad.hospital_district = #datagroupCode#
+		
+	</select>
+	
+	<select id="getDepts" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		<iterate conjunction="UNION" property="list">
+			(
+			select id ,
+				 dept_num ,
+				 dept_name 
+			from $projectSchema$.ac_department
+			where FIND_IN_SET(id, $projectSchema$.getChildrenList(#list[].dept_id#))
+			)
+		</iterate>
+	</select>
+	
+	<select id="getGroupsToUser" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			SELECT last_data_group_code,
+				   last_data_group_name
+			FROM  $platSchema$.teu99
+			WHERE user_code = #workNo#
+	</select>
+	
+	<select id="getGroupsToDept" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			select hospital_district 
+			from $projectSchema$.ac_department  
+			where dept_num = #deptNum#
+	</select>
+	
+	<select id="getResource" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+			SELECT t.id,t.resourceEname,t.resourceName,t.type 
+			FROM (
+					SELECT  DISTINCT
+						ar.id AS id,
+						ar.resource_ename AS resourceEname,
+						ar.resource_name AS resourceName,
+						ar.type
+					FROM ac_rr arr 
+					LEFT JOIN ac_resource ar  ON arr.resource_id = ar.id
+					LEFT JOIN ac_rp arp  ON arp.role_id = arr.role_id
+					LEFT JOIN ac_personnel ap  ON ap.id = arp.perl_id
+					WHERE 1=1
+					<isNotEmpty prepend="and" property="workNo">
+						ap.work_no =#workNo#
+					</isNotEmpty>
+					<isNotEmpty prepend="and" property="userId">
+						ap.id =#userId#
+					</isNotEmpty>
+			) t 
+	</select>
+						
+	
+	
+</sqlMap>

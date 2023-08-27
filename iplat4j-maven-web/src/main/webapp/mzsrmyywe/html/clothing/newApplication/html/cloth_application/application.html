@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>被服申请</title>
+    <link rel="stylesheet" href="../../css/cloth_application/application.css" />
+    <link rel="stylesheet" href="../../../../../reference/mui/css/mui.min.css" />
+    <link rel="stylesheet" href="../../../../../reference/mui/css/mui.picker.css" />
+    <link rel="stylesheet" href="../../../../../reference/mui/css/mui.picker.min.css" />
+    <link rel="stylesheet" href="../../../../../reference/mui/css/mui.dtpicker.css" />
+    <link rel="stylesheet" href="../../../reference/css/loading.css" />
+    <link rel="stylesheet" href="../../../../../reference/vant/css/index.css" />
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <!-- 顶部区域 -->
+        <header>
+            <div class="top">
+                <div id="top-bar">
+                    <span @click="back" id="icon-left-back" class="mui-icon mui-icon-arrowleft"></span>
+                    <h1 id="title">被服申请</h1>
+                    <!-- <span id="select_class" @click="select_class">分类选择</span> -->
+                </div>
+            </div>
+        </header>
+        <!-- 申请填写内容 -->
+        <div class="occontent">
+            <div class="content">
+                <div class="dept">
+                    <div class="left">申请科室</div>
+                    <div class="right deptName"></div>
+                </div>
+                <div class="applicant">
+                    <div class="left">申请人</div>
+                    <div class="right applicant_name"></div>
+                </div>
+                <div class="giveout_time">
+                    <div class="left">发放时间</div>
+                    <div id="time" class="right" @click="click_time">{{giveOutDate}}</div>
+                </div>
+            </div>
+            <!-- 展开与收起 -->
+            <div class="openclose">
+                <span id="toggle" title="点击关闭" href="javascript:void(0);">收起</span>
+            </div>
+        </div>
+        <!-- 表格部分 -->
+        <div class="text">可申请被服列表</div>
+        <!-- 分类表格 -->
+        <table class="selecttable">
+            <thead>
+                <tr>
+                    <th>医用织物分类</th>
+                    <th>规格</th>
+                    <th>数量</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <!-- <div class="mui-scroll-wrapper">
+                    <div class="mui-scroll"> -->
+                        <!-- 一行 -->
+                        <tr v-for="(item,index) in declare_list" :key="index" class="areaScroll">
+                            <!-- 列 -->
+                            <td>{{item.fabricName}}</td>
+                            <td>{{item.fabricModel}}</td>
+                            <td>
+                                <div class="mui-numbox" data-numbox-step="1" data-numbox-min="0" data-numbox-max="100">
+                                    <button @click="redNum(index)" class="mui-btn mui-numbox-btn-minus" type="button">
+                                        -
+                                    </button>
+                                    <input @input="changeInput(item.num,index)" class=" mui-numbox-input"
+                                        v-model="item.num" type="number" />;
+                                    <button @click="addNum(index)" class="mui-btn mui-numbox-btn-plus" type="button">
+                                        +
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    <!-- </div>
+                </div> -->
+            </tbody>
+        </table>
+        <!-- '提交'按钮 -->
+        <div>
+            <button id="btn_submit" @click="submit" type="button">
+                <span>提交</span>
+            </button>
+        </div>
+    </div>
+</body>
+<script src="../../../reference/mui/js/jquery-2.1.4.js"></script>
+<script src="../../../../../reference/assets/js/jquery.min.js"></script>
+<script src="../../../../../html/reference/mui/js/mui.min.js"></script>
+<script src="../../../../../html/reference/mui/js/mui.picker.min.js"></script>
+<script src="../../../../../reference/vue/vue.js"></script>
+<script src="../../../../../reference/vue/vue.min.js"></script>
+<script src="../../../../../reference/vant/js/vant.min.js"></script>
+<script src="../../../../../html/reference/js/mui.loading.js"></script>
+
+<script>
+    var workNo = localStorage.getItem('workNo');
+    var baseUrl = localStorage.getItem("url");
+    // var baseUrl = "http://v5mealtest.yyhq365.cn/v5meal/";
+    var app = new Vue({
+        el: "#app",
+        data: function () {
+            var _this = this
+            return {
+                user_info: [], //登录人信息
+                declare_list: [], //可选择医用织物分类
+                giveOutDate: "选择时间", //发放时期
+                nowTime: "", //当前日期
+                total: 0, //选择的医用织物总数
+                // deptNo: "",
+            }
+        },
+        methods: {
+            //选择发放时间
+            click_time() {
+                // $(_this).toggleClass("mui-active");
+                dtPicker = new mui.DtPicker({
+                    type: "date",
+                });
+                //selectItems为选中的 日期
+                dtPicker.show(function (selectItems) {
+                    _this.giveOutDate = selectItems.text;//选择日期
+                    console.log(_this.giveOutDate);
+                    _this.nowTime = new Date()
+                    var y = app.nowTime.getFullYear()
+                    var m = app.nowTime.getMonth() + 1
+                    m = m < 10 ? '0' + m : m
+                    var d = app.nowTime.getDate()
+                    d = d < 10 ? '0' + d : d
+                    app.nowTime = y + '-' + m + '-' + d
+                    //判断发放日期和当前日期的大小
+                    app.nowTime < app.giveOutDate || mui.toast('发放日期不能小于当天 !');
+                });
+            },
+            // 获取登录人信息
+            init() {
+                var params = {
+                    keyWord: "",
+                    userNo: workNo,
+                    type: "1",
+                    userName: "",
+                    deptNo: "",
+                    deptName: "",
+                    limit: "10",
+                    offset: "0",
+                };
+                var paramsStr = JSON.stringify(params);
+                $.ajax({
+                    url: baseUrl + "medical/fabric",
+                    type: "post",
+                    data: {
+                        requestParam: paramsStr,
+                    },
+                    headers: {
+                        methodName: "queryUserInfo",
+                        serviceName: "OMMF01",
+                    },
+                    success: function (data) {
+                        _this.user_info = data.data;
+                        var userName = _this.user_info[0].userName;
+                        var deptName = _this.user_info[0].deptName;
+                        deptNo = _this.user_info[0].deptNo;
+                        $(".applicant_name").html(userName);
+                        $(".deptName").html(deptName);
+                        localStorage.setItem("deptNo", deptNo);
+                        localStorage.setItem("userName", userName);
+                        localStorage.setItem("deptName", deptName);
+                        _this.get_declare_list();
+                    },
+                });
+            },
+            // “分类选择”按钮单击事件
+            select_class() {
+                location.href = "../classselected.html"
+            },
+            // 计数器增加事件
+            addNum(index) {
+                var item = app.declare_list[index] //拿到index
+                item.num++
+                app.$set(app.declare_list, index, item)
+
+            },
+            //计数器更改事件
+            changeInput(value, index) {
+                value = Number(value)
+                app.declare_list[index].num = Number(app.declare_list[index].num)
+                var _item = app.declare_list[index];
+                (value > 100 || value < 0) && mui.toast("范围为 0 - 100");
+                value > 100 && (_item.num = 100);
+                value <= 0 && (_item.num = 0);
+                app.$set(app.declare_list, index, _item);
+            },
+            //计数器减少事件
+            redNum(index) {
+                var item = this.declare_list[index]
+                item.num > 0 ? (() => {
+                    item.num--
+                    this.$set(this.declare_list, index, item)
+                })() : mui.toast("最小值为 0 ");
+            },
+            //提交
+            submit() {
+                if (app.giveOutDate == "选择时间") {
+                    mui.toast('请选择时间!');
+                    return;
+                } else if (app.nowTime > app.giveOutDate) {
+                    mui.toast('发放日期不能小于当天 !');
+                    return;
+                }
+                //获取申请总数
+                $.each(this.declare_list, function (index, item) {
+                    app.total += item.num;
+                    console.log(app.total)
+                })
+                //判断其是否为0
+                if (app.total <= 0) {
+                    mui.toast('申请总数量不能为0 !');
+                    return;
+                }
+
+                mui.showLoading("正在提交", "div")
+                var _declare_list = [];
+                //遍历,获取申请的医用织物
+                $.each(this.declare_list, function (index, item) {
+                    item.num == 0 || _declare_list.push(
+                        {
+                            number: item.num,
+                            fabricName: item.fabricName,
+                            fabricNo: item.fabricNo,
+                            fabricModel: item.fabricModel,
+                            fabricSpec: item.fabricSpec,
+                        }
+                    )
+                })
+
+                $.ajax({
+                    url: baseUrl + "medical/fabric",
+                    type: "post",
+                    data: {
+                        requestParam: JSON.stringify(
+                            {
+                                deptName: localStorage.getItem('deptName'),
+                                deptNo: localStorage.getItem('deptNo'),
+                                giveOutDate: app.giveOutDate,
+                                workNo: localStorage.getItem('workNo'),
+                                userName: localStorage.getItem('userName'),
+                                isUrgent: '2',
+                                address: "",
+                                remark: "",
+                                fabricInfo: _declare_list
+                            }
+                        )
+                    },
+                    headers: {
+                        methodName: 'saveApplicationInfo',
+                        serviceName: "OMMFApplication"
+                    },
+                    success: function (data) {
+                        mui.hideLoading();
+                        if (data.statusCode != 0 && data.statusCode != 199) {
+                            mui.toast(data.msg);
+                            return;
+                        }
+                        if (data.statusCode == 0) {
+                            mui.toast('提交成功!');
+                            setTimeout(function () {
+                                location.href = "./historyList.html";
+                            }, 1000)
+                        } else if (data.respCode == 199) {
+                            mui.toast(data.respMsg + "，请补签！");
+                            setTimeout(function () {
+                                location.href = "../menuAPP.html";
+                            }, 2000);
+                        }
+                    }
+                });
+
+            },
+            // 获取被服基本信息,表格中的list数据
+            get_declare_list() {
+                mui.showLoading("正在加载", "div");
+                var param = {
+                    deptNo: localStorage.getItem("deptNo"),
+                    limit: "20",
+                    offset: "0"
+                }
+                $.ajax({
+                    type: "post",
+                    url: baseUrl + "medical/fabric",
+                    data: {
+                        requestParam: JSON.stringify(param)
+                    },
+                    headers: {
+                        methodName: 'queryUsualFabric',
+                        serviceName: "OMMFApplication"
+                    },
+                    success: function (data) {
+                        mui.hideLoading();
+                        if (data.statusCode != "0") {
+                            mui.toast(data.msg);
+                            return;
+                        }
+                        app.declare_list = data.data;
+                        console.log(app.declare_list)
+                        //计数器数量初始化为0
+                        $.each(app.declare_list, function (index, item) {
+                            console.log(app.declare_list)
+                            item.num = 0;
+                            app.declare_list[index].num = 0;
+                            console.dir(app.declare_list[index].num)
+
+                        })
+                        if (app.declare_list.length == 0) {
+                            mui.toast("当前没有数据！");
+                            return;
+                        }
+                    }
+                });
+            },
+            //左上角返回事件
+            back() {
+                location.href = "./historyList.html"
+            },
+        },
+        created() {
+            _this = this
+            this.init();
+
+        },
+    });
+
+    //单击展示或收起申请内容表单
+    $(function () {
+        $("#toggle").click(function () {
+            $(this).text($(".content").is(":hidden") ? "收起" : "展开");
+            $(".content").slideToggle();
+        });
+    });
+
+    //滚动
+    // mui(".mui-scroll-wrapper").scroll({
+    //     scrollY: true, //是否竖向滚动
+    //     scrollX: false, //是否横向滚动
+    //     startX: 0, //初始化时滚动至x
+    //     startY: 0, //初始化时滚动至y
+    //     indicators: true, //是否显示滚动条
+    //     deceleration: 0.0006, //阻尼系数,系数越小滑动越灵敏
+    //     bounce: true, //是否启用回弹
+    // });
+</script>
+
+</html>

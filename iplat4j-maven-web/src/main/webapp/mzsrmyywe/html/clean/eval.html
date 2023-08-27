@@ -1,0 +1,249 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+<!--   <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'"> -->
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="stylesheet" href="../../reference/bootstrap-3.3.5/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="../../reference/bootstrap-3.3.5/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="../../reference/bootstrap-3.3.5/css/fontawesome-stars.css"/>
+  <link rel="stylesheet" href="../../reference/bootstrap-3.3.5/css/font-awesome.min.css"/>
+  <link rel="stylesheet" href="../../css/android-ios.css">
+  <link rel="stylesheet" href="../../css/loading.css"/>
+  <link rel="stylesheet" href="css/colorGreen.css">
+</head>
+<STYLE TYPE="text/css">
+
+.br-theme-fontawesome-stars .br-widget a{
+  padding: 0.8rem;
+}
+
+hr {
+  margin-top: 0px;
+  margin-bottom: -9px;
+}
+
+h3 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.navbar {
+  margin-bottom: 0px;
+}
+.col-lg-5, .col-md-5, .col-sm-5, .col-xs-5 {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+body {
+  background-color: #FFFCF5;
+}
+h1 {
+  margin: 0 0 0rem;
+}
+.row {
+  margin-right: 0px;
+  margin-left: 0px;
+}
+</STYLE>
+<body>
+  <div>
+    <nav class="navbar navbar-fixed-top navbar-inverse nav-height">
+      <div id="back" class="glyphicon-btn-left">
+        <span class="glyphicon glyphicon-triangle-left userBtn" style="margin-left:1rem;"></span>
+      </div>
+      <div style="float:right;">
+        <ul class="nav nav-pills ul-btn-right">
+          <li><a id="submit" href="#" style="color:#FFFFFF;">提交</a></li>
+        </ul>
+      </div>
+      <div>
+        <h1 class="title-middle">评价</h1>
+      </div>
+      
+    </nav>
+  </div>
+
+  <div id="warn" class="warn" hidden>
+    <small></small>
+  </div>
+
+  <div id="loading" class="spinner" style="position:fixed;z-index:9999;text-align:center;width:100%;">
+    <div class="bounce1"></div>
+    <div class="bounce2"></div>
+    <div class="bounce3"></div>
+  </div>
+  
+  <div id="content" class="top50">
+  </div>
+  
+</body>
+<script src="../../reference/bootstrap-3.3.5/js/jquery-2.1.4.js" type="text/javascript"></script>
+<script src="../../reference/bootstrap-3.3.5/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../../reference/bootstrap-3.3.5/js/jquery.barrating.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var url = location.search;
+    var taskNo = url.substring(1, url.length);
+    var workNo = localStorage.getItem("workNo");
+    var baseUrl = localStorage.getItem("url");
+
+    $(function() {
+      //初始化页面数据
+      $.ajax({
+        url: baseUrl + 'app_maintainController.do?getTaskStaff',
+        type: 'post',
+        data: {
+          taskNo: taskNo
+        },
+        timeout: 30000,
+        success: function(data) {
+          var taskList = "";
+          var data = eval("(" + data + ")");
+          if (data.respCode != "200") {
+            $("#warn small").html(data.respMsg);
+            $("#warn").fadeIn(500);
+            setTimeout("$('#warn').fadeOut(500)", 3000);
+            return;
+          }
+          var list = new Array();
+          list = data.obj;
+          var name = "";
+          var workNo = "";
+          var pic = "";
+          for (var i = 0; i < list.length; i++) {
+            name = list[i].name;
+            workNo = list[i].workNo;
+            pic = list[i].pic;
+            if(pic==""){
+              pic = "img/worker.jpg";
+            }else{
+              pic = "data:image/png;base64," + pic;
+            }
+            taskList += createHtml(name, workNo, pic);
+          }
+          $("#content").html(taskList);
+
+          $('.eval').barrating({
+            theme: 'fontawesome-stars',
+            showSelectedRating: false,
+            initialRating: '8'
+          });
+
+          $("#loading").hide();
+        },
+        complete: function(XMLHttpRequest, status) { //请求完成后最终执行参数
+          　　　　
+          if (status == 'timeout') {
+            $("#loading").hide();
+            $('#warn small').html('加载失败！');
+            $("#warn").fadeIn(500);　　　　
+          } else if (status == 'error') {
+            $("#loading").hide();
+            $('#warn small').html('请求异常！');
+            $("#warn").fadeIn(500);
+          }　
+        }
+      });
+    });
+
+    function createHtml(name, workNo, pic) {
+      html = "<div class='form-group row'><div style='width:100%;text-align:center;padding-top:20px;'>";
+      //html += "<img src='../../img/boom.jpg' class='img-circle' style='width:50%;height:auto;'></div>";
+      html += "<img src='" + pic + "' class='img-circle' style='width:50%;height:auto;'></div>";
+      html += "<ul id='" + workNo + "'class='list-group'><li class='list-group-item' style='background-color:#D1D1D1;border-color: #D1D1D1;line-height:17px;color:#FFFFFF;'><span class='badge' style='background-color:#D1D1D1;color:#FFFFFF;'></span>" + name + "</li></ul>";
+      html += "<div class='col-xs-4 col-sm-4 col-md-4 col-lg-4' style='text-align:right;'>仪容仪表</div>";
+      html += "<div class='col-xs-5 col-sm-5 col-md-5 col-lg-5' style='text-align:center;'><select class='eval evalApearance' name='rating' onchange='hehe(this)'><option value=''></option><option value='4'>差</option><option value='6'>一般</option><option value='8'>满意</option></select></div>";
+      html += "<div class='col-xs-3 col-sm-3 col-md-3 col-lg-3'>满意</div>";
+
+      html += "<div class='col-xs-4 col-sm-4 col-md-4 col-lg-4' style='text-align:right;'>服务态度</div>";
+      html += "<div class='col-xs-5 col-sm-5 col-md-5 col-lg-5' style='text-align:center;'><select class='eval evalAttitude' name='rating' onchange='hehe(this)'><option value=''></option><option value='4'>差</option><option value='6'>一般</option><option value='8'>满意</option></select></div>";
+      html += "<div class='col-xs-3 col-sm-3 col-md-3 col-lg-3'>满意</div>";
+
+      html += "<div class='col-xs-4 col-sm-4 col-md-4 col-lg-4' style='text-align:right;'>维修质量</div>";
+      html += "<div class='col-xs-5 col-sm-5 col-md-5 col-lg-5' style='text-align:center;'><select class='eval evalQuality' name='rating' onchange='hehe(this)'><option value=''></option><option value='4'>差</option><option value='6'>一般</option><option value='8'>满意</option></select></div>";
+      html += "<div class='col-xs-3 col-sm-3 col-md-3 col-lg-3'>满意</div>";
+
+      html += "<div class='col-xs-4 col-sm-4 col-md-4 col-lg-4' style='text-align:right;'>维修及时性</div>";
+      html += "<div class='col-xs-5 col-sm-5 col-md-5 col-lg-5' style='text-align:center;'><select class='eval evalTimeliness' name='rating' onchange='hehe(this)'><option value=''></option><option value='4'>差</option><option value='6'>一般</option><option value='8'>满意</option></select></div>";
+      html += "<div class='col-xs-3 col-sm-3 col-md-3 col-lg-3'>满意</div></div>";
+
+      return html;
+    }
+
+    function hehe(_this) {
+      var index = _this.selectedIndex;
+      var text = _this.options[index].text;
+      //console.log(_this.parentNode.parentNode.nextElementSibling);
+      _this.parentNode.parentNode.nextElementSibling.innerHTML = text;
+    }
+
+    //返回
+    $("#back").click(function() {
+      location.href = "taskList.html";
+    });
+
+    $("#submit").click(function() {
+      var result = [];
+      var evalApearance = "";
+      var evalAttitude = "";
+      var evalQuality = "";
+      var evalTimeliness = "";
+      var stop = 0;
+      $("#content div.form-group").each(function(index, element) {
+        evalApearance = $(this).find('select.evalApearance').val();
+        evalAttitude = $(this).find('select.evalAttitude').val();
+        evalQuality = $(this).find('select.evalQuality').val();
+        evalTimeliness = $(this).find('select.evalTimeliness').val();
+        if (evalApearance == "" || evalAttitude == "" || evalQuality == "" || evalTimeliness == "") {
+
+          stop = 1;
+        }
+        result[index] = {
+          "workNo": $(this).find('ul').attr('id'),
+          "evalApearance": $(this).find('select.evalApearance').val(),
+          "evalAttitude": $(this).find('select.evalAttitude').val(),
+          "evalQuality": $(this).find('select.evalQuality').val(),
+          "evalTimeliness": $(this).find('select.evalTimeliness').val()
+        };
+
+      });
+      if (stop == 1) {
+        $("#warn small").html("所有评价不能为空");
+        $("#warn").fadeIn(500);
+        setTimeout("$('#warn').fadeOut(500)", 3000);
+        return;
+      }
+      var json = JSON.stringify(result);
+
+      $.ajax({
+        url: baseUrl + 'app_maintainController.do?eval',
+        type: 'post',
+        data: {
+          taskNo: taskNo,
+          workNo: workNo,
+          json: json
+        },
+        timeout: 30000,
+        success: function(data) {
+          var data = eval("(" + data + ")");
+          alert(data.respCode);
+        },
+        complete: function(XMLHttpRequest, status) { //请求完成后最终执行参数
+          　　　　
+          if (status == 'timeout') {
+            $("#loading").hide();
+            $('#warn small').html('请求超时！');
+            $("#warn").fadeIn(500);　　　　
+          } else if (status == 'error') {
+            $("#loading").hide();
+            $('#warn small').html('网络异常！');
+            $("#warn").fadeIn(500);
+          }　
+        }
+      });
+    });
+
+</script>
+</html>

@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="CPDJ01">
+	<select id="query" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.cp.domain.CpBill">
+		SELECT
+		t1.id AS "id",
+		t1.bill_no AS "billNo",
+		t1.rec_creator AS "recCreator",
+		t1.rec_create_name AS "recCreateName",
+		DATE_FORMAT(t1.rec_create_time,"%Y-%m-%d") AS "recCreateTime",
+		t1.rec_revisor AS "recRevisor",
+		t1.rec_revise_name AS "recReviseName",
+		t1.rec_revise_time AS "recReviseTime",
+		t1.complaint_date AS "complaintDate",
+		t1.complaint_name AS "complaintName",
+		t1.complaint_phone AS "complaintPhone",
+		t1.complaint_dept AS "complaintDept",
+		t1.complaint_email AS "complaintEmail",
+		t1.complaint_type AS "complaintType",
+		t1.complaint_way AS "complaintWay",
+		t1.complaint_content AS "complaintContent",
+		t1.tesk_eval AS "teskEval",
+		t1.dept_name AS deptName,
+		t1.dept_num AS deptNum,
+		CASE  t1.status_code
+		WHEN '0'THEN '新建'
+		WHEN '00'THEN '待分配'
+		WHEN '1'THEN '待处理'
+		WHEN '2'THEN '待回访'
+		WHEN '3'THEN '待评价'
+		WHEN '4'THEN '已结束'
+		WHEN '5'THEN '作废'
+		END  AS  "statusCode"
+		FROM
+		cp_bill t1
+		LEFT JOIN cp_file t01 ON t1.bill_no = t01.bill_no
+		WHERE t1.status_code IN ('0','00','5')
+		<isNotEmpty prepend=" AND " property="statusCode">
+			t1.status_code = #statusCode#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="recCreator">
+			t1.rec_creator = #recCreator#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="billNo">
+			t1.bill_no like concat('%',#billNo#,'%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="complaintName">
+			t1.complaint_name like concat('%',#complaintName#,'%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="complaintDept">
+			t1.complaint_dept like concat('%',#complaintDept#,'%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="complaintContent">
+			t1.complaint_content like concat('%',#complaintContent#,'%')
+		</isNotEmpty>
+
+<!--		<isNotEmpty prepend=" AND " property="recCreator">-->
+<!--			t1.rec_creator like concat('%',#recCreator#,'%')-->
+<!--		</isNotEmpty>-->
+
+		<!--<isNotEmpty prepend=" AND " property="complaintName">
+			t1.complaint_name like concat('%',#{complaintName}#,'%')
+		</isNotEmpty>-->
+
+		<isNotEmpty prepend=" AND " property="complaintDateS">
+			date_format(t1.complaint_date,'%Y-%m-%d') >= #complaintDateS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="complaintDateE">
+			date_format(t1.complaint_date,'%Y-%m-%d') <![CDATA[<=]]> #complaintDateE#
+		</isNotEmpty>
+        group by t1.bill_no
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT t1.id
+		FROM
+			cp_bill t1
+		LEFT JOIN cp_file t01 ON t1.bill_no = t01.bill_no
+		WHERE 1 = 1
+		<isEqual prepend="AND" property="labor" compareValue="labor">
+			t1.status_code IN ('00')
+		</isEqual>
+
+		<isEqual prepend="AND" property="labor" compareValue="user">
+			t1.status_code IN ('0','00','5')
+		</isEqual>
+
+		<isNotEmpty prepend=" AND " property="id">
+			t1.id = #id#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="recCreator">
+			t1.rec_creator = #recCreator#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="billNo">
+			t1.bill_no like concat('%',#billNo#,'%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="complaintName">
+			t1.complaint_name like concat('%',#complaintName#,'%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="complaintDept">
+			t1.complaint_dept like concat('%',#complaintDept#,'%')
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="complaintContent">
+			t1.complaint_content like concat('%',#complaintContent#,'%')
+		</isNotEmpty>
+
+		<!--		<isNotEmpty prepend=" AND " property="recCreator">-->
+		<!--			t1.rec_creator like concat('%',#recCreator#,'%')-->
+		<!--		</isNotEmpty>-->
+
+		<!--<isNotEmpty prepend=" AND " property="complaintName">
+			t1.complaint_name like concat('%',#{complaintName}#,'%')
+		</isNotEmpty>-->
+
+		<isNotEmpty prepend=" AND " property="complaintDateS">
+			date_format(t1.complaint_date,'%Y-%m-%d') >= #complaintDateS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="complaintDateE">
+			date_format(t1.complaint_date,'%Y-%m-%d') <![CDATA[<=]]> #complaintDateE#
+		</isNotEmpty>
+	</select>
+
+	<select id="queryId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		t1.id AS "id",
+		t1.bill_no AS "billNo",
+		t1.rec_creator AS "recCreator",
+		t1.rec_create_name AS "recCreateName",
+		t1.rec_create_time AS "recCreateTime",
+		t1.rec_revisor AS "recRevisor",
+		t1.rec_revise_name AS "recReviseName",
+		t1.rec_revise_time AS "recReviseTime",
+		t1.status_code AS "statusCode",
+		t1.complaint_date AS "complaintDate",
+		t1.complaint_name AS "complaintName",
+		t1.complaint_phone AS "complaintPhone",
+		t1.complaint_dept AS "complaintDept",
+		t1.complaint_email AS "complaintEmail",
+		t1.complaint_type AS "complaintType",
+		t1.complaint_way AS "complaintWay",
+		t1.complaint_content AS "complaintContent",
+		t1.tesk_eval AS "teskEval",
+		t1.dept_name AS deptName,
+		t1.dept_num AS deptNum,
+		CASE  t1.status_code
+		WHEN '0'THEN '新建'
+		WHEN '1'THEN '待处理'
+		WHEN '2'THEN '待回访'
+		WHEN '3'THEN '待评价'
+		WHEN '4'THEN '已结束'
+		WHEN '5'THEN '作废'
+		END  AS "statusCode"     <!-- 合同状态 -->
+		FROM
+		cp_bill t1
+		LEFT JOIN cp_file t01 ON t1.bill_no = t01.bill_no
+		WHERE
+		t1.id = #id#
+	</select>
+
+
+	<select id="getUserRole" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select
+			ifnull(GROUP_CONCAT(xug.GROUP_ENAME),'') roles,
+			ifnull(GROUP_CONCAT(xug.GROUP_CNAME),'') roleNames
+		from ${platSchema}.xs_user_group xug
+				 left join ${platSchema}.xs_user_group_member xugm on xug.ID = xugm.PARENT_ID
+				 left join ${platSchema}.xs_user xu on xu.USER_ID = xugm.MEMBER_ID
+				 left join ${platSchema}.txsog03 o3 on xug.ID = o3.USER_GROUP_ID
+				 left join ${platSchema}.txsog01 o1 on o3.ORG_ID = o1.ORG_ID
+		where (o1.IS_DELETED = '0' or o1.IS_DELETED is null) and xu.LOGIN_NAME = #workNo#
+	</select>
+
+	<insert id="insert">
+		INSERT INTO cp_bill (
+			id,
+			bill_no,
+			rec_creator,
+			rec_create_name,
+			rec_create_time,
+			rec_revisor,
+			rec_revise_name,
+			rec_revise_time,
+			status_code,
+			complaint_date,
+			complaint_name,
+			complaint_phone,
+			complaint_dept,
+			complaint_email,
+			complaint_type,
+			complaint_way,
+			complaint_content,
+			tesk_eval,
+		    work_no
+		)
+		VALUES
+			(
+				#id#,
+				#billNo#,
+				#recCreator#,
+				#recCreateName#,
+				now(),
+				#recRevisor#,
+				#recReviseName#,
+				#recReviseTime#,
+				#statusCode#,
+				#complaintDate#,
+				#complaintName#,
+				#complaintPhone#,
+				#complaintDept#,
+				#complaintEmail#,
+				#complaintType#,
+				#complaintWay#,
+				#complaintContent#,
+				#teskEval#,
+			    #workNo#
+			)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM .cp_bill WHERE
+			id = #id#
+	</delete>
+
+	<delete id="deletePic">
+		DELETE FROM cp_file WHERE bill_no = #billNo#
+	</delete>
+
+	<update id="update">
+		UPDATE
+			cp_bill
+		SET
+		rec_revisor	= #recRevisor#,   <!-- 修改人工号 -->
+		rec_revise_name	= #recReviseName#,   <!-- 修改人名字 -->
+		rec_revise_time	= now(),   <!-- 修改时间 -->
+		complaint_date	= #complaintDate#,   <!-- 投诉日期 -->
+		complaint_name	= #complaintName#,   <!-- 投诉人名字 -->
+		complaint_phone	= #complaintPhone#,   <!-- 投诉人电话 -->
+		complaint_dept	= #complaintDept#,   <!-- 投诉人的部门 -->
+		complaint_email	= #complaintEmail#,   <!-- 投诉人邮箱 -->
+		complaint_type	= #complaintType#,   <!-- 投诉所属类型，监管类，病床类，患者类 -->
+		complaint_way	= #complaintWay#,   <!-- 投诉方式，电话，信访，来访 -->
+		complaint_content	= #complaintContent#,   <!-- 投诉内容 -->
+		tesk_eval	= #teskEval#,  <!-- 评价等级 （5很满意、4满意、3一般、2较差、1很差) -->
+		status_code = #statusCode#,
+		dept_num = #deptNum#,
+		dept_name = #deptName#
+		WHERE
+		id = #id#
+	</update>
+	<!-- 提交 -->
+	<update id="examine" parameterClass="java.util.HashMap">
+		UPDATE
+			cp_bill
+		SET
+			status_code = '00'
+		WHERE
+			id = #id#
+	</update>
+
+
+	<update id="invalid" parameterClass="java.util.HashMap">
+		UPDATE
+			cp_bill
+		SET
+			status_code = '5'
+		WHERE
+			id = #id#
+	</update>
+
+
+	<update id="obsolete" parameterClass="java.util.HashMap">
+		UPDATE
+			cp_bill t1
+		SET
+			status_code = '5'
+		WHERE
+			t1.bill_no = #billNo#
+	</update>
+
+	<update id="updateWXGD" parameterClass="java.util.HashMap">
+		update  cp_bill
+		set
+			tesk_eval = #teskEval#,
+			evaluate_content = #evaluateContent#,
+			status_code = '4'
+		where
+			bill_no=#billNo#
+	</update>
+
+
+
+
+	<!-- 查询图片信息 -->
+	<select id="showPic" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+		    id,
+			bill_no AS "billNo",
+			file_name AS "fileName",
+			file_id AS "fileId",
+			file_url AS "path"
+		from cp_file
+		where 1=1
+		  and
+			bill_no = #billNo#
+
+	</select>
+
+	<!-- 保存图片信息 -->
+	<insert id="insertPic" parameterClass="java.util.HashMap">
+		insert into cp_file(
+			id,rec_revisor,rec_revise_time,bill_no,file_name,file_url,file_id)
+			value (#id#,#recRevisor#,#recReviseTime#,#billNo#,#fileName#,#path#,#docId#)
+	</insert>
+
+
+	<!-- 查询科室信息 -->
+	<select id="queryDeptName" parameterClass="java.util.Map" resultClass="com.baosight.wilp.cp.dj.domain.CPDJ01">
+		select
+			dept_num deptNum,
+			dept_name deptName
+		from ${projectSchema}.ac_department
+		where 1=1
+	</select>
+
+	<update id="revocation" parameterClass="java.util.HashMap">
+		update cp_bill
+		set status_code = '0'
+		where bill_no = #billNo#
+	</update>
+
+	<update id="updateCLKS" parameterClass="java.util.HashMap">
+		update  cp_bill
+		set
+			dept_name = #deptName#,
+			dept_num = #deptNum#,
+			status_code = '4'
+		where
+			id=#id#
+	</update>
+
+	<!-- 查询科室信息 -->
+	<select id="queryNumAndName" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select
+			dept_num deptNum,
+			dept_name deptName
+		from ${projectSchema}.ac_department
+		where status = '1'
+	</select>
+
+	<!-- 检查科室信息 -->
+	<select id="queryDeptNamegzf" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select
+			dept_name deptName
+		from ${projectSchema}.ac_department
+		where dept_name  = #deptName#
+	</select>
+
+	<!-- 查询科室信息和人员姓名 -->
+	<select id="queryDepts" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select
+			b.dept_num deptNum,
+			b.dept_name deptName,
+		    a.name complaintName
+		from ${projectSchema}.ac_personnel a
+		left join ${projectSchema}.ac_department b on b.id = a.dept_id
+		where work_no  = #workNo#
+	</select>
+
+	<select id="queryDeptByRole" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT DISTINCT
+			ad.dept_num AS "deptNum",
+			ad.dept_name AS "deptName"
+		FROM ${platSchema}.`xs_user_group` xug
+		LEFT JOIN ${platSchema}.`xs_user_group_member` xugm ON xug.ID = xugm.PARENT_ID
+		LEFT JOIN ${platSchema}.`xs_user` xu ON xu.USER_ID = xugm.MEMBER_ID
+		LEFT JOIN ${projectSchema}.ac_personnel ap ON ap.work_no = xu.LOGIN_NAME
+		LEFT JOIN ${projectSchema}.ac_department ad ON ad.id = ap.dept_id
+		WHERE xug.GROUP_ENAME = #role#
+		<isNotEmpty prepend="and" property="workNo">
+			ap.work_no = #workNo#
+		</isNotEmpty>
+	</select>
+
+	<!-- 查询短信发送人 -->
+	<select id="queryManByRole" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select DISTINCT
+			work_no AS "workNo",
+			work_name AS "workName"
+		from
+			cp_worker_bind_dept
+		where
+			1 = 1
+		<isNotEmpty prepend="and" property="deptName">
+			dept_name = #deptName#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="deptNo">
+			dept_no = #deptNo#
+		</isNotEmpty>
+	</select>
+
+	<!-- 查询当前科室处理人 -->
+</sqlMap>

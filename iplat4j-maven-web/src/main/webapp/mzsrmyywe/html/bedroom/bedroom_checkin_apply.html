@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>入住申请</title>
+  <link rel="stylesheet" href="../../reference/vant/css/index.css" />
+  <link rel="stylesheet" href="../../reference/mui/css/mui.css" />
+</head>
+<style>
+  #app {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  [v-cloak] {
+    display: none !important;
+  }
+
+  .bed-checkin-apply-header {
+    width: 100%;
+    height: 50px;
+    padding: 15px 0;
+    z-index: 99;
+    background-color: #fff;
+  }
+
+  .back {
+    float: left;
+    margin: 0 15px;
+    color: #3eacdb;
+    font-size: 14px;
+    line-height: 30px;
+  }
+
+  .title {
+    text-align: center;
+    color: black;
+    font-size: 20px;
+    width: 200px;
+    margin: 0 auto;
+    line-height: 30px;
+    font-weight: 600;
+  }
+
+  .bed-checkin-apply-content {
+    flex: 0.8;
+    justify-content: center;
+    display: flex;
+  }
+
+  .van-cell-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+
+  .van-cell {
+    padding: 10px 15px;
+  }
+
+  .popup-box {
+    position: relative;
+    margin-bottom: 45px;
+  }
+
+  .choose-sure {
+    position: fixed;
+    bottom: 0;
+    letter-spacing: 2px;
+    width: 100%;
+    height: 45px;
+    background-color: #169bd5;
+    color: #fff;
+    font-size: 18px;
+  }
+
+  .bed-checkin-apply-bottom-tips {
+    display: flex;
+    color: black;
+    font-size: 16px;
+    font-weight: 800;
+    padding: 20px 15px;
+  }
+
+  .van-field__label {
+    font-weight: 600;
+  }
+
+  .bottom-left {
+    padding-right: 5px;
+  }
+
+  .bottom-right {
+    flex: 1;
+  }
+
+  .bed-checkin-apply-bottom-btn {
+    text-align: center;
+    margin: 20px;
+  }
+
+  .submit-btn {
+    color: #fff;
+    background-color: #169bd5;
+    width: 150px;
+    height: 50px;
+    border-radius: 7px;
+  }
+</style>
+
+<body>
+  <div id="app" v-cloak>
+    <!-- 选择科室弹出层 -->
+    <!-- <van-popup position="bottom" :style="{ height: '60%' }" v-model="dept_show" lazy-render="true">
+      <div>
+        <van-search v-model="dept_search_value" show-action placeholder="请输入搜索关键词" @search="onSearch">
+          <template #action>
+            <div @click="onSearch">搜索</div>
+          </template>
+        </van-search>
+      </div>
+      <div class="popup-box">
+        <van-loading size="30px" vertical v-show="loading_ifShow">加载中...</van-loading>
+        <van-radio-group v-model="dept_radio">
+          <van-cell-group>
+            <van-cell v-for="(item, index) in dept_list" :key="item" :title="item.deptName" clickable
+              @click="dept_click(item)">
+              <template #right-icon>
+                <van-radio :name="item" />
+              </template>
+            </van-cell>
+          </van-cell-group>
+        </van-radio-group>
+      </div>
+      <van-button @click="dept_sure()" class="choose-sure">确定</van-button>
+    </van-popup> -->
+    <!-- 选择性别弹出层 -->
+    <van-popup position="bottom" :style="{ height: '40%' }" v-model="sex_show" lazy-render="true">
+      <div class="popup-box">
+        <van-radio-group v-model="sex_radio">
+          <van-cell-group>
+            <van-cell v-for="(item, index) in sex_list" :key="item" :title="item" clickable @click="sex_click(item)">
+              <template #right-icon>
+                <van-radio :name="item" />
+              </template>
+            </van-cell>
+          </van-cell-group>
+        </van-radio-group>
+      </div>
+      <van-button @click="sex_sure()" class="choose-sure">确定</van-button>
+    </van-popup>
+    <!-- 选择人员类型弹出层 -->
+    <van-popup position="bottom" :style="{ height: '60%' }" v-model="person_type_show" lazy-render="true">
+      <div>
+      </div>
+      <div class="popup-box">
+        <van-loading size="30px" vertical v-show="loading_ifShow">加载中...</van-loading>
+        <van-radio-group v-model="person_type_radio">
+          <van-cell-group>
+            <van-cell v-for="(item, index) in person_type_list" :key="item" :title="item.typeName" clickable
+              @click="person_type_click(item)">
+              <template #right-icon>
+                <van-radio :name="item" />
+              </template>
+            </van-cell>
+          </van-cell-group>
+        </van-radio-group>
+      </div>
+      <van-button @click="person_type_sure()" class="choose-sure">确定</van-button>
+    </van-popup>
+    <!-- 是否已婚弹出层 -->
+    <van-popup position="bottom" :style="{ height: '40%' }" v-model="marry_show" lazy-render="true">
+      <div class="popup-box">
+        <van-radio-group v-model="marry_radio">
+          <van-cell-group>
+            <van-cell v-for="(item, index) in marry_list" :key="item" :title="item" clickable
+              @click="marry_click(item)">
+              <template #right-icon>
+                <van-radio :name="item" />
+              </template>
+            </van-cell>
+          </van-cell-group>
+        </van-radio-group>
+      </div>
+      <van-button @click="marry_sure()" class="choose-sure">确定</van-button>
+    </van-popup>
+    <!-- 选择学年弹出层 -->
+    <van-popup position="bottom" :style="{ height: '40%' }" v-model="school_year_show" lazy-render="true">
+      <div class="popup-box">
+        <van-radio-group v-model="school_year_radio">
+          <van-cell-group>
+            <van-cell v-for="(item, index) in school_year_list" :key="item" :title="item" clickable
+              @click="school_year_click(item)">
+              <template #right-icon>
+                <van-radio :name="item" />
+              </template>
+            </van-cell>
+          </van-cell-group>
+        </van-radio-group>
+      </div>
+      <van-button @click="school_year_sure()" class="choose-sure">确定</van-button>
+    </van-popup>
+    <!-- 选择开学日期弹出层 -->
+    <van-popup position="bottom" :style="{ height: '50%' }" v-model="begin_time_show" lazy-render="true">
+      <div class="popup-box">
+        <van-datetime-picker @confirm="begin_time_confirm" @cancel="begin_time_cancel" v-model="currentDate" type="date"
+          title="选择年月日" :min-date="minDate" :max-date="maxDate" />
+      </div>
+    </van-popup>
+    <!-- 选择退房日期弹出层 -->
+    <van-popup position="bottom" :style="{ height: '50%' }" v-model="checkout_time_show" lazy-render="true">
+      <div class="popup-box">
+        <van-datetime-picker @confirm="checkout_time_confirm" @cancel="checkout_time_cancel" v-model="currentDate"
+          type="date" title="选择年月日" :min-date="minDate" :max-date="maxDate" />
+      </div>
+    </van-popup>
+    <!-- 选择入住日期弹出层 -->
+    <van-popup position="bottom" :style="{ height: '50%' }" v-model="checkin_time_show" lazy-render="true">
+      <div class="popup-box">
+        <van-datetime-picker @confirm="checkin_time_confirm" @cancel="checkin_time_cancel" v-model="currentDate"
+          type="date" title="选择年月日" :min-date="minDate" :max-date="maxDate" />
+      </div>
+    </van-popup>
+    <div class="bed-checkin-apply-header">
+      <span class="back" @click="back()">返回</span>
+      <div class="title">入住申请</div>
+    </div>
+    <div class="mui-scroll-wrapper" style="top: 60px;">
+      <div class="mui-scroll">
+        <div class="bed-checkin-apply-content">
+          <van-form @submit="onSubmit">
+            <van-cell-group>
+              <van-field v-model="choose_dept_name" name="choose_dept_name" @click="dept_show_popup()" required
+                label="科室(专业)" placeholder="请选择科室" clickable readonly :rules="[
+                { required: true, message: '请选择科室', trigger: 'onSubmit' }
+              ]" />
+              </van-field>
+              <van-field v-model="choose_name" name="choose_name" label="姓名" placeholder="请填写姓名" clickable />
+              </van-field>
+              <van-field v-model="choose_workNO" name="choose_workNO" label="学号/工号" placeholder="请填写学号/工号" clickable />
+              </van-field>
+              <van-field v-model="choose_idNO" name="choose_idNO" label="身份证号" placeholder="请填写身份证号" required clickable
+                :rules="[
+              { required: true, message: '请填写身份证号', trigger: 'onSubmit' }
+            ]" />
+              </van-field>
+              <van-field v-model="choose_age" name="choose_age" label="年龄" placeholder="请输入年龄" required clickable
+                :rules="[
+              { required: true, message: '请填写年龄', trigger: 'onSubmit' }
+            ]" />
+              </van-field>
+              <van-field v-model="choose_sex" name="choose_sex" @click="sex_show_popup()" required label="性别"
+                placeholder="请选择性别" readonly clickable :rules="[
+                { required: true, message: '请选择性别', trigger: 'onSubmit' }
+              ]" />
+              </van-field>
+              <van-field v-model="choose_person_type" name="choose_person_type" @click="person_type_show_popup()"
+                required label="人员类型" placeholder="请选择人员类型" clickable :rules="[
+                { required: true, message: '请选择人员类型', trigger: 'onSubmit' }
+              ]" />
+              </van-field>
+              <van-field v-model="choose_marry" name="choose_marry" @click="marry_show_popup()" required label="是否已婚"
+                placeholder="请选择是否已婚" clickable readonly :rules="[
+                { required: true, message: '请选择是否已婚', trigger: 'onSubmit' }
+              ]" />
+              </van-field>
+              <van-field v-model="choose_school_year" name="choose_school_year" @click="school_year_show_popup()"
+                label="学年" placeholder="请选择学年" clickable readonly />
+              </van-field>
+              <van-field v-model="choose_tel" name="choose_tel" type="tel" required label="联系电话" placeholder="请选择输入联系电话"
+                clickable :rules="[
+                { required: true, message: '请填写联系电话', trigger: 'onSubmit' },
+                { pattern: /^1[3456789]\d{9}$/, message: '手机号码格式错误！'}
+              ]" />
+              </van-field>
+              <van-field v-model="choose_begin_time" name="choose_begin_time" @click="begin_time_show_popup()" required
+                label="入职(开学)时间" placeholder="请选择时间" clickable readonly :rules="[
+                { required: true, message: '请选择入职(开学)时间', trigger: 'onSubmit' }
+              ]" />
+              </van-field>
+              <van-field v-model="choose_checkin_time" name="choose_checkin_time" @click="checkin_time_show_popup()"
+                required label="预计入住时间" placeholder="请选择时间" clickable readonly :rules="[
+                { required: true, message: '请选择预计入住时间', trigger: 'onSubmit' }
+              ]" />
+              </van-field>
+              <van-field v-model="choose_checkout_time" name="choose_checkout_time" @click="checkout_time_show_popup()"
+                required label="预计退房时间" placeholder="请选择时间" clickable readonly :rules="[
+                { required: true, message: '请选择预计退房时间', trigger: 'onSubmit' }
+              ]" />
+              </van-field>
+              <van-field v-model="choose_reason" name="choose_reason" type="textarea" autosize="{ maxHeight: 20 }，"
+                label=" 申请住房原因" placeholder="请输入原因" clickable />
+              </van-field>
+            </van-cell-group>
+
+            <div class="bed-checkin-apply-bottom-tips">
+              <div class="bottom-left">流程提示:</div>
+              <div class="bottom-right">
+                <div v-for="(item,index) in tips" :key="index">{{item.noticeNo}}.{{item.notice}}</div>
+              </div>
+            </div>
+            <div class="bed-checkin-apply-bottom-btn">
+              <van-button class="submit-btn" native-type="submit">提交申请</van-button>
+            </div>
+        </div>
+        </van-form>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="../../reference/vue/vue.js"></script>
+<script src="../../reference/vant/js/vant.min.js"></script>
+<script src="../../reference/js/jquery-2.1.4.js"></script>
+<script src="../../reference/mui/js/mui.js"></script>
+<script>
+  var app = new Vue({
+    el: "#app",
+    data() {
+      return {
+        baseUrl: localStorage.getItem("url"),
+        choose_dept_name: localStorage.getItem("deptName"),
+        choose_dept_no: "",
+        choose_name: localStorage.getItem("name"),
+        choose_workNO: localStorage.getItem("workNo"),
+        choose_idNO: "",
+        choose_age: "",
+        choose_sex: "",
+        choose_person_type: "",
+        choose_marry: "",
+        choose_school_year: "",
+        choose_tel: "",
+        choose_begin_time: "",
+        choose_checkout_time: "",
+        choose_checkin_time: "",
+        choose_reason: "",
+        dept_show: false,
+        dept_search_value: "",
+        loading_ifShow: false,
+        dept_radio: {}, //点击科室cell获取对应item
+        dept_list: [
+          {
+            deptName: "贺朝",
+            deptNum: "No222"
+          },
+          {
+            deptName: "夫斯基",
+            deptNum: "No111"
+          }
+        ],
+        sex_show: false,
+        sex_radio: "",
+        sex_list: ["男", "女"],
+        person_type_show: false,
+        person_type_radio: {}, //点击科室cell获取对应item
+        person_type_list: [
+          {
+            typeName: "本院职工",
+            typeNum: "00"
+          },
+          {
+            typeName: "外协单位员工",
+            typeNum: "01"
+          },
+          {
+            typeName: "医院返聘职工",
+            typeNum: "02"
+          },
+          {
+            typeName: "科室返聘职工",
+            typeNum: "03"
+          },
+          {
+            typeName: "进修医生",
+            typeNum: "04"
+          },
+          {
+            typeName: "进修护士",
+            typeNum: "05"
+          },
+          {
+            typeName: "实习医生",
+            typeNum: "06"
+          },
+          {
+            typeName: "实习护士",
+            typeNum: "07"
+          },
+          {
+            typeName: "研究生",
+            typeNum: "08"
+          },
+          {
+            typeName: "临时医技人员",
+            typeNum: "09"
+          },
+          {
+            typeName: "规范会培训生",
+            typeNum: "10"
+          },
+          {
+            typeName: "院聘临时工",
+            typeNum: "11"
+          },
+          {
+            typeName: "科聘临时工",
+            typeNum: "12"
+          },
+        ],
+        marry_show: false,
+        marry_radio: "",
+        marry_list: ["是", "否"],
+        school_year_show: false,
+        school_year_radio: "",
+        school_year_list: [
+          {
+            text: "一年制",
+            value: 1
+          },
+          {
+            text: "二年制",
+            value: 2
+          },
+          {
+            text: "三年制",
+            value: 3
+          },
+          {
+            text: "四年制",
+            value: 4
+          },
+          {
+            text: "五年制",
+            value: 5
+          },
+        ],
+        begin_time_show: false,
+        checkout_time_show: false,
+        checkin_time_show: false,
+        minDate: new Date(),
+        maxDate: new Date(2050, 10, 1),
+        currentDate: new Date(),
+        tips: [],
+      }
+    },
+    methods: {
+      // 选择科室时点击搜索
+      onSearch() {
+        this.clean_loading_ifShow = true
+        $.ajax({
+          url: this.baseUrl + "cleanService",
+          type: "post",
+          headers: {
+            methodName: "getDeptInfo",
+            serviceName: "AppLinkService"
+          },
+          data: {
+            deptNum: "",
+            deptName: this.dept_search_value,
+            datagroupCode: this.dataGroupCode
+          },
+          success: function (data) {
+            _this.clean_loading_ifShow = false
+            _this.$nextTick(function () {
+              _this.dept_list = data.obj
+            });
+          }
+        })
+      },
+      // 选择科室 展示弹出层
+      dept_show_popup() {
+        // this.loading_ifShow = true
+        this.dept_show = true;
+        // this.dept_list = []
+        this.dept_search_value = ""
+        this.dept_radio = {}
+        // $.ajax({
+        //   url: this.baseUrl + "cleanService",
+        //   type: "post",
+        //   headers: {
+        //     methodName: "getDeptInfo",
+        //     serviceName: "AppLinkService"
+        //   },
+        //   data: {
+        //     deptNum: "",
+        //     deptName: "",
+        //     datagroupCode: this.dataGroupCode
+        //   },
+        //   success: function (data) {
+        //     _this.loading_ifShow = false
+        //     _this.$nextTick(function () {
+        //       _this.dept_list = data.obj
+        //     });
+        //   }
+        // })
+      },
+      // 选择科室弹出层后 点击科室cell 获取到选择的item
+      dept_click(item) {
+        this.dept_radio = item
+      },
+      //选择科室 确定按钮
+      dept_sure() {
+        this.dept_show = false;
+        this.choose_dept_name = this.dept_radio.deptName
+        this.choose_dept_no = this.dept_radio.deptNum
+      },
+      // 选择性别 展示弹出层
+      sex_show_popup() {
+        this.sex_show = true;
+        this.sex_radio = ""
+      },
+      // 选择性别弹出层后 点击cell 获取到选择的item
+      sex_click(item) {
+        this.sex_radio = item
+      },
+      //选择性别 确定按钮
+      sex_sure() {
+        this.sex_show = false;
+        this.choose_sex = this.sex_radio
+      },
+      // 选择人员类型 展示弹出层
+      person_type_show_popup() {
+        // this.loading_ifShow = true
+        this.person_type_show = true;
+        // this.dept_list = []
+        this.person_type_radio = {}
+        // $.ajax({
+        //   url: this.baseUrl + "cleanService",
+        //   type: "post",
+        //   headers: {
+        //     methodName: "getDeptInfo",
+        //     serviceName: "AppLinkService"
+        //   },
+        //   data: {
+        //     deptNum: "",
+        //     deptName: "",
+        //     datagroupCode: this.dataGroupCode
+        //   },
+        //   success: function (data) {
+        //     _this.loading_ifShow = false
+        //     _this.$nextTick(function () {
+        //       _this.dept_list = data.obj
+        //     });
+        //   }
+        // })
+      },
+      // 选择人员类型弹出层后 点击cell 获取到选择的item
+      person_type_click(item) {
+        this.person_type_radio = item
+      },
+      //选择人员类型 确定按钮
+      person_type_sure() {
+        this.person_type_show = false;
+        this.choose_person_type = this.person_type_radio.typeName
+        this.choose_person_type_no = this.person_type_radio.typeNum
+      },
+      // 是否已婚展示弹出层
+      marry_show_popup() {
+        this.marry_show = true;
+        this.marry_radio = ""
+      },
+      // 是否已婚弹出层后 点击cell 获取到选择的item
+      marry_click(item) {
+        this.marry_radio = item
+      },
+      //是否已婚 确定按钮
+      marry_sure() {
+        this.marry_show = false;
+        this.choose_marry = this.marry_radio
+      },
+      // 选择学年展示弹出层
+      school_year_show_popup() {
+        this.school_year_show = true;
+        this.school_year_radio = ""
+      },
+      // 选择学年弹出层后 点击cell 获取到选择的item
+      school_year_click(item) {
+        this.school_year_radio = item
+      },
+      //选择学年 确定按钮
+      school_year_sure() {
+        this.school_year_show = false;
+        this.choose_school_year = this.school_year_radio.text
+      },
+      //选择开学时间展示弹出层
+      begin_time_show_popup() {
+        this.begin_time_show = true;
+      },
+      // 选择开学时间 取消按钮
+      begin_time_cancel() {
+        this.begin_time_show = false;
+      },
+      //选择开学时间 确定按钮
+      begin_time_confirm(value) {
+        this.begin_time_show = false;
+        this.choose_begin_time = this.date_format(value, 10)
+      },
+      //选择入住时间展示弹出层
+      checkin_time_show_popup() {
+        this.checkin_time_show = true;
+      },
+      // 选择入住时间 取消按钮
+      checkin_time_cancel() {
+        this.checkin_time_show = false;
+      },
+      //选择入住时间 确定按钮
+      checkin_time_confirm(value) {
+        this.checkin_time_show = false;
+        this.choose_checkin_time = this.date_format(value, 10)
+      },
+      //选择退房时间展示弹出层
+      checkout_time_show_popup() {
+        this.checkout_time_show = true;
+      },
+      // 选择退房时间 取消按钮
+      checkout_time_cancel() {
+        this.checkout_time_show = false;
+      },
+      //选择退房时间 确定按钮
+      checkout_time_confirm(value) {
+        this.checkout_time_show = false;
+        this.choose_checkout_time = this.date_format(value, 10)
+      },
+      //时间格式化
+      date_format(time, length) {
+        /**
+        * @description: 时间戳/中国标准时间转为y-m-d h:m:s(由第二个参数决定)
+        * @param {Date | Number} time	时间戳或中国标准时间
+        * @param {Number} length 如：10代表转换为YYYY-MM-DD
+        * @return {Date}	返回日期格式
+        */
+        let date;
+        // 传入的是时间戳
+        if (typeof time === "number" && !isNaN(time)) {
+          let timeLength = time.toString().length;
+          // 10位时间戳
+          if (timeLength === 10) {
+            date = new Date(time * 1000 + 8 * 3600 * 1000);
+          } else if (timeLength === 13) {
+            // 13位时间戳
+            date = new Date(time + 8 * 3600 * 1000);
+          } else {
+            console.log("请传入10位或13位的时间戳！");
+            return;
+          }
+        } else {
+          // 传入的是中国标准时间
+          date = new Date(Date.parse(time) + 8 * 3600 * 1000);
+        }
+        // 校验传入的时间格式
+        if (!date.toJSON()) {
+          console.log("传入的时间格式不正确！");
+          return;
+        }
+        return date.toJSON().substr(0, length).replace("T", " ").replace(/-/g, "-");
+      },
+      get_tips() {
+        $.ajax({
+          url: this.baseUrl + 'MobileAgentService',
+          type: 'post',
+          headers: {
+            serviceName: "DMGG01",
+            methodName: "queryHoldnotice"
+          },
+          success: function (data) {
+            if (data.status !== 0) {
+              mui.toast(data.msg);
+              return;
+            }
+            app.tips = data.blocks.notice.rows
+            if (app.tips.length == 0) {
+              app.tips = [{ noticeNo: "", notice: "暂无提示" }]
+              return
+            }
+          }
+        });
+      },
+      //左上角返回事件
+      back() {
+        location.href = "./main.html"
+      },
+      //提交
+      onSubmit(values) {
+        console.log('submit', values);
+        values.choose_checkin_time > values.choose_checkout_time && this.$toast('入住时间不能晚于退房时间!');
+        $.ajax({
+          url: this.baseUrl + 'MobileAgentService',
+          type: 'post',
+          headers: {
+            serviceName: "DMHM01",
+            methodName: "insert"
+          },
+          data: {
+            prames: JSON.stringify({
+              "employeeId": values.choose_workNO,
+              "manName": values.choose_name,
+              "idNo": values.choose_idNO,
+              "sexCode": values.choose_sex,
+              "degreeCode": values.choose_school_year,
+              "departmentNo": "NO0001",
+              "departmentName": values.choose_dept_name,
+              "employmentNature": values.choose_attribute,
+              "phone": values.choose_tel,
+              "deposit": "",
+              "note": values.choose_reason,
+              "age": values.choose_age,
+              "ifMarried": values.choose_marry,
+              "permanentResidence": "",
+              "workTime": values.choose_begin_time,
+              "inTime": values.choose_checkin_time,
+              "estimatedOutDate": values.choose_checkout_time,
+              "ifReview": "-2"
+            })
+          },
+          success: function (data) {
+            if (data.status == 0) {
+              mui.toast("提交成功!")
+              setTimeout(function () { location.href = "./main.html" }, 2000)
+            } else {
+              mui.toast(data.msg);
+              return;
+            }
+          }
+        });
+      },
+    },
+    created() {
+      this.get_tips()
+    },
+  })
+
+  mui('.mui-scroll-wrapper').scroll({
+    deceleration: 0.0005, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+    indicators: false,
+  });
+</script>
+
+</html>

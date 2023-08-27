@@ -1,0 +1,783 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="FAAP01">
+    <select id="queryFaInventoryInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select DISTINCT
+        fa_inventory.id faInventoryId,
+        fa_inventory.inventory_no inventoryNo,
+        fa_inventory_detail.sub_no subNo,
+        fa_inventory.inventory_dept_num inventoryDeptNum,
+        fa_inventory.inventory_dept_name inventoryDeptName,
+        fa_inventory.inventory_spot_num inventorySpotNum,
+        fa_inventory.inventory_spot_name inventorySpotName,
+        fa_inventory.remark,
+        fa_inventory.after_inven_num afterInvenNum,
+        fa_inventory.before_inven_num beforeInvenNum,
+        fa_inventory.status_code statusCode,
+        CASE fa_inventory.status_code
+        WHEN "0" then "待盘点"
+        WHEN "1" then "盘点中"
+        WHEN "99" then "已盘点"
+        END as statusCodeMean
+        from
+        fa_inventory left join fa_inventory_detail on fa_inventory.id = fa_inventory_detail.inventory_id
+        <dynamic prepend="where">
+            <isEqual prepend="and" property="statusCode" compareValue="0">
+                fa_inventory.status_code in (0,1)
+            </isEqual>
+            <isEqual prepend="and" property="statusCode" compareValue="99">
+                fa_inventory.status_code in (99)
+            </isEqual>
+            <isNotEmpty prepend="and" property="inventoryDeptName">
+                fa_inventory.inventory_dept_name like concat ('%',trim(#inventoryDeptName#),'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="inventorySpotName">
+                fa_inventory.inventory_spot_name like concat ('%',trim(#inventorySpotName#),'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="inventoryNo">
+                fa_inventory.inventory_no = #inventoryNo#
+            </isNotEmpty>
+        </dynamic>
+        order by fa_inventory.inventory_no DESC
+    </select>
+
+    <!--  查询是否是最终工单  -->
+    <select id="queryFaInventoryDetailFinalInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            fid.id faInventoryDetailId,
+            fid.inventory_no inventoryNo,
+            fid.sub_no subNo,
+            fid.deal_flag dealFlag,
+            case fid.deal_flag
+            when "0" then "未盘点"
+            when "1" then "已盘点"
+            end dealFlagMean,
+            fid.inventory_flag inventoryFlag,
+            case fid.inventory_flag
+            when "1" then "盘盈"
+            when "0" then "正常"
+            when "-1" then "盘亏"
+            else "未盘点"
+            end inventoryFlagMean,
+            fid.inventory_remark inventoryRemark,
+            fid.goods_id goodsId,
+            fid.goods_num goodsNum,
+            fid.goods_name goodsName,
+            fi.dept_num AS "deptNum",
+            fi.dept_name AS "deptName",
+            fi.rfid_code rfidCode,
+            fid.model,
+            fid.spec
+        from
+        fa_inventory_detail_final fid
+        left join fa_info fi on fid.goods_id = fi.id
+        <dynamic prepend="where">
+            <isNotEmpty prepend="and" property="inventoryNo">
+                fid.inventory_no = #inventoryNo#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="depName">
+                fi.dept_name like concat ('%',trim(#depName#),'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="goodsNum">
+                fid.goods_num like concat ('%',trim(#goodsNum#),'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="goodsName">
+                fid.goods_name like concat ('%',trim(#goodsName#),'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="model">
+                fid.model like concat ('%',trim(#model#),'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="spec">
+                fid.spec like concat ('%',trim(#spec#),'%')
+            </isNotEmpty>
+        </dynamic>
+        ORDER BY fid.inventory_flag,fi.dept_name,fid.goods_num
+    </select>
+
+    <!-- 查询资产信息 -->
+    <select id="queryFaInventoryDetailInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            fid.id faInventoryDetailId,
+            fid.inventory_no inventoryNo,
+            fid.sub_no subNo,
+            fid.deal_flag dealFlag,
+            case fid.deal_flag
+            when "0" then "未盘点"
+            when "1" then "已盘点"
+            end dealFlagMean,
+            fid.inventory_flag inventoryFlag,
+            case fid.inventory_flag
+            when "1" then "盘盈"
+            when "0" then "正常"
+            when "-1" then "盘亏"
+            end inventoryFlagMean,
+            fid.goods_id goodsId,
+            fid.goods_num goodsNum,
+            fid.goods_name goodsName,
+            fi.dept_num AS "deptNum",
+            fi.dept_name AS "deptName",
+            fi.rfid_code rfidCode,
+            fid.model,
+            fid.spec,
+            fi2.before_inven_num beforeInvenNum
+        from
+        fa_inventory_detail fid
+        left join fa_info fi on fid.goods_id = fi.id
+        left join fa_inventory fi2 on fi2.id = fid.inventory_id
+        <dynamic prepend="where">
+            <isNotEmpty prepend="and" property="inventoryNo">
+                fid.inventory_no = #inventoryNo#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="depName">
+                fi.dept_name like concat ('%',trim(#depName#),'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="goodsNum">
+                fid.goods_num like concat ('%',trim(#goodsNum#),'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="goodsName">
+                fid.goods_name like concat ('%',trim(#goodsName#),'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="model">
+                fid.model like concat ('%',trim(#model#),'%')
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="spec">
+                fid.spec like concat ('%',trim(#spec#),'%')
+            </isNotEmpty>
+        </dynamic>
+        GROUP BY fid.goods_id
+        order by fid.inventory_flag,fi.dept_name,fid.goods_num
+    </select>
+
+    <select id="queryDetailByInventoryNoRfid" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select rfid_code rfidCode
+        from fa_inventory_detail fid
+                 left join fa_info fi on fid.goods_id = fi.id
+        where inventory_no = #inventoryNo#
+        AND rfid_code IS NOT NULL
+    </select>
+
+    <select id="queryDetailByInventoryNoQR" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select goods_num goodsNum
+        from fa_inventory_detail
+        where inventory_no = #inventoryNo#
+    </select>
+
+    <select id="queryFaInfoByRfidProfit" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            dept_num AS "deptNum",
+            dept_name AS "deptName",
+            id goodsId,
+            goods_num goodsNum,
+            goods_name goodsName,
+            model,
+            spec
+        from fa_info
+        where rfid_code in
+        <iterate property="rfid" conjunction="," open="(" close=")">
+            #rfid[]#
+        </iterate>
+        ORDER BY goods_num
+    </select>
+
+    <select id="queryFaInfoByRfidLosses" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            fi.dept_num AS "deptNum",
+            fi.dept_name AS "deptName",
+            fid.inventory_id AS "inventoryId",
+            fid.goods_id goodsId,
+            fid.goods_num goodsNum,
+            fid.goods_name goodsName,
+            fid.model,
+            fid.spec,
+            fid.inventory_flag AS "inventoryCode"
+        from fa_info fi left join fa_inventory_detail fid on fi.id = fid.goods_id
+        where fid.goods_id is not null and
+            fid.inventory_no = #inventoryNo#
+        GROUP BY fid.goods_id
+        ORDER BY fid.goods_num
+    </select>
+
+    <select id="queryFaInfoNotInRfid" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            fi.dept_num AS "deptNum",
+            fi.dept_name AS "deptName",
+            fid.goods_id goodsId,
+            fid.goods_num goodsNum,
+            fid.goods_name goodsName,
+            fi.rfid_code rfidCode,
+            fid.model,
+            fid.spec
+        from fa_info fi left join fa_inventory_detail fid on fi.id = fid.goods_id
+        where fid.goods_id is not null and
+        fid.inventory_no = #inventoryNo# and
+        (fi.rfid_code not in
+        <iterate property="normal" conjunction="," open="(" close=")">
+            #normal[]#
+        </iterate>
+        OR fi.rfid_code IS NULL
+        )
+        GROUP BY fid.goods_id
+        ORDER BY fid.goods_num
+    </select>
+
+    <select id="queryFaInfoByRfid" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            fi.dept_num AS "deptNum",
+            fi.dept_name AS "deptName",
+            fid.inventory_id AS "inventoryId",
+            fid.goods_id goodsId,
+            fid.goods_num goodsNum,
+            fid.goods_name goodsName,
+            fid.model,
+            fid.spec,
+            fid.inventory_flag AS "inventoryCode"
+        from fa_info fi left join fa_inventory_detail fid on fi.id = fid.goods_id
+        where fid.goods_id is not null and
+        fid.inventory_no = #inventoryNo# and
+        fi.rfid_code in
+        <iterate property="rfid" conjunction="," open="(" close=")">
+            #rfid[]#
+        </iterate>
+        GROUP BY fid.goods_id
+        ORDER BY fid.goods_num
+    </select>
+
+    <select id="queryFaInfoByGoodsNumProfit" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            dept_num AS "deptNum",
+            dept_name AS "deptName",
+            id goodsId,
+            goods_num goodsNum,
+            goods_name goodsName,
+            model,
+            spec
+        from fa_info
+        where
+        goods_num in
+        <iterate property="goodsNum" conjunction="," open="(" close=")">
+            #goodsNum[]#
+        </iterate>
+        ORDER BY goods_num
+    </select>
+
+    <select id="queryFaInfoByGoodsNumByList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            fi.dept_num AS "deptNum",
+            fi.dept_name AS "deptName",
+            fid.goods_id goodsId,
+            fid.goods_num goodsNum,
+            fid.goods_name goodsName,
+            fid.model,
+            fid.spec
+        from fa_info fi left join fa_inventory_detail fid on fi.id = fid.goods_id
+        where fid.goods_id is not null and
+        fid.inventory_no = #inventoryNo# and
+        fi.goods_num in
+        <iterate property="goodsNum" conjunction="," open="(" close=")">
+            #goodsNum[]#
+        </iterate>
+        GROUP BY fid.goods_id
+        ORDER BY fid.goods_num
+    </select>
+
+<!--    <update id="updateFaInventoryDetailInfoByInventoryNo" parameterClass="java.util.HashMap">-->
+<!--        update fa_inventory_detail-->
+<!--        set deal_flag = "1"-->
+<!--        where inventory_no = #inventoryNo#-->
+<!--    </update>-->
+    <update id="updateFaInventoryDetailInfoByInventoryNo" parameterClass="java.util.HashMap">
+        update fa_inventory_detail
+        set inventory_flag = #inventoryFlag#
+        where inventory_no = #inventoryNo# AND goods_id = #goodsId#
+    </update>
+
+    <update id="updateFaInventoryDetailStatusAndReason" parameterClass="java.util.HashMap">
+        update fa_inventory_detail
+        set inventory_flag = #inventoryFlag#,inventory_remark = #inventoryRemark#
+        where inventory_no = #inventoryNo# and goods_num = #goodsNum#
+    </update>
+
+    <select id="selectFaInventoryDetailInfoStatus" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select status_code statusCode from fa_inventory where inventory_no = #inventoryNo#
+    </select>
+
+    <delete id="deleteFaInventoryDetailInfoByInventoryNo" parameterClass="java.util.HashMap">
+        delete
+        from fa_inventory_detail_final
+        where inventory_no = #inventoryNo#
+    </delete>
+
+    <insert id="saveFaInventoryDetailInfo" parameterClass="java.util.HashMap">
+        insert into
+        fa_inventory_detail_final(id,inventory_id,sub_no,inventory_no,goods_id,goods_num,goods_name,spot_num,spot_name,inventory_flag,inventory_remark,deal_flag)
+        select
+        uuid(),#inventoryId#,#subNo#,#inventoryNo#,fa_info.id,fa_info.goods_num,fa_info.goods_name,#spotNum#,#spotName#,#inventoryFlag#,#remark#,#dealFlag#
+        from fa_info where fa_info.goods_num in
+        <iterate property="goodsIdList" conjunction="," open="(" close=")">
+            #goodsIdList[]#
+        </iterate>
+    </insert>
+
+    <select id="selectFaInfo" parameterClass="java.util.ArrayList"
+            resultClass="com.baosight.wilp.fa.ap.domain.FaInventoryDetailFinal">
+        select UUID() as id,id as goodsId,goods_num as goodsNum,goods_name as goodsName,install_location_num as
+        spotNum,install_location as spotName from fa_info where goods_num in
+        <iterate conjunction="," open="(" close=")">
+            #value[]#
+        </iterate>
+        ORDER BY goods_num
+    </select>
+
+    <insert id="insertFaInventoryDetailInfo" parameterClass="java.util.ArrayList">
+        insert into fa_inventory_detail_final
+        (id,sub_no,inventory_id,inventory_no,goods_id,goods_num,
+         goods_name,spot_num,spot_name,inventory_flag,inventory_remark,deal_flag)
+        values
+        <iterate conjunction=",">
+            (
+            #queryFaInfo[].id#,
+            #queryFaInfo[].subNo#,
+            #queryFaInfo[].inventoryId#,
+            #queryFaInfo[].inventoryNo#,
+            #queryFaInfo[].goodsId#,
+            #queryFaInfo[].goodsNum#,
+            #queryFaInfo[].goodsName#,
+            #queryFaInfo[].spotNum#,
+            #queryFaInfo[].spotName#,
+            #queryFaInfo[].inventoryFlag#,
+            #queryFaInfo[].remark#,
+            #queryFaInfo[].dealFlag#
+            )
+        </iterate>
+    </insert>
+
+    <update id="updateFaInventoryDetailInfo" parameterClass="java.util.HashMap">
+        update fa_inventory_detail_final
+        set inventory_remark = #remark#
+        where goods_num = #goodsNum#
+    </update>
+
+    <select id="queryFaTypeInfo" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.fa.lb.domain.FaTypeDTO">
+        SELECT
+            id,type_code AS "typeCode",parent_id AS "parentId",code_rule AS "codeRule"
+        FROM fa_type
+        ORDER BY type_code
+    </select>
+
+    <select id="queryRoles" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+        SELECT xug.GROUP_ENAME "value"
+        FROM ${platSchema}.xs_user_group xug
+                 JOIN ${platSchema}.xs_user_group_member xugm ON xug.ID = xugm.PARENT_ID
+                 JOIN ${platSchema}.xs_user xu ON xu.USER_ID = xugm.MEMBER_ID
+        WHERE xu.LOGIN_NAME = #workNo#
+    </select>
+
+    <!-- 对接待确认表 -->
+    <insert id="insertFaConfirm" parameterClass="java.util.ArrayList">
+        INSERT INTO fa_confirm(
+        `id`, `cont_no`, `purchase_vouch`, `purchase_staff_name`, `fundingSource_num`,
+        `fundingSource_name`, `enter_bill_no`, `enter_type`, `enter_type_name`,
+        `mat_num`, `mat_name`, `mat_type_num`, `mat_type_name`, `mat_spec`, `model`, `batch_no`, `batch_num`,
+        `unit_num`, `unit_name`, `enter_num`, `enter_price`, `enter_amount`, `invoice_no`,
+        `manufacturer`, `manufacturer_code`, `surp_num`, `surp_name`, `check_date`,
+        `acquitv_date`, `acquitv_year`, `rec_create_time`, `rec_create_name`, `data_group_code`,
+        `transfer_type`, `confirm_name`, `confirm_status`, `receive_type`, `dept_num`, `dept_name`
+        ) VALUES
+        <iterate conjunction=",">
+        (
+            #collect[].id#,#collect[].contNo#,#collect[].purchaseVouch#,#collect[].purchaseStaffName#,
+            #collect[].fundingSourceNum#,#collect[].fundingSourceName#,#collect[].enterBillNo#,
+            #collect[].enterType#,#collect[].enterTypeName#,#collect[].matNum#,#collect[].matName#,
+            #collect[].matTypeNum#,#collect[].matTypeName#,
+            #collect[].matSpec#,#collect[].model#,#collect[].batchNo#,#collect[].batchNum#,
+            #collect[].unitNum#,#collect[].unitName#,#collect[].enterNum#,#collect[].enterPrice#,
+            #collect[].enterAmount#,#collect[].invoiceNo#,#collect[].manufacturer#,#collect[].manufacturerCode#,
+            #collect[].surpNum#,#collect[].surpName#,#collect[].checkDate#,#collect[].acquitvDate#,
+            #collect[].acquitvYear#,#collect[].recCreateTime#,#collect[].recCreateName#,#collect[].dataGroupCode#,
+            #collect[].transferType#,#collect[].confirmName#,#collect[].confirmStatus#,#collect[].receiveType#,
+            #collect[].deptNum#,#collect[].deptName#
+        )
+        </iterate>
+    </insert>
+    <!--  -->
+
+    <!--  资产出库回调更新出库单  -->
+    <update id="updateFaInfoOutBillNo" parameterClass="java.util.HashMap">
+        UPDATE fa_info SET out_bill_no = #outBillNo# WHERE id IN
+        <iterate open="(" close=")" conjunction="," property="faInfoIdList">
+            #faInfoIdList[]#
+        </iterate>
+    </update>
+
+    <!--  生成资产卡片入库时抛帐  -->
+    <insert id="putInStorageAccount" parameterClass="java.util.HashMap">
+        INSERT INTO fa_throw_account(
+            `id`,
+            `faInfo_id`,
+            `dept_num`,
+            `dept_name`,
+            `surp_num`,
+            `surp_name`,
+            `invoice_no`,
+            `goods_classify_code`,
+            `goods_classify_name`,
+            `goods_type_code`,
+            `goods_type_name`,
+            `goods_num`,
+            `goods_name`,
+            `net_asset_value`,
+            `account_type`,
+            `create_date`
+        ) VALUES
+        <iterate conjunction="," property="faInfoDOList">
+            (
+                UUID(),#faInfoDOList[].id#,#deptNum#,#deptName#,#surpNum#,#surpName#,#invoiceNo#,
+                #faInfoDOList[].goodsClassifyCode#,#faInfoDOList[].goodsClassifyName#,
+                #faInfoDOList[].goodsTypeCode#, #faInfoDOList[].goodsTypeName#,
+                #faInfoDOList[].goodsNum#,#faInfoDOList[].goodsName#,#faInfoDOList[].netAssetValue#,'011',NOW()
+            )
+        </iterate>
+    </insert>
+
+    <!-- 调拨出库时进行抛帐 -->
+    <insert id="putOutStorageAccount" parameterClass="java.util.HashMap">
+        INSERT INTO fa_throw_account
+        (
+            `id`,
+            `faInfo_id`,
+            `dept_num`,
+            `dept_name`,
+            `surp_num`,
+            `surp_name`,
+            `invoice_no`,
+            `goods_classify_code`,
+            `goods_classify_name`,
+            `goods_type_code`,
+            `goods_type_name`,
+            `goods_num`,
+            `goods_name`,
+            `net_asset_value`,
+            `account_type`,
+            `create_date`
+        )
+        SELECT
+            UUID(),
+            `id`,
+            #deptNum#,
+            #deptName#,
+            `surp_num`,
+            `surp_name`,
+            `invoice_no`,
+            `goods_classify_code`,
+            `goods_classify_name`,
+            `goods_type_code`,
+            `goods_type_name`,
+            `goods_num`,
+            `goods_name`,
+            `net_asset_value`,
+            '016',
+            NOW()
+        FROM
+            fa_info
+        WHERE id IN
+        <iterate open="(" close=")" conjunction="," property="faInfoIdList">
+            #faInfoIdList[]#
+        </iterate>
+    </insert>
+
+    <!--  资产变更时进行抛帐 -->
+    <insert id="modificationUpAccount" parameterClass="java.util.HashMap">
+        INSERT INTO fa_throw_account
+        (
+            `id`,
+            `faInfo_id`,
+            `dept_num`,
+            `dept_name`,
+            `surp_num`,
+            `surp_name`,
+            `invoice_no`,
+            `goods_classify_code`,
+            `goods_classify_name`,
+            `goods_type_code`,
+            `goods_type_name`,
+            `goods_num`,
+            `goods_name`,
+            `net_asset_value`,
+            `account_type`,
+            `create_date`
+        )VALUES(
+            UUID(),#id#,#deptNum#,#deptName#,#surpNum#,#surpName#,#invoiceNo#,#goodsClassifyCode#,#goodsClassifyName#,#goodsTypeCode#,
+            #goodsTypeName#,#goodsNum#,#goodsName#,#modificationValue#,'021',NOW()
+        )
+    </insert>
+
+    <insert id="modificationDownAccount" parameterClass="java.util.HashMap">
+        INSERT INTO fa_throw_account
+        (
+            `id`,
+            `faInfo_id`,
+            `dept_num`,
+            `dept_name`,
+            `surp_num`,
+            `surp_name`,
+            `invoice_no`,
+            `goods_classify_code`,
+            `goods_classify_name`,
+            `goods_type_code`,
+            `goods_type_name`,
+            `goods_num`,
+            `goods_name`,
+            `net_asset_value`,
+            `account_type`,
+            `create_date`
+        )VALUES(
+            UUID(),#id#,#deptNum#,#deptName#,#surpNum#,#surpName#,#invoiceNo#,#goodsClassifyCode#,#goodsClassifyName#,#goodsTypeCode#,
+            #goodsTypeName#,#goodsNum#,#goodsName#,ABS(#modificationValue#),'026',NOW()
+        )
+    </insert>
+
+    <!--  资产报废时进行抛帐 -->
+    <insert id="scrapAccount" parameterClass="java.util.ArrayList">
+        INSERT INTO fa_throw_account
+        (
+            `id`,
+            `faInfo_id`,
+            `dept_num`,
+            `dept_name`,
+            `surp_num`,
+            `surp_name`,
+            `invoice_no`,
+            `goods_classify_code`,
+            `goods_classify_name`,
+            `goods_type_code`,
+            `goods_type_name`,
+            `goods_num`,
+            `goods_name`,
+            `net_asset_value`,
+            `account_type`,
+            `create_date`
+        )
+        SELECT
+            UUID(),
+            `id`,
+            `dept_num`,
+            `dept_name`,
+            `surp_num`,
+            `surp_name`,
+            `invoice_no`,
+            `goods_classify_code`,
+            `goods_classify_name`,
+            `goods_type_code`,
+            `goods_type_name`,
+            `goods_num`,
+            `goods_name`,
+            `net_asset_value`,
+            '040',
+            NOW()
+        FROM
+            fa_info
+        WHERE id IN
+        <iterate open="(" close=")" conjunction=",">
+            #faInfoIdList[]#
+        </iterate>
+    </insert>
+    <!--  资产折旧时进行抛帐  -->
+
+    <!--  查询固定资产明细  -->
+    <select id="queryFaInfoByGoodsNum" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+        SELECT
+            trim(id) AS "faInfoId",
+            trim(goods_num) AS "goodsNum",
+            trim(goods_classify_code) AS "goodsClassifyCode",
+            trim(goods_classify_name) AS "goodsClassifyName",
+            trim(dept_num) AS "deptNum",
+            trim(dept_name) AS "deptName",
+            trim(goods_name) AS "goodsName",
+            trim(model) AS "model",
+            trim(spec) AS "spec",
+            DATE_FORMAT( use_date, '%Y-%m-%d %H:%i:%S' ) AS "useDate",
+            buy_cost AS "buyCost",
+            net_asset_value AS "netAssetValue",
+            trim(brand_desc) AS "brandDesc",
+            trim(manufacturer) AS "manufacturer",
+            trim(status_code) AS "statusCode"
+        FROM
+            fa_info
+        WHERE
+            goods_num = #value#
+        ORDER BY goods_num
+    </select>
+
+    <!-- 查询调拨表中是否存在资产 -->
+    <select id="queryTransferInfo" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+        SELECT
+            trim(fi.goods_name) AS "goodsName",
+            trim(fi.goods_num) AS "goodsNum",
+            trim(fi.spec) AS "spec",
+            trim(fi.brand_desc) AS "brandDesc",
+            trim(fi.dept_name) AS "deptName",
+            trim(fi.manufacturer) AS "manufacturer",
+            trim(fi.status_code) AS "statusCode",
+            ft.transfer_status AS "transferStatus"
+        FROM fa_transfer ft
+        LEFT JOIN fa_transfer_detail ftd ON ft.transfer_no = ftd.transfer_no
+        LEFT JOIN fa_info fi ON fi.id = ftd.faInfo_id
+        WHERE (ft.transfer_status = "10" OR ft.transfer_status = "20")
+        AND ftd.goods_num = #value#
+        ORDER BY ftd.goods_num
+    </select>
+
+    <!-- 查询报废表中是否存在资产 -->
+    <select id="queryScrappedInfo" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+        SELECT
+            trim(fi.goods_name) AS "goodsName",
+            trim(fi.goods_num) AS "goodsNum",
+            trim(fi.spec) AS "spec",
+            trim(fi.brand_desc) AS "brandDesc",
+            trim(fi.dept_name) AS "deptName",
+            trim(fi.manufacturer) AS "manufacturer",
+            trim(fi.status_code) AS "statusCode",
+            fsd.scrap_detail_status AS "scrapStatus"
+        FROM fa_scrap_detail fsd
+        LEFT JOIN fa_info fi ON fi.id = fsd.faInfo_id
+        WHERE (fsd.scrap_detail_status = "00" OR fsd.scrap_detail_status = "10" OR fsd.scrap_detail_status = "20" OR fsd.scrap_detail_status = "30")
+        AND fsd.goods_num = #value#
+        ORDER BY fi.goods_num
+    </select>
+
+    <!-- 通过资产编码查询报废信息 -->
+    <select id="queryOnceRecordScrap" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+            fs.apply_dept_name AS "applyDeptName",
+            fs.apply_person AS "applyPerson",
+            fs.apply_reason AS "applyReason",
+            DATE_FORMAT( fs.apply_time, '%Y-%m-%d %H:%i:%S' ) AS "applyTime",
+            fsd.identify_dept_name AS "identifyDeptName",
+            fsd.identify_person AS "identifyPerson",
+            fsd.identify_reason AS "identifyReason",
+            DATE_FORMAT( fsd.identify_time, '%Y-%m-%d %H:%i:%S' ) AS "identifyTime",
+            fsd.function_dept_name AS "functionDeptName",
+            fsd.function_person AS "functionPerson",
+            fsd.function_reason AS "functionReason",
+            DATE_FORMAT( fsd.function_time, '%Y-%m-%d %H:%i:%S' ) AS "functionTime",
+            fsd.asset_dept_name AS "assetDeptName",
+            fsd.asset_person AS "assetPerson",
+            fsd.asset_reason AS "assetReason",
+            DATE_FORMAT( fsd.asset_time, '%Y-%m-%d %H:%i:%S' ) AS "assetTime",
+            fsd.scrap_detail_status AS "scrapDetailStatus",
+            CASE
+                fsd.scrap_detail_status
+                WHEN '00' THEN
+                    '申请中'
+                WHEN '10' THEN
+                    '鉴定中'
+                WHEN '20' THEN
+                    '归口中'
+                WHEN '30' THEN
+                    '审批中'
+                WHEN '70' THEN
+                    '审批驳回'
+                WHEN '80' THEN
+                    '归口驳回'
+                WHEN '90' THEN
+                    '鉴定驳回'
+                WHEN '100' THEN
+                    '审批通过'
+                END AS "scrapResult"
+        FROM
+            `fa_scrap_detail` fsd
+        LEFT JOIN `fa_scrap` fs ON fs.scrapped_no = fsd.scrapped_no
+        WHERE 1=1
+        <isNotEmpty property="source" prepend="and">
+            fs.source = #source#
+        </isNotEmpty>
+        <isNotEmpty property="goodsNum" prepend="and">
+            fsd.goods_num = #goodsNum#
+        </isNotEmpty>
+        GROUP BY
+            fsd.scrapped_no
+        ORDER BY
+            fs.apply_time DESC
+    </select>
+
+    <!-- 通过资产编码查询调拨信息 -->
+    <select id="queryOnceRecordTransfer" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+            ft.apply_dept_name AS "applyDeptName",
+            ft.apply_person AS "applyPerson",
+            ft.apply_reason AS "applyReason",
+            DATE_FORMAT( ft.apply_time, '%Y-%m-%d %H:%i:%S' ) AS "applyTime",
+            ft.confirm_dept_name AS "confirmDeptName",
+            ft.confirm_person AS "confirmPerson",
+            ft.confirm_reason AS "confirmReason",
+            DATE_FORMAT( ft.confirm_time, '%Y-%m-%d %H:%i:%S' ) AS "confirmTime",
+            ft.audit_dept_name AS "auditDeptName",
+            ft.audit_person AS "auditPerson",
+            ft.audit_reason AS "auditReason",
+            DATE_FORMAT( ft.audit_time, '%Y-%m-%d %H:%i:%S' ) AS "auditTime",
+            ft.transfer_status AS "transferStatus",
+            CASE ft.transfer_status
+                WHEN '00' THEN '草稿'
+                WHEN '10' THEN '待接收'
+                WHEN '20' THEN '待审批'
+                WHEN '40' THEN '审批驳回'
+                WHEN '50' THEN '接收驳回'
+                WHEN '100' THEN '已审批'
+                END AS "transferResult"
+        FROM
+            `fa_transfer_detail` ftd
+                LEFT JOIN `fa_transfer` ft ON ft.transfer_no = ftd.transfer_no
+        WHERE
+            1=1
+            <isNotEmpty property="source" prepend="and">
+                ft.source = #source#
+            </isNotEmpty>
+            <isNotEmpty property="goodsNum" prepend="and">
+                ftd.goods_num = #goodsNum#
+            </isNotEmpty>
+        GROUP BY
+            ft.transfer_no
+        ORDER BY
+            ft.apply_time DESC
+    </select>
+
+    <update id="updateFaInventoryDetail" parameterClass="java.util.HashMap">
+        update fa_inventory_detail set inventory_flag = "",inventory_remark = "",deal_flag = "0"
+        WHERE inventory_no = #inventoryNo#
+    </update>
+    
+    <!-- 删除当前报废单的资产明细 -->
+    <delete id="deleteDetail" parameterClass="java.util.HashMap">
+        DELETE FROM fa_inventory_detail WHERE inventory_no = #inventoryNo#
+    </delete>
+
+    <!-- 重新插入资产信息 -->
+    <insert id="insertDetail" parameterClass="java.util.HashMap">
+        INSERT INTO fa_inventory_detail(id,inventory_id,inventory_no,spot_num,spot_name,dept_num,dept_name,goods_id,goods_num,goods_name,
+        model,spec,inventory_flag,deal_flag)
+        values
+        <iterate conjunction="," property="inventoryList">
+            (uuid(),#faInventoryId#,#inventoryNo#,#spotNum#,#spotName#,#inventoryList[].deptNum#,#inventoryList[].deptName#,#inventoryList[].goodsId#,
+             #inventoryList[].goodsNum#,#inventoryList[].goodsName#,#inventoryList[].model#,#inventoryList[].spec#,
+             #inventoryList[].inventoryFlagCode#,'1')
+        </iterate>
+    </insert>
+    
+    <!-- 通过盘点单号修改盘点单状态 -->
+    <update id="updateStatusCodeByInventoryNo" parameterClass="java.util.HashMap">
+        UPDATE fa_inventory SET status_code = #flag# WHERE inventory_no = #inventoryNo#
+    </update>
+
+    <!-- 通过用户工号查询用户的护理单元 -->
+    <select id="queryDeptByWorkNo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+            work_no AS "workNo",
+            `name`,
+            dept_id AS "deptId",
+            dept_code AS "deptCode",
+            dept_name AS "deptName"
+        FROM ${projectSchema}.wz_user
+        WHERE work_no = #workNo#
+    </select>
+</sqlMap>
