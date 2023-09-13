@@ -53,7 +53,7 @@
 				</isEmpty>
 			</dynamic>
 	</select>
-	
+
 
 	<select id="querySupplierListCount" parameterClass="java.util.HashMap" resultClass="int">
 			SELECT COUNT(1)
@@ -75,7 +75,7 @@
 				contact_number = #contactNumber#
 			</isNotEmpty>
 	</select>
-	
+
 
 
 	<update id="startUsing" parameterClass="java.util.HashMap">
@@ -143,4 +143,314 @@
 	<select id="queryAllSupplierNameAndCode" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
 		SELECT supplier_code supplierCode, supplier_name supplierName FROM $projectSchema$.ac_supplier
 	</select>
+
+
+<!--同步供应商档案-->
+
+	<select id="queryBySupplierCode" resultClass="java.util.HashMap"
+			parameterClass="java.util.HashMap">
+		SELECT
+		`hrp_code`
+		FROM $projectSchema$.ac_supplier WHERE 1=1
+		<isNotEmpty prepend=" AND " property="COR_CODE">
+			`hrp_code` = #COR_CODE#
+		</isNotEmpty>
+	</select>
+
+	<select id="querySupplier" resultClass="java.util.HashMap"
+			parameterClass="java.util.HashMap">
+		SELECT
+		`hrp_code`
+		FROM $projectSchema$.ac_supplier
+	</select>
+	<select id="querySupplierAllInfo" resultClass="java.util.HashMap"
+			parameterClass="java.util.HashMap">
+		SELECT
+		`hrp_code`
+		FROM $projectSchema$.ac_supplier WHERE 1=1
+		<isNotEmpty prepend=" AND " property="COR_ID">
+			`id` = #COR_ID#
+		</isNotEmpty>
+<!--		<isNotEmpty prepend=" AND " property="COR_CODE">-->
+<!--			`supplier_code` = #COR_CODE#-->
+<!--		</isNotEmpty>-->
+		<isNotEmpty prepend=" AND " property="COR_NAME">
+			`supplier_name` = #COR_NAME#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="COR_TYPE">
+			`supplier_type` = #COR_TYPE#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="TELEPHONE_NUMBER">
+			`contact_number` = #TELEPHONE_NUMBER#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="ADDRESS">
+			`contact_address` = #ADDRESS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="EMAIL">
+			`contact_email` = #EMAIL#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="CORPORATE">
+			`legal_representative` = #CORPORATE#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="COR_CODE">
+			`hrp_code` = #COR_CODE#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="status">
+			`status` = #status#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="CRE_USR_REF">
+			`rec_creator` = #CRE_USR_REF#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="CRE_DATETIME">
+			`rec_create_time` = #CRE_DATETIME#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="UPD_USR_REF">
+			`rec_revisor` = #UPD_USR_REF#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="UPD_DATETIME">
+			`rec_revise_time` = #UPD_DATETIME#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="ACT_FROM">
+			`ACT_FROM` = #ACT_FROM#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="ACT_TO">
+			`ACT_TO` = #ACT_TO#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="SEQUENCE_NUMBER">
+			`SEQUENCE_NUMBER` = #SEQUENCE_NUMBER#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="MEDICAL_INSTITUT_CODE">
+			`MEDICAL_INSTITUT_CODE` = #MEDICAL_INSTITUT_CODE#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="COR_PROPERTY">
+			`COR_PROPERTY` = #COR_PROPERTY#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="INSTITUT_CODE">
+			`INSTITUT_CODE` = #INSTITUT_CODE#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="FAX_NUMBER">
+			`FAX_NUMBER` = #FAX_NUMBER#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="COMMENTS">
+			`COMMENTS` = #COMMENTS#
+		</isNotEmpty>
+
+	</select>
+	<insert id="insertSupplier" parameterClass="java.util.HashMap">
+		INSERT INTO $projectSchema$.`ac_supplier` (
+		`id`,
+		`supplier_code`,
+		`supplier_name`,
+		<isNotEmpty property="COR_TYPE">
+			supplier_type,
+		</isNotEmpty>
+		<isNotEmpty property="TELEPHONE_NUMBER">
+			`contact_number`,
+		</isNotEmpty>
+		<isNotEmpty property="ADDRESS">
+			`contact_address`,
+		</isNotEmpty>
+		<isNotEmpty property="EMAIL">
+			`contact_email`,
+		</isNotEmpty>
+		<isNotEmpty property="CORPORATE">
+			`legal_representative`,
+		</isNotEmpty>
+		<isNotEmpty property="COR_CODE">
+			`hrp_code`,
+		</isNotEmpty>
+		`status`,
+		<isNotEmpty property="ACT_FROM">
+			`ACT_FROM`,
+		</isNotEmpty>
+		<isNotEmpty property="ACT_TO">
+			`ACT_TO`,
+		</isNotEmpty>
+		<isNotEmpty property="SEQUENCE_NUMBER">
+			`SEQUENCE_NUMBER`,
+		</isNotEmpty>
+		<isNotEmpty property="MEDICAL_INSTITUT_CODE">
+			`MEDICAL_INSTITUT_CODE`,
+		</isNotEmpty>
+		<isNotEmpty property="COR_PROPERTY">
+			`COR_PROPERTY`,
+		</isNotEmpty>
+		<isNotEmpty property="INSTITUT_CODE">
+			`INSTITUT_CODE`,
+		</isNotEmpty>
+		<isNotEmpty property="FAX_NUMBER">
+			`FAX_NUMBER`,
+		</isNotEmpty>
+		<isNotEmpty property="COMMENTS">
+			`COMMENTS`,
+		</isNotEmpty>
+		<isNotEmpty property="UPD_USR_REF">
+			`rec_revisor`,
+		</isNotEmpty>
+		<isNotEmpty property="UPD_DATETIME">
+			`rec_revise_time`,
+		</isNotEmpty>
+		`rec_creator`,
+		`rec_create_time`
+		)
+		VALUES
+		(
+			#COR_ID#,
+			#COR_CODE#,
+			#COR_NAME#,
+		<isNotEmpty property="COR_TYPE">
+			#COR_TYPE#,
+		</isNotEmpty>
+		<isNotEmpty property="TELEPHONE_NUMBER">
+			#TELEPHONE_NUMBER#,
+		</isNotEmpty>
+		<isNotEmpty property="ADDRESS">
+			#ADDRESS#,
+		</isNotEmpty>
+		<isNotEmpty property="EMAIL">
+			#EMAIL#,
+		</isNotEmpty>
+		<isNotEmpty property="CORPORATE">
+			#CORPORATE#,
+		</isNotEmpty>
+		<isNotEmpty property="COR_CODE">
+			#COR_CODE#,
+		</isNotEmpty>
+			#status#,
+		<isNotEmpty property="ACT_FROM">
+			#ACT_FROM#,
+		</isNotEmpty>
+		<isNotEmpty property="ACT_TO">
+			#ACT_TO#,
+		</isNotEmpty>
+		<isNotEmpty property="SEQUENCE_NUMBER">
+			#SEQUENCE_NUMBER#,
+		</isNotEmpty>
+		<isNotEmpty property="MEDICAL_INSTITUT_CODE">
+			#MEDICAL_INSTITUT_CODE#,
+		</isNotEmpty>
+		<isNotEmpty property="COR_PROPERTY">
+			#COR_PROPERTY#,
+		</isNotEmpty>
+		<isNotEmpty property="INSTITUT_CODE">
+			#INSTITUT_CODE#,
+		</isNotEmpty>
+		<isNotEmpty property="FAX_NUMBER">
+			#FAX_NUMBER#,
+		</isNotEmpty>
+		<isNotEmpty property="COMMENTS">
+			#COMMENTS#,
+		</isNotEmpty>
+		<isNotEmpty property="UPD_USR_REF">
+			#UPD_USR_REF#,
+		</isNotEmpty>
+		<isNotEmpty property="UPD_DATETIME">
+			#UPD_DATETIME#,
+		</isNotEmpty>
+		#CRE_USR_REF#,
+		#CRE_DATETIME#
+		) ;
+	</insert>
+
+
+	<update id="updateBySupplierCode">
+		UPDATE $projectSchema$.ac_supplier
+		SET	 id=#COR_ID#,
+		`supplier_name` = #COR_NAME#,
+		<isNotEmpty property="COR_TYPE">
+			`supplier_type` = #COR_TYPE#,
+		</isNotEmpty>
+		<isNotEmpty property="TELEPHONE_NUMBER">
+			`contact_number` = #TELEPHONE_NUMBER#,
+		</isNotEmpty>
+		<isNotEmpty property="ADDRESS">
+			contact_address=#ADDRESS#,
+		</isNotEmpty>
+		<isNotEmpty property="EMAIL">
+			contact_email=#EMAIL#,
+		</isNotEmpty>
+		<isNotEmpty property="CORPORATE">
+			legal_representative=#CORPORATE#,
+		</isNotEmpty>
+		<isNotEmpty property="status">
+			status=#status#,
+		</isNotEmpty>
+		<isNotEmpty property="CRE_USR_REF">
+			rec_creator=#CRE_USR_REF#,
+		</isNotEmpty>
+		<isNotEmpty property="CRE_DATETIME">
+			rec_create_time=#CRE_DATETIME#,
+		</isNotEmpty>
+		<isNotEmpty property="UPD_USR_REF">
+			`rec_revisor` = #UPD_USR_REF#,
+		</isNotEmpty>
+		<isNotEmpty property="UPD_DATETIME">
+			`rec_revise_time` = #UPD_DATETIME#,
+		</isNotEmpty>
+		<isNotEmpty property="ACT_FROM">
+			`ACT_FROM` = #ACT_FROM#,
+		</isNotEmpty>
+		<isNotEmpty property="ACT_TO">
+			`ACT_TO` = #ACT_TO#,
+		</isNotEmpty>
+		<isNotEmpty property="SEQUENCE_NUMBER">
+			`SEQUENCE_NUMBER` = #SEQUENCE_NUMBER#,
+		</isNotEmpty>
+		<isNotEmpty property="MEDICAL_INSTITUT_CODE">
+			`MEDICAL_INSTITUT_CODE` = #MEDICAL_INSTITUT_CODE#,
+		</isNotEmpty>
+		<isNotEmpty property="COR_PROPERTY">
+			`COR_PROPERTY` = #COR_PROPERTY#,
+		</isNotEmpty>
+		<isNotEmpty property="INSTITUT_CODE">
+			`INSTITUT_CODE` = #INSTITUT_CODE#,
+		</isNotEmpty>
+		<isNotEmpty property="FAX_NUMBER">
+			`FAX_NUMBER` = #FAX_NUMBER#,
+		</isNotEmpty>
+		<isNotEmpty property="COMMENTS">
+			`COMMENTS` = #COMMENTS#,
+		</isNotEmpty>
+		<isNotEmpty property="COR_CODE">
+			hrp_code=#COR_CODE#
+		</isNotEmpty>
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="COR_CODE">
+			`hrp_code` = #COR_CODE#
+		</isNotEmpty>
+	</update>
+
+	<update id="updateStatus">
+		UPDATE $projectSchema$.ac_supplier
+		SET status='0'
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="hrp_code">
+			`hrp_code` = #hrp_code#
+		</isNotEmpty>
+	</update>
+
+	<update id="updateBySupplierName">
+		UPDATE $projectSchema$.ac_supplier
+		SET hrp_code=#corCode#
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="supplierName">
+			`supplier_name` = #supplierName#
+		</isNotEmpty>
+	</update>
+
+	<delete id="deletePm" parameterClass="java.util.List">
+		delete from pm01 where ID IN
+		<iterate open="(" close=")" conjunction=",">
+			#resultList[].PROJECT_ID#
+		</iterate>
+	</delete>
+
+	<insert id="insertPm" parameterClass="java.util.List">
+		INSERT INTO pm01(ID, PROJECT_NO, PROJECT_NAME, PROJECT_TYPE_NAME, START_DATE)
+		values
+		    <iterate conjunction=",">
+				(#resultList[].PROJECT_ID#,#resultList[].PROJECT_CODE#,#resultList[].PROJECT_NAME#,
+		        #resultList[].PROJECT_SOURCE#,#resultList[].CRE_DATETIME#)
+			</iterate>
+	</insert>
 </sqlMap>

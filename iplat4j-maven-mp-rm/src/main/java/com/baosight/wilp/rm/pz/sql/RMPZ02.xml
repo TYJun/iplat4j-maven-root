@@ -2,122 +2,116 @@
 <!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 <sqlMap namespace="RMPZ02">
 
-    <select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.rm.pz.domain.RmDeptMatConfig">
-        SELECT
-        id as "id",  <!-- 主键 -->
-        dept_num as "deptNum",  <!-- 科室编码 -->
-        dept_name as "deptName",  <!-- 科室名称 -->
-        mat_num as "matNum",  <!-- 物资编码 -->
-        mat_name as "matName",  <!-- 物资名称 -->
-        mat_type_id as "matTypeId",  <!-- 物资分类ID -->
-        mat_type_name as "matTypeName",  <!-- 物资分类名称 -->
-        mat_spec as "matSpec",  <!-- 物资规格 -->
-        mat_model as "matModel",  <!-- 物资型号 -->
-        unit as "unit",  <!-- 计量单位 -->
-        unit_name as "unitName",  <!-- 计量单位 -->
-        price as "price", <!-- 单价 -->
-        picture_uri as "pictureUri", <!-- 图片地址 -->
-        pack_factor as "packfactor"
-        FROM rm_dept_mat_config WHERE 1=1
-        <isNotEmpty prepend=" AND " property="id">
-            id = #id#
-        </isNotEmpty>
-        <isNotEmpty prepend=" AND " property="deptNum">
-            dept_num = #deptNum#
-        </isNotEmpty>
-        <isNotEmpty prepend=" AND " property="matNum">
-            mat_num like concat('%', #matNum#, '%')
-        </isNotEmpty>
-        <isNotEmpty prepend=" AND " property="matName">
-            mat_name like concat('%', #matName#, '%')
-        </isNotEmpty>
-        <isNotEmpty prepend=" AND " property="matTypeName">
-            mat_type_name like concat('%', #matTypeName#, '%')
-        </isNotEmpty>
-        <dynamic prepend="ORDER BY">
-            <isNotEmpty property="orderBy">
-                $orderBy$
-            </isNotEmpty>
-            <isEmpty property="orderBy">
-                mat_num asc
-            </isEmpty>
-        </dynamic>
-    </select>
+	<select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.rm.pz.domain.RmDeptMatConfig">
+		SELECT
+				id	as "id",  <!-- 主键 -->
+				dept_num	as "deptNum",  <!-- 科室编码 -->
+				dept_name	as "deptName",  <!-- 科室名称 -->
+				mat_num	as "matNum",  <!-- 物资编码 -->
+				mat_name	as "matName",  <!-- 物资名称 -->
+				mat_type_id	as "matTypeId",  <!-- 物资分类ID -->
+				mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+				mat_spec	as "matSpec",  <!-- 物资规格 -->
+				mat_model	as "matModel",  <!-- 物资型号 -->
+				unit	as "unit",  <!-- 计量单位 -->
+				unit_name	as "unitName",  <!-- 计量单位 -->
+				price	as "price", <!-- 单价 -->
+				picture_uri	as "pictureUri", <!-- 图片地址 -->
+		        pack_factor  as "packfactor"
+		FROM rm_dept_mat_config WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			dept_num = #deptNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNum">
+			mat_num like concat('%', #matNum#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matName">
+			mat_name like concat('%', #matName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeName">
+			mat_type_name like concat('%', #matTypeName#, '%')
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+         	<isNotEmpty property="orderBy">
+    		  	$orderBy$
+   		 	</isNotEmpty>
+   			<isEmpty property="orderBy">
+				mat_num asc
+			</isEmpty>
+  		</dynamic>
+	</select>
 
-    <select id="count" resultClass="int">
-        SELECT COUNT(*) FROM rm_dept_mat_config WHERE 1=1
-        <isNotEmpty prepend=" AND " property="id">
-            id = #id#
-        </isNotEmpty>
-        <isNotEmpty prepend=" AND " property="deptNum">
-            dept_num = #deptNum#
-        </isNotEmpty>
-        <isNotEmpty prepend=" AND " property="matNum">
-            mat_num like concat('%', #matNum#, '%')
-        </isNotEmpty>
-        <isNotEmpty prepend=" AND " property="matName">
-            mat_name like concat('%', #matName#, '%')
-        </isNotEmpty>
-        <isNotEmpty prepend=" AND " property="matTypeName">
-            mat_type_name like concat('%', #matTypeName#, '%')
-        </isNotEmpty>
-    </select>
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM rm_dept_mat_config WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			dept_num = #deptNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNum">
+			mat_num like concat('%', #matNum#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matName">
+			mat_name like concat('%', #matName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeName">
+			mat_type_name like concat('%', #matTypeName#, '%')
+		</isNotEmpty>
+	</select>
 
-    <insert id="insert" parameterClass="java.util.List">
-        INSERT INTO rm_dept_mat_config (
-        id,  <!-- 主键 -->
-        dept_num,  <!-- 科室编码 -->
-        dept_name,  <!-- 科室名称 -->
-        mat_num,  <!-- 物资编码 -->
-        mat_name,  <!-- 物资名称 -->
-        mat_type_id,  <!-- 物资分类ID -->
-        mat_type_name,  <!-- 物资分类名称 -->
-        mat_spec,  <!-- 物资规格 -->
-        mat_model,  <!-- 物资型号 -->
-        unit,  <!-- 计量单位 -->
-        unit_name,  <!-- 计量单位 -->
-        price,  <!-- 单价 -->
-        picture_uri,  <!-- 图片地址 -->
-        pack_factor
-        )
-        VALUES
-        <iterate conjunction=",">
-            (
-            #list[].id#,
-            #list[].deptNum#,
-            #list[].deptName#,
-            #list[].matNum#,
-            #list[].matName#,
-            #list[].matTypeId#,
-            #list[].matTypeName#,
-            #list[].matSpec#,
-            #list[].matModel#,
-            #list[].unit#,
-            #list[].unitName#,
-            #list[].price#,
-            #list[].pictureUri#,
-            #list[].packfactor#
-            )
-        </iterate>
-    </insert>
+	<insert id="insert" parameterClass="java.util.List">
+		INSERT INTO rm_dept_mat_config (
+			id,  <!-- 主键 -->
+			dept_num,  <!-- 科室编码 -->
+			dept_name,  <!-- 科室名称 -->
+			mat_num,  <!-- 物资编码 -->
+			mat_name,  <!-- 物资名称 -->
+			mat_type_id,  <!-- 物资分类ID -->
+			mat_type_name,  <!-- 物资分类名称 -->
+			mat_spec,  <!-- 物资规格 -->
+			mat_model,  <!-- 物资型号 -->
+			unit,  <!-- 计量单位 -->
+			unit_name,  <!-- 计量单位 -->
+			price,  <!-- 单价 -->
+		    picture_uri,  <!-- 图片地址 -->
+		    pack_factor
+		)
+	    VALUES
+	    <iterate conjunction=",">
+		(
+			#list[].id#,
+		 	#list[].deptNum#,
+		 	#list[].deptName#,
+		 	#list[].matNum#,
+		 	#list[].matName#,
+		 	#list[].matTypeId#,
+		 	#list[].matTypeName#,
+		 	#list[].matSpec#,
+		 	#list[].matModel#,
+		 	#list[].unit#,
+			#list[].unitName#,
+		 	#list[].price#,
+			#list[].pictureUri#,
+		    #list[].packfactor#
+		)
+		</iterate>
+	</insert>
 
-    <delete id="delete" parameterClass="string">
-        DELETE
-        FROM rm_dept_mat_config
-        WHERE id = #id#
-    </delete>
+	<delete id="delete" parameterClass="string">
+		DELETE FROM rm_dept_mat_config WHERE id = #id#
+	</delete>
 
-    <delete id="deleteByDeptNum" parameterClass="string">
-        DELETE
-        FROM rm_dept_mat_config
-        WHERE dept_num = #deptNum#
-    </delete>
+	<delete id="deleteByDeptNum" parameterClass="string">
+		DELETE FROM rm_dept_mat_config WHERE dept_num = #deptNum#
+	</delete>
 
-    <update id="updatePrice" parameterClass="java.util.List">
-        update rm_dept_mat_config b set price = (select min(price) from si_storge a where a.mat_num = b.mat_num and
-        a.mat_type_num = b.mat_type_id)
-        where b.mat_num in
-        <iterate open="(" conjunction="," close=")">#matNumList[]#</iterate>
-    </update>
+	<update id="updatePrice" parameterClass="java.util.List">
+		update rm_dept_mat_config b set price = (select min(price) from si_storge a where a.mat_num = b.mat_num and a.mat_type_num = b.mat_type_id)
+		where b.mat_num in <iterate open="(" conjunction="," close=")">#matNumList[]#</iterate>
+	</update>
 
 </sqlMap>

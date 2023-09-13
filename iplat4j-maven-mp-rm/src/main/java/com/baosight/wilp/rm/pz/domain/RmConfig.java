@@ -12,48 +12,33 @@ import java.util.Map;
 /**
  * 领用配置实体
  * RmConfig
- *
  * @author fangjian
  */
 public class RmConfig extends DaoEPBase {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 主键
-     */
+    /** 主键*/
     private String id;
 
-    /**
-     * 配置项编码
-     */
+    /** 配置项编码*/
     @NotBlank(message = "配置项编码不能为空")
     private String configCode;
 
-    /**
-     * 配置项名称
-     */
+    /** 配置项名称*/
     @NotBlank(message = "配置项名称不能为空")
     private String configName;
 
-    /**
-     * 配置项值（单选框的值）
-     */
+    /** 配置项值（单选框的值）*/
     private String configValueRadio;
 
-    /**
-     * 配置项值（多选框、输入框的值）
-     */
+    /** 配置项值（多选框、输入框的值）*/
     private String configValueText;
 
-    /**
-     * 账套
-     */
+    /** 账套*/
     private String dataGroupCode;
 
-    /**
-     * 排序
-     */
+    /** 排序*/
     private Integer orderNo;
 
     /**
@@ -102,7 +87,6 @@ public class RmConfig extends DaoEPBase {
 
     /**
      * get the id - 主键
-     *
      * @return the id
      */
     public String getId() {
@@ -118,7 +102,6 @@ public class RmConfig extends DaoEPBase {
 
     /**
      * get the configCode - 配置项编码
-     *
      * @return the configCode
      */
     public String getConfigCode() {
@@ -134,7 +117,6 @@ public class RmConfig extends DaoEPBase {
 
     /**
      * get the configName - 配置项名称
-     *
      * @return the configName
      */
     public String getConfigName() {
@@ -150,7 +132,6 @@ public class RmConfig extends DaoEPBase {
 
     /**
      * get the configValueRedio - 配置项值（单选框的值）
-     *
      * @return the configValueRedio
      */
     public String getConfigValueRadio() {
@@ -166,7 +147,6 @@ public class RmConfig extends DaoEPBase {
 
     /**
      * get the configValueText - 配置项值（多选框、输入框的值）
-     *
      * @return the configValueText
      */
     public String getConfigValueText() {
@@ -182,7 +162,6 @@ public class RmConfig extends DaoEPBase {
 
     /**
      * get the dataGroupCode - 账套
-     *
      * @return the dataGroupCode
      */
     public String getDataGroupCode() {
@@ -224,13 +203,13 @@ public class RmConfig extends DaoEPBase {
     @Override
     public Map toMap() {
         Map map = new HashMap(8);
-        map.put("id", StringUtils.toString(id, eiMetadata.getMeta("id")));
-        map.put("configCode", StringUtils.toString(configCode, eiMetadata.getMeta("configCode")));
-        map.put("configName", StringUtils.toString(configName, eiMetadata.getMeta("configName")));
-        map.put("configValueRadio", StringUtils.toString(configValueRadio, eiMetadata.getMeta("configValueRadio")));
-        map.put("configValueText", StringUtils.toString(configValueText, eiMetadata.getMeta("configValueText")));
-        map.put("dataGroupCode", StringUtils.toString(dataGroupCode, eiMetadata.getMeta("dataGroupCode")));
-        map.put("orderNo", StringUtils.toString(orderNo, eiMetadata.getMeta("orderNo")));
+        map.put("id",StringUtils.toString(id, eiMetadata.getMeta("id")));
+        map.put("configCode",StringUtils.toString(configCode, eiMetadata.getMeta("configCode")));
+        map.put("configName",StringUtils.toString(configName, eiMetadata.getMeta("configName")));
+        map.put("configValueRadio",StringUtils.toString(configValueRadio, eiMetadata.getMeta("configValueRadio")));
+        map.put("configValueText",StringUtils.toString(configValueText, eiMetadata.getMeta("configValueText")));
+        map.put("dataGroupCode",StringUtils.toString(dataGroupCode, eiMetadata.getMeta("dataGroupCode")));
+        map.put("orderNo",StringUtils.toString(orderNo, eiMetadata.getMeta("orderNo")));
         return map;
     }
 }

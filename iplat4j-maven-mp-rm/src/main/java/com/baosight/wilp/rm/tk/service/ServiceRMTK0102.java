@@ -13,27 +13,24 @@ import com.baosight.wilp.rm.lj.domain.RmClaimDetail;
  * @ClassName: ServiceRMTK0102
  * @Package com.baosight.wilp.rm.tk.service
  * @date: 2022年11月01日 17:32
- * <p>
+ *
  * 1.页面加载
  * 2.页面数据查询
  * 3.页面明细数据查询
  */
 public class ServiceRMTK0102 extends ServiceBase {
 
-    /**
-     * 领用单状态数组
-     **/
-    private static String[] statusCodes = {RmConstant.CLAIM_STATUS_PART_OUT,
+    /**领用单状态数组**/
+    private static String[] statusCodes = { RmConstant.CLAIM_STATUS_PART_OUT,
             RmConstant.CLAIM_STATUS_UN_SIGN, RmConstant.CLAIM_STATUS_SIGNED, RmConstant.CLAIM_STATUS_OVER
     };
 
     /**
      * 页面加载
-     *
+     * @Title: initLoad
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: initLoad
      **/
     @Override
     public EiInfo initLoad(EiInfo inInfo) {
@@ -42,11 +39,10 @@ public class ServiceRMTK0102 extends ServiceBase {
 
     /**
      * 页面数据查询
-     *
+     * @Title: query
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: query
      **/
     @Override
     public EiInfo query(EiInfo inInfo) {
@@ -59,11 +55,10 @@ public class ServiceRMTK0102 extends ServiceBase {
 
     /**
      * 明细数据查询
-     *
+     * @Title: queryDetail
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: queryDetail
      **/
     public EiInfo queryDetail(EiInfo inInfo) {
         inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "showOutZero", "N");

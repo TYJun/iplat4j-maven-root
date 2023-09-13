@@ -12,96 +12,61 @@ import java.util.Map;
 /**
  * 物资退库申请明细实体
  * RmBackOutDetail
- *
  * @author fangjian
  */
 public class RmBackOutDetail extends DaoEPBase {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 主键
-     */
+    /** 主键*/
     private String id;
 
-    /**
-     * 物资退库申请表ID
-     */
+    /** 物资退库申请表ID*/
     private String backOutId;
 
-    /**
-     * 领用单号
-     **/
+    /**领用单号**/
     private String claimNo;
 
-    /**
-     * 物资编码
-     */
+    /** 物资编码*/
     private String matNum;
 
-    /**
-     * 物资名称
-     */
+    /** 物资名称*/
     private String matName;
 
-    /**
-     * 物资分类ID
-     */
+    /** 物资分类ID*/
     private String matTypeId;
 
-    /**
-     * 物资分类名称
-     */
+    /** 物资分类名称*/
     private String matTypeName;
 
-    /**
-     * 物资规格
-     */
+    /** 物资规格*/
     private String matSpec;
 
-    /**
-     * 物资型号
-     */
+    /** 物资型号*/
     private String matModel;
 
-    /**
-     * 计量单位
-     */
+    /** 计量单位*/
     private String unit;
 
-    /**
-     * 计量单位
-     */
-    private String unitName;
+    /** 计量单位*/
+    private String unitName ;
 
-    /**
-     * 单价
-     */
+    /** 单价*/
     private Double price = new Double(0.00);
 
-    /**
-     * 退库数量
-     */
+    /** 退库数量*/
     private Double num = new Double(0.00);
 
-    /**
-     * 已退库数量
-     */
+    /** 已退库数量*/
     private Double outNum = new Double(0.00);
 
-    /**
-     * 本次退库数量
-     */
+    /** 本次退库数量*/
     private Double curOutNum = new Double(0.00);
 
-    /**
-     * 实际领用数量
-     */
+    /** 实际领用数量*/
     private Double actualClaimNum = new Double(0.00);
 
-    /**
-     * 图片地址
-     **/
+    /**图片地址**/
     private String pictureUri;
 
     /**
@@ -194,7 +159,6 @@ public class RmBackOutDetail extends DaoEPBase {
 
     /**
      * get the id - 主键
-     *
      * @return the id
      */
     public String getId() {
@@ -210,7 +174,6 @@ public class RmBackOutDetail extends DaoEPBase {
 
     /**
      * get the claimNo - 物资领用单号
-     *
      * @return the claimNo
      */
     public String getClaimNo() {
@@ -226,7 +189,6 @@ public class RmBackOutDetail extends DaoEPBase {
 
     /**
      * get the backOutId - 物资退库申请表ID
-     *
      * @return the backOutId
      */
     public String getBackOutId() {
@@ -242,7 +204,6 @@ public class RmBackOutDetail extends DaoEPBase {
 
     /**
      * get the matNum - 物资编码
-     *
      * @return the matNum
      */
     public String getMatNum() {
@@ -258,7 +219,6 @@ public class RmBackOutDetail extends DaoEPBase {
 
     /**
      * get the matName - 物资名称
-     *
      * @return the matName
      */
     public String getMatName() {
@@ -274,7 +234,6 @@ public class RmBackOutDetail extends DaoEPBase {
 
     /**
      * get the matTypeId - 物资分类ID
-     *
      * @return the matTypeId
      */
     public String getMatTypeId() {
@@ -290,7 +249,6 @@ public class RmBackOutDetail extends DaoEPBase {
 
     /**
      * get the matTypeName - 物资分类名称
-     *
      * @return the matTypeName
      */
     public String getMatTypeName() {
@@ -306,7 +264,6 @@ public class RmBackOutDetail extends DaoEPBase {
 
     /**
      * get the matSpec - 物资规格
-     *
      * @return the matSpec
      */
     public String getMatSpec() {
@@ -322,7 +279,6 @@ public class RmBackOutDetail extends DaoEPBase {
 
     /**
      * get the matModel - 物资型号
-     *
      * @return the matModel
      */
     public String getMatModel() {
@@ -338,7 +294,6 @@ public class RmBackOutDetail extends DaoEPBase {
 
     /**
      * get the unit - 计量单位
-     *
      * @return the unit
      */
     public String getUnit() {
@@ -354,7 +309,6 @@ public class RmBackOutDetail extends DaoEPBase {
 
     /**
      * get the unitName - 计量单位名称
-     *
      * @return the unitName
      */
     public String getUnitName() {
@@ -370,7 +324,6 @@ public class RmBackOutDetail extends DaoEPBase {
 
     /**
      * get the price - 单价
-     *
      * @return the price
      */
     public Double getPrice() {
@@ -386,7 +339,6 @@ public class RmBackOutDetail extends DaoEPBase {
 
     /**
      * get the num - 退库数量
-     *
      * @return the num
      */
     public Double getNum() {
@@ -402,7 +354,6 @@ public class RmBackOutDetail extends DaoEPBase {
 
     /**
      * get the outNum - 已退库数量
-     *
      * @return the outNum
      */
     public Double getOutNum() {
@@ -418,7 +369,6 @@ public class RmBackOutDetail extends DaoEPBase {
 
     /**
      * get the curOutNum - 本次退库数量
-     *
      * @return the curOutNum
      */
     public Double getCurOutNum() {
@@ -434,23 +384,17 @@ public class RmBackOutDetail extends DaoEPBase {
 
     /**
      * get the pictureUri - 图片地址
-     *
      * @return the pictureUri
      */
-    public String getPictureUri() {
-        return pictureUri;
-    }
+    public String getPictureUri() { return pictureUri; }
 
     /**
      * set the pictureUri - 图片地址
      */
-    public void setPictureUri(String pictureUri) {
-        this.pictureUri = pictureUri;
-    }
+    public void setPictureUri(String pictureUri) { this.pictureUri = pictureUri; }
 
     /**
      * get the actualClaimNum - 实际领用数量
-     *
      * @return the actualClaimNum
      */
     public Double getActualClaimNum() {
@@ -495,23 +439,23 @@ public class RmBackOutDetail extends DaoEPBase {
     @Override
     public Map toMap() {
         Map map = new HashMap(16);
-        map.put("id", StringUtils.toString(id, eiMetadata.getMeta("id")));
-        map.put("backOutId", StringUtils.toString(backOutId, eiMetadata.getMeta("backOutId")));
-        map.put("claimNo", StringUtils.toString(claimNo, eiMetadata.getMeta("claimNo")));
-        map.put("matNum", StringUtils.toString(matNum, eiMetadata.getMeta("matNum")));
-        map.put("matName", StringUtils.toString(matName, eiMetadata.getMeta("matName")));
-        map.put("matTypeId", StringUtils.toString(matTypeId, eiMetadata.getMeta("matTypeId")));
-        map.put("matTypeName", StringUtils.toString(matTypeName, eiMetadata.getMeta("matTypeName")));
-        map.put("matSpec", StringUtils.toString(matSpec, eiMetadata.getMeta("matSpec")));
-        map.put("matModel", StringUtils.toString(matModel, eiMetadata.getMeta("matModel")));
-        map.put("unit", StringUtils.toString(unit, eiMetadata.getMeta("unit")));
-        map.put("unitName", StringUtils.toString(unitName, eiMetadata.getMeta("unitName")));
-        map.put("price", StringUtils.toString(price, eiMetadata.getMeta("price")));
-        map.put("num", StringUtils.toString(num, eiMetadata.getMeta("num")));
-        map.put("outNum", StringUtils.toString(outNum, eiMetadata.getMeta("outNum")));
-        map.put("curOutNum", StringUtils.toString(curOutNum, eiMetadata.getMeta("curOutNum")));
-        map.put("pictureUri", StringUtils.toString(pictureUri, eiMetadata.getMeta("pictureUri")));
-        map.put("actualClaimNum", StringUtils.toString(actualClaimNum, eiMetadata.getMeta("actualClaimNum")));
+        map.put("id",StringUtils.toString(id, eiMetadata.getMeta("id")));
+        map.put("backOutId",StringUtils.toString(backOutId, eiMetadata.getMeta("backOutId")));
+        map.put("claimNo",StringUtils.toString(claimNo, eiMetadata.getMeta("claimNo")));
+        map.put("matNum",StringUtils.toString(matNum, eiMetadata.getMeta("matNum")));
+        map.put("matName",StringUtils.toString(matName, eiMetadata.getMeta("matName")));
+        map.put("matTypeId",StringUtils.toString(matTypeId, eiMetadata.getMeta("matTypeId")));
+        map.put("matTypeName",StringUtils.toString(matTypeName, eiMetadata.getMeta("matTypeName")));
+        map.put("matSpec",StringUtils.toString(matSpec, eiMetadata.getMeta("matSpec")));
+        map.put("matModel",StringUtils.toString(matModel, eiMetadata.getMeta("matModel")));
+        map.put("unit",StringUtils.toString(unit, eiMetadata.getMeta("unit")));
+        map.put("unitName",StringUtils.toString(unitName, eiMetadata.getMeta("unitName")));
+        map.put("price",StringUtils.toString(price, eiMetadata.getMeta("price")));
+        map.put("num",StringUtils.toString(num, eiMetadata.getMeta("num")));
+        map.put("outNum",StringUtils.toString(outNum, eiMetadata.getMeta("outNum")));
+        map.put("curOutNum",StringUtils.toString(curOutNum, eiMetadata.getMeta("curOutNum")));
+        map.put("pictureUri",StringUtils.toString(pictureUri, eiMetadata.getMeta("pictureUri")));
+        map.put("actualClaimNum",StringUtils.toString(actualClaimNum, eiMetadata.getMeta("actualClaimNum")));
         return map;
     }
 }

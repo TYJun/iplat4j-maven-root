@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @ClassName: ServiceRMLY0301
  * @Package com.baosight.wilp.rm.ly.service
  * @date: 2022年09月15日 14:58
- * <p>
+ *
  * 1.页面加载
  * 2.科室审批通过
  * 3.科室审批驳回
@@ -37,11 +37,10 @@ public class ServiceRMLY0301 extends ServiceBase {
 
     /**
      * 页面加载
-     *
+     * @Title: initLoad
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: initLoad
      **/
     @Override
     public EiInfo initLoad(EiInfo inInfo) {
@@ -50,12 +49,11 @@ public class ServiceRMLY0301 extends ServiceBase {
 
     /**
      * 审批通过
-     *
+     * @Title: pass
      * @param inInfo inInfo
-     *               claimId : 领用申请ID
+     *      claimId : 领用申请ID
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: pass
      **/
     public EiInfo pass(EiInfo inInfo) {
         String configRadioValue = RmConfigCache.getConfigRadioValue(BaseDockingUtils.getUserGroupByWorkNo(UserSession.getLoginName()),
@@ -66,13 +64,12 @@ public class ServiceRMLY0301 extends ServiceBase {
 
     /**
      * 审批驳回
-     *
+     * @Title: reject
      * @param inInfo inInfo
-     *               claimId : 领用申请ID
-     *               rejectReason : 驳回原因
+     *     claimId : 领用申请ID
+     *     rejectReason : 驳回原因
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: reject
      **/
     public EiInfo reject(EiInfo inInfo) {
         return approval(inInfo, RmConstant.CLAIM_STATUS_DEPT_REJECT);
@@ -80,21 +77,20 @@ public class ServiceRMLY0301 extends ServiceBase {
 
     /**
      * 领用申请科室审批
-     *
-     * @param inInfo         inInfo
+     * @Title: approval
+     * @param inInfo inInfo
      * @param approvalResult approvalResult
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: approval
      **/
     private EiInfo approval(EiInfo inInfo, String approvalResult) {
         String claimId = inInfo.getString("claimId");
         //参数校验
-        if (StringUtils.isBlank(claimId)) {
+        if(StringUtils.isBlank(claimId)) {
             return ValidatorUtils.errorInfo("参数不能为空");
         }
         RmClaim claim = claimService.queryClaimById(claimId);
-        if (claim == null || !(claim.getStatusCode().equals(RmConstant.CLAIM_STATUS_UN_DEPT_APPROVE)
+        if(claim == null || !(claim.getStatusCode().equals(RmConstant.CLAIM_STATUS_UN_DEPT_APPROVE)
                 || RmConstant.CLAIM_STATUS_STOCK_REJECT.equals(claim.getStatusCode()))) {
             return ValidatorUtils.errorInfo("领用申请已审批或无法审批");
         }

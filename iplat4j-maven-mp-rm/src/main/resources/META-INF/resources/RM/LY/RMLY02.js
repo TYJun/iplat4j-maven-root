@@ -1,11 +1,11 @@
-$(function () {
+$(function() {
     //表格初始化处理
     IPLATUI.EFGrid = new WilpGrid({
         add: true, edit: false, del: false,
         detailUrl: "RMLY0204?inqu_status-0-id=#:id#&inqu-status-0-statusCode=#:statusCode#",
         detailWindow: "detailPopData",
         addUrl: "RMLY0205?inqu_status-0-id=#:id#",
-        hasRowClick: true, rowClickConfig: {gridId: "detail", paramName: "claimId", colName: "id"},
+        hasRowClick: true, rowClickConfig: {gridId:"detail", paramName:"claimId", colName: "id"},
         extentMethod: [
             {
                 buttonId: "APPROVAL",
@@ -16,7 +16,7 @@ $(function () {
                     } else if ("30" == checkRows[0].statusCode) {
                         // NotificationUtil("正在操作出库审批");
                         popData("RMLY0202?inqu_status-0-id=" + checkRows[0].id + "&type=approve", "detailPopData");
-                    } else if (["50", "60"].includes(checkRows[0].statusCode)) {
+                    } else if (["50","60"].includes(checkRows[0].statusCode)) {
                         // NotificationUtil("正在执行物资出库操作");
                         popData("RMLY0203?inqu_status-0-id=" + checkRows[0].id + "&type=out", "detailPopData");
                     }
@@ -58,8 +58,7 @@ $(function () {
                                     }
                                 });
                             },
-                            cancelFn: function (e) {
-                            }
+                            cancelFn: function (e) {}
                         })
                     }
                 }
@@ -75,7 +74,7 @@ $(function () {
                 let stockNum = e.sender.dataItems()[i].stockNum;
                 let num = e.sender.dataItems()[i].num;
                 let outNum = e.sender.dataItems()[i].outNum;
-                if ((num > 0 && num != outNum && num - stockNum > 0)) {
+                if ((num>0 && num !=outNum && num-stockNum >0  )) {
                     tr.style.background = "#FF6347"
                 }
             });
@@ -92,16 +91,17 @@ $(function () {
     })
 
 
+
     /**回车键查询**/
     keydown("inqu", "QUERY");
 
     /**查询**/
-    $("#QUERY").on("click", function (e) {
+    $("#QUERY").on("click", function(e) {
         resultGrid.dataSource.page(1);
     });
 
     /**重置**/
-    $("#REQUERY").on("click", function (e) {
+    $("#REQUERY").on("click", function(e) {
         document.getElementById("inqu-trash").click();
         resetTime("inqu_status-0-beginTime", "inqu_status-0-endTime");
         resultGrid.dataSource.page(1);
@@ -111,6 +111,6 @@ $(function () {
 
 function printOutBill(outBillNo) {
     setTimeout(function () {
-        popData("SICK0104?initLoad&outBillNo=" + outBillNo, "detailPopData");
+        popData("SICK0104?initLoad&outBillNo="+ outBillNo, "detailPopData");
     }, 1000);
 }

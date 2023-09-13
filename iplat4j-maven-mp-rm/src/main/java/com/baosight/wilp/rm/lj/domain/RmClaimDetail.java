@@ -14,117 +14,74 @@ import java.util.Objects;
 /**
  * 物资领用明细实体
  * RmClaimDetail
- *
  * @author fangjian
  */
 public class RmClaimDetail extends DaoEPBase {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 主键
-     */
+    /**主键*/
     private String id;
 
-    /**
-     * 物资领用表ID
-     */
+    /**物资领用表ID*/
     private String claimId;
 
-    /**
-     * 物资领用单号
-     */
+    /**物资领用单号*/
     private String claimNo;
 
-    /**
-     * 物资编码
-     */
+    /**物资编码*/
     private String matNum;
 
-    /**
-     * 物资名称
-     */
+    /**物资名称*/
     private String matName;
 
-    /**
-     * 物资分类ID
-     */
+    /**物资分类ID*/
     private String matTypeId;
 
-    /**
-     * 物资分类名称
-     */
+    /**物资分类名称*/
     private String matTypeName;
 
-    /**
-     * 物资规格
-     */
+    /**物资规格*/
     private String matSpec;
 
-    /**
-     * 物资型号
-     */
+    /**物资型号*/
     private String matModel;
 
-    /**
-     * 计量单位
-     */
+    /**计量单位*/
     private String unit;
 
-    /**
-     * 计量单位
-     */
-    private String unitName;
+    /** 计量单位*/
+    private String unitName ;
 
-    /**
-     * 单价
-     */
+    /**单价*/
     private Double price = new Double(0.00);
 
-    /**
-     * 领用数量
-     */
+    /**领用数量*/
     private Double num = new Double(0.00);
 
-    /**
-     * 领用金额
-     */
+    /**领用金额*/
     private BigDecimal claimAmount = new BigDecimal("0.00");
 
-    /**
-     * 已出库数量
-     */
+    /**已出库数量*/
     private Double outNum = new Double(0.00);
 
-    /**
-     * 库存数量
-     */
+    /**库存数量*/
     private Double stockNum = new Double(0.00);
 
-    /**
-     * 预约数量
-     */
+    /**预约数量*/
     private Double reserveNum = new Double(0.00);
 
-    /**
-     * 本次出库数量
-     */
+    /**本次出库数量*/
     private Double outAmount = new Double(0.00);
 
-    /**
-     * 图片地址
-     **/
+    /**图片地址**/
     private String pictureUri;
 
-    /**
-     * 排序字段
-     **/
+    /**排序字段**/
     private Integer sortNo = new Integer(0);
 
-    /**
-     * 包装地址
-     **/
-    private String packfactor;
+    /**包装地址**/
+    private  String packfactor;
 
 
     /**
@@ -245,7 +202,6 @@ public class RmClaimDetail extends DaoEPBase {
 
     /**
      * get the id - 主键
-     *
      * @return the id
      */
     public String getId() {
@@ -261,7 +217,6 @@ public class RmClaimDetail extends DaoEPBase {
 
     /**
      * get the claimId - 物资领用表ID
-     *
      * @return the claimId
      */
     public String getClaimId() {
@@ -277,7 +232,6 @@ public class RmClaimDetail extends DaoEPBase {
 
     /**
      * get the claimNo - 物资领用单号
-     *
      * @return the claimNo
      */
     public String getClaimNo() {
@@ -293,7 +247,6 @@ public class RmClaimDetail extends DaoEPBase {
 
     /**
      * get the matNum - 物资编码
-     *
      * @return the matNum
      */
     public String getMatNum() {
@@ -309,7 +262,6 @@ public class RmClaimDetail extends DaoEPBase {
 
     /**
      * get the matName - 物资名称
-     *
      * @return the matName
      */
     public String getMatName() {
@@ -325,7 +277,6 @@ public class RmClaimDetail extends DaoEPBase {
 
     /**
      * get the matTypeId - 物资分类ID
-     *
      * @return the matTypeId
      */
     public String getMatTypeId() {
@@ -341,7 +292,6 @@ public class RmClaimDetail extends DaoEPBase {
 
     /**
      * get the matTypeName - 物资分类名称
-     *
      * @return the matTypeName
      */
     public String getMatTypeName() {
@@ -357,7 +307,6 @@ public class RmClaimDetail extends DaoEPBase {
 
     /**
      * get the matSpec - 物资规格
-     *
      * @return the matSpec
      */
     public String getMatSpec() {
@@ -373,7 +322,6 @@ public class RmClaimDetail extends DaoEPBase {
 
     /**
      * get the matModel - 物资型号
-     *
      * @return the matModel
      */
     public String getMatModel() {
@@ -389,7 +337,6 @@ public class RmClaimDetail extends DaoEPBase {
 
     /**
      * get the unit - 计量单位
-     *
      * @return the unit
      */
     public String getUnit() {
@@ -405,7 +352,6 @@ public class RmClaimDetail extends DaoEPBase {
 
     /**
      * get the unitName - 计量单位名称
-     *
      * @return the unitName
      */
     public String getUnitName() {
@@ -421,7 +367,6 @@ public class RmClaimDetail extends DaoEPBase {
 
     /**
      * get the price - 单价
-     *
      * @return the price
      */
     public Double getPrice() {
@@ -437,7 +382,6 @@ public class RmClaimDetail extends DaoEPBase {
 
     /**
      * get the num - 领用数量
-     *
      * @return the num
      */
     public Double getNum() {
@@ -453,7 +397,6 @@ public class RmClaimDetail extends DaoEPBase {
 
     /**
      * get the claimAmount - 领用金额
-     *
      * @return the claimAmount
      */
     public BigDecimal getClaimAmount() {
@@ -469,12 +412,11 @@ public class RmClaimDetail extends DaoEPBase {
 
     /**
      * 计算领用金额
-     *
+     * @Title: calClaimAmount
      * @param price price : 单价
-     * @param num   num : 领用数量
+     * @param num num : 领用数量
      * @return void
      * @throws
-     * @Title: calClaimAmount
      **/
     public void calClaimAmount(Double price, Double num) {
         BigDecimal p = NumberUtils.toBigDecimal(price, BigDecimal.ZERO);
@@ -484,7 +426,6 @@ public class RmClaimDetail extends DaoEPBase {
 
     /**
      * get the outNum - 已出库数量
-     *
      * @return the outNum
      */
     public Double getOutNum() {
@@ -524,19 +465,14 @@ public class RmClaimDetail extends DaoEPBase {
 
     /**
      * get the pictureUri - 图片地址
-     *
      * @return the pictureUri
      */
-    public String getPictureUri() {
-        return pictureUri;
-    }
+    public String getPictureUri() { return pictureUri; }
 
     /**
      * set the pictureUri - 图片地址
      */
-    public void setPictureUri(String pictureUri) {
-        this.pictureUri = pictureUri;
-    }
+    public void setPictureUri(String pictureUri) { this.pictureUri = pictureUri; }
 
     public Integer getSortNo() {
         return sortNo;
@@ -598,27 +534,27 @@ public class RmClaimDetail extends DaoEPBase {
     @Override
     public Map toMap() {
         Map map = new HashMap(16);
-        map.put("id", StringUtils.toString(id, eiMetadata.getMeta("id")));
-        map.put("claimId", StringUtils.toString(claimId, eiMetadata.getMeta("claimId")));
-        map.put("claimNo", StringUtils.toString(claimNo, eiMetadata.getMeta("claimNo")));
-        map.put("matNum", StringUtils.toString(matNum, eiMetadata.getMeta("matNum")));
-        map.put("matName", StringUtils.toString(matName, eiMetadata.getMeta("matName")));
-        map.put("matTypeId", StringUtils.toString(matTypeId, eiMetadata.getMeta("matTypeId")));
-        map.put("matTypeName", StringUtils.toString(matTypeName, eiMetadata.getMeta("matTypeName")));
-        map.put("matSpec", StringUtils.toString(matSpec, eiMetadata.getMeta("matSpec")));
-        map.put("matModel", StringUtils.toString(matModel, eiMetadata.getMeta("matModel")));
-        map.put("unit", StringUtils.toString(unit, eiMetadata.getMeta("unit")));
-        map.put("unitName", StringUtils.toString(unitName, eiMetadata.getMeta("unitName")));
-        map.put("price", StringUtils.toString(price, eiMetadata.getMeta("price")));
-        map.put("num", StringUtils.toString(num, eiMetadata.getMeta("num")));
-        map.put("outNum", StringUtils.toString(outNum, eiMetadata.getMeta("outNum")));
-        map.put("claimAmount", StringUtils.toString(claimAmount, eiMetadata.getMeta("claimAmount")));
-        map.put("stockNum", StringUtils.toString(stockNum, eiMetadata.getMeta("stockNum")));
-        map.put("reserveNum", StringUtils.toString(reserveNum, eiMetadata.getMeta("reserveNum")));
-        map.put("outAmount", StringUtils.toString(outAmount, eiMetadata.getMeta("outAmount")));
-        map.put("pictureUri", StringUtils.toString(pictureUri, eiMetadata.getMeta("pictureUri")));
-        map.put("packfactor", StringUtils.toString(packfactor, eiMetadata.getMeta("packfactor")));
-        map.put("sortNo", StringUtils.toString(sortNo, eiMetadata.getMeta("sortNo")));
+        map.put("id",StringUtils.toString(id, eiMetadata.getMeta("id")));
+        map.put("claimId",StringUtils.toString(claimId, eiMetadata.getMeta("claimId")));
+        map.put("claimNo",StringUtils.toString(claimNo, eiMetadata.getMeta("claimNo")));
+        map.put("matNum",StringUtils.toString(matNum, eiMetadata.getMeta("matNum")));
+        map.put("matName",StringUtils.toString(matName, eiMetadata.getMeta("matName")));
+        map.put("matTypeId",StringUtils.toString(matTypeId, eiMetadata.getMeta("matTypeId")));
+        map.put("matTypeName",StringUtils.toString(matTypeName, eiMetadata.getMeta("matTypeName")));
+        map.put("matSpec",StringUtils.toString(matSpec, eiMetadata.getMeta("matSpec")));
+        map.put("matModel",StringUtils.toString(matModel, eiMetadata.getMeta("matModel")));
+        map.put("unit",StringUtils.toString(unit, eiMetadata.getMeta("unit")));
+        map.put("unitName",StringUtils.toString(unitName, eiMetadata.getMeta("unitName")));
+        map.put("price",StringUtils.toString(price, eiMetadata.getMeta("price")));
+        map.put("num",StringUtils.toString(num, eiMetadata.getMeta("num")));
+        map.put("outNum",StringUtils.toString(outNum, eiMetadata.getMeta("outNum")));
+        map.put("claimAmount",StringUtils.toString(claimAmount, eiMetadata.getMeta("claimAmount")));
+        map.put("stockNum",StringUtils.toString(stockNum, eiMetadata.getMeta("stockNum")));
+        map.put("reserveNum",StringUtils.toString(reserveNum, eiMetadata.getMeta("reserveNum")));
+        map.put("outAmount",StringUtils.toString(outAmount, eiMetadata.getMeta("outAmount")));
+        map.put("pictureUri",StringUtils.toString(pictureUri, eiMetadata.getMeta("pictureUri")));
+        map.put("packfactor",StringUtils.toString(packfactor, eiMetadata.getMeta("packfactor")));
+        map.put("sortNo",StringUtils.toString(sortNo, eiMetadata.getMeta("sortNo")));
         return map;
     }
 }

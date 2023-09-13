@@ -24,7 +24,7 @@ import java.util.List;
  * @ClassName: ServiceRMYD01
  * @Package com.baosight.wilp.rm.yd.service
  * @date: 2022年09月21日 14:58
- * <p>
+ *
  * 1.待审批需求计划列表
  * 2.需求计划明细
  * 3.根据需求计划单号获取指定需求计划
@@ -48,23 +48,22 @@ public class ServiceRMYD01 extends ServiceBase {
 
     /**
      * 待审批需求计划列表
-     *
+     * @Title: queryUnApproveList
      * @param inInfo inInfo
-     *               role: 角色编码字符串
-     *               curDept: 当前科室编码
+     *      role: 角色编码字符串
+     *      curDept: 当前科室编码
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: queryUnApproveList
      **/
     public EiInfo queryUnApproveList(EiInfo inInfo) {
         //参数处理
         String role = inInfo.getString("role");
         String deptNum = inInfo.getString("curDept");
-        if (StringUtils.isBlank(deptNum)) {
+        if(StringUtils.isBlank(deptNum)) {
             return ValidatorUtils.errorInfo("科室参数不能为空");
         }
         //角色校验,判断用户的角色是否满足。不满足，返回空;满足,查询数据
-        if (!ROLE.equals(role)) {
+        if(!ROLE.equals(role)) {
             inInfo.set("list", new ArrayList<>());
         } else {
             List<RmRequirePlan> list = dao.query("RMLJ01.query", new HashMap(4) {{
@@ -78,16 +77,15 @@ public class ServiceRMYD01 extends ServiceBase {
 
     /**
      * 获取需求计划明细
-     *
+     * @Title: queryDetailList
      * @param inInfo inInfo
-     *               planId: 需求计划ID
+     *      planId: 需求计划ID
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: queryDetailList
      **/
     public EiInfo queryDetailList(EiInfo inInfo) {
         String planId = inInfo.getString("planId");
-        if (StringUtils.isBlank(planId)) {
+        if(StringUtils.isBlank(planId)) {
             return ValidatorUtils.errorInfo("参数不能为空");
         }
         List<RmRequirePlanDetail> details = requirePlanService.queryRequirePlanDetailList(planId);
@@ -97,15 +95,14 @@ public class ServiceRMYD01 extends ServiceBase {
 
     /**
      * 根据需求计划单号获取指定需求计划
-     *
+     * @Title: queryRequirePlan
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: queryRequirePlan
      **/
     public EiInfo queryRequirePlan(EiInfo inInfo) {
         String planNo = inInfo.getString("planNo");
-        if (StringUtils.isBlank(planNo)) {
+        if(StringUtils.isBlank(planNo)) {
             return ValidatorUtils.errorInfo("参数不能为空");
         }
         RmRequirePlan plan = requirePlanService.queryRequirePlanByPlanNo(planNo);
@@ -115,14 +112,13 @@ public class ServiceRMYD01 extends ServiceBase {
 
     /**
      * 需求计划审批通过
-     *
+     * @Title: pass
      * @param inInfo inInfo
-     *               planId : 需求计划ID
-     *               workNo: 当前登录人工号
-     *               name : 当前登录人姓名
+     *      planId : 需求计划ID
+     *      workNo: 当前登录人工号
+     *      name : 当前登录人姓名
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: pass
      **/
     public EiInfo pass(EiInfo inInfo) {
         return RmUtils.invoke(inInfo, "RMXQ0401", "pass");
@@ -130,19 +126,18 @@ public class ServiceRMYD01 extends ServiceBase {
 
     /**
      * 需求计划审批驳回
-     *
+     * @Title: reject
      * @param inInfo inInfo
-     *               planId : 需求计划ID
-     *               rejectReason : 驳回原因
-     *               workNo: 当前登录人工号
-     *               name : 当前登录人姓名
+     *      planId : 需求计划ID
+     *      rejectReason : 驳回原因
+     *      workNo: 当前登录人工号
+     *      name : 当前登录人姓名
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: reject
      **/
     public EiInfo reject(EiInfo inInfo) {
         String reason = inInfo.getString("rejectReason");
-        if (StringUtils.isBlank(reason)) {
+        if(StringUtils.isBlank(reason)) {
             return ValidatorUtils.errorInfo("驳回原因不能为空");
         }
         return RmUtils.invoke(inInfo, "RMXQ0401", "reject");
@@ -150,14 +145,13 @@ public class ServiceRMYD01 extends ServiceBase {
 
     /**
      * 批量审批通过
-     *
+     * @Title: batchPass
      * @param inInfo inInfo
-     *               ids: 需求计划ID集合
-     *               workNo: 当前登录人工号
-     *               name : 当前登录人姓名
+     *      ids: 需求计划ID集合
+     *      workNo: 当前登录人工号
+     *      name : 当前登录人姓名
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: batchPass
      **/
     public EiInfo batchPass(EiInfo inInfo) {
         return RmUtils.invoke(inInfo, "RMXQ04", "batchPass");
@@ -165,14 +159,13 @@ public class ServiceRMYD01 extends ServiceBase {
 
     /**
      * 批量审批驳回
-     *
+     * @Title: batchReject
      * @param inInfo inInfo
-     *               ids: 需求计划ID集合
-     *               workNo: 当前登录人工号
-     *               name : 当前登录人姓名
+     *      ids: 需求计划ID集合
+     *      workNo: 当前登录人工号
+     *      name : 当前登录人姓名
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: batchReject
      **/
     public EiInfo batchReject(EiInfo inInfo) {
         return RmUtils.invoke(inInfo, "RMXQ04", "batchReject");
@@ -180,15 +173,14 @@ public class ServiceRMYD01 extends ServiceBase {
 
     /**
      * 获取审批履历
-     *
+     * @Title: queryApproval
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: queryApproval
      **/
     public EiInfo queryApproval(EiInfo inInfo) {
         String relateId = inInfo.getString("relateId");
-        if (StringUtils.isBlank(relateId)) {
+        if(StringUtils.isBlank(relateId)) {
             return ValidatorUtils.errorInfo("参数不能为空");
         }
         List<RmApproval> mpApprovals = approvalHistoryService.queryApproval(relateId);

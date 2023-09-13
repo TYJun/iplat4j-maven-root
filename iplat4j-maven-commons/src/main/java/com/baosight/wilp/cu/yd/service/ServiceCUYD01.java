@@ -119,7 +119,7 @@ public class ServiceCUYD01 extends ServiceBase {
                 EiInfo staffOutEiInfo = AppLoginUtils.invoke(staffInEiInfo);
                 if (0 == staffOutEiInfo.getStatus()) { // 获取员工信息成功
                     userResultInfo = (Map<String, String>) staffOutEiInfo.get("result");
-                    if (!userResultInfo.isEmpty()) {
+                    if (null != userResultInfo && !userResultInfo.isEmpty()) {
                         userResultInfo.put("workNo", userResultInfo.get("workNo"));
                         userResultInfo.put("realName", userResultInfo.get("name"));
                         userResultInfo.put("name", userResultInfo.get("name"));
@@ -185,7 +185,14 @@ public class ServiceCUYD01 extends ServiceBase {
             } else { //登录失败
                 //throw new PlatException(LoginCode.getMsgByCode(status));
                 loginOutEiInfo.setStatus(status);
-                loginOutEiInfo.setMsg(LoginCode.getMsgByCode(status));
+
+                // 如果 status 是 -4
+                if(status == -4) {
+                    loginOutEiInfo.setMsg(loginOutEiInfo.getMsg());
+                } else {
+                    loginOutEiInfo.setMsg(LoginCode.getMsgByCode(status));
+                }
+
             }
         }
 

@@ -388,11 +388,11 @@ public class ServiceMCJK01 extends ServiceBase{
 		Date date=new Date();
 		String dateTime=new SimpleDateFormat("yyyyMMddHHmmss").format(date);
 		map.put("dateTime",dateTime);
-		//创建一张表
-		dao.query("MCJK01.createTable",map);
-		//复制数据到这张表中
-		dao.insert("MCJK01.insertPreData",map);
-		System.out.println("================备份成功,表名:ac_department"+dateTime+"===================");
+//		//创建一张表
+//		dao.query("MCJK01.createTable",map);
+//		//复制数据到这张表中
+//		dao.insert("MCJK01.insertPreData",map);
+//		System.out.println("================备份成功,表名:ac_department"+dateTime+"===================");
 
 //		String url="http://199.168.200.136?op=EsbApi";
 		String url = GET_PA_INFO;
@@ -542,11 +542,11 @@ public class ServiceMCJK01 extends ServiceBase{
 		Date date=new Date();
 		String dateTime=new SimpleDateFormat("yyyyMMddHHmmss").format(date);
 		map.put("dateTime",dateTime);
-		//创建一张表
-		dao.query("MCJK01.createTable",map);
-		//复制数据到这张表中
-		dao.insert("MCJK01.insertPreData",map);
-		System.out.println("================备份成功,表名:ac_department"+dateTime+"===================");
+//		//创建一张表
+//		dao.query("MCJK01.createTable",map);
+//		//复制数据到这张表中
+//		dao.insert("MCJK01.insertPreData",map);
+//		System.out.println("================备份成功,表名:ac_department"+dateTime+"===================");
 
 //		String url="http://199.168.200.136?op=EsbApi";
 		String url = GET_PA_INFO;

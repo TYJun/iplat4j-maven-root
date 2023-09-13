@@ -1,8 +1,8 @@
-$(function () {
+$(function() {
     //表格初始化处理
     IPLATUI.EFGrid = new WilpGrid({
         add: false, edit: false, del: false,
-        hasRowClick: true, rowClickConfig: {gridId: "detail", paramName: "claimId", colName: "id"},
+        hasRowClick: true, rowClickConfig: {gridId:"detail", paramName:"claimId", colName: "id"},
         extentMethod: [{
             buttonId: "APPROVAL",
             call: function () {
@@ -15,7 +15,7 @@ $(function () {
                     popData("RMLY0301?inqu_status-0-id=" + checkRows[0].id + "&type=approve");
                 }
             }
-        }, {
+        },{
             buttonId: "BATCH_PASS",
             call: function () {
                 let checkRows = window["resultGrid"].getCheckedRows();
@@ -51,11 +51,8 @@ $(function () {
                 } else {
                     IPLAT.prompt({
                         message: '驳回原因',
-                        okFn: function (e) {
-                            reject(e, checkRows)
-                        },
-                        cancelFn: function (e) {
-                        },
+                        okFn: function (e) { reject(e, checkRows) },
+                        cancelFn: function (e) {},
                         title: '领用申请审批驳回',
                         minWidth: 450
                     });
@@ -68,12 +65,12 @@ $(function () {
     keydown("inqu", "QUERY");
 
     /**查询**/
-    $("#QUERY").on("click", function (e) {
+    $("#QUERY").on("click", function(e) {
         resultGrid.dataSource.page(1);
     });
 
     /**重置**/
-    $("#REQUERY").on("click", function (e) {
+    $("#REQUERY").on("click", function(e) {
         //document.getElementById("inqu-trash").click();
         resetTime("inqu_status-0-beginTime", "inqu_status-0-endTime");
         $("#inqu_status-0-planNo").val("");
@@ -82,7 +79,7 @@ $(function () {
 
 });
 
-function reject(rejectReason, rows) {
+function reject (rejectReason, rows) {
     //参数处理
     let eiInfo = new EiInfo();
     let ids = rows.map(row => row.id);

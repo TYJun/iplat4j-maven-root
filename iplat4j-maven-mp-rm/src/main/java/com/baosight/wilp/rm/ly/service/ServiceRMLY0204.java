@@ -19,7 +19,7 @@ import java.util.List;
  * @ClassName: ServiceRMLY0204
  * @Package com.baosight.wilp.rm.ly.service
  * @date: 2022年09月15日 14:58
- * <p>
+ *
  * 1.页面加载
  * 2.查询领用申请明细
  */
@@ -30,11 +30,10 @@ public class ServiceRMLY0204 extends ServiceBase {
 
     /**
      * 页面加载
-     *
+     * @Title: initLoad
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: initLoad
      **/
     @Override
     public EiInfo initLoad(EiInfo inInfo) {
@@ -52,17 +51,16 @@ public class ServiceRMLY0204 extends ServiceBase {
 
     /**
      * 领用明细查询
-     *
+     * @Title: query
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: query
      **/
     @Override
     public EiInfo query(EiInfo inInfo) {
         String statusCode = inInfo.getCellStr(RmConstant.QUERY_BLOCK, 0, "statusCode");
         inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "claimId", inInfo.getCellStr(RmConstant.QUERY_BLOCK, 0, "id"));
-        if (RmConstant.CLAIM_STATUS_PART_OUT.equals(statusCode)) {
+        if(RmConstant.CLAIM_STATUS_PART_OUT.equals(statusCode)) {
             inInfo.getBlock(RmConstant.RESULT_BLOCK).set(EiConstant.orderByStr, "d.out_num, d.sort_no asc");
         }
         EiInfo outInfo = super.query(inInfo, "RMLJ02.queryDetail", new RmClaimDetail());

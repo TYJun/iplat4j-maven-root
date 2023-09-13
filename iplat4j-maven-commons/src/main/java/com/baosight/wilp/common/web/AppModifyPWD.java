@@ -12,6 +12,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.baosight.iplat4j.core.ei.EiConstant;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.soa.XLocalManager;
+import com.baosight.wilp.utils.ErrorTips;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,33 +22,43 @@ import com.baosight.iplat4j.core.data.ibatis.dao.Dao;
 import com.baosight.iplat4j.core.ioc.spring.PlatApplicationContext;
 import com.baosight.iplat4j.core.util.DateUtils;
 import com.baosight.xservices.xs.authentication.SecurityBridgeFactory;
+
 @RestController
 public class AppModifyPWD {
 
-    private static Dao dao = (Dao)PlatApplicationContext.getBean("dao");
+    private static Dao dao = (Dao) PlatApplicationContext.getBean("dao");
+
+    String defaultPassword = PlatApplicationContext.getProperty("xservices.security.default.password");
 
     @PostMapping("/maintain")
     @CrossOrigin
     public String modifyPWD(HttpServletRequest request, HttpServletResponse response) {
 
-        JSONObject retJson = new JSONObject();
-
         String loginName=request.getParameter("workNo");
         String oldPassword=request.getParameter("oldPassword");
-        String newPassword=request.getParameter("password");Map map =new HashMap();
+        String newPassword=request.getParameter("password");
+
+        return handle(loginName, oldPassword, newPassword);
+    }
+
+    public String handle(String loginName, String oldPassword, String newPassword) {
+        JSONObject retJson = new JSONObject();
+
+        // 首先进行非空校验
+        boolean flag = StringUtils.isEmpty(loginName) || StringUtils.isEmpty(oldPassword) ||  StringUtils.isEmpty(newPassword);
+        if (flag) {
+            retJson.put("respCode", "-1");
+            retJson.put("respMsg", "参数不能为空！");
+            return retJson.toJSONString();
+        }
+
+        Map map =new HashMap();
         map.put("loginName", loginName);
         List resultList = dao.query("XS0104.query", map);
 
         if(null != resultList && resultList.size() > 0){
             Map result = (Map)resultList.get(0);
             String encodedPassword = result.get("password").toString();
-
-            boolean flag = "".equals(oldPassword) || "".equals(newPassword);
-            if (flag) {
-                retJson.put("respCode", "-1");
-                retJson.put("respMsg", "原密码、新密码和确认密码都必须填写！");
-                return retJson.toJSONString();
-            }
 
             String matchedPassword = SecurityBridgeFactory.getSecurityPasswordEncrypt().encode(newPassword);
             if (SecurityBridgeFactory.getSecurityPasswordEncrypt().matches(oldPassword, encodedPassword)) {
@@ -56,6 +68,13 @@ public class AppModifyPWD {
                     retJson.put("respMsg", "新密码不能与原来的密码相同！");
                     return retJson.toJSONString();
                 }
+
+                // 新密码不允许是初始密码的校验
+//                if(StringUtils.isNotEmpty(defaultPassword) && newPassword.equals(defaultPassword)) {  // 禁止修改成默认密码
+//                    retJson.put("respCode", "-1");
+//                    retJson.put("respMsg", ErrorTips.UPDATE_PWD_INITPWD);
+//                    return retJson.toJSONString();
+//                }
 
                 EiInfo passwordInfo = new EiInfo();
                 passwordInfo.set("password", newPassword);
@@ -84,12 +103,12 @@ public class AppModifyPWD {
                 retJson.put("respMsg", "修改成功！");
             } else {
                 retJson.put("respCode", "-1");
-                retJson.put("respMsg", "原密码不正确！");
+                retJson.put("respMsg", ErrorTips.USERNAME_OR_PWD_ERROR_TIPS);
             }
 
         } else {// 用户不存在
             retJson.put("respCode", "-1");
-            retJson.put("respMsg", "用户名不存在！");
+            retJson.put("respMsg", ErrorTips.USERNAME_OR_PWD_ERROR_TIPS);
         }
 
         return retJson.toJSONString();

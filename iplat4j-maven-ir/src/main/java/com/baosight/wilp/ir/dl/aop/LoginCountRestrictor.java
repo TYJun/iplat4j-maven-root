@@ -87,7 +87,11 @@ public class LoginCountRestrictor implements LoginRestrictor{
             exInfo.set(EiConstant.serviceName, "IRDL01");
             exInfo.set(EiConstant.methodName, "loginFailureHandle");
             XLocalManager.call(exInfo);
-            throw e;
+            if(loginFailureCount == limitCount - 1) {
+                throw new UnknownAuthenticationException("该账号已经锁定，请 " +limitMinutes + " 分钟之后再登录");
+            } else {
+                throw e;
+            }
         }
         return proceed;
     }

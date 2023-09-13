@@ -17,7 +17,7 @@ import java.util.Set;
  * @ClassName: ValidatorUtils
  * @Package com.baosight.wilp.rm.common
  * @date: 2022年09月01日 18:51
- * <p>
+ *
  * 1.校验参数Map
  * 2.校验实体参数对象
  * 3.构建错误EiInfo
@@ -33,16 +33,15 @@ public class ValidatorUtils {
 
     /**
      * 校验参数Map
-     *
-     * @param map    map : 参数Map
-     * @param clazz  clazz : 拥有校验规则的实体
+     * @Title: validateEntity
+     * @param map map : 参数Map
+     * @param clazz clazz : 拥有校验规则的实体
      * @param groups groups : 待校验的组
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: validateEntity
      **/
     public static EiInfo validateEntity(Map<String, ?> map, Class<DaoEPBase> clazz, Class<?>... groups) {
-        if (clazz == null) {
+        if(clazz == null) {
             return errorInfo("无法校验错误");
         }
         try {
@@ -56,18 +55,17 @@ public class ValidatorUtils {
 
     /**
      * 校验实体参数对象
-     *
+     * @Title: validateEntity
      * @param object object 待校验对象
      * @param groups groups 待校验的组
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: validateEntity
      **/
     public static EiInfo validateEntity(Object object, Class<?>... groups) {
         Set<ConstraintViolation<Object>> constraintViolations = validator.validate(object, groups);
         if (!constraintViolations.isEmpty()) {
             StringBuilder msg = new StringBuilder();
-            for (ConstraintViolation<Object> constraint : constraintViolations) {
+            for(ConstraintViolation<Object> constraint:  constraintViolations){
                 msg.append(constraint.getMessage()).append("<br>");
             }
             return errorInfo(msg.toString());
@@ -77,15 +75,14 @@ public class ValidatorUtils {
 
     /**
      * 构建错误EiInfo
-     *
+     * @Title: errorInfo
      * @param inInfo inInfo : 参数EiInfo
-     * @param msg    msg : 校验错误消息
+     * @param msg msg : 校验错误消息
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: errorInfo
      **/
     public static EiInfo errorInfo(EiInfo inInfo, String msg) {
-        if (inInfo == null) {
+        if(inInfo == null) {
             inInfo = new EiInfo();
         }
         inInfo.setStatus(-1);
@@ -95,11 +92,10 @@ public class ValidatorUtils {
 
     /**
      * 构建错误EiInfo
-     *
+     * @Title: errorInfo
      * @param msg msg : 校验错误消息
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: errorInfo
      **/
     public static EiInfo errorInfo(String msg) {
         return errorInfo(null, msg);
@@ -107,15 +103,14 @@ public class ValidatorUtils {
 
     /**
      * 构建空EiInfo
-     *
-     * @param inInfo  inInfo : 参数EiInfo
+     * @Title: blankInfo
+     * @param inInfo inInfo : 参数EiInfo
      * @param blockId blockId : block块ID
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: blankInfo
      **/
     public static EiInfo blankInfo(EiInfo inInfo, String blockId) {
-        if (inInfo == null) {
+        if(inInfo == null) {
             inInfo = new EiInfo();
         }
         EiBlock block = new EiBlock(blockId);
@@ -125,11 +120,10 @@ public class ValidatorUtils {
 
     /**
      * 构建空EiInfo
-     *
+     * @Title: blankInfo
      * @param blockId blockId : block块ID
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: blankInfo
      **/
     public static EiInfo blankInfo(String blockId) {
         return blankInfo(null, blockId);

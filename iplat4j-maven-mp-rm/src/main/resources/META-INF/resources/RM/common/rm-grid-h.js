@@ -7,22 +7,22 @@ class WilpGrid {
         /**是否详情功能,要求Grid的某列有displayType="url"**/
         this.detail = config.detail ?? true;
         /**Grid详情页面地址**/
-        this.detailUrl = config.detailUrl ?? __ei.serviceName + "01?inqu_status-0-id=#:id#";
+        this.detailUrl = config.detailUrl ?? __ei.serviceName+"01?inqu_status-0-id=#:id#";
         this.detailWindow = config.detailWindow ?? "popData";
         /**是否有新增按钮(button的id为ADD)**/
         this.add = config.add ?? true;
         /**是否复制新增**/
         this.addCopy = config.addCopy ?? false;
         /**新增页面地址**/
-        this.addUrl = config.addUrl ?? __ei.serviceName + "01?inqu_status-0-id=#:id#";
+        this.addUrl = config.addUrl ?? __ei.serviceName+"01?inqu_status-0-id=#:id#";
         /**是否有编辑按钮(button的id为EDIT)**/
         this.edit = config.edit ?? true;
         /**编辑页面地址**/
-        this.editUrl = config.editUrl ?? __ei.serviceName + "01?inqu_status-0-id=#:id#";
+        this.editUrl = config.editUrl ?? __ei.serviceName+"01?inqu_status-0-id=#:id#";
         /**编辑配置**/
-        this.editConfig = config.editConfig ?? {status: ["01", "20"]}
+        this.editConfig = config.editConfig ?? {status: ["01","20"]}
         /**是否有删除按钮(button的id为DEL)**/
-        this.del = config.del ?? true;
+        this.del =  config.del ?? true;
         /**
          * 删除配置：
          *    status: 数据可删除状态
@@ -38,12 +38,7 @@ class WilpGrid {
          *    serviceName: 服务名
          *    methodName: 方法名
          **/
-        this.submitConfig = config.submitConfig ?? {
-            status: ["01"],
-            backStatus: ["20"],
-            serviceName: __ei.serviceName,
-            methodName: "submit"
-        };
+        this.submitConfig = config.submitConfig ?? { status: ["01"], backStatus: ["20"], serviceName: __ei.serviceName, methodName: "submit" };
         /**是否有撤回按钮(button的id为BACK)**/
         this.back = config.back ?? false;
         /**
@@ -89,16 +84,16 @@ class WilpGrid {
      */
     buildCellClick(resultGrid) {
         let _this = this;
-        if (this.detail || this.showImg) {
+        if(this.detail || this.showImg) {
             resultGrid['onCellClick'] = function (e) {
                 e.preventDefault();
                 //查看详情
-                if (_this.detail && e.td.context.className == "cell-url") {
+                if (_this.detail && e.td.context.className =="cell-url") {
                     popData(_this.buildUrl(_this.detailUrl, e.model, _this.isOpType, "see"), _this.detailWindow);
-                    window[_this.resultId + "Grid"].unCheckAllRows();
+                    window[_this.resultId+"Grid"].unCheckAllRows();
                 }
                 //查看图片大图
-                if (_this.showImg && e.field === "pictureUri") {
+                if(_this.showImg && e.field === "pictureUri") {
                     let img = e.model['pictureUri'];
                     WindowUtil({
                         title: "图片",
@@ -107,7 +102,7 @@ class WilpGrid {
                                        <img src='${IPLATUI.CONTEXT_PATH}${img}'>
                                  </span>`
                     });
-                    window[_this.resultId + "Grid"].unCheckAllRows();
+                    window[_this.resultId+"Grid"].unCheckAllRows();
                 }
             };
         }
@@ -119,7 +114,7 @@ class WilpGrid {
      */
     buildAfterEditor(resultGrid) {
         let _this = this;
-        if (this.afterEditConfig.isShow) {
+        if(this.afterEditConfig.isShow) {
             resultGrid['afterEdit'] = function (e) {
                 //e.preventDefault();
                 _this.afterEditConfig.call(e);
@@ -133,11 +128,11 @@ class WilpGrid {
      */
     buildRowClick(resultGrid) {
         let _this = this;
-        if (this.hasRowClick) {
+        if(this.hasRowClick) {
             resultGrid['onRowClick'] = function (e) {
                 e.preventDefault();
-                $("#inqu_status-0-" + _this.rowClickConfig.paramName).val(e.model[_this.rowClickConfig.colName])
-                window[_this.rowClickConfig.gridId + "Grid"].dataSource.page(1);
+                $("#inqu_status-0-"+_this.rowClickConfig.paramName).val( e.model[_this.rowClickConfig.colName])
+                window[_this.rowClickConfig.gridId+"Grid"].dataSource.page(1);
             }
         }
     }
@@ -147,11 +142,11 @@ class WilpGrid {
      * @param resultGrid : object : grid对象
      */
     buildImgCell(resultGrid) {
-        if (this.showImg) {
+        if(this.showImg) {
             resultGrid['columns'] = [{
                 field: "pictureUri",
                 title: "图片",
-                template: "<span ><img src='" + IPLATUI.CONTEXT_PATH + "#:pictureUri#' height='30' ></span>",
+                template: "<span ><img src='"+IPLATUI.CONTEXT_PATH+"#:pictureUri#' height='30' ></span>",
                 //width:150
             }]
         }
@@ -161,7 +156,7 @@ class WilpGrid {
      * 构建Grid对象
      */
     buildGrid() {
-        let grid = {}, resultGrid = {}, _this = this;
+        let grid = {},resultGrid = {}, _this = this;
         //单元格点击事件
         this.buildCellClick(resultGrid);
         //行点击事件
@@ -171,11 +166,11 @@ class WilpGrid {
         //功能事件
         resultGrid['loadComplete'] = function (e) {
             /**新增**/
-            if (_this.add) {
+            if(_this.add) {
                 $("#ADD").on("click", function (e) {
                     let data = {};
-                    if (_this.addCopy) {
-                        let checkRows = window[_this.resultId + "Grid"].getCheckedRows();
+                    if(_this.addCopy) {
+                        let checkRows = window[_this.resultId+"Grid"].getCheckedRows();
                         data = checkRows.length > 0 ? checkRows[0] : {};
                     }
                     popData(_this.buildUrl(_this.addUrl, data, _this.isOpType, "add"));
@@ -183,9 +178,9 @@ class WilpGrid {
             }
 
             /**编辑**/
-            if (_this.edit) {
+            if(_this.edit) {
                 $("#EDIT").on("click", function (e) {
-                    let checkRows = window[_this.resultId + "Grid"].getCheckedRows()
+                    let checkRows = window[_this.resultId+"Grid"].getCheckedRows()
                     if (checkRows.length < 1) {
                         NotificationUtil("请选择需要编辑的记录", "error");
                     } else if (checkRows[0].statusCode && !_this.editConfig.status.includes(checkRows[0].statusCode)) { //存在状态,但状态不满足
@@ -197,9 +192,9 @@ class WilpGrid {
             }
 
             /**删除**/
-            if (_this.del) {
+            if(_this.del) {
                 $("#DEL").on("click", function (e) {
-                    let checkRows = window[_this.resultId + "Grid"].getCheckedRows();
+                    let checkRows = window[_this.resultId+"Grid"].getCheckedRows();
                     if (checkRows.length < 1) {
                         NotificationUtil("请先选择需要删除的记录", "error");
                     } else if (checkRows[0].statusCode && !_this.delConfig.status.includes(checkRows[0].statusCode)) { //存在状态,但状态不满足
@@ -217,7 +212,7 @@ class WilpGrid {
                                             return;
                                         }
                                         NotificationUtil("删除成功");
-                                        window[_this.resultId + "Grid"].dataSource.page(1);
+                                        window[_this.resultId+"Grid"].dataSource.page(1);
                                     }
                                 });
                             },
@@ -229,16 +224,16 @@ class WilpGrid {
             }
 
             /**提交**/
-            if (_this.submit) {
+            if(_this.submit) {
                 $("#SUBMIT").on("click", function (e) {
-                    let checkRows = window[_this.resultId + "Grid"].getCheckedRows()
+                    let checkRows = window[_this.resultId+"Grid"].getCheckedRows()
                     if (checkRows.length < 1) {
                         NotificationUtil("请先选择需要提交的记录", "error");
-                    } else if (checkRows[0].statusCode && _this.submitConfig.backStatus.includes(checkRows[0].statusCode)) {
+                    } else if (checkRows[0].statusCode && _this.submitConfig.backStatus.includes(checkRows[0].statusCode)){
                         NotificationUtil("请先编辑完善信息后再提交", "error");
                     } else if (checkRows[0].statusCode && !_this.submitConfig.status.includes(checkRows[0].statusCode)) { //存在状态,但状态不满足
                         NotificationUtil("已提交的记录无需再次提交", "error");
-                    } else {
+                    }else {
                         IPLAT.confirm({
                             message: '<b>提交后无法编辑,确定要提交吗？</b>',
                             okFn: function (e) {
@@ -251,7 +246,7 @@ class WilpGrid {
                                             return;
                                         }
                                         NotificationUtil("提交成功");
-                                        window[_this.resultId + "Grid"].dataSource.page(1);
+                                        window[_this.resultId+"Grid"].dataSource.page(1);
                                     }
                                 });
                             },
@@ -263,9 +258,9 @@ class WilpGrid {
             }
 
             /**撤回**/
-            if (_this.back) {
+            if(_this.back) {
                 $("#BACK").on("click", function (e) {
-                    let checkRows = window[_this.resultId + "Grid"].getCheckedRows()
+                    let checkRows = window[_this.resultId+"Grid"].getCheckedRows()
                     if (checkRows.length < 1) {
                         NotificationUtil("请先选择需要撤回的记录", "error");
                     } else if (checkRows[0].statusCode && !_this.backConfig.status.includes(checkRows[0].statusCode)) { //存在状态,但状态不满足
@@ -280,7 +275,7 @@ class WilpGrid {
                                     return;
                                 }
                                 NotificationUtil("撤回成功");
-                                window[_this.resultId + "Grid"].dataSource.page(1);
+                                window[_this.resultId+"Grid"].dataSource.page(1);
                             }
                         });
                     }
@@ -288,11 +283,9 @@ class WilpGrid {
             }
 
             //其他功能
-            if (_this.extentMethod) {
+            if(_this.extentMethod) {
                 _this.extentMethod.forEach(ex => {
-                    $("#" + ex['buttonId']).on("click", function (e) {
-                        ex.call()
-                    });
+                    $("#"+ex['buttonId']).on("click", function(e){ ex.call()});
                 })
             }
         }
@@ -304,18 +297,18 @@ class WilpGrid {
      * 构建Grid对象
      */
     buildToolBarGrid() {
-        let grid = {}, resultGrid = {};
+        let grid = {},resultGrid = {};
         //单元格点击事件
         this.buildCellClick(resultGrid);
         //单元格编辑后事件
         this.buildAfterEditor(resultGrid);
         //显示图片
         this.buildImgCell(resultGrid);
-        if (!this.showPage) {
+        if(!this.showPage) {
             resultGrid["pageable"] = false;
             resultGrid["exportGrid"] = false;
         }
-        if (this.toolbar) {
+        if(this.toolbar) {
             resultGrid["toolbarConfig"] = this.toolbar;
         }
         grid[this.resultId] = resultGrid;
@@ -336,13 +329,13 @@ class WilpGrid {
             params.push($2);
         });
         params.forEach(e => {
-            if (data) {
-                url = url.replace(e, data[e.substring(2, e.length - 1)])
+            if(data) {
+                url = url.replace(e, data[e.substring(2,e.length-1)])
             } else {
                 url = url.replace(e, "")
             }
         })
-        if (isOpType) {
+        if(isOpType) {
             url = url + (params.length > 0 ? "&" : "?") + "type=" + type;
         }
         return url;
@@ -354,18 +347,18 @@ class WilpGrid {
  * @param url : string 子页面地址
  * @param windowName : string 子页面窗口ID
  */
-function popData(url, windowId = "popData") {
+function popData(url, windowId="popData" ) {
     url = IPLATUI.CONTEXT_PATH + "/web/" + url;
-    let popData = $("#" + windowId);
+    let popData = $("#"+windowId);
     popData.data("kendoWindow").setOptions({
-        open: function () {
+        open : function() {
             popData.data("kendoWindow").refresh({
-                url: url,
+                url : url,
             });
         }
     });
     // 打开弹窗
-    window[windowId + "Window"].open().center();
+    window[windowId+"Window"].open().center();
 }
 
 /**
@@ -376,29 +369,29 @@ function popData(url, windowId = "popData") {
  * @param args
  */
 function distinctGridAdd(resultId, checkRows, addFields, ...args) {
-    let rows = window[resultId + "Grid"].getDataItems();
-    if (rows && rows.length > 0 && args && args.length > 0) {
+    let rows = window[resultId+"Grid"].getDataItems();
+    if(rows && rows.length > 0 && args && args.length > 0) {
         for (let i = 0; i < checkRows.length; i++) {
-            let model = checkRows[i], isExist = false;
+            let model = checkRows[i],isExist = false;
             rows.forEach(e => {
                 let isEqual = true;
                 args.forEach(field => isEqual = isEqual && e[field] == model[field])
                 isExist = isExist || isEqual;
             });
-            if (!isExist) {
-                if (addFields) {
+            if(!isExist) {
+                if(addFields) {
                     addFields.forEach(field => model[field] = "")
                 }
-                window[resultId + "Grid"].addRows(model);
+                window[resultId+"Grid"].addRows(model);
             }
         }
     } else {
-        if (addFields) {
-            checkRows.forEach(row => {
+        if(addFields) {
+            checkRows.forEach(row =>{
                 addFields.forEach(field => row[field] = "")
             })
         }
-        window[resultId + "Grid"].addRows(checkRows)
+        window[resultId+"Grid"].addRows(checkRows)
     }
 }
 
@@ -407,9 +400,9 @@ function distinctGridAdd(resultId, checkRows, addFields, ...args) {
  */
 function resetTime(beginId, endId) {
     let lastDate = new Date();
-    lastDate.setMonth(lastDate.getMonth() - 1);
-    $("#" + beginId).val(lastDate.Format("yyyy-MM-dd"));
-    $("#" + endId).val(new Date().Format("yyyy-MM-dd"));
+    lastDate.setMonth(lastDate.getMonth()-1);
+    $("#"+beginId).val(lastDate.Format("yyyy-MM-dd"));
+    $("#"+endId).val(new Date().Format("yyyy-MM-dd"));
 }
 
 /**
@@ -421,10 +414,10 @@ function resetTime(beginId, endId) {
 function resetParam(eiInfo, hasTime, hasUser) {
     $("#inqu_status-0-deptNum").val(eiInfo.get("inqu_status-0-deptNum"));
     $("#inqu_status-0-deptName").val(eiInfo.get("inqu_status-0-deptName"));
-    if (hasUser) {
+    if(hasUser) {
         $("#inqu_status-0-recCreatorName").val(eiInfo.get("inqu_status-0-recCreatorName"))
     }
-    if (hasTime) {
+    if(hasTime) {
         resetTime("inqu_status-0-beginTime", "inqu_status-0-endTime");
     }
 }

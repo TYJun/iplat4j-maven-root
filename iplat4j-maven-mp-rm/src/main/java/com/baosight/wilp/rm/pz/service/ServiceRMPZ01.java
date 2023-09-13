@@ -22,7 +22,7 @@ import java.util.*;
  * @ClassName: ServiceRMPZ01
  * @Package com.baosight.wilp.rm.pz.service
  * @date: 2022年09月05日 11:42
- * <p>
+ *
  * 1.页面加载
  * 2.页面数据数据
  * 3.保存配置
@@ -31,11 +31,10 @@ public class ServiceRMPZ01 extends ServiceBase {
 
     /**
      * 页面加载
-     *
+     * @Title: initLoad
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: initLoad
      **/
     @Override
     public EiInfo initLoad(EiInfo inInfo) {
@@ -44,11 +43,10 @@ public class ServiceRMPZ01 extends ServiceBase {
 
     /**
      * 数据查询
-     *
+     * @Title: query
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: query
      **/
     @Override
     public EiInfo query(EiInfo inInfo) {
@@ -64,30 +62,29 @@ public class ServiceRMPZ01 extends ServiceBase {
 
     /**
      * 保存配置
-     *
+     * @Title: save
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: save
      **/
     public EiInfo save(EiInfo inInfo) {
         //获取参数
         List<Map> rows = inInfo.getBlock(RmConstant.QUERY_BLOCK).getRows();
-        if (CollectionUtils.isEmpty(rows)) {
+        if(CollectionUtils.isEmpty(rows)) {
             return ValidatorUtils.errorInfo("配置不能为空");
         }
         //遍历
         List<RmConfig> list = new ArrayList<>();
-        for (int i = 0; i < rows.size(); i++) {
+        for (int i=0; i< rows.size(); i++) {
             RmConfig config = new RmConfig();
             config.fromMap(rows.get(i));
             //校验参数
             EiInfo outInfo = ValidatorUtils.validateEntity(config);
-            if (outInfo.getStatus() == -1) {
+            if(outInfo.getStatus() == -1) {
                 return outInfo;
             }
             //补全参数
-            if (StringUtils.isBlank(config.getId())) {
+            if(StringUtils.isBlank(config.getId())) {
                 config.setId(UUID.randomUUID().toString());
             }
             config.setDataGroupCode(BaseDockingUtils.getUserGroupByWorkNo(UserSession.getLoginName()));
@@ -103,11 +100,10 @@ public class ServiceRMPZ01 extends ServiceBase {
 
     /**
      * 获取所有的配置
-     *
+     * @Title: getAllConfig
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: getAllConfig
      **/
     public EiInfo getAllConfig(EiInfo inInfo) {
         Map<String, RmConfig> configs = RmConfigCache.getConfigs(BaseDockingUtils.getUserGroupByWorkNo(UserSession.getLoginName()));

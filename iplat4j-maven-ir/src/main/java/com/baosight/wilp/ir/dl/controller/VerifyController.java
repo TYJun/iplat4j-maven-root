@@ -3,23 +3,16 @@ package com.baosight.wilp.ir.dl.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.baosight.bpm.util.StringUtil;
 import com.baosight.wilp.ir.dl.aop.AppLoginAspect;
-import com.baosight.wilp.ir.dl.util.VerifyCode;
-import com.baosight.wilp.utils.UUID;
+import com.baosight.wilp.utils.VerifyCode;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.Base64Utils;
-import org.springframework.util.FastByteArrayOutputStream;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.Properties;
 
 /**
  * @PackageName com.baosight.wilp.ir.dl.controller
@@ -41,7 +34,7 @@ public class VerifyController {
 
     @RequestMapping("/verCode")
     @CrossOrigin
-    public void code(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void verCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setHeader("Content-type","application/octet-stream");
         int width = 100;
         int height = 44;
@@ -49,20 +42,12 @@ public class VerifyController {
         VerifyCode vc = new VerifyCode(width,height,size);
         BufferedImage image = vc.getImage();
         String text = vc.getText();
-        FastByteArrayOutputStream os = new FastByteArrayOutputStream();
 
-        String uuid;
         String deviceId = request.getParameter("deviceId");
         if (StringUtil.isNotEmpty(deviceId)) { // 有设备码，直接用设备码做唯一标识
-            uuid = deviceId;
-        } else {
-            uuid = UUID.fastUUID().toString(true);
+            AppLoginAspect.verifyCodeMap.put(deviceId, text);
         }
-
-        AppLoginAspect.verifyCodeMap.put(uuid, text);
-        VerifyCode.output(image, os);
-        String img = Base64Utils.encodeToString(os.toByteArray());
-        responseReq(response, uuid, img);
+        VerifyCode.output(image, response.getOutputStream());
     }
 
     private void responseReq(HttpServletResponse response, String uuid, String img) throws IOException{

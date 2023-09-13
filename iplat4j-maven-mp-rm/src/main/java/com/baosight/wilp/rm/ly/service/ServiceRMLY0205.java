@@ -34,11 +34,10 @@ public class ServiceRMLY0205 extends ServiceBase {
 
     /**
      * 页面加载
-     *
+     * @Title: initLoad
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: initLoad
      **/
     @Override
     public EiInfo initLoad(EiInfo inInfo) {
@@ -50,11 +49,10 @@ public class ServiceRMLY0205 extends ServiceBase {
 
     /**
      * 查询基础档案物资
-     *
+     * @Title: queryBaseMat
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: queryBaseMat
      **/
     public EiInfo queryBaseMat(EiInfo inInfo) {
         /**1.获取参数**/
@@ -65,7 +63,7 @@ public class ServiceRMLY0205 extends ServiceBase {
         /**2.调用本地服务获取物资信息**/
         EiInfo invoke = RmUtils.invoke("RMTY01", "selectMat", params);
         EiBlock matBlock = invoke.getBlock("mat");
-        if (matBlock == null || matBlock.getRowCount() == 0) {
+        if(matBlock == null || matBlock.getRowCount() == 0){
             return ValidatorUtils.blankInfo(inInfo, "mat");
         }
 
@@ -78,23 +76,22 @@ public class ServiceRMLY0205 extends ServiceBase {
 
     /**
      * 查询库存物资
-     *
+     * @Title: queryStockMat
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: queryStockMat
      **/
     public EiInfo queryStockMat(EiInfo inInfo) {
         /**1.获取参数**/
         Map<String, Object> params = CommonUtils.buildParamter(inInfo, RmConstant.QUERY_BLOCK, "mat");
         params.put("dataGroupCode", RmUtils.toString(params.get("dataGroupCode"), BaseDockingUtils.getUserGroupByWorkNo(UserSession.getLoginName())));
         params.put("isShowZero", "N");
-        Map<String, Object> ordeyBy = inInfo.getBlock("mat").getAttr();
-        params.put("orderBy", ordeyBy.get("orderBy"));
+        Map<String,Object> ordeyBy = inInfo.getBlock("mat").getAttr();
+        params.put("orderBy",ordeyBy.get("orderBy"));
         /**2.调用本地服务获取物资信息**/
         EiInfo invoke = RmUtils.invoke("RMJK03", "dockMatStock", params);
         EiBlock resultBlock = invoke.getBlock(RmConstant.RESULT_BLOCK);
-        if (resultBlock == null || resultBlock.getRowCount() == 0) {
+        if(resultBlock == null || resultBlock.getRowCount() == 0){
             return ValidatorUtils.blankInfo(inInfo, "mat");
         }
 
@@ -103,7 +100,7 @@ public class ServiceRMLY0205 extends ServiceBase {
         for (Map<String, Object> matMap : rows) {
             matMap.put("reserveNum", claimService.queryReserveNum(RmUtils.toString(matMap.get("matNum"))));
             matMap.put("matTypeId", matMap.get("matTypeNum"));
-            matMap.put("pictureUri", "/rm/showImg2/" + matMap.get("matTypeNum") + "-" + matMap.get("matNum"));
+            matMap.put("pictureUri", "/rm/showImg2/"+matMap.get("matTypeNum")+"-"+matMap.get("matNum"));
         }
         inInfo.getBlocks().put("mat", resultBlock);
         return inInfo;
@@ -111,11 +108,10 @@ public class ServiceRMLY0205 extends ServiceBase {
 
     /**
      * 保存领用单并出库
-     *
+     * @Title: saveAndOutStock
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: saveAndOutStock
      **/
     public EiInfo saveAndOutStock(EiInfo inInfo) {
         //保存领用单
@@ -127,9 +123,7 @@ public class ServiceRMLY0205 extends ServiceBase {
         detailList.forEach(detail -> detail.setOutAmount(detail.getNum()));
         //构建出库数据
         EiInfo claimInfo = new EiInfo();
-        claimInfo.setRows(RmConstant.QUERY_BLOCK, new ArrayList() {{
-            add(claim);
-        }});
+        claimInfo.setRows(RmConstant.QUERY_BLOCK, new ArrayList(){{add(claim);}});
         claimInfo.setCell(RmConstant.QUERY_BLOCK, 0, "wareHouseNo",
                 inInfo.getCellStr(RmConstant.QUERY_BLOCK, 0, "wareHouseNo"));
         claimInfo.setCell(RmConstant.QUERY_BLOCK, 0, "wareHouseName",

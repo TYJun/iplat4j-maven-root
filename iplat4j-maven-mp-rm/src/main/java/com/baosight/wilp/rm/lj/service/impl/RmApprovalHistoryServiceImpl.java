@@ -19,7 +19,7 @@ import java.util.List;
  * @ClassName: RmApprovalHistoryServiceImpl
  * @Package com.baosight.wilp.rm.lj.service.impl
  * @date: 2022年09月13日 9:16
- * <p>
+ *
  * 1.保存审批履历
  * 2.新增审批履历
  * 3.编辑审批履历
@@ -31,22 +31,17 @@ public class RmApprovalHistoryServiceImpl implements RmApprovalHistoryService {
 
     private Dao dao = (Dao) PlatApplicationContext.getBean("dao");
 
-    /**
-     * 状态：有效
-     **/
+    /**状态：有效**/
     String STATUS_VALID = "1";
-    /**
-     * 状态：无效
-     **/
+    /**状态：无效**/
     String STATUS_INVALID = "0";
 
     /**
      * 保存审批履历
-     *
+     * @Title: approval
      * @param approval approval : 审批履历对象
      * @return void
      * @throws
-     * @Title: approval
      **/
     @Async("taskExecutor")
     @Override
@@ -61,11 +56,10 @@ public class RmApprovalHistoryServiceImpl implements RmApprovalHistoryService {
 
     /**
      * 新增
-     *
+     * @Title: insert
      * @param approval approval  : 审批履历对象
      * @return void
      * @throws
-     * @Title: insert
      **/
     @Override
     public void insert(RmApproval approval) {
@@ -74,11 +68,10 @@ public class RmApprovalHistoryServiceImpl implements RmApprovalHistoryService {
 
     /**
      * 编辑
-     *
+     * @Title: update
      * @param approval approval  : 审批履历对象
      * @return void
      * @throws
-     * @Title: update
      **/
     @Override
     public void update(RmApproval approval) {
@@ -87,11 +80,10 @@ public class RmApprovalHistoryServiceImpl implements RmApprovalHistoryService {
 
     /**
      * 获取审批履历
-     *
+     * @Title: queryApproval
      * @param relateId relateId : 关联ID(需求计划ID/领用申请ID)
      * @return java.util.List<com.baosight.wilp.rm.lj.domain.RmApproval>
      * @throws
-     * @Title: queryApproval
      **/
     @Override
     public List<RmApproval> queryApproval(String relateId) {

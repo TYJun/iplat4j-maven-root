@@ -23,7 +23,7 @@ import java.util.*;
  * @ClassName: ServiceRMYD02
  * @Package com.baosight.wilp.rm.yd.service
  * @date: 2022年09月21日 14:58
- * <p>
+ *
  * 1.领用申请单列表(根据角色区分)
  * 2.根据领用单号获取指定领用单
  * 3.领用单详请
@@ -51,29 +51,28 @@ public class ServiceRMYD02 extends ServiceBase {
 
     /**
      * 领用申请单列表
-     *
+     * @Title: queryUnApproveList
      * @param inInfo inInfo
-     *               role: 角色编码字符串
-     *               curDept: 当前科室编码
-     *               statusCode: 状态编码(10=待审批)
+     *      role: 角色编码字符串
+     *      curDept: 当前科室编码
+     *      statusCode: 状态编码(10=待审批)
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: queryUnApproveList
      **/
-    public EiInfo queryClaimList(EiInfo inInfo) {
+    public EiInfo queryClaimList (EiInfo inInfo) {
         String deptNum = inInfo.getString("curDept");
         String role = inInfo.getString("role");
         String statusCode = inInfo.getString("statusCode");
-        if (StringUtils.isBlank(deptNum)) {
+        if(StringUtils.isBlank(deptNum)) {
             return ValidatorUtils.errorInfo("科室参数不能为空");
         }
         //当角色不包含科室领导时,待审批工单返回空
-        if (RmConstant.CLAIM_STATUS_UN_DEPT_APPROVE.equals(statusCode) && !ROLE.equals(role)) {
+        if(RmConstant.CLAIM_STATUS_UN_DEPT_APPROVE.equals(statusCode) && !ROLE.equals(role)){
             inInfo.set("list", new ArrayList<>());
         } else {
             List<RmClaim> list = dao.query("RMLJ02.query", new HashMap(4) {{
                 //待审批领用单、成本归集科室领导审核
-                put(RmConstant.CLAIM_STATUS_UN_DEPT_APPROVE.equals(statusCode) ? "costDeptNum" : "deptNum", deptNum);
+                put(RmConstant.CLAIM_STATUS_UN_DEPT_APPROVE.equals(statusCode) ? "costDeptNum": "deptNum", deptNum);
                 put("statusCode", statusCode);
             }});
             inInfo.set("list", list);
@@ -83,15 +82,14 @@ public class ServiceRMYD02 extends ServiceBase {
 
     /**
      * 获取领用单流程
-     *
+     * @Title: queryClaimFlow
+     *      claimNo: 领用单号
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: queryClaimFlow
-     * claimNo: 领用单号
      **/
     public EiInfo queryClaimFlow(EiInfo inInfo) {
         String claimNo = inInfo.getString("claimNo");
-        if (StringUtils.isBlank(claimNo)) {
+        if(StringUtils.isBlank(claimNo)) {
             return ValidatorUtils.errorInfo("参数不能为空");
         }
         List<Map<String, String>> list = claimService.queryClaimFlow(claimNo);
@@ -99,18 +97,17 @@ public class ServiceRMYD02 extends ServiceBase {
         return inInfo;
     }
 
-    /**
+   /**
      * 根据领用单号获取指定领用单
-     *
+     * @Title: queryClaim
      * @param inInfo inInfo
-     *               claimNo: 领用单号
+     *     claimNo: 领用单号
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: queryClaim
      **/
     public EiInfo queryClaim(EiInfo inInfo) {
         String claimNo = inInfo.getString("claimNo");
-        if (StringUtils.isBlank(claimNo)) {
+        if(StringUtils.isBlank(claimNo)) {
             return ValidatorUtils.errorInfo("参数不能为空");
         }
         RmClaim claim = claimService.queryClaimByClaimNo(claimNo);
@@ -120,15 +117,14 @@ public class ServiceRMYD02 extends ServiceBase {
 
     /**
      * 获取领用申请明细
-     *
+     * @Title: queryClaimDetail
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: queryClaimDetail
      **/
     public EiInfo queryClaimDetail(EiInfo inInfo) {
         String claimId = inInfo.getString("claimId");
-        if (StringUtils.isBlank(claimId)) {
+        if(StringUtils.isBlank(claimId)) {
             return ValidatorUtils.errorInfo("参数不能为空");
         }
         List<RmClaimDetail> details = claimService.queryClaimDetailList(claimId);
@@ -138,12 +134,11 @@ public class ServiceRMYD02 extends ServiceBase {
 
     /**
      * 领用申请审批通过
-     *
+     * @Title: pass
      * @param inInfo inInfo
-     *               claimId : 领用申请ID
+     *      claimId : 领用申请ID
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: pass
      **/
     public EiInfo pass(EiInfo inInfo) {
         return RmUtils.invoke(inInfo, "RMLY0301", "pass");
@@ -151,17 +146,16 @@ public class ServiceRMYD02 extends ServiceBase {
 
     /**
      * 领用申请审批驳回
-     *
+     * @Title: reject
      * @param inInfo inInfo
-     *               claimId : 领用申请ID
-     *               rejectReason : 驳回原因
+     *      claimId : 领用申请ID
+     *      rejectReason : 驳回原因
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: reject
      **/
     public EiInfo reject(EiInfo inInfo) {
         String reason = inInfo.getString("rejectReason");
-        if (StringUtils.isBlank(reason)) {
+        if(StringUtils.isBlank(reason)) {
             return ValidatorUtils.errorInfo("驳回原因不能为空");
         }
         return RmUtils.invoke(inInfo, "RMLY0301", "reject");
@@ -169,19 +163,18 @@ public class ServiceRMYD02 extends ServiceBase {
 
     /**
      * 获取科室信息
-     *
-     * @param inInfo inInfo
-     *               workNo: 当前登陆人工号
-     *               deptName: 科室名称
-     *               dataGroupCode: 院区（账套）
-     * @return com.baosight.iplat4j.core.ei.EiInfo
-     * deptId			:	科室ID
-     * deptNum			:	科室编号
-     * deptName		:	科室名称
-     * workNo		    :	工号
-     * name	        :	姓名
-     * @throws
      * @Title: queryDept
+     * @param inInfo inInfo
+     *      workNo: 当前登陆人工号
+     *      deptName: 科室名称
+     *      dataGroupCode: 院区（账套）
+     * @return com.baosight.iplat4j.core.ei.EiInfo
+     * 		deptId			:	科室ID
+     *		deptNum			:	科室编号
+     *		deptName		:	科室名称
+     *		workNo		    :	工号
+     *		name	        :	姓名
+     * @throws
      **/
     public EiInfo queryDept(EiInfo inInfo) {
         //调用微服务查询
@@ -192,29 +185,26 @@ public class ServiceRMYD02 extends ServiceBase {
 
     /**
      * 获取科室常用物资列表
-     *
+     * @Title: queryMatList
      * @param inInfo inInfo
-     *               matTypeName: 物资分类名称
-     *               matName: 物资名称
-     *               matNum : 物资编码
-     *               deptNum : 科室编码
-     *               isClaim: 是否是领用
-     *               page : 页码
-     *               size : 每页数量
+     *      matTypeName: 物资分类名称
+     *      matName: 物资名称
+     *		matNum : 物资编码
+     *	    deptNum : 科室编码
+     *      isClaim: 是否是领用
+     *	    page : 页码
+     *	    size : 每页数量
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: queryMatList
      **/
-    public EiInfo queryDeptMatList(EiInfo inInfo) {
+    public EiInfo queryDeptMatList(EiInfo inInfo){
         //参数处理
         Map<String, Object> pMap = CommonUtils.buildParamterNoPage(inInfo, Arrays.asList("matTypeName", "matName", "matNum", "deptNum"));
         pMap.put("isClaim", "Y");
         //转换参数
         EiInfo info = new EiInfo();
-        info.setRows(RmConstant.QUERY_BLOCK, new ArrayList() {{
-            add(pMap);
-        }});
-        setBlockAttr(info, inInfo, "commonMat");
+        info.setRows(RmConstant.QUERY_BLOCK, new ArrayList(){{add(pMap);}});
+        setBlockAttr(info, inInfo,"commonMat");
 
         //数据查询
         EiInfo invoke = RmUtils.invoke(info, "RMPZ0203", "query");
@@ -224,18 +214,17 @@ public class ServiceRMYD02 extends ServiceBase {
 
     /**
      * 获取物资列表
-     *
+     * @Title: queryMatList
      * @param inInfo inInfo
-     *               matTypeName: 物资分类名称
-     *               matName: 物资名称
-     *               matNum : 物资编码
-     *               isClaim: 是否是领用
-     *               dataGroupCode : 院区（账套）
-     *               page : 页码
-     *               size : 每页数量
+     *      matTypeName: 物资分类名称
+     *      matName: 物资名称
+     *		matNum : 物资编码
+     *      isClaim: 是否是领用
+     *      dataGroupCode : 院区（账套）
+     *	    page : 页码
+     *	    size : 每页数量
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: queryMatList
      **/
     public EiInfo queryMatList(EiInfo inInfo) {
         //参数处理
@@ -243,10 +232,8 @@ public class ServiceRMYD02 extends ServiceBase {
         pMap.put("isClaim", "Y");
         //转换参数
         EiInfo info = new EiInfo();
-        info.setRows(RmConstant.QUERY_BLOCK, new ArrayList() {{
-            add(pMap);
-        }});
-        setBlockAttr(info, inInfo, "mat");
+        info.setRows(RmConstant.QUERY_BLOCK, new ArrayList(){{add(pMap);}});
+        setBlockAttr(info, inInfo,"mat");
 
         //数据啊查询
         EiInfo invoke = RmUtils.invoke(info, "RMLY0103", "query");
@@ -256,21 +243,20 @@ public class ServiceRMYD02 extends ServiceBase {
 
     /**
      * 构建block的分页参数
-     *
-     * @param info    info : 服务调用EiInfo
-     * @param inInfo  inInfo : 参数调用EiInfo
+     * @Title: setBlockAttr
+     * @param info info : 服务调用EiInfo
+     * @param inInfo inInfo : 参数调用EiInfo
      * @param blockId blockId : block块的id
      * @return void
      * @throws
-     * @Title: setBlockAttr
      **/
     private void setBlockAttr(EiInfo info, EiInfo inInfo, String blockId) {
         //分页参数处理
         EiBlock block = new EiBlock(blockId);
         int page = NumberUtils.toint(inInfo.getString("page"), 1);
         int size = NumberUtils.toint(inInfo.getString("size"), 1000);
-        block.setAttr(new HashMap(8) {{
-            put("offset", (page - 1) * size);
+        block.setAttr(new HashMap(8){{
+            put("offset", (page-1) * size);
             put("limit", size);
             put("count", 0);
             put("orderBy", "");
@@ -281,52 +267,48 @@ public class ServiceRMYD02 extends ServiceBase {
 
     /**
      * 保存(并提交)领用申请
-     *
+     * @Title: save
      * @param inInfo inInfo
-     *               submitFlag: 提交标记, N=保存, Y=保存并提交
-     *               deptNum: 当前登录科室编码
-     *               deptName: 当前登录科室名称
-     *               costDeptNum: 成本归集科室编码
-     *               costDeptName: 成本归集科室名称
-     *               remark: 备注
-     *               dataGroupCode: 院区（账套）
-     *               recCreator: 创建人工号
-     *               recCreatorName: 创建人姓名
-     *               recRevisor: 修改人工号
-     *               detailList:
-     *               matNum: 物资编码
-     *               matName: 物资名称
-     *               matTypeId: 物资分类ID
-     *               matTypeName: 物资分类名称
-     *               matSpec: 物资规格
-     *               matModel: 物资型号
-     *               unit: 计量单位
-     *               price: 单价
-     *               num: 领用数量
+     *      submitFlag: 提交标记, N=保存, Y=保存并提交
+     *      deptNum: 当前登录科室编码
+     *      deptName: 当前登录科室名称
+     *      costDeptNum: 成本归集科室编码
+     *      costDeptName: 成本归集科室名称
+     *      remark: 备注
+     *      dataGroupCode: 院区（账套）
+     *      recCreator: 创建人工号
+     *      recCreatorName: 创建人姓名
+     *      recRevisor: 修改人工号
+     *      detailList:
+     *          matNum: 物资编码
+     *          matName: 物资名称
+     *          matTypeId: 物资分类ID
+     *          matTypeName: 物资分类名称
+     *          matSpec: 物资规格
+     *          matModel: 物资型号
+     *          unit: 计量单位
+     *          price: 单价
+     *          num: 领用数量
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: save
      **/
     public EiInfo save(EiInfo inInfo) {
         //参数处理
         List<String> paramNameList = Arrays.asList("submitFlag", "deptNum", "deptName", "costDeptNum", "costDeptName",
                 "remark", "dataGroupCode", "recCreator", "recCreatorName", "recRevisor", "id");
         Map<String, Object> pMap = CommonUtils.buildParamterNoPage(inInfo, paramNameList);
-        inInfo.setRows(RmConstant.QUERY_BLOCK, new ArrayList() {{
-            add(pMap);
-        }});
+        inInfo.setRows(RmConstant.QUERY_BLOCK, new ArrayList(){{add(pMap);}});
         //保存
         return RmUtils.invoke(inInfo, "RMLY0101", "save");
     }
 
     /**
      * 删除领用申请
-     *
+     * @Title: delete
      * @param inInfo inInfo
-     *               id: 领用申请ID
+     *      id: 领用申请ID
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: delete
      **/
     @Override
     public EiInfo delete(EiInfo inInfo) {
@@ -335,12 +317,11 @@ public class ServiceRMYD02 extends ServiceBase {
 
     /**
      * 提交领用申请
-     *
+     * @Title: submit
      * @param inInfo inInfo
-     *               id: 领用申请ID
+     *      id: 领用申请ID
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: submit
      **/
     public EiInfo submit(EiInfo inInfo) {
         return RmUtils.invoke(inInfo, "RMLY01", "submit");
@@ -348,27 +329,25 @@ public class ServiceRMYD02 extends ServiceBase {
 
     /**
      * 撤回领用单
-     *
+     * @Title: withdraw
      * @param inInfo inInfo
-     *               id: 领用申请ID
+     *      id: 领用申请ID
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: withdraw
      **/
-    public EiInfo withdraw(EiInfo inInfo) {
+    public EiInfo withdraw (EiInfo inInfo) {
         return RmUtils.invoke(inInfo, "RMLY01", "withdraw");
     }
 
     /**
      * 验收确认
-     *
+     * @Title: confirmClaim
+     *      id: 领用申请ID
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: confirmClaim
-     * id: 领用申请ID
      **/
     public EiInfo confirmClaim(EiInfo inInfo) {
         return RmUtils.invoke(inInfo, "RMLY01", "signAccept");
     }
 
-}
+ }

@@ -1,13 +1,8 @@
-$(function () {
+$(function() {
     //表格初始化处理
     IPLATUI.EFGrid = new WilpGrid({
         submit: true,
-        back: true,
-        backConfig: {
-            status: [isEffect("requireApproval") ? "10" : "30"],
-            serviceName: "RMXQ01",
-            methodName: "withdraw"
-        },
+        back: true, backConfig: {status: [isEffect("requireApproval") ? "10" : "30"], serviceName: "RMXQ01", methodName: "withdraw"},
         addCopy: true
     }).buildGrid();
 
@@ -31,12 +26,12 @@ $(function () {
     keydown("inqu", "QUERY");
 
     /**查询**/
-    $("#QUERY").on("click", function (e) {
+    $("#QUERY").on("click", function(e) {
         resultGrid.dataSource.page(1);
     });
 
     /**重置**/
-    $("#REQUERY").on("click", function (e) {
+    $("#REQUERY").on("click", function(e) {
         document.getElementById("inqu-trash").click();
         resetParam(__eiInfo, false, true);
         resultGrid.dataSource.page(1);

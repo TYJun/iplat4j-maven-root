@@ -1,15 +1,13 @@
-$(function () {
+$(function() {
     //表格初始化处理
     IPLATUI.EFGrid = new WilpGrid({
         add: false, edit: false, del: false,
         detailUrl: "RMTK0101?inqu_status-0-id=#:id#",
-        hasRowClick: true, rowClickConfig: {gridId: "detail", paramName: "backOutId", colName: "id"},
+        hasRowClick: true, rowClickConfig: {gridId:"detail", paramName:"backOutId", colName: "id"},
         extentMethod: [{
             buttonId: "ADD",
-            call: function () {
-                popData("RMTK0203?type=add");
-            }
-        }, {
+            call: function () { popData("RMTK0203?type=add"); }
+        },{
             buttonId: "APPROVAL",
             call: function () {
                 let checkRows = window["resultGrid"].getCheckedRows();
@@ -21,19 +19,19 @@ $(function () {
                     popData("RMTK0201?inqu_status-0-id=" + checkRows[0].id + "&type=approve");
                 }
             }
-        }, {
+        },{
             buttonId: "OUT",
             call: function () {
                 let checkRows = window["resultGrid"].getCheckedRows();
                 if (checkRows.length < 1) {
                     NotificationUtil("请选择需要出库的记录", "error");
-                } else if (!["30", "40"].includes(checkRows[0].statusCode)) {
+                } else if (!["30","40"].includes(checkRows[0].statusCode)) {
                     NotificationUtil("未审批或已完成出库的记录无法出库", "error");
                 } else {
                     popData("RMTK0202?inqu_status-0-id=" + checkRows[0].id + "&type=out");
                 }
             }
-        }, {
+        },{
             buttonId: "OVER",
             call: function () {
                 let checkRows = window["resultGrid"].getCheckedRows();
@@ -77,12 +75,12 @@ $(function () {
     keydown("inqu", "QUERY");
 
     /**查询**/
-    $("#QUERY").on("click", function (e) {
+    $("#QUERY").on("click", function(e) {
         resultGrid.dataSource.page(1);
     });
 
     /**重置**/
-    $("#REQUERY").on("click", function (e) {
+    $("#REQUERY").on("click", function(e) {
         document.getElementById("inqu-trash").click();
         resetTime("inqu_status-0-beginTime", "inqu_status-0-endTime")
         resultGrid.dataSource.page(1);

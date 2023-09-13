@@ -15,65 +15,44 @@ import java.util.Map;
 /**
  * 审批履历表
  * RmApproval
- *
  * @author fangjian
  */
 public class RmApproval extends DaoEPBase {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 主键
-     */
+    /** 主键*/
     private String id;
 
-    /**
-     * 关联ID，年度/临时/月度/领用等表主键
-     */
+    /** 关联ID，年度/临时/月度/领用等表主键*/
     private String relateId;
 
-    /**
-     * 状态(0=失效,1=有效)
-     */
+    /** 状态(0=失效,1=有效)*/
     private String status;
 
-    /**
-     * 状态(0=失效,1=有效)
-     */
+    /** 状态(0=失效,1=有效)*/
     private String statusName;
 
-    /**
-     * 审批结果编码
-     */
+    /** 审批结果编码*/
     private String approvalResultCode;
 
-    /**
-     * 审批结果名称
-     */
+    /** 审批结果名称*/
     private String approvalResultName;
 
-    /**
-     * 驳回原因
-     */
+    /** 驳回原因*/
     private String rejectReason;
 
-    /**
-     * 审批人工号
-     */
+    /** 审批人工号*/
     private String approver;
 
-    /**
-     * 审批人姓名
-     */
+    /** 审批人姓名*/
     private String approverName;
 
     /***/
-    private Date approvalTime;
+    private Date approvalTime ;
 
-    /**
-     * 审批时间字符串
-     */
-    private String approvalTimeStr;
+    /** 审批时间字符串*/
+    private String approvalTimeStr ;
 
     /**
      * initialize the metadata
@@ -137,7 +116,6 @@ public class RmApproval extends DaoEPBase {
 
     /**
      * get the id - 主键
-     *
      * @return the id
      */
     public String getId() {
@@ -153,7 +131,6 @@ public class RmApproval extends DaoEPBase {
 
     /**
      * get the relateId - 关联ID，年度/临时/月度/领用等表主键
-     *
      * @return the relateId
      */
     public String getRelateId() {
@@ -169,7 +146,6 @@ public class RmApproval extends DaoEPBase {
 
     /**
      * get the status - 状态(0=失效,1=有效)
-     *
      * @return the status
      */
     public String getStatus() {
@@ -186,7 +162,6 @@ public class RmApproval extends DaoEPBase {
 
     /**
      * get the statusName - 状态(0=失效,1=有效)
-     *
      * @return the statusName
      */
     public String getStatusName() {
@@ -198,20 +173,14 @@ public class RmApproval extends DaoEPBase {
      */
     public void setStatusName(String status) {
         switch (status) {
-            case "0":
-                this.statusName = "失效";
-                break;
-            case "1":
-                this.statusName = "有效";
-                break;
-            default:
-                this.statusName = null;
+            case "0": this.statusName = "失效"; break;
+            case "1": this.statusName = "有效"; break;
+            default: this.statusName = null;
         }
     }
 
     /**
      * get the approvalResultCode - 审批结果编码
-     *
      * @return the approvalResultCode
      */
     public String getApprovalResultCode() {
@@ -227,7 +196,6 @@ public class RmApproval extends DaoEPBase {
 
     /**
      * get the approvalResultName - 审批结果名称
-     *
      * @return the approvalResultName
      */
     public String getApprovalResultName() {
@@ -243,7 +211,6 @@ public class RmApproval extends DaoEPBase {
 
     /**
      * get the rejectReason - 驳回原因
-     *
      * @return the rejectReason
      */
     public String getRejectReason() {
@@ -259,7 +226,6 @@ public class RmApproval extends DaoEPBase {
 
     /**
      * get the approver - 审批人工号
-     *
      * @return the approver
      */
     public String getApprover() {
@@ -275,7 +241,6 @@ public class RmApproval extends DaoEPBase {
 
     /**
      * get the approverName - 审批人姓名
-     *
      * @return the approverName
      */
     public String getApproverName() {
@@ -291,7 +256,6 @@ public class RmApproval extends DaoEPBase {
 
     /**
      * get the approvalTime - 审批时间
-     *
      * @return the approvalTime
      */
     public Date getApprovalTime() {
@@ -303,14 +267,13 @@ public class RmApproval extends DaoEPBase {
      */
     public void setApprovalTime(Date approvalTime) {
         this.approvalTime = approvalTime;
-        if (this.approvalTime != null) {
+        if(this.approvalTime != null) {
             setApprovalTimeStr(DateUtils.toDateTimeStr19(this.approvalTime));
         }
     }
 
     /**
      * get the approvalTimeStr - 审批时间
-     *
      * @return the approvalTimeStr
      */
     public String getApprovalTimeStr() {
@@ -347,31 +310,30 @@ public class RmApproval extends DaoEPBase {
     @Override
     public Map toMap() {
         Map map = new HashMap(16);
-        map.put("id", StringUtils.toString(id, eiMetadata.getMeta("id")));
-        map.put("relateId", StringUtils.toString(relateId, eiMetadata.getMeta("relateId")));
-        map.put("status", StringUtils.toString(status, eiMetadata.getMeta("status")));
-        map.put("statusName", StringUtils.toString(statusName, eiMetadata.getMeta("statusName")));
-        map.put("approvalResultCode", StringUtils.toString(approvalResultCode, eiMetadata.getMeta("approvalResultCode")));
-        map.put("approvalResultName", StringUtils.toString(approvalResultName, eiMetadata.getMeta("approvalResultName")));
-        map.put("rejectReason", StringUtils.toString(rejectReason, eiMetadata.getMeta("rejectReason")));
-        map.put("approver", StringUtils.toString(approver, eiMetadata.getMeta("approver")));
-        map.put("approverName", StringUtils.toString(approverName, eiMetadata.getMeta("approverName")));
-        map.put("approvalTime", StringUtils.toString(approvalTime, eiMetadata.getMeta("approvalTime")));
-        map.put("approvalTimeStr", StringUtils.toString(approvalTimeStr, eiMetadata.getMeta("approvalTimeStr")));
+        map.put("id",StringUtils.toString(id, eiMetadata.getMeta("id")));
+        map.put("relateId",StringUtils.toString(relateId, eiMetadata.getMeta("relateId")));
+        map.put("status",StringUtils.toString(status, eiMetadata.getMeta("status")));
+        map.put("statusName",StringUtils.toString(statusName, eiMetadata.getMeta("statusName")));
+        map.put("approvalResultCode",StringUtils.toString(approvalResultCode, eiMetadata.getMeta("approvalResultCode")));
+        map.put("approvalResultName",StringUtils.toString(approvalResultName, eiMetadata.getMeta("approvalResultName")));
+        map.put("rejectReason",StringUtils.toString(rejectReason, eiMetadata.getMeta("rejectReason")));
+        map.put("approver",StringUtils.toString(approver, eiMetadata.getMeta("approver")));
+        map.put("approverName",StringUtils.toString(approverName, eiMetadata.getMeta("approverName")));
+        map.put("approvalTime",StringUtils.toString(approvalTime, eiMetadata.getMeta("approvalTime")));
+        map.put("approvalTimeStr",StringUtils.toString(approvalTimeStr, eiMetadata.getMeta("approvalTimeStr")));
         return map;
     }
 
 
     /**
      * 构建审批履历对象
-     *
-     * @param relateId           relateId
+     * @Title: getInstance
+     * @param relateId relateId
      * @param approvalResultCode approvalResultCode
      * @param approvalResultName approvalResultName
-     * @param rejectReason       rejectReason
+     * @param rejectReason rejectReason
      * @return void
      * @throws
-     * @Title: getInstance
      **/
     public static RmApproval getInstance(String relateId, String approvalResultCode, String approvalResultName, String rejectReason) {
         RmApproval approval = new RmApproval();

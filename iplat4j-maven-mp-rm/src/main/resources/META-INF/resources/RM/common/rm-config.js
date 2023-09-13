@@ -22,9 +22,7 @@ function queryConfig() {
  */
 function getConfig(configCode) {
     //配置不存在,查询配置
-    if (!rmConfigs.length || rmConfigs.length < 1) {
-        queryConfig();
-    }
+    if(!rmConfigs.length || rmConfigs.length < 1) { queryConfig(); }
     return rmConfigs[configCode]
 }
 
