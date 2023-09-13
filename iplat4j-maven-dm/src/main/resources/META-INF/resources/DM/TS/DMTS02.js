@@ -149,8 +149,9 @@ $(function() {
 								//提交数据
 								var eiInfo = new EiInfo();
 								eiInfo.set("manIdList", manIdList);
+								eiInfo.set("manNoList", manNoList);
 								eiInfo.set("statusCode", statusCode);
-								EiCommunicator.send("DMSH01", "batchUpdateStatusCode", eiInfo, {
+								EiCommunicator.send("DMSH01", "batchUpdateStatusCode2", eiInfo, {
 									onSuccess : function(ei) {
 										IPLAT.NotificationUtil(ei.getMsg());
 										setTimeout(function() {

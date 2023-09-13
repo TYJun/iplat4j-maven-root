@@ -4,6 +4,7 @@ import com.baosight.iplat4j.core.ei.EiConstant;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
 import com.baosight.iplat4j.core.service.soa.XLocalManager;
+import com.baosight.wilp.common.util.BaseDockingUtils;
 import com.baosight.wilp.dm.common.DMUtils;
 import com.baosight.xservices.xs.util.UserSession;
 import org.apache.commons.collections.CollectionUtils;
@@ -123,8 +124,31 @@ public class ServiceDMTS0201 extends ServiceBase {
         inInfo.set(EiConstant.serviceName, "DMRZ01");
         inInfo.set(EiConstant.methodName, "insertLCInfo");
         outInfo = XLocalManager.call(inInfo);
+		/*
+		 * 6、企业微信通知退宿申请结果
+		 */
+		//获取app编码
+		String appCode = "AP00002";
+		List<String> workNoList =new ArrayList<>();
+		List<String> paramList = new ArrayList<>();
+
+		//获取退宿人员工号
+		HashMap<Object, Object> map = new HashMap<>();
+		map.put ("manId",inInfo.get("manId"));
+		List<Map<String,Object>> query = dao.query("DMRZ01.queryRZApplyInfo", map);
+		String manNo = (String)query.get(0).get("manNo");
+		workNoList.add(manNo);
+
+
+		//发送的消息
+		String smsTemp = "您退宿申请已被审批通过";
+		paramList.add(smsTemp);
+
+		//发送企业微信
+		BaseDockingUtils.pushWxMsg(workNoList, paramList, "TP00001", appCode);
+
         /*
-         * 6、返回操作结果.
+         * 7、返回操作结果.
          */
         outInfo.setMsgKey("200");
         outInfo.setMsg("操作成功");

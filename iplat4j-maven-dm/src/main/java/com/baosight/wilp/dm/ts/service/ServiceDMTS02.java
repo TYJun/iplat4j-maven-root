@@ -133,10 +133,39 @@ public class ServiceDMTS02 extends ServiceBase {
         /*
          * 4、调用本地服务DMRZ01.batchUpdateStatusCode批量更新人员信息表状态，使状态进入流程结束状态.
          */
+//        inInfo.set("statusCode", "99");
+//        inInfo.set(EiConstant.serviceName, "DMRZ01");
+//        inInfo.set(EiConstant.methodName, "batchUpdateStatusCode");
+//        outInfo = XLocalManager.call(inInfo);
+        HashMap<Object, Object> map = new HashMap<>();
         inInfo.set("statusCode", "99");
-        inInfo.set(EiConstant.serviceName, "DMRZ01");
-        inInfo.set(EiConstant.methodName, "batchUpdateStatusCode");
-        outInfo = XLocalManager.call(inInfo);
+        map.put("statusCode", "99");
+        String statusCode = inInfo.getString("statusCode");
+        String manId = inInfo.get("manIdList").toString();
+        List<Map<String, String>> manIdList = new LinkedList<>();
+        if (StringUtils.isNotBlank(manId) && manId.split(",").length > 1) {
+            // 以一个数组去存分割后的字符串。
+            String[] manIdArray = manId.split(",");
+
+            // 遍历该数组的长度。
+            for (int i = 0; i < manIdArray.length; i++) {
+                // 实例化一个Map<String,String>类型的manIdInfo，用来接收拆出来的manId。
+                Map<String, String> manIdInfo = new HashMap<>();
+                manIdInfo.put("manId", manIdArray[i]);
+                // 将接收到数据的map添加到manIdInfo列表中。
+                manIdList.add(manIdInfo);
+            }
+            // 处理lenght<1，即当获取的值为一个值的情况。
+        }else if(StringUtils.isNotBlank(manId)){
+            // 实例化一个Map<String,String>类型的idInfo，用来接收单独的manId。
+            Map<String, String> manIdInfo = new HashMap<>();
+            manIdInfo.put("manId", manId);
+            // 将接收到数据的map添加到manIdInfo列表中。
+            manIdList.add(manIdInfo);
+        }
+        map.put("manIdList", manIdList);
+        map.put("statusCode", statusCode);
+        dao.update("DMRZ01.batchUpdateStatusCode", map);
         /*
          * 5、调用本地服务DMRZ01.batchInsertLCInfo将申请流程批量插入宿舍操作流程历史表中.
          */

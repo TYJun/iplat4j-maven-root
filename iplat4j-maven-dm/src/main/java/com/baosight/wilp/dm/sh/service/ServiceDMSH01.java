@@ -213,6 +213,114 @@ public class ServiceDMSH01 extends ServiceBase{
 		}
 
 
+//		//发送的消息
+//		String smsTemp = "您退宿申请已审批拒绝，请您及时去系统上重新发起退宿申请";
+//		paramList.add(smsTemp);
+//
+//		//发送企业微信
+//		BaseDockingUtils.pushWxMsg(workNoList, paramList, "TP00001", appCode);
+
+
+		return outInfo;
+	}
+
+	/** 拒绝退宿申请
+	 * 调用本地服务DMRZ01.batchUpdateStatusCode修改状态代码
+	 * 1、获取当前用户信息.
+	 * 2、调用本地服务DMRZ01.batchUpdateStatusCode批量更新人员信息表状态,更新人员入住信息表的状态.
+	 * 3、调用本地服务DMRZ01.batchUpdateLCStatusCode批量更新当前操作流程之前的状态为0,将之前存在的该状态不标注为当前状态.
+	 * 4、调用本地服务DMRZ01.batchInsertLCInfo将申请流程批量插入宿舍操作流程历史表中.
+	 * 5、企业微信通知退宿申请结果
+	 * @Title: batchUpdateStatusCode
+	 * @Param EiInfo
+	 * @return: EiInfo
+	 */
+	public EiInfo batchUpdateStatusCode2(EiInfo inInfo) {
+		/*
+		 * 1、获取当前用户信息.
+		 */
+		// 获取当前登陆工号
+		String loginName= StringUtils.isBlank((String)inInfo.get("workNo"))?
+				UserSession.getUser().getUsername():(String)inInfo.get("workNo");
+		// 赋值操作人
+		inInfo.set("operator", loginName);
+		/*
+		 * 2、调用本地服务DMRZ01.batchUpdateStatusCode批量更新人员信息表状态,更新人员入住信息表的状态.
+		 */
+//		inInfo.set(EiConstant.serviceName, "DMRZ01");
+//		inInfo.set(EiConstant.methodName, "batchUpdateStatusCode");
+//		EiInfo outInfo =XLocalManager.call(inInfo);
+		String statusCode = inInfo.getString("statusCode");
+		String manId = inInfo.get("manIdList").toString();
+		List<Map<String, String>> manIdList = new LinkedList<>();
+		if (StringUtils.isNotBlank(manId) && manId.split(",").length > 1) {
+			// 以一个数组去存分割后的字符串。
+			String[] manIdArray = manId.split(",");
+
+			// 遍历该数组的长度。
+			for (int i = 0; i < manIdArray.length; i++) {
+				// 实例化一个Map<String,String>类型的manIdInfo，用来接收拆出来的manId。
+				Map<String, String> manIdInfo = new HashMap<>();
+				manIdInfo.put("manId", manIdArray[i]);
+				// 将接收到数据的map添加到manIdInfo列表中。
+				manIdList.add(manIdInfo);
+			}
+			// 处理lenght<1，即当获取的值为一个值的情况。
+		}else if(StringUtils.isNotBlank(manId)){
+			// 实例化一个Map<String,String>类型的idInfo，用来接收单独的manId。
+			Map<String, String> manIdInfo = new HashMap<>();
+			manIdInfo.put("manId", manId);
+			// 将接收到数据的map添加到manIdInfo列表中。
+			manIdList.add(manIdInfo);
+		}
+		Map<String, Object> map = new HashMap<>();
+		map.put("manIdList", manIdList);
+		map.put("statusCode", statusCode);
+		dao.update("DMRZ01.batchUpdateStatusCode", map);
+
+		/*
+		 * 3、调用本地服务DMRZ01.batchUpdateLCStatusCode批量更新当前操作流程之前的状态为0,将之前存在的该状态不标注为当前状态.
+		 */
+		inInfo.set(EiConstant.serviceName, "DMRZ01");
+		inInfo.set(EiConstant.methodName, "batchUpdateLCStatusCode");
+		EiInfo outInfo = XLocalManager.call(inInfo);
+		/*
+		 * 4、调用本地服务DMRZ01.batchInsertLCInfo将申请流程批量插入宿舍操作流程历史表中.
+		 */
+		// 将审核申请流程插入宿舍操作流程历史表中
+		inInfo.set(EiConstant.serviceName, "DMRZ01");
+		inInfo.set(EiConstant.methodName, "batchInsertLCInfo");
+		outInfo = XLocalManager.call(inInfo);
+
+		inInfo.set(EiConstant.serviceName, "DMSH01");
+		inInfo.set(EiConstant.methodName, "selectStudent");
+		outInfo = XLocalManager.call(inInfo);
+
+		/*
+		 * 5、企业微信通知退宿申请结果
+		 */
+		//获取app编码
+		String appCode = "AP00002";
+		List<String> workNoList =new ArrayList<>();
+		List<String> paramList = new ArrayList<>();
+
+		//获取退宿人员工号
+		String manNo = inInfo.getString("manNoList");
+		// 接收来的数据有一个数值(**)或多个数值并逗号隔开(**,**)两种形式,所以要分别进行判断操作
+		if (StringUtils.isNotBlank(manNo) && manNo.split(",").length > 1){
+			// 以一个数组去存分割后的字符串。
+			String[] manNoArray = manNo.split(",");
+			// 遍历该数组的长度。
+			for (int i = 0; i < manNoArray.length; i++) {
+				// 接收拆出来的manNo
+				workNoList.add(manNoArray[i]);
+
+			}// 处理lenght<1，即当获取的值为一个值的情况。
+		}else if(StringUtils.isNotBlank(manNo)){
+			workNoList.add(manNo);
+		}
+
+
 		//发送的消息
 		String smsTemp = "您退宿申请已审批拒绝，请您及时去系统上重新发起退宿申请";
 		paramList.add(smsTemp);
