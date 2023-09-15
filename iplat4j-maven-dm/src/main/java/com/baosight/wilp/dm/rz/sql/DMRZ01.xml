@@ -702,7 +702,7 @@
 		       man_no as workNo
 		FROM dorms_man
 		where status_code = "04"
-		AND is_student != "1"
+		AND is_student != "01"
 	</select>
 
 </sqlMap>

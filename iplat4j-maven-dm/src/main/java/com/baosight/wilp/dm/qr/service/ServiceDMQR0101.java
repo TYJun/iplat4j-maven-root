@@ -124,18 +124,10 @@ public class ServiceDMQR0101 extends ServiceBase {
         /*
          * 3、调用本地服务DMRZ01.batchUpdateStatusCode批量更新人员信息表状态.
          */
-        HashMap<Object, Object> map = new HashMap<>();
         inInfo.set("statusCode", "04");
-        map.put("statusCode", "04");
-        //封装人员ID
-        List<Map<String, String>> manIdList = new LinkedList<>();
-        String manId = (String) inInfo.get("manIdList");
-        Map<String, String> manIdInfo = new HashMap<>();
-        manIdInfo.put("manId", manId);
-        // 将接收到数据的map添加到manIdInfo列表中。
-        manIdList.add(manIdInfo);
-        map.put("manIdList",manIdList);
-        dao.update("DMRZ01.batchUpdateStatusCode", map);
+        inInfo.set(EiConstant.serviceName, "DMRZ01");
+        inInfo.set(EiConstant.methodName, "batchUpdateStatusCode");
+        outInfo = XLocalManager.call(inInfo);
         /*
          * 4、调用本地服务DMRZ01.batchUpdateLCStatusCode批量更新当前操作流程之前的状态为0,将之前存在的该状态不标注为当前状态.
          */

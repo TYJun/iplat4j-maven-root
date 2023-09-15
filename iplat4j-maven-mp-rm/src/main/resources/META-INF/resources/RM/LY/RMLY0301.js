@@ -1,12 +1,12 @@
-$(function() {
+$(function () {
 
     //表格初始化处理
     IPLATUI.EFGrid = new WilpGrid({
         toolbar: __ei.type == 'see' ? {} : {
             hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
-            add: false,cancel: false,save: false,'delete': false,
-            buttons:[{
-                name: "PASS",text: "通过",layout: "3",
+            add: false, cancel: false, save: false, 'delete': false,
+            buttons: [{
+                name: "PASS", text: "通过", layout: "3",
                 click: function () {
                     let eiInfo = new EiInfo();
                     eiInfo.set("claimId", $("#inqu_status-0-id").val())
@@ -27,13 +27,16 @@ $(function() {
                         }
                     });
                 }
-            },{
-                name: "REJECT",text: "驳回",layout: "3",
+            }, {
+                name: "REJECT", text: "驳回", layout: "3",
                 click: function () {
                     IPLAT.prompt({
                         message: '驳回原因',
-                        okFn: function (e) { reject(e) },
-                        cancelFn: function (e) {},
+                        okFn: function (e) {
+                            reject(e)
+                        },
+                        cancelFn: function (e) {
+                        },
                         title: '领用申请审批驳回',
                         minWidth: 450
                     });
@@ -47,11 +50,11 @@ $(function() {
  * 驳回
  * @param rejectReason
  */
-function reject (rejectReason) {
+function reject(rejectReason) {
     //参数处理
     let eiInfo = new EiInfo();
     eiInfo.set("claimId", $("#inqu_status-0-id").val());
-    if(!rejectReason) {
+    if (!rejectReason) {
         NotificationUtil("请输入驳回原因", "error");
         return;
     }

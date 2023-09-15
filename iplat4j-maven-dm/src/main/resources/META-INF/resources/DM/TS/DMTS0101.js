@@ -11,8 +11,6 @@ $(function() {
 			.value($("#manId")); /* 人员id */
 		var manNo = IPLAT.EFInput
 			.value($("#manNo")); /* 人员id */
-		var manName = IPLAT.EFInput
-			.value($("#manName")); /* 人员姓名 */
 		var outRoomNote = IPLAT.EFInput
 		.value($("#outRoomNote")); /* 退宿原因 */
 		// // 参数校验
@@ -22,7 +20,6 @@ $(function() {
 		eiInfo.set("id", id);
 		eiInfo.set("manId", manId);
 		eiInfo.set("manNo", manNo);
-		eiInfo.set("manName", manName);
 		eiInfo.set("outRoomNote", outRoomNote);
 		EiCommunicator.send("DMTS0101", "update", eiInfo,
 				{

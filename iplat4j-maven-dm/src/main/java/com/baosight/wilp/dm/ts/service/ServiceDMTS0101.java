@@ -57,7 +57,7 @@ public class ServiceDMTS0101 extends ServiceBase {
          * 1、获取当前用户信息.
          */
         // 获取当前登陆工号
-            String loginName= StringUtils.isBlank((String)inInfo.get("workNo"))?
+        String loginName= StringUtils.isBlank((String)inInfo.get("workNo"))?
                 UserSession.getUser().getUsername():(String)inInfo.get("workNo");
         Map<String, Object> userInfo = DMUtils.getUserInfo(loginName);
         inInfo.set("operator", loginName);
@@ -105,7 +105,7 @@ public class ServiceDMTS0101 extends ServiceBase {
         workNoList = workNoList.stream().distinct().collect(Collectors.toList());
 
         String smsTemp = "";
-        smsTemp = "您收到一条来自"+inInfo.get("manName")+"退宿申请，请您及时去系统上审批！";
+        smsTemp = "您收到一条来自"+inInfo.getString("manName")+"退宿申请，请您及时去系统上审批！";
         paramList.add(smsTemp);
         System.out.println("ren"+workNoList);
         //发送企业微信

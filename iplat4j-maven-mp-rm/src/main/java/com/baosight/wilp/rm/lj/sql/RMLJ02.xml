@@ -2,295 +2,306 @@
 <!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 <sqlMap namespace="RMLJ02">
 
-	<select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.rm.lj.domain.RmClaim">
-		SELECT
-			c.id	as "id",  <!-- 主键 -->
-			c.claim_no	as "claimNo",  <!-- 领用单号 -->
-			c.status_code	as "statusCode",  <!-- 状态编码 -->
-			c.status_name	as "statusName",  <!-- 状态名称 -->
-			c.claim_num	as "claimNum",  <!-- 领用数量 -->
-		    sum(detail.claim_num) as "claimTotalMoney", <!-- 领用总金额 -->
-			c.out_num	as "outNum",  <!-- 已出库数量 -->
-			c.dept_num	as "deptNum",  <!-- 领用(申请)科室编码 -->
-			c.dept_name	as "deptName",  <!-- 领用(申请)科室编码 -->
-		    c.cost_dept_num as "costDeptNum", <!-- 成本归集科室编码 -->
-			c.cost_dept_name as "costDeptName", <!-- 成本归集科室名称 -->
-		    c.apply_user_no as "applyUserNo", <!-- 领用申请人工号 -->
-		    c.apply_user_name as "applyUserName", <!-- 领用申请人姓名 -->
-		    c.remark as "remark", <!-- 备注 -->
-			c.rec_creator	as "recCreator",  <!-- 创建（申请）人 -->
-			c.rec_creator_name	as "recCreatorName",  <!-- 创建（申请）人姓名 -->
-			date_format(c.rec_create_time, '%Y-%m-%d %H:%i:%s') as "recCreateTimeStr",  <!-- 创建时间 -->
-			c.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
-			c.rec_revisor	as "recRevisor",  <!-- 修改人 -->
-			c.rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
-			c.data_group_code	as "dataGroupCode",  <!-- 账套 -->
-		    c.signature,     <!-- 签收电子签名 -->
-			c.archive_flag	as "archiveFlag", <!-- 归档标记 -->
-			if(a2.reject_reason is null, a1.reject_reason, a2.reject_reason) as "rejectReason"
-		FROM rm_claim c
-		left join rm_claim_detail detail on detail.claim_id = c.id
-		left join rm_approval a1 on a1.relate_id = c.id and a1.status = '1' and a1.approval_result_code = '20'
-		left join rm_approval a2 on a2.relate_id = c.id and a2.status = '1' and a2.approval_result_code = '40'
-		WHERE 1=1
-		<isNotEmpty prepend=" AND " property="id">
-			c.id = #id#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="claimNo">
-			c.claim_no like concat('%', #claimNo#, '%')
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="statusCodes">
-			c.status_code in
-			<iterate property="statusCodes" open="(" conjunction="," close=")">
-				 #statusCodes[]#
-			</iterate>
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="statusCode">
-			c.status_code = #statusCode#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="deptNum">
-			c.dept_num = #deptNum#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="costDeptNum">
-			c.cost_dept_num = #costDeptNum#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="deptName">
-			c.dept_name like concat('%', #deptName#, '%')
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="applyOrCostDept">
-			(c.dept_num = #applyOrCostDept# or c.cost_dept_num = #applyOrCostDept#)
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="beginTime">
-			c.rec_create_time >= concat(#beginTime#,' 00:00:00')
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="endTime">
-			c.rec_create_time <![CDATA[<=]]> concat(#endTime#, ' 23:59:59')
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="dataGroupCode">
-			c.data_group_code = #dataGroupCode#
-		</isNotEmpty>
-		group by c.id
-		<dynamic prepend="ORDER BY">
-         	<isNotEmpty property="orderBy">
-    		  $orderBy$
-   		 	</isNotEmpty>
-   			<isEmpty property="orderBy">
-				c.claim_no desc
-			</isEmpty>
-  		</dynamic>
-	</select>
+    <select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.rm.lj.domain.RmClaim">
+        SELECT
+        c.id as "id",  <!-- 主键 -->
+        c.claim_no as "claimNo",  <!-- 领用单号 -->
+        c.status_code as "statusCode",  <!-- 状态编码 -->
+        c.status_name as "statusName",  <!-- 状态名称 -->
+        c.claim_num as "claimNum",  <!-- 领用数量 -->
+        sum(detail.claim_num) as "claimTotalMoney", <!-- 领用总金额 -->
+        c.out_num as "outNum",  <!-- 已出库数量 -->
+        c.dept_num as "deptNum",  <!-- 领用(申请)科室编码 -->
+        c.dept_name as "deptName",  <!-- 领用(申请)科室编码 -->
+        c.cost_dept_num as "costDeptNum", <!-- 成本归集科室编码 -->
+        c.cost_dept_name as "costDeptName", <!-- 成本归集科室名称 -->
+        c.apply_user_no as "applyUserNo", <!-- 领用申请人工号 -->
+        c.apply_user_name as "applyUserName", <!-- 领用申请人姓名 -->
+        c.remark as "remark", <!-- 备注 -->
+        c.rec_creator as "recCreator",  <!-- 创建（申请）人 -->
+        c.rec_creator_name as "recCreatorName",  <!-- 创建（申请）人姓名 -->
+        date_format(c.rec_create_time, '%Y-%m-%d %H:%i:%s') as "recCreateTimeStr",  <!-- 创建时间 -->
+        c.rec_create_time as "recCreateTime",  <!-- 创建时间 -->
+        c.rec_revisor as "recRevisor",  <!-- 修改人 -->
+        c.rec_revise_time as "recReviseTime",  <!-- 修改时间 -->
+        c.data_group_code as "dataGroupCode",  <!-- 账套 -->
+        c.signature,     <!-- 签收电子签名 -->
+        c.archive_flag as "archiveFlag", <!-- 归档标记 -->
+        if(a2.reject_reason is null, a1.reject_reason, a2.reject_reason) as "rejectReason"
+        FROM rm_claim c
+        left join rm_claim_detail detail on detail.claim_id = c.id
+        left join rm_approval a1 on a1.relate_id = c.id and a1.status = '1' and a1.approval_result_code = '20'
+        left join rm_approval a2 on a2.relate_id = c.id and a2.status = '1' and a2.approval_result_code = '40'
+        WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            c.id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="claimNo">
+            c.claim_no like concat('%', #claimNo#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCodes">
+            c.status_code in
+            <iterate property="statusCodes" open="(" conjunction="," close=")">
+                #statusCodes[]#
+            </iterate>
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCode">
+            c.status_code = #statusCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptNum">
+            c.dept_num = #deptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="costDeptNum">
+            c.cost_dept_num = #costDeptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptName">
+            c.dept_name like concat('%', #deptName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="applyOrCostDept">
+            (c.dept_num = #applyOrCostDept# or c.cost_dept_num = #applyOrCostDept#)
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="beginTime">
+            c.rec_create_time >= concat(#beginTime#,' 00:00:00')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="endTime">
+            c.rec_create_time <![CDATA[<=]]> concat(#endTime#, ' 23:59:59')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="dataGroupCode">
+            c.data_group_code = #dataGroupCode#
+        </isNotEmpty>
+        group by c.id
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                c.claim_no desc
+            </isEmpty>
+        </dynamic>
+    </select>
 
-	<select id="count" resultClass="int">
-		SELECT COUNT(*) FROM rm_claim WHERE 1=1
-		<isNotEmpty prepend=" AND " property="id">
-			id = #id#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="claimNo">
-			claim_no like concat('%', #claimNo#, '%')
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="statusCode">
-			status_code = #statusCode#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="costDeptNum">
-			c.cost_dept_num = #costDeptNum#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="deptNum">
-			dept_num = #deptNum#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="deptName">
-			c.dept_name like concat('%', #deptName#, '%')
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="applyOrCostDept">
-			(c.dept_num = #applyOrCostDept# or c.cost_dept_num = #applyOrCostDept#)
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="beginTime">
-			rec_create_time >= concat(#beginTime#,' 00:00:00')
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="endTime">
-			rec_create_time <![CDATA[<=]]> concat(#endTime#, ' 23:59:59')
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="dataGroupCode">
-			data_group_code = #dataGroupCode#
-		</isNotEmpty>
-	</select>
-	
-	<select id="queryClaimStatusCode" parameterClass="string" resultClass="string">
-		select status_code from rm_claim where id = #claimId#
-	</select>
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM rm_claim WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="claimNo">
+            claim_no like concat('%', #claimNo#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCode">
+            status_code = #statusCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="costDeptNum">
+            c.cost_dept_num = #costDeptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptNum">
+            dept_num = #deptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptName">
+            c.dept_name like concat('%', #deptName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="applyOrCostDept">
+            (c.dept_num = #applyOrCostDept# or c.cost_dept_num = #applyOrCostDept#)
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="beginTime">
+            rec_create_time >= concat(#beginTime#,' 00:00:00')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="endTime">
+            rec_create_time <![CDATA[<=]]> concat(#endTime#, ' 23:59:59')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="dataGroupCode">
+            data_group_code = #dataGroupCode#
+        </isNotEmpty>
+    </select>
 
-	<insert id="insert" parameterClass="com.baosight.wilp.rm.lj.domain.RmClaim">
-		INSERT INTO rm_claim (
-			id,  <!-- 主键 -->
-			claim_no,  <!-- 领用单号 -->
-			status_code,  <!-- 状态编码 -->
-			status_name,  <!-- 状态名称 -->
-			claim_num,  <!-- 领用数量 -->
-			out_num,  <!-- 已出库数量 -->
-			dept_num,  <!-- 领用(申请)科室编码 -->
-			dept_name,  <!-- 领用(申请)科室编码 -->
-			cost_dept_num,  <!-- 成本归集科室编码 -->
-			cost_dept_name,  <!-- 成本归集科室编码 -->
-			apply_user_no, <!-- 领用申请人工号 -->
-			apply_user_name, <!-- 领用申请人姓名 -->
-		    remark,	 <!-- 备注 -->
-			rec_creator,  <!-- 创建（申请）人 -->
-			rec_creator_name,  <!-- 创建（申请）人姓名 -->
-			rec_create_time,  <!-- 创建时间 -->
-			rec_revisor,  <!-- 修改人 -->
-			rec_revise_time,  <!-- 修改时间 -->
-			data_group_code,  <!-- 账套 -->
-			archive_flag  <!-- 归档标记 -->
-		)
-	    VALUES (#id#, #claimNo#, #statusCode#, #statusName#, #claimNum#, #outNum#, #deptNum#, #deptName#, #costDeptNum#, #costDeptName#, #applyUserNo#, #applyUserName#, #remark#, #recCreator#, #recCreatorName#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#, #archiveFlag#)
-	</insert>
-  
-	<delete id="delete" parameterClass="string">
-		DELETE FROM rm_claim WHERE id = #id#
-	</delete>
+    <select id="queryClaimStatusCode" parameterClass="string" resultClass="string">
+        select status_code
+        from rm_claim
+        where id = #claimId#
+    </select>
 
-	<update id="update" parameterClass="com.baosight.wilp.rm.lj.domain.RmClaim">
-		UPDATE rm_claim
-		SET 
-			<isNotEmpty property="statusCode">status_code = #statusCode#, </isNotEmpty>  <!-- 状态编码 -->
-			<isNotEmpty property="statusName">status_name = #statusName#, </isNotEmpty>  <!-- 状态名称 -->
-			<isNotEmpty property="remark">remark = #remark#, </isNotEmpty>  <!-- 备注 -->
-			<isNotEmpty property="costDeptNum">cost_dept_num = #costDeptNum#, </isNotEmpty>  <!-- 成本归集科室名称 -->
-			<isNotEmpty property="costDeptName">cost_dept_name = #costDeptName#, </isNotEmpty>  <!-- 成本归集科室编码 -->
-			<isNotEmpty property="applyUserNo">apply_user_no = #applyUserNo#, </isNotEmpty>  <!-- 领用申请人工号 -->
-			<isNotEmpty property="applyUserName">apply_user_name = #applyUserName#, </isNotEmpty>  <!-- 领用申请人姓名 -->
-			<isNotEmpty property="signature">signature = #signature#, </isNotEmpty>  <!-- 签收电子签名 -->
-			<isGreaterThan property="claimNum" compareValue="0">claim_num = #claimNum#, </isGreaterThan>  <!-- 领用数量 -->
-			<isGreaterThan property="outNum" compareValue="0">out_num = #outNum#, </isGreaterThan>  <!-- 已出库数量 -->
-			rec_revisor	= #recRevisor#,   <!-- 修改人 -->
-			rec_revise_time	= #recReviseTime#   <!-- 修改时间 -->
-		WHERE id = #id#
-	</update>
+    <insert id="insert" parameterClass="com.baosight.wilp.rm.lj.domain.RmClaim">
+        INSERT INTO rm_claim (
+        id,  <!-- 主键 -->
+        claim_no,  <!-- 领用单号 -->
+        status_code,  <!-- 状态编码 -->
+        status_name,  <!-- 状态名称 -->
+        claim_num,  <!-- 领用数量 -->
+        out_num,  <!-- 已出库数量 -->
+        dept_num,  <!-- 领用(申请)科室编码 -->
+        dept_name,  <!-- 领用(申请)科室编码 -->
+        cost_dept_num,  <!-- 成本归集科室编码 -->
+        cost_dept_name,  <!-- 成本归集科室编码 -->
+        apply_user_no, <!-- 领用申请人工号 -->
+        apply_user_name, <!-- 领用申请人姓名 -->
+        remark,     <!-- 备注 -->
+        rec_creator,  <!-- 创建（申请）人 -->
+        rec_creator_name,  <!-- 创建（申请）人姓名 -->
+        rec_create_time,  <!-- 创建时间 -->
+        rec_revisor,  <!-- 修改人 -->
+        rec_revise_time,  <!-- 修改时间 -->
+        data_group_code,  <!-- 账套 -->
+        archive_flag  <!-- 归档标记 -->
+        )
+        VALUES (#id#, #claimNo#, #statusCode#, #statusName#, #claimNum#, #outNum#, #deptNum#, #deptName#, #costDeptNum#,
+        #costDeptName#, #applyUserNo#, #applyUserName#, #remark#, #recCreator#, #recCreatorName#, #recCreateTime#,
+        #recRevisor#, #recReviseTime#, #dataGroupCode#, #archiveFlag#)
+    </insert>
 
-	<select id="queryDetail" parameterClass="java.util.Map" resultClass="com.baosight.wilp.rm.lj.domain.RmClaimDetail">
-		SELECT
-			d.id	as "id",  <!-- 主键 -->
-			d.claim_id	as "claimId",  <!-- 物资领用表ID -->
-			d.mat_num	as "matNum",  <!-- 物资编码 -->
-			d.mat_name	as "matName",  <!-- 物资名称 -->
-			d.mat_type_id	as "matTypeId",  <!-- 物资分类ID -->
-			d.mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
-			d.mat_spec	as "matSpec",  <!-- 物资规格 -->
-			d.mat_model	as "matModel",  <!-- 物资型号 -->
-			d.unit	as "unit",  <!-- 计量单位 -->
-			d.unit_name	as "unitName",  <!-- 计量单位 -->
-			d.price	as "price",  <!-- 单价 -->
-			d.num	as "num",  <!-- 领用数量 -->
-		    d.claim_num as "claimAmount",  <!-- 领用金额 -->
-			d.out_num	as "outNum", <!-- 已出库数量 -->
-			d.picture_uri	as "pictureUri", <!-- 图片地址 -->
-			c.claim_no	as "claimNo",  <!-- 领用单号 -->
-		    d.pack_factor as "packfactor",
-			d.sort_no as "sortNo"
-		FROM rm_claim_detail d
-		left join rm_claim c on c.id = d.claim_id
-		WHERE claim_id = #claimId#
-		<isEqual property="showOutZero" prepend=" AND " compareValue="N"> <!-- 不显示没有领用的物资明细 -->
-			d.out_num > 0
-		</isEqual>
-		<dynamic prepend="ORDER BY">
-			<isNotEmpty property="orderBy">
-				$orderBy$
-			</isNotEmpty>
-			<isEmpty property="orderBy">
-				d.sort_no asc
-			</isEmpty>
-		</dynamic>
-	</select>
+    <delete id="delete" parameterClass="string">
+        DELETE
+        FROM rm_claim
+        WHERE id = #id#
+    </delete>
 
-	<select id="countDetail" resultClass="int">
-		SELECT COUNT(*) FROM rm_claim_detail WHERE 1=1
-		<isNotEmpty prepend=" AND " property="claimId">
-			claim_id = #claimId#
-		</isNotEmpty>
-	</select>
+    <update id="update" parameterClass="com.baosight.wilp.rm.lj.domain.RmClaim">
+        UPDATE rm_claim
+        SET
+        <isNotEmpty property="statusCode">status_code = #statusCode#,</isNotEmpty>  <!-- 状态编码 -->
+        <isNotEmpty property="statusName">status_name = #statusName#,</isNotEmpty>  <!-- 状态名称 -->
+        <isNotEmpty property="remark">remark = #remark#,</isNotEmpty>  <!-- 备注 -->
+        <isNotEmpty property="costDeptNum">cost_dept_num = #costDeptNum#,</isNotEmpty>  <!-- 成本归集科室名称 -->
+        <isNotEmpty property="costDeptName">cost_dept_name = #costDeptName#,</isNotEmpty>  <!-- 成本归集科室编码 -->
+        <isNotEmpty property="applyUserNo">apply_user_no = #applyUserNo#,</isNotEmpty>  <!-- 领用申请人工号 -->
+        <isNotEmpty property="applyUserName">apply_user_name = #applyUserName#,</isNotEmpty>  <!-- 领用申请人姓名 -->
+        <isNotEmpty property="signature">signature = #signature#,</isNotEmpty>  <!-- 签收电子签名 -->
+        <isGreaterThan property="claimNum" compareValue="0">claim_num = #claimNum#,</isGreaterThan>  <!-- 领用数量 -->
+        <isGreaterThan property="outNum" compareValue="0">out_num = #outNum#,</isGreaterThan>  <!-- 已出库数量 -->
+        rec_revisor = #recRevisor#,   <!-- 修改人 -->
+        rec_revise_time = #recReviseTime#   <!-- 修改时间 -->
+        WHERE id = #id#
+    </update>
 
-	<insert id="insertDetail" parameterClass="java.util.List">
-		INSERT INTO rm_claim_detail (
-			id,  <!-- 主键 -->
-			claim_id,  <!-- 物资领用表ID -->
-			mat_num,  <!-- 物资编码 -->
-			mat_name,  <!-- 物资名称 -->
-			mat_type_id,  <!-- 物资分类ID -->
-			mat_type_name,  <!-- 物资分类名称 -->
-			mat_spec,  <!-- 物资规格 -->
-			mat_model,  <!-- 物资型号 -->
-			unit,  <!-- 计量单位 -->
-			unit_name,  <!-- 计量单位 -->
-			price,  <!-- 单价 -->
-			num,  <!-- 领用数量 -->
-			claim_num,  <!-- 领用金额 -->
-			out_num,  <!-- 已出库数量 -->
-			picture_uri,  <!-- 图片地址 -->
-		    pack_factor,
-		    sort_no <!-- 排序字段 -->
-		)
-		VALUES
-		<iterate conjunction=",">
-		(
-		 	#detailList[].id#,
-		 	#detailList[].claimId#,
-		 	#detailList[].matNum#,
-		 	#detailList[].matName#,
-		 	#detailList[].matTypeId#,
-		 	#detailList[].matTypeName#,
-		 	#detailList[].matSpec#,
-		 	#detailList[].matModel#,
-		 	#detailList[].unit#,
-			#detailList[].unitName#,
-		 	#detailList[].price#,
-		 	#detailList[].num#,
-		 	#detailList[].claimAmount#,
-		 	#detailList[].outNum#,
-			#detailList[].pictureUri#,
-			#detailList[].packfactor#,
-			#detailList[].sortNo#
-		)
-		</iterate>
-	</insert>
+    <select id="queryDetail" parameterClass="java.util.Map" resultClass="com.baosight.wilp.rm.lj.domain.RmClaimDetail">
+        SELECT
+        d.id as "id",  <!-- 主键 -->
+        d.claim_id as "claimId",  <!-- 物资领用表ID -->
+        d.mat_num as "matNum",  <!-- 物资编码 -->
+        d.mat_name as "matName",  <!-- 物资名称 -->
+        d.mat_type_id as "matTypeId",  <!-- 物资分类ID -->
+        d.mat_type_name as "matTypeName",  <!-- 物资分类名称 -->
+        d.mat_spec as "matSpec",  <!-- 物资规格 -->
+        d.mat_model as "matModel",  <!-- 物资型号 -->
+        d.unit as "unit",  <!-- 计量单位 -->
+        d.unit_name as "unitName",  <!-- 计量单位 -->
+        d.price as "price",  <!-- 单价 -->
+        d.num as "num",  <!-- 领用数量 -->
+        d.claim_num as "claimAmount",  <!-- 领用金额 -->
+        d.out_num as "outNum", <!-- 已出库数量 -->
+        d.picture_uri as "pictureUri", <!-- 图片地址 -->
+        c.claim_no as "claimNo",  <!-- 领用单号 -->
+        d.pack_factor as "packfactor",
+        d.sort_no as "sortNo"
+        FROM rm_claim_detail d
+        left join rm_claim c on c.id = d.claim_id
+        WHERE claim_id = #claimId#
+        <isEqual property="showOutZero" prepend=" AND " compareValue="N"> <!-- 不显示没有领用的物资明细 -->
+            d.out_num > 0
+        </isEqual>
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                d.sort_no asc
+            </isEmpty>
+        </dynamic>
+    </select>
 
-	<delete id="deleteDetail" parameterClass="string">
-		DELETE FROM rm_claim_detail WHERE claim_id = #value#
-	</delete>
+    <select id="countDetail" resultClass="int">
+        SELECT COUNT(*) FROM rm_claim_detail WHERE 1=1
+        <isNotEmpty prepend=" AND " property="claimId">
+            claim_id = #claimId#
+        </isNotEmpty>
+    </select>
 
-	<update id="updateDetail" parameterClass="com.baosight.wilp.rm.lj.domain.RmClaimDetail">
-		UPDATE rm_claim_detail SET out_num = out_num + #outAmount# WHERE claim_id = #claimId# and mat_num = #matNum#
-	</update>
+    <insert id="insertDetail" parameterClass="java.util.List">
+        INSERT INTO rm_claim_detail (
+        id,  <!-- 主键 -->
+        claim_id,  <!-- 物资领用表ID -->
+        mat_num,  <!-- 物资编码 -->
+        mat_name,  <!-- 物资名称 -->
+        mat_type_id,  <!-- 物资分类ID -->
+        mat_type_name,  <!-- 物资分类名称 -->
+        mat_spec,  <!-- 物资规格 -->
+        mat_model,  <!-- 物资型号 -->
+        unit,  <!-- 计量单位 -->
+        unit_name,  <!-- 计量单位 -->
+        price,  <!-- 单价 -->
+        num,  <!-- 领用数量 -->
+        claim_num,  <!-- 领用金额 -->
+        out_num,  <!-- 已出库数量 -->
+        picture_uri,  <!-- 图片地址 -->
+        pack_factor,
+        sort_no <!-- 排序字段 -->
+        )
+        VALUES
+        <iterate conjunction=",">
+            (
+            #detailList[].id#,
+            #detailList[].claimId#,
+            #detailList[].matNum#,
+            #detailList[].matName#,
+            #detailList[].matTypeId#,
+            #detailList[].matTypeName#,
+            #detailList[].matSpec#,
+            #detailList[].matModel#,
+            #detailList[].unit#,
+            #detailList[].unitName#,
+            #detailList[].price#,
+            #detailList[].num#,
+            #detailList[].claimAmount#,
+            #detailList[].outNum#,
+            #detailList[].pictureUri#,
+            #detailList[].packfactor#,
+            #detailList[].sortNo#
+            )
+        </iterate>
+    </insert>
 
-	<select id="queryReserveNums" parameterClass="java.util.List" resultClass="java.util.HashMap">
-		select
-		   cd.mat_num matNum,
-		   cd.mat_name matName,
-		   cd.mat_type_id matTypeId,
-		   cd.mat_type_name matTypeName,
-		   sum(cd.num) totalNum
-		from rm_claim c
-		left join rm_claim_detail cd on c.id = cd.claim_id
-		where c.status_code in ('50', '60') and cd.mat_num in
-		<iterate open="(" conjunction="," close=")">
-			#matNumList[]#
-		</iterate>
-		group by cd.mat_num
-	</select>
+    <delete id="deleteDetail" parameterClass="string">
+        DELETE
+        FROM rm_claim_detail
+        WHERE claim_id = #value#
+    </delete>
+
+    <update id="updateDetail" parameterClass="com.baosight.wilp.rm.lj.domain.RmClaimDetail">
+        UPDATE rm_claim_detail
+        SET out_num = out_num + #outAmount#
+        WHERE claim_id = #claimId#
+          and mat_num = #matNum#
+    </update>
+
+    <select id="queryReserveNums" parameterClass="java.util.List" resultClass="java.util.HashMap">
+        select
+        cd.mat_num matNum,
+        cd.mat_name matName,
+        cd.mat_type_id matTypeId,
+        cd.mat_type_name matTypeName,
+        sum(cd.num) totalNum
+        from rm_claim c
+        left join rm_claim_detail cd on c.id = cd.claim_id
+        where c.status_code in ('50', '60') and cd.mat_num in
+        <iterate open="(" conjunction="," close=")">
+            #matNumList[]#
+        </iterate>
+        group by cd.mat_num
+    </select>
 
 
-	<select id="queryWareHouseNo" parameterClass="com.baosight.wilp.rm.lj.domain.RmClaimDetail"
-			resultClass="java.util.HashMap">
-		SELECT
-		WARE_HOUSE_NO	as "wareHouseNo",  <!-- 仓库号 -->
-		ware_house_name	as "wareHouseName" <!-- 仓库名称 -->
-		FROM si_storge WHERE 1=1
-		<isNotEmpty prepend=" AND " property="matNum"> <!-- 物资编码(精确) -->
-			MAT_NUM = #matNum#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="matName"> <!-- 物资名称 -->
-			MAT_NAME = #matName#
-		</isNotEmpty>
-		order by total_num desc
-	</select>
+    <select id="queryWareHouseNo" parameterClass="com.baosight.wilp.rm.lj.domain.RmClaimDetail"
+            resultClass="java.util.HashMap">
+        SELECT
+        WARE_HOUSE_NO as "wareHouseNo",  <!-- 仓库号 -->
+        ware_house_name as "wareHouseName" <!-- 仓库名称 -->
+        FROM si_storge WHERE 1=1
+        <isNotEmpty prepend=" AND " property="matNum"> <!-- 物资编码(精确) -->
+            MAT_NUM = #matNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="matName"> <!-- 物资名称 -->
+            MAT_NAME = #matName#
+        </isNotEmpty>
+        order by total_num desc
+    </select>
 
 </sqlMap>

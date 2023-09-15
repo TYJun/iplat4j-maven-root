@@ -1,18 +1,18 @@
-$(function() {
-    let  formValidator = IPLAT.Validator({id: "inqu"});
+$(function () {
+    let formValidator = IPLAT.Validator({id: "inqu"});
 
 
     //表格初始化处理
-    if("see" == __ei.type) {
+    if ("see" == __ei.type) {
         IPLATUI.EFGrid = new WilpGrid({detail: false, add: false, edit: false, del: false}).buildGrid();
     } else {
         IPLATUI.EFGrid = new WilpGrid({
-            showPage : false,
+            showPage: false,
             toolbar: {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
-                add: false,cancel: false,save: false,'delete': false,
-                buttons:[{
-                    name: "PASS",text: "通过",layout: "3",
+                add: false, cancel: false, save: false, 'delete': false,
+                buttons: [{
+                    name: "PASS", text: "通过", layout: "3",
                     click: function () {
                         let eiInfo = new EiInfo();
                         eiInfo.set("planId", $("#inqu_status-0-id").val())
@@ -33,13 +33,16 @@ $(function() {
                             }
                         });
                     }
-                },{
-                    name: "REJECT",text: "驳回",layout: "3",
+                }, {
+                    name: "REJECT", text: "驳回", layout: "3",
                     click: function () {
                         IPLAT.prompt({
                             message: '驳回原因',
-                            okFn: function (e) { reject(e) },
-                            cancelFn: function (e) {},
+                            okFn: function (e) {
+                                reject(e)
+                            },
+                            cancelFn: function (e) {
+                            },
                             title: '需求计划审批驳回',
                             minWidth: 450
                         });
@@ -50,11 +53,11 @@ $(function() {
     }
 });
 
-function reject (rejectReason) {
+function reject(rejectReason) {
     //参数处理
     let eiInfo = new EiInfo();
     eiInfo.set("planId", $("#inqu_status-0-id").val());
-    if(!rejectReason) {
+    if (!rejectReason) {
         NotificationUtil("请输入驳回原因", "error");
         return;
     }

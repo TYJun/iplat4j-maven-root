@@ -19,7 +19,7 @@ import java.util.Map;
  * @ClassName: ServiceRMTY02
  * @Package com.baosight.wilp.rm.ty.service
  * @date: 2022年09月13日 13:22
- *
+ * <p>
  * 1.查询指定序列号
  * 2.保存序列号
  */
@@ -27,13 +27,14 @@ public class ServiceRMTY02 extends ServiceBase {
 
     /**
      * 获取指定类型的最大序列号
-     * @Title: querySerialNo
+     *
      * @param inInfo inInfo
-     *     type: 序列号名称
+     *               type: 序列号名称
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: querySerialNo
      **/
-    public EiInfo querySerialNo (EiInfo inInfo) {
+    public EiInfo querySerialNo(EiInfo inInfo) {
         List<String> list = dao.query("RMTY02.querySerialNo", inInfo.getString("type"));
         if (CollectionUtils.isEmpty(list) || StringUtils.isBlank(list.get(0))) {
             inInfo.set("serialNo", "");
@@ -43,23 +44,24 @@ public class ServiceRMTY02 extends ServiceBase {
         return inInfo;
     }
 
-   /**
-    * 保存序列号
-    * @Title: updateSerialNo
-    * @param inInfo inInfo
-    *     op: 操作类型
-    *     type: 序列号名称
-    *     serialNo: 序列号
-    * @return com.baosight.iplat4j.core.ei.EiInfo
-    * @throws
-    **/
+    /**
+     * 保存序列号
+     *
+     * @param inInfo inInfo
+     *               op: 操作类型
+     *               type: 序列号名称
+     *               serialNo: 序列号
+     * @return com.baosight.iplat4j.core.ei.EiInfo
+     * @throws
+     * @Title: updateSerialNo
+     **/
     public EiInfo updateSerialNo(EiInfo inInfo) {
         //获取参数
         String op = inInfo.getString("op");
         String type = inInfo.getString("type");
         String serialNo = inInfo.getString("serialNo");
         //参数校验
-        if(StringUtils.isBlank(type) || StringUtils.isBlank(serialNo)) {
+        if (StringUtils.isBlank(type) || StringUtils.isBlank(serialNo)) {
             return ValidatorUtils.errorInfo("参数为空错误");
         }
         //封装参数
@@ -67,7 +69,7 @@ public class ServiceRMTY02 extends ServiceBase {
         map.put("serialNo", serialNo);
         map.put("type", type);
         //保存数据
-        if(RmConstant.OPERATE_TYPE_ADD.equals(op)){
+        if (RmConstant.OPERATE_TYPE_ADD.equals(op)) {
             map.put("createTime", DateUtils.curDateTimeStr19());
             dao.insert("RMTY02.insertSerialNo", map);
         } else {
@@ -76,8 +78,6 @@ public class ServiceRMTY02 extends ServiceBase {
         }
         return inInfo;
     }
-
-
 
 
 }

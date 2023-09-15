@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class ValidateRepeatCache {
 
     private static LoadingCache<String, String> newCache = null;
+
     static {
         newCache = CacheBuilder.newBuilder()
                 .maximumSize(1000)
@@ -38,15 +39,16 @@ public class ValidateRepeatCache {
 
     /**
      * 校验唯一标识是否存在,不存在则添加缓存
-     * @Title: validateAndPut
+     *
      * @param token token
      * @return boolean
      * @throws
+     * @Title: validateAndPut
      **/
-    public synchronized static boolean validateAndPut(String token){
+    public synchronized static boolean validateAndPut(String token) {
         try {
             String cacheToken = newCache.get(token);
-            if(StringUtils.isBlank(cacheToken)) {
+            if (StringUtils.isBlank(cacheToken)) {
                 newCache.put(token, token);
                 return false;
             }

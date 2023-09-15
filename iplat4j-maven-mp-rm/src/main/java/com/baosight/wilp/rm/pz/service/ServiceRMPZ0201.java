@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * @ClassName: ServiceRMPZ0201
  * @Package com.baosight.wilp.rm.pz.service
  * @date: 2022年09月07日 10:10
- *
+ * <p>
  * 1.页面加载
  * 2.保存科室常用物资信息
  */
@@ -33,10 +33,11 @@ public class ServiceRMPZ0201 extends ServiceBase {
 
     /**
      * 页面加载
-     * @Title: initLoad
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: initLoad
      **/
     @Override
     public EiInfo initLoad(EiInfo inInfo) {
@@ -46,25 +47,26 @@ public class ServiceRMPZ0201 extends ServiceBase {
     /**
      * 数据保存
      * <p>删除原先数据，再保存所有数据</p>
-     * @Title: save
+     *
      * @param inInfo inInfo
-     *     List：list
-     *          id: 主键
-     *          matNum: 物资编码
-     *          matName: 物资名称
-     *          matTypeId: 物资分类ID
-     *          matTypeName: 物资分类名称
-     *          matSpec: 物资规格
-     *          matModel: 物资型号
-     *          unit: 计量单位
-     *          price: 单价
+     *               List：list
+     *               id: 主键
+     *               matNum: 物资编码
+     *               matName: 物资名称
+     *               matTypeId: 物资分类ID
+     *               matTypeName: 物资分类名称
+     *               matSpec: 物资规格
+     *               matModel: 物资型号
+     *               unit: 计量单位
+     *               price: 单价
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: save
      **/
     public EiInfo save(EiInfo inInfo) {
         Map<String, Object> deptMap = BaseDockingUtils.getDeptByworkNo(UserSession.getLoginName());
         List<RmDeptMatConfig> list = RmUtils.toList(inInfo.get("list"), RmDeptMatConfig.class);
-        if(CollectionUtils.isEmpty(list)) {
+        if (CollectionUtils.isEmpty(list)) {
             return ValidatorUtils.errorInfo(inInfo, "物资信息不能为空");
         }
 
@@ -78,7 +80,7 @@ public class ServiceRMPZ0201 extends ServiceBase {
                 && config.getMatTypeId().equals(deptConfig.getMatTypeId()))).collect(Collectors.toList());
 
         //存在数据,保存
-        if(CollectionUtils.isNotEmpty(list)) {
+        if (CollectionUtils.isNotEmpty(list)) {
             //参数补充赋值
             list.forEach(config -> {
                 config.setId(UUID.randomUUID().toString());

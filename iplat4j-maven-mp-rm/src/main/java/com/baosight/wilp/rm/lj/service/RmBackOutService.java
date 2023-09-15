@@ -13,7 +13,7 @@ import java.util.Map;
  * @ClassName: RmBackOutService
  * @Package com.baosight.wilp.rm.lj.service
  * @date: 2022年08月31日 17:29
- *
+ * <p>
  * 1.获取指定的退库申请
  * 2.新增退库申请
  * 3.更新退库申请
@@ -28,91 +28,101 @@ public interface RmBackOutService {
 
     /**
      * 获取指定的退库申请
-     * @Title: queryBackOut
+     *
      * @param id id
      * @return com.baosight.wilp.rm.lj.domain.RmBackOut
      * @throws
+     * @Title: queryBackOut
      **/
     RmBackOut queryBackOut(String id);
 
     /**
      * 新增退库申请
-     * @Title: insert
+     *
      * @param backOut backOut
      * @return void
      * @throws
+     * @Title: insert
      **/
     void insert(RmBackOut backOut);
 
     /**
      * 更新退库申请
-     * @Title: update
+     *
      * @param backOut backOut
      * @return int
      * @throws
+     * @Title: update
      **/
     int update(RmBackOut backOut);
 
     /**
      * 删除退库申请
-     * @Title: delete
+     *
      * @param id id
      * @return int
      * @throws
+     * @Title: delete
      **/
     int delete(String id);
 
     /**
      * 根据退库申请ID查询明细
-     * @Title: queryBackOutDetailList
+     *
      * @param backOutId backOutId
      * @return java.util.List<com.baosight.wilp.rm.lj.domain.RmBackOutDetail>
      * @throws
+     * @Title: queryBackOutDetailList
      **/
     List<RmBackOutDetail> queryBackOutDetailList(String backOutId);
 
     /**
      * 批量新增退库申请明细
-     * @Title: insertDetail
+     *
      * @param list list
      * @return void
      * @throws
+     * @Title: insertDetail
      **/
     void insertDetail(List<RmBackOutDetail> list);
 
     /**
      * 更新退库申请明细
-     * @Title: updateDetail
+     *
      * @param detail detail
      * @return int
      * @throws
+     * @Title: updateDetail
      **/
     int updateDetail(RmBackOutDetail detail);
 
     /**
      * 删除退库申请明细
-     * @Title: deleteDetail
+     *
      * @param backOutId backOutId
      * @return int
      * @throws
+     * @Title: deleteDetail
      **/
     int deleteDetail(String backOutId);
 
     /**
      * 退库单是否完成退库
-     * @Title: hasAllBackOut
+     *
      * @param id id
      * @return void
      * @throws
+     * @Title: hasAllBackOut
      **/
     boolean hasAllBackOut(String id);
 
     /**
      * 根据领用单号获取对应退库明细数量
-     * @Title: queryBackOutDetailListByClaimNo
+     *
      * @param claimNo claimNo : 领用单号
-     * @return java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     * @return java.util.List<java.util.Map < java.lang.String, java.lang.Object>>
      * @throws
+     * @Title: queryBackOutDetailListByClaimNo
      **/
     List<Map<String, Object>> queryBackOutDetailListByClaimNo(String claimNo);
 }

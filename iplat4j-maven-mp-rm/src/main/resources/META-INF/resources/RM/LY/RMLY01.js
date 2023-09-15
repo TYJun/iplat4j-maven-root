@@ -1,14 +1,15 @@
-$(function() {
+$(function () {
     //表格初始化处理
     IPLATUI.EFGrid = new WilpGrid({
         editConfig: {status: ["01", "20", "40"]},
         add: false, submit: true, back: true, addCopy: true,
-        submitConfig: { status: ["01"], backStatus: ["20","40"], serviceName: __ei.serviceName, methodName: "submit" },
-        backConfig: {status: ["10","30","50"], serviceName: __ei.serviceName, methodName: "withdraw"},
+        submitConfig: {status: ["01"], backStatus: ["20", "40"], serviceName: __ei.serviceName, methodName: "submit"},
+        backConfig: {status: ["10", "30", "50"], serviceName: __ei.serviceName, methodName: "withdraw"},
         extentMethod: [{
             buttonId: "ADD",
             call: function () {
-                let data = {}; let checkRows = window["resultGrid"].getCheckedRows();
+                let data = {};
+                let checkRows = window["resultGrid"].getCheckedRows();
                 data = checkRows.length > 0 ? checkRows[0] : {};
                 /**判断是否有验收单**/
                 EiCommunicator.send("RMLY0101", "hasUnSignClaim", new EiInfo(), {
@@ -17,11 +18,11 @@ $(function() {
                             NotificationUtil(ei.getMsg(), "error");
                             return;
                         }
-                        if(ei.get("unSign")) {
+                        if (ei.get("unSign")) {
                             IPLAT.confirm({
                                 message: '<b>您所在科室还有未签收单据，是否去签收?</b>',
                                 okFn: function (e) {
-                                    window.open(IPLATUI.CONTEXT_PATH + "/web/SICK04",'_blank');
+                                    window.open(IPLATUI.CONTEXT_PATH + "/web/SICK04", '_blank');
                                     popData(buildUrl("RMLY0101?inqu_status-0-id=#:id#", data, true, "add"));
                                 },
                                 cancelFn: function (e) {
@@ -35,7 +36,7 @@ $(function() {
                 });
 
             }
-        },{
+        }, {
             buttonId: "SIGN",
             call: function () {
                 let checkRows = window["resultGrid"].getCheckedRows();
@@ -65,17 +66,18 @@ $(function() {
                                 }
                             });
                         },
-                        cancelFn: function (e) {}
+                        cancelFn: function (e) {
+                        }
                     })
                 }
             }
-        },{
+        }, {
             buttonId: "OVER",
             call: function () {
                 let checkRows = window["resultGrid"].getCheckedRows();
                 if (checkRows.length < 1) {
                     NotificationUtil("请选择需要结束的记录", "error");
-                } else if (["70","80"].includes(checkRows[0].statusCode)) {
+                } else if (["70", "80"].includes(checkRows[0].statusCode)) {
                     NotificationUtil("已领用的记录无需结束", "error");
                 } else {
                     IPLAT.confirm({
@@ -94,7 +96,8 @@ $(function() {
                                 }
                             });
                         },
-                        cancelFn: function (e) {}
+                        cancelFn: function (e) {
+                        }
                     })
                 }
             }
@@ -114,12 +117,12 @@ $(function() {
     keydown("inqu", "QUERY");
 
     /**查询**/
-    $("#QUERY").on("click", function(e) {
+    $("#QUERY").on("click", function (e) {
         resultGrid.dataSource.page(1);
     });
 
     /**重置**/
-    $("#REQUERY").on("click", function(e) {
+    $("#REQUERY").on("click", function (e) {
         document.getElementById("inqu-trash").click();
         resetParam(__eiInfo, true, true)
         resultGrid.dataSource.page(1);
@@ -133,13 +136,13 @@ function buildUrl(url, data, isOpType, type) {
         params.push($2);
     });
     params.forEach(e => {
-        if(data) {
-            url = url.replace(e, data[e.substring(2,e.length-1)])
+        if (data) {
+            url = url.replace(e, data[e.substring(2, e.length - 1)])
         } else {
             url = url.replace(e, "")
         }
     })
-    if(isOpType) {
+    if (isOpType) {
         url = url + (params.length > 0 ? "&" : "?") + "type=" + type;
     }
     return url;

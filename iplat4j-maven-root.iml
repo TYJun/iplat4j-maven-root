@@ -14,6 +14,8 @@
       <sourceFolder url="file://$MODULE_DIR$/iplat4j-maven-pm/iplat4j-maven-mp-rm/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/iplat4j-maven-pm/iplat4j-maven-mp-rm/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/iplat4j-maven-pm/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/iplat4j-maven-ms-mx/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/iplat4j-maven-ms-mx/src/main/resources" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/iplat4j-maven-mp-rm/target" />
       <excludeFolder url="file://$MODULE_DIR$/iplat4j-maven-pm/iplat4j-maven-mp-rm/target" />
       <excludeFolder url="file://$MODULE_DIR$/target" />

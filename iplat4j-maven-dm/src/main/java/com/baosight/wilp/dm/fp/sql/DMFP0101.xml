@@ -5,8 +5,7 @@
 
     <!-- 往宿舍选择临时表中插入数据 宿舍选择临时表-->
     <insert id="insertBeSelect" parameterClass="java.util.List">
-        INSERT INTO .dorms_room_select (
-        id,  <!-- 主键 -->
+        INSERT INTO .dorms_room_select (id,  <!-- 主键 -->
         man_id,  <!-- 申请人ID -->
         room_id,  <!-- 宿舍ID -->
         keep_room_days,  <!-- 宿舍保留天数 -->
@@ -28,22 +27,5 @@
         </iterate>
     </insert>
 
-    <select id="queryManId" parameterClass="java.util.HashMap"
-            resultClass="java.util.HashMap">
-        SELECT
-            man_id as manId,  <!-- 申请人ID -->
-            keep_room_days as keepRoomDays,  <!-- 宿舍保留天数 -->
-            rec_creator AS recCreator,  <!-- 分配人工号 -->
-            rec_create_name AS recCreateName,  <!-- 分配人姓名 -->
-            rec_create_time AS recCreateTime, <!-- 分配时间 -->
-            TIMESTAMPDIFF(DAY,rec_create_time,NOW()) AS ExpirydateTime <!--已过期的时间-->
-        FROM .dorms_room_select
-        group by man_id
-    </select>
-
-    <delete id="delete" >
-        DELETE FROM .dorms_room_select WHERE
-            man_id = #manId#
-    </delete>
 
 </sqlMap>

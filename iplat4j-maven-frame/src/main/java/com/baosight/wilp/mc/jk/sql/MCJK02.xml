@@ -116,7 +116,7 @@
 	<update id="update3">
 		update bona_frame_mzsrmyy.ac_personnel
         set
-        status = '1'
+        status = '0'
         where
         work_no = #STAFF_CODE#
         and

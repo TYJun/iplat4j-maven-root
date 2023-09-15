@@ -19,10 +19,11 @@ public class ServiceRMTY03 extends ServiceBase {
 
     /**
      * 根据用户账号获取用户所属用户组
-     * @Title: getParentGroupsByLoginName
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: getParentGroupsByLoginName
      **/
     public EiInfo getParentGroupsByLoginName(EiInfo inInfo) {
         EiInfo outInfo = new EiInfo();

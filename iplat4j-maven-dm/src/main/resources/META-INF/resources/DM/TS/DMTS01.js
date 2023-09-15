@@ -42,8 +42,7 @@ $(function() {
 					var id = checkRows[0].id;
 					var manId = checkRows[0].manId;
 					var manNo = checkRows[0].manNo;
-					var manName = checkRows[0].manName;
-					var url = IPLATUI.CONTEXT_PATH + "/web/DMTS0101?initLoad&id="+id+"&manId="+manId+"&manNo=" + manNo+"&manName=" + manName;
+					var url = IPLATUI.CONTEXT_PATH + "/web/DMTS0101?initLoad&id="+id+"&manId=" + manId+"&manNo=" + manNo;
 					var popData = $("#popData");
 					popData.data("kendoWindow").setOptions({
 						open : function() {

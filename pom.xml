@@ -41,9 +41,11 @@
 <!--        <module>iplat4j-maven-pc</module>-->
        <module>iplat4j-maven-hr</module>
        <module>iplat4j-maven-cp</module>
-       <module>iplat4j-maven-xq</module>
-       <module>iplat4j-maven-vi</module>
-        <module>iplat4j-maven-security</module>
+        <module>iplat4j-maven-xq</module>
+
+        <module>iplat4j-maven-mp</module>
+        <module>iplat4j-maven-mp-rm</module>
+        <module>iplat4j-maven-si</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -84,7 +86,9 @@
         <iplat4j-module-hi-version>5.0.0</iplat4j-module-hi-version>
         <iplat4j-module-xq-version>5.0.2</iplat4j-module-xq-version>
         <iplat4j-module-vi-version>5.0.0</iplat4j-module-vi-version>
-        <iplat4j-maven-security-version>5.0.2</iplat4j-maven-security-version>
+        <iplat4j-module-si-version>5.0.1</iplat4j-module-si-version>
+        <iplat4j-module-mp-version>5.0.0</iplat4j-module-mp-version>
+        <iplat4j-module-mp-rm-version>5.0.0</iplat4j-module-mp-rm-version>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -424,26 +428,36 @@
                 <version>${iplat4j-module-hi-version}</version>
             </dependency>
 
+            <!-- 备件库存管理 -->
+            <dependency>
+                <groupId>com.bonawise.iplat4j</groupId>
+                <artifactId>iplat4j-maven-si</artifactId>
+                <version>${iplat4j-module-si-version}</version>
+            </dependency>
+            <!-- 物资采购-物资领用 -->
+            <dependency>
+                <groupId>com.bonawise.iplat4j</groupId>
+                <artifactId>iplat4j-maven-mp-rm</artifactId>
+                <version>${iplat4j-module-mp-rm-version}</version>
+            </dependency>
+            <!-- 物资采购 -->
+            <dependency>
+                <groupId>com.bonawise.iplat4j</groupId>
+                <artifactId>iplat4j-maven-mp</artifactId>
+                <version>${iplat4j-module-mp-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.bonawise.iplat4j</groupId>
+                <artifactId>iplat4j-maven-vi</artifactId>
+                <version>${iplat4j-module-vi-version}</version>
+            </dependency>
             <!-- 医信签对接 -->
             <dependency>
                 <groupId>com.bonawise.iplat4j</groupId>
                 <artifactId>iplat4j-maven-xq</artifactId>
                 <version>${iplat4j-module-xq-version}</version>
             </dependency>
-
-            <!-- 访客 -->
-            <dependency>
-                <groupId>com.bonawise.iplat4j</groupId>
-                <artifactId>iplat4j-maven-vi</artifactId>
-                <version>${iplat4j-module-vi-version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.bonawise.iplat4j</groupId>
-                <artifactId>iplat4j-maven-security</artifactId>
-                <version>${iplat4j-maven-security-version}</version>
-            </dependency>
-
 
 
             <dependency>

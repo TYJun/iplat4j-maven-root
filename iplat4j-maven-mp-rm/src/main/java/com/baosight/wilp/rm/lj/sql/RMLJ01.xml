@@ -3,322 +3,342 @@
 
 <sqlMap namespace="RMLJ01">
 
-	<select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.rm.lj.domain.RmRequirePlan">
-		SELECT
-			p.id	as "id",  <!-- 主键 -->
-			p.plan_no	as "planNo",  <!-- 需求计划单号 -->
-			p.plan_time	as "planTime",  <!-- 需求计划时间(年份/年月/申请日期) -->
-			p.plan_type	as "planType",  <!-- 计划类型 -->
-			p.plan_type_name	as "planTypeName",  <!-- 计划类型名称 -->
-			p.plan_num	as "planNum",  <!-- 年度计划物资总数 -->
-			p.plan_cost	as "planCost",  <!-- 总金额 -->
-			p.status_code	as "statusCode",  <!-- 状态编码 -->
-			p.status_name	as "statusName",  <!-- 状态名称 -->
-			p.dept_num	as "deptNum",  <!-- 领用(申请)科室编码 -->
-			p.dept_name	as "deptName",  <!-- 领用(申请)科室编码 -->
-			p.dept_principal	as "deptPrincipal",  <!-- 科室负责人工号 -->
-			p.dept_principal_name	as "deptPrincipalName",  <!-- 科室负责人姓名 -->
-			p.remark	as "remark",  <!-- 备注/申请理由 -->
-			p.plan_desc	as "planDesc",  <!--需求计划概述 -->
-			p.rec_creator	as "recCreator",  <!-- 创建（申请）人 -->
-			p.rec_creator_name	as "recCreatorName",  <!-- 创建（申请）人姓名 -->
-			p.rec_create_time	as "recCreateTime",  <!-- 创建时间 -->
-			DATE_FORMAT(p.rec_create_time, '%Y-%m-%d %H:%i:%s')	as "recCreateTimeStr",  <!-- 创建时间 -->
-			p.rec_revisor	as "recRevisor",  <!-- 修改人 -->
-			p.rec_revise_time	as "recReviseTime",  <!-- 修改时间 -->
-			p.data_group_code	as "dataGroupCode",  <!-- 账套 -->
-			p.archive_flag	as "archiveFlag", <!-- 归档标记 -->
-		    a.reject_reason as "rejectReason" <!-- 驳回原因 -->
-		FROM rm_require_plan p
-		left join rm_approval a on a.relate_id = p.id and a.status = '1' and a.approval_result_code = '20'
-		WHERE 1=1
-		<isNotEmpty prepend=" AND " property="id">
-			p.id = #id#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="planNo">
-			p.plan_no like concat('%', #planNo#, '%')
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="planNoEQ">
-			p.plan_no = #planNoEQ#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="planTime">
-			p.plan_time = #planTime#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="planType">
-			p.plan_type = #planType#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="statusCode">
-			p.status_code = #statusCode#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="deptNum">
-			p.dept_num = #deptNum#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="recCreatorName">
-			p.rec_creator_name like concat('%', #recCreatorName#, '%')
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="beginTime">
-			p.rec_create_time >= concat(#beginTime#,' 00:00:00')
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="endTime">
-			p.rec_create_time <![CDATA[<=]]> concat(#endTime#, ' 23:59:59')
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="dataGroupCode">
-			p.data_group_code = #dataGroupCode#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="planIds">
-			p.id in
-		  	<iterate property="planIds" open="(" conjunction="," close=")">
-				#planIds[]#
-			</iterate>
-		</isNotEmpty>
-		<dynamic prepend="ORDER BY">
-         	<isNotEmpty property="orderBy">
-    		  	$orderBy$
-   		 	</isNotEmpty>
-   			<isEmpty property="orderBy">
-    		  	p.plan_no desc
-			</isEmpty>
-  		</dynamic>
-	</select>
+    <select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.rm.lj.domain.RmRequirePlan">
+        SELECT
+        p.id as "id",  <!-- 主键 -->
+        p.plan_no as "planNo",  <!-- 需求计划单号 -->
+        p.plan_time as "planTime",  <!-- 需求计划时间(年份/年月/申请日期) -->
+        p.plan_type as "planType",  <!-- 计划类型 -->
+        p.plan_type_name as "planTypeName",  <!-- 计划类型名称 -->
+        p.plan_num as "planNum",  <!-- 年度计划物资总数 -->
+        p.plan_cost as "planCost",  <!-- 总金额 -->
+        p.status_code as "statusCode",  <!-- 状态编码 -->
+        p.status_name as "statusName",  <!-- 状态名称 -->
+        p.dept_num as "deptNum",  <!-- 领用(申请)科室编码 -->
+        p.dept_name as "deptName",  <!-- 领用(申请)科室编码 -->
+        p.dept_principal as "deptPrincipal",  <!-- 科室负责人工号 -->
+        p.dept_principal_name as "deptPrincipalName",  <!-- 科室负责人姓名 -->
+        p.remark as "remark",  <!-- 备注/申请理由 -->
+        p.plan_desc as "planDesc",  <!--需求计划概述 -->
+        p.rec_creator as "recCreator",  <!-- 创建（申请）人 -->
+        p.rec_creator_name as "recCreatorName",  <!-- 创建（申请）人姓名 -->
+        p.rec_create_time as "recCreateTime",  <!-- 创建时间 -->
+        DATE_FORMAT(p.rec_create_time, '%Y-%m-%d %H:%i:%s') as "recCreateTimeStr",  <!-- 创建时间 -->
+        p.rec_revisor as "recRevisor",  <!-- 修改人 -->
+        p.rec_revise_time as "recReviseTime",  <!-- 修改时间 -->
+        p.data_group_code as "dataGroupCode",  <!-- 账套 -->
+        p.archive_flag as "archiveFlag", <!-- 归档标记 -->
+        a.reject_reason as "rejectReason" <!-- 驳回原因 -->
+        FROM rm_require_plan p
+        left join rm_approval a on a.relate_id = p.id and a.status = '1' and a.approval_result_code = '20'
+        WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            p.id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="planNo">
+            p.plan_no like concat('%', #planNo#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="planNoEQ">
+            p.plan_no = #planNoEQ#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="planTime">
+            p.plan_time = #planTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="planType">
+            p.plan_type = #planType#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCode">
+            p.status_code = #statusCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptNum">
+            p.dept_num = #deptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="recCreatorName">
+            p.rec_creator_name like concat('%', #recCreatorName#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="beginTime">
+            p.rec_create_time >= concat(#beginTime#,' 00:00:00')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="endTime">
+            p.rec_create_time <![CDATA[<=]]> concat(#endTime#, ' 23:59:59')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="dataGroupCode">
+            p.data_group_code = #dataGroupCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="planIds">
+            p.id in
+            <iterate property="planIds" open="(" conjunction="," close=")">
+                #planIds[]#
+            </iterate>
+        </isNotEmpty>
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                p.plan_no desc
+            </isEmpty>
+        </dynamic>
+    </select>
 
-	<select id="count" resultClass="int">
-		SELECT COUNT(*) FROM rm_require_plan WHERE 1=1
-		<isNotEmpty prepend=" AND " property="id">
-			id = #id#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="planNo">
-			plan_no like concat('%', #planNo#, '%')
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="planTime">
-			plan_time = #planTime#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="planType">
-			plan_type = #planType#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="statusCode">
-			status_code = #statusCode#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="deptNum">
-			dept_num = #deptNum#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="beginTime">
-			rec_create_time >= concat(#beginTime#,' 00:00:00')
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="endTime">
-			rec_create_time <![CDATA[<=]]> concat(#endTime#, ' 23:59:59')
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="dataGroupCode">
-			data_group_code = #dataGroupCode#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="planIds">
-			p.id in
-			<iterate property="planIds" open="(" conjunction="," close=")">
-				#planIds[]#
-			</iterate>
-		</isNotEmpty>
-	</select>
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM rm_require_plan WHERE 1=1
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="planNo">
+            plan_no like concat('%', #planNo#, '%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="planTime">
+            plan_time = #planTime#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="planType">
+            plan_type = #planType#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCode">
+            status_code = #statusCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptNum">
+            dept_num = #deptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="beginTime">
+            rec_create_time >= concat(#beginTime#,' 00:00:00')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="endTime">
+            rec_create_time <![CDATA[<=]]> concat(#endTime#, ' 23:59:59')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="dataGroupCode">
+            data_group_code = #dataGroupCode#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="planIds">
+            p.id in
+            <iterate property="planIds" open="(" conjunction="," close=")">
+                #planIds[]#
+            </iterate>
+        </isNotEmpty>
+    </select>
 
-	<insert id="insert" parameterClass="com.baosight.wilp.rm.lj.domain.RmRequirePlan">
-		INSERT INTO rm_require_plan (
-			id,  <!-- 主键 -->
-			plan_no,  <!-- 需求计划单号 -->
-			plan_time,  <!-- 需求计划时间(年份/年月/申请日期) -->
-			plan_type,  <!-- 计划类型 -->
-			plan_type_name,  <!-- 计划类型名称 -->
-			plan_num,  <!-- 年度计划物资总数 -->
-			plan_cost,  <!-- 总金额 -->
-			status_code,  <!-- 状态编码 -->
-			status_name,  <!-- 状态名称 -->
-			dept_num,  <!-- 领用(申请)科室编码 -->
-			dept_name,  <!-- 领用(申请)科室编码 -->
-			dept_principal,  <!-- 科室负责人工号 -->
-			dept_principal_name,  <!-- 科室负责人姓名 -->
-			remark,  <!-- 备注/申请理由 -->
-		    plan_desc, <!-- 需求计划概述 -->
-			rec_creator,  <!-- 创建（申请）人 -->
-			rec_creator_name,  <!-- 创建（申请）人姓名 -->
-			rec_create_time,  <!-- 创建时间 -->
-			rec_revisor,  <!-- 修改人 -->
-			rec_revise_time,  <!-- 修改时间 -->
-			data_group_code,  <!-- 账套 -->
-			archive_flag  <!-- 归档标记 -->
-		)
-	    VALUES (#id#, #planNo#, #planTime#, #planType#, #planTypeName#, #planNum#, #planCost#, #statusCode#, #statusName#, #deptNum#, #deptName#, #deptPrincipal#, #deptPrincipalName#, #remark#, #planDesc#, #recCreator#, #recCreatorName#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#, #archiveFlag#)
-	</insert>
-  
-	<delete id="delete" parameterClass="string">
-		DELETE FROM rm_require_plan WHERE id = #id# and status_code = '01'
-	</delete>
+    <insert id="insert" parameterClass="com.baosight.wilp.rm.lj.domain.RmRequirePlan">
+        INSERT INTO rm_require_plan (
+        id,  <!-- 主键 -->
+        plan_no,  <!-- 需求计划单号 -->
+        plan_time,  <!-- 需求计划时间(年份/年月/申请日期) -->
+        plan_type,  <!-- 计划类型 -->
+        plan_type_name,  <!-- 计划类型名称 -->
+        plan_num,  <!-- 年度计划物资总数 -->
+        plan_cost,  <!-- 总金额 -->
+        status_code,  <!-- 状态编码 -->
+        status_name,  <!-- 状态名称 -->
+        dept_num,  <!-- 领用(申请)科室编码 -->
+        dept_name,  <!-- 领用(申请)科室编码 -->
+        dept_principal,  <!-- 科室负责人工号 -->
+        dept_principal_name,  <!-- 科室负责人姓名 -->
+        remark,  <!-- 备注/申请理由 -->
+        plan_desc, <!-- 需求计划概述 -->
+        rec_creator,  <!-- 创建（申请）人 -->
+        rec_creator_name,  <!-- 创建（申请）人姓名 -->
+        rec_create_time,  <!-- 创建时间 -->
+        rec_revisor,  <!-- 修改人 -->
+        rec_revise_time,  <!-- 修改时间 -->
+        data_group_code,  <!-- 账套 -->
+        archive_flag  <!-- 归档标记 -->
+        )
+        VALUES (#id#, #planNo#, #planTime#, #planType#, #planTypeName#, #planNum#, #planCost#, #statusCode#,
+        #statusName#, #deptNum#, #deptName#, #deptPrincipal#, #deptPrincipalName#, #remark#, #planDesc#, #recCreator#,
+        #recCreatorName#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#, #archiveFlag#)
+    </insert>
 
-	<update id="update" parameterClass="com.baosight.wilp.rm.lj.domain.RmRequirePlan">
-		UPDATE rm_require_plan
-		SET 
-			<isNotEmpty property="planTime">plan_time = #planTime#, </isNotEmpty>  <!-- 需求计划时间(年份/年月/申请日期) -->
-			<isGreaterThan property="planNum" compareValue="0">plan_num = #planNum#, </isGreaterThan>  <!-- 年度计划物资总数 -->
-			<isGreaterThan property="planCost" compareValue="0">plan_cost = #planCost#, </isGreaterThan>  <!-- 总金额 -->
-			<isNotEmpty property="statusCode">status_code = #statusCode#, </isNotEmpty>  <!-- 状态编码 -->
-			<isNotEmpty property="statusName">status_name = #statusName#, </isNotEmpty>  <!-- 状态名称 -->
-			<isNotEmpty property="deptPrincipal">dept_principal	= #deptPrincipal#, </isNotEmpty>  <!-- 科室负责人工号 -->
-			<isNotEmpty property="deptPrincipalName">dept_principal_name = #deptPrincipalName#, </isNotEmpty>  <!-- 科室负责人姓名 -->
-			<isNotEmpty property="remark">remark = #remark#, </isNotEmpty>  <!-- 备注/申请理由 -->
-			<isNotEmpty property="planDesc">plan_desc = #planDesc#, </isNotEmpty>  <!-- 需求计划概述 -->
-			rec_revisor	= #recRevisor#,   <!-- 修改人 -->
-			rec_revise_time	= #recReviseTime#   <!-- 修改时间 -->
-		WHERE id = #id#
-	</update>
+    <delete id="delete" parameterClass="string">
+        DELETE
+        FROM rm_require_plan
+        WHERE id = #id#
+          and status_code = '01'
+    </delete>
 
-	<select id="queryDetail" parameterClass="java.util.Map" resultClass="com.baosight.wilp.rm.lj.domain.RmRequirePlanDetail">
-		SELECT
-			d.id	as "id",  <!-- 主键 -->
-			d.plan_id	as "planId",  <!-- 年度计划ID -->
-			d.mat_num	as "matNum",  <!-- 物资编码 -->
-			d.mat_name	as "matName",  <!-- 物资名称 -->
-			d.mat_type_id	as "matTypeId",  <!-- 物资分类ID -->
-			d.mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
-			d.mat_spec	as "matSpec",  <!-- 物资规格 -->
-			d.mat_model	as "matModel",  <!-- 物资型号 -->
-			d.unit	as "unit",  <!-- 计量单位 -->
-			d.unit_name	as "unitName",  <!-- 计量单位 -->
-			d.price	as "price",  <!-- 单价 -->
-			d.num	as "num", <!-- 计划数量 -->
-			d.picture_uri	as "pictureUri", <!-- 图片地址 -->
-			p.plan_no	as "planNo"  <!-- 需求计划单号 -->
-		FROM rm_require_plan_detail d
-		left join rm_require_plan p on d.plan_id = p.id
-		WHERE d.plan_id = #planId#
-		order by d.mat_num
-	</select>
+    <update id="update" parameterClass="com.baosight.wilp.rm.lj.domain.RmRequirePlan">
+        UPDATE rm_require_plan
+        SET
+        <isNotEmpty property="planTime">plan_time = #planTime#,</isNotEmpty>  <!-- 需求计划时间(年份/年月/申请日期) -->
+        <isGreaterThan property="planNum" compareValue="0">plan_num = #planNum#,</isGreaterThan>  <!-- 年度计划物资总数 -->
+        <isGreaterThan property="planCost" compareValue="0">plan_cost = #planCost#,</isGreaterThan>  <!-- 总金额 -->
+        <isNotEmpty property="statusCode">status_code = #statusCode#,</isNotEmpty>  <!-- 状态编码 -->
+        <isNotEmpty property="statusName">status_name = #statusName#,</isNotEmpty>  <!-- 状态名称 -->
+        <isNotEmpty property="deptPrincipal">dept_principal = #deptPrincipal#,</isNotEmpty>  <!-- 科室负责人工号 -->
+        <isNotEmpty property="deptPrincipalName">dept_principal_name = #deptPrincipalName#,
+        </isNotEmpty>  <!-- 科室负责人姓名 -->
+        <isNotEmpty property="remark">remark = #remark#,</isNotEmpty>  <!-- 备注/申请理由 -->
+        <isNotEmpty property="planDesc">plan_desc = #planDesc#,</isNotEmpty>  <!-- 需求计划概述 -->
+        rec_revisor = #recRevisor#,   <!-- 修改人 -->
+        rec_revise_time = #recReviseTime#   <!-- 修改时间 -->
+        WHERE id = #id#
+    </update>
 
-	<select id="countDetail" parameterClass="java.util.Map" resultClass="int">
-		SELECT COUNT(*) FROM rm_require_plan_detail WHERE plan_id = #planId#
-	</select>
+    <select id="queryDetail" parameterClass="java.util.Map"
+            resultClass="com.baosight.wilp.rm.lj.domain.RmRequirePlanDetail">
+        SELECT
+        d.id as "id",  <!-- 主键 -->
+        d.plan_id as "planId",  <!-- 年度计划ID -->
+        d.mat_num as "matNum",  <!-- 物资编码 -->
+        d.mat_name as "matName",  <!-- 物资名称 -->
+        d.mat_type_id as "matTypeId",  <!-- 物资分类ID -->
+        d.mat_type_name as "matTypeName",  <!-- 物资分类名称 -->
+        d.mat_spec as "matSpec",  <!-- 物资规格 -->
+        d.mat_model as "matModel",  <!-- 物资型号 -->
+        d.unit as "unit",  <!-- 计量单位 -->
+        d.unit_name as "unitName",  <!-- 计量单位 -->
+        d.price as "price",  <!-- 单价 -->
+        d.num as "num", <!-- 计划数量 -->
+        d.picture_uri as "pictureUri", <!-- 图片地址 -->
+        p.plan_no as "planNo"  <!-- 需求计划单号 -->
+        FROM rm_require_plan_detail d
+        left join rm_require_plan p on d.plan_id = p.id
+        WHERE d.plan_id = #planId#
+        order by d.mat_num
+    </select>
 
-	<select id="queryBatchDetail" parameterClass="java.util.Map" resultClass="com.baosight.wilp.rm.lj.domain.RmRequirePlanDetail">
-		SELECT
-			d.id	as "id",  <!-- 主键 -->
-			d.plan_id	as "planId",  <!-- 需求计划ID -->
-		    p.plan_no   as "planNo",   <!-- 需求计划单号 -->
-			d.mat_num	as "matNum",  <!-- 物资编码 -->
-			d.mat_name	as "matName",  <!-- 物资名称 -->
-			d.mat_type_id	as "matTypeId",  <!-- 物资分类ID -->
-			d.mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
-			d.mat_spec	as "matSpec",  <!-- 物资规格 -->
-			d.mat_model	as "matModel",  <!-- 物资型号 -->
-			d.unit	as "unit",  <!-- 计量单位 -->
-			d.unit_name	as "unitName",  <!-- 计量单位 -->
-			d.price	as "price",  <!-- 单价 -->
-			d.num	as "num", <!-- 计划数量 -->
-			d.picture_uri	as "pictureUri" <!-- 图片地址 -->
-		FROM rm_require_plan p
-		left join rm_require_plan_detail d on p.id = d.plan_id
-		WHERE 1=1
-		<isNotEmpty prepend=" AND " property="detailIds">
-			d.id in
-			<iterate property="detailIds" open="(" conjunction="," close=")">
-				#detailIds[]#
-			</iterate>
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="planIds">
-			d.plan_id in
-			<iterate property="planIds" open="(" conjunction="," close=")">
-				#planIds[]#
-			</iterate>
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="matTypeNums">
-			d.mat_type_id in
-			<iterate property="matTypeNums" open="(" conjunction="," close=")">
-				#matTypeNums[]#
-			</iterate>
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="unCollect">
-			d.has_collect = 0
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="deptNum">
-			p.dept_num = #deptNum#
-		</isNotEmpty>
-		order by d.plan_id, d.mat_num
-	</select>
+    <select id="countDetail" parameterClass="java.util.Map" resultClass="int">
+        SELECT COUNT(*)
+        FROM rm_require_plan_detail
+        WHERE plan_id = #planId#
+    </select>
+
+    <select id="queryBatchDetail" parameterClass="java.util.Map"
+            resultClass="com.baosight.wilp.rm.lj.domain.RmRequirePlanDetail">
+        SELECT
+        d.id as "id",  <!-- 主键 -->
+        d.plan_id as "planId",  <!-- 需求计划ID -->
+        p.plan_no as "planNo",   <!-- 需求计划单号 -->
+        d.mat_num as "matNum",  <!-- 物资编码 -->
+        d.mat_name as "matName",  <!-- 物资名称 -->
+        d.mat_type_id as "matTypeId",  <!-- 物资分类ID -->
+        d.mat_type_name as "matTypeName",  <!-- 物资分类名称 -->
+        d.mat_spec as "matSpec",  <!-- 物资规格 -->
+        d.mat_model as "matModel",  <!-- 物资型号 -->
+        d.unit as "unit",  <!-- 计量单位 -->
+        d.unit_name as "unitName",  <!-- 计量单位 -->
+        d.price as "price",  <!-- 单价 -->
+        d.num as "num", <!-- 计划数量 -->
+        d.picture_uri as "pictureUri" <!-- 图片地址 -->
+        FROM rm_require_plan p
+        left join rm_require_plan_detail d on p.id = d.plan_id
+        WHERE 1=1
+        <isNotEmpty prepend=" AND " property="detailIds">
+            d.id in
+            <iterate property="detailIds" open="(" conjunction="," close=")">
+                #detailIds[]#
+            </iterate>
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="planIds">
+            d.plan_id in
+            <iterate property="planIds" open="(" conjunction="," close=")">
+                #planIds[]#
+            </iterate>
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="matTypeNums">
+            d.mat_type_id in
+            <iterate property="matTypeNums" open="(" conjunction="," close=")">
+                #matTypeNums[]#
+            </iterate>
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="unCollect">
+            d.has_collect = 0
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptNum">
+            p.dept_num = #deptNum#
+        </isNotEmpty>
+        order by d.plan_id, d.mat_num
+    </select>
 
 
-	<select id="queryPlanDetail" parameterClass="java.util.Map" resultClass="com.baosight.wilp.rm.lj.domain.RmRequirePlanDetail">
-		SELECT
-		d.id	as "id",  <!-- 主键 -->
-		d.plan_id	as "planId",  <!-- 需求计划ID -->
-		p.plan_no   as "planNo",   <!-- 需求计划单号 -->
-		d.mat_num	as "matNum",  <!-- 物资编码 -->
-		d.mat_name	as "matName",  <!-- 物资名称 -->
-		d.mat_type_id	as "matTypeId",  <!-- 物资分类ID -->
-		d.mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
-		d.mat_spec	as "matSpec",  <!-- 物资规格 -->
-		d.mat_model	as "matModel",  <!-- 物资型号 -->
-		d.unit	as "unit",  <!-- 计量单位 -->
-		d.unit_name	as "unitName",  <!-- 计量单位 -->
-		d.price	as "price",  <!-- 单价 -->
-		d.num	as "num", <!-- 计划数量 -->
-		d.picture_uri	as "pictureUri" <!-- 图片地址 -->
-		FROM rm_require_plan p
-		left join rm_require_plan_detail d on p.id = d.plan_id
-		WHERE d.has_collect = 0
-		<isNotEmpty prepend=" AND " property="deptNum">
-			p.dept_num = #deptNum#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="matNum">
-			d.mat_num = #matNum#
-		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="matTypeId">
-			d.mat_type_id = #matTypeId#
-		</isNotEmpty>
-		order by d.plan_id, d.mat_num
-	</select>
+    <select id="queryPlanDetail" parameterClass="java.util.Map"
+            resultClass="com.baosight.wilp.rm.lj.domain.RmRequirePlanDetail">
+        SELECT
+        d.id as "id",  <!-- 主键 -->
+        d.plan_id as "planId",  <!-- 需求计划ID -->
+        p.plan_no as "planNo",   <!-- 需求计划单号 -->
+        d.mat_num as "matNum",  <!-- 物资编码 -->
+        d.mat_name as "matName",  <!-- 物资名称 -->
+        d.mat_type_id as "matTypeId",  <!-- 物资分类ID -->
+        d.mat_type_name as "matTypeName",  <!-- 物资分类名称 -->
+        d.mat_spec as "matSpec",  <!-- 物资规格 -->
+        d.mat_model as "matModel",  <!-- 物资型号 -->
+        d.unit as "unit",  <!-- 计量单位 -->
+        d.unit_name as "unitName",  <!-- 计量单位 -->
+        d.price as "price",  <!-- 单价 -->
+        d.num as "num", <!-- 计划数量 -->
+        d.picture_uri as "pictureUri" <!-- 图片地址 -->
+        FROM rm_require_plan p
+        left join rm_require_plan_detail d on p.id = d.plan_id
+        WHERE d.has_collect = 0
+        <isNotEmpty prepend=" AND " property="deptNum">
+            p.dept_num = #deptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="matNum">
+            d.mat_num = #matNum#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="matTypeId">
+            d.mat_type_id = #matTypeId#
+        </isNotEmpty>
+        order by d.plan_id, d.mat_num
+    </select>
 
-	<insert id="insertDetail" parameterClass="java.util.List">
-		INSERT INTO rm_require_plan_detail (
-			id,  <!-- 主键 -->
-			plan_id,  <!-- 年度计划ID -->
-			mat_num,  <!-- 物资编码 -->
-			mat_name,  <!-- 物资名称 -->
-			mat_type_id,  <!-- 物资分类ID -->
-			mat_type_name,  <!-- 物资分类名称 -->
-			mat_spec,  <!-- 物资规格 -->
-			mat_model,  <!-- 物资型号 -->
-			unit,  <!-- 计量单位 -->
-			unit_name,  <!-- 计量单位 -->
-			price,  <!-- 单价 -->
-			num,  <!-- 计划数量 -->
-		    picture_uri,  <!-- 图片地址 -->
-			has_collect  <!-- 是否已汇总 -->
-		)
-		VALUES
-	    <iterate conjunction=",">
-		(
-		 	#detailList[].id#,
-		 	#detailList[].planId#,
-		 	#detailList[].matNum#,
-		 	#detailList[].matName#,
-		 	#detailList[].matTypeId#,
-		 	#detailList[].matTypeName#,
-		 	#detailList[].matSpec#,
-		 	#detailList[].matModel#,
-		 	#detailList[].unit#,
-			#detailList[].unitName#,
-		 	#detailList[].price#,
-		 	#detailList[].num#,
-			#detailList[].pictureUri#,
-			#detailList[].hasCollect#
-		 )
-		</iterate>
-	</insert>
+    <insert id="insertDetail" parameterClass="java.util.List">
+        INSERT INTO rm_require_plan_detail (
+        id,  <!-- 主键 -->
+        plan_id,  <!-- 年度计划ID -->
+        mat_num,  <!-- 物资编码 -->
+        mat_name,  <!-- 物资名称 -->
+        mat_type_id,  <!-- 物资分类ID -->
+        mat_type_name,  <!-- 物资分类名称 -->
+        mat_spec,  <!-- 物资规格 -->
+        mat_model,  <!-- 物资型号 -->
+        unit,  <!-- 计量单位 -->
+        unit_name,  <!-- 计量单位 -->
+        price,  <!-- 单价 -->
+        num,  <!-- 计划数量 -->
+        picture_uri,  <!-- 图片地址 -->
+        has_collect  <!-- 是否已汇总 -->
+        )
+        VALUES
+        <iterate conjunction=",">
+            (
+            #detailList[].id#,
+            #detailList[].planId#,
+            #detailList[].matNum#,
+            #detailList[].matName#,
+            #detailList[].matTypeId#,
+            #detailList[].matTypeName#,
+            #detailList[].matSpec#,
+            #detailList[].matModel#,
+            #detailList[].unit#,
+            #detailList[].unitName#,
+            #detailList[].price#,
+            #detailList[].num#,
+            #detailList[].pictureUri#,
+            #detailList[].hasCollect#
+            )
+        </iterate>
+    </insert>
 
-	<delete id="deleteDetail" parameterClass="string">
-		DELETE FROM rm_require_plan_detail WHERE plan_id = #value#
-	</delete>
+    <delete id="deleteDetail" parameterClass="string">
+        DELETE
+        FROM rm_require_plan_detail
+        WHERE plan_id = #value#
+    </delete>
 
-	<update id="updateDetail" parameterClass="com.baosight.wilp.rm.lj.domain.RmRequirePlanDetail">
-		update rm_require_plan_detail set has_collect = 1 where plan_id = #planId# and mat_num = #matNum# and mat_type_id = #matTypeId#
-	</update>
+    <update id="updateDetail" parameterClass="com.baosight.wilp.rm.lj.domain.RmRequirePlanDetail">
+        update rm_require_plan_detail
+        set has_collect = 1
+        where plan_id = #planId#
+          and mat_num = #matNum#
+          and mat_type_id = #matTypeId#
+    </update>
 
-	<select id="hasAllCollect" parameterClass="string" resultClass="int">
-		select id from rm_require_plan_detail where plan_id = #planId# and has_collect = 0
-	</select>
-  
+    <select id="hasAllCollect" parameterClass="string" resultClass="int">
+        select id
+        from rm_require_plan_detail
+        where plan_id = #planId#
+          and has_collect = 0
+    </select>
+
 </sqlMap>

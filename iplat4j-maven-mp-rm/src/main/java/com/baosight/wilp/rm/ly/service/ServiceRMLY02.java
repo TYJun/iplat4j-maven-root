@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * @ClassName: ServiceRMLY02
  * @Package com.baosight.wilp.rm.ly.service
  * @date: 2022年09月16日 16:18
- *
+ * <p>
  * 1.页面加载
  * 2.数据查询
  */
@@ -36,56 +36,59 @@ public class ServiceRMLY02 extends ServiceBase {
 
     /**
      * 页面加载
-     * @Title: initLoad
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: initLoad
      **/
     @Override
     public EiInfo initLoad(EiInfo inInfo) {
         RmUtils.initQueryTime(inInfo, "beginTime", "endTime");
-        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "statusCodes","30,50,60");
+        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "statusCodes", "30,50,60");
         inInfo.addBlock(RmConstant.RESULT_BLOCK).set(EiConstant.limitStr, 50);
-        EiInfo outInfo =  query(inInfo);
+        EiInfo outInfo = query(inInfo);
         //设置状态查询条件
         List<Map<String, String>> list = CommonUtils.getDataCode("wilp.rm.claim.status");
         list = list.stream().filter(map -> NumberUtils.toInteger(map.get("value")) > 20).collect(Collectors.toList());
         outInfo.setRows("status", list);
         //修复被覆盖的状态
-        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "statusCodes","30,50,60");
+        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "statusCodes", "30,50,60");
         outInfo.setRows("detail", new ArrayList());
         return outInfo;
     }
 
     /**
      * 数据查询
-     * @Title: query
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: query
      **/
     @Override
     public EiInfo query(EiInfo inInfo) {
         String statusCodes = inInfo.getCellStr(RmConstant.QUERY_BLOCK, 0, "statusCodes");
-        if(StringUtils.isNotBlank(statusCodes)) {
-            inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "statusCodes",statusCodes.split(","));
+        if (StringUtils.isNotBlank(statusCodes)) {
+            inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "statusCodes", statusCodes.split(","));
         }
         return super.query(inInfo, "RMLJ02.query", new RmClaim());
     }
 
     /**
      * 查询领用明细查询
-     * @Title: queryDetail
+     *
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
+     * @Title: queryDetail
      **/
     public EiInfo queryDetail(EiInfo inInfo) {
         String statusCode = claimService.queryClaimStatusCode(inInfo.getCellStr(RmConstant.QUERY_BLOCK, 0, "claimId"));
-        if(RmConstant.CLAIM_STATUS_PART_OUT.equals(statusCode)) {
+        if (RmConstant.CLAIM_STATUS_PART_OUT.equals(statusCode)) {
             inInfo.getBlock("detail").set(EiConstant.orderByStr, "d.out_num, d.sort_no asc");
         }
-        EiInfo outInfo = super.query(inInfo, "RMLJ02.queryDetail", new RmClaimDetail(),false,null, null, "detail", "detail");
+        EiInfo outInfo = super.query(inInfo, "RMLJ02.queryDetail", new RmClaimDetail(), false, null, null, "detail", "detail");
         //处理库存量、处理预约量
         RmUtils.assignNum(outInfo.getBlock("detail").getRows(), claimService);
         return outInfo;

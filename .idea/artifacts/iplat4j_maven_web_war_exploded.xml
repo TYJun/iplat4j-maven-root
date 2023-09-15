@@ -303,16 +303,6 @@
           <element id="library" level="project" name="Maven: ws.schild:jave-nativebin-linux32:2.7.3" />
           <element id="library" level="project" name="Maven: ws.schild:jave-nativebin-linux64:2.7.3" />
           <element id="library" level="project" name="Maven: ws.schild:jave-nativebin-osx64:2.7.3" />
-          <element id="archive" name="iplat4j-maven-ms-mx-5.0.0.jar">
-            <element id="module-output" name="iplat4j-maven-ms-mx" />
-          </element>
-          <element id="library" level="project" name="Maven: org.influxdb:influxdb-java:2.7" />
-          <element id="library" level="project" name="Maven: com.squareup.retrofit2:retrofit:2.3.0" />
-          <element id="library" level="project" name="Maven: com.squareup.retrofit2:converter-moshi:2.3.0" />
-          <element id="library" level="project" name="Maven: com.squareup.moshi:moshi:1.4.0" />
-          <element id="library" level="project" name="Maven: com.squareup.okhttp3:okhttp:3.8.1" />
-          <element id="library" level="project" name="Maven: com.squareup.okio:okio:1.13.0" />
-          <element id="library" level="project" name="Maven: com.squareup.okhttp3:logging-interceptor:3.8.1" />
           <element id="archive" name="iplat4j-maven-cp-5.0.0.jar">
             <element id="module-output" name="iplat4j-maven-cp" />
           </element>
@@ -325,14 +315,30 @@
           <element id="library" level="project" name="Maven: com.alibaba:easyexcel:2.2.10" />
           <element id="library" level="project" name="Maven: cglib:cglib:3.1" />
           <element id="library" level="project" name="Maven: org.ehcache:ehcache:3.4.0" />
+          <element id="archive" name="iplat4j-maven-ms-mx-5.0.0.jar">
+            <element id="module-output" name="iplat4j-maven-ms-mx" />
+          </element>
+          <element id="library" level="project" name="Maven: org.influxdb:influxdb-java:2.7" />
+          <element id="library" level="project" name="Maven: com.squareup.retrofit2:retrofit:2.3.0" />
+          <element id="library" level="project" name="Maven: com.squareup.retrofit2:converter-moshi:2.3.0" />
+          <element id="library" level="project" name="Maven: com.squareup.moshi:moshi:1.4.0" />
+          <element id="library" level="project" name="Maven: com.squareup.okhttp3:okhttp:3.8.1" />
+          <element id="library" level="project" name="Maven: com.squareup.okio:okio:1.13.0" />
+          <element id="library" level="project" name="Maven: com.squareup.okhttp3:logging-interceptor:3.8.1" />
           <element id="archive" name="iplat4j-maven-xq-5.0.2.jar">
             <element id="module-output" name="iplat4j-maven-xq" />
           </element>
+          <element id="archive" name="iplat4j-maven-si-5.0.1.jar">
+            <element id="module-output" name="iplat4j-maven-si" />
+          </element>
+          <element id="archive" name="iplat4j-maven-mp-rm-5.0.0.jar">
+            <element id="module-output" name="iplat4j-maven-mp-rm" />
+          </element>
+          <element id="archive" name="iplat4j-maven-mp-5.0.0.jar">
+            <element id="module-output" name="iplat4j-maven-mp" />
+          </element>
           <element id="archive" name="iplat4j-maven-vi-5.0.0.jar">
             <element id="module-output" name="iplat4j-maven-vi" />
-          </element>
-          <element id="archive" name="iplat4j-maven-security-5.0.2.jar">
-            <element id="module-output" name="iplat4j-maven-security" />
           </element>
         </element>
       </element>

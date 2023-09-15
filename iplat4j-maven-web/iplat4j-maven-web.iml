@@ -22,7 +22,9 @@
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/src/main/webapp/WEB-INF/web.xml" />
         </descriptors>
-        <webroots />
+        <webroots>
+          <root url="file://$MODULE_DIR$/src/main/webapp" relative="/" />
+        </webroots>
         <sourceRoots>
           <root url="file://$MODULE_DIR$/src/main/java" />
           <root url="file://$MODULE_DIR$/src/main/resources" />
@@ -300,6 +302,12 @@
     <orderEntry type="library" name="Maven: ws.schild:jave-nativebin-linux32:2.7.3" level="project" />
     <orderEntry type="library" name="Maven: ws.schild:jave-nativebin-linux64:2.7.3" level="project" />
     <orderEntry type="library" name="Maven: ws.schild:jave-nativebin-osx64:2.7.3" level="project" />
+    <orderEntry type="module" module-name="iplat4j-maven-cp" />
+    <orderEntry type="module" module-name="iplat4j-maven-dm" />
+    <orderEntry type="module" module-name="iplat4j-maven-hr" />
+    <orderEntry type="library" name="Maven: com.alibaba:easyexcel:2.2.10" level="project" />
+    <orderEntry type="library" name="Maven: cglib:cglib:3.1" level="project" />
+    <orderEntry type="library" name="Maven: org.ehcache:ehcache:3.4.0" level="project" />
     <orderEntry type="module" module-name="iplat4j-maven-ms-mx" />
     <orderEntry type="library" name="Maven: org.influxdb:influxdb-java:2.7" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.retrofit2:retrofit:2.3.0" level="project" />
@@ -308,14 +316,10 @@
     <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:3.8.1" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okio:okio:1.13.0" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okhttp3:logging-interceptor:3.8.1" level="project" />
-    <orderEntry type="module" module-name="iplat4j-maven-cp" />
-    <orderEntry type="module" module-name="iplat4j-maven-dm" />
-    <orderEntry type="module" module-name="iplat4j-maven-hr" />
-    <orderEntry type="library" name="Maven: com.alibaba:easyexcel:2.2.10" level="project" />
-    <orderEntry type="library" name="Maven: cglib:cglib:3.1" level="project" />
-    <orderEntry type="library" name="Maven: org.ehcache:ehcache:3.4.0" level="project" />
     <orderEntry type="module" module-name="iplat4j-maven-xq" />
+    <orderEntry type="module" module-name="iplat4j-maven-si" />
+    <orderEntry type="module" module-name="iplat4j-maven-mp-rm" />
+    <orderEntry type="module" module-name="iplat4j-maven-mp" />
     <orderEntry type="module" module-name="iplat4j-maven-vi" />
-    <orderEntry type="module" module-name="iplat4j-maven-security" />
   </component>
 </module>

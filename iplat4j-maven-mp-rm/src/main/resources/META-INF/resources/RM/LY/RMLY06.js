@@ -1,4 +1,5 @@
-let webUrl = window.location.origin; webUrl = webUrl.substring(0,webUrl.lastIndexOf(":")); //'http://119.146.152.53'
+let webUrl = window.location.origin;
+webUrl = webUrl.substring(0, webUrl.lastIndexOf(":")); //'http://119.146.152.53'
 $(function () {
     let workNo = __ei["workNo"];
     let frameSchema = __ei["frameSchema"];
@@ -20,7 +21,7 @@ function cjkEncode(url) {
     }
     let newText = "";
     for (let i = 0; i < url.length; i++) {
-        let code = url.charCodeAt (i);
+        let code = url.charCodeAt(i);
         if (code >= 128 || code == 91 || code == 93) {  //91 is "[", 93 is "]".
             newText += "[" + code.toString(16) + "]";
         } else {
