@@ -60,6 +60,8 @@ public class FaInfoDO extends DaoEPBase {
 	private String matTypeName = " ";
 	private String goodsNum = " ";        /* 固定资产编码*/
 	private String goodsName = " ";        /* 固定资产名称*/
+	private String goodsCategoryCode = "";
+	private String goodsCategoryName = "";
 	private String goodsClassifyCode = " ";        /* 类别编码（一级）*/
 	private String goodsClassifyName = " ";        /* 类别名称（一级）*/
 	private String goodsTypeCode = " ";        /* 类别名称编码（二级）*/
@@ -251,6 +253,14 @@ public class FaInfoDO extends DaoEPBase {
 
 		eiColumn = new EiColumn("goodsName");
 		eiColumn.setDescName("固定资产名称");
+		eiMetadata.addMeta(eiColumn);
+
+		eiColumn = new EiColumn("goodsCategoryCode");
+		eiColumn.setDescName("类别编码（末级）");
+		eiMetadata.addMeta(eiColumn);
+
+		eiColumn = new EiColumn("goodsCategoryName");
+		eiColumn.setDescName("类别名称（末级）");
 		eiMetadata.addMeta(eiColumn);
 
 		eiColumn = new EiColumn("goodsClassifyCode");
@@ -851,6 +861,22 @@ public class FaInfoDO extends DaoEPBase {
 	 */
 	public void setGoodsName(String goodsName) {
 		this.goodsName = goodsName;
+	}
+
+	public String getGoodsCategoryCode() {
+		return goodsCategoryCode;
+	}
+
+	public void setGoodsCategoryCode(String goodsCategoryCode) {
+		this.goodsCategoryCode = goodsCategoryCode;
+	}
+
+	public String getGoodsCategoryName() {
+		return goodsCategoryName;
+	}
+
+	public void setGoodsCategoryName(String goodsCategoryName) {
+		this.goodsCategoryName = goodsCategoryName;
 	}
 
 	/**
@@ -1816,6 +1842,8 @@ public class FaInfoDO extends DaoEPBase {
 		setMatTypeName(OneSelfUtils.defaultIfEmpty(StringUtils.toString(map.get("matTypeName")), matTypeName));
 		setGoodsNum(OneSelfUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsNum")), goodsNum));
 		setGoodsName(OneSelfUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsName")), goodsName));
+		setGoodsCategoryCode(OneSelfUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsCategoryCode")), goodsCategoryCode));
+		setGoodsCategoryName(OneSelfUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsCategoryName")), goodsCategoryName));
 		setGoodsClassifyCode(OneSelfUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsClassifyCode")), goodsClassifyCode));
 		setGoodsClassifyName(OneSelfUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsClassifyName")), goodsClassifyName));
 		setGoodsTypeCode(OneSelfUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsTypeCode")), goodsTypeCode));
@@ -1914,6 +1942,8 @@ public class FaInfoDO extends DaoEPBase {
 		map.put("matTypeName", StringUtils.toString(matTypeName, eiMetadata.getMeta("matTypeName")));
 		map.put("goodsNum", StringUtils.toString(goodsNum, eiMetadata.getMeta("goodsNum")));
 		map.put("goodsName", StringUtils.toString(goodsName, eiMetadata.getMeta("goodsName")));
+		map.put("goodsCategoryCode", StringUtils.toString(goodsCategoryCode, eiMetadata.getMeta("goodsCategoryCode")));
+		map.put("goodsCategoryName", StringUtils.toString(goodsCategoryName, eiMetadata.getMeta("goodsCategoryName")));
 		map.put("goodsClassifyCode", StringUtils.toString(goodsClassifyCode, eiMetadata.getMeta("goodsClassifyCode")));
 		map.put("goodsClassifyName", StringUtils.toString(goodsClassifyName, eiMetadata.getMeta("goodsClassifyName")));
 		map.put("goodsTypeCode", StringUtils.toString(goodsTypeCode, eiMetadata.getMeta("goodsTypeCode")));

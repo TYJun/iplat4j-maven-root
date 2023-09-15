@@ -72,8 +72,8 @@
 			<EF:EFColumn ename="dealWorkName" cname="处理科室" width="100" align="center"/>
 			<EF:EFColumn ename="dealWorkName" cname="处理人" width="100" align="center"/>
 			<EF:EFColumn ename="dealDate" cname="处理日期" width="100" align="center"/>
-			<EF:EFColumn ename="dealReason" cname="产生原因" width="100" align="center"/>
-			<EF:EFColumn ename="dealDesc" cname="解决方式" width="100" align="center"/>
+			<EF:EFColumn ename="dealReason" cname="解决措施" width="100" align="center"/>
+			<EF:EFColumn ename="dealDesc" cname="不予解决的情况说明" width="100" align="center"/>
 		</EF:EFGrid>
 	</EF:EFRegion>
 	<EF:EFRegion id="inquC" title="回访记录">

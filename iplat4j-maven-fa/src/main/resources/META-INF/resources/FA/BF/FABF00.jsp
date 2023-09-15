@@ -29,12 +29,14 @@
                     <EF:EFColumn ename="detailId" cname="detailId"  align="center" width="200" enable="false" hidden="true"/>
                     <EF:EFColumn ename="goodsNum" cname="资产编码"  align="center" width="200" enable="false" displayType="url"/>
                     <EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="200" enable="false"/>
-                    <EF:EFColumn ename="goodsClassifyCode" cname="类别编码" align="center" width="200" enable="false"/>
-                    <EF:EFColumn ename="goodsClassifyName" cname="资产类别" align="center" width="200" enable="false"/>
+                    <EF:EFColumn ename="spec" cname="型号规格" align="center" width="200" enable="false"/>
                     <EF:EFColumn ename="applyDeptName" cname="申请科室" align="center" width="200" enable="false"/>
+                    <EF:EFColumn ename="scrapStatus" cname="审批状态" align="center" width="200" enable="false"/>
+                    <EF:EFColumn ename="applyReason" cname="申请理由" align="center" width="200" enable="false"/>
+                    <EF:EFColumn ename="applyTime" cname="申请时间" align="center" width="200" enable="false"/>
+                    <EF:EFColumn ename="goodsClassifyCode" cname="类别编码" align="center" width="200" enable="false" hidden="true"/>
+                    <EF:EFColumn ename="goodsClassifyName" cname="资产类别" align="center" width="200" enable="false"/>
                     <EF:EFColumn ename="applyPerson" cname="申请人"  align="center" width="200" enable="false"/>
-                    <EF:EFColumn ename="applyTime" cname="申请时间"  align="center" width="200" enable="false"/>
-                    <EF:EFColumn ename="applyReason" cname="申请理由"  align="center" width="200" enable="false"/>
                 </EF:EFGrid>
             </EF:EFRegion>
         </div>

@@ -40,6 +40,7 @@
             goods_type_name goodsTypeName,
             rfid_code rfidCode,
             model,
+            spec	AS "spec",
             unit_num unitNum,
             unit_name unitName,
             dept_num deptNum,
@@ -206,8 +207,8 @@
         <isNotEmpty prepend=" AND " property="goodsTypeCode">
             goods_type_name  like concat ('%',trim(#goodsTypeCode#),'%')
         </isNotEmpty>
-        <isNotEmpty prepend=" AND " property="deptName">
-            dept_name like concat ('%',trim(#deptName#),'%')
+        <isNotEmpty prepend=" AND " property="deptNameSplit">
+            $deptNameSplit$
         </isNotEmpty>
         <isNotEmpty prepend=" AND " property="fundingSourceNum">
             fundingSource_num = #fundingSourceNum#
@@ -226,6 +227,7 @@
             goods_type_code	AS "goodsTypeCode",
             goods_type_name	AS "goodsTypeName",
             model	AS "model",
+            spec	AS "spec",
             amount	AS "amount",
             price	AS "price",
             buy_cost	AS "buyCost",
@@ -244,6 +246,9 @@
             WHEN '010' THEN '待用'
             WHEN '020' THEN '在用'
             WHEN '030' THEN '现场停用'
+            WHEN '031' THEN '调拨中'
+            WHEN '035' THEN '报废中'
+            WHEN '040' THEN '报废提交'
             WHEN '050' THEN '预报废'
             WHEN '060' THEN '报废'
             END AS "statusCode",
@@ -344,8 +349,8 @@
         <isNotEmpty prepend=" AND " property="goodsTypeCode">
             goods_type_name like concat ('%',trim(#goodsTypeCode#),'%')
         </isNotEmpty>
-        <isNotEmpty prepend=" AND " property="deptName">
-            dept_name like concat ('%',trim(#deptName#),'%')
+        <isNotEmpty prepend=" AND " property="deptNameSplit">
+            $deptNameSplit$
         </isNotEmpty>
         <isNotEmpty prepend=" AND " property="fundingSourceNum">
             fundingSource_num = #fundingSourceNum#
@@ -634,6 +639,9 @@
         </isNotEmpty>
         <isNotEmpty prepend=" AND " property="deptName">
             dept_name like concat ('%',trim(#deptName#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="deptNameSplit">
+            $deptNameSplit$
         </isNotEmpty>
         GROUP BY goods_num
     </select>

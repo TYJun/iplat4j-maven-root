@@ -23,7 +23,7 @@
                 $orderBy$
             </isNotEmpty>
             <isEmpty property="orderBy">
-                id asc
+                operator_time desc
             </isEmpty>
         </dynamic>
 

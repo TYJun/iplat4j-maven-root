@@ -36,21 +36,23 @@ $(function (){
         setTimeout(function(){$("#RESAVE").attr("disabled",false);},5000);
         var rows = resultGrid.getDataItems();
         var type=IPLAT.EFInput.value($("#type"));
+        var billNo=$("#billNo").val();
         var id=IPLAT.EFInput.value($("#id"));
         var billTime=IPLAT.EFInput.value($("#billTime"));
         var arriveTime=IPLAT.EFInput.value($("#arriveTime"));
         var leaveTime=IPLAT.EFInput.value($("#leaveTime"));
         var deptNum= IPLAT.EFPopupInput.text($("#deptNum"));
-        var shiftTimeSection=IPLAT.EFInput.value($("#shiftTimeSection"));
+        var shiftTimeSection=$("#shiftTimeSection").val();
         var changeCode=IPLAT.EFSelect.text($("#changeCode"));
         var numbers=IPLAT.EFInput.value($("#numbers"));
-        var shiftFirstTime=IPLAT.EFInput.value($("#shiftFirstTime"));
+        var shiftFirstTime=$("#shiftFirstTime").val();
         var supportStation=IPLAT.EFInput.value($("#supportStation"));
         var becauseMemo=IPLAT.EFInput.value($("#becauseMemo"));
 
         //参数检验
             var eiInfo = new EiInfo();
             eiInfo.set("rows", rows);
+            eiInfo.set("billNo", billNo);
             eiInfo.set("type", type);
             eiInfo.set("id", id);
             eiInfo.set("billTime", billTime);
@@ -81,7 +83,7 @@ $(function (){
 
     //人员选择弹窗
     function popData() {
-        var url = IPLATUI.CONTEXT_PATH + "/web/HRLZ010101?initLoad";
+        var url = IPLATUI.CONTEXT_PATH + "/web/HRLZ010101?initLoad&view=DP";
         var popData = $("#popDataPerson");
         popData.data("kendoWindow").setOptions({
             open : function() {
@@ -107,11 +109,15 @@ $(function (){
             NotificationUtil("离岗时间不能为空","error");
             return false;
         }
+        if(leaveTime<arriveTime){
+            NotificationUtil("离岗时间不能在到岗时间之前","error");
+            return false;
+        }
         if (isEmpty(deptNum)){
             NotificationUtil("申请科室不能为空","error");
             return false;
         }
-        if (isEmpty(shiftTimeSection)){
+/*        if (isEmpty(shiftTimeSection)){
             NotificationUtil("支援时段不能为空","error");
             return false;
         }
@@ -119,6 +125,10 @@ $(function (){
             NotificationUtil("上班时间不能为空","error");
             return false;
         }
+        if(shiftFirstTime<arriveTime) {
+            NotificationUtil("上班时间不能在到岗时间之前", "error");
+            return false;
+        }*/
         if (isEmpty(numbers)){
             NotificationUtil("支援人数不能为空","error");
             return false;

@@ -17,6 +17,17 @@ $(function (){
 
     IPLATUI.EFGrid = {
         "result": {
+            onCellClick: function (e) {
+                if (e.field === "billNo") {
+                    var billNo = e.model.billNo;
+                    var id = e.model.id;
+                    var url = IPLATUI.CONTEXT_PATH + "/web/HRDP0102?billNo=" + billNo + "&id=" + id;
+                    var popData = $("#popDataModify");
+                    popDataCom(popData, url);
+                    popDataModifyWindow.open().center();
+                }
+            },
+
             loadComplete: function (grid) {
                 // 新增
                 $("#APPLY").on("click", function (e) {
@@ -29,8 +40,21 @@ $(function (){
                 // 编辑
                 $("#EDIT").on("click", function (e) {
                     var checkRows = resultGrid.getCheckedRows();
+
                     if (checkRows.length < 1) {
                         NotificationUtil("请选择要确认的行", "error");
+                        return;
+                    }
+                    if(checkRows[0].statusCode=="02"){
+                        NotificationUtil("此调派申请已提交，无法进行编辑", "error");
+                        return;
+                    }
+                    if(checkRows[0].statusCode=="03"){
+                        NotificationUtil("此调派申请已审批，无法进行编辑", "error");
+                        return;
+                    }
+                    if(checkRows[0].statusCode=="04"){
+                        NotificationUtil("此调派申请已驳回，无法进行编辑", "error");
                         return;
                     }
                     var id =checkRows[0].id;
@@ -46,6 +70,18 @@ $(function (){
                     var checkRows = resultGrid.getCheckedRows();
                     if (checkRows.length < 1) {
                         NotificationUtil("请选择要确认的行", "error");
+                        return;
+                    }
+                    if(checkRows[0].statusCode=="02"){
+                        NotificationUtil("此调派申请已提交，无法进行删除", "error");
+                        return;
+                    }
+                    if(checkRows[0].statusCode=="03"){
+                        NotificationUtil("此调派申请已审批，无法进行删除", "error");
+                        return;
+                    }
+                    if(checkRows[0].statusCode=="04"){
+                        NotificationUtil("此调派申请已驳回，无法进行删除", "error");
                         return;
                     }
                     var billNo = checkRows[0].billNo;
@@ -66,6 +102,18 @@ $(function (){
                     var checkRows = resultGrid.getCheckedRows();
                     if (checkRows.length < 1) {
                         NotificationUtil("请选择要确认的行", "error");
+                        return;
+                    }
+                    if(checkRows[0].statusCode=="02"){
+                        NotificationUtil("此调派申请已提交，请勿重复提交", "error");
+                        return;
+                    }
+                    if(checkRows[0].statusCode=="03"){
+                        NotificationUtil("此调派申请已审批", "error");
+                        return;
+                    }
+                    if(checkRows[0].statusCode=="04"){
+                        NotificationUtil("此调派申请已驳回，请重新申请", "error");
                         return;
                     }
                     var id = checkRows[0].id;

@@ -22,15 +22,22 @@ $(function () {
                 var grid = $(e.contentElement).find("div.k-grid").data("kendoGrid")
                 if (grid != undefined) {
                     if (grid.options.blockId === "resultA") {
+                        if (__ei.role == "admin") {
+                            $("#role").show();
+                        }
                         $("#one").show();
                         $("#other").hide();
                     } else {
                         $("#one").hide();
+                        $("#role").hide();
                         $("#other").show();
                     }
-                    setTimeout(function() {
+                    setTimeout(function () {
                         grid.dataSource.page(1);
-                    },500)
+                        resultDetailsC2Grid.dataSource.page(1);
+                        resultDetailsD2Grid.dataSource.page(1);
+                        resultDetailsE2Grid.dataSource.page(1);
+                    }, 500)
                 }
             }
         }
@@ -105,20 +112,35 @@ $(function () {
             loadComplete: function (grid) {
                 // 仓库调拨申请
                 $("#ADMINAPPLY").on("click", function (e) {
+                    var checkRows = resultAGrid.getCheckedRows();
+                    for (let i = 0; i < checkRows.length; i++) {
+                        if (checkRows[i].statusCode == "调拨中") {
+                            NotificationUtil("权限不足，请选择在用或待用状态的资产", "warning");
+                            return
+                        }
+                    }
                     popDataWindow.setOptions({"title": "仓库调拨申请"});
                     fixedAssetsDetailWindow("admin", "")
                 });
+
                 // 科室调拨申请
-                $("#TRANSFERAPPLY").on("click",function (e) {
+                $("#TRANSFERAPPLY").on("click", function (e) {
                     popDataWindow.setOptions({"title": "科室调拨申请"});
                     var checkRows = resultAGrid.getCheckedRows();
                     // 是否存在电签--后续补充一下
                     if (checkRows.length > 0) {
                         var flag = true;
                         for (let i = 0; i < checkRows.length; i++) {
-                            if (checkRows[i].statusCode == "待用") {
+                            if (checkRows[i].statusCode == "待用" || checkRows[i].statusCode == "调拨中") {
                                 NotificationUtil("权限不足，请选择在用状态的资产", "warning");
+                                return
                                 flag = false;
+                            }
+                        }
+                        for (let i = 0; i < checkRows.length; i++) {
+                            if (__ei.deptName != checkRows[i].deptName) {
+                                NotificationUtil("权限不足，非当前科室无法进行调拨", "warning");
+                                return;
                             }
                         }
                         if (flag) {
@@ -208,12 +230,9 @@ $(function () {
             },
             loadComplete: function (grid) {
 
-            }
+            },
         },
         "resultC": {
-            pageable: {
-                pageSize: 20,
-            },
             toolbarConfig: {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
                 add: false, cancel: false, save: false, 'delete': false,
@@ -261,14 +280,26 @@ $(function () {
                     });
                 }
             },
+            onRowClick: function (e) {
+                var eiInfo = new EiInfo();
+                eiInfo.set("transferNo", e.model.transferNo)
+                eiInfo.set("block", "resultDetailsC2")
+                // 调用小代码
+                EiCommunicator.send("FADB01", "transferDetailResult", eiInfo, {
+                    onSuccess: function (ei) {
+                        resultDetailsC2Grid.setEiInfo(ei);
+                    }
+                });
+            },
             loadComplete: function (grid) {
 
             }
         },
+        "resultDetailsC2": {
+            pageable: false,
+            exportGrid: false,
+        },
         "resultD": {
-            pageable: {
-                pageSize: 20,
-            },
             toolbarConfig: {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
                 add: false, cancel: false, save: false, 'delete': false,
@@ -289,6 +320,17 @@ $(function () {
 
                 }
             },
+            onRowClick: function (e) {
+                var eiInfo = new EiInfo();
+                eiInfo.set("transferNo", e.model.transferNo)
+                eiInfo.set("block", "resultDetailsD2")
+                // 点击查看明细
+                EiCommunicator.send("FADB01", "transferDetailResult", eiInfo, {
+                    onSuccess: function (ei) {
+                        resultDetailsD2Grid.setEiInfo(ei);
+                    }
+                });
+            },
             loadComplete: function (grid) {
                 // 批量审批
                 $("#BATCHAPPROVAL").on("click", function (e) {
@@ -303,7 +345,7 @@ $(function () {
                         getSign(fileCode => {
                             if (fileCode) {
                                 auditFileCode = fileCode;
-                                IPLAT.EFInput.value($("#info-0-auditFileCode"),auditFileCode);
+                                IPLAT.EFInput.value($("#info-0-auditFileCode"), auditFileCode);
                                 // getSignatureImg(auditFileCode, "audit")
                                 // 批量获取调拨单号
                                 acceptWindow.open().center()
@@ -394,10 +436,11 @@ $(function () {
                 });
             }
         },
+        "resultDetailsD2": {
+            pageable: false,
+            exportGrid: false,
+        },
         "resultE": {
-            pageable: {
-                pageSize: 20,
-            },
             toolbarConfig: {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
                 add: false, cancel: false, save: false, 'delete': false,
@@ -463,6 +506,17 @@ $(function () {
                     fixedAssetsWindow("all", "", e.model.transferNo);
                 }
             },
+            onRowClick: function (e) {
+                var eiInfo = new EiInfo();
+                eiInfo.set("transferNo", e.model.transferNo)
+                eiInfo.set("block", "resultDetailsE2")
+                // 点击查看明细
+                EiCommunicator.send("FADB01", "transferDetailResult", eiInfo, {
+                    onSuccess: function (ei) {
+                        resultDetailsE2Grid.setEiInfo(ei);
+                    }
+                });
+            },
             loadComplete: function (grid) {
                 // 打印调拨单PRINTINTRANSFER
                 $("#PRINTINTRANSFER").on("click", function (e) {
@@ -475,7 +529,7 @@ $(function () {
                                 // 当前页面地址
                                 var pageUrl = window.location.href;
                                 // 获取报表地址前袋
-                                var baseUrl = pageUrl.split('/')[0]+"//"+pageUrl.split('/')[2]+"/";
+                                var baseUrl = pageUrl.split('/')[0] + "//" + pageUrl.split('/')[2] + "/";
                                 var BaseUrl = "fr/ReportServer?reportlet=v5stable/";
                                 if (ei.extAttr.url != undefined) {
                                     BaseUrl = ei.extAttr.url;
@@ -501,6 +555,10 @@ $(function () {
                     }
                 });
             }
+        },
+        "resultDetailsE2": {
+            pageable: false,
+            exportGrid: false,
         }
     }
 });

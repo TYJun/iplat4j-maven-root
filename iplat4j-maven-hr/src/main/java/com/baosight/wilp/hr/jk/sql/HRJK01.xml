@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="HRJK01">
+
+	<select id="getUserInfo" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+			id	as "id",
+			real_name	as "STAFF_NAME",  <!-- 姓名 -->
+			sex as "GENDER_NAME",  <!-- 性别：男、女 -->
+			birth_place	as "NATIONALITY_NAME",  <!-- 籍贯 -->
+			kampong	as "NATION_NAME",  <!-- 民族 -->
+			man_code	as "ID_NUMBER",  <!-- 身份证 -->
+			salary	as "salary",  <!-- 基本工资 -->
+			schooling_code	as "schoolingCode",  <!-- 学历 -->
+			political_status	as "POLITICAL_NAME",  <!-- 政治面貌 -->
+			birth_date	as "birthDate",  <!-- 出生年月 -->
+			phone	as "TELEPHONE_NUMBER",  <!-- 联系电话 -->
+			work_no	as "STAFF_CODE",  <!-- 工号 -->
+			dept_num	as "MEDICAL_INSTITUT_CODE",  <!-- 所属部门 -->
+			service_dept_num	as "serviceDeptNum",  <!-- 服务部门 -->
+			job_code	as "jobCode",  <!-- 工作岗位 -->
+			health	as "health",  <!-- 健康状况 -->
+			family_address	as "RESIDENCE_ADDR",  <!-- 家庭地址 -->
+			company	as "company",  <!-- 公司 -->
+			memo	as "memo",  <!-- 备注 -->
+			pre_in_time	as "preInTime",  <!-- 预计入职时间 -->
+			in_time	as "ACT_FROM",  <!-- 入职时间 -->
+			pre_out_time	as "preOutTime",  <!-- 预计离职时间 -->
+			out_time	as "ACT_TO",  <!-- 离职日期 -->
+			create_date	as "createDate",  <!-- 创建时间 -->
+			creator_name	as "creatorName",  <!-- 创建人 -->
+			creator_id	as "creatorId",  <!-- 创建人ID  -->
+			update_date	as "updateDate",  <!-- 更改时间 -->
+			updator_name	as "updatorName",  <!-- 更改人 -->
+			updator_id	as "updatorId",  <!-- 更改人ID -->
+			operator_type	as "operatorType", <!-- 最后操作类型 -->
+			highest_degree	as "DEGREE_NAME",
+			highest_educational	as "EDUCATION_NAME",
+			marital_status	as "MARITAL_STATUS_NAME",
+			emergency_phone	as "CONTACT_TELEPHONE",
+			emergency	as "CONTACT_NAME",
+			personnel_category	as "personnelCategory",
+			status_code	as "statusCode" <!-- 状态(01-新建，02-入职,03-取消入职，04-离职) -->
+		FROM .hr_man WHERE 1=1
+		<isNotEmpty prepend=" AND " property="updateDate">
+			DATE_FORMAT(update_date,'%Y-%m-%d') = #updateDate#
+		</isNotEmpty>
+		ORDER BY create_date desc ,status_code asc
+	</select>
+</sqlMap>

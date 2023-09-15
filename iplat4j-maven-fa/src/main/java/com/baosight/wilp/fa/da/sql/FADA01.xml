@@ -94,7 +94,7 @@
 		    asset_get_way_code,asset_get_way_name,deprect_code,deprect_name,
 		    purchase_vouch,purchase_dept,purchase_staff_name,acquitv_year,brand_desc,
 			mat_num,mat_name,manufacturer_naty_code,manufacturer_naty_name,mat_type_num,mat_type_name,
-		    goods_num,goods_name,contract_no,goods_classify_code,goods_classify_name,goods_type_code,
+		    goods_num,goods_name,contract_no,goods_category_code,goods_category_name,goods_classify_code,goods_classify_name,goods_type_code,
 			goods_type_name,model,spec,amount,price,buy_cost,manufacturer,surp_num,surp_name,buy_date,use_date,build,floor,room,
 			install_location_num,install_location,dept_num,dept_name,status_code,unit_num,unit_name,residual_rate,
 			estimated_residual_value,use_years,month_depreciation,finace_class_num,in_account_date,
@@ -110,7 +110,7 @@
 			#faInfoDOList[].assetUseCode#,#faInfoDOList[].assetUseName#,#faInfoDOList[].assetGetWayCode#,#faInfoDOList[].assetGetWayName#,#faInfoDOList[].deprectCode#,
 		 	#faInfoDOList[].deprectName#,#faInfoDOList[].purchaseVouch#,#faInfoDOList[].purchaseDept#,#faInfoDOList[].purchaseStaffName#,#faInfoDOList[].acquitvYear#,#faInfoDOList[].brandDesc#,
 		 	#faInfoDOList[].matNum#,#faInfoDOList[].matName#,#faInfoDOList[].manufacturerNatyCode#,#faInfoDOList[].manufacturerNatyName#,#faInfoDOList[].matTypeNum#,#faInfoDOList[].matTypeName#,
-		 	#faInfoDOList[].goodsNum#, #faInfoDOList[].goodsName#, #faInfoDOList[].contractNo#, #faInfoDOList[].goodsTypeCode#,#faInfoDOList[].goodsTypeName#,
+		 	#faInfoDOList[].goodsNum#, #faInfoDOList[].goodsName#, #faInfoDOList[].contractNo#,#faInfoDOList[].goodsCategoryCode#,#faInfoDOList[].goodsCategoryName#, #faInfoDOList[].goodsTypeCode#,#faInfoDOList[].goodsTypeName#,
 			#faInfoDOList[].goodsClassifyCode#,	#faInfoDOList[].goodsClassifyName#,
 		 	#faInfoDOList[].model#,#faInfoDOList[].spec#, #faInfoDOList[].amount#, #faInfoDOList[].price#, #faInfoDOList[].buyCost#,
 		 	#faInfoDOList[].manufacturer#, #faInfoDOList[].surpNum#,#faInfoDOList[].surpName#, #faInfoDOList[].buyDate#, #faInfoDOList[].useDate#,
@@ -222,6 +222,8 @@
 			WHEN '010' THEN '待用'
 			WHEN '020' THEN '在用'
 			WHEN '030' THEN '现场停用'
+			WHEN '031' THEN '调拨中'
+			WHEN '035' THEN '报废中'
 			WHEN '040' THEN '报废提交'
 			WHEN '050' THEN '预报废'
 			WHEN '060' THEN '报废'
@@ -698,6 +700,7 @@
 			goods_name	AS "goodsName",
 			goods_classify_code	AS "goodsClassifyCode",
 			goods_classify_name	AS "goodsClassifyName",
+			goods_category_name	AS "goodsCategoryName",
 			goods_type_code	AS "goodsTypeCode",
 			goods_type_name	AS "goodsTypeName",
 			model	AS "model",
@@ -721,6 +724,8 @@
 			WHEN '010' THEN '待用'
 			WHEN '020' THEN '在用'
 			WHEN '030' THEN '现场停用'
+			WHEN '031' THEN '调拨中'
+			WHEN '035' THEN '报废中'
 			WHEN '040' THEN '报废提交'
 			WHEN '050' THEN '预报废'
 			WHEN '060' THEN '报废'
@@ -758,7 +763,7 @@
 			archive_flag	AS "archiveFlag",
 			split_reason AS "splitReason"
 			FROM fa_info
-			WHERE lock_flag NOT IN ('4')
+			WHERE lock_flag NOT IN ('4') AND status_code NOT IN ('060')
 		<isEqual prepend="and" property="inAccountStatus" compareValue="confirmed">
 			in_account_status = '1' AND status_code NOT IN ('00')
 		</isEqual>
@@ -941,7 +946,7 @@
 		FROM
 			${projectSchema}.ac_department
 		where status = '1'
-		AND dict_type = '管理区划'
+		AND dict_type = '业务区划'
 		<isNotEmpty prepend="and" property="deptNum">
 			dept_num like concat ('%',#deptNum#,'%')
 		</isNotEmpty>

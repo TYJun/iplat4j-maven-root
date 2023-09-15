@@ -12,11 +12,12 @@
 			<EF:EFInput ename="inqu_status-0-workNo" cname="工号" colWidth="3" ratio="3:8"/>
 			<EF:EFInput ename="inqu_status-0-jobCode" cname="岗位" colWidth="3" ratio="3:8"/>
 			<EF:EFInput ename="inqu_status-0-company" cname="公司名称" colWidth="3" ratio="3:8"/>
-			<EF:EFInput ename="inqu_status-0-deptNum" cname="所属科室" colWidth="3" ratio="3:8"/>
-			<EF:EFSelect ename="inqu_status-0-statusCode" cname="状态" colWidth="3" ratio="3:8">
+			<EF:EFInput ename="inqu_status-0-deptNum" cname="所属部门" colWidth="3" ratio="3:8"/>
+			<EF:EFInput ename="inqu_status-0-managementDeptNum" cname="管理部门" colWidth="3" ratio="3:8"  readonly="true"/>
+			<%--<EF:EFSelect ename="inqu_status-0-statusCode" cname="状态" colWidth="3" ratio="3:8">
 				<EF:EFOption label="全部" value=""/>
 				<EF:EFCodeOption codeName="wilp.hr.personCode"/>
-			</EF:EFSelect>
+			</EF:EFSelect>--%>
 		</div>
 		<div class="button-region" id="buttonDiv">
 			<EF:EFButton cname="查询" ename="QUERY" layout="0"></EF:EFButton>
@@ -31,6 +32,7 @@
 			<EF:EFColumn ename="sex" cname="性别" width="100" align="center" enable="false"/>
 			<EF:EFColumn ename="deptNum" cname="所属部门" width="100" align="center" enable="false"/>
 			<EF:EFColumn ename="serviceDeptNum" cname="服务部门" width="100" align="center" enable="false"/>
+			<EF:EFColumn ename="managementDeptNum" cname="管理部门" width="100" align="center" enable="false"/>
 			<EF:EFColumn ename="schoolingCode" cname="学历" width="100" align="center" enable="false"/>
 			<EF:EFColumn ename="politicalStatus" cname="政治面貌" width="100" align="center" enable="false"/>
 			<EF:EFColumn ename="preInTime" cname="预计入职时间" width="150" align="center" enable="false"/>

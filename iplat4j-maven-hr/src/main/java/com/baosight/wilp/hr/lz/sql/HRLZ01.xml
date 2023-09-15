@@ -3,13 +3,13 @@
 <sqlMap namespace="HRLZ01">
 <!--登记预离职-->
     <update id="updateQuit" parameterClass="java.util.HashMap">
-        update hr_man set  pre_out_time	= #preOutTime#
+        update hr_man set  pre_out_time	= #preOutTime#,  status_code='03'
                 where work_no=#workNo#
     </update>
 
 <!--取消预离职-->
     <update id="updateCancel" parameterClass="String">
-        update hr_man set  pre_out_time	= ''
+        update hr_man set  pre_out_time	= '',status_code='02'
         where id=#id#
     </update>
 

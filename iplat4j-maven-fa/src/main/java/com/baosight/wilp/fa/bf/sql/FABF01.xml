@@ -13,6 +13,7 @@
             goods_type_code	AS "goodsTypeCode",
             goods_type_name	AS "goodsTypeName",
             model	AS "model",
+            spec	AS "spec",
             amount	AS "amount",
             price	AS "price",
             buy_cost	AS "buyCost",
@@ -31,6 +32,9 @@
             WHEN '010' THEN '待用'
             WHEN '020' THEN '在用'
             WHEN '030' THEN '现场停用'
+            WHEN '031' THEN '调拨中'
+            WHEN '035' THEN '报废中'
+            WHEN '040' THEN '报废提交'
             WHEN '050' THEN '预报废'
             WHEN '060' THEN '报废'
             END AS "statusCode",
@@ -68,7 +72,7 @@
             split_reason AS "splitReason"
         FROM fa_info
         WHERE lock_flag NOT IN ("4")
-        AND status_code = "020"
+        AND status_code IN ('020','035')
         <isEqual prepend="AND" property="role" compareValue="user">
             dept_name in (
             <iterate conjunction="," property="lookDeptName">
@@ -128,7 +132,7 @@
             fundingSource_num = #fundingSourceNum#
         </isNotEmpty>
         <isNotEmpty prepend=" AND " property="deptName">
-            dept_name like concat ('%',trim(#deptName#),'%')
+            $deptName$
         </isNotEmpty>
         order by dept_name,rec_revise_time DESC,rec_create_time DESC,LENGTH(goods_num),goods_num
     </select>
@@ -136,7 +140,7 @@
     <select id="countFaInfoDOInfo" parameterClass="java.util.HashMap" resultClass="int">
         SELECT COUNT(*) FROM  fa_info
         WHERE lock_flag NOT IN ("4")
-        AND status_code = "020"
+        AND status_code IN ('020','035')
         <isEqual prepend="AND" property="role" compareValue="user">
             dept_name in (
             <iterate conjunction="," property="lookDeptName">
@@ -207,6 +211,7 @@
             fsd.faInfo_id AS "faInfoId",
             fsd.goods_num AS "goodsNum",
             fsd.goods_name AS "goodsName",
+            fi.spec,
             fsd.goods_classify_code AS "goodsClassifyCode",
             fsd.goods_classify_name AS "goodsClassifyName",
             fs.scrapped_no AS "scrappedNo",
@@ -239,6 +244,7 @@
         FROM
             fa_scrap fs
         LEFT JOIN fa_scrap_detail fsd ON fs.scrapped_no = fsd.scrapped_no
+        LEFT JOIN fa_info fi ON fi.id = fsd.faInfo_id
         WHERE
             1 = 1
             <isEqual prepend="and" property="scrapStatus" compareValue="apply">
@@ -575,6 +581,9 @@
                 WHEN '010' THEN '待用'
                 WHEN '020' THEN '在用'
                 WHEN '030' THEN '现场停用'
+                WHEN '031' THEN '调拨中'
+                WHEN '035' THEN '报废中'
+                WHEN '040' THEN '报废提交'
                 WHEN '050' THEN '预报废'
                 WHEN '060' THEN '报废'
                 END AS "statusCode",
@@ -655,6 +664,9 @@
             WHEN '010' THEN '待用'
             WHEN '020' THEN '在用'
             WHEN '030' THEN '现场停用'
+            WHEN '031' THEN '调拨中'
+            WHEN '035' THEN '报废中'
+            WHEN '040' THEN '报废提交'
             WHEN '050' THEN '预报废'
             WHEN '060' THEN '报废'
             END AS "statusCode",
@@ -797,8 +809,8 @@
     </insert>
 
     <update id="updateFaInfoStatus" parameterClass="java.util.ArrayList">
-        UPDATE fa_info SET status_code = "030"
-        WHERE id IN
+        UPDATE fa_info SET status_code = '035'
+        WHERE status_code = '020' AND id IN
         <iterate conjunction="," open="(" close=")">
             #faScrapDetailVOList[].faInfoId#
         </iterate>
@@ -808,7 +820,7 @@
     <!-- 批量撤销报废申请：修改资产主表状态，删除明细表信息，删除主表信息 -->
     <update id="revocationFaInfoStatus" parameterClass="java.util.HashMap">
         UPDATE fa_info SET status_code = #statusCode#
-        WHERE status_code = '030' AND id IN
+        WHERE status_code = '035' AND id IN
         (SELECT
             faInfo_id
         FROM fa_scrap_detail
@@ -838,7 +850,7 @@
     <!-- 批量撤销通过资产报废明细表的id -->
     <update id="revocationFaInfoStatusById" parameterClass="java.util.HashMap">
         UPDATE fa_info SET status_code = #statusCode#
-        WHERE status_code = '030' AND id IN
+        WHERE status_code = '035' AND id IN
         (SELECT
         faInfo_id
         FROM fa_scrap_detail

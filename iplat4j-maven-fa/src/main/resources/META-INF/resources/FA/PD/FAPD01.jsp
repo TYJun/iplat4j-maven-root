@@ -24,7 +24,7 @@
 		<div title="待完结盘点单">
 			<EF:EFGrid blockId="resultA" autoDraw="no" autoBind="true" readonly="true" rowNo="true" checkMode="multiple,row" queryMethod="unCheckedQuery" height="460px">
 				<EF:EFColumn ename="faInventoryId" cname="faInventoryId"  align="center" hidden="true"/>
-				<EF:EFColumn ename="inventoryNo" cname="盘点单号" align="center" displayType="url"/>
+				<EF:EFColumn ename="inventoryNo" cname="盘点单号" align="center" displayType="url" enable="false"/>
 				<EF:EFColumn ename="inventoryDeptName" cname="盘点科室"  align="center"/>
 				<EF:EFColumn ename="inventorySpotName" cname="盘点地点" align="center"/>
 				<EF:EFColumn ename="singleSystenDate" cname="制单日期"  align="center"/>
@@ -37,7 +37,7 @@
 		<div title="已完结盘点单">
 			<EF:EFGrid blockId="resultB" autoDraw="no" autoBind="true" readonly="true" rowNo="true" checkMode="multiple,row" queryMethod="checkedQuery" height="460px">
 				<EF:EFColumn ename="faInventoryId" cname="faInventoryId"  align="center" hidden="true"/>
-				<EF:EFColumn ename="inventoryNo" cname="盘点单号"  align="center" displayType="url"/>
+				<EF:EFColumn ename="inventoryNo" cname="盘点单号"  align="center" displayType="url" enable="false"/>
 				<EF:EFColumn ename="inventoryDeptName" cname="盘点科室"  align="center"/>
 				<EF:EFColumn ename="inventorySpotName" cname="盘点地点" align="center"/>
 				<EF:EFColumn ename="singleSystenDate" cname="制单日期"  align="center"/>

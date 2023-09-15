@@ -66,11 +66,11 @@
 							 colWidth="5" ratio="4:8"/>
 		</div>
 		<div class="row">
-			<EF:EFInput ename="inqu_status-0-dealReason" cname="产生原因" colWidth="10"
+			<EF:EFInput ename="inqu_status-0-dealReason" cname="解决措施" colWidth="10"
 						ratio="2:10" type="textarea" rows="4" maxLength="200" required="true"/>
 		</div>
 		<div class="row">
-			<EF:EFInput ename="inqu_status-0-dealDesc" cname="解决方式" colWidth="10"
+			<EF:EFInput ename="inqu_status-0-dealDesc" cname="不予解决的情况说明" colWidth="10"
 						ratio="2:10" type="textarea" rows="4" maxLength="200" required="true"/>
 		</div>
 		<div class="button-region" id="buttonDiv">

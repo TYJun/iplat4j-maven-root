@@ -30,6 +30,7 @@ public class FaScrapVO extends DaoEPBase {
 	private String detailId;
 	private String goodsNum;
 	private String goodsName;
+	private String spec;
 	private String goodsClassifyCode;
 	private String goodsClassifyName;
 	private String scrappedNo;        /* 报废单号*/
@@ -79,6 +80,10 @@ public class FaScrapVO extends DaoEPBase {
 
 		eiColumn = new EiColumn("goodsName");
 		eiColumn.setDescName("资产名称");
+		eiMetadata.addMeta(eiColumn);
+
+		eiColumn = new EiColumn("spec");
+		eiColumn.setDescName("型号规格");
 		eiMetadata.addMeta(eiColumn);
 
 		eiColumn = new EiColumn("goodsClassifyCode");
@@ -223,6 +228,14 @@ public class FaScrapVO extends DaoEPBase {
 
 	public void setGoodsName(String goodsName) {
 		this.goodsName = goodsName;
+	}
+
+	public String getSpec() {
+		return spec;
+	}
+
+	public void setSpec(String spec) {
+		this.spec = spec;
 	}
 
 	public String getGoodsClassifyCode() {
@@ -556,6 +569,7 @@ public class FaScrapVO extends DaoEPBase {
 		setFaInfoId(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("faInfoId")), faInfoId));
 		setGoodsNum(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsNum")), goodsNum));
 		setGoodsName(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsName")), goodsName));
+		setSpec(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("spec")), spec));
 		setGoodsClassifyCode(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsClassifyCode")), goodsClassifyCode));
 		setGoodsClassifyName(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsClassifyName")), goodsClassifyName));
 		setScrappedNo(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("scrappedNo")), scrappedNo));
@@ -590,6 +604,7 @@ public class FaScrapVO extends DaoEPBase {
 		map.put("detailId", StringUtils.toString(detailId, eiMetadata.getMeta("detailId")));
 		map.put("goodsNum", StringUtils.toString(goodsNum, eiMetadata.getMeta("goodsNum")));
 		map.put("goodsName", StringUtils.toString(goodsName, eiMetadata.getMeta("goodsName")));
+		map.put("spec", StringUtils.toString(spec, eiMetadata.getMeta("spec")));
 		map.put("goodsClassifyCode", StringUtils.toString(goodsClassifyCode, eiMetadata.getMeta("goodsClassifyCode")));
 		map.put("goodsClassifyName", StringUtils.toString(goodsClassifyName, eiMetadata.getMeta("goodsClassifyName")));
 		map.put("scrappedNo", StringUtils.toString(scrappedNo, eiMetadata.getMeta("scrappedNo")));

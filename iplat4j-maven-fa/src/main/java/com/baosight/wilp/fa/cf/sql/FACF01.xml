@@ -105,6 +105,9 @@
         WHEN '010' THEN '待用'
         WHEN '020' THEN '在用'
         WHEN '030' THEN '现场停用'
+        WHEN '031' THEN '调拨中'
+        WHEN '035' THEN '报废中'
+        WHEN '040' THEN '报废提交'
         WHEN '050' THEN '预报废'
         WHEN '060' THEN '报废'
         END AS "statusCodeMean",
@@ -206,7 +209,7 @@
             goods_classify_name	AS "goodsClassifyName",
             goods_type_code	AS "goodsTypeCode",
             goods_type_name	AS "goodsTypeName",
-            model	AS "model",
+            spec	AS "spec",
             amount	AS "amount",
             price	AS "price",
             buy_cost	AS "buyCost",
@@ -216,6 +219,7 @@
             DATE_FORMAT( use_date, '%Y-%m-%d' ) AS "useDate",
             build	AS "build",
             floor	AS "floor",
+            room AS "room",
             install_location	AS "installLocation",
             install_location_num AS "installLocationNum",
             dept_num	AS "deptNum",
@@ -224,6 +228,9 @@
             WHEN '010' THEN '待用'
             WHEN '020' THEN '在用'
             WHEN '030' THEN '现场停用'
+            WHEN '031' THEN '调拨中'
+            WHEN '035' THEN '报废中'
+            WHEN '040' THEN '报废提交'
             WHEN '050' THEN '预报废'
             WHEN '060' THEN '报废'
             END AS "statusCode",
@@ -313,8 +320,8 @@
         <isNotEmpty prepend=" AND " property="fundingSourceNum">
             fundingSource_num = #fundingSourceNum#
         </isNotEmpty>
-        <isNotEmpty prepend=" AND " property="deptName">
-            dept_name like concat ('%',trim(#deptName#),'%')
+        <isNotEmpty prepend=" AND " property="deptNameSplit">
+            $deptNameSplit$
         </isNotEmpty>
         order by dept_name,rec_revise_time DESC,rec_create_time DESC,LENGTH(goods_num),goods_num
     </select>
@@ -375,8 +382,8 @@
         <isNotEmpty prepend=" AND " property="fundingSourceNum">
             fundingSource_num = #fundingSourceNum#
         </isNotEmpty>
-        <isNotEmpty prepend=" AND " property="deptName">
-            dept_name like concat ('%',trim(#deptName#),'%')
+        <isNotEmpty prepend=" AND " property="deptNameSplit">
+            $deptNameSplit$
         </isNotEmpty>
     </select>
     <!--    -->

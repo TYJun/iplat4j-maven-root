@@ -97,8 +97,7 @@ public class ServiceFADA01 extends ServiceBase {
      */
     @Override
     public EiInfo initLoad(EiInfo info) {
-        // 1.调用本地查询方法
-        return this.confirmedQuery(info);
+        return confirmedQuery(info);
     }
 
     /**
@@ -188,72 +187,6 @@ public class ServiceFADA01 extends ServiceBase {
         List<Map<String, String>> result = (List<Map<String, String>>) queryDept.getAttr().get("result");
         queryDept.addBlock("dept").addRows(result);
         return queryDept;
-    }
-
-    /**
-     * 设备树结构.
-     * 1.获取参数，从前端获取节点值.
-     * 2.查询数据，查询设备分类.
-     * 3.增加节点block块.
-     *
-     * @param info
-     * @return com.baosight.iplat4j.core.ei.EiInfo
-     * @author zhaowei
-     * @date 2022/6/6 16:20
-     * @version v5.0.0
-     */
-    public EiInfo queryDeviceTypeTree(EiInfo info) {
-        /*
-         * 1.获取参数，从前端获取节点值.
-         */
-        String node = info.getCellStr(EiConstant.queryBlock, 0, "node");
-        Map<String, String> queryMap = new HashMap<>(16);
-        queryMap.put("parentId", node);
-        /*
-         * 2.查询数据，查询设备分类.
-         */
-        List rows = dao.query("FADA01.queryDeviceTypeTree", queryMap);
-        /*
-         * 3.增加节点 block 块.
-         */
-        EiInfo outInfo = new EiInfo();
-        EiBlock outBlock = outInfo.addBlock(node);
-        outBlock.addRows(rows);
-        return outInfo;
-    }
-
-    /**
-     * 设备列表.
-     * 1.将参数进行封装（包含分页）.
-     * 2.进行数据的查询并返回.
-     *
-     * @param inInfo
-     * @return com.baosight.iplat4j.core.ei.EiInfo
-     * @author zhaowei
-     * @date 2022/6/6 16:20
-     * @version v5.0.0
-     */
-    public EiInfo queryDeviceList(EiInfo inInfo) {
-        /*
-         * 1、将参数进行封装（包含分页）.
-         */
-        String[] param = {"machineName", "deviceClassifyCode"};
-        Map<String, Object> map = CommonUtils.buildParamter(inInfo, "result1", Arrays.asList(param));
-        /*
-         * 2、进行数据的查询并返回.
-         */
-        // 将map作为参数传到"FADA01.queryDeviceList" 进行数据列表的查询。
-        List<Map<String, String>> list = dao.query("FADA01.queryDeviceList", map,
-                Integer.parseInt(map.get("offset").toString()), Integer.parseInt(map.get("limit").toString()));
-        // 查询数据列表的数据数量。
-        int count = super.count("FADA01.countDeviceList", map);
-        // 返回结果。
-        // 判断是否存在，存在则构建返回对象
-        if (list != null && list.size() > 0) {
-            return CommonUtils.BuildOutEiInfo(inInfo, "result1", CommonUtils.createBlockMeta(list.get(0)), list, count);
-        } else {
-            return inInfo;
-        }
     }
 
     /**
@@ -499,13 +432,6 @@ public class ServiceFADA01 extends ServiceBase {
             }
         }
         EiInfo outInfo = super.query(info, "FADA01.queryFaInfoDOInfo", new FaInfoDO(), false, null, null, "resultB", "resultB");
-        // 1.获取参数,处理参数
-        Map<String, Object> map = CommonUtils.buildParamter(info, "inqu_status", "dept");
-        // 2.调用微服务接口S_AC_FW_05，获取科室信息
-        map.remove("limit");
-        EiInfo queryDept = BaseDockingUtils.getDeptAll(map);
-        List<Map<String, String>> result = (List<Map<String, String>>) queryDept.getAttr().get("result");
-        outInfo.addBlock("dept").addRows(result);
         if (info.getBlocks().size() > 0) {
             if (info.getBlock("resultB") != null) {
                 if ("15".equals(info.getBlock("resultB").get("limit"))) {
@@ -513,6 +439,12 @@ public class ServiceFADA01 extends ServiceBase {
                 }
             }
         }
+        // 1.获取参数,处理参数
+        Map<String, Object> map = CommonUtils.buildParamter(info, "inqu_status", "dept");
+        // 2.调用微服务接口S_AC_FW_05，获取科室信息
+        map.remove("limit");
+        List<Map<String, String>> maps = dao.query("FADA01.queryDept", map);
+        outInfo.setRows("dept", maps);
         return outInfo;
     }
 
@@ -543,9 +475,9 @@ public class ServiceFADA01 extends ServiceBase {
         Map<String, Object> map = CommonUtils.buildParamter(info, "inqu_status", "dept");
         // 2.调用微服务接口S_AC_FW_05，获取科室信息
         map.remove("limit");
-        EiInfo queryDept = BaseDockingUtils.getDeptAll(map);
-        List<Map<String, String>> result = (List<Map<String, String>>) queryDept.getAttr().get("result");
-        outInfo.addBlock("dept").addRows(result);
+        List<Map<String, String>> maps = dao.query("FADA01.queryDept", map);
+        info.setRows("dept", maps);
+        outInfo.addBlock("dept").addRows(maps);
         if (info.getBlocks().size() > 0) {
             if (info.getBlock("resultC") != null) {
                 if ("15".equals(info.getBlock("resultC").get("limit"))) {

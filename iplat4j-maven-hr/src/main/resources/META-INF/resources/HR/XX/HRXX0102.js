@@ -6,10 +6,11 @@ $(function (){
         setTimeout(function(){$("#RESAVE").attr("disabled",false);},5000);
         var inInfo = new EiInfo();
         var inTime=IPLAT.EFInput.value($("#inTime"));
-        if(inTime == null && inTime==""){
+        if(inTime == null || inTime==""){
             NotificationUtil("入职时间不能为空", "error");
             return;
         }
+
         var id=IPLAT.EFInput.value($("#id"));
         inInfo.set("id", id);
         inInfo.set("type","induction");

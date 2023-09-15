@@ -1,8 +1,12 @@
+var checkRowsCount = 0, pageCount = 0.00, buyCostCount = 0.00, netValueCount = 0.00;// 资产原值总金额
+var pageMoneySum = 0.00;// 全选后记录本页总金额
+var datagrid = null;
+let addFlag = true;// afterEdit会执行两次，总价会重复计算两次，用该变量控制只计算一次
 $(function () {
-    if ($("#info-0-type").val() == "wasting"){
+    if ($("#info-0-type").val() == "wasting") {
         $("#wasted").hide();
         $("#wasting").show();
-    } else if ($("#info-0-type").val() == "wasted"){
+    } else if ($("#info-0-type").val() == "wasted") {
         $("#wasting").hide();
         $("#wasted").show();
     }
@@ -91,6 +95,15 @@ $(function () {
                                             EiCommunicator.send("FASH00", "updateFaInfoLock", eiInfo, {
                                                 onSuccess: function (ei) {
                                                     resultGrid.removeRows(checkRows);
+                                                    pageCount = 0.00;
+                                                    var DataItems = resultGrid.getDataItems();
+                                                    for (let j = 0; j < DataItems.length; j++) {
+                                                        pageCount += $.isNumeric(DataItems[j].buyCost) ? +DataItems[j].buyCost : 0;
+                                                    }
+                                                    $("#pageCount").text(pageCount.toFixed(2));
+                                                    $("#checkRowsCount").text(0);
+                                                    $("#buyCostCount").text("0.00");
+                                                    $("#netValueCount").text("0.00");
                                                 }
                                             });
                                         },
@@ -116,6 +129,18 @@ $(function () {
                                             EiCommunicator.send("FASH00", "updateFaInfoLock", eiInfo, {
                                                 onSuccess: function (ei) {
                                                     resultGrid.removeRows(checkRows);
+                                                    pageCount = 0.00;
+                                                    checkRowsCount = 0;
+                                                    buyCostCount = 0.00;
+                                                    netValueCount = 0.00;
+                                                    var DataItems = resultGrid.getDataItems();
+                                                    for (let j = 0; j < DataItems.length; j++) {
+                                                        pageCount += $.isNumeric(DataItems[j].buyCost) ? +DataItems[j].buyCost : 0;
+                                                    }
+                                                    $("#pageCount").text(pageCount.toFixed(2));
+                                                    $("#checkRowsCount").text(checkRowsCount);
+                                                    $("#buyCostCount").text(buyCostCount);
+                                                    $("#netValueCount").text(netValueCount);
                                                 }
                                             });
                                         },
@@ -136,6 +161,9 @@ $(function () {
                         click: function () {
                             var discussId = IPLAT.EFInput.value($("#info-0-discussId"))
                             fixedAssetsWindow(discussId)
+                            $("#checkRowsCount").text(0);
+                            $("#buyCostCount").text("0.00");
+                            $("#netValueCount").text("0.00");
                         }
                     },
                 ]
@@ -149,16 +177,78 @@ $(function () {
                     return $("#info-0-discussId").val();
                 }
             }],
+            onCellClick: function (e) {
+                e.preventDefault();
+                if (!e.fake) {
+                    let grid = e.sender, model = e.model, $tr = e.tr, row = e.row;
+                    datagrid = model;
+                }
+            },
+            onRowClick: function (e) {
+                e.preventDefault();
+            },
+            onCheckAllRows: function (e) {
+                buyCostCount = 0.00;
+                $("#buyCostCount").text(buyCostCount);
+            },
             loadComplete: function (grid) {
+                $("#ef_grid_toolbar_result").prepend("<div style='float:left;font-size:13px;'>" +
+                    "当页资产原值总金额：<span id='pageCount' style='color: red'>0.00</span>元，" +
+                    "选中资产数量：<span id='checkRowsCount' style='color: red'>0</span>条，" +
+                    "选中资产原值总金额：<span id='buyCostCount' style='color: red'>0.00</span>元，" +
+                    "选中资产净值总金额：<span id='netValueCount' style='color: red'>0.00</span>元</div>")
                 var checkRows = window.parent.resultAGrid.getCheckedRows()
                 if (checkRows.length > 0) {
                     grid.addRows(checkRows);
                     grid.unCheckAllRows();
+                } else {
+                    if (grid != undefined) {
+                        for (let i = 0; i < grid.eiBlock.rows.length; i++) {
+                            pageCount += $.isNumeric(grid.eiBlock.rows[i][13]) ? +grid.eiBlock.rows[i][13] : 0;
+                        }
+                    }
+                    $("#pageCount").text(pageCount.toFixed(2));
                 }
                 if (__ei.type == "wasted") {
                     $(".k-grid-addRows").hide()
                 }
-            }
+            },
+            onSuccess: function (e) {
+                // 数据源发生改变（切换条数、切换页）时，入库总金额清零
+                pageCount = 0.00;
+                for (let i = 0; i < e.eiInfo.blocks.result.rows.length; i++) {
+                    pageCount += $.isNumeric(e.eiInfo.blocks.result.rows[i][13]) ? + e.eiInfo.blocks.result.rows[i][13] : 0;
+                }
+                $("#pageCount").text(pageCount.toFixed(2));
+                checkRowsCount = 0;
+                buyCostCount = 0.00;
+                netValueCount = 0.00;
+                $("#checkRowsCount").text(checkRowsCount);
+                $("#buyCostCount").text(buyCostCount);
+                $("#netValueCount").text(netValueCount);
+            },
+            onCheckRow: function (e) {
+                let model = e.model;
+                let buyCost = $.isNumeric(model["buyCost"]) ? +model["buyCost"] : 0;
+                let netValue = $.isNumeric(model["netAssetValue"]) ? +model["netAssetValue"] : 0;
+                if (e.checked) {
+                    buyCostCount += buyCost
+                    netValueCount += netValue
+                    // 全选时调用n次单选，加上最后一条记录的金额时，pageMoneySum记录下本页总金额
+                } else {
+                    buyCostCount -= buyCost
+                    netValueCount -= netValue
+                }
+                var getCheckedRows = resultGrid.getCheckedRows().length;
+                $("#checkRowsCount").text(getCheckedRows);
+                if (getCheckedRows == 0) {
+                    buyCostCount = 0
+                    netValueCount = 0
+                }
+                $("#buyCostCount").text(buyCostCount.toFixed(2));
+                $("#netValueCount").text(netValueCount.toFixed(2));
+
+            },
         },
     }
 });
@@ -176,4 +266,10 @@ function fixedAssetsWindow(discussId) {
     });
     // 新窗口打开居中
     popDataWindow.open().center();
+}
+
+window.methods = {
+    pageCountCallback(arguments) {
+        $("#pageCount").text(arguments);
+    }
 }

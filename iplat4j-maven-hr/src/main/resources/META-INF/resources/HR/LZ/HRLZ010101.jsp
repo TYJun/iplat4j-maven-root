@@ -10,6 +10,7 @@
 		<div class="row">
 			<EF:EFInput ename="inqu_status-0-realName" cname="姓名" colWidth="3" ratio="3:8"/>
 			<EF:EFInput ename="inqu_status-0-workNo" cname="工号" colWidth="3" ratio="3:8"/>
+			<EF:EFInput ename="view" cname="调派 " colWidth="3" ratio="3:8" type="hidden"/>
 		</div>
 		<div class="button-region" id="buttonDiv">
 			<EF:EFButton cname="查询" ename="QUERY" layout="0"></EF:EFButton>
@@ -24,6 +25,7 @@
 			<EF:EFColumn ename="sex" cname="性别" width="100" align="center" enable="false"/>
 			<EF:EFColumn ename="deptNum" cname="所属部门" width="100" align="center" enable="false"/>
 			<EF:EFColumn ename="serviceDeptNum" cname="服务部门" width="100" align="center" enable="false"/>
+			<EF:EFColumn ename="managementDeptNum" cname="管理部门" width="100" align="center" enable="false"/>
 			<EF:EFColumn ename="inTime" cname="入职时间" width="150" align="center" enable="false"/>
 		</EF:EFGrid>
 	</EF:EFRegion>

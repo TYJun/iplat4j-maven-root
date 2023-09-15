@@ -82,6 +82,7 @@ public class ServiceFADB0101 extends ServiceBase {
 					applyDeptName = faTransferVOList.get(0).getApplyDeptName();
 					confirmDeptNum = faTransferVOList.get(0).getConfirmDeptNum();
 					confirmDeptName = faTransferVOList.get(0).getConfirmDeptName();
+					info.setCell("info",0,"deptNum",applyDeptNum);
 					break;
 			}
 		}
@@ -116,6 +117,12 @@ public class ServiceFADB0101 extends ServiceBase {
 				break;
 		}
 		info.set("inventoryStatus", stringBuilder);
+		String dept = OneSelfUtils.specifyDept();
+		if (dept == null){
+			info.set("role", "admin");
+		} else {
+			info.set("role", "user");
+		}
 		return info;
 	}
 
@@ -464,14 +471,18 @@ public class ServiceFADB0101 extends ServiceBase {
 			case "pass":
 				faTransferVO.setTransferStatus("100");
 				StringBuilder stringBuilder = new StringBuilder();
-				int outCount = dao.count("FADB01.queryOutFaInventoryInfo", confirmInfo.get("applydeptNum"));
+				int outCount = dao.count("FADB01.queryOutFaInventoryInfo", new HashMap<String,Object>(){{
+					put("deptNum",confirmInfo.get("applyDeptNum"));
+				}});
 				if (outCount > 0) {
 					stringBuilder.append("调出科室:" + confirmInfo.get("applydeptName") + "正在进行盘库操作;");
 					info.setStatus(-1);
 					info.setMsg(stringBuilder.toString());
 					return info;
 				}
-				int inCount = dao.count("FADB01.queryOutFaInventoryInfo", confirmInfo.get("confirmDeptNum"));
+				int inCount = dao.count("FADB01.queryOutFaInventoryInfo", new HashMap<String,Object>(){{
+					put("deptNum",confirmInfo.get("confirmDeptNum"));
+				}});
 				if (inCount > 0) {
 					stringBuilder.append("调入科室" + confirmInfo.get("confirmDeptName") + "正在进行盘库操作;");
 					info.setStatus(-1);

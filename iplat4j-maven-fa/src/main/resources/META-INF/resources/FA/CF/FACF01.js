@@ -1,15 +1,15 @@
 $(function () {
     $("#QUERY").on("click", function (e) {
         resultAGrid.dataSource.page(1);
-        resultBGrid.dataSource.page(1);
-        resultCGrid.dataSource.page(1);
+        // resultBGrid.dataSource.page(1);
+        // resultCGrid.dataSource.page(1);
     });
 
     $("#REQUERY").on("click", function (e) {
         document.getElementById("inqu-trash").click();
         resultAGrid.dataSource.page(1);
-        resultBGrid.dataSource.page(1);
-        resultCGrid.dataSource.page(1);
+        // resultBGrid.dataSource.page(1);
+        // resultCGrid.dataSource.page(1);
     });
 
     IPLATUI.EFTab = {
@@ -25,16 +25,17 @@ $(function () {
 
     IPLATUI.EFGrid = {
         "resultA": {
+            pageable: {
+                pageSize: 15
+            },
             onCellClick: function (e) {
+                console.log(e)
                 if (e.field === "goodsNum") {
                     var faInfoId = e.model['faInfoId'];
                     if (faInfoId != " " && faInfoId != null) {
                         fixedAssetsWindowByNumberAPPROVAL(faInfoId);
                     }
                 }
-            },
-            pageable: {
-                pageSize: 15
             },
             toolbarConfig: {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
@@ -63,7 +64,14 @@ $(function () {
                             if (checkedRows.length > 0) {
                                 // console.log(checkedRows[0])
                                 popDataWindow.setOptions({"title": "资产按价值拆分"});
-                                fixedAssetsWindowByValue(checkedRows[0].faInfoId, "enter", checkedRows[0].goodsTypeCode)
+                                var goodsClassifyCode = checkedRows[0].goodsClassifyCode;
+                                var flag = goodsClassifyCode.substring(0,5);
+                                if (goodsClassifyCode.substring(0,3) == "A08"){
+                                    goodsClassifyCode = goodsClassifyCode.replace('A08','B')
+                                } else if (flag != "A0232"){
+                                    goodsClassifyCode = goodsClassifyCode.replace('A','C')
+                                }
+                                fixedAssetsWindowByValue(checkedRows[0].faInfoId, "enter", goodsClassifyCode)
                             } else {
                                 NotificationUtil("请选择一条记录", "warning");
                             }

@@ -8,57 +8,111 @@
 <EF:EFPage>
 	<EF:EFRegion id="inqu" title="新增">
 		<div class="row">
-		<EF:EFInput ename="workNo" cname="工号" colWidth="3"  ratio="3:8"/>
-            <EF:EFInput ename="id" cname="id" type="hidden"/>
-            <EF:EFInput ename="type" cname="类型" type="hidden"/>
-		<EF:EFInput ename="realName" cname="姓名" colWidth="3" required="true" ratio="3:8"/>
-		<EF:EFSelect ename="sex" cname="性别" colWidth="3" ratio="3:8"  textField="label" valueField="value">
-			<EF:EFOption label="请选择" value=""/>
-			<EF:EFOption label="女" value="女"/>
-			<EF:EFOption label="男" value="男"/>
-		</EF:EFSelect>
-		<EF:EFInput ename="birthPlace" cname="籍贯" colWidth="3"  ratio="3:8"/>
-		<EF:EFSelect ename="maritalStatus" cname="婚姻状况" colWidth="3" ratio="3:8"  textField="label" valueField="value">
-			<EF:EFOption label="请选择" value=""/>
-			<EF:EFOption label="未婚" value="未婚"/>
-			<EF:EFOption label="已婚" value="已婚"/>
-		</EF:EFSelect>
-		<EF:EFSelect ename="personnelCategory" cname="人员类别" colWidth="3" required="true" ratio="3:8"  textField="label" valueField="value">
-			<EF:EFOption label="请选择" value=""/>
-			<EF:EFOption label="第三方人员" value="第三方人员"/>
-			<EF:EFOption label="后勤保障中心" value="后勤保障中心"/>
-		</EF:EFSelect>
-		<EF:EFPopupInput ename="deptNum" cname="所属部门" colWidth="3" ratio="3:8"
-						 popupType="ServiceGrid" popupTitle="科室" serviceName="HRPZ01"
-						 methodName="queryDept" resultId="dept" autofit="true" readonly="true" required="true"
-						 valueField="deptNum" textField="deptName" columnEnames="deptNum,deptName"
-						 columnCnames="科室编码,科室名称"
-		/>
-		<EF:EFPopupInput ename="serviceDeptNum" cname="服务部门" colWidth="3" ratio="3:8"
-						 popupType="ServiceGrid" popupTitle="科室" serviceName="HRPZ01"
-						 methodName="queryDept" resultId="dept" autofit="true" readonly="true" required="true"
-						 valueField="deptNum" textField="deptName" columnEnames="deptNum,deptName"
-						 columnCnames="科室编码,科室名称"
-		/>
-		<EF:EFInput ename="kampong" cname="民族" colWidth="3" required="true" ratio="3:8"/>
-		<EF:EFInput ename="manCode" cname="身份证号码" colWidth="3" required="true" ratio="3:8"/>
-		<EF:EFInput ename="schoolingCode" cname="学历" colWidth="3" required="true" ratio="3:8"/>
-		<EF:EFInput ename="highestEducational" cname="最高学历" colWidth="3"  ratio="3:8"/>
-		<EF:EFInput ename="highestDegree" cname="最高学位" colWidth="3"  ratio="3:8"/>
-		<EF:EFInput ename="jobCode" cname="岗位" colWidth="3" required="true" ratio="3:8"/>
-		<EF:EFInput ename="salary" cname="基本工资" colWidth="3" ratio="3:8"/>
-		<EF:EFInput ename="politicalStatus" cname="政治面貌" colWidth="3"  ratio="3:8"/>
-		<EF:EFDatePicker ename="birthDate" cname="出生日期" role="date" colWidth="3" ratio="3:8" format="yyyy-MM-dd"
-						 parseFormats="['yyyy-mm-dd']" readonly="true" />
-		<EF:EFDatePicker ename="preInTime" cname="入职\入场日期" role="date" colWidth="3" ratio="3:8" format="yyyy-MM-dd"
-						 parseFormats="['yyyy-mm-dd']" readonly="true" />
-		<EF:EFInput ename="phone" cname="联系电话" colWidth="3" required="true" ratio="3:8"/>
-		<EF:EFInput ename="emergency" cname="紧急联系人" colWidth="3" required="true" ratio="3:8"/>
-		<EF:EFInput ename="emergencyPhone" cname="紧急联系人电话" colWidth="3" required="true" ratio="3:8"/>
-		<EF:EFInput ename="health" cname="健康状况" colWidth="3" required="true" ratio="3:8"/>
-		<EF:EFInput ename="familyAddress" cname="现住址" colWidth="3" required="true" ratio="3:8"/>
-		<EF:EFInput ename="company" cname="公司名称" colWidth="3" required="true" ratio="3:8"/>
-		<EF:EFInput ename="memo" cname="备注" type="textarea" maxLength="400" colWidth="3" ratio="3:8"/>
+			<c:choose>
+				<c:when test="${type != 'in_edit'}">
+					<EF:EFInput ename="realName" cname="姓名" colWidth="3" required="true" ratio="3:8"/>
+					<EF:EFSelect ename="sex" cname="性别" colWidth="3" ratio="3:8"  textField="label" valueField="value">
+						<EF:EFOption label="请选择" value=""/>
+						<EF:EFOption label="女" value="女"/>
+						<EF:EFOption label="男" value="男"/>
+					</EF:EFSelect>
+					<EF:EFInput ename="birthPlace" cname="籍贯" colWidth="3"  ratio="3:8"/>
+					<EF:EFSelect ename="maritalStatus" cname="婚姻状况" colWidth="3" ratio="3:8"  textField="label" valueField="value">
+						<EF:EFOption label="请选择" value=""/>
+						<EF:EFOption label="未婚" value="未婚"/>
+						<EF:EFOption label="已婚" value="已婚"/>
+					</EF:EFSelect>
+					</div>
+					<div class="row">
+					<EF:EFSelect ename="personnelCategory" cname="人员类别" colWidth="3" required="true" ratio="3:8"  textField="label" valueField="value">
+						<EF:EFOption label="请选择" value=""/>
+						<EF:EFOption label="第三方人员" value="第三方人员"/>
+						<EF:EFOption label="后勤保障中心" value="后勤保障中心"/>
+					</EF:EFSelect>
+					<EF:EFSelect ename="managementDeptNum" cname="管理部门" colWidth="3" required="true" ratio="3:8"  textField="label" valueField="value">
+						<EF:EFCodeOption codeName="wilp.hr.dept"/>
+					</EF:EFSelect>
+					<EF:EFInput ename="kampong" cname="民族" colWidth="3" required="true" ratio="3:8"/>
+					<EF:EFInput ename="manCode" cname="身份证号码" colWidth="3" required="true" ratio="3:8"/>
+					</div>
+					<div class="row">
+					<EF:EFInput ename="schoolingCode" cname="学历" colWidth="3" required="true" ratio="3:8"/>
+					<EF:EFInput ename="highestEducational" cname="最高学历" colWidth="3"  ratio="3:8"/>
+					<EF:EFInput ename="highestDegree" cname="最高学位" colWidth="3"  ratio="3:8"/>
+					<EF:EFInput ename="salary" cname="基本工资" colWidth="3" ratio="3:8"/>
+					</div>
+					<div class="row">
+					<EF:EFInput ename="politicalStatus" cname="政治面貌" colWidth="3"  ratio="3:8"/>
+					<EF:EFDatePicker ename="birthDate" cname="出生日期" role="date" colWidth="3" ratio="3:8" format="yyyy-MM-dd"
+									 parseFormats="['yyyy-mm-dd']" readonly="true" />
+					<EF:EFDatePicker ename="preInTime" cname="预计入职时间" role="date" colWidth="3" ratio="3:8" format="yyyy-MM-dd"
+									 parseFormats="['yyyy-mm-dd']" readonly="true" />
+					<EF:EFInput ename="company" cname="公司名称" colWidth="3" required="true" ratio="3:8"/>
+					</div>
+				</c:when>
+				<c:otherwise>
+					<div class="row">
+					<EF:EFInput ename="realName" cname="姓名" colWidth="3" required="true" ratio="3:8"  readonly="true"/>
+					<EF:EFSelect ename="sex" cname="性别" colWidth="3" ratio="3:8"  textField="label" valueField="value"  readonly="true">
+						<EF:EFOption label="请选择" value=""/>
+						<EF:EFOption label="女" value="女"/>
+						<EF:EFOption label="男" value="男"/>
+					</EF:EFSelect>
+					<EF:EFInput ename="birthPlace" cname="籍贯" colWidth="3"  ratio="3:8"  readonly="true"/>
+					<EF:EFSelect ename="maritalStatus" cname="婚姻状况" colWidth="3" ratio="3:8"  textField="label" valueField="value"  readonly="true">
+						<EF:EFOption label="请选择" value=""/>
+						<EF:EFOption label="未婚" value="未婚"/>
+						<EF:EFOption label="已婚" value="已婚"/>
+					</EF:EFSelect>
+					</div>
+					<div class="row">
+					<EF:EFSelect ename="personnelCategory" cname="人员类别" colWidth="3" required="true" ratio="3:8"  textField="label" valueField="value"  readonly="true">
+						<EF:EFOption label="请选择" value=""/>
+						<EF:EFOption label="第三方人员" value="第三方人员"/>
+						<EF:EFOption label="后勤保障中心" value="后勤保障中心"/>
+					</EF:EFSelect>
+					<EF:EFSelect ename="managementDeptNum" cname="管理部门" colWidth="3" required="true" ratio="3:8"  textField="label" valueField="value" readonly="true">
+						<EF:EFCodeOption codeName="wilp.hr.dept"/>
+					</EF:EFSelect>
+					<EF:EFInput ename="kampong" cname="民族" colWidth="3" required="true" ratio="3:8"  readonly="true"/>
+					<EF:EFInput ename="manCode" cname="身份证号码" colWidth="3" required="true" ratio="3:8"  readonly="true"/>
+					</div>
+					<div class="row">
+					<EF:EFInput ename="schoolingCode" cname="学历" colWidth="3" required="true" ratio="3:8"  readonly="true"/>
+					<EF:EFInput ename="highestEducational" cname="最高学历" colWidth="3"  ratio="3:8"  readonly="true"/>
+					<EF:EFInput ename="highestDegree" cname="最高学位" colWidth="3"  ratio="3:8"  readonly="true"/>
+					<EF:EFInput ename="salary" cname="基本工资" colWidth="3" ratio="3:8"  readonly="true"/>
+					</div>
+					<div class="row">
+					<EF:EFInput ename="politicalStatus" cname="政治面貌" colWidth="3"  ratio="3:8"  readonly="true"/>
+					<EF:EFInput ename="birthDate" cname="出生日期"  colWidth="3" ratio="3:8"  readonly="true" />
+					<EF:EFInput ename="preInTime" cname="入职\入场日期"  colWidth="3" ratio="3:8" readonly="true" />
+					<EF:EFInput ename="company" cname="公司名称" colWidth="3" required="true" ratio="3:8"  readonly="true"/>
+					</div>
+				</c:otherwise>
+			</c:choose>
+		<div class="row">
+			<EF:EFSelect ename="deptNum" cname="所属部门" colWidth="3" required="true" ratio="3:8"
+						 resultId="h_dept" textField="deptName" valueField="deptName" filter="contains"
+						 serviceName="HRXX0101" methodName="queryDept">
+			</EF:EFSelect>
+			<EF:EFSelect ename="serviceDeptNum" cname="服务部门" colWidth="3" required="true" ratio="3:8"
+						 resultId="h_dept" textField="deptName" valueField="deptName" filter="contains"
+						 serviceName="HRXX0101" methodName="queryDept">
+			</EF:EFSelect>
+			<EF:EFInput ename="jobCode" cname="岗位" colWidth="3" required="true" ratio="3:8"/>
+			<EF:EFInput ename="phone" cname="联系电话" colWidth="3" required="true" ratio="3:8"/>
+		</div>
+		<div class="row">
+			<EF:EFInput ename="emergency" cname="紧急联系人" colWidth="3" required="true" ratio="3:8" />
+			<EF:EFInput ename="emergencyPhone" cname="紧急联系人电话" colWidth="3" required="true" ratio="3:8" />
+			<EF:EFInput ename="health" cname="健康状况" colWidth="3" required="true" ratio="3:8"/>
+			<EF:EFInput ename="familyAddress" cname="现住址" colWidth="3" required="true" ratio="3:8"/>
+		</div>
+		<div class="row">
+			<EF:EFInput ename="memo" cname="备注" type="textarea" maxLength="400" colWidth="3" ratio="3:8"/>
+			<EF:EFInput ename="id" cname="id" type="hidden"/>
+			<EF:EFInput ename="type" cname="类型" type="hidden"/>
 		</div>
 	</EF:EFRegion>
 	<EF:EFTab id="tab-tab_grid">
@@ -71,7 +125,7 @@
 				<EF:EFColumn ename="fileNum" cname="文件排序" width="200" hidden="true"/>
 			</EF:EFGrid>
 		</div>
-		<div title="变更履历">
+		<div title="履历变更">
 			<EF:EFGrid blockId="resultD" needAuth="false" autoDraw="no">
 				<EF:EFColumn ename="id" cname="文件id" width="200" hidden="true"/>
 				<EF:EFColumn ename="manId" cname="人员id" width="200" hidden="true"/>
@@ -88,3 +142,5 @@
 		<EF:EFUpload ename="hrxxFiles" docTag="hrxx_files" path="HR" showFileList="true"/>
 	</EF:EFRegion>
 </EF:EFWindow>
+
+<script type="text/javascript" src="${ctx}/HR/common/js/hr-autoComplete.js"></script>

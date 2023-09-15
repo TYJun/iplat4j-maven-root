@@ -32,11 +32,11 @@
 	<EF:EFRegion id="result" title="人员配置信息">
 		<EF:EFGrid blockId="result" autoDraw="no" checkMode="single,row" autoBind="false" readonly="true" rowNo="true">
 			<EF:EFColumn ename="id" cname="主键" width="100" hidden="true" align="center" enable="false"/>
-			<EF:EFColumn ename="billNo" cname="调派申请单号" width="100" align="center" enable="false"/>
+			<EF:EFColumn ename="billNo" cname="调派申请单号" width="100" align="center" enable="false" displayType="url"/>
 			<EF:EFColumn ename="deptNum" cname="申请科室" width="100" align="center" enable="false"/>
 			<EF:EFColumn ename="createDate" cname="申请日期" width="150" align="center" enable="false"/>
 			<EF:EFColumn ename="arriveTime" cname="到岗日期" width="150" align="center" enable="false"/>
-			<EF:EFColumn ename="shiftTimeSection" cname="支援时段" width="150" align="center" enable="false"/>
+		<%--	<EF:EFColumn ename="shiftTimeSection" cname="支援时段" width="150" align="center" enable="false"/>--%>
 			<EF:EFColumn ename="numbers" cname="支援人数" width="100" align="center" enable="false"/>
 			<EF:EFColumn ename="changeCode" cname="支援类别" width="100" align="center" enable="false"/>
 			<EF:EFColumn ename="auditOpinion" cname="驳回理由" width="100" align="center" enable="false"/>

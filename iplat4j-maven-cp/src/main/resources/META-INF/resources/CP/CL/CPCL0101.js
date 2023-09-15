@@ -2,19 +2,30 @@ var fileList=[];
 
 $(function (){
     $("#SAVEPR").on("click", function () {
-        var eiInfo = new EiInfo();
-        var billNo =IPLAT.EFInput.value($("#inqu_status-0-billNo"));
-        eiInfo.set("billNo", billNo);
-        eiInfo.setByNode("result");
-        //提交
-        EiCommunicator.send("CPCL0101", "saveComolaintHandling", eiInfo, {
-            onSuccess: function (ei) {
-                closeCurrentWindow();
-                IPLAT.NotificationUtil(ei.msg)
-                window.parent["resultGrid"].dataSource.page(1);
-            }
-        })
+        // 获取字段值
+        var dealReason = $("#inqu_status-0-dealReason").val();
+        var dealDesc = $("#inqu_status-0-dealDesc").val();
+        if (dealReason.trim() === "" && dealDesc.trim() === "") {
+            // 两个字段都为空，报错
+            IPLAT.alert("请填写”解决措施“或填写”不予解决的情况说明“。");
+        } else {
+            // 执行提交操作
+            var eiInfo = new EiInfo();
+            var billNo = IPLAT.EFInput.value($("#inqu_status-0-billNo"));
+            eiInfo.set("billNo", billNo);
+            eiInfo.setByNode("result");
+
+            EiCommunicator.send("CPCL0101", "saveComolaintHandling", eiInfo, {
+                onSuccess: function (ei) {
+                    closeCurrentWindow();
+                    IPLAT.NotificationUtil(ei.msg)
+                    window.parent["resultGrid"].dataSource.page(1);
+                }
+            });
+        }
+
     });
+
 
     $("#CANCEL").on("click", function () {
         closeCurrentWindow()

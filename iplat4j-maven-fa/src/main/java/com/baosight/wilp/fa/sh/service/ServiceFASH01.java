@@ -3,6 +3,8 @@ package com.baosight.wilp.fa.sh.service;
 import com.baosight.iplat4j.core.ei.EiBlock;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
+import com.baosight.iplat4j.core.util.StringUtils;
+import com.baosight.wilp.common.util.CommonUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,8 +12,8 @@ import java.util.Map;
 
 public class ServiceFASH01 extends ServiceBase {
     @Override
-    public EiInfo initLoad(EiInfo inInfo) {
-        return inInfo;
+    public EiInfo initLoad(EiInfo info) {
+        return confirmedQuery(info);
     }
 
     @Override
@@ -22,23 +24,44 @@ public class ServiceFASH01 extends ServiceBase {
     // 报废提交资产
     public EiInfo confirmedQuery(EiInfo info) {
         Integer offset = 0;
-        Map attr = info.getBlock("resultA").getAttr();
+        Integer limit = 15;
+        EiBlock resultA = info.getBlock("resultA");
+        Map<String, Object> attr = new HashMap<>();
+        if (resultA != null) {
+            attr = resultA.getAttr();
+        }
         Map<String, Object> map = new HashMap<>();
         EiBlock eiBlock = info.getBlock("inqu_status");
         if (eiBlock != null) {
             map = eiBlock.getRow(0);
+            String deptNameSplit = (String) map.get("deptName");
+            if (StringUtils.isNotEmpty(deptNameSplit)) {
+                String[] split = deptNameSplit.split(",");
+                for (int i = 0; i < split.length; i++) {
+                    split[i] = "fi.dept_name LIKE concat ( '%', trim('" + split[i] + "'), '%' )";
+                }
+                String param = "(" + org.apache.commons.lang.StringUtils.join(split, " OR ") + ")";
+                info.setCell("inqu_status", 0, "deptNameSplit", param);
+            }
         }
-        if (attr.containsKey("offset")) {
+        if (attr.containsKey("offset") && attr.containsKey("limit")) {
             offset = (Integer) attr.get("offset");
+            limit = (Integer) attr.get("limit");
         }
         map.put("statusCode", "040");
-        List<Map<String, String>> list = dao.query("FASH01.query", map, offset, (Integer) attr.get("limit"));
+        List<Map<String, String>> list = dao.query("FASH01.query", map, offset, limit);
         int count = dao.count("FASH01.query", map);
         attr.put("count", count);
         EiBlock block = new EiBlock("resultA");
         block.setRows(list);
         block.setAttr(attr);
         info.setBlock(block);
+        // 1.获取参数,处理参数
+        Map<String, Object> map1 = CommonUtils.buildParamter(info, "inqu_status", "dept");
+        // 2.调用微服务接口S_AC_FW_05，获取科室信息
+        map.remove("limit");
+        List<Map<String, String>> maps = dao.query("FADA01.queryDept", map1);
+        info.addBlock("dept").addRows(maps);
         return info;
     }
 
@@ -96,6 +119,15 @@ public class ServiceFASH01 extends ServiceBase {
         EiBlock eiBlock = info.getBlock("inqu_status");
         if (eiBlock != null) {
             map = eiBlock.getRow(0);
+            String deptNameSplit = (String) map.get("deptName");
+            if (StringUtils.isNotEmpty(deptNameSplit)) {
+                String[] split = deptNameSplit.split(",");
+                for (int i = 0; i < split.length; i++) {
+                    split[i] = "fi.dept_name LIKE concat ( '%', trim('" + split[i] + "'), '%' )";
+                }
+                String param = "(" + org.apache.commons.lang.StringUtils.join(split, " OR ") + ")";
+                info.setCell("inqu_status", 0, "deptNameSplit", param);
+            }
         }
         if (attr.containsKey("offset")) {
             offset = (Integer) attr.get("offset");
@@ -112,7 +144,7 @@ public class ServiceFASH01 extends ServiceBase {
     }
 
     // 完结上会单
-    public EiInfo FinsihQuery(EiInfo info){
+    public EiInfo FinsihQuery(EiInfo info) {
         Integer offset = 0;
         Map attr = info.getBlock("resultE").getAttr();
         Map<String, Object> map = new HashMap<>();

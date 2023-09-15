@@ -38,8 +38,7 @@ public class ServiceHRDP01 extends ServiceBase {
 	 * @return :outInfo
 	 * @see ServiceBase#query(EiInfo)
 	 */
-	public EiInfo initLoad(EiInfo info) {
-		return this.query(info);
+	public EiInfo initLoad(EiInfo info) {return this.query(info);
 	}
 
 	/**
@@ -53,7 +52,7 @@ public class ServiceHRDP01 extends ServiceBase {
 	 */
 	public EiInfo query(EiInfo info) {
 		// 设置flag值表示调派页面
-		info.set("inqu_status-0-flag","dp");
+		info.set("inqu_status-0-flag"," ");
 		EiInfo outInfo = super.query(info,"HRDP01.query",new HrJobChangeBill());
 		return outInfo;
 	}

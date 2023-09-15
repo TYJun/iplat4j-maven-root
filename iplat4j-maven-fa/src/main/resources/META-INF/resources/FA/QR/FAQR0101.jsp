@@ -45,12 +45,14 @@
 		<EF:EFRegion title="资产信息">
 			<EF:EFInput ename="info-0-goodsNum" cname="资产编号" readOnly="true" type="hidden"/>
 			<EF:EFInput ename="info-0-goodsName" cname="资产名称" required="true"/>
-			<EF:EFPopupInput ename="info-0-goodsTypeCode" cname="资产类别" required="true" readOnly="true"
-							 containerId="ef_popup_grid" popupWidth="1200" popupHeight="600" popupTitle="资产类别选择"
-							 resizable="true" center="true">
-			</EF:EFPopupInput>
-			<EF:EFInput ename="info-0-goodsClassifyName" cname="类组" readonly="true"/>
-			<EF:EFInput ename="info-0-goodsClassifyCode" cname="类别编码"  required="true" type="hidden"/>
+<%--			<EF:EFPopupInput ename="info-0-goodsTypeCode" cname="资产类别" required="true" readOnly="true"--%>
+<%--							 containerId="ef_popup_grid" popupWidth="1200" popupHeight="600" popupTitle="资产类别选择"--%>
+<%--							 resizable="true" center="true">--%>
+<%--			</EF:EFPopupInput>--%>
+			<EF:EFInput ename="info-0-goodsClassifyName" cname="资产类别" readonly="true"/>
+			<EF:EFInput ename="info-0-goodsClassifyCode" cname="资产类别编码"  required="true" type="hidden"/>
+			<EF:EFInput ename="info-0-goodsTypeName" cname="类组" readonly="true"/>
+			<EF:EFInput ename="info-0-goodsTypeCode" cname="类别编码"  required="true" type="hidden"/>
 			<!-- 固资类别选择弹出窗  -->
 			<div id="ef_popup_grid" style="display: none;">
 				<EF:EFPage>
@@ -96,7 +98,11 @@
 			<EF:EFSelect ename="info-0-assetUseCode" cname="资产用途" optionLabel="--请选择--">
 				<EF:EFCodeOption codeName="wilp.fa.assetUseCode"/>
 			</EF:EFSelect>
-			<EF:EFInput ename="info-0-manufacturer" cname="制造厂商"  />
+			<EF:EFPopupInput ename="info-0-goodsCategoryCode" cname="资产末级" required="true" readOnly="true"
+							 containerId="ef_popup_grid" popupWidth="1200" popupHeight="600" popupTitle="资产末级选择"
+							 resizable="true" center="true">
+			</EF:EFPopupInput>
+			<EF:EFInput ename="info-0-manufacturer" cname="制造厂商" type="hidden"/>
 			<EF:EFSelect ename="info-0-manufacturerNatyCode" resultId="result" cname="国别"
 						 textField="label" valueField="value" required="true" filter="contains"
 						 serviceName="FAQR01" methodName="queryManufacturerNatyCode"
@@ -116,7 +122,7 @@
 			<EF:EFInput ename="info-0-confirmRoom" cname="具体位置" />
 			<EF:EFInput ename="info-0-brandDesc" cname="出厂编号" type="textarea"
 						rows="1" maxLength="200"/>
-			<EF:EFInput ename="info-0-warranty" cname="保质期(月)" value="0" required="true"/>
+			<EF:EFInput ename="info-0-warranty" cname="保修期(月)" value="0"/>
 			<EF:EFInput ename="info-0-remark" cname="备注" colWidth="8" type="textarea" ratio="2:10"
 						rows="3" placeholder="不能超过200字" maxLength="200"/>
 		</EF:EFRegion>

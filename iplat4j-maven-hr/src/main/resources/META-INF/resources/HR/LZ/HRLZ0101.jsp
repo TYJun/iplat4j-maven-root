@@ -14,6 +14,7 @@
 			<EF:EFColumn ename="sex" cname="性别" width="100" align="center" enable="false"/>
 			<EF:EFColumn ename="deptNum" cname="所属部门" width="100" align="center" enable="false"/>
 			<EF:EFColumn ename="serviceDeptNum" cname="服务部门" width="100" align="center" enable="false"/>
+			<EF:EFColumn ename="managementDeptNum" cname="管理部门" width="100" align="center" enable="false"/>
 			<EF:EFColumn ename="inTime" cname="入职时间" width="150" align="center" enable="false"/>
 			<EF:EFColumn ename="preOutTime" cname="预离职时间" editType="date" dateFormat="yyyy-MM-dd"
 						 parseFormats="['yyyy-MM-dd']" width="150" readonly="true" required="true"/>

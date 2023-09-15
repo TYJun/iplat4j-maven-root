@@ -1,8 +1,10 @@
 package com.baosight.wilp.hr.lz.service;
 
+import com.baosight.iplat4j.core.ei.EiBlock;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
 import com.baosight.iplat4j.core.util.DateUtils;
+import com.baosight.iplat4j.core.web.threadlocal.UserSession;
 import com.baosight.wilp.common.util.BaseDockingUtils;
 import com.baosight.wilp.common.util.CommonUtils;
 import com.baosight.wilp.hr.common.HrUtils;
@@ -35,6 +37,19 @@ public class ServiceHRLZ01 extends ServiceBase {
 	 * @see ServiceBase#query(EiInfo)
 	 */
 	public EiInfo initLoad(EiInfo info) {
+		Map<String, Object> deptMap = BaseDockingUtils.getDeptByworkNo(UserSession.getLoginName());
+		EiBlock eiBlock = new EiBlock("result");
+		eiBlock.setAttr(new HashMap(){{
+			put("showCount","true");
+			put("offset","0");
+			put("count","0");
+			put("limit","50");
+			put("orderBy","");
+		}});
+		info.setBlock(eiBlock);
+		if (!"admin".equals(UserSession.getLoginName())) {
+			info.setCell("inqu_status", 0, "managementDeptNum", deptMap.get("deptName"));
+		}
 		return this.query(info);
 	}
 
@@ -56,6 +71,7 @@ public class ServiceHRLZ01 extends ServiceBase {
 	public EiInfo query(EiInfo info) {
 		// 设置flag值表示离职页面
 		info.set("inqu_status-0-flag","lz");
+		info.set("inqu_status-0-statusCode","03");
 		EiInfo outInfo = super.query(info,"HRXX01.query",new HrMan());
 		return outInfo;
 	}

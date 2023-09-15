@@ -1,42 +1,42 @@
 $(function (){
-        IPLAT.EFPopupInput.text($("#deptNum"),__ei.deptNum);
-        IPLAT.EFPopupInput.text($("#serviceDeptNum"),__ei.serviceDeptNum);
-        IPLATUI.EFGrid = {
-            // 表格渲染按钮
-            "resultC": {
-                toolbarConfig: {
-                    hidden: false,// true 时，不显示功能按钮，但保留 setting 导出按钮
-                    add: false, cancel: false, save: false, 'delete': false,
-                    buttons: [{
-                        name: "addFile", text: "上传", layout: "3",
-                        click: function () {
-                            fileChooseWindow.open().center()
+    IPLAT.EFPopupInput.text($("#deptNum"),__ei.deptNum);
+    IPLAT.EFPopupInput.text($("#serviceDeptNum"),__ei.serviceDeptNum);
+    IPLATUI.EFGrid = {
+        // 表格渲染按钮
+        "resultC": {
+            toolbarConfig: {
+                hidden: false,// true 时，不显示功能按钮，但保留 setting 导出按钮
+                add: false, cancel: false, save: false, 'delete': false,
+                buttons: [{
+                    name: "addFile", text: "上传", layout: "3",
+                    click: function () {
+                        fileChooseWindow.open().center()
+                    }
+                }, {
+                    name: "delFile", text: "删除", layout: "3",
+                    click: function () {
+                        var checkRows = resultCGrid.getCheckedRows();
+                        if (checkRows.length > 0) {
+                            resultCGrid.removeRows(checkRows);
+                        } else {
+                            IPLAT.NotificationUtil("请选择需要删除的文件信息", "failure")
                         }
-                    }, {
-                        name: "delFile", text: "删除", layout: "3",
-                        click: function () {
-                            var checkRows = resultCGrid.getCheckedRows();
-                            if (checkRows.length > 0) {
-                                resultCGrid.removeRows(checkRows);
-                            } else {
-                                IPLAT.NotificationUtil("请选择需要删除的文件信息", "failure")
-                            }
-                        }
-                    }, {
-                        name: "downLoadFile", text: "下载", layout: "3",
-                        click: function () {
-                            downLoadFile()
-                        }
-                    }]
-                }
-            },
-            "resultD": {
-                toolbarConfig: {
-                    hidden: false,// true 时，不显示功能按钮，但保留 setting 导出按钮
-                    add: false, cancel: false, save: false, 'delete': false,
-                }
-            },
-        }
+                    }
+                }, {
+                    name: "downLoadFile", text: "下载", layout: "3",
+                    click: function () {
+                        downLoadFile()
+                    }
+                }]
+            }
+        },
+        "resultD": {
+            toolbarConfig: {
+                hidden: false,// true 时，不显示功能按钮，但保留 setting 导出按钮
+                add: false, cancel: false, save: false, 'delete': false,
+            }
+        },
+    }
 
 
     // 文件下载
@@ -134,116 +134,117 @@ $(function (){
         return model;
     }
 
-
     //确定
     $("#RESAVE").unbind('click').on('click', function(e){
         // 防止连续提交
         $("#RESAVE").attr("disabled",true);
         setTimeout(function(){$("#RESAVE").attr("disabled",false);},5000);
-        var deptNum = IPLAT.EFPopupInput.text($("#deptNum"));
-        var serviceDeptNum = IPLAT.EFPopupInput.text($("#serviceDeptNum"));
-        var workNo = IPLAT.EFInput.value($("#workNo"));
-        var realName = IPLAT.EFInput.value($("#realName"));
+        var deptNum = '';
+        if(__ei.type== 'in_edit'){
+            deptNum = $("#deptNum").val();
+        } else {
+            deptNum = IPLAT.EFSelect.text($("#deptNum"));
+        }
+        var serviceDeptNum = IPLAT.EFSelect.text($("#serviceDeptNum"));
+        //var workNo = IPLAT.EFInput.value($("#workNo"));
+        var realName = $("#realName").val();
         var sex = IPLAT.EFSelect.value($("#sex"));
         var maritalStatus = IPLAT.EFSelect.value($("#maritalStatus"));  //婚姻状况
         var personnelCategory = IPLAT.EFSelect.value($("#personnelCategory")); //人员类别
-        var birthPlace = IPLAT.EFInput.value($("#birthPlace"));
-        var kampong = IPLAT.EFInput.value($("#kampong"));
-        var manCode = IPLAT.EFInput.value($("#manCode"));
-        var schoolingCode = IPLAT.EFInput.value($("#schoolingCode"));
-        var jobCode = IPLAT.EFInput.value($("#jobCode"));
-        var politicalStatus = IPLAT.EFInput.value($("#politicalStatus"));
-        var salary = IPLAT.EFInput.value($("#salary"));
-        var birthDate = IPLAT.EFInput.value($("#birthDate"));
-        var preInTime = IPLAT.EFInput.value($("#preInTime"));
-        var phone = IPLAT.EFInput.value($("#phone"));
-        var highestEducational = IPLAT.EFInput.value($("#highestEducational")); //最高学历
-        var highestDegree = IPLAT.EFInput.value($("#highestDegree")); //最高学位
-        var emergency = IPLAT.EFInput.value($("#emergency")); //紧急联系人
-        var emergencyPhone = IPLAT.EFInput.value($("#emergencyPhone")); //紧急联系人电话
-        var health = IPLAT.EFInput.value($("#health"));
-        var familyAddress = IPLAT.EFInput.value($("#familyAddress"));
-        var company = IPLAT.EFInput.value($("#company"));
-        var memo = IPLAT.EFInput.value($("#memo"));
-        var id = IPLAT.EFInput.value($("#id"));
-        var type = IPLAT.EFInput.value($("#type"));
+        var birthPlace = $("#birthPlace").val();
+        var kampong = $("#kampong").val();
+        var manCode = $("#manCode").val();
+        var schoolingCode = $("#schoolingCode").val();
+        var jobCode = $("#jobCode").val();
+        var politicalStatus = $("#politicalStatus").val();
+        var salary = $("#salary").val();
+        var birthDate = $("#birthDate").val();
+        var preInTime = $("#preInTime").val();
+        var phone = $("#phone").val();
+        var highestEducational = $("#highestEducational").val(); //最高学历
+        var highestDegree = $("#highestDegree").val(); //最高学位
+        var emergency = $("#emergency").val(); //紧急联系人
+        var emergencyPhone = $("#emergencyPhone").val(); //紧急联系人电话
+        var health = $("#health").val();
+        var familyAddress = $("#familyAddress").val();
+        var managementDeptNum = $("#managementDeptNum").val();
+        var company = $("#company").val();
+        var memo = $("#memo").val();
+        var id = $("#id").val();
+        var type = $("#type").val();
         var fileArray = resultCGrid.getDataItems();
         //参数检验
-      if(validate(workNo,realName,birthPlace,deptNum,serviceDeptNum,kampong,manCode,schoolingCode,jobCode,phone,health,familyAddress,company,personnelCategory,emergency,emergencyPhone)) {
-          var eiInfo = new EiInfo();
-          eiInfo.set("deptNum", deptNum);
-          eiInfo.set("serviceDeptNum", serviceDeptNum);
-          eiInfo.set("workNo", workNo);
-          eiInfo.set("realName", realName);
-          eiInfo.set("sex", sex);
-          eiInfo.set("birthPlace", birthPlace);
-          eiInfo.set("kampong", kampong);
-          eiInfo.set("manCode", manCode);
-          eiInfo.set("schoolingCode", schoolingCode);
-          eiInfo.set("jobCode", jobCode);
-          eiInfo.set("politicalStatus", politicalStatus);
-          eiInfo.set("salary", salary);
-          eiInfo.set("birthDate", birthDate);
-          eiInfo.set("preInTime", preInTime);
-          eiInfo.set("phone", phone);
-          eiInfo.set("health", health);
-          eiInfo.set("familyAddress", familyAddress);
-          eiInfo.set("company", company);
-          eiInfo.set("memo", memo);
-          eiInfo.set("id", id);
-          eiInfo.set("type", type);
-          eiInfo.set("fileArray", fileArray);
-          eiInfo.set("maritalStatus", maritalStatus);
-          eiInfo.set("personnelCategory", personnelCategory);
-          eiInfo.set("highestEducational", highestEducational);
-          eiInfo.set("highestDegree", highestDegree);
-          eiInfo.set("emergency", emergency);
-          eiInfo.set("emergencyPhone", emergencyPhone);
-          EiCommunicator.send("HRXX0101", "putUserInfo", eiInfo, {
-              onSuccess: function (ei) {
-                  if (ei.getStatus() == -1) {
-                      NotificationUtil(ei.getMsg(), "error");
-                      return;
-                  }
-                  // NotificationUtil("新增成功");
-                  // window.parent['popDataWindow'].close();
-                  // window.parent["resultGrid"].dataSource.page(1);
-              }
-          }),
-          EiCommunicator.send("HRXX0101", "insert", eiInfo, {
-              onSuccess: function (ei) {
-                  if (ei.getStatus() == -1) {
-                      NotificationUtil(ei.getMsg(), "error");
-                      return;
-                  }
-                  NotificationUtil("新增成功");
-                  window.parent['popDataWindow'].close();
-                  window.parent["resultGrid"].dataSource.page(1);
-              }
-          })
-      }
+        if(validate(realName,birthPlace,deptNum,serviceDeptNum,managementDeptNum,kampong,manCode,schoolingCode,jobCode,phone,health,familyAddress,company,personnelCategory,emergency,emergencyPhone)) {
+            var eiInfo = new EiInfo();
+            eiInfo.set("deptNum", deptNum);
+            eiInfo.set("serviceDeptNum", serviceDeptNum);
+           // eiInfo.set("workNo", workNo);
+            eiInfo.set("realName", realName);
+            eiInfo.set("sex", sex);
+            eiInfo.set("birthPlace", birthPlace);
+            eiInfo.set("kampong", kampong);
+            eiInfo.set("manCode", manCode);
+            eiInfo.set("schoolingCode", schoolingCode);
+            eiInfo.set("jobCode", jobCode);
+            eiInfo.set("politicalStatus", politicalStatus);
+            eiInfo.set("salary", salary);
+            eiInfo.set("birthDate", birthDate);
+            eiInfo.set("preInTime", preInTime);
+            eiInfo.set("phone", phone);
+            eiInfo.set("health", health);
+            eiInfo.set("familyAddress", familyAddress);
+            eiInfo.set("managementDeptNum", managementDeptNum);
+            eiInfo.set("company", company);
+            eiInfo.set("memo", memo);
+            eiInfo.set("id", id);
+            eiInfo.set("type", type);
+            eiInfo.set("fileArray", fileArray);
+            eiInfo.set("maritalStatus", maritalStatus);
+            eiInfo.set("personnelCategory", personnelCategory);
+            eiInfo.set("highestEducational", highestEducational);
+            eiInfo.set("highestDegree", highestDegree);
+            eiInfo.set("emergency", emergency);
+            eiInfo.set("emergencyPhone", emergencyPhone);
+/*            EiCommunicator.send("HRXX0101", "putUserInfo", eiInfo, {
+                onSuccess: function (ei) {
+                    if (ei.getStatus() == -1) {
+                        NotificationUtil(ei.getMsg(), "error");
+                        return;
+                    }
+                }
+            }),*/
+                EiCommunicator.send("HRXX0101", "insert", eiInfo, {
+                    onSuccess: function (ei) {
+                        if (ei.getStatus() == -1) {
+                            NotificationUtil(ei.getMsg(), "error");
+                            return;
+                        }
+                        NotificationUtil("新增成功");
+                        window.parent['popDataWindow'].close();
+                        window.parent["resultGrid"].dataSource.page(1);
+                    }
+                })
+        }
     });
 
     //参数校验
-    function validate(workNo,realName,birthPlace,deptNum,serviceDeptNum,kampong,manCode,schoolingCode,jobCode,phone,health,familyAddress,company,personnelCategory,emergency,emergencyPhone) {
-        // if(isEmpty(workNo)){
-        //     NotificationUtil("工号不能为空","error");
-        //     return false;
-        // }
+    function validate(realName,birthPlace,deptNum,serviceDeptNum,managementDeptNum,kampong,manCode,schoolingCode,jobCode,phone,health,familyAddress,company,personnelCategory,emergency,emergencyPhone) {
+
         if(isEmpty(realName)){
             NotificationUtil("姓名不能为空","error");
             return false;
         }
-        // if(isEmpty(birthPlace)){
-        //     NotificationUtil("籍贯不能为空","error");
-        //     return false;
-        // }
+
         if(isEmpty(deptNum)){
             NotificationUtil("所属部门不能为空","error");
             return false;
         }
         if(isEmpty(serviceDeptNum)){
             NotificationUtil("服务部门不能为空","error");
+            return false;
+        }
+        if(isEmpty(managementDeptNum)){
+            NotificationUtil("管理部门不能为空","error");
             return false;
         }
         if(isEmpty(kampong)){
@@ -266,12 +267,12 @@ $(function (){
             return false;
         }
         if(isEmpty(phone)){
-            NotificationUtil("手机号不能为空","error");
+            NotificationUtil("联系电话不能为空","error");
             return false;
         }else if(checkPhone(phone)){
-            NotificationUtil("请输入正确的手机号","error");
+            NotificationUtil("请输入正确的联系电话","error");
             return false;
-        };
+        }
         if(isEmpty(health)){
             NotificationUtil("健康状况不能为空","error");
             return false;
@@ -290,6 +291,9 @@ $(function (){
         }
         if(isEmpty(emergencyPhone)){
             NotificationUtil("紧急联系人电话不能为空","error");
+            return false;
+        }else if(checkPhone(emergencyPhone)){
+            NotificationUtil("请输入正确的紧急联系人电话","error");
             return false;
         }
         if(isEmpty(personnelCategory)){
@@ -322,23 +326,20 @@ $(function (){
      */
     function checkPhone(parameter) {
         if (!(/^1[3456789]\d{9}$/.test(parameter))) {
-           return true;
+            return true;
         }
         return false;
     }
 
     /**
-     * 检验身份证号码
+     * 检验身份证号码 true不合规范
      * @param parameter
      * @returns {boolean}
      */
     function isCardNo(parameter){
         // 身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X
-        var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
-        if(reg.test(parameter) === false){
-            return true;
-        }
-        return false;
+        let reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+        return !reg.test(parameter);
     }
 
     function getExtension (name) {

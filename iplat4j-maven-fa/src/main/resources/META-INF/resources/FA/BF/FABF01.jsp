@@ -25,7 +25,11 @@
                                endName="inqu_status-0-useDateE" endCname="使用日期止"
                                ratio="3:3" startRatio="4:8" endRatio="4:8" readonly="true"/>
                     <%--			<EF:EFInput ename="inqu_status-0-useYear" colWidth="3" ratio="4:8" cname="使用年限"/>--%>
-                <EF:EFInput ename="inqu_status-0-deptName" cname="所属科室" colWidth="3"/>
+<%--                <EF:EFInput ename="inqu_status-0-deptName" cname="所属科室" colWidth="3"/>--%>
+                <EF:EFMultiSelect ename="inqu_status-0-deptName" cname="所属科室" colWidth="3" ratio="4:8"
+                                  serviceName="FADA01" queryMethod="queryDept" filter="contains">
+                    <EF:EFOptions blockId="dept" textField="deptName" valueField="deptName"/>
+                </EF:EFMultiSelect>
 <%--                <EF:EFTreeInput ename="inqu_status-0-goodsClassifyCode" cname="资产类别" serviceName="FALB01"--%>
 <%--                                methodName="queryFaTypeTree"--%>
 <%--                                valueField="id" textField="typeName" hasChildren="isLeaf" readonly="true"--%>
@@ -62,20 +66,22 @@
     <EF:EFTab id="FaDaTab">
         <div title="报废申请">
             <EF:EFGrid blockId="resultA" autoDraw="no" autoBind="true" rowNo="true" readonly="true"
-                       checkMode="multiple,row" queryMethod="confirmedQuery" height="460px">
+                       checkMode="multiple,row" queryMethod="confirmedQuery" height="418px">
                 <EF:EFColumn ename="faInfoId" cname="faInfoId" align="center" width="200" hidden="true"/>
                 <EF:EFColumn ename="goodsNum" cname="资产编码" align="center" width="200" displayType="url"/>
                 <EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="200"/>
+                <EF:EFColumn ename="spec" cname="型号规格" align="center" width="200"/>
                 <EF:EFColumn ename="deptName" cname="所属科室" align="center" width="200"/>
+                <EF:EFColumn ename="room" cname="具体位置" align="center" width="200"/>
+                <EF:EFColumn ename="statusCode" cname="资产状态" align="center" width="200"/>
+                <EF:EFColumn ename="remark" cname="备注" align="center" width="200"/>
                 <%--				<EF:EFColumn ename="build" cname="楼"   align="center" width="200"/>--%>
                 <%--				<EF:EFColumn ename="floor" cname="层"   align="center" width="200"/>--%>
-                <EF:EFColumn ename="installLocation" cname="地点" align="center" width="200"/>
-                <EF:EFColumn ename="room" cname="具体位置" align="center" width="200"/>
+                <EF:EFColumn ename="installLocation" cname="地点" align="center" width="200" hidden="true"/>
                 <EF:EFColumn ename="goodsClassifyName" cname="资产类别" align="center" width="200"/>
                 <EF:EFColumn ename="goodsTypeCode" cname="资产类别名称" align="center" width="200" hidden="true"/>
                 <EF:EFColumn ename="goodsTypeName" cname="资产类别名称" align="center" width="200"/>
-                <EF:EFColumn ename="model" cname="型号规格" align="center" width="200"/>
-                <EF:EFColumn ename="manufacturer" cname="制造厂商" align="center" width="200"/>
+                <EF:EFColumn ename="manufacturer" cname="制造厂商" align="center" width="200" hidden="true"/>
                 <EF:EFColumn ename="surpName" cname="供应商" align="center" width="200"/>
                 <EF:EFColumn ename="buyDate" cname="购入日期" align="center" width="200"/>
                 <EF:EFColumn ename="useDate" cname="使用日期" align="center" width="200"/>
@@ -84,8 +90,6 @@
                 <EF:EFColumn ename="useYears" cname="使用年限" align="center" width="200"/>
                 <%--			<EF:EFColumn ename="deviceName" cname="设备名称"   align="center" />--%>
                 <EF:EFColumn ename="recCreateName" cname="创建人" align="center" width="200"/>
-                <EF:EFColumn ename="remark" cname="备注" align="center" width="200"/>
-                <EF:EFColumn ename="statusCode" cname="资产状态" align="center" width="200"/>
                 <EF:EFColumn ename="rfidCode" cname="RFID" align="center" width="200" hidden="true"/>
                 <EF:EFColumn ename="cardStatus" cname="是否发卡" align="center" width="200" hidden="true"/>
                 <EF:EFColumn ename="lockFlag" cname="变更状态" align="center" hidden="true"/>
@@ -98,13 +102,14 @@
                 <EF:EFColumn ename="detailId" cname="detailId" align="center" locked="true" hidden="true"/>
                 <EF:EFColumn ename="goodsNum" cname="资产编码" align="center" width="200" displayType="url"/>
                 <EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="200"/>
-                <EF:EFColumn ename="goodsClassifyCode" cname="资产类别编码" align="center" width="200"/>
-                <EF:EFColumn ename="goodsClassifyName" cname="资产类别" align="center" width="200"/>
+                <EF:EFColumn ename="spec" cname="型号规格" align="center" width="200"/>
                 <EF:EFColumn ename="applyDeptName" cname="申请科室" align="center" width="200"/>
-                <EF:EFColumn ename="applyPerson" cname="申请人" align="center" width="200"/>
-                <EF:EFColumn ename="applyTime" cname="申请时间" align="center" width="200"/>
-                <EF:EFColumn ename="applyReason" cname="申请理由" align="center" width="200"/>
                 <EF:EFColumn ename="scrapStatus" cname="审批状态" align="center" width="200"/>
+                <EF:EFColumn ename="applyReason" cname="申请理由" align="center" width="200"/>
+                <EF:EFColumn ename="applyTime" cname="申请时间" align="center" width="200"/>
+                <EF:EFColumn ename="goodsClassifyCode" cname="资产类别编码" align="center" width="200" hidden="true"/>
+                <EF:EFColumn ename="goodsClassifyName" cname="资产类别" align="center" width="200"/>
+                <EF:EFColumn ename="applyPerson" cname="申请人" align="center" width="200"/>
                 <EF:EFColumn ename="scrappedNo" cname="报废单号" align="center" width="200" displayType="url"
                              hidden="true"/>
             </EF:EFGrid>
@@ -116,13 +121,14 @@
                 <EF:EFColumn ename="detailId" cname="detailId" align="center" locked="true" hidden="true"/>
                 <EF:EFColumn ename="goodsNum" cname="资产编码" align="center" width="200" displayType="url"/>
                 <EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="200"/>
+                <EF:EFColumn ename="spec" cname="型号规格" align="center" width="200"/>
                 <EF:EFColumn ename="applyDeptName" cname="申请科室" align="center" width="200"/>
-                <EF:EFColumn ename="applyPerson" cname="申请人" align="center" width="200"/>
-                <EF:EFColumn ename="applyTime" cname="申请时间" align="center" width="200"/>
+                <EF:EFColumn ename="scrapStatus" cname="审批状态" align="center" width="200"/>
                 <EF:EFColumn ename="applyReason" cname="申请理由" align="center" width="200"/>
+                <EF:EFColumn ename="applyTime" cname="申请时间" align="center" width="200"/>
+                <EF:EFColumn ename="applyPerson" cname="申请人" align="center" width="200"/>
                 <EF:EFColumn ename="identifyDeptName" cname="技术科" align="center" width="200"/>
                 <EF:EFColumn ename="functionDeptName" cname="归口科室" align="center" width="200"/>
-                <EF:EFColumn ename="scrapStatus" cname="审批状态" align="center" width="200"/>
                 <EF:EFColumn ename="scrappedNo" cname="报废单号" align="center" width="200" displayType="url"
                              hidden="true"/>
             </EF:EFGrid>
@@ -134,17 +140,18 @@
                 <EF:EFColumn ename="detailId" cname="detailId" align="center" locked="true" hidden="true"/>
                 <EF:EFColumn ename="goodsNum" cname="资产编码" align="center" width="200" displayType="url"/>
                 <EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="200"/>
+                <EF:EFColumn ename="spec" cname="型号规格" align="center" width="200"/>
                 <EF:EFColumn ename="scrappedNo" cname="报废单号" align="center" width="200" displayType="url" hidden="true"/>
                 <EF:EFColumn ename="applyDeptName" cname="申请科室" align="center" width="200"/>
+                <EF:EFColumn ename="scrapStatus" cname="审批状态" align="center" width="200"/>
+                <EF:EFColumn ename="applyReason" cname="申请理由" align="center" width="200"/>
                 <EF:EFColumn ename="applyPerson" cname="申请人" align="center" width="200"/>
                 <EF:EFColumn ename="applyTime" cname="申请时间" align="center" width="200"/>
-                <EF:EFColumn ename="applyReason" cname="申请理由" align="center" width="200"/>
                 <EF:EFColumn ename="identifyDeptName" cname="技术科" align="center" width="200"/>
                 <EF:EFColumn ename="identifyPerson" cname="技术员" align="center" width="200"/>
                 <EF:EFColumn ename="identifyTime" cname="技术确认时间" align="center" width="200"/>
                 <EF:EFColumn ename="identifyReason" cname="技术指导" align="center" width="200"/>
                 <EF:EFColumn ename="functionDeptName" cname="归口科室" align="center" width="200"/>
-                <EF:EFColumn ename="scrapStatus" cname="审批状态" align="center" width="200"/>
             </EF:EFGrid>
         </div>
         <div title="资产管理">
@@ -154,11 +161,13 @@
                 <EF:EFColumn ename="detailId" cname="detailId" align="center" locked="true" hidden="true"/>
                 <EF:EFColumn ename="goodsNum" cname="资产编码" align="center" width="200" displayType="url"/>
                 <EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="200"/>
+                <EF:EFColumn ename="spec" cname="型号规格" align="center" width="200"/>
                 <EF:EFColumn ename="scrappedNo" cname="报废单号" align="center" width="200" displayType="url" hidden="true"/>
                 <EF:EFColumn ename="applyDeptName" cname="申请科室" align="center" width="200"/>
+                <EF:EFColumn ename="scrapStatus" cname="审批状态" align="center" width="200"/>
+                <EF:EFColumn ename="applyReason" cname="申请理由" align="center" width="200"/>
                 <EF:EFColumn ename="applyPerson" cname="申请人" align="center" width="200"/>
                 <EF:EFColumn ename="applyTime" cname="申请时间" align="center" width="200"/>
-                <EF:EFColumn ename="applyReason" cname="申请理由" align="center" width="200"/>
                 <EF:EFColumn ename="identifyDeptName" cname="技术科" align="center" width="200"/>
                 <EF:EFColumn ename="identifyPerson" cname="技术员" align="center" width="200"/>
                 <EF:EFColumn ename="identifyTime" cname="技术确认时间" align="center" width="200"/>
@@ -167,7 +176,6 @@
                 <EF:EFColumn ename="functionPerson" cname="归口人" align="center" width="200"/>
                 <EF:EFColumn ename="functionTime" cname="归口通过时间" align="center" width="200"/>
                 <EF:EFColumn ename="functionReason" cname="归口原因" align="center" width="200"/>
-                <EF:EFColumn ename="scrapStatus" cname="审批状态" align="center" width="200"/>
             </EF:EFGrid>
             <!-- 批量鉴定 -->
             <EF:EFWindow id="identify" title="批量鉴定" url="" lazyload="true" width="60%" height="40%">
@@ -252,12 +260,13 @@
                 <EF:EFColumn ename="detailId" cname="detailId" align="center" locked="true" hidden="true"/>
                 <EF:EFColumn ename="goodsNum" cname="资产编码" align="center" width="200" displayType="url"/>
                 <EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="200"/>
+                <EF:EFColumn ename="spec" cname="型号规格" align="center" width="200"/>
+                <EF:EFColumn ename="applyDeptName" cname="申请科室" align="center" width="200"/>
                 <EF:EFColumn ename="scrappedNo" cname="报废单号" align="center" width="200" displayType="url" hidden="true"/>
                 <EF:EFColumn ename="scrapStatus" cname="审批状态" align="center" width="200"/>
-                <EF:EFColumn ename="applyDeptName" cname="申请科室" align="center" width="200"/>
+                <EF:EFColumn ename="applyReason" cname="申请理由" align="center" width="200"/>
                 <EF:EFColumn ename="applyPerson" cname="申请人" align="center" width="200"/>
                 <EF:EFColumn ename="applyTime" cname="申请时间" align="center" width="200"/>
-                <EF:EFColumn ename="applyReason" cname="申请理由" align="center" width="200"/>
                 <EF:EFColumn ename="identifyDeptName" cname="技术科" align="center" width="200"/>
                 <EF:EFColumn ename="identifyPerson" cname="技术员" align="center" width="200"/>
                 <EF:EFColumn ename="identifyTime" cname="技术确认时间" align="center" width="200"/>

@@ -1,4 +1,10 @@
 $(function (){
+
+    var managementDeptNum= $("#inqu_status-0-managementDeptNum").val();
+    if(isEmpty(managementDeptNum)){
+        $("#inqu_status-0-managementDeptNum").attr("readonly",false)
+    }
+
     // 查询
     $("#QUERY").on("click", function (e) {
         resultGrid.dataSource.page(1);
@@ -16,6 +22,10 @@ $(function (){
 
     IPLATUI.EFGrid = {
         "result": {
+            pageable: {
+                pageSize: 50,
+                pageSizes: [50, 100, 200, 500]
+            },
             loadComplete: function (grid) {
                 // 新增
                 $("#READD").on("click", function (e) {
@@ -38,10 +48,10 @@ $(function (){
                         NotificationUtil("请选择行", "error");
                         return;
                     }
-                    if (checkRows[0].statusCode != '02' ) {
+      /*              if (checkRows[0].statusCode != '03' ) {
                         NotificationUtil("只能选择预离职的人员", "error");
                         return;
-                    }
+                    }*/
                     var id = checkRows[0].id;
                     var info = new EiInfo();
                     info.set("id", id);
@@ -71,10 +81,10 @@ $(function (){
                         NotificationUtil("请选择要确认的行", "error");
                         return;
                     }
-                    if (checkRows[0].statusCode != '02' ) {
+ /*                   if (checkRows[0].statusCode != '0' ) {
                         NotificationUtil("只能选择预离职的人员", "error");
                         return;
-                    }
+                    }*/
                     var id = checkRows[0].id;
                     var preOutTime = checkRows[0].preOutTime;
                     var url = IPLATUI.CONTEXT_PATH + "/web/HRLZ0201?id=" + id + "&preOutTime=" + preOutTime;
@@ -92,3 +102,13 @@ $(function (){
         }
     }
 })
+function isEmpty(parameter){
+    if(parameter == undefined || parameter == null){
+        return true;
+    } // 除去参数俩端的空格
+    else if (parameter.replace(/(^\s*)|(\s*$)/g, "") == ""){
+        return true;
+    } else {
+        return false;
+    }
+}

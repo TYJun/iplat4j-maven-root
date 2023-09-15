@@ -11,20 +11,35 @@
 			<EF:EFInput ename="info-0-archiveFlag" cname="归档标记" colWidth="5" required="true" type="hidden"/>
 		</div>
 		<div class="row">
-			<EF:EFInput ename="info-0-turnDeptNum" cname="科室编码" colWidth="5" readonly="true" type="hidden"/>
-			<EF:EFInput ename="info-0-turnDeptName" cname="科室名称" colWidth="5" readonly="true" type="hidden"/>
-			<EF:EFAutoComplete ename="info-0-deptName" cname="接收科室" colWidth="5" ratio="4:8" required="true"
-				noDataTemplate="没有数据" filter="contains" serviceName="FADA01" queryMethod="queryDept"
-				resultId="dept" dataField="deptName"/>
-<%--			<EF:EFPopupInput ename="info-0-deptNum" cname="接收科室"  colWidth="5" required="true"--%>
-<%--							 popupTitle="科室选择" readOnly="true"--%>
-<%--							 popupType="ServiceGrid" serviceName="FADA01" methodName="queryDept" resultId="dept"--%>
-<%--							 valueField="deptNum" textField="deptName"--%>
-<%--							 columnEnames="deptNum,deptName" columnCnames="科室编码,科室名称" />--%>
+			<EF:EFSelect ename="info-0-turnType" colWidth="5" cname="调拨类型" defaultValue="dept">
+				<EF:EFOption label="调拨回科室" value="dept"></EF:EFOption>
+				<EF:EFOption label="调拨回仓库" value="warehouse"></EF:EFOption>
+			</EF:EFSelect>
 		</div>
-		<div class="row">
-			<EF:EFInput ename="info-0-applyReason" cname="备注" rows="3" placeholder=""
-						colWidth="10" type="textarea" ratio="2:10" maxLength="200"/>
+		<div id="backWarehouse">
+			<div class="row">
+				<EF:EFInput ename="info-0-turnDeptNum" cname="科室编码" colWidth="5" readonly="true" type="hidden"/>
+				<EF:EFInput ename="info-0-turnDeptName" cname="科室名称" colWidth="5" readonly="true" type="hidden"/>
+				<EF:EFInput ename="info-0-deptNum" cname="科室编码" colWidth="5" readonly="true" type="hidden"/>
+				<EF:EFAutoComplete ename="info-0-deptName" cname="接收科室" colWidth="5" ratio="4:8" required="true"
+								   noDataTemplate="没有数据" filter="contains" serviceName="FADA01" queryMethod="queryDept"
+								   resultId="dept" dataField="deptName"/>
+					<%--			<EF:EFPopupInput ename="info-0-deptNum" cname="接收科室"  colWidth="5" required="true"--%>
+					<%--							 popupTitle="科室选择" readOnly="true"--%>
+					<%--							 popupType="ServiceGrid" serviceName="FADA01" methodName="queryDept" resultId="dept"--%>
+					<%--							 valueField="deptNum" textField="deptName"--%>
+					<%--							 columnEnames="deptNum,deptName" columnCnames="科室编码,科室名称" />--%>
+				<EF:EFPopupInput ename="info-0-confirmLocationNum" cname="存放位置" colWidth="5" readonly="true" popupWidth = "550" filterPopupGrid = "false"
+								 popupType="ServiceGrid" popupTitle="存放位置选择" serviceName="FADB0101" methodName="querySpot" resultId="spot" autofit="true"
+								 valueField="spotNum" textField="spotName" backFillFieldIds="spotName" backFillColumnIds="spotName" columnEnames="building,floor,spotName" columnCnames="楼,层,地点"/>
+				<EF:EFInput ename="info-0-confirmBuild" cname="楼" colWidth="5" readonly="true"/>
+				<EF:EFInput ename="info-0-confirmFloor" cname="层" colWidth="5" readonly="true"/>
+				<EF:EFInput ename="info-0-confirmRoom" cname="具体位置" colWidth="5"/>
+			</div>
+			<div class="row">
+				<EF:EFInput ename="info-0-applyReason" cname="备注" rows="3" placeholder=""
+							colWidth="10" type="textarea" ratio="2:10" maxLength="200"/>
+			</div>
 		</div>
 		<div class="button-region" id="buttonDiv">
 			<EF:EFButton cname="调拨" ename="save" layout="3"></EF:EFButton>
@@ -35,22 +50,24 @@
 		<EF:EFGrid blockId="resultFixedAssests" needAuth="false" autoDraw="no" autoBind="true" autoFit="true"
 				   checkMode="multiple,row" readonly="true" rowNo="true" isFloat="true">
 			<EF:EFColumn ename="faInfoId" cname="faInfoId"  align="center" locked="true" width="200" hidden="true"/>
-			<EF:EFColumn ename="enterBillNo" cname="出库单号" align="center" width="200" hidden="true"/>
-			<EF:EFColumn ename="matNum" cname="物资编码" align="center" width="200" hidden="true"/>
+			<EF:EFColumn ename="enterBillNo" cname="入库单号" align="center" width="200" hidden="true"/>
+			<EF:EFColumn ename="outBillNo" cname="出库单号" align="center" width="200" enable="false"/>
+			<EF:EFColumn ename="matNum" cname="物资编码" align="center" width="200" enable="false" hidden="true"/>
 			<EF:EFColumn ename="matName" cname="物资名称" align="center" width="200" hidden="true"/>
 			<EF:EFColumn ename="matTypeNum" cname="物资分类编码" align="center" width="200" hidden="true"/>
 			<EF:EFColumn ename="matTypeName" cname="物资分类名称" align="center" width="200" hidden="true"/>
-			<EF:EFColumn ename="model" cname="物资型号" align="center" width="200" hidden="true"/>
-			<EF:EFColumn ename="spec" cname="物资规格" align="center" width="200" hidden="true"/>
 			<EF:EFColumn ename="unitNum" cname="计量单位" align="center" width="200" hidden="true"/>
 			<EF:EFColumn ename="unitName" cname="计量单位" align="center" width="200" hidden="true"/>
 			<EF:EFColumn ename="price" cname="出库单价" align="center" width="200" hidden="true"/>
-
 			<EF:EFColumn ename="goodsNum" cname="资产编码" align="center" width="200" enable="false"/>
 			<EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="200" enable="false"/>
+			<EF:EFColumn ename="spec" cname="型号规格"  align="center" width="200" enable="false"/>
+			<EF:EFColumn ename="deptName" cname="所属科室" align="center" width="200" enable="false"/>
+			<EF:EFColumn ename="room" cname="具体位置"   align="center" width="200" enable="false"/>
+			<EF:EFColumn ename="statusCode" cname="资产状态" align="center" width="200" enable="false"/>
+			<EF:EFColumn ename="remark" cname="备注"  align="center" width="200" enable="false"/>
 			<EF:EFColumn ename="goodsClassifyName" cname="资产类别"  align="center" width="200" enable="false"/>
 			<EF:EFColumn ename="goodsTypeName" cname="资产类别名称"  align="center" width="200" enable="false"/>
-			<EF:EFColumn ename="statusCode" cname="资产状态"   align="center" width="200" enable="false"/>
 			<EF:EFColumn ename="rfidCode" cname="RFID"  align="center" width="200" enable="false"/>
 			<EF:EFColumn ename="manufacturer" cname="制造厂商"  align="center" width="200" enable="false"/>
 			<EF:EFColumn ename="surpName" cname="供应商"   align="center" width="200" enable="false"/>
@@ -60,7 +77,6 @@
 			<EF:EFColumn ename="useYears" cname="使用年限"   align="center" width="200" enable="false"/>
 			<%--			<EF:EFColumn ename="deviceName" cname="设备名称"   align="center" />--%>
 			<EF:EFColumn ename="recCreateName" cname="创建人"   align="center" width="200" enable="false"/>
-			<EF:EFColumn ename="remark" cname="备注"  align="center" width="200" enable="false"/>
 		</EF:EFGrid>
 	</div>
 

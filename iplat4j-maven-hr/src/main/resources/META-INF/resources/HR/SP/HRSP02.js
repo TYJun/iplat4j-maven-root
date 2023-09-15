@@ -17,6 +17,17 @@ $(function (){
 
     IPLATUI.EFGrid = {
         "result": {
+            onCellClick: function (e) {
+                if (e.field === "billNo") {
+                    var billNo = e.model.billNo;
+                    var id = e.model.id;
+                    var url = IPLATUI.CONTEXT_PATH + "/web/HRDP0102?billNo=" + billNo + "&id=" + id;
+                    var popData = $("#popDataModify");
+                    popDataCom(popData, url);
+                    popDataModifyWindow.open().center();
+                }
+            },
+
             loadComplete: function (grid) {
                 // 编辑
                 $("#EXAMINE").on("click", function (e) {

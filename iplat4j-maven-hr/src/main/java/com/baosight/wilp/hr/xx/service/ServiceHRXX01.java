@@ -1,7 +1,9 @@
 package com.baosight.wilp.hr.xx.service;
 
+import com.baosight.iplat4j.core.ei.EiBlock;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
+import com.baosight.iplat4j.core.web.threadlocal.UserSession;
 import com.baosight.wilp.common.util.BaseDockingUtils;
 import com.baosight.wilp.common.util.CommonUtils;
 import com.baosight.wilp.hr.common.HrUtils;
@@ -41,6 +43,19 @@ public class ServiceHRXX01 extends ServiceBase {
 	 * @see ServiceBase#query(EiInfo)
 	 */
 	public EiInfo initLoad(EiInfo info) {
+		Map<String, Object> deptMap = BaseDockingUtils.getDeptByworkNo(UserSession.getLoginName());
+		EiBlock eiBlock = new EiBlock("result");
+		eiBlock.setAttr(new HashMap(){{
+			put("showCount","true");
+			put("offset","0");
+			put("count","0");
+			put("limit","50");
+			put("orderBy","");
+		}});
+		info.setBlock(eiBlock);
+		if (!"admin".equals(UserSession.getLoginName())) {
+			info.setCell("inqu_status", 0, "managementDeptNum", deptMap.get("deptName"));
+		}
 		return this.query(info);
 	}
 
@@ -108,8 +123,8 @@ public class ServiceHRXX01 extends ServiceBase {
 	 *更新人员信息（入职和取消入职）
 	 * updateInduction
 	 * @param info id   ：  主键
-	 *             type  类型 1.如果值为uninduction则是取消入职
-	 *             			 2.如果值为induction则是确认入职
+	 * type  类型 1.如果值为uninduction则是取消入职
+	 * 2.如果值为induction则是确认入职
 	 * @return
 	 */
 	@SuppressWarnings("all")
@@ -172,7 +187,6 @@ public class ServiceHRXX01 extends ServiceBase {
 			resultData.setSuccess(false);
 		}
 		return resultData;
-
 	}
 
 	public ResultData putUserInfo(HttpServletRequest request, HttpServletResponse response){
@@ -199,7 +213,5 @@ public class ServiceHRXX01 extends ServiceBase {
 			resultData.setSuccess(false);
 		}
 		return resultData;
-
 	}
-
 }

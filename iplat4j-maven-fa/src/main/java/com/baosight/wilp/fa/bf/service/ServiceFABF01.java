@@ -8,6 +8,7 @@ import com.baosight.iplat4j.core.service.soa.XLocalManager;
 import com.baosight.iplat4j.core.util.DateUtils;
 import com.baosight.iplat4j.core.util.StringUtils;
 import com.baosight.wilp.common.util.BaseDockingUtils;
+import com.baosight.wilp.common.util.CommonUtils;
 import com.baosight.wilp.fa.bf.domian.FaScrapVO;
 import com.baosight.wilp.fa.da.domain.FaInfoDO;
 import com.baosight.wilp.fa.utils.OneSelfUtils;
@@ -42,7 +43,6 @@ public class ServiceFABF01 extends ServiceBase {
 	 */
 	@Override
 	public EiInfo initLoad(EiInfo info) {
-		// 1.固定资产报废调用本类中的query方法
 		return confirmedQuery(info);
 	}
 
@@ -62,7 +62,7 @@ public class ServiceFABF01 extends ServiceBase {
 	 */
 	@Override
 	public EiInfo query(EiInfo info) {
-		return confirmedQuery(info);
+		return info;
 	}
 
 	// 另起炉灶
@@ -76,6 +76,19 @@ public class ServiceFABF01 extends ServiceBase {
 	 * @date 2022/12/8 9:45
 	 */
 	public EiInfo confirmedQuery(EiInfo info) {
+		EiBlock eiBlock = info.getBlock("inqu_status");
+		if (eiBlock != null) {
+			Map<String, String> row = eiBlock.getRow(0);
+			String deptName = row.get("deptName");
+			if (StringUtils.isNotEmpty(deptName)) {
+				String[] split = deptName.split(",");
+				for (int i = 0; i < split.length; i++) {
+					split[i] = "dept_name LIKE concat ( '%', trim('" + split[i] + "'), '%' )";
+				}
+				String param = "(" + org.apache.commons.lang.StringUtils.join(split, " OR ") + ")";
+				info.setCell("inqu_status", 0, "deptName", param);
+			}
+		}
 		Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
 		List<String> deptName = OneSelfUtils.specifyDept((String) staffByUserId.get("workNo"));
 		if (CollectionUtils.isNotEmpty(deptName)) {
@@ -92,6 +105,13 @@ public class ServiceFABF01 extends ServiceBase {
 		}
 		outInfo.set("workNo", staffByUserId.get("workNo"));
 		outInfo.set("name", staffByUserId.get("name"));
+		outInfo.set("deptName", staffByUserId.get("deptName"));
+		// 1.获取参数,处理参数
+		Map<String, Object> map = CommonUtils.buildParamter(info, "inqu_status", "dept");
+		// 2.调用微服务接口S_AC_FW_05，获取科室信息
+		map.remove("limit");
+		List<Map<String, String>> maps = dao.query("FADA01.queryDept", map);
+		outInfo.setRows("dept", maps);
 		return outInfo;
 	}
 

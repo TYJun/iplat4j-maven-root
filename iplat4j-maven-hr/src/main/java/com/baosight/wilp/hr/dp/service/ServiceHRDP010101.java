@@ -49,7 +49,7 @@ public class ServiceHRDP010101 extends ServiceBase {
 	 */
 	public EiInfo query(EiInfo info){
 		// 设置flag值为rz,查询入职且未登记预离职的人员
-		info.set("inqu_status-0-flag","rz");
+		info.set("inqu_status-0-statusCode","02");
 		EiInfo outInfo = super.query(info,"HRXX01.query",new HrMan());
 		return outInfo;
 	}

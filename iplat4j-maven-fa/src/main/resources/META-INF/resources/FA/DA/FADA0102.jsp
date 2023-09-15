@@ -76,7 +76,7 @@
     <EF:EFTab id="tab-tab_grid">
         <div title="入库履历">
             <EF:EFGrid blockId="resultPutIn" needAuth="false" autoDraw="no" autoBind="false" autoFit="true"
-                       checkMode="single,row" readonly="true" rowNo="true" isFloat="true" queryMethod="queryPutInTabInfo">
+                       checkMode="single,row" readonly="true" rowNo="true" isFloat="true" queryMethod="queryPutInTabInfo" height="480px">
                 <EF:EFColumn ename="id" cname="id" hidden="true" enable="false" width="100"/>
                 <EF:EFColumn ename="enterBillNo" cname="入库单号" align="center" enable="false" width="100"/>
                 <EF:EFColumn ename="enterTypeName" cname="入库类型名称" align="center" enable="false" width="100"/>
@@ -87,7 +87,7 @@
         </div>
         <div title="出库履历">
             <EF:EFGrid blockId="resultPutOut" needAuth="false" autoDraw="no" autoBind="false" autoFit="true"
-                       checkMode="single,row" readonly="true" rowNo="true" isFloat="true" queryMethod="queryPutOutTabInfo">
+                       checkMode="single,row" readonly="true" rowNo="true" isFloat="true" queryMethod="queryPutOutTabInfo" height="480px">
                 <EF:EFColumn ename="id" cname="id" hidden="true" enable="false" width="100"/>
                 <EF:EFColumn ename="outBillNo" cname="出库单号" align="center" enable="false" width="100"/>
                 <EF:EFColumn ename="outTypeName" cname="出库类型名称" align="center" enable="false" width="100"/>
@@ -98,7 +98,7 @@
         </div>
         <div title="折旧履历">
             <EF:EFGrid blockId="resultDepreciation" needAuth="false" autoDraw="no" autoBind="false" autoFit="true"
-                       checkMode="single,row" readonly="true" rowNo="true" isFloat="true" queryMethod="queryDepreciationTabInfo">
+                       checkMode="single,row" readonly="true" rowNo="true" isFloat="true" queryMethod="queryDepreciationTabInfo" height="480px">
                 <EF:EFColumn ename="faDepreciationId" cname="faDepreciationId" hidden="true" enable="false" width="100"/>
                 <EF:EFColumn ename="faInfoId" cname="faInfoId" align="center" hidden="true" enable="false" width="100"/>
                 <EF:EFColumn ename="depreciationMonth" cname="折旧月份" align="center" enable="false" width="100"/>
@@ -110,7 +110,7 @@
         </div>
         <div title="变更履历">
             <EF:EFGrid blockId="resultModification" needAuth="false" autoDraw="no" autoBind="false" autoFit="true"
-                       checkMode="single,row" readonly="true" rowNo="true" isFloat="true" queryMethod="queryModificationTabInfo">
+                       checkMode="single,row" readonly="true" rowNo="true" isFloat="true" queryMethod="queryModificationTabInfo" height="480px">
                 <EF:EFColumn ename="id" cname="id"  align="center" locked="true" hidden="true"/>
                 <EF:EFColumn ename="faInfoId" cname="faInfoId"  align="center" hidden="true"/>
                 <EF:EFColumn ename="key" cname="编码" align="center" width="200" hidden="true"/>
@@ -124,7 +124,7 @@
         </div>
         <div title="拆分履历">
             <EF:EFGrid blockId="resultSplit" needAuth="false" autoDraw="no" autoBind="false" autoFit="true"
-                       checkMode="single,row" readonly="true" rowNo="true" isFloat="true" queryMethod="querySplitTabInfo">
+                       checkMode="single,row" readonly="true" rowNo="true" isFloat="true" queryMethod="querySplitTabInfo" height="480px">
                 <EF:EFColumn ename="goodsId" cname="goodsId" align="center" width="200" hidden="true"/>
                 <EF:EFColumn ename="goodsNum" cname="资产编码" align="center" enable="false" width="200"/>
                 <EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="200"/>
@@ -136,7 +136,7 @@
         </div>
         <div title="调拨履历">
             <EF:EFGrid blockId="resultTransfer" needAuth="false" autoDraw="no" autoBind="false" autoFit="true"
-                       checkMode="single,row" readonly="true" rowNo="true" isFloat="true" queryMethod="queryTransferTabInfo">
+                       checkMode="single,row" readonly="true" rowNo="true" isFloat="true" queryMethod="queryTransferTabInfo" height="480px">
                 <EF:EFColumn ename="faTransferId" cname="faTransferId" hidden="true" enable="false" width="200"/>
                 <EF:EFColumn ename="transferNo" cname="调拨单号" align="center" enable="false" width="200"/>
                 <EF:EFColumn ename="applyDeptName" cname="申请科室" align="center" enable="false" width="200"/>
@@ -173,7 +173,7 @@
 <%--        </div>--%>
         <div title="报废履历">
             <EF:EFGrid blockId="resultScrap" needAuth="false" autoDraw="no" autoBind="false" autoFit="true"
-                       checkMode="single,row" readonly="true" rowNo="true" isFloat="true" queryMethod="queryScrapTabInfo">
+                       checkMode="single,row" readonly="true" rowNo="true" isFloat="true" queryMethod="queryScrapTabInfo" height="480px">
                 <EF:EFColumn ename="faScrapId" cname="faScrapId" hidden="true" enable="false" width="200"/>
                 <EF:EFColumn ename="scrappedNo" cname="报废单号" align="center" enable="false" width="200"/>
                 <EF:EFColumn ename="applyDeptName" cname="申请科室" align="center" enable="false" width="200"/>

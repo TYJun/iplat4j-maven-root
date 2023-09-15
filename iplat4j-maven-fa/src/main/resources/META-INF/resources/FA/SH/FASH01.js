@@ -85,6 +85,7 @@ $(function () {
             },
             onCellClick: function (e) {
                 if (e.field === "discussNo") {
+                    resultAGrid.unCheckAllRows();
                     popDataWindow.setOptions({"title": "资产上会单详情"});
                     fixedAssetsWindowDetail(e.model.discussId, e.model.discussNo, e.model.discussName, e.model.discussDate, "wasting")
                 }
@@ -234,8 +235,8 @@ $(function () {
 });
 
 // 自定义资产弹窗
-function fixedAssetsWindow(type, id, scrappedNo, detailId, fileCode) {
-    var url = IPLATUI.CONTEXT_PATH + "/web/FASH0101?initLoad&faScrapId=" + id + "&type=" + type + "&scrappedNo=" + scrappedNo + "&detailId=" + detailId + "&fileCode=" + fileCode;
+function fixedAssetsWindow(discussId, discussNo, discussName, discussDate, type) {
+    var url = IPLATUI.CONTEXT_PATH + "/web/FASH0101?initLoad&discussId=" + discussId + "&discussNo=" + discussNo + "&discussName=" + discussName + "&discussDate=" + discussDate + "&type=" + type;
     var popData = $("#popData");
     popData.data("kendoWindow").setOptions({
         open: function () {

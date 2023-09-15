@@ -134,7 +134,7 @@ $(function() {
                 var deptNum = IPLAT.EFSelect.value($("#inqu_status-0-deptName"));
                 // alert("deptName"+deptName)
                 if (deptNum == ""){
-                    IPLAT.alert("请选择处理部门/单位","error");
+                    IPLAT.alert("请选择处理部门/单位");
                     return
                 }
             }

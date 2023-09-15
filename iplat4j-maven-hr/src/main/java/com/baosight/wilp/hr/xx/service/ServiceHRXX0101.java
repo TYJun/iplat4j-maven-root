@@ -2,15 +2,17 @@ package com.baosight.wilp.hr.xx.service;
 
 import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.baosight.iplat4j.core.ei.EiInfo;
+import com.baosight.iplat4j.core.ioc.spring.PlatApplicationContext;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
 import com.baosight.iplat4j.core.util.DateUtils;
 import com.baosight.wilp.hr.common.HrUtils;
-import com.baosight.wilp.hr.common.StringUtil;
+import com.baosight.wilp.hr.common.SerialNoUtils;
 import com.baosight.wilp.hr.xx.domain.HrMan;
 import com.baosight.xservices.xs.util.UserSession;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
+
 
 /**
  *人员信息新增编辑页面
@@ -25,20 +27,21 @@ import java.util.*;
  * @Copyright: 2022 www.bonawise.com Inc. All rights reserved.
  */
 public class ServiceHRXX0101 extends ServiceBase {
-    /**
-     * 初始化查询
-     * <p>Title: initLoad</p>
-     * <p>Description: </p>
-     * @param info
+	/**
+	 * 初始化查询
+	 * <p>Title: initLoad</p>
+	 * <p>Description: </p>
+	 * @param info
 	 * id  主键
-     * @return
-     * 		info
-     * @see ServiceBase#query(EiInfo)
-     */
+	 * @return
+	 * 		info
+	 * @see ServiceBase#query(EiInfo)
+	 */
 	@SuppressWarnings("all")
 	public EiInfo initLoad(EiInfo info) {
 		// 如果传过来的type值为edit则是编辑页面回显数据
-		if(info.getString("type").equals("edit")) {
+		String type = info.getString("type");
+		if(type.contains("edit")) {
 			Map map = new HashMap();
 			map.put("id", info.getString("id") == null ? "" : info.getString("id"));
 			// 获取id 查询主表数据
@@ -48,13 +51,14 @@ public class ServiceHRXX0101 extends ServiceBase {
 			}
 			// 获取attr中属性放入info中
 			info.setAttr(list.get(0).toMap());
-			info.set("type","edit");
+			info.set("type",type);
 			// 查询tab页信息,履历信息和证书信息
 			List list1 = dao.query("HRXX02.query", map);
 			List list2 = dao.query("HRXX03.query", map);
 			info.addRows("resultC", list1);
 			info.addRows("resultD", list2);
 		}
+		com.baosight.iplat4j.core.web.threadlocal.UserSession.setOutRequestProperty("type", info.getString("type"));
 		return info;
 	}
 
@@ -94,29 +98,33 @@ public class ServiceHRXX0101 extends ServiceBase {
 		String dataGroupCode = userInfo.get("dataGroupCode").toString();
 		String serviceDeptNum = info.getString("serviceDeptNum");
 		String deptNum = info.getString("deptNum");
-		String workNo = info.getString("workNo");
+		String managementDeptNum = info.getString("managementDeptNum");
+		String workNo = "";
+		if("add".equals(info.getString("type"))){
+			workNo = SerialNoUtils.generateNumberSerialNo("hr_user", "TH", 5);
+		}
 		String realName = info.getString("realName");
 		String sex = info.getString("sex");
 		String birthPlace = info.getString("birthPlace");
 		String kampong = info.getString("kampong");
 		String manCode = info.getString("manCode");
+		String maritalStatus = info.getString("maritalStatus");
 		String schoolingCode = info.getString("schoolingCode");
+		String highestDegree = info.getString("highestDegree");
+		String highestEducational = info.getString("highestEducational");
 		String jobCode = info.getString("jobCode");
 		String politicalStatus = info.getString("politicalStatus");
 		String salary = StringUtils.isBlank(info.getString("salary")) ? "0":info.getString("salary");
 		String birthDate = info.getString("birthDate");
 		String preInTime = info.getString("preInTime");
+		String emergency = info.getString("emergency");
+		String emergencyPhone = info.getString("emergencyPhone");
+		String personnelCategory = info.getString("personnelCategory");
 		String phone = info.getString("phone");
 		String health = info.getString("health");
 		String familyAddress = info.getString("familyAddress");
 		String company = info.getString("company");
 		String memo = info.getString("memo");
-		String maritalStatus = info.getString("maritalStatus");
-		String personnelCategory = info.getString("personnelCategory");
-		String highestEducational = info.getString("highestEducational");
-		String highestDegree = info.getString("highestDegree");
-		String emergency = info.getString("emergency");
-		String emergencyPhone = info.getString("emergencyPhone");
 		Map map = new HashMap<>();
 		// 获取附件集合
 		List<Map<String,String>> fileArray = (List<Map<String, String>>) info.get("fileArray");
@@ -124,33 +132,34 @@ public class ServiceHRXX0101 extends ServiceBase {
 		// 封装数据
 		map.put("serviceDeptNum", serviceDeptNum);
 		map.put("deptNum", deptNum);
+		map.put("managementDeptNum", managementDeptNum);
 		map.put("workNo", workNo);
 		map.put("realName", realName);
 		map.put("sex", sex);
 		map.put("birthPlace", birthPlace);
 		map.put("kampong", kampong);
 		map.put("manCode", manCode);
+		map.put("maritalStatus", maritalStatus);
 		map.put("schoolingCode", schoolingCode);
+		map.put("highestDegree", highestDegree);
+		map.put("highestEducational", highestEducational);
 		map.put("jobCode", jobCode);
 		map.put("politicalStatus", politicalStatus);
 		map.put("salary", salary);
 		map.put("birthDate", birthDate);
 		map.put("preInTime", preInTime);
+		map.put("emergency", emergency);
+		map.put("emergencyPhone", emergencyPhone);
+		map.put("personnelCategory", personnelCategory);
 		map.put("phone", phone);
 		map.put("health", health);
 		map.put("familyAddress", familyAddress);
 		map.put("company", company);
 		map.put("memo", memo);
-		map.put("maritalStatus", maritalStatus);
-		map.put("personnelCategory", personnelCategory);
-		map.put("highestEducational", highestEducational);
-		map.put("highestDegree", highestDegree);
-		map.put("emergency", emergency);
-		map.put("emergencyPhone", emergencyPhone);
 		// 状态为新建状态
-        map.put("statusCode","01");
+		map.put("statusCode","01");
 		// 如果type的值为edit时则是编辑页面
-		if ("edit".equals(info.getString("type"))){
+		if ("edit".equals(info.getString("type")) || "in_edit".equals(info.getString("type"))){
 			String id =info.getString("id");
 			map.put("id",id);
 			// 是否存在重复工号
@@ -194,91 +203,10 @@ public class ServiceHRXX0101 extends ServiceBase {
 		return info;
 	}
 
-	public EiInfo getUserInfo(EiInfo info){
-		//获取前端参数
-		HashMap<String, Object> attr = (HashMap<String, Object>) info.getAttr().get("paramObject");
-
-		String updateDate = StringUtil.toString(attr.get("updateDate"));
-
-		Map map = new HashMap();
-		map.put("updateDate", updateDate);
-
-		//数据更新
-		List<Map<String, String>> list = dao.query("HRXX01.getUserInfo", map);
-		//页面返回
-
-		info.set("obj", list);
-		info.set("msg", "200");
-		return info;
-
-	}
-
-	public EiInfo putUserInfo(EiInfo info){
-		// 获取前台传来的数据
-//		Map<String, Object> userInfo = HrUtils.getUserInfo(UserSession.getUser().getUsername());
-//		String name =userInfo.get("name").toString();
-//		String dataGroupCode = userInfo.get("dataGroupCode").toString();
-		String serviceDeptNum = info.getString("serviceDeptNum");
-		String deptNum = info.getString("deptNum");
-		String workNo = info.getString("workNo");
-		String realName = info.getString("realName");
-		String sex = info.getString("sex");
-		String birthPlace = info.getString("birthPlace");
-		String kampong = info.getString("kampong");
-		String manCode = info.getString("manCode");
-		String schoolingCode = info.getString("schoolingCode");
-		String jobCode = info.getString("jobCode");
-		String politicalStatus = info.getString("politicalStatus");
-		String salary = StringUtils.isBlank(info.getString("salary")) ? "0":info.getString("salary");
-		String birthDate = info.getString("birthDate");
-		String preInTime = info.getString("preInTime");
-		String phone = info.getString("phone");
-		String health = info.getString("health");
-		String familyAddress = info.getString("familyAddress");
-		String company = info.getString("company");
-		String memo = info.getString("memo");
-		String maritalStatus = info.getString("maritalStatus");
-		String personnelCategory = info.getString("personnelCategory");
-		String highestEducational = info.getString("highestEducational");
-		String highestDegree = info.getString("highestDegree");
-		String emergency = info.getString("emergency");
-		String emergencyPhone = info.getString("emergencyPhone");
-		Map map = new HashMap<>();
-		// 获取附件集合
-		List<Map<String,String>> fileArray = (List<Map<String, String>>) info.get("fileArray");
-
-		// 封装数据
-		map.put("serviceDeptNum", serviceDeptNum);
-		map.put("deptNum", deptNum);
-		map.put("workNo", workNo);
-		map.put("realName", realName);
-		map.put("sex", sex);
-		map.put("birthPlace", birthPlace);
-		map.put("kampong", kampong);
-		map.put("manCode", manCode);
-		map.put("schoolingCode", schoolingCode);
-		map.put("jobCode", jobCode);
-		map.put("politicalStatus", politicalStatus);
-		map.put("salary", salary);
-		map.put("birthDate", birthDate);
-		map.put("preInTime", preInTime);
-		map.put("phone", phone);
-		map.put("health", health);
-		map.put("familyAddress", familyAddress);
-		map.put("company", company);
-		map.put("memo", memo);
-		map.put("maritalStatus", maritalStatus);
-		map.put("personnelCategory", personnelCategory);
-		map.put("highestEducational", highestEducational);
-		map.put("highestDegree", highestDegree);
-		map.put("emergency", emergency);
-		map.put("emergencyPhone", emergencyPhone);
-		// 状态为新建状态
-		map.put("statusCode","01");
-
-		info.set("obj", map);
-		System.out.println("obj:"+info);
-		return info;
+	public EiInfo queryDept(EiInfo inInfo) {
+		List<Map<String, String>> list = dao.query("HRXX01.queryDept", PlatApplicationContext.getProperty("projectSchema"));
+		inInfo.addRows("h_dept", list);
+		return inInfo;
 	}
 
 }

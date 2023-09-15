@@ -4,6 +4,8 @@ import com.baosight.iplat4j.core.ei.EiBlock;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
 import com.baosight.iplat4j.core.util.StringUtils;
+import com.baosight.wilp.common.util.BaseDockingUtils;
+import com.baosight.wilp.common.util.CommonUtils;
 import com.baosight.wilp.fa.cf.domain.FaSplitVO;
 import com.baosight.wilp.fa.da.domain.FaInfoDO;
 import com.baosight.wilp.fa.utils.OneSelfUtils;
@@ -31,8 +33,7 @@ public class ServiceFACF01 extends ServiceBase {
 	 */
 	@Override
 	public EiInfo initLoad(EiInfo info) {
-		// 1.调用固定资产拆分管理查询方法.
-		return this.query(info);
+		return confirmedQuery(info);
 	}
 
 	/**
@@ -95,8 +96,27 @@ public class ServiceFACF01 extends ServiceBase {
 	 * @date 2022/12/10 15:51
 	 */
 	public EiInfo confirmedQuery(EiInfo info) {
+		EiBlock eiBlock = info.getBlock("inqu_status");
+		if (eiBlock != null) {
+			Map<String, String> row = eiBlock.getRow(0);
+			String deptNameSplit = row.get("deptName");
+			if (StringUtils.isNotEmpty(deptNameSplit)) {
+				String[] split = deptNameSplit.split(",");
+				for (int i = 0; i < split.length; i++) {
+					split[i] = "dept_name LIKE concat ( '%', trim('" + split[i] + "'), '%' )";
+				}
+				String param = "(" + org.apache.commons.lang.StringUtils.join(split, " OR ") + ")";
+				info.setCell("inqu_status", 0, "deptNameSplit", param);
+			}
+		}
 		info.setCell("inqu_status", 0, "inAccountStatus", "confirmed");
 		EiInfo outInfo = super.query(info, "FACF01.queryFaInfoDOInfo", new FaInfoDO(), false, null, null, "resultA", "resultA");
+		// 1.获取参数,处理参数
+		Map<String, Object> map = CommonUtils.buildParamter(info, "inqu_status", "dept");
+		// 2.调用微服务接口S_AC_FW_05，获取科室信息
+		map.remove("limit");
+		List<Map<String, String>> maps = dao.query("FADA01.queryDept", map);
+		outInfo.setRows("dept", maps);
 		return outInfo;
 	}
 

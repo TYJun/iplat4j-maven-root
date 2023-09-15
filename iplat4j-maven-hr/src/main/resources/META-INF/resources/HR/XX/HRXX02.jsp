@@ -9,10 +9,16 @@
 	<EF:EFRegion id="inqu" title="查询条件">
 		<div class="row">
 			<EF:EFInput ename="inqu_status-0-realName" cname="姓名" colWidth="3" ratio="3:8"/>
+			<EF:EFSelect ename="inqu_status-0-sex" cname="性别" colWidth="3" ratio="3:8">
+				<EF:EFOption label="全部" value=""/>
+				<EF:EFOption label="男" value="男"/>
+				<EF:EFOption label="女" value="女"/>
+			</EF:EFSelect>
 			<EF:EFInput ename="inqu_status-0-workNo" cname="工号" colWidth="3" ratio="3:8"/>
-			<EF:EFInput ename="inqu_status-0-jobCode" cname="岗位" colWidth="3" ratio="3:8"/>
 			<EF:EFInput ename="inqu_status-0-company" cname="公司名称" colWidth="3" ratio="3:8"/>
-			<EF:EFInput ename="inqu_status-0-deptNum" cname="所属科室" colWidth="3" ratio="3:8"/>
+			<EF:EFInput ename="inqu_status-0-deptNum" cname="所属部门" colWidth="3" ratio="3:8" />
+			<EF:EFInput ename="inqu_status-0-serviceDeptNum" cname="服务部门" colWidth="3" ratio="3:8" />
+			<EF:EFInput ename="inqu_status-0-managementDeptNum" cname="管理部门" colWidth="3" ratio="3:8"  readonly="true"/>
 			<EF:EFSelect ename="inqu_status-0-statusCode" cname="状态" colWidth="3" ratio="3:8">
 				<EF:EFOption label="全部" value=""/>
 				<EF:EFCodeOption codeName="wilp.hr.personCode"/>
@@ -28,11 +34,15 @@
 			<EF:EFColumn ename="id" cname="主键" width="100" hidden="true" align="center" enable="false"/>
 			<EF:EFColumn ename="statusCode" cname="主键" width="100" hidden="true" align="center" enable="false"/>
 			<EF:EFColumn ename="realName" cname="姓名" width="100" align="center" enable="false"/>
+			<EF:EFColumn ename="workNo" cname="工号" width="100" align="center" enable="false"/>
 			<EF:EFColumn ename="sex" cname="性别" width="100" align="center" enable="false"/>
+			<EF:EFColumn ename="company" cname="公司名称" width="100" align="center" enable="false"/>
 			<EF:EFColumn ename="deptNum" cname="所属部门" width="100" align="center" enable="false"/>
 			<EF:EFColumn ename="serviceDeptNum" cname="服务部门" width="100" align="center" enable="false"/>
+			<EF:EFColumn ename="managementDeptNum" cname="管理部门" width="100" align="center" enable="false"/>
 			<EF:EFColumn ename="schoolingCode" cname="学历" width="100" align="center" enable="false"/>
 			<EF:EFColumn ename="politicalStatus" cname="政治面貌" width="100" align="center" enable="false"/>
+			<EF:EFColumn ename="jobCode" cname="岗位" width="100" align="center" enable="false"/>
 			<EF:EFColumn ename="preInTime" cname="预计入职时间" width="150" align="center" enable="false"/>
 			<EF:EFColumn ename="inTime" cname="入职时间" width="150" align="center" enable="false"/>
 			<EF:EFColumn ename="preOutTime" cname="预离职时间" width="150" align="center" enable="false"/>

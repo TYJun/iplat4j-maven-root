@@ -301,15 +301,27 @@ $(function () {
                         var checkRows = resultGrid.getCheckedRows();
                         var model = checkRows[0];
                         if (model) {
-                            $("#info-0-goodsTypeCode").val(model['typeCode']);
-                            $("#info-0-goodsTypeCode_textField").val(model['typeName']);
-                            $("#info-0-goodsClassifyCode").val(model['parentCode']);
-                            $("#info-0-goodsClassifyName").val(model['parentName']);
+                            $("#info-0-goodsCategoryCode").val(model['typeCode']);
+                            $("#info-0-goodsCategoryCode_textField").val(model['typeName']);
+                            // $("#info-0-goodsClassifyCode").val(model['parentCode']);
+                            // $("#info-0-goodsClassifyName").val(model['parentName']);
                             $("#info-0-useYears").val(model['useYears']);
+                            var eiInfo = new EiInfo();
+                            eiInfo.set("goodsCategoryCode", model['typeCode']);
+                            EiCommunicator.send("FADA0101", "backGoodsCategoryCode", eiInfo, {
+                                onSuccess: function (ei) {
+                                    var list = ei.extAttr.list
+                                    $("#info-0-goodsTypeCode").val(list.parentCode);
+                                    $("#info-0-goodsTypeName").val(list.parentName);
+                                    $("#info-0-goodsClassifyCode").val(list.typeCode);
+                                    $("#info-0-goodsClassifyName").val(list.typeName);
+                                }
+                            })
                             var popupGridWindow = $("#ef_popup_grid").data("kendoWindow");
                             popupGridWindow.close();
                         } else {
-                            NotificationUtil("请选择资产类别", "warning");
+                            NotificationUtil("请选择资产末级", "warning");
+                            return
                         }
                     },
 
@@ -349,20 +361,24 @@ $(function () {
                         NotificationUtil("请检查使用年限类型", "warning")
                         return
                     }
-                    var warranty = $("#info-0-warranty").val();
-                    console.log(warranty)
-                    if ($("#info-0-warranty").val() == "") {
-                        NotificationUtil("请检查保质期", "warning")
+                    if ($("#info-0-goodsCategoryCode").val() == ""){
+                        NotificationUtil("请选择资产末级", "warning")
                         return
                     }
+                    var warranty = $("#info-0-warranty").val();
+                    // console.log(warranty)
+                    // if ($("#info-0-warranty").val() == "") {
+                    //     NotificationUtil("请检查保修期", "warning")
+                    //     return
+                    // }
                     if ($("#info-0-warranty").val() != "") {
-                        if ($("#info-0-warranty").val() % 1 !== 0) {
-                            NotificationUtil("请检查保质期", "warning")
+                        if ($("#info-0-warranty").val() % 1 != 0) {
+                            NotificationUtil("请检查保修期", "warning")
                             return
                         }
                     }
                     if (isNaN($("#info-0-warranty").val())) {
-                        NotificationUtil("请检查保质期", "warning")
+                        NotificationUtil("请检查保修期", "warning")
                         return
                     }
                     eiInfo.set("createType", "write");
@@ -398,7 +414,6 @@ $(function () {
                     }
                     EiCommunicator.send("FADA0101", "saveFaInfo", eiInfo, {
                         onSuccess: function (ei) {
-                            console.log(ei)
                             closeParentWindow()
                         }
                     })

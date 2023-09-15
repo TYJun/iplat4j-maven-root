@@ -60,6 +60,7 @@
                goods_type_code                                   AS "goodsTypeCode",
                goods_type_name                                   AS "goodsTypeName",
                model                                             AS "model",
+               spec                                             AS "spec",
                amount                                            AS "amount",
                price                                             AS "price",
                buy_cost                                          AS "buyCost",
@@ -69,6 +70,7 @@
                DATE_FORMAT(use_date, '%Y-%m-%d')        AS "useDate",
                build                                             AS "build",
                floor                                             AS "floor",
+               room                                             AS "room",
                install_location                                  AS "installLocation",
                install_location_num                              AS "installLocationNum",
                dept_num                                          AS "deptNum",
@@ -77,6 +79,9 @@
                    WHEN '010' THEN '待用'
                    WHEN '020' THEN '在用'
                    WHEN '030' THEN '现场停用'
+                   WHEN '031' THEN '调拨中'
+                   WHEN '035' THEN '报废中'
+                   WHEN '040' THEN '报废提交'
                    WHEN '050' THEN '预报废'
                    WHEN '060' THEN '报废'
                    END                                           AS "statusCode",
@@ -139,7 +144,7 @@
 
     <update id="revocationFaInfoStatus" parameterClass="java.util.ArrayList">
         UPDATE fa_info SET status_code = '020'
-        WHERE status_code = '030' AND id IN
+        WHERE status_code = '031' AND id IN
         (SELECT faInfo_id FROM fa_transfer_detail WHERE transfer_no IN
         <iterate open="(" close=")" conjunction=",">
             #transferNoList[]#
@@ -270,6 +275,32 @@
             dept_name = compose.new_use_dept_name
     </update>
 
+    <update id="updateFaInfoByTransferNo" parameterClass="java.util.HashMap">
+        update fa_info info inner join
+            (SELECT
+                detail.faInfo_id,
+                transfer.confirm_dept_num,
+                transfer.confirm_dept_name,
+                transfer.confirm_build,
+                transfer.confirm_floor,
+                transfer.confirm_room,
+                transfer.confirm_location_num,
+                transfer.confirm_location_name
+            FROM
+            fa_transfer_detail detail
+            LEFT JOIN fa_transfer transfer on transfer.transfer_no = detail.transfer_no
+            where transfer.transfer_no = #transferNo#
+            ) compose
+        on info.id = compose.faInfo_id set
+            info.build = compose.confirm_build,
+            info.floor = compose.confirm_floor,
+            info.room = compose.confirm_room,
+            info.install_location_num = compose.confirm_location_num,
+            info.install_location = compose.confirm_location_name,
+            info.dept_num = compose.confirm_dept_num,
+            info.dept_name = compose.confirm_dept_name
+    </update>
+
     <select id="queryPicInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
         select file_id   fileId,
                file_name fileName,
@@ -321,6 +352,9 @@
                    WHEN '010' THEN '待用'
                    WHEN '020' THEN '在用'
                    WHEN '030' THEN '现场停用'
+                   WHEN '031' THEN '调拨中'
+                   WHEN '035' THEN '报废中'
+                   WHEN '040' THEN '报废提交'
                    WHEN '050' THEN '预报废'
                    WHEN '060' THEN '报废'
                    END                                           AS "statusCode",
@@ -430,6 +464,9 @@
         <isNotEmpty prepend=" AND " property="deptName">
             dept_name like concat ('%',trim(#deptName#),'%')
         </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="statusCode">
+            status_code = #statusCode#
+        </isNotEmpty>
     </select>
 
     <select id="queryFaInfoDOInfo" parameterClass="java.util.HashMap"
@@ -438,6 +475,7 @@
         id,
         id AS "faInfoId",
         enter_bill_no AS "enterBillNo",
+        out_bill_no AS "outBillNo",
         mat_num AS "matNum",
         mat_name AS "matName",
         mat_type_num AS "matTypeNum",
@@ -472,6 +510,9 @@
         WHEN '010' THEN '待用'
         WHEN '020' THEN '在用'
         WHEN '030' THEN '现场停用'
+        WHEN '031' THEN '调拨中'
+        WHEN '035' THEN '报废中'
+        WHEN '040' THEN '报废提交'
         WHEN '050' THEN '预报废'
         WHEN '060' THEN '报废'
         END AS "statusCode",
@@ -508,7 +549,7 @@
         archive_flag AS "archiveFlag",
         split_reason AS "splitReason"
         FROM fa_info
-        WHERE lock_flag NOT IN ("4") AND status_code IN ('010','020')
+        WHERE lock_flag NOT IN ("4") AND status_code IN ('010','020','031')
         <isEqual prepend="AND" property="role" compareValue="user">
             dept_name IN (
             <iterate property="lookDeptName" conjunction=",">
@@ -567,10 +608,13 @@
         <isNotEmpty prepend=" AND " property="fundingSourceNum">
             fundingSource_num = #fundingSourceNum#
         </isNotEmpty>
-        <isNotEmpty prepend=" AND " property="deptName">
-            dept_name like concat ('%',trim(#deptName#),'%')
+        <isNotEmpty prepend=" AND " property="deptNameSplit">
+            $deptNameSplit$
         </isNotEmpty>
-        order by dept_name,rec_revise_time DESC,rec_create_time DESC,goods_num
+        <isNotEmpty prepend=" AND " property="statusCode">
+            status_code = #statusCode#
+        </isNotEmpty>
+        order by status_code,dept_name,goods_num
     </select>
     <!--    -->
 
@@ -673,12 +717,18 @@
             audit_reason LIKE concat('%',trim(#auditReason#),'%')
         </isNotEmpty>
         <isNotEmpty prepend="and" property="applyTimeS">
-            DATE_FORMAT( apply_time, '%Y-%m-%d' ) >= #buyDateS#
+            DATE_FORMAT( apply_time, '%Y-%m-%d' ) >= #applyTimeS#
         </isNotEmpty>
         <isNotEmpty prepend="and" property="applyTimeE">
             #applyTimeE# >= DATE_FORMAT( apply_time, '%Y-%m-%d' )
         </isNotEmpty>
-        ORDER BY apply_dept_name,apply_time DESC,transfer_no DESC
+        <isNotEmpty prepend="and" property="applyDeptName">
+            apply_dept_name LIKE concat('%',trim(#applyDeptName#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="confirmDeptName">
+            confirm_dept_name LIKE concat('%',trim(#confirmDeptName#),'%')
+        </isNotEmpty>
+        ORDER BY apply_time DESC
     </select>
 
     <select id="transferRecordCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
@@ -747,6 +797,12 @@
         <isNotEmpty prepend="and" property="auditReason">
             audit_reason LIKE concat('%',trim(#auditReason#),'%')
         </isNotEmpty>
+        <isNotEmpty prepend="and" property="applyDeptName">
+            apply_dept_name LIKE concat('%',trim(#applyDeptName#),'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="confirmDeptName">
+            confirm_dept_name LIKE concat('%',trim(#confirmDeptName#),'%')
+        </isNotEmpty>
     </select>
     <!--    -->
 
@@ -754,10 +810,12 @@
     <insert id="saveFaTransferInfo" parameterClass="com.baosight.wilp.fa.db.domain.FaTransferVO">
         INSERT INTO fa_transfer
         (id, transfer_no, apply_dept_num, apply_dept_name, apply_person, apply_time, apply_reason,
-         apply_fileCode, confirm_dept_num, confirm_dept_name, audit_time, transfer_status, `source`)
+         apply_fileCode, confirm_dept_num, confirm_dept_name, confirm_build, confirm_floor, confirm_room,
+         confirm_location_num, confirm_location_name, audit_time, transfer_status, `source`)
         VALUES
         (#id#, #transferNo#, #applyDeptNum#, #applyDeptName#, #applyPerson#, #applyTime#, #applyReason#,
-         #applyFileCode#, #confirmDeptNum#, #confirmDeptName#, #auditTime#, #transferStatus#, #source#)
+         #applyFileCode#, #confirmDeptNum#, #confirmDeptName#, #confirmBuild#, #confirmFloor#, #confirmRoom#,
+         #confirmLocationNum#, #confirmLocationName#, #auditTime#, #transferStatus#, #source#)
     </insert>
 
     <insert id="saveFaTransferDetailInfo" parameterClass="java.util.ArrayList">
@@ -775,7 +833,7 @@
     </insert>
 
     <update id="updateFaInfoStatus" parameterClass="java.util.ArrayList">
-        UPDATE fa_info SET status_code = '030'
+        UPDATE fa_info SET status_code = '031'
         WHERE status_code = '020' AND
         id IN
         <iterate open="(" close=")" conjunction=",">
@@ -796,7 +854,7 @@
     <!-- 更新移除部分的资产状态 -->
     <update id="updatePart" parameterClass="java.util.HashMap">
         update fa_info set status_code = "020"
-        where status_code = "030" and id IN (
+        where status_code = "031" and id IN (
         select faInfo_id
         from fa_transfer_detail
         where transfer_no = #transferNo#
@@ -858,7 +916,8 @@
 
     <update id="updateFaInfoStatusUsing" parameterClass="java.util.HashMap">
         UPDATE fa_info SET dept_num = #deptNum#,dept_name = #deptName#,
-        build = "",floor = "",room = "",install_location_num = "",install_location = ""
+        build = #build#,floor = #floor#,room = #room#,install_location_num = #installLocationNum#,
+        install_location = #installLocation#
         WHERE status_code = '020' AND id IN
         <iterate open="(" close=")" conjunction="," property="faInfoIdList">
             #faInfoIdList[]#
@@ -898,4 +957,22 @@
         </iterate>
     </update>
     <!---->
+
+    <!-- 查看调拨详情 -->
+    <select id="transferDetailResult" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            id,
+            faInfo_id AS "faInfoId",
+            goods_num AS "goodsNum",
+            goods_name AS "goodsName",
+            model,
+            spec
+        from
+            fa_transfer_detail
+        where
+            1 = 1
+        <isNotEmpty property="transferNo" prepend="and">
+            transfer_no = #transferNo#
+        </isNotEmpty>
+    </select>
 </sqlMap>

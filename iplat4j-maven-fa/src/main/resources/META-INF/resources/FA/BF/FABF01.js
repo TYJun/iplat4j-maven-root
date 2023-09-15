@@ -61,6 +61,12 @@ $(function () {
                         click: function () {
                             var checkRows = resultAGrid.getCheckedRows()
                             if (checkRows.length > 0) {
+                                for (let i = 0; i < checkRows.length; i++) {
+                                    if (__ei.deptName != checkRows[i].deptName) {
+                                        NotificationUtil("权限不足，非当前科室无法进行报废", "warning");
+                                        return;
+                                    }
+                                }
                                 setConfig(__ei.workNo, __ei.name, "FA");
                                 // setConfig("testzw", "赵伟", "FA");
                                 getSign(fileCode => {

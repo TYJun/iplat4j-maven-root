@@ -27,7 +27,7 @@
 				</div>
 			</EF:EFRegion>
 			<EF:EFRegion id="result" title="归口科室信息">
-				<EF:EFGrid blockId="result" autoDraw="no" readonly="true" checkMode="single,row" rowNo="true" height="520px">
+				<EF:EFGrid blockId="result" autoDraw="no" readonly="true" checkMode="single,row" rowNo="true" height="526px">
 					<EF:EFColumn ename="deptId" cname="deptId" width="100" enable="false" align="center" hidden="true"/>
 					<EF:EFColumn ename="identifyDeptName" cname="鉴定科室" width="100" enable="false" align="center"/>
 					<EF:EFColumn ename="functionDeptName" cname="归口科室" width="100" enable="false" align="center"/>

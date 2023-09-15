@@ -24,16 +24,38 @@ $(function () {
                         click: function () {
                             var checkRows = resultAGrid.getCheckedRows()
                             if (checkRows.length > 0) {
-                                var eiInfo = new EiInfo();
-                                eiInfo.set("discussId",__ei.discussId);
-                                eiInfo.set("faInfoList", checkRows);
-                                eiInfo.set("lockFlag", 1);
-                                EiCommunicator.send("FASH00", "updateFaInfoLock", eiInfo, {
-                                    onSuccess : function(ei) {
-                                        addRowsCheck(checkRows);
-                                        window.parent['popDataWindow'].close();
+                                if (__ei.discussId != undefined && __ei.discussId != "undefined"){
+                                    var eiInfo = new EiInfo();
+                                    eiInfo.set("discussId",__ei.discussId);
+                                    eiInfo.set("faInfoList", checkRows);
+                                    eiInfo.set("lockFlag", 1);
+                                    EiCommunicator.send("FASH00", "updateFaInfoLock", eiInfo, {
+                                        onSuccess : function(ei) {
+                                            addRowsCheck(checkRows);
+                                            var pageCount = 0.00;
+                                            var DataItems = window.parent.resultGrid.getDataItems();
+                                            for (let j = 0; j < DataItems.length; j++) {
+                                                pageCount += $.isNumeric(DataItems[j].buyCost) ? + DataItems[j].buyCost : 0;
+                                            }
+                                            window.parent.methods.pageCountCallback(pageCount.toFixed(2));
+                                            window.parent.resultGrid.dataSource.page(1);
+                                            window.parent['popDataWindow'].close();
+                                        }
+                                    });
+                                } else {
+                                    addRowsCheck(checkRows);
+                                    window.parent['popDataWindow'].close();
+                                    var netValueCount = 0.00;
+                                    var pageCount = 0.00;
+                                    var DataItems = window.parent.resultGrid.getDataItems();
+                                    for (let j = 0; j < DataItems.length; j++) {
+                                        pageCount += $.isNumeric(DataItems[j].buyCost) ? + DataItems[j].buyCost : 0;
+                                        netValueCount += $.isNumeric(DataItems[j].netAssetValue) ? + DataItems[j].netAssetValue : 0;
                                     }
-                                });
+                                    window.parent.methods.pageCount01Callback(pageCount.toFixed(2));
+                                    window.parent.methods.netValueCount01Callback(netValueCount.toFixed(2));
+
+                                }
                             } else {
                                 NotificationUtil("请选择一条记录", "warning");
                             }

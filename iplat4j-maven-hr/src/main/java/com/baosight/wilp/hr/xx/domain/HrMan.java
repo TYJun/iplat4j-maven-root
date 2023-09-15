@@ -28,8 +28,11 @@ public class HrMan extends DaoEPBase {
     private String birthPlace = " ";		/* 籍贯*/
     private String kampong = " ";		/* 民族*/
     private String manCode = " ";		/* 身份证*/
+    private String maritalStatus = " ";/* 婚姻状况 */
     private BigDecimal salary = new BigDecimal("0");		/* 基本工资*/
     private String schoolingCode = " ";		/* 学历*/
+    private String highestDegree = " ";    /* 最高学位 */
+    private String highestEducational= " "; /*最高学历*/
     private String politicalStatus = " ";		/* 政治面貌*/
     private String birthDate = " ";		/* 出生年月*/
     private String phone = " ";		/* 联系电话*/
@@ -42,6 +45,10 @@ public class HrMan extends DaoEPBase {
     private String company = " ";		/* 公司*/
     private String memo = " ";		/* 备注*/
     private String preInTime = " ";		/* 预计入职时间*/
+    private String emergency= " ";   /* 紧急联系人 */
+    private String emergencyPhone = " "; /*紧急联系人电话 */
+    private String managementDeptNum = " "; /*管理部门 */
+    private String personnelCategory = " ";   /* 人员类别 */
     private String inTime = " ";		/* 入职时间*/
     private String preOutTime = " ";		/* 预计离职时间*/
     private String outTime = " ";		/* 离职日期*/
@@ -52,6 +59,7 @@ public class HrMan extends DaoEPBase {
     private String updatorName = " ";		/* 更改人*/
     private String updatorId = " ";		/* 更改人ID*/
     private String operatorType = " ";		/* 最后操作类型*/
+
     private String statusCode = " ";		/* 状态(01-新建，02-入职,03-取消入职，04-离职)*/
 
     /**
@@ -85,6 +93,10 @@ public class HrMan extends DaoEPBase {
         eiColumn.setDescName("身份证");
         eiMetadata.addMeta(eiColumn);
 
+        eiColumn = new EiColumn("maritalStatus");
+        eiColumn.setDescName("婚姻状况");
+        eiMetadata.addMeta(eiColumn);
+
         eiColumn = new EiColumn("salary");
         eiColumn.setType("N");
         eiColumn.setScaleLength(0);
@@ -96,12 +108,25 @@ public class HrMan extends DaoEPBase {
         eiColumn.setDescName("学历");
         eiMetadata.addMeta(eiColumn);
 
+        eiColumn = new EiColumn("highestDegree");
+        eiColumn.setDescName("最高学位");
+        eiMetadata.addMeta(eiColumn);
+
+        eiColumn = new EiColumn("highestEducational");
+        eiColumn.setDescName("最高学历");
+        eiMetadata.addMeta(eiColumn);
+
         eiColumn = new EiColumn("politicalStatus");
         eiColumn.setDescName("政治面貌");
         eiMetadata.addMeta(eiColumn);
 
         eiColumn = new EiColumn("birthDate");
         eiColumn.setDescName("出生年月");
+        eiMetadata.addMeta(eiColumn);
+
+
+        eiColumn = new EiColumn("managementDeptNum");
+        eiColumn.setDescName("管理部门");
         eiMetadata.addMeta(eiColumn);
 
         eiColumn = new EiColumn("phone");
@@ -143,6 +168,19 @@ public class HrMan extends DaoEPBase {
         eiColumn = new EiColumn("preInTime");
         eiColumn.setDescName("预计入职时间");
         eiMetadata.addMeta(eiColumn);
+
+        eiColumn = new EiColumn("emergency");
+        eiColumn.setDescName("紧急联系人");
+        eiMetadata.addMeta(eiColumn);
+
+        eiColumn = new EiColumn("emergencyPhone");
+        eiColumn.setDescName("紧急联系人电话");
+        eiMetadata.addMeta(eiColumn);
+
+        eiColumn = new EiColumn("personnelCategory");
+        eiColumn.setDescName("人员类别");
+        eiMetadata.addMeta(eiColumn);
+
 
         eiColumn = new EiColumn("inTime");
         eiColumn.setDescName("入职时间");
@@ -289,6 +327,17 @@ public class HrMan extends DaoEPBase {
     }
 
     /**
+     * get the maritalStatus - 婚姻状况
+     * @return the maritalStatus
+     */
+    public String getMaritalStatus() {return this.maritalStatus;}
+
+    /**
+     * set the maritalStatus - 婚姻状况
+     */
+    public void setMaritalStatus(String maritalStatus) {this.maritalStatus = maritalStatus;}
+
+    /**
      * get the salary - 基本工资
      * @return the salary
      */
@@ -317,6 +366,28 @@ public class HrMan extends DaoEPBase {
     public void setSchoolingCode(String schoolingCode) {
         this.schoolingCode = schoolingCode;
     }
+
+    /**
+     * get the highestDegree - 最高学位
+     * @return the highestDegree
+     */
+    public String getHighestDegree() {return this.highestDegree;}
+
+    /**
+     * set the highestDegree - 最高学位
+     */
+    public void setHighestDegree(String highestDegree) { this.highestDegree = highestDegree;}
+
+    /**
+     * get the highestEducational - 最高学历
+     * @return the highestEducational
+     */
+    public String getHighestEducational() { return this.highestEducational;}
+
+    /**
+     * set the highestEducational - 最高学历
+     */
+    public void setHighestEducational(String highestEducational) { this.highestEducational= highestEducational;}
 
     /**
      * get the politicalStatus - 政治面貌
@@ -391,6 +462,21 @@ public class HrMan extends DaoEPBase {
      */
     public void setDeptNum(String deptNum) {
         this.deptNum = deptNum;
+    }
+
+    /**
+     * get the deptNum - 所属部门
+     * @return the deptNum
+     */
+    public String getManagementDeptNum() {
+        return this.managementDeptNum;
+    }
+
+    /**
+     * set the deptNum - 所属部门
+     */
+    public void setManagementDeptNum(String managementDeptNum) {
+        this.managementDeptNum = managementDeptNum;
     }
 
     /**
@@ -497,6 +583,39 @@ public class HrMan extends DaoEPBase {
     public void setPreInTime(String preInTime) {
         this.preInTime = preInTime;
     }
+
+    /**
+     * get the emergency - 紧急联系人
+     * @return the emergency
+     */
+    public String getEmergency() {return this.emergency;}
+
+    /**
+     * set the  emergency - 紧急联系人
+     */
+    public void setEmergency(String emergency) {this.emergency = emergency;}
+
+    /**
+     * get the emergencyPhone - 紧急联系人电话
+     * @return the emergencyPhone
+     */
+    public String getEmergencyPhone() {return this.emergencyPhone;}
+
+    /**
+     * set the  emergencyPhone - 紧急联系人电话
+     */
+    public void setEmergencyPhone(String emergencyPhone) { this.emergencyPhone = emergencyPhone;}
+
+    /**
+     * get the personnelCategory - 人员类别
+     * @return the personnelCategory
+     */
+    public String getPersonnelCategory() {return this.personnelCategory;}
+
+    /**
+     * set the  personnelCategory - 人员类别
+     */
+    public void setPersonnelCategory(String personnelCategory) {this.personnelCategory = personnelCategory;}
 
     /**
      * get the inTime - 入职时间
@@ -673,20 +792,27 @@ public class HrMan extends DaoEPBase {
         setBirthPlace(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("birthPlace")), birthPlace));
         setKampong(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("kampong")), kampong));
         setManCode(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("manCode")), manCode));
+        setMaritalStatus(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("maritalStatus")), maritalStatus));
         setSalary(NumberUtils.toBigDecimal(StringUtils.toString(map.get("salary")), salary));
         setSchoolingCode(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("schoolingCode")), schoolingCode));
+        setHighestDegree(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("highestDegree")), highestDegree));
+        setHighestEducational(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("highestEducational")), highestEducational));
         setPoliticalStatus(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("politicalStatus")), politicalStatus));
         setBirthDate(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("birthDate")), birthDate));
         setPhone(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("phone")), phone));
         setWorkNo(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("workNo")), workNo));
         setDeptNum(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("deptNum")), deptNum));
         setServiceDeptNum(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("serviceDeptNum")), serviceDeptNum));
+        setServiceDeptNum(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("managementDeptNum")), managementDeptNum));
         setJobCode(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("jobCode")), jobCode));
         setHealth(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("health")), health));
         setFamilyAddress(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("familyAddress")), familyAddress));
         setCompany(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("company")), company));
         setMemo(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("memo")), memo));
         setPreInTime(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("preInTime")), preInTime));
+        setEmergency(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("emergency")), emergency));
+        setEmergencyPhone(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("emergencyPhone")), emergencyPhone));
+        setPersonnelCategory(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("personnelCategory")), personnelCategory));
         setInTime(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("inTime")), inTime));
         setPreOutTime(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("preOutTime")), preOutTime));
         setOutTime(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("outTime")), outTime));
@@ -711,20 +837,27 @@ public class HrMan extends DaoEPBase {
         map.put("birthPlace",StringUtils.toString(birthPlace, eiMetadata.getMeta("birthPlace")));
         map.put("kampong",StringUtils.toString(kampong, eiMetadata.getMeta("kampong")));
         map.put("manCode",StringUtils.toString(manCode, eiMetadata.getMeta("manCode")));
+        map.put("maritalStatus",StringUtils.toString(maritalStatus, eiMetadata.getMeta("maritalStatus")));
         map.put("salary",StringUtils.toString(salary, eiMetadata.getMeta("salary")));
         map.put("schoolingCode",StringUtils.toString(schoolingCode, eiMetadata.getMeta("schoolingCode")));
+        map.put("highestDegree",StringUtils.toString(highestDegree, eiMetadata.getMeta("highestDegree")));
+        map.put("highestEducational",StringUtils.toString(highestEducational, eiMetadata.getMeta("highestEducational")));
         map.put("politicalStatus",StringUtils.toString(politicalStatus, eiMetadata.getMeta("politicalStatus")));
         map.put("birthDate",StringUtils.toString(birthDate, eiMetadata.getMeta("birthDate")));
         map.put("phone",StringUtils.toString(phone, eiMetadata.getMeta("phone")));
         map.put("workNo",StringUtils.toString(workNo, eiMetadata.getMeta("workNo")));
         map.put("deptNum",StringUtils.toString(deptNum, eiMetadata.getMeta("deptNum")));
         map.put("serviceDeptNum",StringUtils.toString(serviceDeptNum, eiMetadata.getMeta("serviceDeptNum")));
+        map.put("managementDeptNum",StringUtils.toString(managementDeptNum, eiMetadata.getMeta("managementDeptNum")));
         map.put("jobCode",StringUtils.toString(jobCode, eiMetadata.getMeta("jobCode")));
         map.put("health",StringUtils.toString(health, eiMetadata.getMeta("health")));
         map.put("familyAddress",StringUtils.toString(familyAddress, eiMetadata.getMeta("familyAddress")));
         map.put("company",StringUtils.toString(company, eiMetadata.getMeta("company")));
         map.put("memo",StringUtils.toString(memo, eiMetadata.getMeta("memo")));
         map.put("preInTime",StringUtils.toString(preInTime, eiMetadata.getMeta("preInTime")));
+        map.put("emergency",StringUtils.toString(emergency, eiMetadata.getMeta("emergency")));
+        map.put("emergencyPhone",StringUtils.toString(emergencyPhone, eiMetadata.getMeta("emergencyPhone")));
+        map.put("personnelCategory",StringUtils.toString(personnelCategory, eiMetadata.getMeta("personnelCategory")));
         map.put("inTime",StringUtils.toString(inTime, eiMetadata.getMeta("inTime")));
         map.put("preOutTime",StringUtils.toString(preOutTime, eiMetadata.getMeta("preOutTime")));
         map.put("outTime",StringUtils.toString(outTime, eiMetadata.getMeta("outTime")));

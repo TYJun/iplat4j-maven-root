@@ -6,7 +6,7 @@ $(function (){
         setTimeout(function(){$("#RESAVE").attr("disabled",false);},5000);
         var inInfo = new EiInfo();
         var outTime=IPLAT.EFInput.value($("#outTime"));
-        if(outTime == null && outTime==""){
+        if(outTime == null || outTime==""){
             NotificationUtil("离职时间不能为空", "error");
             return;
         }

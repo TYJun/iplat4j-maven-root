@@ -49,7 +49,7 @@
 				<EF:EFColumn ename="faConfirmId" cname="faConfirmId"  align="center" locked="true" hidden="true"/>
 				<EF:EFColumn ename="receiveType" cname="入库方式" align="center" enable="false" width="100" hidden="true"/>
 				<EF:EFColumn ename="receiveTypeName" cname="入库方式"   align="center" enable="false" width="120"/>
-				<EF:EFColumn ename="enterBillNo" cname="入库单号"  align="center" enable="false" width="200" displayType="url"/>
+				<EF:EFColumn ename="enterBillNo" cname="入库单号"  align="center" width="200" displayType="url" enable="false"/>
 				<EF:EFColumn ename="matNum" cname="物资编码" align="center" enable="false" width="200"/>
 				<EF:EFColumn ename="matName" cname="物资名称"  align="center" enable="false" width="200"/>
 				<EF:EFColumn ename="matTypeNum" cname="物资类别编码" align="center" enable="false" width="200"/>

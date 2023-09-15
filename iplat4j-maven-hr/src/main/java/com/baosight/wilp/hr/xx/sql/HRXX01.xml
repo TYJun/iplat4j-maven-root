@@ -11,8 +11,11 @@
 		birth_place	as "birthPlace",  <!-- 籍贯 -->
 		kampong	as "kampong",  <!-- 民族 -->
 		man_code	as "manCode",  <!-- 身份证 -->
+		marital_status as "maritalStatus",<!-- 婚姻状况 -->
 		salary	as "salary",  <!-- 基本工资 -->
 		schooling_code	as "schoolingCode",  <!-- 学历 -->
+		highest_degree as "highestDegree",<!-- 最高学位 -->
+		highest_educational as "highestEducational",<!-- 最高学历 -->
 		political_status	as "politicalStatus",  <!-- 政治面貌 -->
 		birth_date	as "birthDate",  <!-- 出生年月 -->
 		phone	as "phone",  <!-- 联系电话 -->
@@ -21,6 +24,9 @@
 		service_dept_num	as "serviceDeptNum",  <!-- 服务部门 -->
 		job_code	as "jobCode",  <!-- 工作岗位 -->
 		health	as "health",  <!-- 健康状况 -->
+		emergency as "emergency",<!-- 紧急联系人 -->
+		emergency_phone as "emergencyPhone",<!-- 紧急联系人电话 -->
+		personnel_category as "personnelCategory",<!-- 人员类别 -->
 		family_address	as "familyAddress",  <!-- 家庭地址 -->
 		company	as "company",  <!-- 公司 -->
 		memo	as "memo",  <!-- 备注 -->
@@ -35,34 +41,38 @@
 		updator_name	as "updatorName",  <!-- 更改人 -->
 		updator_id	as "updatorId",  <!-- 更改人ID -->
 		operator_type	as "operatorType", <!-- 最后操作类型 -->
-		highest_degree	as "highestDegree",
-		highest_educational	as "highestEducational",
-		marital_status	as "maritalStatus",
-		emergency_phone	as "emergencyPhone",
-		emergency	as "emergency",
-		personnel_category	as "personnelCategory",
-		status_code	as "statusCode" <!-- 状态(01-新建，02-入职,03-取消入职，04-离职) -->
+		status_code	as "statusCode", <!-- 状态(01-新建，02-入职,03-取消入职，04-离职) -->
+		management_dept_num as "managementDeptNum" <!--管理科室 -->
 		FROM .hr_man WHERE 1=1
 		<isNotEmpty prepend=" AND " property="id">
 			id = #id#
 		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="jobCode">
+		<!--<isNotEmpty prepend=" AND " property="jobCode">
 			job_code like concat('%',#jobCode#,'%')
+		</isNotEmpty>-->
+		<isNotEmpty prepend=" AND " property="sex">
+			sex = #sex#
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="company">
 			company like concat('%',#company#,'%')
 		</isNotEmpty>
-		<isEqual property="flag" prepend="and" compareValue="lz">
-			pre_out_time not in ('')
-		</isEqual>
-		<isEqual property="flag" prepend="and" compareValue="rz">
-			status_code = '02' and pre_out_time is null or pre_out_time =''
-		</isEqual>
+		<!--	<isEqual property="flag" prepend="and" compareValue="lz">
+                pre_out_time not in ('')
+            </isEqual>
+            <isEqual property="flag" prepend="and" compareValue="rz">
+                status_code = '02' and (pre_out_time is null or pre_out_time ='')
+            </isEqual>-->
 		<isNotEmpty prepend=" AND " property="realName">
 			real_name  like concat('%',#realName#,'%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="deptNum">
 			dept_num like concat('%',#deptNum#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="serviceDeptNum">
+			service_dept_num like concat('%',#serviceDeptNum#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="managementDeptNum">
+			management_dept_num like concat('%',#managementDeptNum#,'%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="workNo">
 			work_no like concat('%',#workNo#,'%')
@@ -70,6 +80,9 @@
 		<isNotEmpty prepend=" AND " property="statusCode">
 			status_code = #statusCode#
 		</isNotEmpty>
+		<!--		<isNotEmpty prepend=" AND " property="notShowLz">
+                    status_code in ('01','02', '03')
+                </isNotEmpty>-->
 		ORDER BY create_date desc ,status_code asc
 
 	</select>
@@ -78,6 +91,39 @@
 		SELECT COUNT(*) FROM .hr_man WHERE 1=1
 		<isNotEmpty prepend=" AND " property="id">
 			id = #id#
+		</isNotEmpty>
+		<!--<isNotEmpty prepend=" AND " property="jobCode">
+			job_code like concat('%',#jobCode#,'%')
+		</isNotEmpty>-->
+		<isNotEmpty prepend=" AND " property="sex">
+			sex = #sex#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="company">
+			company like concat('%',#company#,'%')
+		</isNotEmpty>
+		<!--		<isEqual property="flag" prepend="and" compareValue="lz">
+                    pre_out_time not in ('')
+                </isEqual>
+                <isEqual property="flag" prepend="and" compareValue="rz">
+                    status_code = '02' and (pre_out_time is null or pre_out_time ='')
+                </isEqual>-->
+		<isNotEmpty prepend=" AND " property="realName">
+			real_name  like concat('%',#realName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptNum">
+			dept_num like concat('%',#deptNum#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="serviceDeptNum">
+			service_dept_num like concat('%',#serviceDeptNum#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="managementDeptNum">
+			management_dept_num like concat('%',#managementDeptNum#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="workNo">
+			work_no like concat('%',#workNo#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			status_code = #statusCode#
 		</isNotEmpty>
 	</select>
 
@@ -89,20 +135,27 @@
 		birth_place,  <!-- 籍贯 -->
 		kampong,  <!-- 民族 -->
 		man_code,  <!-- 身份证 -->
+		marital_status,<!-- 婚姻状况 -->
 		salary,  <!-- 基本工资 -->
 		schooling_code,  <!-- 学历 -->
+		highest_degree,<!-- 最高学位 -->
+		highest_educational,<!-- 最高学历 -->
 		political_status,  <!-- 政治面貌 -->
 		birth_date,  <!-- 出生年月 -->
 		phone,  <!-- 联系电话 -->
 		work_no,  <!-- 工号 -->
 		dept_num,  <!-- 所属部门 -->
 		service_dept_num,  <!-- 服务部门 -->
+		management_dept_num, <!--管理部门-->
 		job_code,  <!-- 工作岗位 -->
 		health,  <!-- 健康状况 -->
 		family_address,  <!-- 家庭地址 -->
 		company,  <!-- 公司 -->
 		memo,  <!-- 备注 -->
 		pre_in_time,  <!-- 预计入职时间 -->
+		emergency,<!-- 紧急联系人 -->
+		emergency_phone,<!-- 紧急联系人电话 -->
+		personnel_category,<!-- 人员类别 -->
 		in_time,  <!-- 入职时间 -->
 		pre_out_time,  <!-- 预计离职时间 -->
 		out_time,  <!-- 离职日期 -->
@@ -113,22 +166,9 @@
 		updator_name,  <!-- 更改人 -->
 		updator_id,  <!-- 更改人ID -->
 		operator_type,  <!-- 最后操作类型 -->
-		highest_degree,
-		highest_educational,
-		marital_status,
-		emergency_phone,
-		emergency,
-		personnel_category,
-		status_code  <!-- 状态(01-新建，02-入职,03-取消入职，04-离职) -->
-
+		status_code <!-- 状态(01-新建，02-入职,03-取消入职，04-离职) -->
 		)
-		VALUES (#id#, #realName#, #sex#, #birthPlace#, #kampong#, #manCode#, #salary#,
-		  #schoolingCode#, #politicalStatus#, #birthDate#, #phone#, #workNo#, #deptNum#,
-		  #serviceDeptNum#, #jobCode#, #health#, #familyAddress#, #company#, #memo#, #preInTime#, #inTime#,
-		  #preOutTime#, #outTime#, #createDate#,
-		  #creatorName#, #creatorId#, #updateDate#, #updatorName#, #updatorId#, #operatorType#, #highestDegree#,#highestEducational#,
-		  #maritalStatus#,#emergencyPhone#,#emergency#,#personnelCategory#,
-		  #statusCode#)
+		VALUES (#id#, #realName#, #sex#, #birthPlace#, #kampong#, #manCode#,#maritalStatus#, #salary#, #schoolingCode#,#highestDegree#,#highestEducational#, #politicalStatus#, #birthDate#, #phone#, #workNo#, #deptNum#, #serviceDeptNum#, #managementDeptNum#,#jobCode#, #health#, #familyAddress#, #company#, #memo#, #preInTime#,#emergency#,#emergencyPhone#,#personnelCategory#, #inTime#, #preOutTime#, #outTime#, #createDate#, #creatorName#, #creatorId#, #updateDate#, #updatorName#, #updatorId#, #operatorType#, #statusCode#)
 	</insert>
 
 	<delete id="delete">
@@ -144,42 +184,45 @@
 		birth_place	= #birthPlace#,   <!-- 籍贯 -->
 		kampong	= #kampong#,   <!-- 民族 -->
 		man_code	= #manCode#,   <!-- 身份证 -->
+		marital_status = #maritalStatus#, <!-- 婚姻状况 -->
 		salary	= #salary#,   <!-- 基本工资 -->
 		schooling_code	= #schoolingCode#,   <!-- 学历 -->
+		highest_degree = #highestDegree#,<!-- 最高学位 -->
+		highest_educational = #highestEducational#,<!-- 最高学历 -->
 		political_status	= #politicalStatus#,   <!-- 政治面貌 -->
 		birth_date	= #birthDate#,   <!-- 出生年月 -->
 		phone	= #phone#,   <!-- 联系电话 -->
-		work_no	= #workNo#,   <!-- 工号 -->
 		dept_num	= #deptNum#,   <!-- 所属部门 -->
 		service_dept_num	= #serviceDeptNum#,   <!-- 服务部门 -->
+		management_dept_num = #managementDeptNum#,<!-- 管理部门 -->
 		job_code	= #jobCode#,   <!-- 工作岗位 -->
 		health	= #health#,   <!-- 健康状况 -->
 		family_address	= #familyAddress#,   <!-- 家庭地址 -->
 		company	= #company#,   <!-- 公司 -->
 		memo	= #memo#,   <!-- 备注 -->
 		pre_in_time	= #preInTime#,   <!-- 预计入职时间 -->
+		emergency = #emergency#,<!-- 紧急联系人 -->
+		emergency_phone = #emergencyPhone#,<!-- 紧急联系人电话 -->
+		personnel_category = #personnelCategory#,<!-- 人员类别 -->
 		in_time	= #inTime#,   <!-- 入职时间 -->
 		pre_out_time	= #preOutTime#,   <!-- 预计离职时间 -->
 		out_time	= #outTime#,   <!-- 离职日期 -->
 		creator_id	= #creatorId#,   <!-- 创建人ID  -->
-		update_date	= DATE_FORMAT(NOW(),'%Y-%m-%d'),   <!-- 更改时间 -->
+		update_date	= #updateDate#,   <!-- 更改时间 -->
 		updator_name	= #updatorName#,   <!-- 更改人 -->
 		updator_id	= #updatorId#,   <!-- 更改人ID -->
-		operator_type	= #operatorType#,  <!-- 最后操作类型 -->
-		highest_degree = #highestDegree#,
-		highest_educational= #highestEducational#,
-		marital_status= #maritalStatus#,
-		emergency_phone= #emergencyPhone#,
-		emergency= #emergency#,
-		personnel_category= #personnelCategory#
+		operator_type	= #operatorType#  <!-- 最后操作类型 -->
 		WHERE
 		id = #id#
 	</update>
 
 	<update id="updateInduction" parameterClass="java.util.HashMap">
 		update hr_man set status_code ='02',
-						  in_time = #inTime#
-        where id =#id#
+						  in_time = #inTime#,
+						  pre_out_time = null,
+						  out_time = null
+		where id =#id#
+
 	</update>
 
 	<update id="updateUninduction" parameterClass="String">
@@ -193,58 +236,16 @@
 
 	<select id="queryWorkNoEdit" parameterClass="java.util.HashMap" resultClass="int">
 		SELECT count(1) FROM hr_man WHERE work_no = #workNo#
-		 <isNotEmpty prepend="and" property="id">
-			 id <![CDATA[!= ]]> #id#
-		 </isNotEmpty>
+		<isNotEmpty prepend="and" property="id">
+			id <![CDATA[!= ]]> #id#
+		</isNotEmpty>
 	</select>
 
-	<select id="getUserInfo" parameterClass="java.util.HashMap"
-			resultClass="java.util.HashMap">
-		SELECT
-		id	as "id",
-		real_name	as "realName",  <!-- 姓名 -->
-		sex as "sex",  <!-- 性别：男、女 -->
-		birth_place	as "birthPlace",  <!-- 籍贯 -->
-		kampong	as "kampong",  <!-- 民族 -->
-		man_code	as "manCode",  <!-- 身份证 -->
-		salary	as "salary",  <!-- 基本工资 -->
-		schooling_code	as "schoolingCode",  <!-- 学历 -->
-		political_status	as "politicalStatus",  <!-- 政治面貌 -->
-		birth_date	as "birthDate",  <!-- 出生年月 -->
-		phone	as "phone",  <!-- 联系电话 -->
-		work_no	as "workNo",  <!-- 工号 -->
-		dept_num	as "deptNum",  <!-- 所属部门 -->
-		service_dept_num	as "serviceDeptNum",  <!-- 服务部门 -->
-		job_code	as "jobCode",  <!-- 工作岗位 -->
-		health	as "health",  <!-- 健康状况 -->
-		family_address	as "familyAddress",  <!-- 家庭地址 -->
-		company	as "company",  <!-- 公司 -->
-		memo	as "memo",  <!-- 备注 -->
-		pre_in_time	as "preInTime",  <!-- 预计入职时间 -->
-		in_time	as "inTime",  <!-- 入职时间 -->
-		pre_out_time	as "preOutTime",  <!-- 预计离职时间 -->
-		out_time	as "outTime",  <!-- 离职日期 -->
-		create_date	as "createDate",  <!-- 创建时间 -->
-		creator_name	as "creatorName",  <!-- 创建人 -->
-		creator_id	as "creatorId",  <!-- 创建人ID  -->
-		update_date	as "updateDate",  <!-- 更改时间 -->
-		updator_name	as "updatorName",  <!-- 更改人 -->
-		updator_id	as "updatorId",  <!-- 更改人ID -->
-		operator_type	as "operatorType", <!-- 最后操作类型 -->
-		highest_degree	as "highestDegree",
-		highest_educational	as "highestEducational",
-		marital_status	as "maritalStatus",
-		emergency_phone	as "emergencyPhone",
-		emergency	as "emergency",
-		personnel_category	as "personnelCategory",
-		status_code	as "statusCode" <!-- 状态(01-新建，02-入职,03-取消入职，04-离职) -->
-		FROM .hr_man WHERE 1=1
-
-		<isNotEmpty prepend=" AND " property="updateDate">
-			DATE_FORMAT(update_date,'%Y-%m-%d') = #updateDate#
-		</isNotEmpty>
-		ORDER BY create_date desc ,status_code asc
-
+	<select id="queryDept" parameterClass="string" resultClass="java.util.HashMap">
+		select
+			dept_num	as "deptNum",
+			concat(dept_name, IF(dict_type='业务区划', '(业)', ''))	as "deptName"
+		from $projectSchema$.ac_department where status = '1'
 	</select>
 
 </sqlMap>

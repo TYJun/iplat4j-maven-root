@@ -30,13 +30,17 @@ $(function () {
             IPLAT.EFInput.enable($("#info-0-confirmRoom"), false)
             IPLAT.EFInput.enable($("#info-0-applyReason"), false)
             IPLAT.EFPopupInput.enable($("#info-0-confirmDeptNum"), false)
-            IPLAT.EFPopupInput.setAllFields($("#info-0-confirmDeptNum"), __ei.applyDeptNum, __ei.applyDeptName)
+            IPLAT.EFPopupInput.setAllFields($("#info-0-confirmDeptNum"), __ei.confirmDeptNum, __ei.confirmDeptName)
             IPLAT.EFPopupInput.setAllFields($("#info-0-confirmLocationNum"), __ei.confirmLocationNum, __ei.confirmLocationName)
             $("#confirm").show()
             IPLAT.EFPopupInput.enable($("#info-0-confirmLocationNum"), false)
             IPLAT.EFInput.enable($("#info-0-confirmReason"), false)
             $("#audit").show()
-            $("#auditButton").show()
+            if (__ei.role == "admin") {
+                $("#auditButton").show()
+            } else if (__ei.role == "user") {
+                $("#auditButton2").show()
+            }
             break
         // 查看所有
         case "all":
@@ -95,6 +99,58 @@ IPLATUI.EFAutoComplete = {
 }
 
 IPLATUI.EFGrid = {
+    "spot": {
+        pageable : false,
+        exportGrid: false,
+        loadComplete: function (e) {
+
+        },
+        onRowDblClick: function (e) {
+            if (e.event.type === "dblclick") {
+                if (e.model){
+                    $("#info-0-confirmLocationNum").val(e.model['spotNum']);
+                    $("#info-0-confirmLocationNum_textField").val(e.model['spotName']);
+                    IPLAT.EFInput.value($("#info-0-confirmBuild"), e.model['building']);
+                    IPLAT.EFInput.value($("#info-0-confirmFloor"), e.model['floor']);
+                    var popupGridWindow = $("#confirmLocationNum").data("kendoWindow");
+                    popupGridWindow.close()
+                }
+            }
+        },
+        columns: [
+            {
+                field: "building",
+                title: "楼",
+                filterable: {
+                    operators: {
+                        string: {
+                            contains: "包含"
+                        }
+                    }
+                }
+            }, {
+                field: "floor",
+                title: "层",
+                filterable: {
+                    operators: {
+                        string: {
+                            contains: "包含"
+                        }
+                    }
+                }
+            }, {
+                field: "spotName",
+                title: "地点",
+                filterable: {
+                    operators: {
+                        string: {
+                            contains: "包含"
+                        }
+                    }
+                }
+            }
+        ]
+    },
     "result": {
         toolbarConfig: {
             hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
@@ -114,7 +170,7 @@ IPLATUI.EFGrid = {
             buttons: []
         },
         onCheckRow: function (e) {
-            if (IPLAT.EFInput.value($("#type")) == "confirm"){
+            if (IPLAT.EFInput.value($("#type")) == "confirm") {
                 return;
             } else {
                 var grid = e.sender,
@@ -147,7 +203,6 @@ IPLATUI.EFGrid = {
             //     getSignatureImg(auditFileCode, "audit")
             // }
             var checkRows = window.parent.resultAGrid.getCheckedRows()
-            console.log(checkRows)
             switch (type) {
                 case "enter":
                     if (checkRows.length > 0) {
@@ -423,6 +478,10 @@ IPLATUI.EFGrid = {
             $("#close5").on("click", function (e) {
                 closeParentWindow()
             });
+
+            $("#close6").on("click", function (e) {
+                closeParentWindow()
+            });
         }
     }
 }
@@ -554,7 +613,6 @@ function closeParentWindow() {
     window.parent["resultDGrid"].dataSource.page(1);
     window.parent["resultEGrid"].dataSource.page(1);
 }
-
 
 
 // 通过fileCode获取图片

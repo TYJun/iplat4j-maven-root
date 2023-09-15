@@ -154,11 +154,9 @@ $(function () {
                 IPLAT.EFInput.value($("#info-0-confirmFloor"), "");
             }
         },
-        "info-0-goodsTypeCode": {
+        "info-0-goodsCategoryCode": {
             clearInput: function (e) {
-                IPLAT.EFPopupInput.clear($("#info-0-goodsTypeCode"), true)
-                IPLAT.EFInput.value($("#info-0-goodsClassifyCode"), "");
-                IPLAT.EFInput.value($("#info-0-goodsClassifyName"), "");
+                IPLAT.EFPopupInput.clear($("#info-0-goodsCategoryCode"), true)
             }
         }
     }
@@ -235,10 +233,8 @@ $(function () {
                         var checkRows = resultGrid.getCheckedRows();
                         var model = checkRows[0];
                         if (model) {
-                            $("#info-0-goodsTypeCode").val(model['typeCode']);
-                            $("#info-0-goodsTypeCode_textField").val(model['typeName']);
-                            $("#info-0-goodsClassifyCode").val(model['parentCode']);
-                            $("#info-0-goodsClassifyName").val(model['parentName']);
+                            $("#info-0-goodsCategoryCode").val(model['typeCode']);
+                            $("#info-0-goodsCategoryCode_textField").val(model['typeName']);
                             $("#info-0-useYears").val(model['useYears']);
                             var popupGridWindow = $("#ef_popup_grid").data("kendoWindow");
                             popupGridWindow.close();
@@ -272,16 +268,20 @@ $(function () {
                         NotificationUtil("请选择资产类别", "warning")
                         return
                     }
+                    if ($("#info-0-goodsCategoryCode").val() == ""){
+                        NotificationUtil("请选择资产末级", "warning")
+                        return
+                    }
                     if (isNaN($("#info-0-buyCost").val())) {
                         NotificationUtil("请检查资产原值类型", "warning")
                         return
                     }
-                    if ($("#info-0-warranty").val() == "") {
-                        NotificationUtil("请检查保质期", "warning")
-                        return
-                    }
+                    // if ($("#info-0-warranty").val() == "") {
+                    //     NotificationUtil("请检查保质期", "warning")
+                    //     return
+                    // }
                     if (isNaN($("#info-0-warranty").val())) {
-                        NotificationUtil("请检查保质期", "warning")
+                        NotificationUtil("请检查保修期类型", "warning")
                         return
                     }
                     if (isNaN($("#info-0-estimateCost").val())) {

@@ -23,13 +23,13 @@
 							 valueField="deptNum" textField="deptName" columnEnames="deptNum,deptName"
 							 columnCnames="科室编码,科室名称"
 			/>
-			<EF:EFInput ename="shiftTimeSection" cname="支援时段" colWidth="3" required="true" ratio="3:8"/>
+			<%--<EF:EFInput ename="shiftTimeSection" cname="支援时段" colWidth="3" required="true" ratio="3:8"/>--%>
 			<EF:EFSelect ename="changeCode" cname="支援类别" colWidth="3" ratio="3:8">
 				<EF:EFCodeOption codeName="wilp.hr.typeCode"/>
 			</EF:EFSelect>
 			<EF:EFInput ename="numbers" cname="支援人数" colWidth="3" required="true" ratio="3:8"/>
-			<EF:EFDatePicker ename="shiftFirstTime" cname="上班时间" role="date" colWidth="3" ratio="3:8" format="yyyy-MM-dd "
-							 parseFormats="['yyyy-mm-dd HH:mm:ss']" readonly="true" required="true"/>
+			<%--<EF:EFDatePicker ename="shiftFirstTime" cname="上班时间" role="date" colWidth="3" ratio="3:8" format="yyyy-MM-dd "
+							 parseFormats="['yyyy-mm-dd HH:mm:ss']" readonly="true" required="true"/>--%>
 
 			<EF:EFInput ename="supportStation" cname="支援岗位" colWidth="3" required="true" ratio="3:8"/>
 			<EF:EFInput ename="becauseMemo" cname="申请原因" type="textarea" maxLength="400" colWidth="3" ratio="3:8"/>

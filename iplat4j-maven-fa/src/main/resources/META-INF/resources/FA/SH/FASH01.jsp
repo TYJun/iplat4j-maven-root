@@ -29,7 +29,11 @@
                                endName="inqu_status-0-useDateE" endCname="使用日期止"
                                ratio="3:3" startRatio="4:8" endRatio="4:8" readonly="true"/>
                     <%--			<EF:EFInput ename="inqu_status-0-useYear" colWidth="3" ratio="4:8" cname="使用年限"/>--%>
-                <EF:EFInput ename="inqu_status-0-deptName" cname="所属科室" colWidth="3"/>
+<%--                <EF:EFInput ename="inqu_status-0-deptName" cname="所属科室" colWidth="3"/>--%>
+                <EF:EFMultiSelect ename="inqu_status-0-deptName" cname="所属科室" colWidth="3" ratio="4:8"
+                                  serviceName="FADA01" queryMethod="queryDept" filter="contains">
+                    <EF:EFOptions blockId="dept" textField="deptName" valueField="deptName"/>
+                </EF:EFMultiSelect>
 <%--                <EF:EFTreeInput ename="inqu_status-0-goodsClassifyCode" cname="资产类别" serviceName="FALB01"--%>
 <%--                                methodName="queryFaTypeTree"--%>
 <%--                                valueField="id" textField="typeName" hasChildren="isLeaf" readonly="true"--%>
@@ -37,10 +41,11 @@
 <%--                </EF:EFTreeInput>--%>
                 <EF:EFInput ename="inqu_status-0-goodsClassifyCode" colWidth="3" ratio="4:8" cname="资产类别"/>
                 <EF:EFInput ename="inqu_status-0-goodsTypeCode" colWidth="3" ratio="4:8" cname="资产类别名称"/>
-                <EF:EFSelect ename="inqu_status-0-fundingSourceNum" cname="资金来源" colWidth="3" ratio="4:8">
-                    <EF:EFOption label="--请选择--" value=""/>
-                    <EF:EFCodeOption codeName="wilp.mp.source"/>
-                </EF:EFSelect>
+                <EF:EFInput ename="inqu_status-0-spec" colWidth="3" ratio="4:8" cname="型号规格"/>
+<%--                <EF:EFSelect ename="inqu_status-0-fundingSourceNum" cname="资金来源" colWidth="3" ratio="4:8">--%>
+<%--                    <EF:EFOption label="--请选择--" value=""/>--%>
+<%--                    <EF:EFCodeOption codeName="wilp.mp.source"/>--%>
+<%--                </EF:EFSelect>--%>
 <%--                <EF:EFSelect ename="inqu_status-0-goodsTypeCode" resultId="result" serviceName="FALB01"--%>
 <%--                             methodName="faTypeEFSelect" filter="contains"--%>
 <%--                             colWidth="3" ratio="4:8" optionLabel="--请选择--" cname="类别名称" textField="text"--%>
@@ -55,19 +60,21 @@
     <EF:EFTab id="FaDaTab">
         <div title="报废提交资产">
             <EF:EFGrid blockId="resultA" autoDraw="no" autoBind="true" rowNo="true" readonly="true"
-                       checkMode="multiple,row" queryMethod="confirmedQuery" height="460px">
+                       checkMode="multiple,row" queryMethod="confirmedQuery" height="418px">
                 <EF:EFColumn ename="faInfoId" cname="faInfoId" align="center" width="200" hidden="true"/>
                 <EF:EFColumn ename="goodsNum" cname="资产编码" align="center" width="200"/>
                 <EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="200"/>
+                <EF:EFColumn ename="spec" cname="型号规格" align="center" width="200"/>
                 <EF:EFColumn ename="deptName" cname="所属科室" align="center" width="200"/>
                 <%--				<EF:EFColumn ename="build" cname="楼"   align="center" width="200"/>--%>
                 <%--				<EF:EFColumn ename="floor" cname="层"   align="center" width="200"/>--%>
                 <EF:EFColumn ename="room" cname="具体位置" align="center" width="200"/>
+                <EF:EFColumn ename="statusCodeMean" cname="资产状态" align="center" width="200"/>
+                <EF:EFColumn ename="remark" cname="备注" align="center" width="200"/>
                 <EF:EFColumn ename="goodsClassifyName" cname="资产类别" align="center" width="200"/>
                 <EF:EFColumn ename="goodsTypeCode" cname="资产类别名称" align="center" width="200" hidden="true"/>
                 <EF:EFColumn ename="goodsTypeName" cname="资产类别名称" align="center" width="200"/>
-                <EF:EFColumn ename="model" cname="型号规格" align="center" width="200"/>
-                <EF:EFColumn ename="manufacturer" cname="制造厂商" align="center" width="200"/>
+                <EF:EFColumn ename="manufacturer" cname="制造厂商" align="center" width="200" hidden="true"/>
                 <EF:EFColumn ename="surpName" cname="供应商" align="center" width="200"/>
                 <EF:EFColumn ename="buyDate" cname="购入日期" align="center" width="200"/>
                 <EF:EFColumn ename="useDate" cname="使用日期" align="center" width="200"/>
@@ -76,9 +83,7 @@
                 <EF:EFColumn ename="useYears" cname="使用年限" align="center" width="200"/>
                 <%--			<EF:EFColumn ename="deviceName" cname="设备名称"   align="center" />--%>
                 <EF:EFColumn ename="recCreateName" cname="创建人" align="center" width="200"/>
-                <EF:EFColumn ename="remark" cname="备注" align="center" width="200"/>
-                <EF:EFColumn ename="installLocation" cname="地点" align="center" width="200"/>
-                <EF:EFColumn ename="statusCodeMean" cname="资产状态" align="center" width="200"/>
+                <EF:EFColumn ename="installLocation" cname="地点" align="center" width="200" hidden="true"/>
                 <EF:EFColumn ename="rfidCode" cname="RFID" align="center" width="200" hidden="true"/>
                 <EF:EFColumn ename="cardStatus" cname="是否发卡" align="center" width="200" hidden="true"/>
                 <EF:EFColumn ename="lockFlag" cname="变更状态" align="center" hidden="true"/>
@@ -102,22 +107,26 @@
                 <EF:EFColumn ename="discussDate" cname="会议时间" align="center" width="200" enable="false"/>
             </EF:EFGrid>
         </div>
-        <div title="已报废资产">
+        <div title="已销账资产">
             <EF:EFGrid blockId="resultD" autoDraw="no" autoBind="true" rowNo="true" readonly="true"
-                       checkMode="multiple,row" queryMethod="wastedQuery" height="460px">
+                       checkMode="multiple,row" queryMethod="wastedQuery" height="418px">
                 <EF:EFColumn ename="faInfoId" cname="faInfoId" align="center" width="200" hidden="true"/>
                 <EF:EFColumn ename="goodsNum" cname="资产编码" align="center" width="200"/>
                 <EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="200"/>
+                <EF:EFColumn ename="spec" cname="型号规格" align="center" width="200"/>
+                <EF:EFColumn ename="discussNo" cname="会议单号" align="center" width="200" enable="false"/>
+                <EF:EFColumn ename="discussName" cname="会议名称" align="center" width="200" enable="false"/>
+                <EF:EFColumn ename="discussDate" cname="会议时间" align="center" width="200" enable="false"/>
+                <EF:EFColumn ename="statusCodeMean" cname="资产状态" align="center" width="200"/>
+                <EF:EFColumn ename="remark" cname="备注" align="center" width="200"/>
                 <EF:EFColumn ename="deptName" cname="所属科室" align="center" width="200"/>
                 <%--				<EF:EFColumn ename="build" cname="楼"   align="center" width="200"/>--%>
                 <%--				<EF:EFColumn ename="floor" cname="层"   align="center" width="200"/>--%>
-                <EF:EFColumn ename="installLocation" cname="地点" align="center" width="200"/>
                 <EF:EFColumn ename="room" cname="具体位置" align="center" width="200"/>
                 <EF:EFColumn ename="goodsClassifyName" cname="资产类别" align="center" width="200"/>
                 <EF:EFColumn ename="goodsTypeCode" cname="资产类别名称" align="center" width="200" hidden="true"/>
                 <EF:EFColumn ename="goodsTypeName" cname="资产类别名称" align="center" width="200"/>
-                <EF:EFColumn ename="model" cname="型号规格" align="center" width="200"/>
-                <EF:EFColumn ename="manufacturer" cname="制造厂商" align="center" width="200"/>
+                <EF:EFColumn ename="manufacturer" cname="制造厂商" align="center" width="200" hidden="true"/>
                 <EF:EFColumn ename="surpName" cname="供应商" align="center" width="200"/>
                 <EF:EFColumn ename="buyDate" cname="购入日期" align="center" width="200"/>
                 <EF:EFColumn ename="useDate" cname="使用日期" align="center" width="200"/>
@@ -126,8 +135,6 @@
                 <EF:EFColumn ename="useYears" cname="使用年限" align="center" width="200"/>
                 <%--			<EF:EFColumn ename="deviceName" cname="设备名称"   align="center" />--%>
                 <EF:EFColumn ename="recCreateName" cname="创建人" align="center" width="200"/>
-                <EF:EFColumn ename="remark" cname="备注" align="center" width="200"/>
-                <EF:EFColumn ename="statusCodeMean" cname="资产状态" align="center" width="200"/>
                 <EF:EFColumn ename="rfidCode" cname="RFID" align="center" width="200" hidden="true"/>
                 <EF:EFColumn ename="cardStatus" cname="是否发卡" align="center" width="200" hidden="true"/>
                 <EF:EFColumn ename="lockFlag" cname="变更状态" align="center" hidden="true"/>

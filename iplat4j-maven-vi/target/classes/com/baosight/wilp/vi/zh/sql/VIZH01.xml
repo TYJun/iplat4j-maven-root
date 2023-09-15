@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="VIZH01">
+
+    <select id="query" parameterClass="java.util.HashMap"
+            resultClass="com.baosight.wilp.vi.common.domain.ViVistingInfo">
+        SELECT
+            vii.id	as "id",
+            vii.visiting_dept_id	as "visitingDeptId",
+            vii.visiting_dept_name	as "visitingDeptName",
+            vii.visting_begin_date	as "vistingBeginDate",
+            vii.visting_end_date	as "vistingEndDate",
+            vii.interviewer_work_no	as "interviewerWorkNo",
+            vii.nterviewer_name	as "nterviewerName",
+            vii.nterviewer_phone	as "nterviewerPhone",
+            vii.create_time	as "createTime",
+            vii.creator_type	as "creatorType",
+            vii.creator_identity	as "creatorIdentity",
+            vii.creat_ip	as "creatIp",
+            vii.auditor_identity	as "auditorIdentity",
+            vii.auditor_step	as "auditorStep",
+            case vii.auditor_step
+                when 0 then '待审批'
+                when 1 then '通过'
+                when -1 then '驳回'
+            ELSE ''
+            END AS "auditorStepMean",
+            vii.auditor_memo	as "auditorMemo",
+            vii.bat_no	as "batNo",
+            date_format(val.audit_time,'%Y-%m-%d %H:%i:%s') as "auditTime",
+            val.auditor_client_type as "auditorClientType"
+        FROM
+            vi_visiting_info vii
+        LEFT JOIN vi_audit_log val ON val.visiting_id = vii.id
+        WHERE
+        1 = 1
+        <isEqual prepend="and" property="superMan" compareValue="superMan">
+            visiting_dept_id IN ('100301','100302')
+        </isEqual>
+        <isNotEmpty prepend="and" property="auditorStep">
+            auditor_step = #auditorStep#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="visitingDeptName">
+            visiting_dept_name like concat ('%',#visitingDeptName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="nterviewerName">
+            nterviewer_name like concat ('%',#nterviewerName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="vistingBeginDateS">
+            visting_begin_date >= #vistingBeginDateS#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="vistingBeginDateE">
+            visting_begin_date <![CDATA[<=]]> #vistingBeginDateE#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="deptNum">
+            visiting_dept_id = #deptNum#
+        </isNotEmpty>
+        GROUP BY id DESC
+    </select>
+
+    <select id="queryViVistingInfoDetail" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            vvid.id,
+            vvid.nterviewee_content AS "ntervieweeContent",
+            vvid.guest_name AS "guestName",
+            vvid.card_id AS "cardId",
+            vvid.guest_phone AS "guestPhone",
+            vvid.guest_email AS "guestEmail",
+            vvid.guest_org_name AS "guestOrgName",
+            vvid.vehicle_number AS "vehicleNumber",
+            vvid.vehicle_type_code AS "vehicleTypeCode",
+            vvid.bat_no AS "batNo",
+            vaf.file_content AS "fileContent",
+            GROUP_CONCAT(vaf.id) AS "docId"
+        from
+            vi_visiting_info_detail vvid
+        left join vi_visiting_file vvf on vvid.id = vvf.visiting_id
+        left join vi_attach_file vaf on vvf.file_id = vaf.id
+        where
+            vvid.bat_no = #visitingId#
+        GROUP BY vvid.id
+    </select>
+
+    <select id="queryViVistingInfoDetailApp" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            vvid.id,
+            vaf.id AS "visitingId",
+            vaf.file_name AS "fileName",
+            vvid.nterviewee_content AS "ntervieweeContent",
+            vvid.guest_name AS "guestName",
+            vvid.card_id AS "cardId",
+            vvid.guest_phone AS "guestPhone",
+            vvid.guest_email AS "guestEmail",
+            vvid.guest_org_name AS "guestOrgName",
+            vvid.vehicle_number AS "vehicleNumber",
+            vvid.vehicle_type_code AS "vehicleTypeCode",
+            vvid.bat_no AS "batNo",
+            vaf.file_content AS "fileContent"
+        from
+            vi_visiting_info_detail vvid
+        left join vi_visiting_file vvf on vvid.id = vvf.visiting_id
+        left join vi_attach_file vaf on vvf.file_id = vaf.id
+        where
+            vvid.bat_no = #visitingId#
+    </select>
+
+    <select id="count" resultClass="int">
+        SELECT COUNT(*) FROM
+        vi_visiting_info vii
+        LEFT JOIN vi_audit_log val ON val.visiting_id = vii.id
+        WHERE
+        1 = 1
+        <isEqual prepend="and" property="superMan" compareValue="superMan">
+            visiting_dept_id IN ('100301','100302')
+        </isEqual>
+        <isNotEmpty prepend="and" property="auditorStep">
+            auditor_step = #auditorStep#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="visitingDeptName">
+            visiting_dept_name like concat ('%',#visitingDeptName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="nterviewerName">
+            nterviewer_name like concat ('%',#nterviewerName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="vistingBeginDateS">
+            visting_begin_date >= #vistingBeginDateS#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="vistingBeginDateE">
+            visting_begin_date <![CDATA[<=]]> #vistingBeginDateE#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="deptNum">
+            visiting_dept_id = #deptNum#
+        </isNotEmpty>
+    </select>
+</sqlMap>
