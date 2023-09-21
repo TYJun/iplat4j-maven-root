@@ -34,7 +34,7 @@ public class DaiapiWeChatOauthController {
         log.info("进入到微信页面自定义方法地址...");
         //拼接微信网页授权地址
         String redirectURL = String.format(WxConstants.WX_H5_OAUTH2_PRIVATE_URL, WxConstants.WX_APP_ID, URIUtil.encodeURIComponent(WxConstants.H5_REQUEST_URL),
-                WxConstants.WX_SNSAPI_PRIVATEINFO, StringUtils.trimToEmpty(WxConstants.WX_STATE),WxConstants.AGENT_ID);
+                WxConstants.WX_SNSAPI_BASE, StringUtils.trimToEmpty(WxConstants.WX_STATE),WxConstants.AGENT_ID);
         log.info("【微信网页授权】获取redirectURL,redirectURL={}", redirectURL);
         return "redirect:" + redirectURL;
     }
@@ -138,23 +138,25 @@ public class DaiapiWeChatOauthController {
                 }
 
                 //获取访问用户敏感信息
-                String getUserDetail = WxConstants.GET_USER_DETAIL.replace("ACCESS_TOKEN", access_token);
-                com.alibaba.fastjson.JSONObject postJson = new com.alibaba.fastjson.JSONObject();
-                postJson.put("user_ticket",userTicket);
-                Map userDetailResponse = RestUtils.post(getUserDetail, postJson);
-                log.info("获取访问用户敏感信息返回:{}", response.toString());
-                if(response.containsKey("errcode") && (Integer) response.get("errcode") != 0){
-                    log.error("获取访问用户敏感信息失败:{}", response.toString());
-                    return "redirect:"+WxConstants.REQUEST_URL_LOGIN_ERROR;
-                }
-                String mobile = (String) userDetailResponse.get("mobile"); String seeUserId = "";
+//                String getUserDetail = WxConstants.GET_USER_DETAIL.replace("ACCESS_TOKEN", access_token);
+//                com.alibaba.fastjson.JSONObject postJson = new com.alibaba.fastjson.JSONObject();
+//                postJson.put("user_ticket",userTicket);
+//                Map userDetailResponse = RestUtils.post(getUserDetail, postJson);
+//                log.info("获取访问用户敏感信息返回:{}", response.toString());
+//                if(response.containsKey("errcode") && (Integer) response.get("errcode") != 0){
+//                    log.error("获取访问用户敏感信息失败:{}", response.toString());
+//                    return "redirect:"+WxConstants.REQUEST_URL_LOGIN_ERROR;
+//                }
+//                String mobile = (String) userDetailResponse.get("mobile");
+                String seeUserId = "";
                 JSONArray useridList = seeUserIdResponse.getJSONArray("userid_list");
                 if(!useridList.isEmpty()) {
                     seeUserId = useridList.getJSONObject(0).getString("userid");
                 }
 
                 StringBuffer string = new StringBuffer(WxConstants.REQUEST_URL_LOGIN_SUCCESS);
-                string.append("?userId=").append(seeUserId).append("&mobile=").append(mobile);
+//                string.append("?userId=").append(seeUserId).append("&mobile=").append(mobile);
+                string.append("?userId=").append(seeUserId);
                 /**物资采购详情页面跳转参数**/
                 String nid = req.getParameter("nid");
                 if(StringUtil.isNotBlank(nid)) {
@@ -165,7 +167,7 @@ public class DaiapiWeChatOauthController {
                     string.append("&type=").append(req.getParameter("type"));
                 }
 //                log.info("获取访问用户身份获取的userId:{}", seeUserId);
-                log.info("获取访问用户身份获取的mobile:{}", mobile);
+                log.info("获取访问用户身份获取的seeUserId:{}", seeUserId);
                 log.info("获取访问用户身份成功跳转url:{}",string.toString());
                 return "redirect:"+string;
                 }

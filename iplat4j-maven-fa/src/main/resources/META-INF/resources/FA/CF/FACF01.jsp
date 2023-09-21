@@ -28,7 +28,7 @@
 				<EF:EFOptions blockId="dept" textField="deptName" valueField="deptName"/>
 			</EF:EFMultiSelect>
 			<EF:EFInput ename="inqu_status-0-goodsClassifyCode" colWidth="3" ratio="4:8" cname="资产类别"/>
-			<EF:EFInput ename="inqu_status-0-goodsTypeCode" colWidth="3" ratio="4:8" cname="资产类别名称"/>
+			<EF:EFInput ename="inqu_status-0-goodsTypeCode" colWidth="3" ratio="4:8" cname="类组"/>
 <%--			<EF:EFTreeInput ename="inqu_status-0-goodsClassifyCode" cname="资产类别" serviceName="FALB01" methodName="queryFaTypeTree"--%>
 <%--							valueField="id" textField="typeName" hasChildren="isLeaf" readonly="true"--%>
 <%--							root="{id: 'root', typeName: '根节点'}" colWidth="3" ratio="4:8">--%>
@@ -61,7 +61,7 @@
 				<EF:EFColumn ename="installLocation" cname="地点"   align="center" width="200" hidden="true"/>
 				<EF:EFColumn ename="goodsClassifyName" cname="资产类别"  align="center" width="200"/>
 				<EF:EFColumn ename="goodsTypeCode" cname="类别名称"  align="center" width="200" hidden="true"/>
-				<EF:EFColumn ename="goodsTypeName" cname="资产类别名称"  align="center" width="200"/>
+				<EF:EFColumn ename="goodsTypeName" cname="类组"  align="center" width="200"/>
 				<EF:EFColumn ename="manufacturer" cname="制造厂商"  align="center" width="200" hidden="true"/>
 				<EF:EFColumn ename="surpName" cname="供应商"   align="center" width="200"/>
 				<EF:EFColumn ename="buyDate" cname="购入日期"   align="center" width="200"/>

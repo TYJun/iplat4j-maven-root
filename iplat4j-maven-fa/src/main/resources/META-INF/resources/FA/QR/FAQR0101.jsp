@@ -52,7 +52,7 @@
 			<EF:EFInput ename="info-0-goodsClassifyName" cname="资产类别" readonly="true"/>
 			<EF:EFInput ename="info-0-goodsClassifyCode" cname="资产类别编码"  required="true" type="hidden"/>
 			<EF:EFInput ename="info-0-goodsTypeName" cname="类组" readonly="true"/>
-			<EF:EFInput ename="info-0-goodsTypeCode" cname="类别编码"  required="true" type="hidden"/>
+			<EF:EFInput ename="info-0-goodsTypeCode" cname="类组编码" required="true" type="hidden"/>
 			<!-- 固资类别选择弹出窗  -->
 			<div id="ef_popup_grid" style="display: none;">
 				<EF:EFPage>
@@ -111,9 +111,9 @@
 			<%--所属科室、楼、层、地点、具体位置--%>
 			<EF:EFInput ename="info-0-confirmDeptName" cname="所属科室" readonly="true" type="hidden"/>
 			<EF:EFInput ename="info-0-confirmDeptNum" cname="所属科室" readonly="true" type="hidden"/>
-			<EF:EFAutoComplete ename="info-0-deptName" cname="所属科室" ratio="4:8"
+			<EF:EFAutoComplete ename="info-0-deptName" cname="所属科室" ratio="4:8"  required="true"
 							   noDataTemplate="没有数据" filter="contains" serviceName="FADA01" queryMethod="queryDept"
-							   resultId="dept" dataField="deptName" required="true"/>
+							   resultId="dept" dataField="deptName"/>
 			<EF:EFPopupInput ename="info-0-confirmLocationNum" cname="存放位置" readonly="true" popupWidth = "550"
 							 popupType="ServiceGrid" popupTitle="存放位置选择" serviceName="FADB0101" methodName="querySpot" resultId="spot" autofit="true"
 							 valueField="spotNum" textField="spotName" backFillFieldIds="spotName" backFillColumnIds="spotName" columnEnames="building,floor,spotName" columnCnames="楼,层,地点"/>

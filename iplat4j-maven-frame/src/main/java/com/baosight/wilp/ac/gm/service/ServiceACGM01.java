@@ -76,9 +76,35 @@ public class ServiceACGM01 extends ServiceBase {
          * 2.调用query()方法查询出符合条件的物资信息
          */
         map.put("projectSchema", projectSchema);
-        List<Map<String, Object>> matList = dao.query("ACGM01.queryMaterialList", map,
-                Integer.parseInt(map.get("offset").toString()), Integer.parseInt(map.get("limit").toString()));
-        int count = super.count("ACGM01.queryMaterialListCount", map);
+        //筛选是MP-仓库账务员、MP-仓库发货员、MP-仓库主管进行判断不可查看进销存物资
+        //获取工号ID
+        String workNo = UserSession.getUserId();
+        map.put("workNo",workNo);
+        List<Map<String, String>> getUserRoleList = dao.query("ACGM01.getUserRole", map);
+        //获取分组的编码名称
+        String roles = getUserRoleList.get(0).get("roles");
+        String[] split = roles.split(",");
+        //定义用于明确有哪些分组不可见，若为0，则全部物资可见。
+        int num = 0 ;
+        for (int x = 0;roles.split(",").length > x ; x++ ){
+            //MP-仓库账务员、MP-仓库发货员、MP-仓库主管不可见进销存物资
+            if (split[x].equals("MPCK001")||split[x].equals("MPCK002")||split[x].equals("MPCK003")){
+                num++;
+                break;
+            }
+        }
+        List<Map<String, Object>> matList = new ArrayList<Map<String, Object>>();
+        int count = 0;
+        //限制是否可以看到进销存物资树
+        if (num==0){ //若数量为0则可以看到所有的物资树
+            matList = dao.query("ACGM01.queryMaterialList", map,
+                    Integer.parseInt(map.get("offset").toString()), Integer.parseInt(map.get("limit").toString()));
+            count = super.count("ACGM01.queryMaterialListCount", map);
+        }else {//若数量大于0则不可以看到所有的物资树
+            matList = dao.query("ACGM01.queryMaterialListExclude", map,
+                    Integer.parseInt(map.get("offset").toString()), Integer.parseInt(map.get("limit").toString()));
+            count = super.count("ACGM01.queryMaterialListCountExclude", map);
+        }
 
         /**
          * 3.将查询结果封装在EiInfo中返
@@ -177,7 +203,30 @@ public class ServiceACGM01 extends ServiceBase {
         /**
          * 3.调用query()方法，得到满足上述条件的树形结果集。
          */
-        List<Map<String, String>> list = dao.query("ACGM01.queryMatTree", map);
+        //筛选是物资仓的人员进行判断不可查看进销存物资
+        //获取工号ID
+        String workNo = UserSession.getUserId();
+        map.put("workNo",workNo);
+        List<Map<String, String>> getUserRoleList = dao.query("ACGM01.getUserRole", map);
+        //获取分组的编码名称
+        String roles = getUserRoleList.get(0).get("roles");
+        String[] split = roles.split(",");
+        //定义用于明确有哪些分组不可见，若为0，则全部物资可见。
+        int num = 0 ;
+        for (int x = 0;roles.split(",").length > x ; x++ ){
+            //MP-仓库账务员、MP-仓库发货员、MP-仓库主管不可见进销存物资
+            if (split[x].equals("MPCK001")||split[x].equals("MPCK002")||split[x].equals("MPCK003")){
+                num++;
+                break;
+            }
+        }
+        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+        //限制是否可以看到进销存物资树
+        if (num==0){ //若数量为0则可以看到所有的物资树
+             list = dao.query("ACGM01.queryMatTree", map);
+        }else {//若数量不为0则不可以看到所有的物资树
+             list = dao.query("ACGM01.queryMatTreeExclude", map);
+        }
 
         /**
          * 4.调用PrUtils.BuildOutEiInfo()方法将查询结果封装在EiInfo中的result域

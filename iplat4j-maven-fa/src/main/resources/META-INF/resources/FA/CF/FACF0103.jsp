@@ -9,7 +9,7 @@
 		<EF:EFInput ename="info-0-goodsNumMax" cname="资产编号" readOnly="true" type="hidden"/>
 		<EF:EFInput ename="info-0-goodsNum" cname="资产编码" readOnly="true"/>
 		<EF:EFInput ename="info-0-goodsName" cname="资产名称" readOnly="true"/>
-		<EF:EFInput ename="info-0-goodsTypeName" cname="资产类别名称" readOnly="true"/>
+		<EF:EFInput ename="info-0-goodsTypeName" cname="类组" readOnly="true"/>
 		<EF:EFInput ename="info-0-buyCost" cname="资产原值(元)" readOnly="true"/>
 		<EF:EFInput ename="info-0-totalDepreciation" cname="累计折旧值(元)" readOnly="true"/>
 		<EF:EFInput ename="info-0-netAssetValue" cname="资产净值(元)" readOnly="true"/>

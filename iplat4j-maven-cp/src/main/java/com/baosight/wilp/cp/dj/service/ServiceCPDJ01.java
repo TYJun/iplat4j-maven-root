@@ -13,6 +13,7 @@ import com.baosight.wilp.utils.UUID;
 import com.baosight.xservices.xs.util.UserSession;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.core.userdetails.User;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;

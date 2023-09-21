@@ -231,12 +231,12 @@
     <!--  通过物资编码类别获取资产类别信息  -->
     <select id="queryFaTypeInfoByMatTypeName" parameterClass="java.lang.String" resultClass="java.util.HashMap">
         SELECT
-           T1.type_code AS "goodsTypeCode",
-           T1.type_name AS "goodsTypeName",
+           T1.type_code AS "goodsClassifyCode",
+           T1.type_name AS "goodsClassifyName",
            T1.use_years AS "useYears",
-           T2.id AS "parentId",
-           T2.type_code AS "goodsClassifyCode",
-           T2.type_name AS "goodsClassifyName"
+           T1.id AS "parentId",
+           T2.type_code AS "goodsTypeCode",
+           T2.type_name AS "goodsTypeName"
         FROM
             fa_type T1
         JOIN fa_type T2 ON T1.parent_id = T2.id

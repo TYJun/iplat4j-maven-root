@@ -114,7 +114,7 @@
         <EF:EFColumn ename="goodsNum" cname="资产编码"  align="center" width="200" enable="false"/>
         <EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="200" enable="false"/>
         <EF:EFColumn ename="goodsClassifyName" cname="资产类别"  align="center" width="200" enable="false"/>
-        <EF:EFColumn ename="goodsTypeName" cname="类别名称"  align="center" width="200" enable="false"/>
+        <EF:EFColumn ename="goodsTypeName" cname="类组"  align="center" width="200" enable="false"/>
         <EF:EFColumn ename="model" cname="型号规格"  align="center" width="200" enable="false"/>
         <EF:EFColumn ename="statusCode" cname="资产状态"   align="center" width="200" enable="false"/>
         <EF:EFColumn ename="rfidCode" cname="RFID"  align="center" width="200" enable="false"/>

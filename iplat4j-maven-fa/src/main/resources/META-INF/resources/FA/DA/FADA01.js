@@ -101,7 +101,7 @@ $(function () {
     IPLATUI.EFGrid = {
         "resultA": {
             toolbarConfig: {
-                hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
+                hidden:false,//true 时，不显示功能按钮，但保留 setting 导出按钮
                 add: false, cancel: false, save: false, 'delete': false,
                 buttons: [
                     // {
@@ -246,10 +246,10 @@ $(function () {
                 }
             },
             toolbarConfig: {
-                hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
+                hidden:false,//true 时，不显示功能按钮，但保留 setting 导出按钮
                 add: false, cancel: false, save: false, 'delete': false,
                 buttons: [
-                    {
+                    /*{
                         name: "enter",
                         text: "手工录入",
                         layout: "3",
@@ -271,7 +271,7 @@ $(function () {
                                 })
                             }
                         }
-                    },
+                    },*/
                     // {
                     //     name: "writeOff",
                     //     text: "销账",

@@ -47,7 +47,8 @@ public class UploadImageServlet extends HttpServlet
         try 
         {
             //获取文件保存路径
-            String tBasePath="/image/module/frame/"+(new SimpleDateFormat("yyyyMMdd").format(new Date()));
+//            String tBasePath="/image/module/frame/"+(new SimpleDateFormat("yyyyMMdd").format(new Date()));
+            String tBasePath="/upload/frame/mat/"+(new SimpleDateFormat("yyyyMMdd").format(new Date()));
             String tRealPath=pRequest.getRealPath(tBasePath);
             File pBaseDirFile=new File(tRealPath);
             if(!pBaseDirFile.exists())

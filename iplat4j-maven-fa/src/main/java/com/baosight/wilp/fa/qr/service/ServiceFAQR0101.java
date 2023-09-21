@@ -36,8 +36,8 @@ public class ServiceFAQR0101 extends ServiceBase {
 			inInfo.set("deptNum", mapList.get(0).get("deptNum"));
 			inInfo.set("deptName", mapList.get(0).get("deptName"));
 			if (CollectionUtils.isNotEmpty(FaTypeInfo)) {
-				inInfo.set("goodsTypeCode", FaTypeInfo.get(0).get("goodsTypeCode"));
-				inInfo.set("goodsTypeName", FaTypeInfo.get(0).get("goodsTypeName"));
+				inInfo.setCell("info", 0, "goodsTypeCode", FaTypeInfo.get(0).get("goodsTypeCode"));
+				inInfo.setCell("info", 0, "goodsTypeName", FaTypeInfo.get(0).get("goodsTypeName"));
 				inInfo.setCell("info", 0, "useYears", FaTypeInfo.get(0).get("useYears"));
 				inInfo.setCell("info", 0, "goodsClassifyCode", FaTypeInfo.get(0).get("goodsClassifyCode"));
 				inInfo.setCell("info", 0, "goodsClassifyName", FaTypeInfo.get(0).get("goodsClassifyName"));

@@ -440,6 +440,36 @@
         </iterate>
     </insert>
 
+    <!-- 直入直出类型的卡片进行抛帐 -->
+    <insert id="putOutStorageAccountCard" parameterClass="java.util.HashMap">
+        INSERT INTO fa_throw_account(
+            `id`,
+            `faInfo_id`,
+            `dept_num`,
+            `dept_name`,
+            `surp_num`,
+            `surp_name`,
+            `invoice_no`,
+            `goods_classify_code`,
+            `goods_classify_name`,
+            `goods_type_code`,
+            `goods_type_name`,
+            `goods_num`,
+            `goods_name`,
+            `net_asset_value`,
+            `account_type`,
+            `create_date`
+        ) VALUES
+        <iterate conjunction="," property="faInfoDOList">
+            (
+            UUID(),#faInfoDOList[].id#,#deptNum#,#deptName#,#surpNum#,#surpName#,#invoiceNo#,
+            #faInfoDOList[].goodsClassifyCode#,#faInfoDOList[].goodsClassifyName#,
+            #faInfoDOList[].goodsTypeCode#, #faInfoDOList[].goodsTypeName#,
+            #faInfoDOList[].goodsNum#,#faInfoDOList[].goodsName#,#faInfoDOList[].netAssetValue#,'016',NOW()
+            )
+        </iterate>
+    </insert>
+
     <!-- 调拨出库时进行抛帐 -->
     <insert id="putOutStorageAccount" parameterClass="java.util.HashMap">
         INSERT INTO fa_throw_account

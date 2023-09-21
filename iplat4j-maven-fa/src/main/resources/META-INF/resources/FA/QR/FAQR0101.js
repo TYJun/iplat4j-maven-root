@@ -17,7 +17,7 @@ $(function () {
         countOtherFund();
     })
     // 回显资产类别
-    IPLAT.EFPopupInput.setAllFields($("#info-0-goodsTypeCode"), __ei.goodsTypeCode, __ei.goodsTypeName)
+    // IPLAT.EFPopupInput.setAllFields($("#info-0-goodsTypeCode"), __ei.goodsTypeCode, __ei.goodsTypeName)
     IPLAT.EFPopupInput.setAllFields($("#info-0-surpNum"), __ei.surpNum, __ei.surpName)
     // IPLAT.EFPopupInput.enable($("#info-0-surpNum"), false)
     $("#info-0-confirmDeptNum").val(__ei.deptNum);
@@ -270,6 +270,14 @@ $(function () {
                     }
                     if ($("#info-0-goodsCategoryCode").val() == ""){
                         NotificationUtil("请选择资产末级", "warning")
+                        return
+                    }
+                    if ($("#info-0-deptName").val() == ""){
+                        NotificationUtil("请选择所属科室", "warning")
+                        return
+                    }
+                    if ($("#info-0-confirmDeptNum").val() == ""){
+                        NotificationUtil("请勿手填所属科室", "warning")
                         return
                     }
                     if (isNaN($("#info-0-buyCost").val())) {

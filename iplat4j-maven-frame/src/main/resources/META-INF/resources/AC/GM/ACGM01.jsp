@@ -35,6 +35,7 @@
                         <EF:EFCodeOption codeName="wilp.ac.gm.type" textField="label" valueField="value"/>
                     </EF:EFSelect>
                     <EF:EFSelect ename="status" cname="物资状态">
+                        <EF:EFOption label="全部" value=""></EF:EFOption>
                         <EF:EFOption label="启用" value="1"></EF:EFOption>
                         <EF:EFOption label="停用" value="0"></EF:EFOption>
                     </EF:EFSelect>

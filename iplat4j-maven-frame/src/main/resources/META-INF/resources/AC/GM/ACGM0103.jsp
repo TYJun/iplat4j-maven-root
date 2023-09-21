@@ -189,6 +189,7 @@
         $.ajax({
             //url: IPLATUI.CONTEXT_PATH + "/app/materialsPicUpload",
             url: IPLATUI.CONTEXT_PATH + "/frame/servlet/uploadImage",
+            // url: IPLATUI.CONTEXT_PATH + "/" + $("#pictureUri").val(),
             data: fd,
             type: "post",
             cache: false,

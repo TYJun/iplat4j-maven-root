@@ -1,12 +1,10 @@
 package com.baosight.wilp.ci.kc.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
+import com.baosight.wilp.ci.kc.domain.CiStorge;
 import com.baosight.wilp.common.util.CommonUtils;
 import com.baosight.wilp.ci.kc.domain.CiStorgeRecord;
 
@@ -131,6 +129,55 @@ public class ServiceCIKC02 extends ServiceBase {
 		//获取参数
 		Object object = inInfo.get("record");
 		Object object2 = inInfo.get("recordList");
+		CiStorgeRecord recordList = new CiStorgeRecord();
+		//获取操作履历数据
+		if(object != null){
+			recordList = (CiStorgeRecord) object;
+		}
+		if(object2 != null){
+			List<CiStorgeRecord> list = (List<CiStorgeRecord>) object2;
+			recordList = list.get(0);
+		}
+		//更改插入操作履历信息
+		//获取操作履历数据
+
+		//获取操作前数量和价格
+		Double beforeNum = recordList.getBeforeNum();
+		Double beforeAmount = recordList.getBeforeAmount();
+		//获取操作后数量和价格
+		Double afterNum = recordList.getAfterNum();
+		Double afterAmount = recordList.getAfterAmount();
+		//获取出入库数量数量差和价格差
+		double num = beforeNum - afterNum;
+		double amount = beforeAmount - afterAmount;
+
+		//获取操作类型
+		String originBillType = recordList.getOriginBillType();
+
+		//修改操作前和操作后的数量和价格
+		//1.获取物资库存量
+		HashMap<Object, Object> map = new HashMap<>();
+		String matNum = recordList.getMatNum();
+		map.put("matNumEQ", matNum);
+		//获取库存表中的信息
+		List<CiStorge> query = dao.query("CIKC01.query", map);
+		Double totalNum = query.get(0).getTotalNum();
+		//2.获取库存量作为操作前数量，库存量加减数量差作为操作后数量
+		if (originBillType.equals("06")){//出库入库操作
+			if (recordList.getOriginBillTypeName().equals("食堂进销存出库")){
+
+			}else if (recordList.getOriginBillTypeName().equals("采购入库")){
+
+			}
+
+		}else if (originBillType.equals("01")){ //直入直出操作
+
+		}else if (originBillType.equals("05")){//红冲操作
+
+		}else if (originBillType.equals("03")){//盘亏盘盈出库操作
+
+		}
+
 		if(object != null){
 			CiStorgeRecord record = (CiStorgeRecord) object;
 			dao.insert("CIKC02.insert", record);

@@ -32,7 +32,7 @@
 <%--                                root="{id: 'root', typeName: '根节点'}" colWidth="3" ratio="4:8">--%>
 <%--                </EF:EFTreeInput>--%>
                 <EF:EFInput ename="inqu_status-0-goodsClassifyCode" colWidth="3" ratio="4:8" cname="资产类别"/>
-                <EF:EFInput ename="inqu_status-0-goodsTypeCode" colWidth="3" ratio="4:8" cname="资产类别名称"/>
+                <EF:EFInput ename="inqu_status-0-goodsTypeCode" colWidth="3" ratio="4:8" cname="类组"/>
                 <EF:EFSelect ename="inqu_status-0-fundingSourceNum" cname="资金来源" colWidth="3" ratio="4:8">
                     <EF:EFOption label="--请选择--" value=""/>
                     <EF:EFCodeOption codeName="wilp.mp.source"/>
@@ -74,8 +74,8 @@
             <EF:EFColumn ename="statusCodeMean" cname="资产状态" align="center" width="200"/>
             <EF:EFColumn ename="remark" cname="备注" align="center" width="200"/>
             <EF:EFColumn ename="goodsClassifyName" cname="资产类别" align="center" width="200"/>
-            <EF:EFColumn ename="goodsTypeCode" cname="资产类别名称" align="center" width="200" hidden="true"/>
-            <EF:EFColumn ename="goodsTypeName" cname="资产类别名称" align="center" width="200"/>
+            <EF:EFColumn ename="goodsTypeCode" cname="类组" align="center" width="200" hidden="true"/>
+            <EF:EFColumn ename="goodsTypeName" cname="类组" align="center" width="200"/>
             <EF:EFColumn ename="manufacturer" cname="制造厂商" align="center" width="200"/>
             <EF:EFColumn ename="surpName" cname="供应商" align="center" width="200"/>
             <EF:EFColumn ename="buyDate" cname="购入日期" align="center" width="200"/>

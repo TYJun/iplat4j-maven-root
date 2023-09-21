@@ -36,8 +36,8 @@
             <EF:EFColumn ename="installLocation" cname="地点" align="center" width="200" enable="false" hidden="true"/>
             <EF:EFColumn ename="room" cname="具体位置" align="center" width="200" enable="false" hidden="true"/>
             <EF:EFColumn ename="goodsClassifyName" cname="资产类别" align="center" width="200" enable="false"/>
-            <EF:EFColumn ename="goodsTypeCode" cname="资产类别名称" align="center" width="200" hidden="true"/>
-            <EF:EFColumn ename="goodsTypeName" cname="资产类别名称" align="center" width="200" enable="false"/>
+            <EF:EFColumn ename="goodsTypeCode" cname="类组" align="center" width="200" hidden="true"/>
+            <EF:EFColumn ename="goodsTypeName" cname="类组" align="center" width="200" enable="false"/>
             <EF:EFColumn ename="model" cname="型号规格" align="center" width="200" enable="false" hidden="true"/>
             <EF:EFColumn ename="manufacturer" cname="制造厂商" align="center" width="200" enable="false" hidden="true"/>
             <EF:EFColumn ename="surpName" cname="供应商" align="center" width="200" enable="false" hidden="true"/>

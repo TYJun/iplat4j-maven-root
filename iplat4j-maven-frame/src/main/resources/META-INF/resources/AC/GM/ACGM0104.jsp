@@ -274,6 +274,7 @@
 		$.ajax({
 			// url: IPLATUI.CONTEXT_PATH + "/app/materialsPicUpload",
 			url: IPLATUI.CONTEXT_PATH + "/frame/servlet/uploadImage",
+			// url: IPLATUI.CONTEXT_PATH + "/" + $("#pictureUri").val(),
 			data: fd,
 			type: "post",
 			cache: false,
@@ -297,14 +298,14 @@
 					$('#uploadButton').attr("disabled", false);
 					//$('#uploadButtonOne').removeAttr("disabled");
 					//$('#uploadButtonOne').attr("disabled","");
-					$('#pictureUri').val(data.msg);
+					$('#pictureUri').val(data);
 
 					// var accessPath = IPLATUI.CONTEXT_PATH + "/" + data.msg+"?nowTime="+new Date().getTime();
 					var accessPath =IPLATUI.CONTEXT_PATH +"/" + data;
 					$("#imageShow").attr("src", accessPath);
 					setTimeout(function(){$("#imageShow")[0].src="";$("#imageShow")[0].src=accessPath;},5000);
 					setTimeout(function(){IPLAT.alert("图片上传成功");},2000);
-					IPLAT.alert("图片上传成功");
+					// IPLAT.alert("图片上传成功");
 
 				} else {
 					NotificationUtil("图片上传失败", "error");

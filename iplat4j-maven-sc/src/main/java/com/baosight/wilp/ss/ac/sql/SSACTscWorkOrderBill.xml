@@ -793,13 +793,18 @@
     <select id="queryMeauNum" parameterClass="java.util.HashMap"
             resultClass="java.util.HashMap">
         SELECT
-        id as "id",  <!-- 主键 -->
-        building as "building",
-        menu_num as "menuNum",
-        menu_name as "menuName"
-        FROM sc_menu_addr_config
+        a.id as "id",  <!-- 主键 -->
+        a.building as "building",
+        b.menu_num as "menuNum",
+        b.menu_name as "menuName",
+        a.menu_name as menuNamed
+        FROM sc_menu_addr_config a
+        left join sc_menu b on b.menu_type_name = a.menu_name
         WHERE 1=1
-        and menu_name = #menuName#
+        and b.menu_name = #menuName#
+        and b.canteen_num = 'ST000009'
+        and a.take_effect = '1'
+        group by b.menu_type_name
     </select>
 
 

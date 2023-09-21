@@ -23,7 +23,7 @@
 						   ratio="3:3" startRatio="4:8" endRatio="4:8" readonly="true"/>
 			<EF:EFInput ename="inqu_status-0-useYear" colWidth="3" ratio="4:8" cname="使用年限"/>
 			<EF:EFInput ename="inqu_status-0-goodsClassifyCode" colWidth="3" ratio="4:8" cname="资产类别"/>
-			<EF:EFInput ename="inqu_status-0-goodsTypeCode" colWidth="3" ratio="4:8" cname="资产类别名称"/>
+			<EF:EFInput ename="inqu_status-0-goodsTypeCode" colWidth="3" ratio="4:8" cname="类组"/>
 <%--			<EF:EFTreeInput ename="inqu_status-0-goodsClassifyCode" cname="资产类别" serviceName="FALB01" methodName="queryFaTypeTree"--%>
 <%--							valueField="id" textField="typeName" hasChildren="isLeaf" readonly="true"--%>
 <%--							root="{id: 'root', typeName: '根节点'}" colWidth="3" ratio="4:8">--%>

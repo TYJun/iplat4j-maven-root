@@ -69,6 +69,74 @@
 		</dynamic>
 	</select>
 
+	<!-- 查询物资列表排除进销存物资 -->
+	<select id="queryMaterialListExclude" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT t.* FROM (
+		SELECT am.id AS "id",
+		am.mat_code AS "matCode",
+		am.mat_name AS "matName",
+		am.mat_class_id AS "matClassId",
+		amc.mat_class_name AS "matClassName",
+		amc.mat_class_code AS "matClassCode",
+		am.mat_spec AS "matSpec",
+		am.mat_model AS "matModel",
+		am.unit AS "unit",
+		format(am.price,2) AS "price",
+		am.supplier AS "supplier",
+		acs.supplier_name AS "supplierText",
+		am.manufacturer AS "manufacturer",
+		am.mat_type_code AS "matTypeCode",
+		am.remark AS "remark",
+		am.status AS "status",
+		CASE am.status
+		WHEN '1' THEN '启用'
+		WHEN '0' THEN '停用'
+		ELSE '未知' END AS "statusText",
+		am.rec_create_time AS "recCreateTime",
+		am.rec_revise_time AS "recReviseTime",
+		am.picture_uri AS pictureUri,
+		am.pack_factor AS packfactor
+		FROM $projectSchema$.ac_material am
+		LEFT JOIN $projectSchema$.ac_material_class amc ON amc.id = am.mat_class_id
+		LEFT JOIN $projectSchema$.ac_supplier acs ON am.supplier = acs.supplier_code
+		WHERE amc.mat_class_code != 'MC00001'
+		) t
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="id">
+			t.id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matClassCode">
+			t.matClassCode = #matClassCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matClassName">
+			t.matClassName  LIKE  concat('%',#matClassName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matClassId">
+			t.matClassId = #matClassId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matCode">
+			t.matCode = #matCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matName">
+			t.matName LIKE  concat('%',#matName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matTypeCode">
+			t.matTypeCode = #matTypeCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="status">
+			t.status = #status#
+		</isNotEmpty>
+
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				t.recReviseTime desc, t.matCode desc
+			</isEmpty>
+		</dynamic>
+	</select>
+
 
 	<!-- 查询科室列数量 -->
 	<select id="queryMaterialListCount" parameterClass="java.util.HashMap" resultClass="int">
@@ -122,14 +190,67 @@
 		</isNotEmpty>
 	</select>
 
+	<!-- 查询科室列数量排除进销存物资 -->
+	<select id="queryMaterialListCountExclude" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT count(1) FROM (
+		SELECT am.id AS "id",
+		am.mat_code AS "matCode",
+		am.mat_name AS "matName",
+		am.mat_class_id AS "matClassId",
+		amc.mat_class_name AS "matClassName",
+		amc.mat_class_code AS "matClassCode",
+		am.mat_spec AS "matSpec",
+		am.mat_model AS "matModel",
+		am.unit AS "unit",
+		am.price AS "price",
+		am.supplier AS "supplier",
+		am.manufacturer AS "manufacturer",
+		am.mat_type_code AS "matTypeCode",
+		am.remark AS "remark",
+		am.status AS "status",
+		am.rec_create_time AS "recCreateTime",
+		am.rec_creator AS "recCreator",
+		am.rec_revisor AS "recRevisor",
+		am.rec_revise_time AS "recReviseTime"
+		FROM $projectSchema$.ac_material am
+		LEFT JOIN $projectSchema$.ac_material_class amc ON amc.id = am.mat_class_id
+		WHERE amc.mat_class_code != 'MC00001'
+		) t
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="id">
+			t.id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matClassCode">
+			t.matClassCode = #matClassCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matClassName">
+			t.matClassName = #matClassName#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matClassId">
+			t.matClassId = #matClassId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matCode">
+			t.matCode = #matCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matName">
+			t.matName = #matName#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matTypeCode">
+			t.matTypeCode = #matTypeCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="status">
+			t.status = #status#
+		</isNotEmpty>
+	</select>
+
 	<select id="queryMatClassNameById" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
 		select id matClassId,
 		       mat_class_name  matClassName
 		from  $projectSchema$.ac_material_class
 		where id = #matClassId#
 	</select>
-
-	<select id="queryMatTree" resultClass="java.util.HashMap">
+	<!--不可看到进销存物资-->
+	<select id="queryMatTreeExclude" resultClass="java.util.HashMap">
 			SELECT t.* from (
 				SELECT id AS "label",
 				   	mat_class_code AS "matClassCode",
@@ -137,6 +258,7 @@
 					parent_id AS "pId",
 					status AS "status"
 				FROM $projectSchema$.ac_material_class
+				WHERE mat_class_code != 'MC00001'
 				ORDER BY mat_class_code desc
 			) t
 			WHERE 1=1
@@ -146,6 +268,25 @@
 			<isNotEmpty prepend=" AND " property="node">
 				t.pId = #node#
 			</isNotEmpty>
+	</select>
+
+	<select id="queryMatTree" resultClass="java.util.HashMap">
+		SELECT t.* from (
+		SELECT id AS "label",
+		mat_class_code AS "matClassCode",
+		concat('[',mat_class_code, ']', mat_class_name) matClassName,
+		parent_id AS "pId",
+		status AS "status"
+		FROM $projectSchema$.ac_material_class
+		ORDER BY mat_class_code desc
+		) t
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="status">
+			t.status = #status#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="node">
+			t.pId = #node#
+		</isNotEmpty>
 
 
 	</select>
@@ -316,4 +457,21 @@
 		FROM $platSchema$.tedcm01
 		WHERE CODESET_CODE = 'wilp.ac.gm.unit'
 	</select>
+	<!-- 获取指定人员的用户组/角色 -->
+	<select id="getUserRole" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+
+		SELECT
+			ifnull( GROUP_CONCAT( xug.GROUP_ENAME ), '' ) roles,
+			ifnull( GROUP_CONCAT( xug.GROUP_CNAME ), '' ) roleNames
+		FROM
+			$platSchema$.xs_user_group_member AS xugm
+				LEFT JOIN $platSchema$.xs_user_group AS xug ON xugm.PARENT_ID = xug.ID
+				LEFT JOIN $platSchema$.xs_user AS xu ON xugm.MEMBER_ID = xu.USER_ID
+				LEFT JOIN $platSchema$.txsog03 o3 ON xug.ID = o3.USER_GROUP_ID
+				LEFT JOIN $platSchema$.txsog01 o1 ON o3.ORG_ID = o1.ORG_ID
+		WHERE
+			( o1.IS_DELETED = '0' OR o1.IS_DELETED IS NULL )
+		  AND xu.LOGIN_NAME = #workNo#
+	</select>
+
 </sqlMap>

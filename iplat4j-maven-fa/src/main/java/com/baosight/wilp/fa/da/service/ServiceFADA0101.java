@@ -191,6 +191,8 @@ public class ServiceFADA0101 extends ServiceBase {
                 param.put("recCreateTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                 if (param.get("useDate") != null && !"".equals(param.get("useDate"))) {
                     param.put("useDate", param.get("useDate"));
+                } else {
+                    param.put("useDate", param.get("acquitvDate"));
                 }
                 if (param.get("acquitvDate") != null && !"".equals(param.get("acquitvDate"))) {
                     param.put("buyDate", param.get("acquitvDate"));
@@ -236,6 +238,19 @@ public class ServiceFADA0101 extends ServiceBase {
                     put("deptNum", param.get("confirmDeptNum"));
                     put("deptName", param.get("confirmDeptName"));
                 }});
+                // 判断是否是直入直出，如果是直入直出就进行抛帐出库
+                if ("card".equals(info.getString("createType"))) {
+                    if ("01".equals(info.getString("receiveType"))) {
+                        dao.insert("FAAP01.putOutStorageAccountCard", new HashMap<String, Object>() {{
+                            put("faInfoDOList", faInfoDOList);
+                            put("surpNum", param.get("surpNum"));
+                            put("surpName", param.get("surpName"));
+                            put("invoiceNo", param.get("invoiceNo"));
+                            put("deptNum", param.get("confirmDeptNum"));
+                            put("deptName", param.get("confirmDeptName"));
+                        }});
+                    }
+                }
                 break;
             case "edit":
                 FaInfoDO faInfoDO = new FaInfoDO();
