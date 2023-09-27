@@ -69,7 +69,7 @@
 		</dynamic>
 	</select>
 
-	<!-- 查询物资列表排除进销存物资 -->
+	<!-- 查询物资列表排除配置项中的物资 -->
 	<select id="queryMaterialListExclude" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
 		SELECT t.* FROM (
 		SELECT am.id AS "id",
@@ -99,7 +99,13 @@
 		FROM $projectSchema$.ac_material am
 		LEFT JOIN $projectSchema$.ac_material_class amc ON amc.id = am.mat_class_id
 		LEFT JOIN $projectSchema$.ac_supplier acs ON am.supplier = acs.supplier_code
-		WHERE amc.mat_class_code != 'MC00001'
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="matClassCodeList">
+			amc.mat_class_code NOT in
+			<iterate property="matClassCodeList" conjunction="," open="(" close=")">
+				#matClassCodeList[].matClassCode#
+			</iterate>
+		</isNotEmpty>
 		) t
 		WHERE 1=1
 		<isNotEmpty prepend="and" property="id">
@@ -214,7 +220,13 @@
 		am.rec_revise_time AS "recReviseTime"
 		FROM $projectSchema$.ac_material am
 		LEFT JOIN $projectSchema$.ac_material_class amc ON amc.id = am.mat_class_id
-		WHERE amc.mat_class_code != 'MC00001'
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="matClassCodeList">
+			amc.mat_class_code NOT in
+			<iterate property="matClassCodeList" conjunction="," open="(" close=")">
+				#matClassCodeList[].matClassCode#
+			</iterate>
+		</isNotEmpty>
 		) t
 		WHERE 1=1
 		<isNotEmpty prepend="and" property="id">
@@ -258,7 +270,13 @@
 					parent_id AS "pId",
 					status AS "status"
 				FROM $projectSchema$.ac_material_class
-				WHERE mat_class_code != 'MC00001'
+				WHERE 1=1
+				<isNotEmpty prepend="and" property="matClassCodeList">
+					mat_class_code not in
+					<iterate property="matClassCodeList" conjunction="," open="(" close=")">
+						#matClassCodeList[].matClassCode#
+					</iterate>
+				</isNotEmpty>
 				ORDER BY mat_class_code desc
 			) t
 			WHERE 1=1
@@ -464,6 +482,7 @@
 			ifnull( GROUP_CONCAT( xug.GROUP_ENAME ), '' ) roles,
 			ifnull( GROUP_CONCAT( xug.GROUP_CNAME ), '' ) roleNames
 		FROM
+
 			$platSchema$.xs_user_group_member AS xugm
 				LEFT JOIN $platSchema$.xs_user_group AS xug ON xugm.PARENT_ID = xug.ID
 				LEFT JOIN $platSchema$.xs_user AS xu ON xugm.MEMBER_ID = xu.USER_ID

@@ -60,7 +60,46 @@
             <EF:EFColumn ename="statusName" cname="订单状态" width="100" align="center" readonly="true"/>
 		</EF:EFGrid>
 	</EF:EFRegion>
-	
+    <!-- 弹窗 -->
+    <EF:EFWindow id="shEdit" width="590px" height="629px" modal="true" url="" title="查看" style="display:none;">
+        <EF:EFRegion id="edit" title="订单明细" showClear="true" >
+            <div class="row" >
+                <EF:EFInput ename="userName" cname="用户姓名" ratio="2:10" colWidth="12" readonly="true" required="true" maxLength="200" />
+            </div>
+            <div class="row">
+                <EF:EFInput ename="userTelNumber" cname="用户电话" ratio="2:10" colWidth="12" readonly="true" required="true" maxLength="200" />
+            </div>
+            <div class="row" >
+                <EF:EFInput ename="deptName" cname="科室名称" ratio="2:10" colWidth="12" readonly="true" required="true" maxLength="200" />
+            </div>
+            <div class="row" >
+                <EF:EFInput ename="room" cname="订餐地点" ratio="2:10" colWidth="12" readonly="true" required="true" maxLength="200" />
+            </div>
+            <div class="row" >
+                <EF:EFInput ename="mealName" cname="餐次名称" ratio="2:10" colWidth="12" readonly="true" required="true" maxLength="200" />
+            </div>
+            <div class="row" >
+                <EF:EFInput ename="canteenName" cname="食堂名称" ratio="2:10" colWidth="12" readonly="true" required="true" maxLength="200" />
+            </div>
+            <div class="row" >
+                <EF:EFInput ename="reqSendTime" cname="需求时间" ratio="2:10" colWidth="12" readonly="true" required="true" maxLength="200" />
+            </div>
+            <div class="row" >
+                <EF:EFInput ename="billRemark" cname="订单备注" type="textarea" ratio="2:10" readonly="true" colWidth="12" maxLength="200" />
+            </div>
+        </EF:EFRegion>
+        <!-- 菜品组成 -->
+        <EF:EFRegion id="composition " title="菜品明细" showClear="true" style="height:280px;">
+            <EF:EFGrid blockId="menus" autoDraw="no" rowNo="false" autoBind="false" serviceName="SSDCWSGL01" queryMethod="queryMenus">
+                <!-- 展示列 -->
+                <EF:EFColumn ename="menuName" cname="菜品名称" width="150" align="center" />
+                <EF:EFColumn ename="menuPrice" cname="单价" width="80" align="center" />
+                <EF:EFColumn ename="menuNumber" cname="数量" width="80" align="center" />
+                <EF:EFColumn ename="menuTotalPrice" cname="总价" width="80" align="center" />
+            </EF:EFGrid>
+        </EF:EFRegion>
+        <EF:EFButton ename="cancel" cname="取消"  class="k-button window-btn" style="float:right;"/>
+    </EF:EFWindow>
 </EF:EFPage>
 <script type="text/javascript">
 	//提交类型
@@ -97,9 +136,46 @@
                         }
                     }
                 }
+            },
+            onRowDblClick: function (e) {
+                rowDbClick(e);
             }
 		}
 	}
+    //双击行
+    function rowDbClick(e){
+        //向弹窗中填值
+        IPLAT.EFInput.value($("#userName"),e.model["userName"]);
+        IPLAT.EFInput.value($("#userTelNumber"),e.model["userTelNumber"]);
+        IPLAT.EFInput.value($("#deptName"),e.model["deptName"]);
+        IPLAT.EFInput.value($("#room"),e.model["room"]);
+        IPLAT.EFInput.value($("#mealName"),e.model["mealName"]);
+        IPLAT.EFInput.value($("#canteenName"),e.model["canteenName"]);
+        IPLAT.EFInput.value($("#reqSendTime"),e.model["reqSendTime"]);
+        IPLAT.EFInput.value($("#billRemark"),e.model["billRemark"]);
+        //打开弹窗
+        shEditWindow.open().center();
+        //加载menusGrid菜品组成数据
+        var eiInfo = new EiInfo();
+        eiInfo.set("billNo", e.model["billNo"]);
+        EiCommunicator.send("SSDCWSGL01", "queryMenus", eiInfo, {
+            onSuccess : function(ei) {
+                //为menusGrid赋值
+                menusGrid.setEiInfo(ei);
+            }
+        });
+    }
+    // 弹窗关闭事件
+    IPLATUI.EFWindow = {
+        "shEdit": {
+            close: function (e) {
+                //EFRegion的id-trash
+                $("#edit-trash").click();
+                //清空menusGrid菜品组成
+                menusGrid.removeRows(menusGrid.getDataItems());
+            }
+        }
+    }
 	$(function() {
         //撤单
         $("#DELBTN").on("click", function(e) {

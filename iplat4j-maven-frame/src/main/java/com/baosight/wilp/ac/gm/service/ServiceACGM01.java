@@ -76,23 +76,40 @@ public class ServiceACGM01 extends ServiceBase {
          * 2.调用query()方法查询出符合条件的物资信息
          */
         map.put("projectSchema", projectSchema);
-        //筛选是MP-仓库账务员、MP-仓库发货员、MP-仓库主管进行判断不可查看进销存物资
+        map.put("platSchema", platSchema);
+        //（1）获取用户的权限组信息
         //获取工号ID
         String workNo = UserSession.getUserId();
         map.put("workNo",workNo);
+        //获取登录账号的权限用户组
         List<Map<String, String>> getUserRoleList = dao.query("ACGM01.getUserRole", map);
-        //获取分组的编码名称
+        //获取分组的编码名称，并转换为List集合
         String roles = getUserRoleList.get(0).get("roles");
         String[] split = roles.split(",");
+        ArrayList<Object> rolesList = new ArrayList(Arrays.asList(split));
+
+        //（2）获取ACGMPZ01配置页面数据
+        //获取隔离数据（群组中文名、群组编码、物资分类编码、物资分类名称）
+        List<Map<String,Object>> query = dao.query("ACGMPZ01.query", map);
+        //封装群组编码为List集合
+        List<String> GroupEnameList = new ArrayList<>();
+        for (int i =0 ; i< query.size() ; i++){
+            GroupEnameList.add(i,(String) query.get(i).get("GroupEname"));
+        }
+        //使用retainAll方法进行获取隔离组和登录用户的相同群组编码
+        rolesList.retainAll(GroupEnameList);
+
+        //（3）获取隔离数据
         //定义用于明确有哪些分组不可见，若为0，则全部物资可见。
         int num = 0 ;
-        for (int x = 0;roles.split(",").length > x ; x++ ){
-            //MP-仓库账务员、MP-仓库发货员、MP-仓库主管不可见进销存物资
-            if (split[x].equals("MPCK001")||split[x].equals("MPCK002")||split[x].equals("MPCK003")){
-                num++;
-                break;
-            }
+        //封装数据隔离条件参数
+        if(!rolesList.isEmpty()){
+            num++;
+            map.put("GroupEnameList",rolesList);
+            //获取存在相同分组的隔离数据（群组中文名、群组编码、物资分类编码、物资分类名称）
+            map.put("matClassCodeList",(List<Map<String,Object>>)dao.query("ACGMPZ01.query", map));
         }
+
         List<Map<String, Object>> matList = new ArrayList<Map<String, Object>>();
         int count = 0;
         //限制是否可以看到进销存物资树
@@ -194,7 +211,7 @@ public class ServiceACGM01 extends ServiceBase {
          */
         Map<String, Object> map = inInfo.getRow("inqu_status", 0);
         map.put("projectSchema", projectSchema);
-
+        map.put("platSchema", platSchema);
         /**
          * 2.设置状态 status 为 1
          */
@@ -203,23 +220,39 @@ public class ServiceACGM01 extends ServiceBase {
         /**
          * 3.调用query()方法，得到满足上述条件的树形结果集。
          */
-        //筛选是物资仓的人员进行判断不可查看进销存物资
+        //（1）获取用户的权限组信息
         //获取工号ID
         String workNo = UserSession.getUserId();
         map.put("workNo",workNo);
+        //获取登录账号的权限用户组
         List<Map<String, String>> getUserRoleList = dao.query("ACGM01.getUserRole", map);
-        //获取分组的编码名称
+        //获取分组的编码名称，并转换为List集合
         String roles = getUserRoleList.get(0).get("roles");
         String[] split = roles.split(",");
+        ArrayList<Object> rolesList = new ArrayList(Arrays.asList(split));
+
+        //（2）获取ACGMPZ01配置页面数据
+        //获取隔离数据（群组中文名、群组编码、物资分类编码、物资分类名称）
+        List<Map<String,Object>> query = dao.query("ACGMPZ01.query", map);
+        //封装群组编码为List集合
+        List<String> GroupEnameList = new ArrayList<>();
+        for (int i =0 ; i< query.size() ; i++){
+            GroupEnameList.add(i,(String) query.get(i).get("GroupEname"));
+        }
+        //使用retainAll方法进行获取隔离组和登录用户的相同群组编码
+        rolesList.retainAll(GroupEnameList);
+
+        //（3）获取隔离数据
         //定义用于明确有哪些分组不可见，若为0，则全部物资可见。
         int num = 0 ;
-        for (int x = 0;roles.split(",").length > x ; x++ ){
-            //MP-仓库账务员、MP-仓库发货员、MP-仓库主管不可见进销存物资
-            if (split[x].equals("MPCK001")||split[x].equals("MPCK002")||split[x].equals("MPCK003")){
-                num++;
-                break;
-            }
+        //封装数据隔离条件参数
+        if(!rolesList.isEmpty()){
+            num++;
+            map.put("GroupEnameList",rolesList);
+            //获取存在相同分组的隔离数据（群组中文名、群组编码、物资分类编码、物资分类名称）
+            map.put("matClassCodeList",(List<Map<String,Object>>)dao.query("ACGMPZ01.query", map));
         }
+
         List<Map<String, String>> list = new ArrayList<Map<String, String>>();
         //限制是否可以看到进销存物资树
         if (num==0){ //若数量为0则可以看到所有的物资树

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ACGMPZ01">
+
+	<select id="query" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		    id,
+		    RESOURCE_GROUP_CNAME AS "GroupCname", <!--群组中文名-->
+			RESOURCE_GROUP_ENAME AS "GroupEname", <!--群组编码-->
+			mat_class_code AS "matClassCode", <!--物资分类编码-->
+			mat_class_name AS "matClassName"<!--物资分类名称-->
+		FROM $projectSchema$.ac_material_configuration
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="GroupCname">
+			RESOURCE_GROUP_CNAME like concat('%', #GroupCname#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="GroupEname">
+			RESOURCE_GROUP_ENAME like concat('%', #GroupEname#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matClassCode">
+			mat_class_code = #matClassCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="GroupEnameList">
+			RESOURCE_GROUP_ENAME in
+		    <iterate property="GroupEnameList" conjunction="," open="(" close=")">
+				#GroupEnameList[]#
+			</iterate>
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert">
+		insert into $projectSchema$.ac_material_configuration
+		(
+		 	id,
+			RESOURCE_GROUP_CNAME, <!--群组中文名-->
+			RESOURCE_GROUP_ENAME, <!--群组编码-->
+			mat_class_code,  <!--物资分类编码-->
+			mat_class_name <!--物资分类名称-->
+		)
+		value (#id#,#groupCname#,#groupEname#,#matClassCode#,#matClassName#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM $projectSchema$.ac_material_configuration
+			WHERE id = #id#
+	</delete>
+
+	<!--查询所有分组名称-->
+	<select id="queryAllPermissionGroup" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		RESOURCE_GROUP_CNAME, <!--群组中文名-->
+		RESOURCE_GROUP_ENAME <!--群组编码-->
+		FROM $platSchema$.xs_resource_group
+		WHERE RESOURCE_GROUP_ENAME != "ROOT"
+		<isNotEmpty prepend=" AND " property="groupEname">
+			RESOURCE_GROUP_ENAME = #groupEname#
+		</isNotEmpty>
+		GROUP BY RESOURCE_GROUP_CNAME
+	</select>
+
+	<!--查询物资类别编码-->
+	<select id="queryAllMaterialCategory" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		mat_class_code, <!--物资分类编码-->
+		mat_class_name <!--物资分类名称-->
+		FROM $projectSchema$.ac_material_class
+		WHERE status = "1"
+		<isNotEmpty prepend=" AND " property="matClassCode">
+			mat_class_code = #matClassCode#
+		</isNotEmpty>
+
+	</select>
+
+</sqlMap>
