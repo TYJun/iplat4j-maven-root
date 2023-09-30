@@ -248,6 +248,7 @@
             WHEN '030' THEN '现场停用'
             WHEN '031' THEN '调拨中'
             WHEN '035' THEN '报废中'
+            WHEN '039' THEN '退货中'
             WHEN '040' THEN '报废提交'
             WHEN '050' THEN '预报废'
             WHEN '060' THEN '报废'
@@ -362,7 +363,7 @@
         INSERT INTO fa_modification_batch_detail
         (
             id,faInfo_id,goods_num,goods_name,contract_no,goods_classify_code,goods_classify_name,
-            goods_type_code,goods_type_name,model,amount,price,buy_cost,manufacturer,surp_name,buy_date,
+            goods_type_code,goods_type_name,goods_category_code,goods_category_name,model,amount,price,buy_cost,manufacturer,surp_name,buy_date,
             use_date,build,floor,install_location_num,install_location,dept_num,dept_name,unit_num,
             unit_name,residual_rate,estimated_residual_value,use_years,fundingSource_num,finace_class_num,
             invoice_no,estimate_cost,remark,rec_creator,rec_create_name,rec_create_time,
@@ -375,7 +376,8 @@
             #faModificationBatchDetailVOList[].goodsNum#, #faModificationBatchDetailVOList[].goodsName#,
             #faModificationBatchDetailVOList[].contractNo#,#faModificationBatchDetailVOList[].goodsClassifyCode#,
             #faModificationBatchDetailVOList[].goodsClassifyName#, #faModificationBatchDetailVOList[].goodsTypeCode#,
-            #faModificationBatchDetailVOList[].goodsTypeName#, #faModificationBatchDetailVOList[].model#,
+            #faModificationBatchDetailVOList[].goodsTypeName#, #faModificationBatchDetailVOList[].goodsCategoryCode#,
+            #faModificationBatchDetailVOList[].goodsCategoryName#, #faModificationBatchDetailVOList[].model#,
             #faModificationBatchDetailVOList[].amount#, #faModificationBatchDetailVOList[].price#,
             #faModificationBatchDetailVOList[].buyCost#, #faModificationBatchDetailVOList[].manufacturer#,
             #faModificationBatchDetailVOList[].surpName#, #faModificationBatchDetailVOList[].buyDate#,
@@ -515,6 +517,8 @@
            goods_classify_name	= #goodsClassifyName#,
            goods_type_code	= #goodsTypeCode#,
            goods_type_name	= #goodsTypeName#,
+           goods_category_code = #goodsCategoryCode#,
+           goods_category_name = #goodsCategoryName#,
            model	= #model#,
            spec	= #spec#,
            unit_num	= #unitNum#,

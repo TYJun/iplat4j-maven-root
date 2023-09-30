@@ -90,6 +90,7 @@
 				<EF:EFColumn ename="unitNum" cname="计量单位" align="center" width="200" hidden="true"/>
 				<EF:EFColumn ename="unitName" cname="计量单位" align="center" width="200" hidden="true"/>
 				<EF:EFColumn ename="price" cname="出库单价" align="center" width="200" hidden="true"/>
+				<EF:EFColumn ename="operationType" cname="出库类型" align="center" width="200"/>
 				<EF:EFColumn ename="goodsNum" cname="资产编码" align="center" width="200" displayType="url" enable="false"/>
 				<EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="200"/>
 				<EF:EFColumn ename="spec" cname="型号规格"  align="center" width="200" />

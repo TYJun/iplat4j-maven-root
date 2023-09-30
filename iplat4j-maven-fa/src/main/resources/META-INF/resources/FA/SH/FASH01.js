@@ -39,7 +39,8 @@ $(function () {
     IPLATUI.EFGrid = {
         "resultA": {
             pageable: {
-                pageSize: 15
+                pageSize: 100,
+                pageSizes: [100, 200, 500, 1000]
             },
             toolbarConfig: {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
@@ -81,7 +82,7 @@ $(function () {
         },
         "resultB": {
             pageable: {
-                pageSize: 15
+                pageSize: 100
             },
             onCellClick: function (e) {
                 if (e.field === "discussNo") {
@@ -119,7 +120,7 @@ $(function () {
         },
         "resultC": {
             pageable: {
-                pageSize: 15
+                pageSize: 100
             },
             onCellClick: function (e) {
                 if (e.field === "discussNo") {
@@ -156,7 +157,7 @@ $(function () {
         },
         "resultD": {
             pageable: {
-                pageSize: 15
+                pageSize: 100
             },
             toolbarConfig: {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮

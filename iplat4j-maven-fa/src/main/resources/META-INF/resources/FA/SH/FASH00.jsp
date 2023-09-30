@@ -61,7 +61,7 @@
     </EF:EFRegion>
     <EF:EFRegion id="result" title="报废提交资产">
         <EF:EFGrid blockId="resultA" autoDraw="no" autoBind="true" rowNo="true" readonly="true"
-                   checkMode="multiple,row" serviceName="FASH01" queryMethod="confirmedQuery" height="460px">
+                   checkMode="multiple,row" serviceName="FASH00" queryMethod="query" height="460px">
             <EF:EFColumn ename="faInfoId" cname="faInfoId" align="center" width="200" hidden="true"/>
             <EF:EFColumn ename="goodsNum" cname="资产编码" align="center" width="200" displayType="url"/>
             <EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="200"/>

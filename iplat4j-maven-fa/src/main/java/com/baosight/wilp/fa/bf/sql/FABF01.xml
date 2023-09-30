@@ -34,6 +34,7 @@
             WHEN '030' THEN '现场停用'
             WHEN '031' THEN '调拨中'
             WHEN '035' THEN '报废中'
+            WHEN '039' THEN '退货中'
             WHEN '040' THEN '报废提交'
             WHEN '050' THEN '预报废'
             WHEN '060' THEN '报废'
@@ -583,6 +584,7 @@
                 WHEN '030' THEN '现场停用'
                 WHEN '031' THEN '调拨中'
                 WHEN '035' THEN '报废中'
+                WHEN '039' THEN '退货中'
                 WHEN '040' THEN '报废提交'
                 WHEN '050' THEN '预报废'
                 WHEN '060' THEN '报废'
@@ -627,11 +629,7 @@
                 WHEN '3' THEN '拆分中'
                 ELSE '无' END AS "lockFlag",
             archive_flag	AS "archiveFlag",
-            split_reason AS "splitReason",
-            CASE operation_type
-                WHEN '10' THEN '入库'
-                WHEN '20' THEN '出库'
-                ELSE '手工录入' END AS "operationType"
+            split_reason AS "splitReason"
         FROM fa_info
         WHERE goods_num = #value#
     </select>
@@ -666,6 +664,7 @@
             WHEN '030' THEN '现场停用'
             WHEN '031' THEN '调拨中'
             WHEN '035' THEN '报废中'
+            WHEN '039' THEN '退货中'
             WHEN '040' THEN '报废提交'
             WHEN '050' THEN '预报废'
             WHEN '060' THEN '报废'
@@ -710,11 +709,7 @@
             WHEN '3' THEN '拆分中'
             ELSE '无' END AS "lockFlag",
             archive_flag	AS "archiveFlag",
-            split_reason AS "splitReason",
-            CASE operation_type
-            WHEN '10' THEN '入库'
-            WHEN '20' THEN '出库'
-            ELSE '手工录入' END AS "operationType"
+            split_reason AS "splitReason"
         FROM fa_info
         WHERE id IN
         (SELECT

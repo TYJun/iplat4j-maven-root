@@ -81,6 +81,7 @@
                    WHEN '030' THEN '现场停用'
                    WHEN '031' THEN '调拨中'
                    WHEN '035' THEN '报废中'
+                   WHEN '039' THEN '退货中'
                    WHEN '040' THEN '报废提交'
                    WHEN '050' THEN '预报废'
                    WHEN '060' THEN '报废'
@@ -354,6 +355,7 @@
                    WHEN '030' THEN '现场停用'
                    WHEN '031' THEN '调拨中'
                    WHEN '035' THEN '报废中'
+                   WHEN '039' THEN '退货中'
                    WHEN '040' THEN '报废提交'
                    WHEN '050' THEN '预报废'
                    WHEN '060' THEN '报废'
@@ -512,6 +514,7 @@
         WHEN '030' THEN '现场停用'
         WHEN '031' THEN '调拨中'
         WHEN '035' THEN '报废中'
+        WHEN '039' THEN '退货中'
         WHEN '040' THEN '报废提交'
         WHEN '050' THEN '预报废'
         WHEN '060' THEN '报废'
@@ -547,6 +550,10 @@
         data_group_code AS "dataGroupCode",
         lock_flag AS "lockFlag",
         archive_flag AS "archiveFlag",
+        CASE operation_type
+        WHEN "01" THEN "直入直出"
+        WHEN "08" THEN "手工入库"
+        END AS "operationType",
         split_reason AS "splitReason"
         FROM fa_info
         WHERE lock_flag NOT IN ("4") AND status_code IN ('010','020','031')
@@ -811,11 +818,11 @@
         INSERT INTO fa_transfer
         (id, transfer_no, apply_dept_num, apply_dept_name, apply_person, apply_time, apply_reason,
          apply_fileCode, confirm_dept_num, confirm_dept_name, confirm_build, confirm_floor, confirm_room,
-         confirm_location_num, confirm_location_name, audit_time, transfer_status, `source`)
+         confirm_location_num, confirm_location_name, audit_time, transfer_status, `source`, out_type, bill_no)
         VALUES
-        (#id#, #transferNo#, #applyDeptNum#, #applyDeptName#, #applyPerson#, #applyTime#, #applyReason#,
+        (#id#, #transferNo#, #applyDeptNum#, #applyDeptName#, #applyPerson#, now(), #applyReason#,
          #applyFileCode#, #confirmDeptNum#, #confirmDeptName#, #confirmBuild#, #confirmFloor#, #confirmRoom#,
-         #confirmLocationNum#, #confirmLocationName#, #auditTime#, #transferStatus#, #source#)
+         #confirmLocationNum#, #confirmLocationName#, #auditTime#, #transferStatus#, #source#, #outType#, #billNo#)
     </insert>
 
     <insert id="saveFaTransferDetailInfo" parameterClass="java.util.ArrayList">
@@ -906,8 +913,9 @@
     <!--  资产科调拨：无需审批 修改资产状态、新增调拨单、新增调拨履历  -->
     <update id="updateFaInfoStatusNewToUse" parameterClass="java.util.HashMap">
         UPDATE fa_info SET status_code = '020',dept_num = #deptNum#,dept_name = #deptName#,
-        build = "",floor = "",room = "",install_location_num = "",install_location = "",
-        in_account_date = #inAccountDate#,out_remark = #outRemark#
+        build = #build#,floor = #floor#,room = #room#,install_location_num = #installLocationNum#,
+        install_location = #installLocation#,in_account_date = #inAccountDate#,out_remark = #outRemark#,
+        out_bill_no = #outBillNo#
         WHERE status_code = '010' AND id IN
         <iterate open="(" close=")" conjunction="," property="faInfoIdList">
             #faInfoIdList[]#
@@ -917,7 +925,7 @@
     <update id="updateFaInfoStatusUsing" parameterClass="java.util.HashMap">
         UPDATE fa_info SET dept_num = #deptNum#,dept_name = #deptName#,
         build = #build#,floor = #floor#,room = #room#,install_location_num = #installLocationNum#,
-        install_location = #installLocation#
+        install_location = #installLocation#, status_code = #statusCode#
         WHERE status_code = '020' AND id IN
         <iterate open="(" close=")" conjunction="," property="faInfoIdList">
             #faInfoIdList[]#
@@ -975,4 +983,13 @@
             transfer_no = #transferNo#
         </isNotEmpty>
     </select>
+
+    <delete id="deleteFaThrowAccountOut" parameterClass="java.util.HashMap">
+        delete from fa_throw_account where (account_type = '016' OR account_type = '011') AND faInfo_id IN
+        (
+            <iterate property="faInfoIdList" conjunction=",">
+                #faInfoIdList[]#
+            </iterate>
+        )
+    </delete>
 </sqlMap>

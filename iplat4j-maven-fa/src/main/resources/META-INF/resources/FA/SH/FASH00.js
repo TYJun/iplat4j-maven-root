@@ -34,10 +34,12 @@ $(function () {
                                             addRowsCheck(checkRows);
                                             var pageCount = 0.00;
                                             var DataItems = window.parent.resultGrid.getDataItems();
+                                            var numberCount = DataItems.length;
                                             for (let j = 0; j < DataItems.length; j++) {
                                                 pageCount += $.isNumeric(DataItems[j].buyCost) ? + DataItems[j].buyCost : 0;
                                             }
                                             window.parent.methods.pageCountCallback(pageCount.toFixed(2));
+                                            window.parent.methods.numberCount01Callback(numberCount.toFixed(2));
                                             window.parent.resultGrid.dataSource.page(1);
                                             window.parent['popDataWindow'].close();
                                         }
@@ -48,13 +50,14 @@ $(function () {
                                     var netValueCount = 0.00;
                                     var pageCount = 0.00;
                                     var DataItems = window.parent.resultGrid.getDataItems();
+                                    var numberCount = DataItems.length;
                                     for (let j = 0; j < DataItems.length; j++) {
                                         pageCount += $.isNumeric(DataItems[j].buyCost) ? + DataItems[j].buyCost : 0;
                                         netValueCount += $.isNumeric(DataItems[j].netAssetValue) ? + DataItems[j].netAssetValue : 0;
                                     }
                                     window.parent.methods.pageCount01Callback(pageCount.toFixed(2));
                                     window.parent.methods.netValueCount01Callback(netValueCount.toFixed(2));
-
+                                    window.parent.methods.numberCount01Callback(numberCount.toFixed(2));
                                 }
                             } else {
                                 NotificationUtil("请选择一条记录", "warning");

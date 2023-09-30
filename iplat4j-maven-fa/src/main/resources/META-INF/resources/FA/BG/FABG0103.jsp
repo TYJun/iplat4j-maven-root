@@ -10,6 +10,7 @@
 		<EF:EFInput ename="outBillNo" cname="出库单号" readOnly="true"/>
 		<EF:EFInput ename="goodsClassifyName" cname="资产类别" readOnly="true"/>
 		<EF:EFInput ename="goodsTypeName" cname="资产类别名称" readOnly="true"/>
+		<EF:EFInput ename="goodsCategoryName" cname="末级类别" readOnly="true"/>
 		<EF:EFInput ename="goodsClassifyCode" cname="资产类别编码" type="hidden"/>
 	</EF:EFRegion>
 	<EF:EFRegion title="基础信息">

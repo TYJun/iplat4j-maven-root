@@ -90,7 +90,7 @@
 
 	<insert id="saveFaInfo" parameterClass="java.util.List">
 		INSERT INTO fa_info(
-		    id,enter_bill_no,cont_no,fundingSource_num,fundingSource_name,asset_use_code,asset_use_name,
+		    id,enter_bill_no,out_bill_no,cont_no,fundingSource_num,fundingSource_name,asset_use_code,asset_use_name,
 		    asset_get_way_code,asset_get_way_name,deprect_code,deprect_name,
 		    purchase_vouch,purchase_dept,purchase_staff_name,acquitv_year,brand_desc,
 			mat_num,mat_name,manufacturer_naty_code,manufacturer_naty_name,mat_type_num,mat_type_name,
@@ -101,17 +101,17 @@
 			invoice_no,invoice_date,device_id,device_name,device_type_name,rfid_code,net_asset_value,estimate_cost,
 			remark,depreciation_way,total_depreciation,in_account_status,rec_creator,rec_create_name,
 			rec_create_time,data_group_code,archive_flag,card_status,lock_flag,asset_type,
-		    equity_fund,other_fund,fund_project_code,fund_project,warranty
+		    equity_fund,other_fund,fund_project_code,fund_project,warranty,operation_type
 		)
 		VALUES
 		<iterate conjunction=",">
 		(
-			#faInfoDOList[].id#,#faInfoDOList[].enterBillNo#,#faInfoDOList[].contNo#,#faInfoDOList[].fundingSourceNum#,#faInfoDOList[].fundingSourceName#,
+			#faInfoDOList[].id#,#faInfoDOList[].enterBillNo#,#faInfoDOList[].outBillNo#,#faInfoDOList[].contNo#,#faInfoDOList[].fundingSourceNum#,#faInfoDOList[].fundingSourceName#,
 			#faInfoDOList[].assetUseCode#,#faInfoDOList[].assetUseName#,#faInfoDOList[].assetGetWayCode#,#faInfoDOList[].assetGetWayName#,#faInfoDOList[].deprectCode#,
 		 	#faInfoDOList[].deprectName#,#faInfoDOList[].purchaseVouch#,#faInfoDOList[].purchaseDept#,#faInfoDOList[].purchaseStaffName#,#faInfoDOList[].acquitvYear#,#faInfoDOList[].brandDesc#,
 		 	#faInfoDOList[].matNum#,#faInfoDOList[].matName#,#faInfoDOList[].manufacturerNatyCode#,#faInfoDOList[].manufacturerNatyName#,#faInfoDOList[].matTypeNum#,#faInfoDOList[].matTypeName#,
-		 	#faInfoDOList[].goodsNum#, #faInfoDOList[].goodsName#, #faInfoDOList[].contractNo#,#faInfoDOList[].goodsCategoryCode#,#faInfoDOList[].goodsCategoryName#, #faInfoDOList[].goodsTypeCode#,#faInfoDOList[].goodsTypeName#,
-			#faInfoDOList[].goodsClassifyCode#,	#faInfoDOList[].goodsClassifyName#,
+		 	#faInfoDOList[].goodsNum#, #faInfoDOList[].goodsName#, #faInfoDOList[].contractNo#,#faInfoDOList[].goodsCategoryCode#,#faInfoDOList[].goodsCategoryName#,
+			#faInfoDOList[].goodsClassifyCode#,	#faInfoDOList[].goodsClassifyName#, #faInfoDOList[].goodsTypeCode#, #faInfoDOList[].goodsTypeName#,
 		 	#faInfoDOList[].model#,#faInfoDOList[].spec#, #faInfoDOList[].amount#, #faInfoDOList[].price#, #faInfoDOList[].buyCost#,
 		 	#faInfoDOList[].manufacturer#, #faInfoDOList[].surpNum#,#faInfoDOList[].surpName#, #faInfoDOList[].buyDate#, #faInfoDOList[].useDate#,
 			#faInfoDOList[].build#, #faInfoDOList[].floor#,  #faInfoDOList[].room#, #faInfoDOList[].installLocationNum#,
@@ -126,7 +126,7 @@
 		 	#faInfoDOList[].recCreateName#, #faInfoDOList[].recCreateTime#,	#faInfoDOList[].dataGroupCode#,
 		 	#faInfoDOList[].archiveFlag#, #faInfoDOList[].cardStatus#, #faInfoDOList[].lockFlag#,#faInfoDOList[].assetType#,
 		 	#faInfoDOList[].equityFund#, #faInfoDOList[].otherFund#, #faInfoDOList[].fundProjectCode#, #faInfoDOList[].fundProject#,
-			#faInfoDOList[].warranty#
+			#faInfoDOList[].warranty#, #faInfoDOList[].operationType#
 		)
 		</iterate>
 	</insert>
@@ -160,6 +160,8 @@
 			goods_classify_name	as "goodsClassifyName",
 			goods_type_code	as "goodsTypeCode",
 			goods_type_name	as "goodsTypeName",
+			goods_category_code AS "goodsCategoryCode",
+			goods_category_name AS "goodsCategoryName",
 			rfid_code	as "rfidCode",
 			model	as "model",
 			spec	as "matSpec",
@@ -224,6 +226,7 @@
 			WHEN '030' THEN '现场停用'
 			WHEN '031' THEN '调拨中'
 			WHEN '035' THEN '报废中'
+			WHEN '039' THEN '退货中'
 			WHEN '040' THEN '报废提交'
 			WHEN '050' THEN '预报废'
 			WHEN '060' THEN '报废'
@@ -696,6 +699,10 @@
 		SELECT
 			id,
 			id AS "faInfoId",
+			CASE operation_type
+			WHEN "01" THEN "直入直出"
+			WHEN "08" THEN "手工入库"
+			END AS "operationType",
 			goods_num	AS "goodsNum",
 			goods_name	AS "goodsName",
 			goods_classify_code	AS "goodsClassifyCode",
@@ -721,11 +728,13 @@
 			dept_num	AS "deptNum",
 			dept_name	AS "deptName",
 			CASE status_code
+			WHEN '000' THEN '退库供应商'
 			WHEN '010' THEN '待用'
 			WHEN '020' THEN '在用'
 			WHEN '030' THEN '现场停用'
 			WHEN '031' THEN '调拨中'
 			WHEN '035' THEN '报废中'
+			WHEN '039' THEN '退货中'
 			WHEN '040' THEN '报废提交'
 			WHEN '050' THEN '预报废'
 			WHEN '060' THEN '报废'
@@ -763,7 +772,7 @@
 			archive_flag	AS "archiveFlag",
 			split_reason AS "splitReason"
 			FROM fa_info
-			WHERE lock_flag NOT IN ('4') AND status_code NOT IN ('060')
+			WHERE lock_flag NOT IN ('4') AND status_code NOT IN ('000','060')
 		<isEqual prepend="and" property="inAccountStatus" compareValue="confirmed">
 			in_account_status = '1' AND status_code NOT IN ('00')
 		</isEqual>

@@ -98,13 +98,18 @@ $(function () {
                 }
 
                 $("#save").on("click", function (e) {
+                    // 防止连续提交
+                    $("#save").attr("disabled",true);
+                    // setTimeout(function(){$("#save").attr("disabled",false);},3000);
                     // 出现分支调拨回科室和调拨回仓库
                     // 调拨回科室
                     if ($("#info-0-turnType").val() == "dept"){
                         if ($("#info-0-turnDeptNum").val() == "") {
                             NotificationUtil("请选择接收科室", "warning");
+                            $("#save").attr("disabled",false);
                             return;
                         }
+                        var checkRows = resultFixedAssestsGrid.getDataItems();
                         if (checkRows.length > 0) {
                             var newFaInfo = [],useFaInfo = [];
                             for (let i = 0; i < checkRows.length; i++) {
@@ -131,28 +136,40 @@ $(function () {
                                     } else {
                                         closeParentWindow()
                                     }
+                                    $("#save").attr("disabled",false);
                                 }
                             });
                         } else {
                             NotificationUtil("请先选择一条记录", "warning");
+                            $("#save").attr("disabled",false);
                             return;
                         }
                     } // 调拨回仓库
                     else if ($("#info-0-turnType").val() == "warehouse"){
+                        var checkRows = resultFixedAssestsGrid.getDataItems();
                         if (checkRows.length > 0) {
-                            var backFaInfo = [];
+                            var backZFaInfo = [];
+                            var backSFaInfo = [];
                             // 出库单号为空不能进行资产退库
                             for (let i = 0; i < checkRows.length; i++) {
-                                if (checkRows[i].outBillNo == "") {
+                                if (checkRows[i].outBillNo == "" || checkRows[i].outBillNo == null) {
                                     NotificationUtil("请选择存在出库单的资产卡片进行退库", "warning");
                                     return;
-                                } else {
-                                    backFaInfo.push(checkRows[i])
+                                } else if(checkRows[i].statusCode == "待用"){
+                                    NotificationUtil("'待用'状态的资产卡片，不能进行退库", "warning");
+                                    return;
+                                } else if (checkRows[i].operationType == "直入直出"){
+                                    NotificationUtil("'直入直出'状态的资产不能进行调拨回仓库，请在仓库模块进行退货操作", "warning");
+                                    return;
+                                    backZFaInfo.push(checkRows[i])
+                                } else if (checkRows[i].operationType == "手工入库"){
+                                    backSFaInfo.push(checkRows[i])
                                 }
                             }
                             var eiInfo = new EiInfo();
                             eiInfo.setByNode("info");
-                            eiInfo.set("backFaInfo", backFaInfo)
+                            eiInfo.set("backZFaInfo", backZFaInfo)
+                            eiInfo.set("backSFaInfo", backSFaInfo)
                             EiCommunicator.send("FADB0102", "assetOutWarehouse", eiInfo, {
                                 onSuccess: function (ei) {
                                     if (ei.status == -1) {

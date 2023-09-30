@@ -62,7 +62,8 @@ public class ServiceFABG0101 extends ServiceBase {
 				info.set("buyCost", faInfoInfoList.get(0).get("buyCost"));
 				info.set("estimateCost", faInfoInfoList.get(0).get("estimateCost"));
 				info.set("netAssetValue", faInfoInfoList.get(0).get("netAssetValue"));
-				info.set("info-0-goodsTypeCode_textField", faInfoInfoList.get(0).get("goodsTypeName"));
+//				info.set("info-0-goodsTypeCode_textField", faInfoInfoList.get(0).get("goodsTypeName"));
+				info.set("info-0-goodsCategoryCode_textField", faInfoInfoList.get(0).get("goodsCategoryName"));
 				break;
 		}
 		return info;
@@ -129,6 +130,7 @@ public class ServiceFABG0101 extends ServiceBase {
 		List<FaModificationBatchDetailVO> faModificationBatchDetailVOList = new ArrayList<>();
 		Map<String, String> map = info.getRow("info", 0);
 		map.put("surpName",map.get("surpNum_textField"));
+		map.put("goodsCategoryName",map.get("goodsCategoryCode_textField"));
 		String id = map.get("faInfoId");
 		// 查询变更前信息
 		List<Map<String,Object>> faInfoDOS = dao.query("FADA01.query", new HashMap<String, String>() {{
@@ -145,13 +147,13 @@ public class ServiceFABG0101 extends ServiceBase {
 		faModificationBatchDetailVO.fromMap(map);
 		faModificationBatchDetailVO.setFaInfoId(id);
 		if (CollectionUtils.isNotEmpty(faInfoDOS)) {
-			if (!faInfoDOS.get(0).get("goodsTypeCode").equals(map.get("goodsTypeCode"))) {
-				faModificationBatchDetailVO.setGoodsNum(OneSelfUtils.privateCreateCode(map.get("goodsTypeCode")));
+			if (!faInfoDOS.get(0).get("goodsClassifyCode").equals(map.get("goodsClassifyCode"))) {
+				faModificationBatchDetailVO.setGoodsNum(OneSelfUtils.privateCreateCode(map.get("goodsClassifyCode")));
 			}
 		}
 		String batchId = UUID.randomUUID().toString();
 		faModificationBatchDetailVO.setId(batchId);
-		faModificationBatchDetailVO.setGoodsTypeName(map.get("goodsTypeCode_textField"));
+		faModificationBatchDetailVO.setGoodsCategoryName(map.get("goodsCategoryCode_textField"));
 		faModificationBatchDetailVO.setRecCreateName((String) staffByUserId.get("name"));
 		faModificationBatchDetailVO.setRecCreator((String) staffByUserId.get("workNo"));
 		faModificationBatchDetailVO.setRecCreateTime(DateUtils.curDateTimeStr19());

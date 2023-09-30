@@ -219,6 +219,7 @@ public class ServiceFADA0102 extends ServiceBase {
 			eiInfo.set("matNum", matNum);
 //			EiInfo outInfo = OneSelfUtils.invoke(eiInfo,"SIJK04","queryOut");
 			EiInfo outInfo = OneSelfUtils.invoke(eiInfo, "S_SI_FA_02");
+			System.out.println("出库查询————————————————"+outInfo);
 			if (outInfo != null) {
 				String id = outInfo.getString("id");
 				String outTypeName = outInfo.getString("outTypeName");

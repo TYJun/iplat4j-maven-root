@@ -57,6 +57,8 @@ public class FaModifyBaseDTO extends DaoEPBase {
 	private String goodsTypeCode = " ";		/* 类别名称编码（二级）*/
 	@AnjiDescription("类别名称")
 	private String goodsTypeName = " ";		/* 类别名称（二级）*/
+	@AnjiDescription("末级类别")
+	private String goodsCategoryName = "";
 	@AnjiDescription("型号")
 	private String model = " ";		/* 型号*/
 	@AnjiDescription("规格")
@@ -204,6 +206,10 @@ public class FaModifyBaseDTO extends DaoEPBase {
 
 		eiColumn = new EiColumn("goodsTypeName");
 		eiColumn.setDescName("类别名称（二级）");
+		eiMetadata.addMeta(eiColumn);
+
+		eiColumn = new EiColumn("goodsCategoryName");
+		eiColumn.setDescName("末级类别");
 		eiMetadata.addMeta(eiColumn);
 
 		eiColumn = new EiColumn("model");
@@ -659,6 +665,14 @@ public class FaModifyBaseDTO extends DaoEPBase {
 	 */
 	public void setGoodsTypeName(String goodsTypeName) {
 		this.goodsTypeName = goodsTypeName;
+	}
+
+	public String getGoodsCategoryName() {
+		return goodsCategoryName;
+	}
+
+	public void setGoodsCategoryName(String goodsCategoryName) {
+		this.goodsCategoryName = goodsCategoryName;
 	}
 
 	/**
@@ -1240,6 +1254,7 @@ public class FaModifyBaseDTO extends DaoEPBase {
 		setGoodsClassifyName(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsClassifyName")), goodsClassifyName));
 		setGoodsTypeCode(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsTypeCode")), goodsTypeCode));
 		setGoodsTypeName(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsTypeName")), goodsTypeName));
+		setGoodsCategoryName(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsCategoryName")), goodsCategoryName));
 		setModel(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("model")), model));
 		setSpec(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("spec")), spec));
 		setUnitNum(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("unitNum")), unitNum));
@@ -1306,6 +1321,7 @@ public class FaModifyBaseDTO extends DaoEPBase {
 		map.put("goodsClassifyName",StringUtils.toString(goodsClassifyName, eiMetadata.getMeta("goodsClassifyName")));
 		map.put("goodsTypeCode",StringUtils.toString(goodsTypeCode, eiMetadata.getMeta("goodsTypeCode")));
 		map.put("goodsTypeName",StringUtils.toString(goodsTypeName, eiMetadata.getMeta("goodsTypeName")));
+		map.put("goodsCategoryName",StringUtils.toString(goodsCategoryName, eiMetadata.getMeta("goodsCategoryName")));
 		map.put("model",StringUtils.toString(model, eiMetadata.getMeta("model")));
 		map.put("spec",StringUtils.toString(spec, eiMetadata.getMeta("spec")));
 		map.put("unitName",StringUtils.toString(unitName, eiMetadata.getMeta("unitName")));

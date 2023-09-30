@@ -184,29 +184,29 @@ $(function () {
                 // console.log("编码：" + confirmDeptNum + "--" + "名称：" + confirmDeptName)
             }
         },
-        "info-0-deptName": {
-            change: function (e) {
-                var context = $("#info-0-deptName").data("kendoAutoComplete");
-                if (context.listView._dataItems.length > 0) {
-                    var purchaseDeptNum = context.listView._dataItems[0].deptNum;
-                    console.log(purchaseDeptNum)
-                    var purchaseDeptName = context.listView._dataItems[0].deptName;
-                    if (purchaseDeptNum == "") {
-                        NotificationUtil("该科室不存在编码请重新选择", "warning")
-                        IPLAT.EFInput.value($("#info-0-confirmDeptNum"), "");
-                        IPLAT.EFInput.value($("#info-0-confirmDeptName"), "");
-                    } else {
-                        IPLAT.EFInput.value($("#info-0-confirmDeptNum"), purchaseDeptNum);
-                        IPLAT.EFInput.value($("#info-0-confirmDeptName"), purchaseDeptName);
-                    }
-                } else {
-                    NotificationUtil("该科室不存在请重新选择", "warning")
-                    IPLAT.EFInput.value($("#info-0-confirmDeptNum"), "");
-                    IPLAT.EFInput.value($("#info-0-confirmDeptName"), "");
-                }
-                // console.log("编码：" + confirmDeptNum + "--" + "名称：" + confirmDeptName)
-            }
-        }
+        // "info-0-deptName": {
+        //     change: function (e) {
+        //         var context = $("#info-0-deptName").data("kendoAutoComplete");
+        //         if (context.listView._dataItems.length > 0) {
+        //             var purchaseDeptNum = context.listView._dataItems[0].deptNum;
+        //             console.log(purchaseDeptNum)
+        //             var purchaseDeptName = context.listView._dataItems[0].deptName;
+        //             if (purchaseDeptNum == "") {
+        //                 NotificationUtil("该科室不存在编码请重新选择", "warning")
+        //                 IPLAT.EFInput.value($("#info-0-confirmDeptNum"), "");
+        //                 IPLAT.EFInput.value($("#info-0-confirmDeptName"), "");
+        //             } else {
+        //                 IPLAT.EFInput.value($("#info-0-confirmDeptNum"), purchaseDeptNum);
+        //                 IPLAT.EFInput.value($("#info-0-confirmDeptName"), purchaseDeptName);
+        //             }
+        //         } else {
+        //             NotificationUtil("该科室不存在请重新选择", "warning")
+        //             IPLAT.EFInput.value($("#info-0-confirmDeptNum"), "");
+        //             IPLAT.EFInput.value($("#info-0-confirmDeptName"), "");
+        //         }
+        //         // console.log("编码：" + confirmDeptNum + "--" + "名称：" + confirmDeptName)
+        //     }
+        // }
     }
 
     // Cookies 保存结点展开状态 Fn
@@ -272,14 +272,14 @@ $(function () {
                         NotificationUtil("请选择资产末级", "warning")
                         return
                     }
-                    if ($("#info-0-deptName").val() == ""){
-                        NotificationUtil("请选择所属科室", "warning")
-                        return
-                    }
-                    if ($("#info-0-confirmDeptNum").val() == ""){
-                        NotificationUtil("请勿手填所属科室", "warning")
-                        return
-                    }
+                    // if ($("#info-0-deptName").val() == ""){
+                    //     NotificationUtil("请选择所属科室", "warning")
+                    //     return
+                    // }
+                    // if ($("#info-0-confirmDeptNum").val() == ""){
+                    //     NotificationUtil("请勿手填所属科室", "warning")
+                    //     return
+                    // }
                     if (isNaN($("#info-0-buyCost").val())) {
                         NotificationUtil("请检查资产原值类型", "warning")
                         return

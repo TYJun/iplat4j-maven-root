@@ -35,7 +35,9 @@ public class FaConfirmDO extends DaoEPBase {
     private String purchaseStaffName;		/* 采购人 资产采购项目执行负责人姓名,*/
     private String fundingSourceNum;		/* 资金来源编码*/
     private String fundingSourceName;		/* 资金来源名称*/
+    private String originBillNo;
     private String enterBillNo;		/* 入库单号 资产入库的唯一标识码,大于零的自然数*/
+    private String outBillNo;		/* 出库单号 资产出库的唯一标识码,大于零的自然数*/
     private String enterType;		/* 入库类别*/
     private String enterTypeName;		/* 入库类型名称*/
     private String matNum;		/* 物资编码*/
@@ -68,7 +70,7 @@ public class FaConfirmDO extends DaoEPBase {
     private String confirmStatus;		/* 确认状态(00-待确认,10-已确认,20-生成卡片)*/
     private String receiveType;     // 领用方式
     private String receiveTypeName;
-    private int warranty;       // 保质期(月)
+    private int warranty;       // 保修期(月)
     private String deptNum;     // 科室编码
     private String deptName;    // 科室名称
 
@@ -108,8 +110,16 @@ public class FaConfirmDO extends DaoEPBase {
         eiColumn.setDescName("资金来源名称");
         eiMetadata.addMeta(eiColumn);
 
+        eiColumn = new EiColumn("originBillNo");
+        eiColumn.setDescName("来源单据 资产入库的唯一标识码,大于零的自然数");
+        eiMetadata.addMeta(eiColumn);
+
         eiColumn = new EiColumn("enterBillNo");
         eiColumn.setDescName("入库单号 资产入库的唯一标识码,大于零的自然数");
+        eiMetadata.addMeta(eiColumn);
+
+        eiColumn = new EiColumn("outBillNo");
+        eiColumn.setDescName("出库单号 资产出库的唯一标识码,大于零的自然数");
         eiMetadata.addMeta(eiColumn);
 
         eiColumn = new EiColumn("enterType");
@@ -364,6 +374,14 @@ public class FaConfirmDO extends DaoEPBase {
         this.fundingSourceName = fundingSourceName;
     }
 
+    public String getOriginBillNo() {
+        return originBillNo;
+    }
+
+    public void setOriginBillNo(String originBillNo) {
+        this.originBillNo = originBillNo;
+    }
+
     /**
      * get the enterBillNo - 入库单号 资产入库的唯一标识码,大于零的自然数
      * @return the enterBillNo
@@ -377,6 +395,14 @@ public class FaConfirmDO extends DaoEPBase {
      */
     public void setEnterBillNo(String enterBillNo) {
         this.enterBillNo = enterBillNo;
+    }
+
+    public String getOutBillNo() {
+        return outBillNo;
+    }
+
+    public void setOutBillNo(String outBillNo) {
+        this.outBillNo = outBillNo;
     }
 
     /**
@@ -867,7 +893,9 @@ public class FaConfirmDO extends DaoEPBase {
         setPurchaseStaffName(OneSelfUtils.defaultIfEmpty(StringUtils.toString(map.get("purchaseStaffName")), purchaseStaffName));
         setFundingSourceNum(OneSelfUtils.defaultIfEmpty(StringUtils.toString(map.get("fundingSourceNum")), fundingSourceNum));
         setFundingSourceName(OneSelfUtils.defaultIfEmpty(StringUtils.toString(map.get("fundingSourceName")), fundingSourceName));
+        setOriginBillNo(OneSelfUtils.defaultIfEmpty(StringUtils.toString(map.get("originBillNo")), originBillNo));
         setEnterBillNo(OneSelfUtils.defaultIfEmpty(StringUtils.toString(map.get("enterBillNo")), enterBillNo));
+        setOutBillNo(OneSelfUtils.defaultIfEmpty(StringUtils.toString(map.get("outBillNo")), outBillNo));
         setEnterType(OneSelfUtils.defaultIfEmpty(StringUtils.toString(map.get("enterType")), enterType));
         setEnterTypeName(OneSelfUtils.defaultIfEmpty(StringUtils.toString(map.get("enterTypeName")), enterTypeName));
         setMatNum(OneSelfUtils.defaultIfEmpty(StringUtils.toString(map.get("matNum")), matNum));
@@ -918,6 +946,8 @@ public class FaConfirmDO extends DaoEPBase {
         map.put("fundingSourceNum",StringUtils.toString(fundingSourceNum, eiMetadata.getMeta("fundingSourceNum")));
         map.put("fundingSourceName",StringUtils.toString(fundingSourceName, eiMetadata.getMeta("fundingSourceName")));
         map.put("enterBillNo",StringUtils.toString(enterBillNo, eiMetadata.getMeta("enterBillNo")));
+        map.put("originBillNo",StringUtils.toString(originBillNo, eiMetadata.getMeta("originBillNo")));
+        map.put("outBillNo",StringUtils.toString(outBillNo, eiMetadata.getMeta("outBillNo")));
         map.put("enterType",StringUtils.toString(enterType, eiMetadata.getMeta("enterType")));
         map.put("enterTypeName",StringUtils.toString(enterTypeName, eiMetadata.getMeta("enterTypeName")));
         map.put("matNum",StringUtils.toString(matNum, eiMetadata.getMeta("matNum")));
@@ -954,5 +984,56 @@ public class FaConfirmDO extends DaoEPBase {
         map.put("deptNum",StringUtils.toString(deptNum, eiMetadata.getMeta("deptNum")));
         map.put("deptName",StringUtils.toString(deptName, eiMetadata.getMeta("deptName")));
         return map;
+    }
+
+    @Override
+    public String toString() {
+        return "FaConfirmDO{" +
+                ", id='" + id + '\'' +
+                ", faConfirmId='" + faConfirmId + '\'' +
+                ", contNo='" + contNo + '\'' +
+                ", purchaseVouch='" + purchaseVouch + '\'' +
+                ", purchaseStaffName='" + purchaseStaffName + '\'' +
+                ", fundingSourceNum='" + fundingSourceNum + '\'' +
+                ", fundingSourceName='" + fundingSourceName + '\'' +
+                ", originBillNo='" + originBillNo + '\'' +
+                ", enterBillNo='" + enterBillNo + '\'' +
+                ", outBillNo='" + outBillNo + '\'' +
+                ", enterType='" + enterType + '\'' +
+                ", enterTypeName='" + enterTypeName + '\'' +
+                ", matNum='" + matNum + '\'' +
+                ", matName='" + matName + '\'' +
+                ", matTypeNum='" + matTypeNum + '\'' +
+                ", matTypeName='" + matTypeName + '\'' +
+                ", matSpec='" + matSpec + '\'' +
+                ", model='" + model + '\'' +
+                ", batchNo='" + batchNo + '\'' +
+                ", batchNum='" + batchNum + '\'' +
+                ", unitNum='" + unitNum + '\'' +
+                ", unitName='" + unitName + '\'' +
+                ", enterNum=" + enterNum +
+                ", enterPrice=" + enterPrice +
+                ", enterAmount=" + enterAmount +
+                ", invoiceNo='" + invoiceNo + '\'' +
+                ", manufacturer='" + manufacturer + '\'' +
+                ", manufacturerCode='" + manufacturerCode + '\'' +
+                ", surpNum='" + surpNum + '\'' +
+                ", surpName='" + surpName + '\'' +
+                ", checkDate=" + checkDate +
+                ", acquitvDate=" + acquitvDate +
+                ", acquitvYear='" + acquitvYear + '\'' +
+                ", recCreateTime=" + recCreateTime +
+                ", recCreateName='" + recCreateName + '\'' +
+                ", dataGroupCode='" + dataGroupCode + '\'' +
+                ", transferType='" + transferType + '\'' +
+                ", confirmName='" + confirmName + '\'' +
+                ", confirmDate=" + confirmDate +
+                ", confirmStatus='" + confirmStatus + '\'' +
+                ", receiveType='" + receiveType + '\'' +
+                ", receiveTypeName='" + receiveTypeName + '\'' +
+                ", warranty=" + warranty +
+                ", deptNum='" + deptNum + '\'' +
+                ", deptName='" + deptName + '\'' +
+                '}';
     }
 }

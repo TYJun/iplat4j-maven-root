@@ -67,7 +67,7 @@ $(function () {
     IPLATUI.EFGrid = {
         "result": {
             pageable: false,
-            exportGrid: false,
+            // exportGrid: false,
             // pageable: {
             //     pageSize: 15
             // },
@@ -159,7 +159,7 @@ $(function () {
                         text: "附加资产",
                         layout: "3",
                         click: function () {
-                            var discussId = IPLAT.EFInput.value($("#info-0-discussId"))
+                            var discussId = IPLAT.EFInput.value($("#info-0-discussId"));
                             fixedAssetsWindow(discussId)
                             $("#checkRowsCount").text(0);
                             $("#buyCostCount").text("0.00");
@@ -255,7 +255,16 @@ $(function () {
 
 // 自定义资产弹窗
 function fixedAssetsWindow(discussId) {
-    var url = IPLATUI.CONTEXT_PATH + "/web/FASH00?initLoad&discussId=" + discussId;
+    var DataItems = resultGrid.getDataItems();
+    var faInfoIdList = null;
+    for (let i = 0; i < DataItems.length; i++) {
+        if (i!=0){
+            faInfoIdList = faInfoIdList+","+DataItems[i].faInfoId;
+        }else {
+            faInfoIdList = DataItems[i].faInfoId;
+        }
+    }
+    var url = IPLATUI.CONTEXT_PATH + "/web/FASH00?initLoad&discussId=" + discussId+"&faInfoIdList=" +faInfoIdList;;
     var popData = $("#popData");
     popData.data("kendoWindow").setOptions({
         open: function () {

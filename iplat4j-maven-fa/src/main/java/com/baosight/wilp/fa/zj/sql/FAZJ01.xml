@@ -134,7 +134,7 @@
         FROM
             fa_info
         WHERE
-            status_code NOT IN ('060')
+            status_code NOT IN ('060','000')
         AND net_asset_value > 0
         <isNotEmpty prepend="AND" property="depreciationMonth">
             (depreciation_month != #depreciationMonth# OR depreciation_month IS NULL)

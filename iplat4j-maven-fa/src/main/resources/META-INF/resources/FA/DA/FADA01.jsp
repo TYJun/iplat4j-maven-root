@@ -63,6 +63,7 @@
 			<EF:EFGrid blockId="resultB" autoDraw="no" rowNo="true" autoBind="true" readonly="true" checkMode="multiple,row" queryMethod="confirmedQuery" height="418px">
 				<EF:EFColumn ename="id" cname="id"  align="center" locked="true" hidden="true"/>
 				<EF:EFColumn ename="faInfoId" cname="faInfoId"  align="center" hidden="true"/>
+				<EF:EFColumn ename="operationType" cname="出库类型" align="center" width="200"/>
 				<EF:EFColumn ename="goodsNum" cname="资产编码"  align="center" width="200" displayType="url" enable="false"/>
 				<EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="200"/>
 				<EF:EFColumn ename="spec" cname="型号规格"  align="center" width="200" />

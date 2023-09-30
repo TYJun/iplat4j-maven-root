@@ -377,7 +377,7 @@
     <insert id="insertFaConfirm" parameterClass="java.util.ArrayList">
         INSERT INTO fa_confirm(
         `id`, `cont_no`, `purchase_vouch`, `purchase_staff_name`, `fundingSource_num`,
-        `fundingSource_name`, `enter_bill_no`, `enter_type`, `enter_type_name`,
+        `fundingSource_name`, `enter_bill_no`, `enter_type`, `enter_type_name`, `out_bill_no`,
         `mat_num`, `mat_name`, `mat_type_num`, `mat_type_name`, `mat_spec`, `model`, `batch_no`, `batch_num`,
         `unit_num`, `unit_name`, `enter_num`, `enter_price`, `enter_amount`, `invoice_no`,
         `manufacturer`, `manufacturer_code`, `surp_num`, `surp_name`, `check_date`,
@@ -388,8 +388,8 @@
         (
             #collect[].id#,#collect[].contNo#,#collect[].purchaseVouch#,#collect[].purchaseStaffName#,
             #collect[].fundingSourceNum#,#collect[].fundingSourceName#,#collect[].enterBillNo#,
-            #collect[].enterType#,#collect[].enterTypeName#,#collect[].matNum#,#collect[].matName#,
-            #collect[].matTypeNum#,#collect[].matTypeName#,
+            #collect[].enterType#,#collect[].enterTypeName#,#collect[].outBillNo#,#collect[].matNum#,
+            #collect[].matName#,#collect[].matTypeNum#,#collect[].matTypeName#,
             #collect[].matSpec#,#collect[].model#,#collect[].batchNo#,#collect[].batchNum#,
             #collect[].unitNum#,#collect[].unitName#,#collect[].enterNum#,#collect[].enterPrice#,
             #collect[].enterAmount#,#collect[].invoiceNo#,#collect[].manufacturer#,#collect[].manufacturerCode#,
@@ -810,4 +810,70 @@
         FROM ${projectSchema}.wz_user
         WHERE work_no = #workNo#
     </select>
+
+    <!-- 退货流程：查询对应的资产调拨单 -->
+    <select id="queryTransferByReturn" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+            transfer_no AS "transferNo"
+        FROM
+            fa_transfer
+        WHERE bill_no = #billNo#
+    </select>
+
+    <!-- 退货流程：修改对应的资产状态从退货中变为逻辑删除 -->
+    <update id="updateTransferByReturn" parameterClass="java.util.HashMap">
+        UPDATE fa_info SET status_code = '000' where status_code = '039' AND id IN (
+            select
+                ftd.faInfo_id
+            from fa_transfer ft
+            left join fa_transfer_detail ftd on ft.transfer_no = ftd.transfer_no
+            where ft.transfer_no = #transferNo#
+        )
+    </update>
+
+    <!-- 退货流程：查询对应的资产确认单 -->
+    <select id="queryConfirmByReturn" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+            enter_num AS "enterNum",
+            enter_amount AS "enterAmount"
+        FROM
+            fa_confirm
+        WHERE
+            1 = 1
+        <isNotEmpty property="enterBillNo" prepend="and">
+            enter_bill_no = #enterBillNo#
+        </isNotEmpty>
+        <isNotEmpty property="matNum" prepend="and">
+            mat_num = #matNum#
+        </isNotEmpty>
+        <isNotEmpty property="confirmStatus" prepend="and">
+            confirm_status = #confirmStatus#
+        </isNotEmpty>
+    </select>
+
+    <!-- 退库流程：修改对应的资产确认单 -->
+    <update id="updateConfirmByReturn" parameterClass="java.util.HashMap">
+        update fa_confirm set enter_num = #enterNum#,enter_amount = #enterAmount#
+        where enter_bill_no = #enterBillNo# AND mat_num = #matNum#
+    </update>
+
+    <!-- 退库流程：查询对应的待出库卡片 -->
+    <select id="queryConfirmByReturnId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select id from fa_info
+        where mat_num = #matNum# AND enter_bill_no = #enterBillNo# AND status_code = #statusCode#
+        <dynamic prepend="">
+            <isNotNull property="enterNum">
+                limit #enterNum#
+            </isNotNull>
+        </dynamic>
+    </select>
+
+    <!-- 退库流程：删除对应的资产卡片 -->
+    <delete id="deleteConfirmByReturn" parameterClass="java.util.HashMap">
+        delete from fa_info where id in (
+            <iterate property="faInfoIdList" conjunction=",">
+                #faInfoIdList[]#
+            </iterate>
+        )
+    </delete>
 </sqlMap>

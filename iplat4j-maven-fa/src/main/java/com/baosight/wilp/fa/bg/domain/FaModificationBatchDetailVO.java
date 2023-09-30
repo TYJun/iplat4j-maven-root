@@ -46,6 +46,8 @@ public class FaModificationBatchDetailVO extends DaoEPBase {
 	private String goodsClassifyName = " ";        /* 类别名称（一级）*/
 	private String goodsTypeCode = " ";        /* 类别名称编码（二级）*/
 	private String goodsTypeName = " ";        /* 类别名称（二级）*/
+	private String goodsCategoryCode = "";        /* 类别名称（二级）*/
+	private String goodsCategoryName = "";        /* 类别名称（二级）*/
 	private String model = " ";        /* 型号*/
 	private String spec = " ";        /* 规格*/
 	private String unitNum = " ";        /* 计量单位*/
@@ -186,6 +188,14 @@ public class FaModificationBatchDetailVO extends DaoEPBase {
 
 		eiColumn = new EiColumn("goodsTypeName");
 		eiColumn.setDescName("类别名称（二级）");
+		eiMetadata.addMeta(eiColumn);
+
+		eiColumn = new EiColumn("goodsCategoryCode");
+		eiColumn.setDescName("类别编码（一级）");
+		eiMetadata.addMeta(eiColumn);
+
+		eiColumn = new EiColumn("goodsCategoryName");
+		eiColumn.setDescName("类别名称（一级）");
 		eiMetadata.addMeta(eiColumn);
 
 		eiColumn = new EiColumn("model");
@@ -688,6 +698,22 @@ public class FaModificationBatchDetailVO extends DaoEPBase {
 	 */
 	public void setGoodsTypeName(String goodsTypeName) {
 		this.goodsTypeName = goodsTypeName;
+	}
+
+	public String getGoodsCategoryCode() {
+		return goodsCategoryCode;
+	}
+
+	public void setGoodsCategoryCode(String goodsCategoryCode) {
+		this.goodsCategoryCode = goodsCategoryCode;
+	}
+
+	public String getGoodsCategoryName() {
+		return goodsCategoryName;
+	}
+
+	public void setGoodsCategoryName(String goodsCategoryName) {
+		this.goodsCategoryName = goodsCategoryName;
 	}
 
 	/**
@@ -1366,6 +1392,8 @@ public class FaModificationBatchDetailVO extends DaoEPBase {
 		setGoodsClassifyName(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsClassifyName")), goodsClassifyName));
 		setGoodsTypeCode(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsTypeCode")), goodsTypeCode));
 		setGoodsTypeName(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsTypeName")), goodsTypeName));
+		setGoodsCategoryCode(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsCategoryCode")), goodsCategoryCode));
+		setGoodsCategoryName(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsCategoryName")), goodsCategoryName));
 		setModel(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("model")), model));
 		setSpec(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("spec")), spec));
 		setUnitNum(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("unitNum")), unitNum));
@@ -1437,6 +1465,8 @@ public class FaModificationBatchDetailVO extends DaoEPBase {
 		map.put("goodsClassifyName", StringUtils.toString(goodsClassifyName, eiMetadata.getMeta("goodsClassifyName")));
 		map.put("goodsTypeCode", StringUtils.toString(goodsTypeCode, eiMetadata.getMeta("goodsTypeCode")));
 		map.put("goodsTypeName", StringUtils.toString(goodsTypeName, eiMetadata.getMeta("goodsTypeName")));
+		map.put("goodsCategoryName", StringUtils.toString(goodsCategoryName, eiMetadata.getMeta("goodsCategoryName")));
+		map.put("goodsCategoryCode", StringUtils.toString(goodsCategoryCode, eiMetadata.getMeta("goodsCategoryCode")));
 		map.put("model", StringUtils.toString(model, eiMetadata.getMeta("model")));
 		map.put("spec", StringUtils.toString(spec, eiMetadata.getMeta("spec")));
 		map.put("unitName", StringUtils.toString(unitName, eiMetadata.getMeta("unitName")));

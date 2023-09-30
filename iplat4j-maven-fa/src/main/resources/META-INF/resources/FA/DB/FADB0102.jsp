@@ -37,7 +37,7 @@
 				<EF:EFInput ename="info-0-confirmRoom" cname="具体位置" colWidth="5"/>
 			</div>
 			<div class="row">
-				<EF:EFInput ename="info-0-applyReason" cname="备注" rows="3" placeholder=""
+				<EF:EFInput ename="info-0-applyReason" cname="调拨原因" rows="3" placeholder=""
 							colWidth="10" type="textarea" ratio="2:10" maxLength="200"/>
 			</div>
 		</div>
@@ -51,6 +51,7 @@
 				   checkMode="multiple,row" readonly="true" rowNo="true" isFloat="true">
 			<EF:EFColumn ename="faInfoId" cname="faInfoId"  align="center" locked="true" width="200" hidden="true"/>
 			<EF:EFColumn ename="enterBillNo" cname="入库单号" align="center" width="200" hidden="true"/>
+			<EF:EFColumn ename="operationType" cname="出库类型" align="center" width="200" enable="false"/>
 			<EF:EFColumn ename="outBillNo" cname="出库单号" align="center" width="200" enable="false"/>
 			<EF:EFColumn ename="matNum" cname="物资编码" align="center" width="200" enable="false" hidden="true"/>
 			<EF:EFColumn ename="matName" cname="物资名称" align="center" width="200" hidden="true"/>

@@ -119,8 +119,13 @@ $(function () {
                             return
                         }
                     }
-                    popDataWindow.setOptions({"title": "仓库调拨申请"});
-                    fixedAssetsDetailWindow("admin", "")
+                    if (checkRows.length > 0){
+                        popDataWindow.setOptions({"title": "仓库调拨申请"});
+                        fixedAssetsDetailWindow("admin", "")
+                    } else {
+                        NotificationUtil("请选择需要调拨的资产", "warning");
+                        return
+                    }
                 });
 
                 // 科室调拨申请

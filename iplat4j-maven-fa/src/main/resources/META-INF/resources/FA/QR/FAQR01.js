@@ -100,7 +100,7 @@ $(function () {
                             }
 
                         }
-                    },
+                    },/*
                     {
                         name: "batchRemove",
                         text: "批量删除",
@@ -141,7 +141,7 @@ $(function () {
                                 NotificationUtil("请先选择至少一条记录", "warning");
                             }
                         }
-                    },
+                    },*/
                 ]
             },
             onCellClick: function (e) {

@@ -6,7 +6,13 @@
 <EF:EFPage title="资产变更录入">
 	<EF:EFRegion id="info" head="hidden">
 		<EF:EFRegion title="大类信息">
-			<EF:EFPopupInput ename="info-0-goodsTypeCode" cname="资产类别" required="true" readOnly="true"
+<%--			<EF:EFPopupInput ename="info-0-goodsTypeCode" cname="资产类别(三级)" required="true" readOnly="true"--%>
+<%--							 containerId="ef_popup_grid" popupWidth="1200" popupHeight="600" popupTitle="资产类别选择"--%>
+<%--							 resizable="true" center="true">--%>
+<%--			</EF:EFPopupInput>--%>
+			<EF:EFInput ename="info-0-goodsClassifyCode" cname="编码" readonly="true" type="hidden"/>
+			<EF:EFInput ename="info-0-goodsClassifyName" cname="资产类别(三级)" readonly="true"/>
+			<EF:EFPopupInput ename="info-0-goodsCategoryCode" cname="末级类别" required="true" readOnly="true"
 							 containerId="ef_popup_grid" popupWidth="1200" popupHeight="600" popupTitle="资产类别选择"
 							 resizable="true" center="true">
 			</EF:EFPopupInput>
@@ -78,7 +84,7 @@
 			/>
 			<EF:EFInput ename="info-0-deptNum" cname="所属科室"  readonly="true" type="hidden"/>
 			<EF:EFInput ename="info-0-deptName" cname="所属科室"  readonly="true"/>
-			<EF:EFInput ename="info-0-manufacturer" cname="制造厂商"  />
+			<EF:EFInput ename="info-0-manufacturer" cname="制造厂商" type="hidden"/>
 			<EF:EFPopupInput ename="info-0-surpNum" cname="供应商" popupTitle="供应商选择" readonly="true"
 							 popupType="ServiceGrid" resultId="supplier" serviceName="FADA01" methodName="querySupplier"
 							 valueField="surpNum" textField="surpName"  columnEnames="surpNum,supplierName"
@@ -99,7 +105,7 @@
 			<div class="col-md-4">
 				<div class="form-group">
 					<label data-for="newBuild" class="col-xs-4 control-label">
-						<span style="color:red">*</span>楼
+						楼
 					</label>
 					<div class="col-xs-8">
 						<input id="newBuild" name="newBuild" value=""
@@ -110,7 +116,7 @@
 			<div class="col-md-4">
 				<div class="form-group">
 					<label data-for="newFloor" class="col-xs-4 control-label">
-						<span style="color:red">*</span>层
+						层
 					</label>
 					<div class="col-xs-8">
 						<input id="newFloor" name="newFloor" value=""
@@ -121,7 +127,7 @@
 			<div class="col-md-4">
 				<div class="form-group">
 					<label data-for="newGoodsLocation" class="col-xs-4 control-label">
-						<span style="color:red">*</span>地点
+						地点
 					</label>
 					<div class="col-xs-8">
 						<input id="newGoodsLocation" name="newGoodsLocation"

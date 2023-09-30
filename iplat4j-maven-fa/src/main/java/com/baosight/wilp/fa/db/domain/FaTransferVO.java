@@ -52,6 +52,8 @@ public class FaTransferVO extends DaoEPBase {
 	private String auditFileCode;
 	private String transferStatus = " ";        /* 审批状态(00-草稿,10-调入科室待确认,20-资产科待确认,30-资产科确认,40-资产科驳回,50-调入科室驳回)*/
 	private String source;
+	private String outType = "";
+	private String billNo = "";
 
 	/**
 	 * initialize the metadata
@@ -166,6 +168,14 @@ public class FaTransferVO extends DaoEPBase {
 
 		eiColumn = new EiColumn("source");
 		eiColumn.setDescName("来源");
+		eiMetadata.addMeta(eiColumn);
+
+		eiColumn = new EiColumn("outType");
+		eiColumn.setDescName("出库类型");
+		eiMetadata.addMeta(eiColumn);
+
+		eiColumn = new EiColumn("billNo");
+		eiColumn.setDescName("出库单号");
 		eiMetadata.addMeta(eiColumn);
 	}
 
@@ -568,6 +578,22 @@ public class FaTransferVO extends DaoEPBase {
 		this.source = source;
 	}
 
+	public String getOutType() {
+		return outType;
+	}
+
+	public void setOutType(String outType) {
+		this.outType = outType;
+	}
+
+	public String getBillNo() {
+		return billNo;
+	}
+
+	public void setBillNo(String billNo) {
+		this.billNo = billNo;
+	}
+
 	/**
 	 * get the value from Map
 	 */
@@ -600,6 +626,8 @@ public class FaTransferVO extends DaoEPBase {
 		setAuditFileCode(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("auditFileCode")), auditFileCode));
 		setTransferStatus(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("transferStatus")), transferStatus));
 		setSource(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("source")), source));
+		setOutType(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("outType")), outType));
+		setBillNo(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("billNo")), billNo));
 	}
 
 	/**
@@ -634,6 +662,8 @@ public class FaTransferVO extends DaoEPBase {
 		map.put("auditFileCode", StringUtils.toString(auditFileCode, eiMetadata.getMeta("auditFileCode")));
 		map.put("transferStatus", StringUtils.toString(transferStatus, eiMetadata.getMeta("transferStatus")));
 		map.put("source", StringUtils.toString(source, eiMetadata.getMeta("source")));
+		map.put("outType", StringUtils.toString(outType, eiMetadata.getMeta("outType")));
+		map.put("billNo", StringUtils.toString(billNo, eiMetadata.getMeta("billNo")));
 		return map;
 	}
 }

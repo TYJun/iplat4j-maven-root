@@ -12,7 +12,10 @@
             fundingSource_num	as "fundingSourceNum",  <!-- 资金来源编码 -->
             fundingSource_name	as "fundingSourceName",
             enter_bill_no	as "enterBillNo",  <!-- 入库单号 资产入库的唯一标识码,大于零的自然数 -->
+            out_bill_no	as "outBillNo",  <!-- 出库单号 资产出库的唯一标识码,大于零的自然数 -->
             enter_type_name	as "enterTypeName",  <!-- 入库类型名称 -->
+            enter_type	as "enterType",  <!-- 入库类型 -->
+            receive_type	as "receiveType",  <!-- 入库类型 -->
             dept_num AS "deptNum",
             dept_name AS "deptName",
             mat_num	as "matNum",  <!-- 物资编码 -->
@@ -62,6 +65,7 @@
             WHEN "08" THEN "手工入库"
             END AS "receiveTypeName",
             enter_bill_no	as "enterBillNo",  <!-- 入库单号 资产入库的唯一标识码,大于零的自然数 -->
+            out_bill_no	as "outBillNo",  <!-- 出库单号 资产出库的唯一标识码,大于零的自然数 -->
             enter_type	as "enterType",  <!-- 入库类别 -->
             enter_type_name	as "enterTypeName",  <!-- 入库类型名称 -->
             mat_num	as "matNum",  <!-- 物资编码 -->

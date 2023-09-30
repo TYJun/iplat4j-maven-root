@@ -75,10 +75,22 @@ IPLATUI.EFGrid = {
                     var checkRows = resultGrid.getCheckedRows();
                     var model = checkRows[0];
                     if (model) {
-                        $("#info-0-goodsTypeCode").val(model['typeCode']);
-                        $("#info-0-goodsTypeCode_textField").val(model['typeName']);
-                        $("#info-0-goodsClassifyCode").val(model['parentId']);
-                        $("#info-0-goodsClassifyName").val(model['parentName']);
+                        $("#info-0-goodsCategoryCode").val(model['typeCode']);
+                        $("#info-0-goodsCategoryCode_textField").val(model['typeName']);
+                        // $("#info-0-goodsClassifyCode").val(model['parentCode']);
+                        // $("#info-0-goodsClassifyName").val(model['parentName']);
+                        $("#info-0-useYears").val(model['useYears']);
+                        var eiInfo = new EiInfo();
+                        eiInfo.set("goodsCategoryCode", model['typeCode']);
+                        EiCommunicator.send("FADA0101", "backGoodsCategoryCode", eiInfo, {
+                            onSuccess: function (ei) {
+                                var list = ei.extAttr.list
+                                $("#info-0-goodsTypeCode").val(list.parentCode);
+                                $("#info-0-goodsTypeName").val(list.parentName);
+                                $("#info-0-goodsClassifyCode").val(list.typeCode);
+                                $("#info-0-goodsClassifyName").val(list.typeName);
+                            }
+                        })
                         var popupGridWindow = $("#ef_popup_grid").data("kendoWindow");
                         popupGridWindow.close();
                     } else {
@@ -106,8 +118,12 @@ IPLATUI.EFGrid = {
                     $("#info-0-buyCost").val(0);
                 }
                 // 前端校验
-                if ($("#info-0-goodsTypeCode").val() == "") {
-                    NotificationUtil("请选择类别名称", "warning")
+                if ($("#info-0-goodsClassifyCode").val() == "") {
+                    NotificationUtil("请选择末级类别", "warning")
+                    return
+                }
+                if ($("#info-0-goodsCategoryCode").val() == "") {
+                    NotificationUtil("请选择末级类别", "warning")
                     return
                 }
                 if ($("#info-0-goodsName").val() == "") {
@@ -118,10 +134,10 @@ IPLATUI.EFGrid = {
                 //     NotificationUtil("请填写所属科室", "warning")
                 //     return
                 // }
-                if ($("#info-0-installLocation").val() == "") {
-                    NotificationUtil("请填写地点", "warning")
-                    return
-                }
+                // if ($("#info-0-installLocation").val() == "") {
+                //     NotificationUtil("请填写地点", "warning")
+                //     return
+                // }
                 if (isNaN($("#info-0-amount").val())) {
                     NotificationUtil("请检查数量类型", "warning")
                     return

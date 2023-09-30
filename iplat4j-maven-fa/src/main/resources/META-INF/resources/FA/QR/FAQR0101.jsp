@@ -9,8 +9,10 @@
 			<EF:EFInput ename="info-0-faConfirmId" cname="faConfirmId" type="hidden"/>
 			<EF:EFInput ename="type" cname="操作类型" type="hidden"/>
 			<EF:EFInput ename="receiveType" cname="入库类型" type="hidden"/>
+			<EF:EFInput ename="info-0-receiveType" cname="入库类型" type="hidden"/>
 			<EF:EFInput ename="info-0-archiveFlag" cname="归档标记" type="hidden"/>
-			<EF:EFInput ename="info-0-enterBillNo" cname="入库单号"/>
+			<EF:EFInput ename="info-0-enterBillNo" cname="入库单号" readonly="true"/>
+			<EF:EFInput ename="info-0-outBillNo" cname="出库单号" readonly="true"/>
 			<EF:EFInput ename="info-0-contNo" cname="合同号"/>
 			<EF:EFInput ename="info-0-purchaseVouch" cname="采购凭证"/>
 			<EF:EFInput ename="info-0-purchaseDeptNum" cname="科室编码" type="hidden"/>
@@ -111,9 +113,10 @@
 			<%--所属科室、楼、层、地点、具体位置--%>
 			<EF:EFInput ename="info-0-confirmDeptName" cname="所属科室" readonly="true" type="hidden"/>
 			<EF:EFInput ename="info-0-confirmDeptNum" cname="所属科室" readonly="true" type="hidden"/>
-			<EF:EFAutoComplete ename="info-0-deptName" cname="所属科室" ratio="4:8"  required="true"
-							   noDataTemplate="没有数据" filter="contains" serviceName="FADA01" queryMethod="queryDept"
-							   resultId="dept" dataField="deptName"/>
+			<EF:EFInput ename="info-0-deptName" cname="所属科室" readonly="true"/>
+<%--			<EF:EFAutoComplete ename="info-0-deptName" cname="所属科室" ratio="4:8"  required="true"--%>
+<%--							   noDataTemplate="没有数据" filter="contains" serviceName="FADA01" queryMethod="queryDept"--%>
+<%--							   resultId="dept" dataField="deptName"/>--%>
 			<EF:EFPopupInput ename="info-0-confirmLocationNum" cname="存放位置" readonly="true" popupWidth = "550"
 							 popupType="ServiceGrid" popupTitle="存放位置选择" serviceName="FADB0101" methodName="querySpot" resultId="spot" autofit="true"
 							 valueField="spotNum" textField="spotName" backFillFieldIds="spotName" backFillColumnIds="spotName" columnEnames="building,floor,spotName" columnCnames="楼,层,地点"/>

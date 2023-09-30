@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 public class FaTransfterDTO {
 	private String faInfoId;
 	private String enterBillNo;
+	private String outBillNo;
 	private String matNum;
 	private String matName;
 	private String matTypeNum;
@@ -40,6 +41,14 @@ public class FaTransfterDTO {
 
 	public void setEnterBillNo(String enterBillNo) {
 		this.enterBillNo = enterBillNo;
+	}
+
+	public String getOutBillNo() {
+		return outBillNo;
+	}
+
+	public void setOutBillNo(String outBillNo) {
+		this.outBillNo = outBillNo;
 	}
 
 	public String getMatNum() {

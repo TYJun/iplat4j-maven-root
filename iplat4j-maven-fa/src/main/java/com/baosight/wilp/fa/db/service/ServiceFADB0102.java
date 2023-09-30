@@ -300,7 +300,7 @@ public class ServiceFADB0102 extends ServiceBase {
                 info.set("userDeptName", applyInfo.get("turnDeptName"));
                 info.set("billMakerName", staffByUserId.get("name"));
                 info.set("billMaker", staffByUserId.get("workNo"));
-                info.set("billMakeTime", DateUtils.toDateStr10(new Date()));
+                info.set("billMakeTime", DateUtils.toDateTimeStr19(new Date()));
                 info.set("dataGroupCode", DatagroupUtil.getDatagroupCode());
                 // 先将相同物资编码的数据进行合并
                 List<FaTransfterDTO> collect = newFaInfo.stream().map(map -> {
@@ -333,53 +333,74 @@ public class ServiceFADB0102 extends ServiceBase {
                         list.addAll(v);
                     }
                 });
+                // 出库
+                info.set("outType", "06");
+                info.set("costDeptNum", applyInfo.get("turnDeptNum"));
+                info.set("costDeptName", applyInfo.get("turnDeptName"));
                 info.set("list", list);
-                info.set("faInfoIdList", faInfoIdList);
-                OneSelfUtils.invoke(info, "S_SI_FA_03");
-                // 修改资产状态：新建->在用
-                dao.update("FADB01.updateFaInfoStatusNewToUse", new HashMap<String, Object>() {{
-                    put("faInfoIdList", faInfoIdList);
-                    put("deptNum", applyInfo.get("turnDeptNum"));
-                    put("deptName", applyInfo.get("turnDeptName"));
-                    put("outRemark", applyInfo.get("applyReason"));
-                    put("useDate", new Date());
-                }});
-                FaTransferVO faTransferVO = new FaTransferVO();
-                String transferNo = OneSelfUtils.publicCreateCode(FixedAssetsEum.DB.getAcronym());
-                applyInfo.put("applyTime", DateUtils.toDateStr10(new Date()));
-                applyInfo.put("confirmTime", DateUtils.toDateStr10(new Date()));
-                applyInfo.put("auditTime", DateUtils.toDateStr10(new Date()));
-                applyInfo.put("confirmDeptNum", applyInfo.get("turnDeptNum"));
-                applyInfo.put("confirmDeptName", applyInfo.get("turnDeptName"));
-                applyInfo.put("source", "PC");
-                faTransferVO.fromMap(applyInfo);
-                faTransferVO.setId(UUID.randomUUID().toString());
-                faTransferVO.setTransferNo(transferNo);
-                faTransferVO.setApplyDeptNum((String) staffByUserId.get("deptNum"));
-                faTransferVO.setApplyDeptName((String) staffByUserId.get("deptName"));
-                faTransferVO.setApplyPerson((String) staffByUserId.get("name"));
-                faTransferVO.setTransferStatus("100");
-                // 新增调拨记录
-                dao.insert("FADB01.saveFaTransferInfo", faTransferVO);
-                // 新增调拨明细
-                List<FaTransferDetailVO> faTransferDetailVOList = newFaInfo.stream().map(map -> {
-                    FaTransferDetailVO faTransferDetailVO = new FaTransferDetailVO();
-                    faTransferDetailVO.setId(UUID.randomUUID().toString());
-                    faTransferDetailVO.setTransferNo(transferNo);
-                    faTransferDetailVO.setFaInfoId((String) map.get("faInfoId"));
-                    faTransferDetailVO.setGoodsNum((String) map.get("goodsNum"));
-                    faTransferDetailVO.setGoodsName((String) map.get("goodsName"));
-                    faTransferDetailVO.setModel((String) map.get("model"));
-                    faTransferDetailVO.setSpec((String) map.get("spec"));
-                    return faTransferDetailVO;
-                }).collect(Collectors.toList());
-                dao.insert("FADB01.saveFaTransferDetailInfo", faTransferDetailVOList);
-                // 根据调拨的资产id查询资产信息并入账
-                dao.insert("FAAP01.putOutStorageAccount", new HashMap<String, Object>() {{
-                    put("faInfoIdList", faInfoIdList);
-                    put("deptNum", applyInfo.get("turnDeptNum"));
-                    put("deptName", applyInfo.get("turnDeptName"));
-                }});
+                info.set("faInfoIds", faInfoIdList);
+                EiInfo eiInfo = OneSelfUtils.invoke(info, "S_SI_FA_03");
+                System.out.println("--------------" + eiInfo + "=============");
+                if (eiInfo != null) {
+                    String claimOutBillNo = eiInfo.getString("claimOutBillNo");
+                    System.out.println("新出库单接口");
+                    // 修改资产状态：新建->在用
+                    dao.update("FADB01.updateFaInfoStatusNewToUse", new HashMap<String, Object>() {{
+                        put("faInfoIdList", faInfoIdList);
+                        put("deptNum", applyInfo.get("turnDeptNum"));
+                        put("deptName", applyInfo.get("turnDeptName"));
+                        put("build", applyInfo.get("confirmBuild"));
+                        put("floor", applyInfo.get("confirmFloor"));
+                        put("room", applyInfo.get("confirmRoom"));
+                        put("installLocationNum", applyInfo.get("confirmLocationNum"));
+                        put("installLocation", applyInfo.get("confirmLocationNum_textField"));
+                        put("outRemark", applyInfo.get("applyReason"));
+                        put("useDate", new Date());
+                        put("outBillNo", claimOutBillNo);
+                    }});
+                    FaTransferVO faTransferVO = new FaTransferVO();
+                    String transferNo = OneSelfUtils.publicCreateCode(FixedAssetsEum.DB.getAcronym());
+                    applyInfo.put("applyTime", DateUtils.toDateStr10(new Date()));
+                    applyInfo.put("confirmTime", DateUtils.toDateStr10(new Date()));
+                    applyInfo.put("auditTime", DateUtils.toDateStr10(new Date()));
+                    applyInfo.put("confirmDeptNum", applyInfo.get("turnDeptNum"));
+                    applyInfo.put("confirmDeptName", applyInfo.get("turnDeptName"));
+                    applyInfo.put("source", "PC");
+                    applyInfo.put("billNo", claimOutBillNo);
+                    applyInfo.put("outType", "06");
+                    faTransferVO.fromMap(applyInfo);
+                    faTransferVO.setId(UUID.randomUUID().toString());
+                    faTransferVO.setTransferNo(transferNo);
+                    faTransferVO.setApplyDeptNum((String) staffByUserId.get("deptNum"));
+                    faTransferVO.setApplyDeptName((String) staffByUserId.get("deptName"));
+                    faTransferVO.setApplyPerson((String) staffByUserId.get("name"));
+                    faTransferVO.setTransferStatus("100");
+                    // 新增调拨记录
+                    dao.insert("FADB01.saveFaTransferInfo", faTransferVO);
+                    // 新增调拨明细
+                    List<FaTransferDetailVO> faTransferDetailVOList = newFaInfo.stream().map(map -> {
+                        FaTransferDetailVO faTransferDetailVO = new FaTransferDetailVO();
+                        faTransferDetailVO.setId(UUID.randomUUID().toString());
+                        faTransferDetailVO.setTransferNo(transferNo);
+                        faTransferDetailVO.setFaInfoId((String) map.get("faInfoId"));
+                        faTransferDetailVO.setGoodsNum((String) map.get("goodsNum"));
+                        faTransferDetailVO.setGoodsName((String) map.get("goodsName"));
+                        faTransferDetailVO.setModel((String) map.get("model"));
+                        faTransferDetailVO.setSpec((String) map.get("spec"));
+                        return faTransferDetailVO;
+                    }).collect(Collectors.toList());
+                    dao.insert("FADB01.saveFaTransferDetailInfo", faTransferDetailVOList);
+                    // 根据调拨的资产id查询资产信息并入账
+                    dao.insert("FAAP01.putOutStorageAccount", new HashMap<String, Object>() {{
+                        put("faInfoIdList", faInfoIdList);
+                        put("deptNum", applyInfo.get("turnDeptNum"));
+                        put("deptName", applyInfo.get("turnDeptName"));
+                    }});
+                } else {
+                    info.setStatus(-1);
+                    info.setMsg("库存不足，出库单号为空，调拨流程终止，请联系系统工程师。");
+                    return info;
+                }
             }
         }
         // 调拨方法判断
@@ -405,7 +426,7 @@ public class ServiceFADB0102 extends ServiceBase {
                     }
                 }
                 List<String> faInfoIdList = useFaInfo.stream().map(map -> (String) map.get("faInfoId")).collect(Collectors.toList());
-                // 修改资产状态：在用
+                // 修改资产状态：在用->调拨中
                 dao.update("FADB01.updateFaInfoStatusUsing", new HashMap<String, Object>() {{
                     put("faInfoIdList", faInfoIdList);
                     put("deptNum", applyInfo.get("turnDeptNum"));
@@ -415,6 +436,7 @@ public class ServiceFADB0102 extends ServiceBase {
                     put("room", applyInfo.get("confirmRoom"));
                     put("installLocationNum", applyInfo.get("confirmLocationNum"));
                     put("installLocation", applyInfo.get("confirmLocationNum_textField"));
+                    put("statusCode", "031");
                 }});
                 FaTransferVO faTransferVO = new FaTransferVO();
                 String transferNo = OneSelfUtils.publicCreateCode(FixedAssetsEum.DB.getAcronym());
@@ -454,21 +476,232 @@ public class ServiceFADB0102 extends ServiceBase {
 
     // 资产调拨回仓库
     public EiInfo assetOutWarehouse(EiInfo info) {
-        if (info.get("backFaInfo") != null) {
-            List<Map<String, Object>> backFaInfo = (List<Map<String, Object>>) info.get("backFaInfo");
-            List<String> faInfoIdList = backFaInfo.stream().map(map -> (String) map.get("faInfoId")).collect(Collectors.toList());
-            // 获取调拨回仓库的资产id
-            // 更新对应的资产状态、科室编码、科室名称、所在位置
-            dao.update("FADB01.updateFaInfoStatusUsing", new HashMap<String, Object>() {{
-                put("faInfoIdList", faInfoIdList);
-                put("deptNum", "");
-                put("deptName", "");
-                put("build", "");
-                put("floor", "");
-                put("room", "");
-                put("installLocationNum", "");
-                put("installLocation", "");
-            }});
+        Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
+        if (info.get("backZFaInfo") != null && info.get("backSFaInfo") != null) {
+            List<Map<String, Object>> backZFaInfo = (List<Map<String, Object>>) info.get("backZFaInfo");
+            List<Map<String, Object>> backSFaInfo = (List<Map<String, Object>>) info.get("backSFaInfo");
+            String transferNo = OneSelfUtils.publicCreateCode(FixedAssetsEum.DB.getAcronym());
+            if (CollectionUtils.isNotEmpty(backZFaInfo)) {
+                // 调用出库微服务
+                // 先将相同物资编码的数据进行合并
+                List<FaTransfterDTO> collect = backZFaInfo.stream().map(map -> {
+                    FaTransfterDTO faTransfterDTO = new FaTransfterDTO();
+                    faTransfterDTO.setFaInfoId((String) map.get("faInfoId"));
+                    faTransfterDTO.setEnterBillNo((String) map.get("enterBillNo"));
+                    faTransfterDTO.setOutBillNo((String) map.get("outBillNo"));
+                    faTransfterDTO.setMatNum((String) map.get("matNum"));
+                    faTransfterDTO.setMatName((String) map.get("matName"));
+                    faTransfterDTO.setMatTypeNum((String) map.get("matTypeNum"));
+                    faTransfterDTO.setMatTypeName((String) map.get("matTypeName"));
+                    faTransfterDTO.setMatModel((String) map.get("model"));
+                    faTransfterDTO.setMatSpec((String) map.get("spec"));
+                    faTransfterDTO.setUnit((String) map.get("unitNum"));
+                    faTransfterDTO.setUnitName((String) map.get("unitName"));
+                    faTransfterDTO.setOutNum(Double.valueOf("1"));
+                    faTransfterDTO.setOutPrice(Double.valueOf(String.valueOf(map.get("price"))));
+                    return faTransfterDTO;
+                }).collect(Collectors.toList());
+                Map<String, List<FaTransfterDTO>> collect1 = collect.stream()
+                        .collect(Collectors.groupingBy(faTransfterDTO -> faTransfterDTO.getMatNum() + "&" + faTransfterDTO.getOutBillNo()));
+                List<FaTransfterDTO> list = new ArrayList<>();
+                collect1.forEach((k, v) -> {
+                    List<String> faInfoIdList = new ArrayList();
+                    info.set("outType", "05");
+                    info.set("outBillNo", k.split("&")[1]);
+                    if (v.size() > 0) {
+                        for (int i = 0; i < v.size(); i++) {
+                            String faInfoId = v.get(i).getFaInfoId();
+                            faInfoIdList.add(faInfoId);
+                        }
+                        FaTransfterDTO faTransfterDTO = v.get(0);
+                        Double aDouble = v.stream().collect(Collectors.summingDouble(FaTransfterDTO::getOutNum));
+                        faTransfterDTO.setOutNum(aDouble);
+                        faTransfterDTO.setOutAmount(aDouble * faTransfterDTO.getOutPrice());
+                        list.add(faTransfterDTO);
+                    }
+                    info.set("list", list);
+                    info.set("faInfoIds", faInfoIdList);
+                    info.set("billMaker", staffByUserId.get("workNo"));
+                    info.set("billMakerName", staffByUserId.get("name"));
+                    info.set("billMakeTime", DateUtils.toDateTimeStr19(new Date()));
+                    // 退库
+                    EiInfo eiInfo = OneSelfUtils.invoke(info, "S_SI_FA_03");
+                    System.out.println("新退库单接口");
+                    System.out.println("eiInfo:" + eiInfo);
+                    if (eiInfo != null){
+                        info.setStatus(-1);
+                        info.setMsg("调拨回仓库操作失败，原因：'直入直出'状态的资产不能进行调拨回仓库，请在仓库模块进行退货操作");
+                        Object o = eiInfo.get("outList");
+                        if (o != null) {
+                            List<Map> outList = (List<Map>) eiInfo.get("outList");
+                            String outBillNo = (String) outList.get(0).get("outBillNo");
+                            String originBillNo = (String) outList.get(0).get("originBillNo");
+                            // 更新对应的资产状态、科室编码、科室名称、所在位置、资产状态从在用变成000
+                            dao.update("FADB01.updateFaInfoStatusUsing", new HashMap<String, Object>() {{
+                                put("faInfoIdList", faInfoIdList);
+                                put("deptNum", "");
+                                put("deptName", "");
+                                put("build", "");
+                                put("floor", "");
+                                put("room", "");
+                                put("installLocationNum", "");
+                                put("installLocation", "");
+                                put("statusCode", "039");
+                            }});
+                            FaTransferVO faTransferVO = new FaTransferVO();
+                            Map<String, Object> applyInfo = new HashMap<>();
+                            applyInfo.put("applyTime", DateUtils.toDateStr10(new Date()));
+                            applyInfo.put("confirmTime", DateUtils.toDateStr10(new Date()));
+                            applyInfo.put("auditTime", DateUtils.toDateStr10(new Date()));
+                            applyInfo.put("source", "PC");
+                            applyInfo.put("billNo", outBillNo);
+                            applyInfo.put("outType", "05");
+                            faTransferVO.fromMap(applyInfo);
+                            faTransferVO.setId(UUID.randomUUID().toString());
+                            faTransferVO.setTransferNo(transferNo);
+                            faTransferVO.setApplyDeptNum((String) staffByUserId.get("deptNum"));
+                            faTransferVO.setApplyDeptName((String) staffByUserId.get("deptName"));
+                            faTransferVO.setApplyPerson((String) staffByUserId.get("name"));
+                            faTransferVO.setTransferStatus("100");
+                            // 新增调拨记录
+                            dao.insert("FADB01.saveFaTransferInfo", faTransferVO);
+                            // 新增调拨明细
+                            List<FaTransferDetailVO> faTransferDetailVOList = backZFaInfo.stream().map(map -> {
+                                FaTransferDetailVO faTransferDetailVO = new FaTransferDetailVO();
+                                faTransferDetailVO.setId(UUID.randomUUID().toString());
+                                faTransferDetailVO.setTransferNo(transferNo);
+                                faTransferDetailVO.setFaInfoId((String) map.get("faInfoId"));
+                                faTransferDetailVO.setGoodsNum((String) map.get("goodsNum"));
+                                faTransferDetailVO.setGoodsName((String) map.get("goodsName"));
+                                faTransferDetailVO.setModel((String) map.get("model"));
+                                faTransferDetailVO.setSpec((String) map.get("spec"));
+                                return faTransferDetailVO;
+                            }).collect(Collectors.toList());
+                            dao.insert("FADB01.saveFaTransferDetailInfo", faTransferDetailVOList);
+                        } else {
+                            info.setStatus(-1);
+                            info.setMsg("退库操作失败，原因：退库接口返回数据为空");
+                        }
+                    } else {
+                        info.setStatus(-1);
+                        info.setMsg("退库操作失败，原因：退库接口调用失败");
+                    }
+                });
+                return info;
+            }
+            // 手工入库
+            if (CollectionUtils.isNotEmpty(backSFaInfo)) {
+                // 调用出库微服务
+                // 先将相同物资编码的数据进行合并
+                List<FaTransfterDTO> collect = backSFaInfo.stream().map(map -> {
+                    FaTransfterDTO faTransfterDTO = new FaTransfterDTO();
+                    faTransfterDTO.setFaInfoId((String) map.get("faInfoId"));
+                    faTransfterDTO.setEnterBillNo((String) map.get("enterBillNo"));
+                    faTransfterDTO.setOutBillNo((String) map.get("outBillNo"));
+                    faTransfterDTO.setMatNum((String) map.get("matNum"));
+                    faTransfterDTO.setMatName((String) map.get("matName"));
+                    faTransfterDTO.setMatTypeNum((String) map.get("matTypeNum"));
+                    faTransfterDTO.setMatTypeName((String) map.get("matTypeName"));
+                    faTransfterDTO.setMatModel((String) map.get("model"));
+                    faTransfterDTO.setMatSpec((String) map.get("spec"));
+                    faTransfterDTO.setUnit((String) map.get("unitNum"));
+                    faTransfterDTO.setUnitName((String) map.get("unitName"));
+                    faTransfterDTO.setOutNum(Double.valueOf("1"));
+                    faTransfterDTO.setOutPrice(Double.valueOf(String.valueOf(map.get("price"))));
+                    return faTransfterDTO;
+                }).collect(Collectors.toList());
+                Map<String, List<FaTransfterDTO>> collect1 = collect.stream()
+                        .collect(Collectors.groupingBy(faTransfterDTO -> faTransfterDTO.getMatNum() + "&" + faTransfterDTO.getOutBillNo()));
+                List<FaTransfterDTO> list = new ArrayList<>();
+                collect1.forEach((k, v) -> {
+                    List<String> faInfoIdList = new ArrayList();
+                    info.set("outType", "05");
+                    info.set("outBillNo", k.split("&")[1]);
+                    if (v.size() > 0) {
+                        for (int i = 0; i < v.size(); i++) {
+                            String faInfoId = v.get(i).getFaInfoId();
+                            faInfoIdList.add(faInfoId);
+                        }
+                        FaTransfterDTO faTransfterDTO = v.get(0);
+                        Double aDouble = v.stream().collect(Collectors.summingDouble(FaTransfterDTO::getOutNum));
+                        faTransfterDTO.setOutNum(aDouble);
+                        faTransfterDTO.setOutAmount(aDouble * faTransfterDTO.getOutPrice());
+                        list.add(faTransfterDTO);
+                    }
+                    info.set("list", list);
+                    info.set("faInfoIds", faInfoIdList);
+                    info.set("billMaker", staffByUserId.get("workNo"));
+                    info.set("billMakerName", staffByUserId.get("name"));
+                    info.set("billMakeTime", DateUtils.toDateTimeStr19(new Date()));
+                    // 退库
+                    EiInfo eiInfo = OneSelfUtils.invoke(info, "S_SI_FA_03");
+                    System.out.println("新退库单接口");
+                    System.out.println("eiInfo:" + eiInfo);
+                    if (eiInfo != null){
+                        Object o = eiInfo.get("outList");
+                        if (o != null) {
+                            List<Map> outList = (List<Map>) eiInfo.get("outList");
+                            String outBillNo = (String) outList.get(0).get("outBillNo");
+                            String originBillNo = (String) outList.get(0).get("originBillNo");
+                            for (Map map : backSFaInfo) {
+                                faInfoIdList.add((String) map.get("id"));
+                            }
+                            // 更新对应的资产状态、科室编码、科室名称、所在位置、资产状态从在用变成000
+                            dao.update("FADB01.updateFaInfoStatusUsing", new HashMap<String, Object>() {{
+                                put("faInfoIdList", faInfoIdList);
+                                put("deptNum", "");
+                                put("deptName", "");
+                                put("build", "");
+                                put("floor", "");
+                                put("room", "");
+                                put("installLocationNum", "");
+                                put("installLocation", "");
+                                put("statusCode", "010");
+                            }});
+                            FaTransferVO faTransferVO = new FaTransferVO();
+                            Map<String, Object> applyInfo = new HashMap<>();
+                            applyInfo.put("applyTime", DateUtils.toDateStr10(new Date()));
+                            applyInfo.put("confirmTime", DateUtils.toDateStr10(new Date()));
+                            applyInfo.put("auditTime", DateUtils.toDateStr10(new Date()));
+                            applyInfo.put("source", "PC");
+                            applyInfo.put("billNo", outBillNo);
+                            applyInfo.put("outType", "05");
+                            faTransferVO.fromMap(applyInfo);
+                            faTransferVO.setId(UUID.randomUUID().toString());
+                            faTransferVO.setTransferNo(transferNo);
+                            faTransferVO.setApplyDeptNum((String) staffByUserId.get("deptNum"));
+                            faTransferVO.setApplyDeptName((String) staffByUserId.get("deptName"));
+                            faTransferVO.setApplyPerson((String) staffByUserId.get("name"));
+                            faTransferVO.setTransferStatus("100");
+                            // 新增调拨记录
+                            dao.insert("FADB01.saveFaTransferInfo", faTransferVO);
+                            // 新增调拨明细
+                            List<FaTransferDetailVO> faTransferDetailVOList = backSFaInfo.stream().map(map -> {
+                                FaTransferDetailVO faTransferDetailVO = new FaTransferDetailVO();
+                                faTransferDetailVO.setId(UUID.randomUUID().toString());
+                                faTransferDetailVO.setTransferNo(transferNo);
+                                faTransferDetailVO.setFaInfoId((String) map.get("faInfoId"));
+                                faTransferDetailVO.setGoodsNum((String) map.get("goodsNum"));
+                                faTransferDetailVO.setGoodsName((String) map.get("goodsName"));
+                                faTransferDetailVO.setModel((String) map.get("model"));
+                                faTransferDetailVO.setSpec((String) map.get("spec"));
+                                return faTransferDetailVO;
+                            }).collect(Collectors.toList());
+                            dao.insert("FADB01.saveFaTransferDetailInfo", faTransferDetailVOList);
+                        } else {
+                            info.setStatus(-1);
+                            info.setMsg("退库操作失败，原因：退库接口返回数据为空");
+                        }
+                    } else {
+                        info.setStatus(-1);
+                        info.setMsg("退库操作失败，原因：退库接口调用失败");
+                    }
+                });
+                return info;
+            }
+        } else {
+            info.setStatus(-1);
+            info.setMsg("调拨失败：调拨物资为空");
         }
         return info;
     }

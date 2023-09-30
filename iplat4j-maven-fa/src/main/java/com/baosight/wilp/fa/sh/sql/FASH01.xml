@@ -107,6 +107,7 @@
             WHEN '030' THEN '现场停用'
             WHEN '031' THEN '调拨中'
             WHEN '035' THEN '报废中'
+            WHEN '039' THEN '退货中'
             WHEN '040' THEN '报废提交'
             WHEN '050' THEN '预报废'
             WHEN '060' THEN '报废'
@@ -137,6 +138,12 @@
         left join fa_discuss_detail fdd on fi.id = fdd.fa_info_id
         left join fa_discuss fd on fdd.fa_discuss_id = fd.id
         WHERE lock_flag = '0'
+        <isNotEmpty prepend="and" property="rowsList">
+            fi.id not in
+            <iterate property="rowsList" open="(" close=")" conjunction=",">
+                #rowsList[]#
+            </iterate>
+        </isNotEmpty>
         <isNotEmpty prepend="and" property="statusCode">
             fi.status_code = #statusCode#
         </isNotEmpty>
@@ -397,6 +404,7 @@
             WHEN '030' THEN '现场停用'
             WHEN '031' THEN '调拨中'
             WHEN '035' THEN '报废中'
+            WHEN '039' THEN '退货中'
             WHEN '040' THEN '报废提交'
             WHEN '050' THEN '预报废'
             WHEN '060' THEN '报废'

@@ -18,7 +18,7 @@
         </div>
     </EF:EFRegion>
     <EF:EFRegion id="result" title="上会资产列表">
-        <EF:EFGrid blockId="result" autoDraw="no" autoBind="true" checkMode="row" readonly="true" height="560px">
+        <EF:EFGrid blockId="result" autoDraw="no" autoBind="true" checkMode="row" rowNo="true" readonly="true" height="560px">
             <EF:EFColumn ename="faInfoId" cname="faInfoId" align="center" width="200" hidden="true"/>
             <EF:EFColumn ename="goodsNum" cname="资产编码" align="center" width="200" enable="false"/>
             <EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="200" enable="false"/>

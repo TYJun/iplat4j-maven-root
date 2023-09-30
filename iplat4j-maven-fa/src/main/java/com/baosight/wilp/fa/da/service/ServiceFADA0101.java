@@ -203,6 +203,7 @@ public class ServiceFADA0101 extends ServiceBase {
                     faInfoDO.setId(UUID.randomUUID().toString());
                     faInfoDO.setGoodsNum(goodsNum.substring(0, goodsNum.length() - 4) + String.format("%04d", Integer.valueOf(goodsNum.substring(goodsNum.length() - 4)) + i));
                     faInfoDO.setAmount(1);
+                    faInfoDO.setOperationType((String) param.get("receiveType"));
                     faInfoDOList.add(faInfoDO);
                 }
                 Map<String, Object> map = info.getRow("info", 0);

@@ -1,19 +1,58 @@
 package com.baosight.wilp.fa.sh.service;
 
+import com.baosight.iplat4j.core.ei.EiBlock;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class ServiceFASH00 extends ServiceBase {
     @Override
     public EiInfo initLoad(EiInfo inInfo) {
-        return inInfo;
+       return query(inInfo);
     }
 
     @Override
     public EiInfo query(EiInfo inInfo) {
+        HashMap<String, Object> map = new HashMap<>();
+        HashMap<String, Object> attr = new HashMap<>();
+        EiBlock block = inInfo.getBlock("inqu_status");
+        //查询条件
+        if (block!=null){
+            Map inquStatus = block.getRow(0);
+            map.put("goodsNum",inquStatus.get("goodsNum"));
+            map.put("goodsName",inquStatus.get("goodsName"));
+            map.put("surpName",inquStatus.get("surpName"));
+            map.put("remark",inquStatus.get("remark"));
+            map.put("buyCostS",inquStatus.get("buyCostS"));
+            map.put("buyCostE",inquStatus.get("buyCostE"));
+            map.put("netAssetValueS",inquStatus.get("netAssetValueS"));
+            map.put("netAssetValueE",inquStatus.get("netAssetValueE"));
+            map.put("buyDateS",inquStatus.get("buyDateS"));
+            map.put("buyDateE",inquStatus.get("buyDateE"));
+            map.put("useDateS",inquStatus.get("useDateS"));
+            map.put("useDateE",inquStatus.get("useDateE"));
+            map.put("deptName",inquStatus.get("deptName"));
+            map.put("goodsClassifyCode",inquStatus.get("goodsClassifyCode"));
+            map.put("goodsTypeCode",inquStatus.get("goodsTypeCode"));
+            map.put("fundingSourceNum",inquStatus.get("fundingSourceNum"));
+        }
+        //筛选已选物资
+        String faInfoIdList = (String) inInfo.getAttr().get("faInfoIdList");
+        if (faInfoIdList!=null){
+            String[] split = faInfoIdList.split(",");
+            ArrayList<String> rowsList = new ArrayList<>(Arrays.asList(split));
+            map.put("rowsList",rowsList);
+            }
+        map.put("statusCode", "040");
+        List<Map<String, String>> list = dao.query("FASH01.query", map, 0, 15);
+
+        int count = dao.count("FASH01.query", map);
+        attr.put("count",count);
+        attr.put("offset",0);
+        attr.put("limit",15);
+        inInfo.setRows("resultA",list);
+        inInfo.setAttr(attr);
         return inInfo;
     }
 
