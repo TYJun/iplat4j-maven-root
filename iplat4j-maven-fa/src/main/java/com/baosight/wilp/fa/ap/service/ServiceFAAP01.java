@@ -1017,18 +1017,18 @@ public class ServiceFAAP01 extends ServiceBase {
                         if (faConfirmDO.getOutBillNo() != null) {
                             List<String> faInfoIdList = new ArrayList<>();
                             // 针对直入直出查询对应的调拨单
-                            List<Map<String, Object>> confirmReturn = dao.query("FAAP01.queryTransferByReturn", new HashMap<String, Object>() {{
+                            List<Map<String, Object>> transferReturn = dao.query("FAAP01.queryTransferByReturn", new HashMap<String, Object>() {{
                                 put("billNo", faConfirmDO.getEnterBillNo());
                             }});
-                            if (CollectionUtils.isNotEmpty(confirmReturn)) {
+                            if (CollectionUtils.isNotEmpty(transferReturn)) {
                                 // 存在调拨单 --固定资产发起的退库操作即退货
                                 // 修改调拨单中的资产卡片状态 -》 退货中039 -》 逻辑删除000
                                 dao.update("FAAP01.updateTransferByReturn", new HashMap<String, Object>() {{
-                                    put("transferNo", confirmReturn.get(0).get("transferNo"));
+                                    put("transferNo", transferReturn.get(0).get("transferNo"));
                                 }});
                                 // 获取这些资产id
                                 List<Map<String, Object>> list = dao.query("FADB01.transferDetailResult", new HashMap<String, Object>() {{
-                                    put("transferNo", confirmReturn.get(0).get("transferNo"));
+                                    put("transferNo", transferReturn.get(0).get("transferNo"));
                                 }});
                                 for (int i = 0; i < list.size(); i++) {
                                     faInfoIdList.add((String) list.get(i).get("faInfoId"));
@@ -1036,26 +1036,54 @@ public class ServiceFAAP01 extends ServiceBase {
                             } else {
                                 // 不存在调拨单 --仓库发起的退货操作
                                 // 删除对应数量的资产卡片
-                                // 如果已经生成卡片就删除对应待出库的卡片
-                                List<Map<String, Object>> list = dao.query("FAAP01.queryConfirmByReturnId", new HashMap<String, Object>() {{
+                                List<Map<String, Object>> confirmReturn = dao.query("FAAP01.queryConfirmByReturn", new HashMap<String, Object>() {{
                                     put("enterBillNo", faConfirmDO.getOriginBillNo());
                                     put("matNum", faConfirmDO.getMatNum());
-                                    put("statusCode", "020");
-                                    put("enterNum", Integer.valueOf(faConfirmDO.getEnterNum().intValue()));
+                                    put("confirmStatus", "00");
                                 }});
-                                if (CollectionUtils.isNotEmpty(list)){
-                                    for (int i = 0; i < list.size(); i++) {
-                                        faInfoIdList.add((String) list.get(i).get("id"));
+                                if (CollectionUtils.isNotEmpty(confirmReturn)){
+                                    // 如果状态是待生成卡片就改变卡片数量
+                                    BigDecimal enterNum = new BigDecimal(String.valueOf(confirmReturn.get(0).get("enterNum")));
+                                    BigDecimal enterAmount = new BigDecimal(String.valueOf(confirmReturn.get(0).get("enterAmount")));
+                                    if (enterNum.compareTo(faConfirmDO.getEnterNum()) > 0){
+                                        // 卡片数量充足才删除卡片
+                                        dao.update("FAAP01.updateConfirmByReturn", new HashMap<String, Object>() {{
+                                            put("enterBillNo", faConfirmDO.getOriginBillNo());
+                                            put("matNum", faConfirmDO.getMatNum());
+                                            put("enterNum", enterNum.subtract(faConfirmDO.getEnterNum()));
+                                            put("enterAmount", enterAmount.subtract(faConfirmDO.getEnterAmount()));
+                                        }});
+                                    } else {
+                                        // 卡片数量不足才删除卡片
+                                        dao.delete("FAAP01.deleteConfirmByReturnZero",new HashMap<String,Object>(){{
+                                            put("enterBillNo", faConfirmDO.getOriginBillNo());
+                                            put("matNum", faConfirmDO.getMatNum());
+                                        }});
                                     }
-                                    dao.delete("FAAP01.deleteConfirmByReturn",new HashMap<String,Object>(){{
-                                        put("faInfoIdList", faInfoIdList);
+                                } else {
+                                    // 如果已经生成卡片就删除对应待出库的卡片
+                                    List<Map<String, Object>> list = dao.query("FAAP01.queryConfirmByReturnId", new HashMap<String, Object>() {{
+                                        put("enterBillNo", faConfirmDO.getOriginBillNo());
+                                        put("matNum", faConfirmDO.getMatNum());
+                                        put("statusCode", "020");
+                                        put("enterNum", Integer.valueOf(faConfirmDO.getEnterNum().intValue()));
                                     }});
+                                    if (CollectionUtils.isNotEmpty(list)){
+                                        for (int i = 0; i < list.size(); i++) {
+                                            faInfoIdList.add((String) list.get(i).get("id"));
+                                        }
+                                        dao.delete("FAAP01.deleteConfirmByReturn",new HashMap<String,Object>(){{
+                                            put("faInfoIdList", faInfoIdList);
+                                        }});
+                                    }
                                 }
                             }
-                            // 资产调拨回仓库需要删除对应抛帐表中的数据
-                            dao.delete("FADB01.deleteFaThrowAccountOut", new HashMap<String, Object>() {{
-                                put("faInfoIdList", faInfoIdList);
-                            }});
+                            if (faInfoIdList != null && CollectionUtils.isNotEmpty(faInfoIdList)){
+                                // 资产调拨回仓库需要删除对应抛帐表中的数据
+                                dao.delete("FADB01.deleteFaThrowAccountOut", new HashMap<String, Object>() {{
+                                    put("faInfoIdList", faInfoIdList);
+                                }});
+                            }
                         } else {
                             List<String> faInfoIdList = new ArrayList<>();
                             // 针对手工入库查询对应的确认单
@@ -1066,14 +1094,21 @@ public class ServiceFAAP01 extends ServiceBase {
                             }});
                             if (CollectionUtils.isNotEmpty(confirmReturn)) {
                                 // 如果状态是待生成卡片就改变卡片数量
-                                BigDecimal enterNum = (BigDecimal) confirmReturn.get(0).get("enterNum");
-                                BigDecimal enterAmount = (BigDecimal) confirmReturn.get(0).get("enterAmount");
-                                dao.update("FAAP01.updateConfirmByReturn", new HashMap<String, Object>() {{
-                                    put("enterBillNo", faConfirmDO.getOriginBillNo());
-                                    put("matNum", faConfirmDO.getMatNum());
-                                    put("enterNum", enterNum.subtract(faConfirmDO.getEnterNum()));
-                                    put("enterAmount", enterAmount.subtract(faConfirmDO.getEnterAmount()));
-                                }});
+                                BigDecimal enterNum = new BigDecimal(String.valueOf(confirmReturn.get(0).get("enterNum")));
+                                BigDecimal enterAmount = new BigDecimal(String.valueOf(confirmReturn.get(0).get("enterAmount")));
+                                if (enterNum.compareTo(faConfirmDO.getEnterNum()) > 0){
+                                    dao.update("FAAP01.updateConfirmByReturn", new HashMap<String, Object>() {{
+                                        put("enterBillNo", faConfirmDO.getOriginBillNo());
+                                        put("matNum", faConfirmDO.getMatNum());
+                                        put("enterNum", enterNum.subtract(faConfirmDO.getEnterNum()));
+                                        put("enterAmount", enterAmount.subtract(faConfirmDO.getEnterAmount()));
+                                    }});
+                                } else {
+                                    dao.delete("FAAP01.deleteConfirmByReturnZero",new HashMap<String,Object>(){{
+                                        put("enterBillNo", faConfirmDO.getOriginBillNo());
+                                        put("matNum", faConfirmDO.getMatNum());
+                                    }});
+                                }
                             } else {
                                 // 如果已经生成卡片就删除对应待出库的卡片
                                 List<Map<String, Object>> list = dao.query("FAAP01.queryConfirmByReturnId", new HashMap<String, Object>() {{
@@ -1104,10 +1139,12 @@ public class ServiceFAAP01 extends ServiceBase {
                                     return info;
                                 }
                             }
-                            // 资产调拨回仓库需要删除对应抛帐表中的数据
-                            dao.delete("FADB01.deleteFaThrowAccountOut", new HashMap<String, Object>() {{
-                                put("faInfoIdList", faInfoIdList);
-                            }});
+                            if (faInfoIdList != null && CollectionUtils.isNotEmpty(faInfoIdList)){
+                                // 资产调拨回仓库需要删除对应抛帐表中的数据
+                                dao.delete("FADB01.deleteFaThrowAccountOut", new HashMap<String, Object>() {{
+                                    put("faInfoIdList", faInfoIdList);
+                                }});
+                            }
                         }
                     }
                 } else {

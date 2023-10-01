@@ -13,7 +13,7 @@ import java.util.Map;
 public class ServiceFASH01 extends ServiceBase {
     @Override
     public EiInfo initLoad(EiInfo info) {
-        return confirmedQuery(info);
+        return info;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class ServiceFASH01 extends ServiceBase {
     // 报废提交资产
     public EiInfo confirmedQuery(EiInfo info) {
         Integer offset = 0;
-        Integer limit = 15;
+        Integer limit = 100;
         EiBlock resultA = info.getBlock("resultA");
         Map<String, Object> attr = new HashMap<>();
         if (resultA != null) {
@@ -68,17 +68,19 @@ public class ServiceFASH01 extends ServiceBase {
     // 上会讨论资产
     public EiInfo discussQuery(EiInfo info) {
         Integer offset = 0;
+        Integer limit = 100;
         Map attr = info.getBlock("resultB").getAttr();
         Map<String, Object> map = new HashMap<>();
         EiBlock eiBlock = info.getBlock("inqu_status");
         if (eiBlock != null) {
             map = eiBlock.getRow(0);
         }
-        if (attr.containsKey("offset")) {
+        if (attr.containsKey("offset") && attr.containsKey("limit")) {
             offset = (Integer) attr.get("offset");
+            limit = (Integer) attr.get("limit");
         }
         map.put("discussStatus", "00");
-        List<Map<String, String>> list = dao.query("FASH01.discussQuery", map, offset, (Integer) attr.get("limit"));
+        List<Map<String, String>> list = dao.query("FASH01.discussQuery", map, offset, limit);
         int count = dao.count("FASH01.discussQuery", map);
         attr.put("count", count);
         EiBlock block = new EiBlock("resultB");
@@ -91,17 +93,19 @@ public class ServiceFASH01 extends ServiceBase {
     // 预报废资产
     public EiInfo wastingQuery(EiInfo info) {
         Integer offset = 0;
+        Integer limit = 100;
         Map attr = info.getBlock("resultC").getAttr();
         Map<String, Object> map = new HashMap<>();
         EiBlock eiBlock = info.getBlock("inqu_status");
         if (eiBlock != null) {
             map = eiBlock.getRow(0);
         }
-        if (attr.containsKey("offset")) {
+        if (attr.containsKey("offset") && attr.containsKey("limit")) {
             offset = (Integer) attr.get("offset");
+            limit = (Integer) attr.get("limit");
         }
         map.put("discussStatus", "10");
-        List<Map<String, String>> list = dao.query("FASH01.discussQuery", map, offset, (Integer) attr.get("limit"));
+        List<Map<String, String>> list = dao.query("FASH01.discussQuery", map, offset, limit);
         int count = dao.count("FASH01.discussQuery", map);
         attr.put("count", count);
         EiBlock block = new EiBlock("resultC");
@@ -114,6 +118,7 @@ public class ServiceFASH01 extends ServiceBase {
     // 已报废资产
     public EiInfo wastedQuery(EiInfo info) {
         Integer offset = 0;
+        Integer limit = 100;
         Map attr = info.getBlock("resultD").getAttr();
         Map<String, Object> map = new HashMap<>();
         EiBlock eiBlock = info.getBlock("inqu_status");
@@ -129,11 +134,12 @@ public class ServiceFASH01 extends ServiceBase {
                 info.setCell("inqu_status", 0, "deptNameSplit", param);
             }
         }
-        if (attr.containsKey("offset")) {
+        if (attr.containsKey("offset") && attr.containsKey("limit")) {
             offset = (Integer) attr.get("offset");
+            limit = (Integer) attr.get("limit");
         }
         map.put("statusCode", "060");
-        List<Map<String, String>> list = dao.query("FASH01.query", map, offset, (Integer) attr.get("limit"));
+        List<Map<String, String>> list = dao.query("FASH01.query", map, offset, limit);
         int count = dao.count("FASH01.query", map);
         attr.put("count", count);
         EiBlock block = new EiBlock("resultD");
@@ -146,17 +152,19 @@ public class ServiceFASH01 extends ServiceBase {
     // 完结上会单
     public EiInfo FinsihQuery(EiInfo info) {
         Integer offset = 0;
+        Integer limit = 100;
         Map attr = info.getBlock("resultE").getAttr();
         Map<String, Object> map = new HashMap<>();
         EiBlock eiBlock = info.getBlock("inqu_status");
         if (eiBlock != null) {
             map = eiBlock.getRow(0);
         }
-        if (attr.containsKey("offset")) {
+        if (attr.containsKey("offset") && attr.containsKey("limit")) {
             offset = (Integer) attr.get("offset");
+            limit = (Integer) attr.get("limit");
         }
         map.put("discussStatus", "99");
-        List<Map<String, String>> list = dao.query("FASH01.discussQuery", map, offset, (Integer) attr.get("limit"));
+        List<Map<String, String>> list = dao.query("FASH01.discussQuery", map, offset, limit);
         int count = dao.count("FASH01.discussQuery", map);
         attr.put("count", count);
         EiBlock block = new EiBlock("resultE");

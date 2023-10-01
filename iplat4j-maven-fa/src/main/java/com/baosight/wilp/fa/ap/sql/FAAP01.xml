@@ -876,4 +876,9 @@
             </iterate>
         )
     </delete>
+
+    <!-- 退库流程：删除对应的确认单 -->
+    <delete id="deleteConfirmByReturnZero" parameterClass="java.util.HashMap">
+        delete from fa_confirm where enter_bill_no = #enterBillNo# AND mat_num = #matNum#
+    </delete>
 </sqlMap>

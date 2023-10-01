@@ -49,12 +49,12 @@ $(function () {
                         click: function (e) {
                             var checkRows = resultGrid.getCheckedRows()
                             resultGrid.removeRows(checkRows);
-                            if (checkRows.length > 0){
+                            if (checkRows.length > 0) {
                                 var newRows = resultGrid.getDataItems();
-                                pageCount = 0.00,netValueCount = 0.00;
+                                pageCount = 0.00, netValueCount = 0.00;
                                 for (let i = 0; i < newRows.length; i++) {
-                                    pageCount += $.isNumeric(newRows[i].buyCost) ? + newRows[i].buyCost : 0;
-                                    netValueCount += $.isNumeric(newRows[i].netAssetValue) ? + newRows[i].netAssetValue : 0;
+                                    pageCount += $.isNumeric(newRows[i].buyCost) ? +newRows[i].buyCost : 0;
+                                    netValueCount += $.isNumeric(newRows[i].netAssetValue) ? +newRows[i].netAssetValue : 0;
                                 }
                                 numberCount = newRows.length;
                                 $("#pageCount").text(pageCount.toFixed(2));
@@ -87,20 +87,20 @@ $(function () {
                     grid.addRows(checkRows);
                     grid.unCheckAllRows();
                     for (let i = 0; i < checkRows.length; i++) {
-                        pageCount += $.isNumeric(checkRows[i].buyCost) ? + checkRows[i].buyCost : 0;
-                        netValueCount += $.isNumeric(checkRows[i].netAssetValue) ? + checkRows[i].netAssetValue : 0;
+                        pageCount += $.isNumeric(checkRows[i].buyCost) ? +checkRows[i].buyCost : 0;
+                        netValueCount += $.isNumeric(checkRows[i].netAssetValue) ? +checkRows[i].netAssetValue : 0;
                         numberCount = checkRows.length;
                         $("#pageCount").text(pageCount.toFixed(2));
                         $("#netValueCount").text(netValueCount.toFixed(2));
                         $("#numberCount").text(numberCount.toFixed(2));
                     }
                 } else {
-                    if (grid != undefined){
+                    if (grid != undefined) {
 
                     }
                 }
             },
-            beforeRequest: function(e) {
+            beforeRequest: function (e) {
 
             },
             onCheckRow: function (e) {
@@ -115,21 +115,21 @@ function fixedAssetsWindow(discussId) {
     var DataItems = resultGrid.getDataItems();
     var faInfoIdList = null;
     for (let i = 0; i < DataItems.length; i++) {
-        if (i!=0){
-            faInfoIdList = faInfoIdList+","+DataItems[i].faInfoId;
-        }else {
+        if (i != 0) {
+            faInfoIdList = faInfoIdList + "," + DataItems[i].faInfoId;
+        } else {
             faInfoIdList = DataItems[i].faInfoId;
         }
     }
-    var url = IPLATUI.CONTEXT_PATH + "/web/FASH00?query&discussId=" + discussId+"&faInfoIdList=" +faInfoIdList;
+    var url = IPLATUI.CONTEXT_PATH + "/web/FASH00?query&discussId=" + discussId + "&faInfoIdList=" + faInfoIdList;
     var popData = $("#popData");
     popData.data("kendoWindow").setOptions({
-            open: function () {
-                popData.data("kendoWindow").refresh({
-                    url: url,
-                });
-            }
-        });
+        open: function () {
+            popData.data("kendoWindow").refresh({
+                url: url,
+            });
+        }
+    });
     // 新窗口打开居中
     popDataWindow.open().center();
 }

@@ -7,6 +7,7 @@
 <EF:EFPage title="资产上会">
     <EF:EFRegion id="inqu" title="查询条件" showClear="true">
         <div class="row">
+            <EF:EFInput ename="inqu_status-0-faInfoIdList" cname="父页面资产" colWidth="3" type="hidden"/>
             <div id="only">
                 <EF:EFInput ename="inqu_status-0-goodsNum" cname="资产编码" colWidth="3"/>
                 <EF:EFInput ename="inqu_status-0-goodsName" cname="资产名称" colWidth="3"/>

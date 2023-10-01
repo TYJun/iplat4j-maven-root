@@ -157,7 +157,8 @@ $(function () {
         },
         "resultD": {
             pageable: {
-                pageSize: 100
+                pageSize: 100,
+                pageSizes: [100, 200, 500, 1000]
             },
             toolbarConfig: {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
