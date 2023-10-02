@@ -14,10 +14,21 @@ public class ServiceFASH00 extends ServiceBase {
 
     @Override
     public EiInfo query(EiInfo inInfo) {
+        Integer offset = 0;
+        Integer limit = 100;
         HashMap<String, Object> map = new HashMap<>();
-        HashMap<String, Object> attr = new HashMap<>();
+        Map<String, Object> attrSize = new HashMap<>();
         EiBlock block = inInfo.getBlock("inqu_status");
         String faInfoIdList = (String) inInfo.getAttr().get("faInfoIdList");
+        //选择页面显示条数
+        EiBlock resultNumber = inInfo.getBlock("resultA");
+        if (resultNumber != null) {
+            attrSize = resultNumber.getAttr();
+        }
+        if (attrSize.containsKey("offset") && attrSize.containsKey("limit")) {
+            offset = (Integer) attrSize.get("offset");
+            limit = (Integer) attrSize.get("limit");
+        }
         //查询条件
         if (block != null) {
             Map inquStatus = block.getRow(0);
@@ -46,11 +57,13 @@ public class ServiceFASH00 extends ServiceBase {
             map.put("rowsList", rowsList);
         }
         map.put("statusCode", "040");
-        List<Map<String, String>> list = dao.query("FASH01.query", map);
+        List<Map<String, String>> list = dao.query("FASH01.query", map, offset, limit);
         int count = dao.count("FASH01.query", map);
-        attr.put("count", count);
-        inInfo.setRows("resultA", list);
-        inInfo.setAttr(attr);
+        attrSize.put("count", count);
+        EiBlock resultA = new EiBlock("resultA");
+        resultA.setRows(list);
+        resultA.setAttr(attrSize);
+        inInfo.setBlock(resultA);
         return inInfo;
     }
 
