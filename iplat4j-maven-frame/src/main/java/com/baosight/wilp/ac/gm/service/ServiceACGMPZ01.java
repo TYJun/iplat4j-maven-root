@@ -53,7 +53,7 @@ public class ServiceACGMPZ01 extends ServiceBase {
     public EiInfo delete(EiInfo inInfo) {
 
         HashMap<String,Object> map = new HashMap<>();
-        map.put("id",inInfo.getBlock("result").getRow(0).get("id"));
+        map.put("id",inInfo.getAttr().get("id"));
         map.put("projectSchema",projectSchema);
         dao.delete("ACGMPZ01.delete", map);
 

@@ -37,6 +37,11 @@ var datagrid = null;
 						});
 				});
 
+				$("#REQUERY").on("click", function (e) {
+					document.getElementById("inqu-trash").click();
+					resultGrid.dataSource.page(1);
+				});
+
 				// 新增按钮
 				$("#ADD").on("click", function(e) {
 					// 防止连续提交
@@ -58,9 +63,6 @@ var datagrid = null;
 					});
 					popDataWindow.open().center();
 				});
-
-
-
 			},
 		}
 	}

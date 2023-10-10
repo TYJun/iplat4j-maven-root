@@ -196,7 +196,7 @@ public class ServiceCICK0101 extends ServiceBase {
 				inInfo.setMsg("库存不足 无法出库");
 				return inInfo;
 			}
-			//足够出库,获取库存物资的批次 
+			//足够出库,获取库存物资的批次
 			outInfo = CiUtils.invoke(null, "CIKC0101", "queryStorgeDetail", new String[]{"wareHouseNo","matNum"},
 					out.getWareHouseNo(), outDetail.getMatNum());
 			List<CiStorgeDetail> storgeDetailList = (List<CiStorgeDetail>) outInfo.get("list");

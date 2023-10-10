@@ -7,6 +7,8 @@
 <EF:EFPage title="资产档案">
 	<EF:EFRegion id="inqu" title="查询条件" showClear="true">
 		<div class="row">
+			<EF:EFInput ename="inqu_status-0-buyCostCount" cname="资产原值总计"  colWidth="3"  type="hidden"/>
+			<EF:EFInput ename="inqu_status-0-countAll" cname="资产数量总计"  colWidth="3"  type="hidden"/>
 			<EF:EFInput ename="inqu_status-0-goodsNum" colWidth="3" ratio="4:8" cname="资产编码"/>
 			<EF:EFInput ename="inqu_status-0-goodsName" colWidth="3" ratio="4:8" cname="资产名称"/>
 			<EF:EFInput ename="inqu_status-0-surpName" colWidth="3" ratio="4:8" cname="供应商"/>
@@ -67,6 +69,9 @@
 				<EF:EFColumn ename="goodsNum" cname="资产编码"  align="center" width="200" displayType="url" enable="false"/>
 				<EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="200"/>
 				<EF:EFColumn ename="spec" cname="型号规格"  align="center" width="200" />
+				<EF:EFColumn ename="buyDate" cname="购入日期"   align="center" width="200"/>
+				<EF:EFColumn ename="useDate" cname="使用日期"   align="center" width="200"/>
+				<EF:EFColumn ename="buyCost" cname="资产原值"   align="center" width="200"/>
 				<EF:EFColumn ename="deptName" cname="所属科室"   align="center" width="200"/>
 				<EF:EFColumn ename="room" cname="具体位置"   align="center" width="200"/>
 				<EF:EFColumn ename="statusCode" cname="资产状态"   align="center" width="200"/>
@@ -77,9 +82,6 @@
 				<EF:EFColumn ename="model" cname="型号"  align="center" width="200" hidden="true"/>
 				<EF:EFColumn ename="manufacturer" cname="制造厂商"  align="center" width="200" hidden="true"/>
 				<EF:EFColumn ename="surpName" cname="供应商"   align="center" width="200"/>
-				<EF:EFColumn ename="buyDate" cname="购入日期"   align="center" width="200"/>
-				<EF:EFColumn ename="useDate" cname="使用日期"   align="center" width="200"/>
-				<EF:EFColumn ename="buyCost" cname="资产原值"   align="center" width="200"/>
 				<EF:EFColumn ename="netAssetValue" cname="资产净值"   align="center" width="200"/>
 				<EF:EFColumn ename="useYears" cname="使用年限"   align="center" width="200"/>
 				<%--			<EF:EFColumn ename="deviceName" cname="设备名称"   align="center" />--%>

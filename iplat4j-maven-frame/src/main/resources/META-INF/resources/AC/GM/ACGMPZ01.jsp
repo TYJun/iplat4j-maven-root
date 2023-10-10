@@ -9,8 +9,12 @@
 	<EF:EFRegion id="inqu" title="查询条件" showClear="true">
 		<div class="row">
 			<EF:EFInput ename="GroupCname" cname="群组名称:" />
-			<EF:EFInput ename="GroupCname" cname="群组编码:" />
+			<EF:EFInput ename="GroupEname" cname="群组编码:" />
 			<EF:EFInput ename="matClassCode" cname="物资分类编码:" />
+		</div>
+		<div class="button-region" id="buttonDiv">
+			<EF:EFButton cname="查询" ename="QUERY" layout="0"></EF:EFButton>
+			<EF:EFButton cname="重置" ename="REQUERY" layout="0"></EF:EFButton>
 		</div>
 	</EF:EFRegion>
 	<EF:EFRegion id="result" title="物资档案配置信息">

@@ -129,6 +129,21 @@ public class ServiceCIKC02 extends ServiceBase {
 		//获取参数
 		Object object = inInfo.get("record");
 		Object object2 = inInfo.get("recordList");
+		if(object != null){
+			CiStorgeRecord record = (CiStorgeRecord) object;
+			dao.insert("CIKC02.insert", record);
+		}
+		if(object2 != null){
+			List<CiStorgeRecord> list = (List<CiStorgeRecord>) object2;
+			list.forEach(storgeRecord -> dao.insert("CIKC02.insert", storgeRecord));
+		}
+		return inInfo;
+	}
+
+	public EiInfo insert1(EiInfo inInfo) {
+		//获取参数
+		Object object = inInfo.get("record");
+		Object object2 = inInfo.get("recordList");
 		CiStorgeRecord recordList = new CiStorgeRecord();
 		//获取操作履历数据
 		if(object != null){

@@ -9,20 +9,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4fb1e35a-1e81-4c26-8858-23093e5fa00e" name="变更" comment="V1.3.5&#10;订餐模块：&#10;1.患者作废和管理页面分别增加患者床位号字段。&#10;2.职工外送餐综合管理点击就查看订单详情">
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/gm/service/ServiceACGMPZ01.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/gm/service/ServiceACGMPZ0101.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/gm/sql/ACGMPZ01.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/resources/META-INF/resources/AC/GM/ACGMPZ01.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/resources/META-INF/resources/AC/GM/ACGMPZ01.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/resources/META-INF/resources/AC/GM/ACGMPZ0101.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/resources/META-INF/resources/AC/GM/ACGMPZ0101.jsp" afterDir="false" />
+    <list default="true" id="4fb1e35a-1e81-4c26-8858-23093e5fa00e" name="变更" comment="V1.3.6&#10;固定资产">
+      <change afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/mc/jk/utils/LocalServiceUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/gm/service/ServiceACGM01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/gm/service/ServiceACGM01.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/gm/sql/ACGM01.xml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/gm/sql/ACGM01.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-sc/src/main/resources/META-INF/resources/PS/BM/PSBMDDGL01.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-sc/src/main/resources/META-INF/resources/PS/BM/PSBMDDGL01.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-sc/src/main/resources/META-INF/resources/PS/BM/PSBMDDZF01.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-sc/src/main/resources/META-INF/resources/PS/BM/PSBMDDZF01.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-sc/src/main/resources/META-INF/resources/SS/DC/SSDCWSCX01.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-sc/src/main/resources/META-INF/resources/SS/DC/SSDCWSCX01.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-ci/src/main/java/com/baosight/wilp/ci/ck/service/ServiceCICK0101.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-ci/src/main/java/com/baosight/wilp/ci/ck/service/ServiceCICK0101.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-ci/src/main/java/com/baosight/wilp/ci/kc/service/ServiceCIKC02.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-ci/src/main/java/com/baosight/wilp/ci/kc/service/ServiceCIKC02.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/da/service/ServiceFADA01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/da/service/ServiceFADA01.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/da/sql/FADA01.xml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/da/sql/FADA01.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DA/FADA01.js" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DA/FADA01.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DA/FADA01.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DA/FADA01.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/gm/service/ServiceACGMPZ01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/gm/service/ServiceACGMPZ01.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/pe/service/ServiceACPE01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/pe/service/ServiceACPE01.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/pe/sql/ACPE01.xml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/pe/sql/ACPE01.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/mc/jk/service/InfaceBaseInfoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/mc/jk/service/InfaceBaseInfoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/resources/META-INF/resources/AC/GM/ACGMPZ01.js" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/resources/META-INF/resources/AC/GM/ACGMPZ01.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/resources/META-INF/resources/AC/GM/ACGMPZ01.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/resources/META-INF/resources/AC/GM/ACGMPZ01.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/resources/META-INF/resources/AC/PE/ACPE01.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/resources/META-INF/resources/AC/PE/ACPE01.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,7 +112,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/休闲/桌面文件库/代码相关文档/iplat_mzsrmyy/iplat4j-maven-frame/src/main/resources/META-INF/resources/AC/GM&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/休闲/桌面文件库/代码相关文档/iplat_mzsrmyy/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DA&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;project.structure.last.edited&quot;: &quot;工件&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.16894531&quot;,
@@ -125,11 +127,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-frame\src\main\resources\META-INF\resources\AC\GM" />
-      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-frame\src\main\java\com\baosight\wilp\ac\gm\sql" />
-      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-frame\src\main\java\com\baosight\wilp\ac\gm\service" />
-      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-ir\src\main\java\com\baosight\wilp\ir\dl\app\security" />
-      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-si\src\main\java\com\baosight\wilp\si\ck\sql" />
+      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-fa\src\main\resources\META-INF\resources\FA\DA" />
+      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-fa\src\main\resources\META-INF\resources\FA\SH" />
+      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-fa\src\main\java\com\baosight\wilp\fa\sh\sql" />
+      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-fa\src\main\java\com\baosight\wilp\fa\ap\sql" />
+      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-frame\src\main\java\com\baosight\wilp\ac\pe\sql" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-dm\src\main\java\com\baosight\wilp\dm\rz\sql" />
@@ -137,7 +139,11 @@
       <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-dk" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.baosight.wilp.ac.gm.service" />
+      <recent name="com.baosight.wilp.fa.sh.service" />
+      <recent name="com.baosight.wilp.fa.ap.service" />
+      <recent name="com.baosight.wilp.mc.jk.utils" />
+      <recent name="com.baosight.wilp.mc.jk.service" />
+      <recent name="com.baosight.wilp.ac.pe.service" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -343,7 +349,26 @@
       <workItem from="1695604359122" duration="17615000" />
       <workItem from="1695690201152" duration="18449000" />
       <workItem from="1695777941518" duration="17265000" />
-      <workItem from="1695815041195" duration="1925000" />
+      <workItem from="1695815041195" duration="2614000" />
+      <workItem from="1695864488273" duration="75000" />
+      <workItem from="1695864936946" duration="740000" />
+      <workItem from="1695866635710" duration="502000" />
+      <workItem from="1695867488491" duration="107000" />
+      <workItem from="1695867900410" duration="24000" />
+      <workItem from="1695868099579" duration="329000" />
+      <workItem from="1695868571069" duration="155000" />
+      <workItem from="1695869230479" duration="1452000" />
+      <workItem from="1695870854946" duration="14435000" />
+      <workItem from="1695963610620" duration="10581000" />
+      <workItem from="1696036285615" duration="29617000" />
+      <workItem from="1696130846173" duration="5932000" />
+      <workItem from="1696216137046" duration="4462000" />
+      <workItem from="1696248145415" duration="11232000" />
+      <workItem from="1696319335848" duration="8199000" />
+      <workItem from="1696331494222" duration="8532000" />
+      <workItem from="1696673192448" duration="7582000" />
+      <workItem from="1696833409689" duration="4640000" />
+      <workItem from="1696922156050" duration="6487000" />
     </task>
     <task id="LOCAL-00002" summary="1.0">
       <created>1692064121183</created>
@@ -443,11 +468,50 @@
       <option name="project" value="LOCAL" />
       <updated>1695279203895</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="V1.3.5&#10;订餐模块：&#10;1.患者作废和管理页面分别增加患者床位号字段。&#10;2.职工外送餐综合管理点击就查看订单详情&#10;物资档案：&#10;1.增加配置项页面进行物资数据隔离">
+      <created>1695817538093</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1695817538093</updated>
+    </task>
+    <task id="LOCAL-00017" summary="V1.3.6">
+      <created>1696086098704</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1696086098704</updated>
+    </task>
+    <task id="LOCAL-00018" summary="V1.3.6&#10;固定资产上会页面更新">
+      <created>1696138784677</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1696138784677</updated>
+    </task>
+    <task id="LOCAL-00019" summary="V1.3.6&#10;固定资产上会页面统计数量">
+      <created>1696248190463</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1696248190463</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+        <option value="Space.CommitStatus" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -465,7 +529,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="github/master" />
+                        <option value="master" />
                       </list>
                     </value>
                   </entry>
@@ -541,7 +605,12 @@
     <MESSAGE value="V1.1" />
     <MESSAGE value="V1.3.2" />
     <MESSAGE value="V1.3.4&#10;1.宿舍模块：修正退宿发送企业微信通知信息错发问题。&#10;2.物资档案：增加筛选仓库人员不可见进销存物资筛选。" />
-    <option name="LAST_COMMIT_MESSAGE" value="V1.3.4&#10;1.宿舍模块：修正退宿发送企业微信通知信息错发问题。&#10;2.物资档案：增加筛选仓库人员不可见进销存物资筛选。" />
+    <MESSAGE value="V1.3.5&#10;订餐模块：&#10;1.患者作废和管理页面分别增加患者床位号字段。&#10;2.职工外送餐综合管理点击就查看订单详情&#10;物资档案：&#10;1.增加配置项页面进行物资数据隔离" />
+    <MESSAGE value="V1.3.6" />
+    <MESSAGE value="V1.3.6&#10;固定资产上会页面更新" />
+    <MESSAGE value="V1.3.6&#10;固定资产上会页面统计数量" />
+    <MESSAGE value="V1.3.6&#10;固定资产" />
+    <option name="LAST_COMMIT_MESSAGE" value="V1.3.6&#10;固定资产" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -555,11 +624,6 @@
           <url>file://$PROJECT_DIR$/iplat4j-maven-cp/src/main/java/com/baosight/wilp/cp/dj/service/ServiceCPDJ01.java</url>
           <line>96</line>
           <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/iplat4j-maven-ci/src/main/java/com/baosight/wilp/ci/kc/service/ServiceCIKC02.java</url>
-          <line>166</line>
-          <option name="timeStamp" value="18" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/iplat4j-maven-si/src/main/java/com/baosight/wilp/si/ty/service/ServiceSITY02.java</url>

@@ -1,4 +1,4 @@
-var ws = null;
+var ws = null, pageCount = 0.00, numberCount = 0.00;
 $(function () {
     // webSocketInit(0);
     $("#QUERY").on("click", function (e) {
@@ -236,8 +236,8 @@ $(function () {
         },
         "resultB": {
             pageable: {
-                pageSize: 15,
-                pageSizes: [15]
+                pageSize: 100,
+                pageSizes: [100,200,500,1000]
             },
             onCellClick: function (e) {
                 if (e.field === "goodsNum") {
@@ -510,8 +510,53 @@ $(function () {
                 ]
             },
             loadComplete: function (grid) {
+                $("#ef_grid_toolbar_resultB").prepend("<div style='float:left;font-size:13px;'>" +
+                    "勾选资产原值总金额：<span id='pageCount' style='color: red'>0.00</span>元，" +
+                    "勾选资产数量：<span id='numberCount' style='color: red'>0.00</span>条</div>")
+                var checkRows = grid.getCheckedRows()
+                if (checkRows.length > 0) {
+                    grid.addRows(checkRows);
+                    grid.unCheckAllRows();
+                    numberCount = checkRows.length;
+                    for (let i = 0; i < checkRows.length; i++) {
+                        pageCount += $.isNumeric(checkRows[i].buyCost) ? +checkRows[i].buyCost : 0;
+                        $("#pageCount").text(pageCount.toFixed(2));
+                        $("#numberCount").text(numberCount.toFixed(2));
+                    }
+                } else {
+                    if (grid != undefined) {
 
-            }
+                    }
+                    pageCount = $.isNumeric($("#inqu_status-0-buyCostCount").val()) ? $("#inqu_status-0-buyCostCount").val() : 0;
+                    numberCount = $.isNumeric($("#inqu_status-0-countAll").val()) ? $("#inqu_status-0-countAll").val() : 0
+                    $("#pageCount").text(parseInt(pageCount).toFixed(2));
+                    $("#numberCount").text(parseInt(numberCount).toFixed(2));
+                }
+            },
+            onCheckRow: function (e) {
+                let model = e.model;
+                var rows = resultBGrid.getCheckedRows();
+                pageCount = 0;
+                let numberCount = $.isNumeric(rows.length) ? rows.length : 0;
+                if (e.checked) {
+                    for (let i = 0; i < rows.length; i++) {
+                        pageCount += rows[i].buyCost;
+                    }
+                    // 全选时调用n次单选，加上最后一条记录的金额时，pageMoneySum记录下本页总金额
+                } else {
+                    for (let i = 0; i < rows.length; i++) {
+                        pageCount += rows[i].buyCost;
+                    }
+                }
+                // var getCheckedRows = resultGrid.getCheckedRows().length;
+                // $("#checkRowsCount").text(getCheckedRows);
+                // if (getCheckedRows == 0) {
+                //     pageCount = 0
+                //     numberCount = 0
+                // }
+                $("#pageCount").text(parseInt(pageCount).toFixed(2));
+                $("#numberCount").text(parseInt(numberCount).toFixed(2));
+            },
         },
         "resultC":{
             pageable: {

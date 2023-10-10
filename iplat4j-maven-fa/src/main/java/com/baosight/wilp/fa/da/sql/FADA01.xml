@@ -963,4 +963,12 @@
 			dept_name like concat ('%',#deptName#,'%')
 		</isNotEmpty>
 	</select>
+
+	<select id="querySUMFaInfoDOInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		SUM(buy_cost) AS "buyCostCount",
+		count(id) AS "countAll"
+		FROM fa_info
+		WHERE lock_flag NOT IN ('4') AND status_code NOT IN ('000','060')
+	</select>
 </sqlMap>

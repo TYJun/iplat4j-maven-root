@@ -1,5 +1,6 @@
 package com.baosight.wilp.fa.da.service;
 
+import com.baosight.iplat4j.core.data.ibatis.dao.SqlMapDao;
 import com.baosight.iplat4j.core.ei.EiBlock;
 import com.baosight.iplat4j.core.ei.EiConstant;
 import com.baosight.iplat4j.core.ei.EiInfo;
@@ -432,10 +433,17 @@ public class ServiceFADA01 extends ServiceBase {
             }
         }
         EiInfo outInfo = super.query(info, "FADA01.queryFaInfoDOInfo", new FaInfoDO(), false, null, null, "resultB", "resultB");
+        List<Map<String,Object>> query =(List<Map<String,Object>>)dao.query("FADA01.querySUMFaInfoDOInfo", null);
         if (info.getBlocks().size() > 0) {
             if (info.getBlock("resultB") != null) {
-                if ("15".equals(info.getBlock("resultB").get("limit"))) {
-                    outInfo.addBlock("resultB").set(EiConstant.limitStr, 15);
+                if ("100".equals(info.getBlock("resultB").get("limit"))) {
+                    outInfo.addBlock("resultB").set(EiConstant.limitStr, 100);
+                }else if ("200".equals(info.getBlock("resultB").get("limit"))) {
+                    outInfo.addBlock("resultB").set(EiConstant.limitStr, 200);
+                }else if ("500".equals(info.getBlock("resultB").get("limit"))) {
+                    outInfo.addBlock("resultB").set(EiConstant.limitStr, 500);
+                }else if ("1000".equals(info.getBlock("resultB").get("limit"))) {
+                    outInfo.addBlock("resultB").set(EiConstant.limitStr, 1000);
                 }
             }
         }
@@ -445,6 +453,7 @@ public class ServiceFADA01 extends ServiceBase {
         map.remove("limit");
         List<Map<String, String>> maps = dao.query("FADA01.queryDept", map);
         outInfo.setRows("dept", maps);
+        outInfo.setRows("inqu_status",query);
         return outInfo;
     }
 
