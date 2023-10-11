@@ -52,7 +52,7 @@ public class ServicePSBMDDCX01 extends ServiceBase{
      * initLoad初始化方法
      * @param inInfo
      * @return
-     * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
+     * @see ServiceBase#initLoad(EiInfo)
      */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -85,7 +85,7 @@ public class ServicePSBMDDCX01 extends ServiceBase{
 	 * query 查询方法
 	 * @param inInfo
 	 * @return
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#query(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @see ServiceBase#query(EiInfo)
 	 */
 	@Override
 	public EiInfo query(EiInfo inInfo) {

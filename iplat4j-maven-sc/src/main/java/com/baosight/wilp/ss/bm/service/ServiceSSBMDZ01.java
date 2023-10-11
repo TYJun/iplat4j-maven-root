@@ -69,18 +69,18 @@ public class ServiceSSBMDZ01 extends ServiceBase{
 
 	public EiInfo queryBuilding (EiInfo inInfo){
 
-		List<com.baosight.wilp.ss.bm.domain.ScAddress> list = dao.query("SSBMDZ01.queryBuilding", new HashMap<>());
+		List<ScAddress> list = dao.query("SSBMDZ01.queryBuilding", new HashMap<>());
 		inInfo.addBlock("building").addRows(list);
-		inInfo.getBlock("building").setBlockMeta(new com.baosight.wilp.ss.bm.domain.ScAddress().eiMetadata);
+		inInfo.getBlock("building").setBlockMeta(new ScAddress().eiMetadata);
 		return inInfo;
 
 	}
 
 	public EiInfo queryFloor (EiInfo inInfo){
 
-		List<com.baosight.wilp.ss.bm.domain.ScAddress> list = dao.query("SSBMDZ01.queryFloor", new HashMap<>());
+		List<ScAddress> list = dao.query("SSBMDZ01.queryFloor", new HashMap<>());
 		inInfo.addBlock("floor").addRows(list);
-		inInfo.getBlock("floor").setBlockMeta(new com.baosight.wilp.ss.bm.domain.ScAddress().eiMetadata);
+		inInfo.getBlock("floor").setBlockMeta(new ScAddress().eiMetadata);
 		return inInfo;
 
 	}

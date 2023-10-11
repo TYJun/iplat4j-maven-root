@@ -39,7 +39,7 @@ public class ServiceSSBMDCSJ01 extends ServiceBase{
      * 初始化查询
      * @param inInfo
      * @return
-     * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
+     * @see ServiceBase#initLoad(EiInfo)
      */
 	@Override
 	public EiInfo initLoad(EiInfo inInfo) {
@@ -66,7 +66,7 @@ public class ServiceSSBMDCSJ01 extends ServiceBase{
 	 * grid数据集查询订餐时间
 	 * @param inInfo
 	 * @return
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#query(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @see ServiceBase#query(EiInfo)
 	 */
 	@Override
 	public EiInfo query(EiInfo inInfo) {
@@ -107,7 +107,7 @@ public class ServiceSSBMDCSJ01 extends ServiceBase{
 	 * 删除订餐时间
 	 * @param inInfo
 	 * @return
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#delete(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @see ServiceBase#delete(EiInfo)
 	 */
 	@Override
 	public EiInfo delete(EiInfo inInfo) {
@@ -131,7 +131,7 @@ public class ServiceSSBMDCSJ01 extends ServiceBase{
 	 * 新增订餐时间
 	 * @param inInfo
 	 * @return
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#insert(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @see ServiceBase#insert(EiInfo)
 	 */
 	@Override
 	public EiInfo insert(EiInfo inInfo) {
@@ -195,7 +195,7 @@ public class ServiceSSBMDCSJ01 extends ServiceBase{
 	 * 编辑数据
 	 * @param inInfo
 	 * @return
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#update(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @see ServiceBase#update(EiInfo)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override

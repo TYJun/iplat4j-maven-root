@@ -49,7 +49,6 @@
 <%--                <EF:EFColumn ename="openId" cname="住院号" width="100" align="center" readonly="true"/>--%>
                 <EF:EFColumn ename="userTelNumber" cname="电话号码" width="100" align="center" readonly="true"/>
                 <EF:EFColumn ename="deptName" cname="病区" width="100" align="center" readonly="true"/>
-                <EF:EFColumn ename="bedNo" cname="床位号" width="100" align="center" readonly="true"/>
                 <EF:EFColumn ename="canteenName" cname="食堂名称" width="100" align="center" readonly="true"/>
                 <EF:EFColumn ename="mealName" cname="餐次" width="100" align="center" readonly="true"/>
                 <EF:EFColumn ename="billTotalPrice" cname="订单总价" format="{0:n}" width="100" align="center" readonly="true"/>
@@ -74,7 +73,6 @@
 <%--                <EF:EFColumn ename="openId" cname="住院号" width="100" align="center" readonly="true"/>--%>
                 <EF:EFColumn ename="userTelNumber" cname="电话号码" width="100" align="center" readonly="true"/>
                 <EF:EFColumn ename="deptName" cname="病区" width="100" align="center" readonly="true"/>
-                <EF:EFColumn ename="bedNo" cname="床位号" width="100" align="center" readonly="true"/>
                 <EF:EFColumn ename="canteenName" cname="食堂名称" width="100" align="center" readonly="true"/>
                 <EF:EFColumn ename="mealName" cname="餐次" width="100" align="center" readonly="true"/>
                 <EF:EFColumn ename="billTotalPrice" cname="订单总价" format="{0:n}" width="100" align="center" readonly="true"/>

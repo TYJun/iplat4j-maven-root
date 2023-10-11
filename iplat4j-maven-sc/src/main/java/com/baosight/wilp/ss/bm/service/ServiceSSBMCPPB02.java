@@ -34,7 +34,7 @@ public class ServiceSSBMCPPB02 extends ServiceBase {
      * 初始化查询
      * @param inInfo
      * @return
-     * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
+     * @see ServiceBase#initLoad(EiInfo)
      */
 	@Override
 	public EiInfo initLoad(EiInfo inInfo) {

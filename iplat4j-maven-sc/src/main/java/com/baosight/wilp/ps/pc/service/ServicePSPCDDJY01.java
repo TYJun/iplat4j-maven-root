@@ -45,7 +45,7 @@ public class ServicePSPCDDJY01 extends ServiceBase {
      * 查询订单信息
      * @param inInfo
      * @return
-     * @see com.baosight.iplat4j.core.service.impl.ServiceBase#query(com.baosight.iplat4j.core.ei.EiInfo)
+     * @see ServiceBase#query(EiInfo)
      */
 	public EiInfo query(EiInfo inInfo) {
 		EiInfo outInfo = super.query(inInfo, "PSBMDdgl01.query", new PSBMDdgl01());

@@ -47,8 +47,6 @@
 	            <EF:EFColumn ename="billNo" cname="订单号" width="150" align="center" readonly="true"/>
 	            <EF:EFColumn ename="userName" cname="用户名" width="150" align="center" readonly="true" />
 <%--	            <EF:EFColumn ename="openId" cname="住院号" width="100" align="center" readonly="true"/>--%>
-				<EF:EFColumn ename="deptName" cname="病区" width="100" align="center" readonly="true"/>
-				<EF:EFColumn ename="bedNo" cname="床位号" width="100" align="center" readonly="true"/>
 				<EF:EFColumn ename="userTelNumber" cname="电话号码" width="100" align="center" readonly="true"/>
 	            <EF:EFColumn ename="address" cname="订餐地点" width="100" align="center" readonly="true" hidden="true" />
 	            <EF:EFColumn ename="recCreateTime" cname="下单时间" width="100" align="center" readonly="true"/>
@@ -74,8 +72,6 @@
 	            <EF:EFColumn ename="billNo" cname="订单号" width="150" align="center" readonly="true"/>
 	            <EF:EFColumn ename="userName" cname="用户名" width="150" align="center" readonly="true" />
 <%--	            <EF:EFColumn ename="openId" cname="住院号" width="100" align="center" readonly="true"/>--%>
-				<EF:EFColumn ename="deptName" cname="病区" width="100" align="center" readonly="true"/>
-				<EF:EFColumn ename="bedNo" cname="床位号" width="100" align="center" readonly="true"/>
 				<EF:EFColumn ename="userTelNumber" cname="电话号码" width="100" align="center" readonly="true"/>
 	            <EF:EFColumn ename="address" cname="订餐地点" width="100" align="center" readonly="true" hidden="true" />
 	            <EF:EFColumn ename="recCreateTime" cname="下单时间" width="100" align="center" readonly="true"/>
