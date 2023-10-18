@@ -39,7 +39,7 @@
 				CONCAT(ROUND(a.item_score/a.item_point*100,1),'%') != #percent#
 			</isNotEmpty>
 		</dynamic>
-        group by a.item_name
+        group by a.work_no,a.item_name
 	</select>
 
 	<select id="count" resultClass="int">

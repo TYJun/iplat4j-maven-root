@@ -246,7 +246,7 @@
     </select>
     
     <!-- 获取食堂信息canteen_status:1 启用 -->
-    <select id="getCanteenData" resultClass="HashMap" parameterClass="java.util.HashMap">
+    <select id="getCanteenData" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
 		SELECT 
 			distinct(canteen_num) typeCode,
 			canteen_name typeName ,

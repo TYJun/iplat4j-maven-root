@@ -71,7 +71,21 @@ $(function () {
                         text: "附加资产",
                         layout: "3",
                         click: function () {
-                            fixedAssetsWindow()
+                            //获取过滤的资产编码
+                            var eiInfo = new EiInfo();
+                            var goodsNumList = [];
+                            var DataItems = resultGrid.getDataItems();
+                            for (var i = 0 ; i < DataItems.length; i++){
+                                goodsNumList[i] = DataItems[i].goodsNum;
+                            }
+                            eiInfo.set("goodsNumList",goodsNumList);
+                            EiCommunicator.send("FASH00", "filterate", eiInfo, {
+                                onSuccess: function (ei) {
+                                    if(ei.getMsg()==200){
+                                        fixedAssetsWindow();
+                                    }
+                                }
+                            });
                         }
                     },
                 ]
@@ -112,16 +126,16 @@ $(function () {
 
 // 自定义资产弹窗
 function fixedAssetsWindow(discussId) {
-    var DataItems = resultGrid.getDataItems();
-    var faInfoIdList = null;
-    for (let i = 0; i < DataItems.length; i++) {
-        if (i != 0) {
-            faInfoIdList = faInfoIdList + "," + DataItems[i].faInfoId;
-        } else {
-            faInfoIdList = DataItems[i].faInfoId;
-        }
-    }
-    var url = IPLATUI.CONTEXT_PATH + "/web/FASH00?query&discussId=" + discussId + "&faInfoIdList=" + faInfoIdList;
+    // var DataItems = resultGrid.getDataItems();
+    // var faInfoIdList = null;
+    // for (let i = 0; i < DataItems.length; i++) {
+    //     if (i != 0) {
+    //         faInfoIdList = faInfoIdList + "," + DataItems[i].faInfoId;
+    //     } else {
+    //         faInfoIdList = DataItems[i].faInfoId;
+    //     }
+    // }
+    var url = IPLATUI.CONTEXT_PATH + "/web/FASH00?query&discussId=" + discussId ;
     var popData = $("#popData");
     popData.data("kendoWindow").setOptions({
         open: function () {

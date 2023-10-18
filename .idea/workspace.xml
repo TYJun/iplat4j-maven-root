@@ -9,22 +9,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4fb1e35a-1e81-4c26-8858-23093e5fa00e" name="变更" comment="V1.3.6&#10;固定资产">
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/mc/jk/utils/LocalServiceUtil.java" afterDir="false" />
+    <list default="true" id="4fb1e35a-1e81-4c26-8858-23093e5fa00e" name="变更" comment="V1.3.7">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-ci/src/main/java/com/baosight/wilp/ci/ck/service/ServiceCICK0101.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-ci/src/main/java/com/baosight/wilp/ci/ck/service/ServiceCICK0101.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-ci/src/main/java/com/baosight/wilp/ci/kc/service/ServiceCIKC02.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-ci/src/main/java/com/baosight/wilp/ci/kc/service/ServiceCIKC02.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/da/service/ServiceFADA01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/da/service/ServiceFADA01.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/da/sql/FADA01.xml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/da/sql/FADA01.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DA/FADA01.js" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DA/FADA01.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DA/FADA01.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DA/FADA01.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/gm/service/ServiceACGMPZ01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/gm/service/ServiceACGMPZ01.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/sh/service/ServiceFASH00.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/sh/service/ServiceFASH00.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/sh/sql/FASH01.xml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/sh/sql/FASH01.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/SH/FASH00.js" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/SH/FASH00.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/SH/FASH00.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/SH/FASH00.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/SH/FASH0101.js" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/SH/FASH0101.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/pe/service/ServiceACPE01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/pe/service/ServiceACPE01.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/pe/sql/ACPE01.xml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/pe/sql/ACPE01.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/mc/jk/service/InfaceBaseInfoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/mc/jk/service/InfaceBaseInfoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/resources/META-INF/resources/AC/GM/ACGMPZ01.js" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/resources/META-INF/resources/AC/GM/ACGMPZ01.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/resources/META-INF/resources/AC/GM/ACGMPZ01.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/resources/META-INF/resources/AC/GM/ACGMPZ01.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/resources/META-INF/resources/AC/PE/ACPE01.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/resources/META-INF/resources/AC/PE/ACPE01.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-sc/src/main/java/com/baosight/wilp/ss/bm/sql/SSBMStxx01.xml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-sc/src/main/java/com/baosight/wilp/ss/bm/sql/SSBMStxx01.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-sq/src/main/java/com/baosight/wilp/sq/zh/sql/SQZH02.xml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-sq/src/main/java/com/baosight/wilp/sq/zh/sql/SQZH02.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-web/src/main/resources/quartz.properties" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-web/src/main/resources/quartz.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +38,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
@@ -112,13 +110,14 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/休闲/桌面文件库/代码相关文档/iplat_mzsrmyy/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DA&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/休闲/桌面文件库/代码相关文档/iplat_mzsrmyy/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/SH&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;project.structure.last.edited&quot;: &quot;工件&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.16894531&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.24470589&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;spring.configuration.checksum&quot;: &quot;6f2903b17e419d485a9955f721149395&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;29e48185e00af04a7fe1f3aca3e353a4&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -127,11 +126,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-fa\src\main\resources\META-INF\resources\FA\DA" />
       <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-fa\src\main\resources\META-INF\resources\FA\SH" />
+      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy" />
+      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-fa\src\main\resources\META-INF\resources\FA\DA" />
       <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-fa\src\main\java\com\baosight\wilp\fa\sh\sql" />
       <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-fa\src\main\java\com\baosight\wilp\fa\ap\sql" />
-      <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-frame\src\main\java\com\baosight\wilp\ac\pe\sql" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-dm\src\main\java\com\baosight\wilp\dm\rz\sql" />
@@ -368,7 +367,19 @@
       <workItem from="1696331494222" duration="8532000" />
       <workItem from="1696673192448" duration="7582000" />
       <workItem from="1696833409689" duration="4640000" />
-      <workItem from="1696922156050" duration="6487000" />
+      <workItem from="1696922156050" duration="7641000" />
+      <workItem from="1697009369457" duration="3996000" />
+      <workItem from="1697015001527" duration="823000" />
+      <workItem from="1697016226439" duration="674000" />
+      <workItem from="1697040086952" duration="406000" />
+      <workItem from="1697073776272" duration="16837000" />
+      <workItem from="1697419411407" duration="7756000" />
+      <workItem from="1697427230024" duration="1253000" />
+      <workItem from="1697438299918" duration="829000" />
+      <workItem from="1697439245390" duration="9425000" />
+      <workItem from="1697506389361" duration="8382000" />
+      <workItem from="1697539021115" duration="3352000" />
+      <workItem from="1697593057545" duration="318000" />
     </task>
     <task id="LOCAL-00002" summary="1.0">
       <created>1692064121183</created>
@@ -496,7 +507,21 @@
       <option name="project" value="LOCAL" />
       <updated>1696248190463</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="V1.3.7">
+      <created>1696929854752</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1696929854752</updated>
+    </task>
+    <task id="LOCAL-00021" summary="V1.3.7">
+      <created>1697010318880</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1697010318880</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -610,7 +635,8 @@
     <MESSAGE value="V1.3.6&#10;固定资产上会页面更新" />
     <MESSAGE value="V1.3.6&#10;固定资产上会页面统计数量" />
     <MESSAGE value="V1.3.6&#10;固定资产" />
-    <option name="LAST_COMMIT_MESSAGE" value="V1.3.6&#10;固定资产" />
+    <MESSAGE value="V1.3.7" />
+    <option name="LAST_COMMIT_MESSAGE" value="V1.3.7" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -649,6 +675,7 @@
     <select />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/iplat4j_maven_root$Tomcat.ic" NAME="Tomcat 覆盖结果" MODIFIED="1697009465464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/iplat4j_maven_root$Tomcat_8_5_66.ic" NAME="Tomcat 8.5.66 Coverage Results" MODIFIED="1660730439557" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

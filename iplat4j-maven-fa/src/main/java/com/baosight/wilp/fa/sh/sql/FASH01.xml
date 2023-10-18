@@ -139,9 +139,9 @@
         left join fa_discuss fd on fdd.fa_discuss_id = fd.id
         WHERE lock_flag = '0'
         <isNotEmpty prepend="and" property="rowsList">
-            fi.id not in
+            fi.goods_num not in
             <iterate property="rowsList" open="(" close=")" conjunction=",">
-                #rowsList[]#
+                #rowsList[].goods_num#
             </iterate>
         </isNotEmpty>
         <isNotEmpty prepend="and" property="statusCode">
@@ -527,4 +527,19 @@
         </iterate>
         )
     </update>
+    
+    <delete id="cleanUpFaInfoBackups">
+        delete FROM fa_infoBackups
+        where  rec_creator = 1
+    </delete>
+
+    <insert id="insertFaInfoBackups">
+            INSERT into fa_infoBackups(id,goods_num) value(UUID(),#goodsNum#);
+    </insert>
+
+    <select id="queryFaInfoBackups" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+            goods_num
+        FROM fa_infoBackups
+    </select>
 </sqlMap>

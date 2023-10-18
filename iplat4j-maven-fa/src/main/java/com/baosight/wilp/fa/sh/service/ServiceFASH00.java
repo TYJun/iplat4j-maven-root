@@ -1,5 +1,6 @@
 package com.baosight.wilp.fa.sh.service;
 
+import com.baosight.iplat4j.core.data.ibatis.dao.SqlMapDao;
 import com.baosight.iplat4j.core.ei.EiBlock;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
@@ -19,7 +20,7 @@ public class ServiceFASH00 extends ServiceBase {
         HashMap<String, Object> map = new HashMap<>();
         Map<String, Object> attrSize = new HashMap<>();
         EiBlock block = inInfo.getBlock("inqu_status");
-        String faInfoIdList = (String) inInfo.getAttr().get("faInfoIdList");
+//        String faInfoIdList = (String) inInfo.getAttr().get("faInfoIdList");
         //选择页面显示条数
         EiBlock resultNumber = inInfo.getBlock("resultA");
         if (resultNumber != null) {
@@ -48,16 +49,24 @@ public class ServiceFASH00 extends ServiceBase {
             map.put("goodsClassifyCode", inquStatus.get("goodsClassifyCode"));
             map.put("goodsTypeCode", inquStatus.get("goodsTypeCode"));
             map.put("fundingSourceNum", inquStatus.get("fundingSourceNum"));
-            faInfoIdList = (String) inquStatus.get("faInfoIdList");
+//            faInfoIdList = (String) inquStatus.get("faInfoIdList");
         }
         //筛选已选物资
-        if (faInfoIdList != null) {
-            String[] split = faInfoIdList.split(",");
-            ArrayList<String> rowsList = new ArrayList<>(Arrays.asList(split));
-            map.put("rowsList", rowsList);
+        int setCount = dao.count("FASH01.queryFaInfoBackups", null);
+        SqlMapDao sqlMapDao = (SqlMapDao) this.dao;
+        sqlMapDao.setMaxQueryCount(setCount);
+        List<Map<String,Object>> queryFaInfoBackups = dao.query("FASH01.queryFaInfoBackups", null);
+//        if (faInfoIdList != null) {
+//            String[] split = faInfoIdList.split(",");
+//            ArrayList<String> rowsList = new ArrayList<>(Arrays.asList(split));
+//            map.put("rowsList", rowsList);
+//        }
+        if(queryFaInfoBackups!=null){
+            map.put("rowsList", queryFaInfoBackups);
         }
         map.put("statusCode", "040");
-        List<Map<String, String>> list = dao.query("FASH01.query", map, offset, limit);
+
+        List<Map<String, Object>> list = dao.query("FASH01.query", map,offset, limit);
         int count = dao.count("FASH01.query", map);
         attrSize.put("count", count);
         EiBlock resultA = new EiBlock("resultA");
@@ -100,6 +109,20 @@ public class ServiceFASH00 extends ServiceBase {
                     break;
             }
         }
+        return info;
+    }
+    /**
+     * 已添加物资插入表fa_infoBackups，用于后续过滤
+     */
+    public EiInfo filterate(EiInfo info) {
+        dao.delete("FASH01.cleanUpFaInfoBackups",null);
+        HashMap<Object, Object> map = new HashMap<>();
+        List<Map<String,String>> goodsNumList = (List) info.getAttr().get("goodsNumList");
+        for(int i = 0;i < goodsNumList.size();i++){
+            map.put("goodsNum",goodsNumList.get(i));
+            dao.insert("FASH01.insertFaInfoBackups",map);
+        }
+        info.setMsg("200");
         return info;
     }
 }
