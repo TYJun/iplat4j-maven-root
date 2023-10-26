@@ -4,7 +4,7 @@
 <%@ taglib prefix="EF" tagdir="/WEB-INF/tags/EF"%>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
-<%--<title>仓库出库管理</title>--%>
+<%--<title>已签收出库记录</title>--%>
 <EF:EFPage>
 	<EF:EFRegion id="inqu" title="查询条件" showClear="true">
 		<div class="row">

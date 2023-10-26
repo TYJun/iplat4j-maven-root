@@ -111,28 +111,28 @@
 	<!-- 查询物资列表 -->
 	<select id="queryMatInformationByInven" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
 		SELECT t.* FROM (
-		SELECT am.id AS "id",
-		am.mat_code AS "matNum",
-		am.mat_name AS "matName",
-		am.mat_class_id AS "matClassId",
-		amc.mat_class_code AS "matTypeNum",
-		amc.mat_class_name AS "matTypeName",
-		am.mat_spec AS "matSpec",
-		am.mat_model AS "matModel",
-		am.unit AS "unit",
-		b.ITEM_CNAME AS "unitName",
-		am.price AS "price",
-		acs.supplier_name AS "supplier",
-		am.manufacturer AS "manufacturer",
-		am.mat_type_code AS "matTypeCode",
-		am.remark AS "remark",
-		am.status AS "status",
-		am.rec_create_time AS "recCreateTime",
-		am.picture_uri AS pictureUri
-		FROM $projectSchema$.ac_material am
-		LEFT JOIN $projectSchema$.ac_material_class amc ON amc.id = am.mat_class_id
-		LEFT JOIN $projectSchema$.ac_supplier acs ON acs.supplier_code = am.supplier
-		LEFT JOIN $platSchema$.tedcm01 b ON b.ITEM_CODE = am.unit AND b.CODESET_CODE = 'wilp.ac.gm.unit'
+			SELECT am.id AS "id",
+				am.mat_code AS "matNum",
+				am.mat_name AS "matName",
+				am.mat_class_id AS "matClassId",
+				amc.mat_class_code AS "matTypeNum",
+				amc.mat_class_name AS "matTypeName",
+				am.mat_spec AS "matSpec",
+				am.mat_model AS "matModel",
+				am.unit AS "unit",
+				b.ITEM_CNAME AS "unitName",
+				am.price AS "price",
+				acs.supplier_name AS "supplier",
+				am.manufacturer AS "manufacturer",
+				am.mat_type_code AS "matTypeCode",
+				am.remark AS "remark",
+				am.status AS "status",
+				am.rec_create_time AS "recCreateTime",
+				am.picture_uri AS pictureUri
+			FROM $projectSchema$.ac_material am
+			LEFT JOIN $projectSchema$.ac_material_class amc ON amc.id = am.mat_class_id
+			LEFT JOIN $projectSchema$.ac_supplier acs ON acs.supplier_code = am.supplier
+			LEFT JOIN $platSchema$.tedcm01 b ON b.ITEM_CODE = am.unit AND b.CODESET_CODE = 'wilp.ac.gm.unit'
 		) t
 		WHERE 1=1 AND NOT EXISTS(SELECT a.mat_num FROM si_inven_detail a WHERE a.inven_bill_no = #invenBillNo# AND a.mat_num = t.matNum)
 		and t.status = '1'
@@ -144,6 +144,9 @@
 		</isNotEmpty>
 		<isNotEmpty prepend="and" property="matName">
 			t.matName like concat('%',#matName#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matTypeCode">
+			find_in_set(t.matTypeCode, #matTypeCode#)
 		</isNotEmpty>
 		<dynamic prepend="ORDER BY">
 			<isNotEmpty property="orderBy">

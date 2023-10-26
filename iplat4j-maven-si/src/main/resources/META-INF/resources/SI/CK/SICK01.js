@@ -51,6 +51,8 @@ $(function() {
 							NotificationUtil("请选择一条出库记录","error");
 						} else if (checkRows[0].outType == "05"){
 							NotificationUtil("该单据已经红冲出库，无法再操作","error");
+						} else if(checkRows[0].wareHouseNo == '0003') {
+							NotificationUtil("固定资产退库请使用资产调拨回仓库","error");
 						} else if (checkRows[0].outType != "06"){
 							NotificationUtil("该单据类型不能红冲出库","error");
 						} else {

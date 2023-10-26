@@ -5,17 +5,28 @@
 	<select id="queryOut" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
 		select
 			sod.id,
+		    so.origin_bill_no originBillNo,
 			so.out_bill_no outBillNo,
-		    so.out_type_name outTypeName,
+		    so.out_type outType,
+			so.out_type_name outTypeName,
 			so.bill_maker_name outPerson,
-		    so.bill_make_time outTime,
-		    so.user_dept_name userDeptName
+			so.bill_make_time outTime,
+			so.user_dept_name userDeptName
 		from si_out so left join si_out_detail sod on so.out_bill_no =sod.out_bill_no
 		where so.out_bill_no = #outBillNo#
 		<isNotEmpty property="matNum" prepend=" and ">
 			sod.mat_num = #matNum#
 		</isNotEmpty>
 		limit 1
+	</select>
+
+	<select id="queryOutDept" parameterClass="string" resultClass="java.util.HashMap">
+		select
+			so.user_dept_num userDeptNum,
+		    so.user_dept_name userDeptName,
+			so.cost_dept_num costDeptNum,
+		    so.cost_dept_name costDeptName
+		from si_out so where so.out_bill_no = #outBillNo# limit 1
 	</select>
 
 	<select id="queryEnter" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
@@ -35,10 +46,16 @@
 	</select>
 
 	<select id="queryWareHouse" parameterClass="string" resultClass="string">
-		select concat(ware_house_no, '-', ware_house_name) from si_enter where enter_bill_no = #value# limit 1
+		select ware_house_name from si_enter where ware_house_no = #value# limit 1
 	</select>
 
-	<select id="queryFaClassType" parameterClass="string" resultClass="java.util.HashMap">
-		select config_value_radio configValueRadio, config_value_text configValueText from mp_config where config_code = 'dockFixedAsset' limit 1
+	<select id="queryCont" parameterClass="string" resultClass="java.util.HashMap">
+		select
+		   manager_name managerName,
+		   fundingSource_num fundingSourceNum,
+		   fundingSource_name fundingSourceName,
+		   date_format(sign_date, '%Y-%m-%d') signDate,
+		   YEAR(sign_date) signYear
+	   from mp_contract where cont_no = #contNo#
 	</select>
 </sqlMap>

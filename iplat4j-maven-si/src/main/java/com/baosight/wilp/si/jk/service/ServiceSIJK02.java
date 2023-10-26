@@ -4,6 +4,7 @@ import com.baosight.iplat4j.core.ei.EiConstant;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
 import com.baosight.iplat4j.core.util.DateUtils;
+import com.baosight.iplat4j.core.web.threadlocal.UserSession;
 import com.baosight.wilp.common.util.CommonUtils;
 import com.baosight.wilp.si.ck.domain.SiOut;
 import com.baosight.wilp.si.ck.domain.SiOutDetail;
@@ -51,6 +52,7 @@ public class ServiceSIJK02 extends ServiceBase {
     public EiInfo queryWareHouse(EiInfo inInfo) {
         List<SiWarehouse> list = dao.query("SIWH01.query", new HashMap(2) {{
             put("freezeFlag", "N");
+            put("workNo", SiUtils.isEmpty(inInfo.getString("workNo"), UserSession.getLoginName()));
         }});
         inInfo.setRows("wareHouse", list);
         return inInfo;
@@ -64,6 +66,7 @@ public class ServiceSIJK02 extends ServiceBase {
      *      matNum: 物资编码
      *      matName: 物资名称
      *      wareHouseNo: 仓库号
+     *      wareHouseNos: 仓库号集合
      *      isShowZero: 是否显示零库存（Y/N）
      *      offset: 分页开始的索引
      *      limit: 获取的数量

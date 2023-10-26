@@ -1,18 +1,18 @@
 package com.baosight.wilp.si.wh.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.baosight.iplat4j.core.ei.EiBlock;
 import com.baosight.iplat4j.core.ei.EiConstant;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
 import com.baosight.iplat4j.core.util.DateUtils;
+import com.baosight.iplat4j.core.web.threadlocal.UserSession;
 import com.baosight.wilp.common.util.CommonUtils;
 import com.baosight.wilp.si.common.SiUtils;
 import com.baosight.wilp.si.wh.domain.SiWarehouse;
-import com.baosight.xservices.xs.util.UserSession;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *  仓库管理页面Service
@@ -72,7 +72,7 @@ public class ServiceSIWH01 extends ServiceBase {
     @Override
     public EiInfo query(EiInfo inInfo) {
 		//inInfo.set("inqu_status-0-workNo", UserSession.getUser().getUsername());
-    	inInfo.set("inqu_status-0-dataGroupCode", SiUtils.getDataGroupCode(UserSession.getUser().getUsername()));
+    	inInfo.set("inqu_status-0-dataGroupCode", SiUtils.getDataGroupCode(UserSession.getLoginName()));
         EiInfo outInfo = super.query(inInfo, "SIWH01.query", new SiWarehouse());
         return outInfo;
 
@@ -99,10 +99,13 @@ public class ServiceSIWH01 extends ServiceBase {
     @SuppressWarnings("unchecked")
 	public EiInfo queryWareHouse(EiInfo inInfo) {
     	Map<String, Object> map = CommonUtils.buildParamterNoPage(inInfo, "inqu_status", "result");
-    	map.put("dataGroupCode",  SiUtils.getDataGroupCode(UserSession.getUser().getUsername()));
+    	map.put("dataGroupCode",  SiUtils.getDataGroupCode(UserSession.getLoginName()));
+		map.put("workNo", SiUtils.isEmpty(inInfo.getString("workNo"), UserSession.getLoginName()));
         List<SiWarehouse> list = dao.query("SIWH01.query", map);
         return CommonUtils.BuildOutEiInfo(inInfo, "result", new SiWarehouse().eiMetadata, list, list.size());
     }
+
+
 
 	/**
 	 *  查询仓库:过滤冻结的
@@ -140,7 +143,8 @@ public class ServiceSIWH01 extends ServiceBase {
     	 Map<String, Object> pMap = (Map<String, Object>) block.getRows().get(0);
     	 //判断仓库中是否存在物资
     	 int count = super.count("SIWH01.isExistMat",pMap);
-    	 if(count > 0){//存在，提示错误信息
+		//存在，提示错误信息
+    	 if(count > 0){
     		 inInfo.setMsg("仓库中存在耗材，无法删除");
     		 return inInfo;
     	 }
@@ -168,7 +172,7 @@ public class ServiceSIWH01 extends ServiceBase {
     	//获取参数
          SiWarehouse kcst01 = new SiWarehouse();
          kcst01.setRecReviseTime(DateUtils.curDateTimeStr19());
-         kcst01.setRecCreator(UserSession.getUser().getUsername());
+         kcst01.setRecCreator(UserSession.getLoginName());
          kcst01.setId(inInfo.getString("id"));
          kcst01.setWareHouseNo(inInfo.getString("wareHouseNo"));
         //冻结

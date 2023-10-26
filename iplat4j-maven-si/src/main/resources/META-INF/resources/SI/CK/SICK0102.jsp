@@ -20,19 +20,19 @@
 		</div> 
 	</EF:EFRegion>
 		<EF:EFRegion id="result" title="出库单明细">
-		<EF:EFGrid blockId="result" autoDraw="no" height="380" checkMode="row" sort="single">
-			<EF:EFColumn ename="matNum" cname="物资编码" width="100" enable="false" align="center" sort="true"/>
-			<EF:EFColumn ename="matName" cname="物资名称" width="150" enable="false" align="center" sort="true"/>
-			<EF:EFColumn ename="matSpec" cname="物资规格" width="80" enable="false" align="center" sort="true"/>
+		<EF:EFGrid blockId="result" autoDraw="no" height="380" checkMode="row">
+			<EF:EFColumn ename="matNum" cname="物资编码" width="100" enable="false" align="center"/>
+			<EF:EFColumn ename="matName" cname="物资名称" width="150" enable="false" align="center"/>
+			<EF:EFColumn ename="matSpec" cname="物资规格" width="80" enable="false" align="center"/>
 			<%--<EF:EFColumn ename="matModel" cname="物资型号" width="80" enable="false" align="center"/>--%>
-			<EF:EFColumn ename="unit" cname="单位" width="60" hidden="true"  sort="false"/>
-			<EF:EFColumn ename="unitName" cname="物资单位" width="80" enable="false" align="center" sort="false"/>
-			<EF:EFColumn ename="outNum" cname="出库数量" width="100" enable="false" align="center" sort="true"/>
-			<EF:EFColumn ename="totalRedRushNum" cname="已红冲数量" width="100" enable="false" align="center" sort="true"/>
-			<EF:EFColumn ename="redRushNum" cname="红冲数量" width="100" sort="false"/>
-			<EF:EFColumn ename="batchNo" cname="批次" width="60" hidden="true" sort="false"/>
-			<EF:EFColumn ename="matTypeNum" cname="物资分类编码" hidden="true" sort="false"/>
-			<EF:EFColumn ename="matTypeName" cname="物资分类" width="100" enable="false" align="center" sort="false"/>
+			<EF:EFColumn ename="unit" cname="单位" width="60" hidden="true" />
+			<EF:EFColumn ename="unitName" cname="物资单位" width="80" enable="false" align="center"/>
+			<EF:EFColumn ename="outNum" cname="出库数量" width="100" enable="false" align="center"/>
+			<EF:EFColumn ename="totalRedRushNum" cname="已红冲数量" width="100" enable="false" align="center"/>
+			<EF:EFColumn ename="redRushNum" cname="红冲数量" width="100" />
+			<EF:EFColumn ename="batchNo" cname="批次" width="60" hidden="true" />
+			<EF:EFColumn ename="matTypeNum" cname="物资分类编码" hidden="true"/>
+			<EF:EFColumn ename="matTypeName" cname="物资分类" width="100" enable="false" align="center"/>
 		</EF:EFGrid>
 	</EF:EFRegion>
 </EF:EFPage>

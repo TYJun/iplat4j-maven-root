@@ -45,6 +45,12 @@
 		<isNotEmpty prepend=" AND " property="wareHouseNo">
 			WARE_HOUSE_NO = #wareHouseNo#
 		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNos"> <!-- 仓库号 -->
+			WARE_HOUSE_NO in
+			<iterate property="wareHouseNos" open="(" conjunction="," close=")">
+				#wareHouseNos[]#
+			</iterate>
+		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matNum">
 			MAT_NUM = #matNum#
 		</isNotEmpty>
@@ -86,6 +92,12 @@
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="wareHouseNo">
 			WARE_HOUSE_NO = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNos"> <!-- 仓库号 -->
+			WARE_HOUSE_NO in
+			<iterate property="wareHouseNos" open="(" conjunction="," close=")">
+				#wareHouseNos[]#
+			</iterate>
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matNum">
 			MAT_NUM = #matNum#

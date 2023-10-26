@@ -3,10 +3,12 @@ package com.baosight.wilp.si.bf.service;
 import com.baosight.iplat4j.core.ei.EiConstant;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
+import com.baosight.iplat4j.core.web.threadlocal.UserSession;
 import com.baosight.wilp.si.bf.domain.SiScrap;
 import com.baosight.wilp.si.common.SiConstant;
 import com.baosight.wilp.si.common.SiUtils;
 import com.baosight.wilp.si.common.ValidatorUtils;
+import com.baosight.wilp.si.common.WareHouseDataSplitUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -49,6 +51,7 @@ public class ServiceSIBF01 extends ServiceBase {
      **/
     @Override
     public EiInfo query(EiInfo inInfo) {
+        inInfo.set("inqu_status-0-wareHouseNosStr", WareHouseDataSplitUtils.getWareHouseNosStr(UserSession.getLoginName()));
         return super.query(inInfo, "SIBF01.query", new SiScrap());
     }
 

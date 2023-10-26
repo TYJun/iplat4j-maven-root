@@ -7,18 +7,16 @@ import com.baosight.iplat4j.core.ioc.spring.PlatApplicationContext;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
 import com.baosight.iplat4j.core.service.soa.XLocalManager;
 import com.baosight.iplat4j.core.util.DateUtils;
-import com.baosight.iplat4j.core.util.NumberUtils;
 import com.baosight.wilp.common.util.CommonUtils;
-import com.baosight.wilp.si.common.*;
+import com.baosight.wilp.si.common.SerialNoUtils;
+import com.baosight.wilp.si.common.WareHouseDataSplitUtils;
 import com.baosight.wilp.si.pk.domain.SiInven;
-import com.baosight.wilp.si.rk.domain.EnterTypeEnum;
-import com.baosight.wilp.si.rk.domain.SiEnter;
-import com.baosight.wilp.si.rk.domain.SiEnterDetail;
 import com.baosight.xservices.xs.util.UserSession;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * 新增盘库物资子界面
@@ -52,6 +50,7 @@ public class ServiceSIPK010101 extends ServiceBase {
 	 * @param inInfo
 	 * @return EiInfo
 	 */
+	@Override
 	public EiInfo query(EiInfo inInfo) {
 		return inInfo;
 	}
@@ -83,6 +82,10 @@ public class ServiceSIPK010101 extends ServiceBase {
 		/*
 		 * 3.调用SIPK0101.queryMatInformationByInven 查询在该盘点仓库中无库存的物资。
 		 */
+		if(inInfo.getBlock("mat") != null) {
+			map.put("orderBy", inInfo.getBlock("mat").get("orderBy"));
+		}
+		map.put("matTypeCode", WareHouseDataSplitUtils.getWareHouseMatRootType(UserSession.getUser().getUsername()));
 		List<Map<String,Object>> list = sqlmapDao.query("SIPK0101.queryMatInformationByInven", map,
 				Integer.parseInt(map.get("offset").toString()), Integer.parseInt(map.get("limit").toString()));
 		// 判断是否存在，存在则构建返回对象

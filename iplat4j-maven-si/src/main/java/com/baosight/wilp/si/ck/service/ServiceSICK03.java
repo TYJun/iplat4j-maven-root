@@ -3,11 +3,9 @@ package com.baosight.wilp.si.ck.service;
 import com.baosight.iplat4j.core.ei.EiConstant;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
+import com.baosight.iplat4j.core.web.threadlocal.UserSession;
 import com.baosight.wilp.si.common.SiUtils;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.baosight.wilp.si.common.WareHouseDataSplitUtils;
 
 /**
  * @author fangjian
@@ -45,8 +43,7 @@ public class ServiceSICK03 extends ServiceBase {
      **/
     @Override
     public EiInfo query(EiInfo inInfo) {
-        Map<String,Object> map = inInfo.getBlock("result").getAttr();
-        inInfo.setCell("result",0,"orderBy",map.get("orderBy"));
+        inInfo.set("inqu_status-0-wareHouseNos", WareHouseDataSplitUtils.getWareHouseNos(UserSession.getLoginName()));
         return super.query(inInfo, "SICK03.query");
     }
 }

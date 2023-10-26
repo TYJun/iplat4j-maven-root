@@ -4,6 +4,8 @@ import com.baosight.iplat4j.core.ei.EiConstant;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
 import com.baosight.wilp.si.common.SiUtils;
+import com.baosight.wilp.si.common.WareHouseDataSplitUtils;
+import com.baosight.xservices.xs.util.UserSession;
 
 /**
  * @author fangjian
@@ -41,6 +43,7 @@ public class ServiceSIRK03 extends ServiceBase {
      **/
     @Override
     public EiInfo query(EiInfo inInfo) {
+        inInfo.set("inqu_status-0-wareHouseNos", WareHouseDataSplitUtils.getWareHouseNos(UserSession.getUser().getUsername()));
         return super.query(inInfo, "SIRK03.query");
     }
 }

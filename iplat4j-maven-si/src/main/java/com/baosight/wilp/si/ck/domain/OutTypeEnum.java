@@ -5,18 +5,30 @@ package com.baosight.wilp.si.ck.domain;
  */
 public enum OutTypeEnum {
 
-	ZRZC("01", "outStockByZRZC"),//直入直出
-	DB("02", "outStockByCommon"),//调拨出库
-	PK("03", "outStockByCommon"),//盘亏出库
-	FPDC("04", "outStockByFPDC"),//发票调差出库
-	HC("05", "outStockByHC"),//红冲出库
-	LY("06", "outStockByCommon"),//领用出库
-	WX("07", "outStockByCommon"),//维修出库
-	WY("08", "outStockByWY"),//委外出库
-	BF("09", "outStockByBF");//报废出库
-	
-	private String code;//code
-	private String methodName;//方法名
+	/**直入直出**/
+	ZRZC("01", "outStockByZRZC"),
+	/**调拨出库**/
+	DB("02", "outStockByCommon"),
+	/**盘亏出库**/
+	PK("03", "outStockByCommon"),
+	/**发票调差出库**/
+	FPDC("04", "outStockByFPDC"),
+	/**红冲出库**/
+	HC("05", "outStockByHC"),
+	/**领用出库**/
+	LY("06", "outStockByCommon"),
+	/**维修出库**/
+	WX("07", "outStockByCommon"),
+	/**委外出库**/
+	WY("08", "outStockByWY"),
+	/**报废出库**/
+	BF("09", "outStockByBF");
+
+	/**code**/
+	private String code;
+
+	/**方法名**/
+	private String methodName;
 	
 	private OutTypeEnum(String code, String methodName) {
 		this.code = code;

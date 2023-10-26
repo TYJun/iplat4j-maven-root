@@ -65,8 +65,10 @@ public class ServiceSIRK0106 extends ServiceBase {
 		Map<String, Object> map = CommonUtils.buildParamter(inInfo, "mat", Arrays.asList(new String[]{"matNum", "matName","matTypeNum"}));
 		map.put("matClassCode",map.get("matTypeNum"));
 		map.put("matCode",map.get("matNum"));
-		Map<String,Object> parame = inInfo.getBlock("mat").getAttr();
-		map.put("orderBy",parame.get("orderBy"));
+		String orderBy = inInfo.getBlock("mat").getString("orderBy");
+		orderBy = StringUtils.isBlank(orderBy) ? orderBy : orderBy.replace("matNum", "matCode");
+		map.put("orderBy",orderBy);
+
 		EiInfo mat = SiUtils.getMatInformation(map);
 		mat.setBlockInfoValue("mat", "showCount", "true");
 		return mat;

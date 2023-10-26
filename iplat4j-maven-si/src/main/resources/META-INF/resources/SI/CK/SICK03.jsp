@@ -33,8 +33,7 @@
 		</div>
 	</EF:EFRegion>
 	<EF:EFRegion id="result" title="仓库出库信息">
-		<EF:EFGrid blockId="result" autoDraw="no" checkMode="single,row" autoBind="true" readonly="true"
-			sort="single">
+		<EF:EFGrid blockId="result" autoDraw="no" checkMode="single,row" autoBind="true" readonly="true" sort="single">
 			<EF:EFColumn ename="id" cname="id" hidden="true" sort="false"/>
 			<EF:EFColumn ename="outBillNo" cname="出库单号" align="center" sort="false"/>
 			<EF:EFColumn ename="outTypeName" cname="出库类别" align="center" sort="false"/>

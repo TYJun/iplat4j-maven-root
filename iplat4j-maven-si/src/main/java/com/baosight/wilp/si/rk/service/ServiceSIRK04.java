@@ -6,10 +6,7 @@ import com.baosight.iplat4j.core.service.impl.ServiceBase;
 import com.baosight.iplat4j.core.util.DateUtils;
 import com.baosight.iplat4j.core.web.threadlocal.UserSession;
 import com.baosight.wilp.common.util.BaseDockingUtils;
-import com.baosight.wilp.si.common.SiConfigCache;
-import com.baosight.wilp.si.common.SiUtils;
-import com.baosight.wilp.si.common.ValidateRepeatCache;
-import com.baosight.wilp.si.common.ValidatorUtils;
+import com.baosight.wilp.si.common.*;
 import com.baosight.wilp.si.rk.domain.SiEnterDetail;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -56,6 +53,7 @@ public class ServiceSIRK04 extends ServiceBase {
      **/
     @Override
     public EiInfo query(EiInfo inInfo) {
+        inInfo.set("inqu_status-0-wareHouseNos", WareHouseDataSplitUtils.getWareHouseNos(com.baosight.xservices.xs.util.UserSession.getUser().getUsername()));
         inInfo.setCell(EiConstant.queryBlock, 0, "isCheck", 0);
         return super.query(inInfo, "SIRK01.query");
     }
@@ -97,6 +95,9 @@ public class ServiceSIRK04 extends ServiceBase {
         /**是否验收后入库：是, 进入库存**/
         String hasInStorage = SiConfigCache.getConfigRadioValue(BaseDockingUtils.getUserGroupByWorkNo(UserSession.getLoginName()),
                 SiConfigCache.SI_CONFIG_CHECK_IN_STORAGE);
+        /**是否验收后自动审批, 是,调用审批接口审批**/
+        String autoApproval = SiConfigCache.getConfigRadioValue(BaseDockingUtils.getUserGroupByWorkNo(UserSession.getLoginName()),
+                SiConfigCache.SI_CONFIG_AUTO_APPROVAL);
         //获取验收人的签名图片地址
         String signature = "/si/showSign/" + inInfo.getString("signature");
         //更新入库单状态(记录验收人、修改入库时间)
@@ -115,7 +116,16 @@ public class ServiceSIRK04 extends ServiceBase {
             pMap.put("enterDate", DateUtils.curDateStr10());
             dao.update("SIRK0101.updateEnterDate", pMap);
             //物资入库
-            return SiUtils.invoke(null,"SIRK0101", "enterStorage", new String[]{"enterBillNos"}, list);
+            EiInfo invoke = SiUtils.invoke(null, "SIRK0101", "enterStorage", new String[]{"enterBillNos"}, list);
+            if(invoke.getStatus() == -1) {
+                return invoke;
+            }
+            //自动审核
+            if(SiUtils.toBoolean(autoApproval)) {
+                SiUtils.invoke(null,"SIRK05", "checkApproval", new String[]{"list","signature"}, list,
+                        SiConfigCache.getConfigTextValue(BaseDockingUtils.getUserGroupByWorkNo(UserSession.getLoginName()),
+                                SiConfigCache.SI_CONFIG_AUTO_APPROVAL));
+            }
         }
         return inInfo;
     }

@@ -19,6 +19,9 @@
 			data_group_code	as "dataGroupCode",  <!-- 账套 -->
 			archive_flag	as "archiveFlag" <!-- 归档标记 -->
 		FROM si_scrap WHERE 1=1
+		<isNotEmpty prepend=" AND " property="wareHouseNosStr">
+			id in (select ssd.scrap_id from si_scrap_detail ssd where FIND_IN_SET(ssd.ware_house_no, #wareHouseNosStr#))
+		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="id">
 			id = #id#
 		</isNotEmpty>

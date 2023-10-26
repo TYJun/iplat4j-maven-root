@@ -3,13 +3,10 @@ package com.baosight.wilp.si.pk.service;
 import com.baosight.iplat4j.core.ei.EiConstant;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
-import com.baosight.iplat4j.core.service.soa.XLocalManager;
+import com.baosight.iplat4j.core.web.threadlocal.UserSession;
 import com.baosight.wilp.si.common.SiUtils;
+import com.baosight.wilp.si.common.WareHouseDataSplitUtils;
 import com.baosight.wilp.si.pk.domain.SiInven;
-import com.baosight.xservices.xs.util.UserSession;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 盘库管理页面Service
@@ -63,11 +60,12 @@ public class ServiceSIPK01 extends ServiceBase {
 	 *		billMakerName : 制单人员
 	 *		billCheckTime : 审核日期
 	 *		billCheckerName : 审核人员 
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#query(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @see ServiceBase#query(EiInfo)
 	 */
 	@Override
     public EiInfo query(EiInfo inInfo) {
-    	inInfo.set("inqu_status-0-dataGroupCode", SiUtils.getDataGroupCode(UserSession.getUser().getUsername()));
+		inInfo.set("inqu_status-0-wareHouseNos", WareHouseDataSplitUtils.getWareHouseNos(UserSession.getLoginName()));
+    	inInfo.set("inqu_status-0-dataGroupCode", SiUtils.getDataGroupCode(UserSession.getLoginName()));
         EiInfo outInfo = super.query(inInfo, "SIPK01.query", new SiInven());
         return outInfo;
     }

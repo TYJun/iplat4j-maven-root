@@ -30,24 +30,15 @@ public class ServiceSICK0102 extends ServiceBase {
 	 * <p>Description: </p>   
 	 * @param inInfo
 	 * @return   
-	 * @see ServiceBase#initLoad(EiInfo)
+	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
     public EiInfo initLoad(EiInfo inInfo) {
-		return this.query(inInfo);
-	}
-
-	public EiInfo query(EiInfo inInfo) {
 		Map<String,String> pMap = new HashMap<>();
-		//页面排序
-		if (inInfo.getBlock("result")!=null){
-			pMap.put("orderBy",(String) inInfo.getBlock("result").getAttr().get("orderBy"));
-		}
-
 		pMap.put("outBillNo", inInfo.getString("outBillNo"));
 		pMap.put("showRedRush", "Y");
 		List<SiOutDetail> list = dao.query("SICK0101.query", pMap);
-		return CommonUtils.BuildOutEiInfo(inInfo, "result", new SiOutDetail().eiMetadata, list, list.size());
-	}
+        return CommonUtils.BuildOutEiInfo(inInfo, "result", new SiOutDetail().eiMetadata, list, list.size());
+    }
 }

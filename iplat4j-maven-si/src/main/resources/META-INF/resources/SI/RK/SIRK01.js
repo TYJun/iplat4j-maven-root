@@ -144,6 +144,43 @@ $(function() {
 					}
 				});
 
+				$("#RK_DEL").on("click", function(e) {
+					let checkRows = resultGrid.getCheckedRows()
+					if (checkRows.length < 1) {
+						NotificationUtil("请选择需要删除的入库记录", "error");
+						return;
+					}
+					for (let row of checkRows) {
+						if (row['isCheck'] != '0') {
+							NotificationUtil("只能删除待验收的入库记录", "error");
+							return;
+						}
+					}
+
+					IPLAT.confirm({
+						message: '<b>您确定要删除吗？</b>',
+						okFn: function (e) {
+							let list = checkRows.map(row => row['enterBillNo']);
+							let eiInfo = new EiInfo();
+							eiInfo.set("enterBillNos", list);
+							EiCommunicator.send("SIRK01", "delete", eiInfo, {
+								onSuccess: function (ei) {
+									if (ei.getStatus() == -1) {
+										NotificationUtil(ei.getMsg(), "error");
+										return;
+									}
+									NotificationUtil("删除成功");
+									window["resultGrid"].dataSource.page(1);
+								}
+							});
+
+						},
+						cancelFn: function (e) {
+						}
+
+					});
+				});
+
 				//打印
 				$("#PRINT").on("click", function(e) {
 					let checkRows = resultGrid.getCheckedRows()

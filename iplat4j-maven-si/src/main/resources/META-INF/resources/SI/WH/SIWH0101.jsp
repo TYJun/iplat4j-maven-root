@@ -7,12 +7,20 @@
 <title>仓库新增/编辑</title>
 <EF:EFPage>
 	<EF:EFRegion id="result" title="仓库信息" fitHeight="true">
-		<EF:EFInput ename="wareHouseNo" cname="仓库编号" bindId="wareHouseNo"
-			colWidth="5" ratio="2:8" type="text" required="true"
-			placeholder="请输入仓库编号" />
-		<EF:EFInput ename="wareHouseName" cname="仓库名称" bindId="wareHouseName"
-			colWidth="5" ratio="2:8" type="text" required="true"
-			placeholder="请输入仓库名称" />
+		<c:choose>
+			<c:when test="${'add' == type}">
+				<EF:EFInput ename="wareHouseNo" cname="仓库编号" bindId="wareHouseNo"
+							colWidth="5" ratio="2:8" type="text" required="true"
+							placeholder="请输入仓库编号" />
+				<EF:EFInput ename="wareHouseName" cname="仓库名称" bindId="wareHouseName"
+							colWidth="5" ratio="2:8" type="text" required="true"
+							placeholder="请输入仓库名称" />
+			</c:when>
+			<c:otherwise>
+				<EF:EFInput ename="wareHouseNo" cname="仓库编号" colWidth="5" ratio="2:8" type="text" readonly="true"/>
+				<EF:EFInput ename="wareHouseName" cname="仓库名称" colWidth="5" ratio="2:8" type="text" readonly="true"/>
+			</c:otherwise>
+		</c:choose>
 		<EF:EFSelect ename="wareHouseType" cname="仓库类型" colWidth="5" ratio="2:8">
 			<EF:EFCodeOption codeName="wilp.si.wareHouseType"/>
 		</EF:EFSelect>

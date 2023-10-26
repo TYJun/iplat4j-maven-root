@@ -11,6 +11,7 @@ import com.baosight.wilp.si.ck.domain.SiOutDetail;
 import com.baosight.wilp.si.common.SiConfigCache;
 import com.baosight.wilp.si.common.SiUtils;
 import com.baosight.wilp.si.common.ValidatorUtils;
+import com.baosight.wilp.si.common.WareHouseDataSplitUtils;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.HashMap;
@@ -51,6 +52,7 @@ public class ServiceSICK05 extends ServiceBase {
      **/
     @Override
     public EiInfo query(EiInfo inInfo) {
+        inInfo.set("inqu_status-0-wareHouseNos", WareHouseDataSplitUtils.getWareHouseNos(UserSession.getLoginName()));
         inInfo.setCell(EiConstant.queryBlock, 0, "isCheck", 0);
         return super.query(inInfo, "SICK01.query", new SiOut());
     }
@@ -98,6 +100,10 @@ public class ServiceSICK05 extends ServiceBase {
         if(SiUtils.toBoolean(hasSign) && SiUtils.toBoolean(hasCheck)) {
             //出库
             return SiUtils.invoke(null,"SICK0101", "outStorage", new String[]{"outBillNos"}, list);
+        }
+        /**修改领用单状态**/
+        if(SiUtils.isExistModule("RM")){
+            dao.update("SICK04.updateClaimStatusStockConfirm", list);
         }
         return inInfo;
     }

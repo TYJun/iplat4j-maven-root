@@ -143,5 +143,32 @@
 	<delete id="deleteByEnterBillNo" parameterClass="string" >
 		delete from si_out_detail where out_bill_no = (select si_out.out_bill_no from si_out where origin_bill_no = #value#)
 	</delete>
+
+	<select id="queryHcDetail" parameterClass="com.baosight.wilp.si.ck.domain.SiOut"
+			resultClass="com.baosight.wilp.si.ck.domain.SiOutDetail">
+		SELECT
+			ID	as "id",  <!-- 主键 -->
+			out_bill_detail_no	as "outBillDetailNo",  <!-- 出库单明细号 -->
+			out_bill_no	as "outBillNo",  <!-- 出库单号 -->
+			out_type	as "outType",  <!-- 出库类别 -->
+			out_type_name	as "outTypeName",  <!-- 出库类型名称 -->
+			mat_type_num as "matTypeNum", <!-- 物资分类编码 -->
+			mat_type_name as "matTypeName", <!-- 物资分类名称 -->
+			mat_num	as "matNum",  <!-- 物资编码 -->
+			mat_name	as "matName",  <!-- 物资名称 -->
+			mat_model	as "matModel",  <!-- 物资型号 -->
+			mat_spec	as "matSpec",  <!-- 物资规格 -->
+			unit	as "unit",  <!-- 计量单位编码 -->
+			unit_name	as "unitName",  <!-- 计量单位名称 -->
+			out_num	as "outNum",  <!-- 出库数量 -->
+			out_price	as "outPrice",  <!-- 出库单价 -->
+			out_amount	as "outAmount",  <!-- 出库明细 -->
+			(select ifnull(sum(b.out_num),0) from si_out a left join si_out_detail b on a.out_bill_no = b.out_bill_no
+			where a.origin_bill_no = si_out_detail.out_bill_no and b.mat_type_num = si_out_detail.mat_type_num
+			and b.mat_num = si_out_detail.mat_num and a.out_type = '05' and a.out_bill_no != #outBillNo#) totalRedRushNum, <!-- 显示已红冲数量 -->
+			OUT_DATE	as "outDate",  <!-- 出库日期 -->
+			OUT_TIME	as "outTime"  <!-- 出库时间 -->
+		FROM si_out_detail WHERE OUT_BILL_NO = #originBillNo#
+	</select>
   
 </sqlMap>

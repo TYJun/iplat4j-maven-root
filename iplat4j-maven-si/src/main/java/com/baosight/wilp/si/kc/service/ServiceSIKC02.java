@@ -8,7 +8,9 @@ import java.util.Map;
 import com.baosight.iplat4j.core.ei.EiConstant;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
+import com.baosight.iplat4j.core.web.threadlocal.UserSession;
 import com.baosight.wilp.common.util.CommonUtils;
+import com.baosight.wilp.si.common.WareHouseDataSplitUtils;
 import com.baosight.wilp.si.kc.domain.SiStorgeRecord;
 
 /**
@@ -76,6 +78,7 @@ public class ServiceSIKC02 extends ServiceBase {
 	 */
 	@Override
     public EiInfo query(EiInfo inInfo) {
+		inInfo.set("inqu_status-0-wareHouseNos", WareHouseDataSplitUtils.getWareHouseNos(UserSession.getLoginName()));
         EiInfo outInfo = super.query(inInfo, "SIKC02.query", new SiStorgeRecord());
         return outInfo;
     }

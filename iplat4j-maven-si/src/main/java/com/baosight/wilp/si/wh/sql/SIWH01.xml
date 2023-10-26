@@ -54,7 +54,7 @@
 	</select>
 
 	<select id="count" resultClass="int">
-		SELECT COUNT(*) FROM .si_warehouse WHERE 1=1
+		SELECT COUNT(*) FROM si_warehouse WHERE 1=1
 		<isNotEmpty prepend=" AND " property="id"> <!-- 主键 -->
 			id = #id#
 		</isNotEmpty>
@@ -77,7 +77,7 @@
 	
 	
 	<insert id="insert" parameterClass="com.baosight.wilp.si.wh.domain.SiWarehouse">
-		INSERT INTO .si_warehouse (ID,  <!-- 主键 -->
+		INSERT INTO si_warehouse (ID,  <!-- 主键 -->
 										REC_CREATOR,  <!-- 记录创建责任者 -->
 										REC_CREATE_TIME,  <!-- 记录创建时间 -->
 										REC_REVISOR,  <!-- 记录修改责任者 -->
@@ -99,17 +99,18 @@
 	</insert>
   
 	<delete id="delete">
-		DELETE FROM .si_warehouse WHERE ID = #id#
+		DELETE FROM si_warehouse WHERE ID = #id#
 	</delete>
 
 	<update id="update" parameterClass="com.baosight.wilp.si.wh.domain.SiWarehouse">
-		UPDATE .si_warehouse 
+		UPDATE si_warehouse
 		SET 
 			REC_REVISOR	= #recRevisor#,   <!-- 记录修改责任者 -->  
-			REC_REVISE_TIME	= #recReviseTime#,   <!-- 记录修改时间 -->  
-			WARE_HOUSE_NAME	= #wareHouseName#,   <!-- 仓库名称 -->  
+			REC_REVISE_TIME	= #recReviseTime#,   <!-- 记录修改时间 -->
 			WARE_HOUSE_TYPE	= #wareHouseType#,   <!-- 仓库类型 -->  
-			price_type	= #priceType#   <!-- 计价方式 -->  
+			price_type	= #priceType#,   <!-- 计价方式 -->
+			work_no = #workNo#,  <!-- 仓库管理员（未用） -->
+			work_name = #workName#  <!-- 仓库管理员（未用） -->
 		WHERE ID = #id#
 	</update>
 	

@@ -179,7 +179,7 @@ public class SiUtils {
 	@SuppressWarnings("all")
 	public static EiInfo getMat(Map<String, Object> map) {
 		//调用微服务接口S_AC_FW_17查物资信息
-		map.put("matTypeCode", "2,7");
+		map.put("matTypeCode", WareHouseDataSplitUtils.getWareHouseMatRootType(com.baosight.iplat4j.core.web.threadlocal.UserSession.getLoginName()));
 		EiInfo info = BaseDockingUtils.getMatPage(map, "result");
 		EiBlock block = info.getBlock("result");
 		if (block == null) {
@@ -202,7 +202,7 @@ public class SiUtils {
 
 	public static EiInfo getMatInformation(Map<String, Object> map) {
 		//调用微服务接口S_AC_FW_17查物资信息
-		map.put("matTypeCode", "2,7");
+		map.put("matTypeCode", WareHouseDataSplitUtils.getWareHouseMatRootType(com.baosight.iplat4j.core.web.threadlocal.UserSession.getLoginName()));
 		EiInfo info = BaseDockingUtils.getMatPage(map, "mat");
 		EiBlock block = info.getBlock("mat");
 		if (block == null) {

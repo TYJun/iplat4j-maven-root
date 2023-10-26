@@ -40,6 +40,12 @@ public class SiConfigCache {
     /**库存配置: 是否仓库签字出库**/
     public static final String SI_CONFIG_STORAGE_MANAGER_CHECK = "storageManagerCheck";
 
+    /**库存配置: 是否验收后自动审核**/
+    public static final String SI_CONFIG_AUTO_APPROVAL = "autoApproval";
+
+    /**库存配置: 是否对接固定资产出入库**/
+    public static final String SI_CONFIG_FIXED_ASSET = "fixedAssetRelateStock";
+
     /**配置缓存Map**/
     private static Map<String, Map<String, SiConfig>> configMap = new HashMap<>(8);
 

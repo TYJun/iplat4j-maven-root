@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -24,6 +25,8 @@ public class SerialNoUtils {
 
     /**锁对象**/
     private static final Lock lock = new ReentrantLock();
+
+    private static Map<String, String> serialNoCache = new ConcurrentHashMap<>();
 
     /**
      * 生成序列号
@@ -98,10 +101,13 @@ public class SerialNoUtils {
      * @throws
      **/
     public static synchronized String generateSerialNo(String name, String prefix, String dateFormat, int suffixLength) {
-        String serialNo = "", op = "add";
+        String serialNo = "", op = "add"; String lastSerialNo = "";
         /**1.查询cu_model_number表中的序号**/
-        String lastSerialNo = querySerialNo(name);
-        // if("OW".equals(prefix)){ System.out.println("获取上次序列号：" + lastSerialNo);}
+        if(serialNoCache.containsKey(name)) {
+            lastSerialNo = serialNoCache.get(name);
+        } else {
+            lastSerialNo = querySerialNo(name);
+        }
 
         /**2.判断单号是否存在，不存在，构建一个初始工单号; 存在，更新单号**/
         String dateStr = StringUtils.isBlank(dateFormat) ? "" : DateUtils.curDateStr(dateFormat);
@@ -111,6 +117,7 @@ public class SerialNoUtils {
             op = "edit";
             serialNo = prefix + buildSuffixByDate(dateStr, dateFormat, lastSerialNo, prefix.length());
         }
+        serialNoCache.put(name, serialNo);
 
         /**3.更新单号**/
         updateSerialNo(op, name, serialNo);

@@ -43,7 +43,7 @@ public class ServiceSIWH0101 extends ServiceBase {
 	@SuppressWarnings("unchecked")
     public EiInfo initLoad(EiInfo inInfo) {
 		inInfo.set("workNo", UserSession.getUser().getUsername());
-		if("see".equals(inInfo.getString("type"))){
+		if(!"add".equals(inInfo.getString("type"))){
 			Map<String, String> map = new HashMap<>(2);
 			map.put("id", inInfo.getString("id"));
 			List<SiWarehouse> list = dao.query("SIWH01.query", map);
@@ -53,6 +53,7 @@ public class ServiceSIWH0101 extends ServiceBase {
 		//人员选择多选下拉框
 		EiInfo invoke = SiUtils.invoke(null, "SITY02", "selectPerson", null);
 		inInfo.addBlock(invoke.getBlock("person"));
+		com.baosight.iplat4j.core.web.threadlocal.UserSession.setOutRequestProperty("type", inInfo.getString("type"));
 		return inInfo;
     }
 
@@ -84,7 +85,7 @@ public class ServiceSIWH0101 extends ServiceBase {
    	 	SiWarehouse kcst01 = new SiWarehouse();
 		kcst01.fromMap(inInfo.getAttr());
         //新增
-        if (inInfo.getString("type").equals("add")) {
+        if ("add".equals(inInfo.getString("type"))) {
         	//判断仓库号是否已存在，存在提示错误信息
        	 	int count = super.count("SIWH01.isExistwareHouseNo",inInfo.getString("wareHouseNo"));
        	 	if(count > 0){

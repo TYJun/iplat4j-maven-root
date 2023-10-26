@@ -3,12 +3,14 @@ package com.baosight.wilp.si.ck.service;
 import com.baosight.iplat4j.core.ei.EiConstant;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
+import com.baosight.iplat4j.core.web.threadlocal.UserSession;
 import com.baosight.wilp.si.ck.domain.SiOut;
 import com.baosight.wilp.si.common.SiUtils;
-import com.baosight.xservices.xs.util.UserSession;
+import com.baosight.wilp.si.common.WareHouseDataSplitUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -68,7 +70,8 @@ public class ServiceSICK01 extends ServiceBase {
 	 */
 	@Override
     public EiInfo query(EiInfo inInfo) {
-    	inInfo.set("inqu_status-0-dataGroupCode", SiUtils.getDataGroupCode(UserSession.getUser().getUsername()));
+		inInfo.set("inqu_status-0-wareHouseNos", WareHouseDataSplitUtils.getWareHouseNos(UserSession.getLoginName()));
+    	inInfo.set("inqu_status-0-dataGroupCode", SiUtils.getDataGroupCode(UserSession.getLoginName()));
         EiInfo outInfo = super.query(inInfo, "SICK01.query", new SiOut());
         return outInfo;
     }

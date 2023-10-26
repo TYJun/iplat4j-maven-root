@@ -27,13 +27,13 @@
 				<EF:EFGrid blockId="mat" autoDraw="no" checkMode="row"
 						   readonly="true" sort="single" queryMethod="queryOriginEnter" >
 					<EF:EFColumn ename="matNum" cname="物资编码" width="90" align="center" sort="true"/>
-					<EF:EFColumn ename="matName" cname="物资名称" width="120" align="center" sort="false"/>
-					<EF:EFColumn ename="matSpec" cname="物资规格" width="100" align="center" sort="false"/>
+					<EF:EFColumn ename="matName" cname="物资名称" width="120" align="center" sort="true"/>
+					<EF:EFColumn ename="matSpec" cname="物资规格" width="100" align="center" sort="true"/>
 					<%--<EF:EFColumn ename="matModel" cname="物资型号" width="100" align="center"/>--%>
 					<EF:EFColumn ename="unit" cname="单位" width="60" hidden="true" align="center" sort="false"/>
 					<EF:EFColumn ename="unitName" cname="单位" width="60" align="center" sort="false"/>
-					<EF:EFColumn ename="enterPrice" cname="入库单价(元)" width="100" align="center" sort="false"/>
-					<EF:EFColumn ename="enterNum" cname="入库数量" width="80" align="center" sort="false"/>
+					<EF:EFColumn ename="enterPrice" cname="入库单价(元)" width="100" align="center" sort="true"/>
+					<EF:EFColumn ename="enterNum" cname="入库数量" width="80" align="center" sort="true"/>
 					<EF:EFColumn ename="totalRedRushNum" cname="已红冲数量" width="100" enable="false" align="center"/>
 					<EF:EFColumn ename="matTypeNum" cname="物资分类编码" hidden="true" sort="false"/>
 					<EF:EFColumn ename="matTypeName" cname="物资分类" width="100" align="center" sort="false"/>

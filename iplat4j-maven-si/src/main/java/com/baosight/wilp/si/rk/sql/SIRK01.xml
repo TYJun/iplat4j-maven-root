@@ -58,6 +58,12 @@
 		<isNotEmpty prepend=" AND " property="wareHouseNo"> <!-- 仓库号 -->
 			WARE_HOUSE_NO = #wareHouseNo#
 		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNos"> <!-- 仓库号 -->
+			WARE_HOUSE_NO in
+		  	<iterate property="wareHouseNos" open="(" conjunction="," close=")">
+				#wareHouseNos[]#
+			</iterate>
+		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="enterType"> <!-- 入库类别 -->
 			ENTER_TYPE = #enterType#
 		</isNotEmpty>
@@ -76,10 +82,10 @@
 		<isNotEmpty prepend=" AND " property="isCheck">  <!-- 状态 -->
 			is_check = #isCheck#
 		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="printFlag">  <!-- 状态 -->
+		<isNotEmpty prepend=" AND " property="printFlag">  <!-- 是否已打印 -->
 			print_flag = #printFlag#
 		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="billMakerName">  <!-- 状态 -->
+		<isNotEmpty prepend=" AND " property="billMakerName">  <!-- 制单人 -->
 			bill_maker_name like concat('%', #billMakerName# ,'%')
 		</isNotEmpty>
 		<dynamic prepend="ORDER BY">
@@ -93,7 +99,7 @@
 	</select>
 
 	<select id="count" resultClass="int">
-		SELECT COUNT(*) FROM .si_enter WHERE 1=1
+		SELECT COUNT(*) FROM si_enter WHERE 1=1
 		<isNotEmpty prepend=" AND " property="id">
 			ID = #id#
 		</isNotEmpty>
@@ -103,11 +109,17 @@
 		<isNotEmpty prepend=" AND " property="enterBillNoEQ">  <!-- 入库单号(精确) -->
 			ENTER_BILL_NO = #enterBillNoEQ#
 		</isNotEmpty>
-		<isNotEmpty prepend=" AND " property="enterType"> <!-- 入库类别 -->
-			ENTER_TYPE = #enterType#
-		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="wareHouseNo"> <!-- 仓库号 -->
 			WARE_HOUSE_NO = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNos"> <!-- 仓库号 -->
+			WARE_HOUSE_NO in
+			<iterate property="wareHouseNos" open="(" conjunction="," close=")">
+				#wareHouseNos[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="enterType"> <!-- 入库类别 -->
+			ENTER_TYPE = #enterType#
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="beginTime">   <!-- 制单日期（>=） -->
 			date_format(BILL_MAKE_TIME,'%Y-%m-%d') >= #beginTime#
@@ -115,8 +127,20 @@
 		<isNotEmpty prepend=" AND " property="endTime">    <!-- 制单日期止（<=） -->
 			date_format(BILL_MAKE_TIME,'%Y-%m-%d') <![CDATA[<=]]> #endTime#
 		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="supplierName">    <!-- 供应商名称 -->
+			ENTER_BILL_NO in (select distinct ENTER_BILL_NO from si_enter_detail where surp_name like concat('%', #supplierName#, '%'))
+		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="dataGroupCode">  <!-- 院区（账套） -->
 			DATA_GROUP_CODE = #dataGroupCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="isCheck">  <!-- 状态 -->
+			is_check = #isCheck#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="printFlag">  <!-- 是否已打印 -->
+			print_flag = #printFlag#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="billMakerName">  <!-- 制单人 -->
+			bill_maker_name like concat('%', #billMakerName# ,'%')
 		</isNotEmpty>
 	</select>
 
@@ -222,5 +246,20 @@
 			#list[]#
 		</iterate>
 	</select>
+
+	<select id="hashDelete" parameterClass="java.util.List" resultClass="int">
+		select count(1) from si_enter where is_check > 0 and enter_bill_no in
+		<iterate open="(" conjunction="," close=")">#enterBillNos[]#</iterate>
+	</select>
+
+	<delete id="batchDeleteEnter" parameterClass="java.util.List">
+		delete from si_enter where enter_bill_no in
+		<iterate open="(" conjunction="," close=")">#enterBillNos[]#</iterate>
+	</delete>
+
+	<delete id="batchDeleteEnterDetail" parameterClass="java.util.List">
+		delete from si_enter_detail where enter_bill_no in
+		<iterate open="(" conjunction="," close=")">#enterBillNos[]#</iterate>
+	</delete>
 
 </sqlMap>

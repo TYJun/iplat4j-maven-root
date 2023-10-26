@@ -32,10 +32,10 @@
 				format="yyyy-MM-dd" parseFormats="['yyyy-MM-dd']" bindId="endTime" />
 			<EF:EFInput ename="mainEnterBillNo" type="hidden" value="no data"/>
 			<EF:EFInput ename="inqu_status-0-billMakerName" cname="制单人" />
-			<EF:EFSelect ename="inqu_status-0-printFlag" cname="打印状态">
+			<EF:EFSelect ename="inqu_status-0-printFlag" cname="是否已打印">
 				<EF:EFOption label="全部" value=""/>
-				<EF:EFOption label="未打印" value="0"/>
-				<EF:EFOption label="已打印" value="1"/>
+				<EF:EFOption label="是" value="1"/>
+				<EF:EFOption label="否" value="0"/>
 			</EF:EFSelect>
 		</div>
 	</EF:EFRegion>

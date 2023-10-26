@@ -20,7 +20,7 @@
 				format="yyyy-MM-dd" parseFormats="['yyyy-MM-dd']" bindId="endTime" />
 		</div>
 	</EF:EFRegion>
-	<EF:EFRegion id="result" title="仓库入库信息">
+	<EF:EFRegion id="result" title="物资报废信息">
 		<EF:EFGrid blockId="result" autoDraw="no" checkMode="single,row"
 			autoBind="true" readonly="true">
 			<EF:EFColumn ename="id" cname="id" width="100" hidden="true" />

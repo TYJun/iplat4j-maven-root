@@ -17,17 +17,17 @@
 	</EF:EFRegion>
 	<EF:EFRegion id="result" title="出库明细信息">
 		<EF:EFGrid blockId="result" autoDraw="no" checkMode="single,row"
-			autoBind="true" readonly="true" sort="single" >
-			<EF:EFColumn ename="matNum" cname="物资编码" width="100" align="center" sort="true"/>
-			<EF:EFColumn ename="matName" cname="物资名称" width="150" align="center" sort="true"/>
-			<EF:EFColumn ename="matSpec" cname="物资规格" width="80" align="center" sort="true"/>
+			autoBind="true" readonly="true" >
+			<EF:EFColumn ename="matNum" cname="物资编码" width="100" align="center"/>
+			<EF:EFColumn ename="matName" cname="物资名称" width="150" align="center"/>
+			<EF:EFColumn ename="matSpec" cname="物资规格" width="80" align="center"/>
 			<%--<EF:EFColumn ename="matModel" cname="物资型号" width="80" align="center"/>--%>
-			<EF:EFColumn ename="unit" cname="单位" width="60" hidden="true" sort="false"/>
-			<EF:EFColumn ename="unitName" cname="物资单位" width="80" align="center" sort="false"/>
-			<EF:EFColumn ename="outNum" cname="出库数量" width="100" align="center" sort="true"/>
-			<EF:EFColumn ename="outAmount" cname="出库总价" width="100" align="center" sort="true"/>
-			<EF:EFColumn ename="matTypeNum" cname="物资分类编码" hidden="true" sort="false"/>
-			<EF:EFColumn ename="matTypeName" cname="物资分类" width="100" align="center" sort="false"/>
+			<EF:EFColumn ename="unit" cname="单位" width="60" hidden="true" />
+			<EF:EFColumn ename="unitName" cname="物资单位" width="80" align="center"/>
+			<EF:EFColumn ename="outNum" cname="出库数量" width="100" align="center"/>
+			<EF:EFColumn ename="outAmount" cname="出库总价" width="100" align="center"/>
+			<EF:EFColumn ename="matTypeNum" cname="物资分类编码" hidden="true"/>
+			<EF:EFColumn ename="matTypeName" cname="物资分类" width="100" align="center"/>
 		</EF:EFGrid>
 	</EF:EFRegion>
 </EF:EFPage>

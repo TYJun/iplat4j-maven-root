@@ -57,5 +57,12 @@
                 <iterate open="(" conjunction="," close=")">#list[]#</iterate>
         )
     </update>
+
+    <update id="updateClaimStatusStockConfirm" parameterClass="java.util.List">
+        update rm_claim set status_code = '70', status_name = '待签收' where status_code = '65'
+        and claim_no in (select origin_bill_no from si_out where out_type = '06' and out_bill_no in
+        <iterate open="(" conjunction="," close=")">#list[]#</iterate>
+        )
+    </update>
   
 </sqlMap>

@@ -48,6 +48,12 @@
 		<isNotEmpty prepend=" AND " property="wareHouseNo">
 			ware_house_no = #wareHouseNo#
 		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNos"> <!-- 仓库号 -->
+			WARE_HOUSE_NO in
+			<iterate property="wareHouseNos" open="(" conjunction="," close=")">
+				#wareHouseNos[]#
+			</iterate>
+		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matTypeName">
 			mat_type_name like concat('%', #matTypeName#, '%')
 		</isNotEmpty>
@@ -80,6 +86,12 @@
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="wareHouseNo">
 			ware_house_no = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNos"> <!-- 仓库号 -->
+			WARE_HOUSE_NO in
+			<iterate property="wareHouseNos" open="(" conjunction="," close=")">
+				#wareHouseNos[]#
+			</iterate>
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matTypeName">
 			mat_type_name like concat('%', #matTypeName#, '%')

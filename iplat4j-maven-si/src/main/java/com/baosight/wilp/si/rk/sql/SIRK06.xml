@@ -40,6 +40,12 @@
         <isNotEmpty prepend=" AND " property="wareHouseName">
             sd.ware_house_name = #wareHouseName#
         </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="wareHouseNos"> <!-- 仓库号 -->
+            sd.WARE_HOUSE_NO in
+            <iterate property="wareHouseNos" open="(" conjunction="," close=")">
+                #wareHouseNos[]#
+            </iterate>
+        </isNotEmpty>
         <isNotEmpty prepend=" AND " property="matTypeName">
             sd.mat_type_name = #matTypeName#
         </isNotEmpty>
@@ -73,6 +79,12 @@
         </isNotEmpty>
         <isNotEmpty prepend=" AND " property="wareHouseName">
             sd.ware_house_name = #wareHouseName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" AND " property="wareHouseNos"> <!-- 仓库号 -->
+            sd.WARE_HOUSE_NO in
+            <iterate property="wareHouseNos" open="(" conjunction="," close=")">
+                #wareHouseNos[]#
+            </iterate>
         </isNotEmpty>
         <isNotEmpty prepend=" AND " property="matTypeName">
             sd.mat_type_name = #matTypeName#

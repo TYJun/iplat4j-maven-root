@@ -88,11 +88,11 @@ function query() {
         if(!items || items.length == 1) {return;}
         let html = items[1].innerHTML;
         let baseUrl = html.substring(html.indexOf("href")+6, html.indexOf(">")-1);
-        // baseUrl = webUrl + baseUrl.replace(/http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/, "");
+        //baseUrl = webUrl + baseUrl.replace(/http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/, "");
         url = baseUrl +  url;
         choseItem = {text: items[1].innerText, url: baseUrl};
     }
-    let reportURL = cjkEncode(url);
+    let reportURL = url//cjkEncode(url);
     document.getElementById("cxFrame").src = reportURL;
 
 }

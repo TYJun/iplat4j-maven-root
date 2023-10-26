@@ -58,6 +58,12 @@
 		<isNotEmpty prepend=" AND " property="wareHouseNo"> <!-- 仓库号 -->
 			so.WARE_HOUSE_NO = #wareHouseNo#
 		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNos"> <!-- 仓库号 -->
+			so.WARE_HOUSE_NO in
+			<iterate property="wareHouseNos" open="(" conjunction="," close=")">
+				#wareHouseNos[]#
+			</iterate>
+		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matNum">  <!-- 物资编码 -->
 			sod.mat_num like concat('%', #matNum#, '%')
 		</isNotEmpty>
@@ -104,6 +110,12 @@
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="wareHouseNo"> <!-- 仓库号 -->
 			so.WARE_HOUSE_NO = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNos"> <!-- 仓库号 -->
+			so.WARE_HOUSE_NO in
+			<iterate property="wareHouseNos" open="(" conjunction="," close=")">
+				#wareHouseNos[]#
+			</iterate>
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matNum">  <!-- 物资编码 -->
 			sod.mat_num like concat('%', #matNum#, '%')

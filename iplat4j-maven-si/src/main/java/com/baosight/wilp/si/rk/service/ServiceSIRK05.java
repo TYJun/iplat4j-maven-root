@@ -9,6 +9,7 @@ import com.baosight.wilp.common.util.BaseDockingUtils;
 import com.baosight.wilp.si.common.SiConfigCache;
 import com.baosight.wilp.si.common.SiUtils;
 import com.baosight.wilp.si.common.ValidatorUtils;
+import com.baosight.wilp.si.common.WareHouseDataSplitUtils;
 import com.baosight.wilp.si.rk.domain.SiEnterDetail;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -55,6 +56,7 @@ public class ServiceSIRK05 extends ServiceBase {
      **/
     @Override
     public EiInfo query(EiInfo inInfo) {
+        inInfo.set("inqu_status-0-wareHouseNos", WareHouseDataSplitUtils.getWareHouseNos(com.baosight.xservices.xs.util.UserSession.getUser().getUsername()));
         inInfo.setCell(EiConstant.queryBlock, 0, "isCheck", 1);
         return super.query(inInfo, "SIRK01.query");
     }

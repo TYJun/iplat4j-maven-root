@@ -12,8 +12,10 @@
 	StringBuilder sb  = new StringBuilder("[");
 	sb.append("{\"configCode\":\"enterCheck\",\"configName\":\"是否开启入库验收流程\",\"hasRadio\":true,\"hasText\":false}").append(",");
 	sb.append("{\"configCode\":\"checkInStorage\",\"configName\":\"是否验收后入库\",\"hasRadio\":true,\"hasText\":false}").append(",");
+	sb.append("{\"configCode\":\"autoApproval\",\"configName\":\"是否验收后自动审核\",\"hasRadio\":true,\"hasText\":true}").append(",");
 	sb.append("{\"configCode\":\"outStockSign\",\"configName\":\"是否开启仓库出库签字\",\"hasRadio\":true,\"hasText\":false}").append(",");
 	sb.append("{\"configCode\":\"storageManagerCheck\",\"configName\":\"是否仓库签字出库\",\"hasRadio\":true,\"hasText\":false}");
+	sb.append("{\"configCode\":\"fixedAssetRelateStock\",\"configName\":\"是否关联固定资产出入库\",\"hasRadio\":true,\"hasText\":true}");
 	sb.append("]");
 	//数据转换
 	List<Map> list = JSON.parseArray(sb.toString(), Map.class);

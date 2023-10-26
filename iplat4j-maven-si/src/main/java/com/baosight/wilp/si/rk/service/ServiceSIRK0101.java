@@ -12,6 +12,7 @@ import com.baosight.wilp.si.common.*;
 import com.baosight.wilp.si.kc.domain.SiStorge;
 import com.baosight.wilp.si.kc.domain.SiStorgeDetail;
 import com.baosight.wilp.si.kc.domain.SiStorgeRecord;
+import com.baosight.wilp.si.pz.domain.SiConfig;
 import com.baosight.wilp.si.rk.domain.EnterTypeEnum;
 import com.baosight.wilp.si.rk.domain.SiEnter;
 import com.baosight.wilp.si.rk.domain.SiEnterDetail;
@@ -133,7 +134,7 @@ public class ServiceSIRK0101 extends ServiceBase {
 				return ValidatorUtils.errorInfo(SiUtils.isEmpty(outInfo.getMsg(), "入库失败"));
 			}
 			//推送到固定资产
-			dockFixedAssets(enter, enterDetailList);
+			dockFixedAssets(enter, enterDetailList, outInfo.getString("outBillNo"));
 			inInfo.setMsg("入库成功");
 		}
 		inInfo.set("enterBillNo", enter.getEnterBillNo());
@@ -169,7 +170,7 @@ public class ServiceSIRK0101 extends ServiceBase {
 				return ValidatorUtils.errorInfo(SiUtils.isEmpty(outInfo.getMsg(), "入库失败"));
 			}
 			//推送到固定资产
-			dockFixedAssets(enter, details);
+			dockFixedAssets(enter, details, outInfo.getString("outBillNo"));
 			inInfo.setMsg("入库成功");
 		}
 		return inInfo;
@@ -184,22 +185,18 @@ public class ServiceSIRK0101 extends ServiceBase {
 	 * @return com.baosight.iplat4j.core.ei.EiInfo
 	 * @throws
 	 **/
-	private EiInfo dockFixedAssets(SiEnter enter, List<SiEnterDetail> enterDetailList) {
-		//存在微服务、存在采购模块、入库类型为手工入库
-		if(SiUtils.isExistService(FA_SERVICE_ID) && SiUtils.isExistModule(MODULE_CODE_MP)
-				&& (SiConstant.ENTER_TYPE_SG.equals(enter.getEnterType()) ||
-				SiConstant.ENTER_TYPE_ZRZC.equals(enter.getEnterType()))) {
+	private EiInfo dockFixedAssets(SiEnter enter, List<SiEnterDetail> enterDetailList, String outBillNo) {
+		List<String> enterTypes = Arrays.asList(SiConstant.ENTER_TYPE_ZRZC, SiConstant.ENTER_TYPE_CG,
+				SiConstant.ENTER_TYPE_SG,SiConstant.ENTER_TYPE_HC);
+		SiConfig config = SiConfigCache.getConfig(enter.getDataGroupCode(), SiConfigCache.SI_CONFIG_FIXED_ASSET);
+
+		//存在微服务、开启出入库跟固定资产关、入库仓库为配置的固定资产仓库、入库类型为指定类型
+		if(SiUtils.isExistService(FA_SERVICE_ID) && SiUtils.toBoolean(config.getConfigValueRadio())
+				&& enter.getWareHouseNo().equals(config.getConfigValueText()) && enterTypes.contains(enter.getEnterType())) {
 			EiInfo eiInfo = new EiInfo();
 			eiInfo.set("enterDetails", enterDetailList);
-			eiInfo.set("originBillType", enter.getOriginBillType());
-			eiInfo.set("originBillTypeName", enter.getOriginBillTypeName());
-			eiInfo.set("enterType", enter.getEnterType());
-			eiInfo.set("enterTypeName", enter.getEnterTypeName());
-			eiInfo.set("deptNum", enter.getUserDeptNum());
-			eiInfo.set("deptName", enter.getUserDeptName());
-			eiInfo.set("invoiceNum", enter.getInvoiceNum());
-			eiInfo.set("wareHouseNo", enter.getWareHouseNo());
-			eiInfo.set("wareHouseName", enter.getWareHouseName());
+			eiInfo.set("enter", enter);
+			eiInfo.set("outBillNo", outBillNo);
 			return SiUtils.invoke(eiInfo, "SIJK04", "pushEnter", null, null);
 		}
 		return new EiInfo();
@@ -243,6 +240,7 @@ public class ServiceSIRK0101 extends ServiceBase {
 			return inInfo;
 		}
 		inInfo.setMsg("直入直出操作成功");
+		inInfo.set("outBillNo", out.getOutBillNo());
 		return inInfo;
 	}
 
@@ -403,7 +401,8 @@ public class ServiceSIRK0101 extends ServiceBase {
 		//判断是否是直出
 		List<String> pList = dao.query("SIRK01.queryOriginEnterBillType", enter.getOriginBillNo());
 		if(SiConstant.ENTER_TYPE_ZRZC.equals(pList.get(0))) {
-			redPushZRZC(enter, enterDetailList);
+			String outBillNo = redPushZRZC(enter, enterDetailList);
+			inInfo.set("outBillNo", outBillNo);
 		} else {
 			//获取指定的物资明细集合
 			EiInfo outInfo = SiUtils.invoke(null, "SIKC0101", "queryStorgeDetail", new String[]{"enterBillNo"}, enter.getOriginBillNo());
@@ -412,9 +411,9 @@ public class ServiceSIRK0101 extends ServiceBase {
 			List<SiStorgeRecord> storgeRecordList = new ArrayList<>();
 			//判断物资是足够红冲入库,足够，返回要红冲的库存明细;不够，返回null
 			List<SiStorgeDetail> storgeDetailList = isEnoughHC(enterDetailList, siStorgeDetailList, storgeRecordList);
-			if (storgeDetailList == null) {
+			if (CollectionUtils.isEmpty(storgeDetailList)) {
 				inInfo.setStatus(-1);
-				inInfo.setMsg("当前库存不足 无法红冲");
+				inInfo.setMsg("当前库存不足 无法退货");
 				return inInfo;
 			}
 			//调用本地服务更新库存及库存明细
@@ -433,7 +432,7 @@ public class ServiceSIRK0101 extends ServiceBase {
 	 * @return void
 	 * @throws
 	 **/
-	private void redPushZRZC(SiEnter enter, List<SiEnterDetail> enterDetailList) {
+	private String redPushZRZC(SiEnter enter, List<SiEnterDetail> enterDetailList) {
 		SiOut out = BeanExchangeUtils.enterToOut(enter, enter.getUserDeptNum(), enter.getUserDeptName());
 		out.setOutType(SiConstant.OUT_TYPE_HC);
 		out.setOutTypeName(CommonUtils.getDataCodeItemName("wilp.si.outType", out.getOutType()));
@@ -452,6 +451,7 @@ public class ServiceSIRK0101 extends ServiceBase {
 		});
 		dao.insert("SICK01.insert", out);
 		dao.insert("SICK0101.insert", outDetailList);
+		return out.getOutBillNo();
 	}
 
 	/**

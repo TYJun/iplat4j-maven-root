@@ -8,6 +8,7 @@ import com.baosight.iplat4j.core.web.threadlocal.UserSession;
 import com.baosight.wilp.common.util.BaseDockingUtils;
 import com.baosight.wilp.common.util.CommonUtils;
 import com.baosight.wilp.si.common.SiUtils;
+import com.baosight.wilp.si.common.WareHouseDataSplitUtils;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.ArrayList;
@@ -25,6 +26,11 @@ import java.util.stream.Collectors;
  * @date: 2022年10月08日 17:18
  *
  * 1.人员选择
+ * 2.供应商选择
+ * 3.获取指定物资的所有子级分类编码集合
+ * 4.查询指定的物资分类
+ * 5.获取指定人员的业务科室
+ * 6.或群所有的业务科室
  */
 public class ServiceSITY02 extends ServiceBase {
 
@@ -189,7 +195,12 @@ public class ServiceSITY02 extends ServiceBase {
                         .filter(x-> !"301".equals(x.get("matClassCode")))
                         .filter(x-> !"302".equals(x.get("matClassCode")))
                         .filter(x-> !"3".equals(x.get("matClassCode"))).collect(Collectors.toList());
-
+        //判断是否需要添加固定资产的物资分类
+        String rootType = WareHouseDataSplitUtils.getWareHouseMatRootType(UserSession.getLoginName());
+        if(rootType.contains("6")) {
+            matList.addAll(list.stream().filter(m -> m.get("matClassCode").startsWith("A"))
+                    .filter(x -> x.get("matClassCode").matches("^A[0-9][1-9][0-9][1-9][0-9]{4}$")).collect(Collectors.toList()));
+        }
         //3 增加节点 block 块
         inInfo.setRows("matType", matList);
         return inInfo;

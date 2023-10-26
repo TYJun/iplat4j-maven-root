@@ -3,7 +3,9 @@ package com.baosight.wilp.si.yj.service;
 import com.baosight.iplat4j.core.ei.EiConstant;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
+import com.baosight.iplat4j.core.web.threadlocal.UserSession;
 import com.baosight.wilp.si.common.SiUtils;
+import com.baosight.wilp.si.common.WareHouseDataSplitUtils;
 
 /**
  * 库存预警页面Service
@@ -67,6 +69,7 @@ public class ServiceSIYJ01 extends ServiceBase {
     @Override
     public EiInfo query(EiInfo inInfo) {
     	inInfo.set("inqu_status-0-earlyWarning", "Y");
+		inInfo.set("inqu_status-0-wareHouseNos", WareHouseDataSplitUtils.getWareHouseNos(UserSession.getLoginName()));
     	return SiUtils.invoke(inInfo, "SIKC01", "query", null);
     }
     

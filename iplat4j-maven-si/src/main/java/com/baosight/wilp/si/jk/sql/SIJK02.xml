@@ -18,6 +18,12 @@
 		<isNotEmpty property="wareHouseNo" prepend=" AND ">
 			WARE_HOUSE_NO = #wareHouseNo#  <!-- 仓库号 -->
 		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNos"> <!-- 仓库号 -->
+			WARE_HOUSE_NO in
+			<iterate property="wareHouseNos" open="(" conjunction="," close=")">
+				#wareHouseNos[]#
+			</iterate>
+		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matNum"> <!-- 物资编码 -->
 			MAT_NUM like concat('%', #matNum#, '%')
 		</isNotEmpty>
@@ -55,6 +61,12 @@
 		SELECT id FROM si_storge WHERE 1=1
 		<isNotEmpty property="wareHouseNo" prepend=" AND ">
 			WARE_HOUSE_NO = #wareHouseNo#  <!-- 仓库号 -->
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNos"> <!-- 仓库号 -->
+			WARE_HOUSE_NO in
+			<iterate property="wareHouseNos" open="(" conjunction="," close=")">
+				#wareHouseNos[]#
+			</iterate>
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matNum"> <!-- 物资编码 -->
 			MAT_NUM like concat('%', #matNum#, '%')

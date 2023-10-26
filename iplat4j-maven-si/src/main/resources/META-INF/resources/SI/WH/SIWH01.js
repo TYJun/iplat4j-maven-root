@@ -27,6 +27,15 @@ $(function() {
 				$("#ADD").on("click", function(e) {
 					popData("", "add");
 				});
+
+				$("#EDIT").on("click", function(e) {
+					let checkRows = resultGrid.getCheckedRows()
+					if (checkRows.length != 1) {
+						IPLAT.alert("请选择一条记录进行修改");
+					} else {
+						popData(checkRows[0]['id'], "edit");
+					}
+				});
 				
 				//冻结
 				$("#DJ").on("click", function(e) {

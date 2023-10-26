@@ -36,6 +36,12 @@
 		<isNotEmpty prepend=" AND " property="wareHouseNo">    <!-- 仓库号 -->
 			WARE_HOUSE_NO = #wareHouseNo#
 		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNos"> <!-- 仓库号 -->
+			WARE_HOUSE_NO in
+			<iterate property="wareHouseNos" open="(" conjunction="," close=")">
+				#wareHouseNos[]#
+			</iterate>
+		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="invenStatus">    <!-- 盘点状态 -->
 			INVEN_STATUS = #invenStatus#
 		</isNotEmpty>
@@ -65,6 +71,12 @@
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="wareHouseNo">    <!-- 仓库号 -->
 			WARE_HOUSE_NO = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNos"> <!-- 仓库号 -->
+			WARE_HOUSE_NO in
+			<iterate property="wareHouseNos" open="(" conjunction="," close=")">
+				#wareHouseNos[]#
+			</iterate>
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="invenStatus">    <!-- 盘点状态 -->
 			INVEN_STATUS = #invenStatus#
