@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SIPZ03">
+
+	<select id="query" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.si.pz.domain.SiConfigMatRootType">
+		SELECT
+			id	as "id",  <!-- 主键 -->
+			ware_house_no	as "wareHouseNo",  <!-- 工号 -->
+			ware_house_name	as "wareHouseName",  <!-- 姓名 -->
+			relate_mat_type	as "relateMatType",  <!-- 科室编码 -->
+			relate_mat_type_name	as "relateMatTypeName",  <!-- 科室名称 -->
+			apply_mat_type	as "applyMatType",  <!-- 科室编码 -->
+			apply_mat_type_name	as "applyMatTypeName"  <!-- 科室名称 -->
+		FROM si_config_mat_type WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNo">
+			ware_house_no = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="relateMatType">
+			find_in_set(#relateMatType#, relate_mat_type)
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			 <isNotEmpty property="orderBy">
+				  $orderBy$
+			 </isNotEmpty>
+			<isEmpty property="orderBy">
+				ware_house_no asc
+			</isEmpty>
+  		</dynamic>
+	</select>
+
+	<select id="count" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT count(*) FROM si_config_mat_type WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNo">
+			ware_house_no = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="relateMatType">
+			find_in_set(#relateMatType#, relate_mat_type)
+		</isNotEmpty>
+	</select>
+
+	<select id="queryMatRootTypes" parameterClass="java.util.List" resultClass="string">
+		select relate_mat_type from si_config_mat_type where ware_house_no in
+		<iterate open="(" conjunction="," close=")">#wareHouseNos[]#</iterate>
+	</select>
+
+	<select id="queryApplyMatRootTypes" parameterClass="java.util.List" resultClass="string">
+		select apply_mat_type from si_config_mat_type where ware_house_no in
+		<iterate open="(" conjunction="," close=")">#wareHouseNos[]#</iterate>
+	</select>
+
+	<insert id="insert" parameterClass="com.baosight.wilp.si.pz.domain.SiConfigMatRootType">
+		insert into si_config_mat_type ( id, ware_house_no, ware_house_name, relate_mat_type, relate_mat_type_name,
+		        apply_mat_type, apply_mat_type_name)
+	    VALUES (#id#,#wareHouseNo#,#wareHouseName#,#relateMatType#,#relateMatTypeName#, #applyMatType#, #applyMatTypeName#)
+	</insert>
+
+	<insert id="update" parameterClass="com.baosight.wilp.si.pz.domain.SiConfigMatRootType">
+		update si_config_mat_type set
+		  	ware_house_no = #wareHouseNo#,
+			ware_house_name = #wareHouseName#,
+			relate_mat_type	= #relateMatType#,
+			relate_mat_type_name = #relateMatTypeName#,
+			apply_mat_type = #applyMatType#,
+			apply_mat_type_name = #applyMatTypeName#
+		where id = #id#
+	</insert>
+  
+	<delete id="delete" parameterClass="java.util.List">
+		DELETE FROM si_config_mat_type WHERE id in
+		<iterate open="(" conjunction="," close=")">#ids[]#</iterate>
+	</delete>
+
+</sqlMap>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SITYUndo">
+
+	<!-- 查询驳回的物资领用单 -->
+	<select id="queryRejectClaim" parameterClass="string" resultClass="java.util.HashMap">
+		select
+			claim_no claimNo,
+		    dept_name deptName,
+		    cost_dept_name costDeptName,
+		    remark
+		from rm_claim where status_code = '40' and apply_user_no = #value# limit 10
+	</select>
+
+	<select id="countRejectClaim" parameterClass="string" resultClass="int">
+		select count(*) from rm_claim where status_code = '40' and apply_user_no = #value#
+	</select>
+
+</sqlMap>

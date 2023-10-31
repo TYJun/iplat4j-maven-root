@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="SICK01">
+
+	<select id="query" parameterClass="java.util.HashMap"
+			resultClass="com.baosight.wilp.si.ck.domain.SiOut">
+		SELECT
+		REC_CREATOR	as "recCreator",  <!-- 记录创建责任者 -->
+		REC_CREATE_TIME	as "recCreateTime",  <!-- 记录创建时间 -->
+		REC_REVISOR	as "recRevisor",  <!-- 记录修改责任者 -->
+		REC_REVISE_TIME	as "recReviseTime",  <!-- 记录修改时间 -->
+		DATA_GROUP_CODE	as "dataGroupCode",  <!-- 院区（账套） -->
+		ARCHIVE_FLAG	as "archiveFlag",  <!-- 归档标记 -->
+		ID	as "id",  <!-- 主键 -->
+		OUT_BILL_NO	as "outBillNo",  <!-- 出库单号 -->
+		OUT_TYPE	as "outType",  <!-- 出库类别 -->
+		out_type_name	as "outTypeName",  <!-- 出库类型名称 -->
+		ORIGIN_BILL_NO	as "originBillNo",  <!-- 来源单据号 -->
+		ORIGIN_BILL_TYPE	as "originBillType",  <!-- 来源单据类型 -->
+		WARE_HOUSE_NO	as "wareHouseNo",  <!-- 仓库号 -->
+		ware_house_name	as "wareHouseName",  <!-- 仓库名称 -->
+		total_num  as "totalNum",  <!-- 总入库数量 -->
+		total_amount "totalAmount",  <!-- 总入库金额 -->
+		STORAGE_NO	as "storageNo",  <!-- 库位号 -->
+		STACK_NO	as "stackNo",  <!-- 货位号 -->
+		BILL_MAKE_TIME	as "billMakeTime",  <!-- 制单日期 -->
+		BILL_MAKER	as "billMaker",  <!-- 制单人员 -->
+		bill_maker_name	as "billMakerName",  <!-- 制单人名字 -->
+		BILL_CHECK_TIME	as "billCheckTime",  <!-- 审核日期 -->
+		BILL_CHECKER	as "billChecker",  <!-- 审核人员 -->
+		bill_checker_name	as "billCheckerName",  <!-- 审核人名字 -->
+		USER_WORKER_NO	as "userWorkerNo",  <!-- 领用人 -->
+		user_worker_name	as "userWorkerName",  <!-- 领用人名称 -->
+		USER_DEPT_NUM	as "userDeptNum",  <!-- 领用科室 -->
+		user_dept_name	as "userDeptName",  <!-- 领用科室名称 -->
+		cost_dept_num	as "costDeptNum",  <!-- 成本科室 -->
+		cost_dept_name	as "costDeptName",  <!-- 成本科室名称 -->
+		is_check	as "isCheck", <!-- 是否已经审核(0/否,1/是) -->
+		signature,  <!-- 签收电子签名-->
+		print_flag	as "printFlag", <!-- 打印标记 -->
+		remark	as "remark" <!-- 备注/红冲原因 -->
+		FROM si_out WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outBillNo">  <!-- 出库单号 -->
+			OUT_BILL_NO like concat('%', #outBillNo#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outBillNoEQ">  <!-- 出库单号（精确） -->
+			OUT_BILL_NO = #outBillNoEQ#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="originBillNoEQ">  <!-- 来源单号（精确） -->
+			ORIGIN_BILL_NO = #originBillNoEQ#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNo"> <!-- 仓库号 -->
+			WARE_HOUSE_NO = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNos"> <!-- 仓库号 -->
+			WARE_HOUSE_NO in
+			<iterate property="wareHouseNos" open="(" conjunction="," close=")">
+				#wareHouseNos[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="userDeptNum">
+			user_dept_num = #userDeptNum#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="userDeptNums">
+			user_dept_num in
+			<iterate property="userDeptNums" open="(" conjunction="," close=")" >#userDeptNums[]#</iterate>
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="costDeptNums">
+			cost_dept_num in
+			<iterate property="costDeptNums" open="(" conjunction="," close=")" >#costDeptNums[]#</iterate>
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="userDeptName">
+			user_dept_name like concat('%', #userDeptName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="userDeptNameEQ">
+			user_dept_name = #userDeptNameEQ#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="billMakerName">
+			bill_maker_name like concat('%', #billMakerName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outType">  <!-- 出库类别 -->
+			OUT_TYPE = #outType#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">   <!-- 制单日期（>=） -->
+			date_format(BILL_MAKE_TIME,'%Y-%m-%d') >= #beginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">    <!-- 制单日期止（<=） -->
+			date_format(BILL_MAKE_TIME,'%Y-%m-%d') <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">  <!-- 院区（账套） -->
+			DATA_GROUP_CODE = #dataGroupCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="isCheck">
+			is_check = #isCheck#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="printFlag">  <!-- 是否已打印 -->
+			print_flag = #printFlag#
+		</isNotEmpty>
+	  	<isNotEmpty prepend=" AND " property="matName">
+			out_bill_no in (select d.out_bill_no from si_out_detail d where d.mat_name like concat('%', #matName#, '%'))
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matNum">
+			out_bill_no in (select d.out_bill_no from si_out_detail d where d.mat_num like concat('%', #matNum#, '%'))
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				OUT_BILL_NO desc
+			</isEmpty>
+		</dynamic>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM .si_out WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			ID = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outBillNo">  <!-- 出库单号 -->
+			OUT_BILL_NO like concat('%', #outBillNo#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outBillNoEQ">  <!-- 出库单号（精确） -->
+			OUT_BILL_NO = #outBillNoEQ#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="originBillNoEQ">  <!-- 来源单号（精确） -->
+			ORIGIN_BILL_NO = #originBillNoEQ#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNo"> <!-- 仓库号 -->
+			WARE_HOUSE_NO = #wareHouseNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="wareHouseNos"> <!-- 仓库号 -->
+			WARE_HOUSE_NO in
+			<iterate property="wareHouseNos" open="(" conjunction="," close=")">
+				#wareHouseNos[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="userDeptNum">
+			user_dept_num = #userDeptNum#
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="userDeptNums">
+			user_dept_num in
+			<iterate property="userDeptNums" open="(" conjunction="," close=")" >#userDeptNums[]#</iterate>
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="costDeptNums">
+			cost_dept_num in
+			<iterate property="costDeptNums" open="(" conjunction="," close=")" >#costDeptNums[]#</iterate>
+		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="userDeptName">
+			user_dept_name like concat('%', #userDeptName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="userDeptNameEQ">
+			user_dept_name = #userDeptNameEQ#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="billMakerName">
+			bill_maker_name like concat('%', #billMakerName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outType">  <!-- 出库类别 -->
+			OUT_TYPE = #outType#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="beginTime">   <!-- 制单日期（>=） -->
+			date_format(BILL_MAKE_TIME,'%Y-%m-%d') >= #beginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="endTime">    <!-- 制单日期止（<=） -->
+			date_format(BILL_MAKE_TIME,'%Y-%m-%d') <![CDATA[<=]]> #endTime#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="dataGroupCode">  <!-- 院区（账套） -->
+			DATA_GROUP_CODE = #dataGroupCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="isCheck">
+			is_check = #isCheck#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="printFlag">  <!-- 是否已打印 -->
+			print_flag = #printFlag#
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert" parameterClass="com.baosight.wilp.si.ck.domain.SiOut">
+		INSERT INTO si_out (REC_CREATOR,  <!-- 记录创建责任者 -->
+		REC_CREATE_TIME,  <!-- 记录创建时间 -->
+		REC_REVISOR,  <!-- 记录修改责任者 -->
+		REC_REVISE_TIME,  <!-- 记录修改时间 -->
+		DATA_GROUP_CODE,  <!-- 院区（账套） -->
+		ARCHIVE_FLAG,  <!-- 归档标记 -->
+		ID,  <!-- 主键 -->
+		OUT_BILL_NO,  <!-- 出库单号 -->
+		OUT_TYPE,  <!-- 出库类别 -->
+		out_type_name,  <!-- 出库类型名称 -->
+		ORIGIN_BILL_NO,  <!-- 来源单据号 -->
+		ORIGIN_BILL_TYPE,  <!-- 来源单据类型 -->
+		WARE_HOUSE_NO,  <!-- 仓库号 -->
+		ware_house_name,  <!-- 仓库名称 -->
+		total_num,  <!-- 总入库数量 -->
+		total_amount,  <!-- 总入库金额 -->
+		STORAGE_NO,  <!-- 库位号 -->
+		STACK_NO,  <!-- 货位号 -->
+		BILL_MAKE_TIME,  <!-- 制单日期 -->
+		BILL_MAKER,  <!-- 制单人员 -->
+		bill_maker_name,  <!-- 制单人名字 -->
+		BILL_CHECK_TIME,  <!-- 审核日期 -->
+		BILL_CHECKER,  <!-- 审核人员 -->
+		bill_checker_name,  <!-- 审核人名字 -->
+		USER_WORKER_NO,  <!-- 领用人 -->
+		user_worker_name,  <!-- 领用人名称 -->
+		cost_dept_num,  <!-- 成本科室 -->
+		cost_dept_name,  <!-- 成本科室 -->
+		USER_DEPT_NUM,  <!-- 领用科室 -->
+		user_dept_name,  <!-- 领用科室名称 -->
+		is_check,  <!-- 是否已经审核(0/否,1/是) -->
+		remark <!-- 备注/红冲原因 -->
+		)
+		VALUES (#recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#, #archiveFlag#, #id#, #outBillNo#, #outType#, #outTypeName#, #originBillNo#, #originBillType#, #wareHouseNo#, #wareHouseName#, #totalNum#, #totalAmount#, #storageNo#, #stackNo#, #billMakeTime#, #billMaker#, #billMakerName#, #billCheckTime#, #billChecker#, #billCheckerName#, #userWorkerNo#, #userWorkerName#,#costDeptNum#, #costDeptName#, #userDeptNum#, #userDeptName#, #isCheck#, #remark#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM si_out WHERE ID = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE si_out
+		SET
+		REC_CREATOR	= #recCreator#,   <!-- 记录创建责任者 -->
+		REC_CREATE_TIME	= #recCreateTime#,   <!-- 记录创建时间 -->
+		REC_REVISOR	= #recRevisor#,   <!-- 记录修改责任者 -->
+		REC_REVISE_TIME	= #recReviseTime#,   <!-- 记录修改时间 -->
+		DATA_GROUP_CODE	= #dataGroupCode#,   <!-- 院区（账套） -->
+		ARCHIVE_FLAG	= #archiveFlag#,   <!-- 归档标记 -->
+		OUT_BILL_NO	= #outBillNo#,   <!-- 出库单号 -->
+		OUT_TYPE	= #outType#,   <!-- 出库类别 -->
+		out_type_name	= #outTypeName#,   <!-- 出库类型名称 -->
+		ORIGIN_BILL_NO	= #originBillNo#,   <!-- 来源单据号 -->
+		ORIGIN_BILL_TYPE	= #originBillType#,   <!-- 来源单据类型 -->
+		WARE_HOUSE_NO	= #wareHouseNo#,   <!-- 仓库号 -->
+		ware_house_name	= #wareHouseName#,   <!-- 仓库名称 -->
+		STORAGE_NO	= #storageNo#,   <!-- 库位号 -->
+		STACK_NO	= #stackNo#,   <!-- 货位号 -->
+		BILL_MAKE_TIME	= #billMakeTime#,   <!-- 制单日期 -->
+		BILL_MAKER	= #billMaker#,   <!-- 制单人员 -->
+		bill_maker_name	= #billMakerName#,   <!-- 制单人名字 -->
+		BILL_CHECK_TIME	= #billCheckTime#,   <!-- 审核日期 -->
+		BILL_CHECKER	= #billChecker#,   <!-- 审核人员 -->
+		bill_checker_name	= #billCheckerName#,   <!-- 审核人名字 -->
+		USER_WORKER_NO	= #userWorkerNo#,   <!-- 领用人 -->
+		user_worker_name	= #userWorkerName#,   <!-- 领用人名称 -->
+		USER_DEPT_NUM	= #userDeptNum#,   <!-- 领用科室 -->
+		user_dept_name	= #userDeptName#,   <!-- 领用科室名称 -->
+		cost_dept_num = #costDeptNum#,  <!-- 成本科室 -->
+		cost_dept_name = #costDeptName#,  <!-- 成本科室 -->
+		is_check	= #isCheck#,  <!-- 是否已经审核(0/否,1/是) -->
+		remark = #remark#  <!-- 备注/红冲原因 -->
+		WHERE ID = #id#
+	</update>
+
+	<update id="updatePrintFlag" parameterClass="java.util.List">
+		update si_out set print_flag = 1 where OUT_BILL_NO in
+		<iterate open="(" conjunction="," close=")">
+			#list[]#
+		</iterate>
+	</update>
+
+	<update id="outSign" parameterClass="java.util.Map">
+		update si_out set
+		signature = #signature#,
+		is_check = 1,
+		BILL_CHECK_TIME	= #billCheckTime#,   <!-- 审核日期 -->
+		BILL_CHECKER	= #billChecker#,   <!-- 审核人员 -->
+		bill_checker_name	= #billCheckerName#   <!-- 审核人名字 -->
+		where OUT_BILL_NO in
+		<iterate property="list" open="(" conjunction="," close=")">
+			#list[]#
+		</iterate>
+	</update>
+
+	<update id="outStockSign" parameterClass="java.util.Map">
+		update si_out set stock_signature = #signature#, is_check = 2 where OUT_BILL_NO in
+		<iterate property="list" open="(" conjunction="," close=")">
+			#list[]#
+		</iterate>
+	</update>
+
+	<update id="overOutStockSign" parameterClass="java.util.Map">
+		update si_out set
+			over_signature = #signature#,
+			is_check = 3,
+		    over_time = #overTime#,
+		    over_man = #overMan#
+		where OUT_BILL_NO in
+		<iterate property="list" open="(" conjunction="," close=")">
+			#list[]#
+		</iterate>
+	</update>
+
+	<update id="updateTotalAmount" parameterClass="string">
+		update si_out set
+						  total_num = (select sum(out_num) from si_out_detail d where d.OUT_BILL_NO = si_out.OUT_BILL_NO),
+						  total_amount = (select sum(out_amount) from si_out_detail d where d.OUT_BILL_NO = si_out.OUT_BILL_NO)
+		where OUT_BILL_NO = #outBillNo#
+	</update>
+
+
+</sqlMap>

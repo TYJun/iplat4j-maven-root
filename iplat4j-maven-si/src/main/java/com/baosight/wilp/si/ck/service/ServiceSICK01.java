@@ -10,7 +10,6 @@ import com.baosight.wilp.si.common.WareHouseDataSplitUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 /**

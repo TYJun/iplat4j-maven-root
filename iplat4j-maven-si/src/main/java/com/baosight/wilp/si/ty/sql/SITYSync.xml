@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="SITYSync">
+
+	<!-- 同步物资出库次数到物资档案 -->
+	<update id="syncMat" parameterClass="string">
+		update $projectSchema$.ac_material ma
+			left join (select d.mat_num,d.mat_name,count(*) outFrequency
+					   from si_out_detail d where d.mat_type_num like '30%' group by d.mat_num
+			) t on ma.mat_code = t.mat_num
+		set ma.out_count = t.outFrequency where ma.status = '1' and ma.mat_type_code = '2'
+	</update>
+
+</sqlMap>
