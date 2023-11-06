@@ -11,9 +11,12 @@
 		<div class="row">
 			<EF:EFInput ename="manNo" cname="工号" />
 			<EF:EFInput ename="manName" cname="姓名" />
+			<EF:EFInput ename="roomName" cname="房间号" />
+			<EF:EFInput ename="School" cname="学校" />
+			<EF:EFInput ename="Major" cname="专业" />
 		</div>
 		<div class="row">
-			<EF:EFInput ename="deptName" cname="科室部门" />
+<%--			<EF:EFInput ename="deptName" cname="科室部门" />--%>
 			<EF:EFSelect ename="employmentNature" cname="员工类型" >
 				<EF:EFOption label="请选择员工类型" value=""/>
 				<EF:EFOption label="本院职工" value="本院职工"/>

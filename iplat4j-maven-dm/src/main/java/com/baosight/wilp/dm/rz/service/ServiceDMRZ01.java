@@ -128,7 +128,7 @@ public class ServiceDMRZ01 extends ServiceBase{
 		/*
 		 * 1、将要查询的参数组成数组并调用工具类转换参数
 		 */
-		String[] param = {"manNo", "manName","sex","deptName", "employmentNature", "statusCode","archiveFlag"};
+		String[] param = {"manNo", "manName","sex","deptName", "employmentNature", "statusCode","archiveFlag","roomName","School","Major"};
 		List<String> plist = Arrays.asList(param);
 		// 调用工具类转换参数
 		Map<String, Object> map = CommonUtils.buildParamter(inInfo, "result", plist);

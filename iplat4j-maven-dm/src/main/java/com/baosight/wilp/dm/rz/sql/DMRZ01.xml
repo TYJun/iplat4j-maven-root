@@ -2,37 +2,37 @@
 <!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
 		Generate time : 2022-02-09 19:41:24
    		Version :  6.0.731.201809200158
-		tableName :.dorms_man 
-		 id  VARCHAR   NOT NULL   primarykey, 
-		 man_no  VARCHAR, 
-		 man_name  VARCHAR, 
-		 status_code  CHAR, 
-		 sex  VARCHAR, 
-		 age  INTEGER, 
-		 phone  VARCHAR, 
-		 identity_card  VARCHAR, 
-		 education_background  VARCHAR, 
-		 academic_year  VARCHAR, 
-		 marital_status  VARCHAR, 
-		 dept_num  VARCHAR, 
-		 dept_name  VARCHAR, 
-		 employment_nature  VARCHAR, 
-		 cash_pledge  VARCHAR, 
-		 is_network  VARCHAR, 
-		 is_stay  VARCHAR, 
-		 permanent_residence  VARCHAR, 
-		 note  VARCHAR, 
-		 hiredate  VARCHAR, 
-		 estimated_in_date  VARCHAR, 
+		tableName :.dorms_man
+		 id  VARCHAR   NOT NULL   primarykey,
+		 man_no  VARCHAR,
+		 man_name  VARCHAR,
+		 status_code  CHAR,
+		 sex  VARCHAR,
+		 age  INTEGER,
+		 phone  VARCHAR,
+		 identity_card  VARCHAR,
+		 education_background  VARCHAR,
+		 academic_year  VARCHAR,
+		 marital_status  VARCHAR,
+		 dept_num  VARCHAR,
+		 dept_name  VARCHAR,
+		 employment_nature  VARCHAR,
+		 cash_pledge  VARCHAR,
+		 is_network  VARCHAR,
+		 is_stay  VARCHAR,
+		 permanent_residence  VARCHAR,
+		 note  VARCHAR,
+		 hiredate  VARCHAR,
+		 estimated_in_date  VARCHAR,
 		 estimated_out_date  VARCHAR,
 		 eval_status  VARCHAR,
 		 eval_content  VARCHAR,
 		 eval_time  VARCHAR,
-		 rec_creator  VARCHAR, 
-		 rec_create_name  VARCHAR, 
-		 rec_create_time  VARCHAR, 
-		 rec_revisor  VARCHAR, 
-		 rec_revise_name  VARCHAR, 
+		 rec_creator  VARCHAR,
+		 rec_create_name  VARCHAR,
+		 rec_create_time  VARCHAR,
+		 rec_revisor  VARCHAR,
+		 rec_revise_name  VARCHAR,
 		 rec_revise_time  VARCHAR
 	-->
 <sqlMap namespace="DMRZ01">
@@ -167,6 +167,14 @@
 		<isNotEmpty prepend=" AND " property="roomName">
 			dr.room_name like concat('%', #roomName#,'%')
 		</isNotEmpty>
+
+		<isNotEmpty prepend=" AND " property="School">
+			dm.school like concat('%', #School#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="Major">
+			dm.major like concat('%', #Major#,'%')
+		</isNotEmpty>
+
 		<dynamic prepend="ORDER BY">
          <isNotEmpty property="orderBy">
     		  $orderBy$
@@ -175,7 +183,7 @@
 			dm.status_code, dm.archive_flag asc
 		</isEmpty>
   		</dynamic>
-			
+
 	</select>
 
 	<select id="queryRZInfoListCount" resultClass="int">
@@ -324,8 +332,8 @@
 		LEFT JOIN dorms_room dr on dr.id = drm.room_id
 		WHERE dm.id = #manId#
 	</select>
-	
-	<!--  
+
+	<!--
 		<isNotEmpty prepend=" AND " property="id">
 			id = #id#
 		</isNotEmpty>
