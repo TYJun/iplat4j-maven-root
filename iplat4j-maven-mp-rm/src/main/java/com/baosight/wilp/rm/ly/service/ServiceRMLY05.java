@@ -22,7 +22,7 @@ import java.util.Map;
  * @ClassName: ServiceRMLY05
  * @Package com.baosight.wilp.rm.ly.service
  * @date: 2023年02月02日 17:19
- * <p>
+ *
  * 1.页面加载
  * 2.页面查询
  */
@@ -33,36 +33,34 @@ public class ServiceRMLY05 extends ServiceBase {
 
     /**
      * 页面加载
-     *
+     * @Title: initLoad
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: initLoad
      **/
     @Override
     public EiInfo initLoad(EiInfo inInfo) {
         Map<String, Object> deptMap = BaseDockingUtils.getDeptByworkNo(UserSession.getLoginName());
-        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptNum", deptMap.get("deptNum"));
-        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptName", deptMap.get("deptName"));
+        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptNum",deptMap.get("deptNum"));
+        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptName",deptMap.get("deptName"));
         inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "recCreatorName", UserSession.getLoginCName());
         RmUtils.initQueryTime(inInfo, "beginTime", "endTime");
         inInfo.addBlock(RmConstant.RESULT_BLOCK).set(EiConstant.limitStr, 20);
         //新增/编辑区域
-        inInfo.setCell("detail_form", 0, "deptNum", deptMap.get("deptNum"));
-        inInfo.setCell("detail_form", 0, "deptName", deptMap.get("deptName"));
+        inInfo.setCell("detail_form", 0, "deptNum",deptMap.get("deptNum"));
+        inInfo.setCell("detail_form", 0, "deptName",deptMap.get("deptName"));
         inInfo.setCell("detail_form", 0, "recCreator", UserSession.getLoginName());
         inInfo.setCell("detail_form", 0, "recCreatorName", UserSession.getLoginCName());
         inInfo.set(RmConstant.OPERATE_NAME, RmConstant.OPERATE_TYPE_ADD);
-        return inInfo;
+       return inInfo;
     }
 
     /**
      * 页面查询
-     *
+     * @Title: query
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: query
      **/
     @Override
     public EiInfo query(EiInfo inInfo) {
@@ -71,11 +69,10 @@ public class ServiceRMLY05 extends ServiceBase {
 
     /**
      * 查询领用申请明细
-     *
+     * @Title: queryDetail
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: queryDetail
      **/
     public EiInfo queryDetail(EiInfo inInfo) {
         String claimId = inInfo.getCellStr("detail_form", 0, "id");

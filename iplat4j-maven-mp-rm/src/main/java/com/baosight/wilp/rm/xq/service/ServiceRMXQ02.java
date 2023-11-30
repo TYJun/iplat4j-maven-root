@@ -17,7 +17,7 @@ import java.util.Map;
  * @ClassName: ServiceRMXQ02
  * @Package com.baosight.wilp.rm.xq.service
  * @date: 2022年09月09日 17:13
- * <p>
+ *
  * 1.页面加载
  * 2.页面数据查询
  */
@@ -25,30 +25,30 @@ public class ServiceRMXQ02 extends ServiceBase {
 
     /**
      * 页面加载
-     *
+     * @Title: initLoad
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: initLoad
      **/
     @Override
     public EiInfo initLoad(EiInfo inInfo) {
         //添加科室查询条件
         Map<String, Object> deptMap = BaseDockingUtils.getDeptByworkNo(UserSession.getLoginName());
-        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptNum", deptMap.get("deptNum"));
-        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptName", deptMap.get("deptName"));
-        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "recCreatorName", UserSession.getLoginCName());
+        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "manageDeptNum",deptMap.get("deptNum"));
+        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "manageDeptName",deptMap.get("deptName"));
+        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "recCreatorName",UserSession.getLoginCName());
         inInfo.addBlock(RmConstant.RESULT_BLOCK).set(EiConstant.limitStr, 20);
+        inInfo.set("workNo", UserSession.getLoginName());
+        inInfo.set("name", UserSession.getLoginCName());
         return query(inInfo);
     }
 
     /**
      * 页面数据查询(月度需求计划)
-     *
+     * @Title: query
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: query
      **/
     @Override
     public EiInfo query(EiInfo inInfo) {

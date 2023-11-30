@@ -3,9 +3,9 @@
 <!-- 菜品数量 -->
 <sqlMap namespace="SSBMCpsl01">
 
-	<select id="query" parameterClass="java.util.HashMap" 
+	<select id="query" parameterClass="java.util.HashMap"
 			resultClass="com.baosight.wilp.ss.bm.domain.SSBMCpsl01">
-		SELECT 
+		SELECT
         a.id,
         c.menu_name as menuName,
         c.menu_price as menuPrice,
@@ -57,32 +57,32 @@
 	<select id="count" resultClass="int">
 		SELECT COUNT(*) FROM sc_menu_sche WHERE 1=1
 	</select>
-	
+
     <update id="update">
-        UPDATE sc_menu_sche 
-        SET 
-           num = #num#,   <!-- 份量 -->  
+        UPDATE sc_menu_sche
+        SET
+           num = #num#,   <!-- 份量 -->
            surplus = #surplus#,   <!-- 剩余数量 -->
            price_after_discount  = #priceAfterDiscount#   <!-- 折后价格 -->
-        WHERE   
+        WHERE
         id = #id#
     </update>
-    
+
     <update id="updateMenuSche" parameterClass="java.util.HashMap" >
-        UPDATE sc_menu_sche 
-        SET 
-           surplus = $surplus$   <!-- 剩余数量 -->  
-        WHERE   
+        UPDATE sc_menu_sche
+        SET
+           surplus = $surplus$   <!-- 剩余数量 -->
+        WHERE
         id = #id#
     </update>
-    
+
     <update id="updateMenuScheSurplus" parameterClass="java.util.HashMap" >
-        UPDATE sc_menu_sche 
-        SET 
-           surplus = surplus + #num#   <!-- 剩余数量 -->  
-        WHERE  canteen_num = #canteenNum# 
-           and meal_num = #mealNum# 
-           and meal_date = #mealDate# 
+        UPDATE sc_menu_sche
+        SET
+           surplus = surplus + #num#   <!-- 剩余数量 -->
+        WHERE  canteen_num = #canteenNum#
+           and meal_num = #mealNum#
+           and meal_date = #mealDate#
            and menu_num = #menuNum#
     </update>
 
@@ -96,5 +96,5 @@
             id = #id#
         </isNotEmpty>
     </select>
-  
+
 </sqlMap>

@@ -16,9 +16,10 @@ $(function () {
             pageable: {
                 pageSize: 20, // 每页显示的条数，优先级低于 DataSource 中的 pageSize
                 pageSizes: [10, 20, 50, 100, 500]
-            }
+            },
         }
-    })
+    }),
+
 
     IPLATUI.EFDatePicker = {
         "inqu_status-0-planTime": {
@@ -41,5 +42,10 @@ $(function () {
         resetParam(__eiInfo, false, true);
         resultGrid.dataSource.page(1);
     });
-
+    $("#EXPORTTYPE").on("click", function (e) {
+        exportFile();
+    });
+    function exportFile() {
+        window.location.href = IPLATUI.CONTEXT_PATH+"/exp/采购模块申请与审批操作说明——需求计划2023.11.01.docx"
+    }
 });

@@ -18,7 +18,7 @@ $(function() {
 			backFill: function (e) {
 				console.log("33");
 				$("#machineTypeId").val(e.node.id);
-				resultGrid.dataSource.page(1);
+				// resultGrid.dataSource.page(1);
 			},
 		}
 	}
@@ -287,8 +287,7 @@ $(function() {
 		var regularinspcycle = IPLAT.EFInput.value($("#regularinspcycle"));
 
 			//参数校验
-	   if(!validate(machineTypeId,machineName,chargeUserId,managerManId,managerDeptId,useDeaprtId,fixedPlace,thisCheckDate
-   			,thisFinishDate,nextCheckDate,thisExpiredDate,thisChexpiredDate,nextExpiredDate)){
+	   if(!validate(machineName,chargeUserId,managerManId,managerDeptId,useDeaprtId,fixedPlace)){
    			 return;
    		}
 			 //参数校验时间
@@ -383,12 +382,11 @@ $(function() {
 	});
 
 		//参数校验
-		function validate(machineTypeId,machineName,chargeUserId,managerManId,managerDeptId,useDeaprtId,fixedPlace,thisCheckDate
-		 ,thisFinishDate,nextCheckDate,thisExpiredDate,thisChexpiredDate,nextExpiredDate){
-		 if(isEmpty(machineTypeId)){
-				 NotificationUtil("设备分类不能为空", "error");
-		  return false;
-		 }
+		function validate(machineName,chargeUserId,managerManId,managerDeptId,useDeaprtId,fixedPlace){
+		 // if(isEmpty(machineTypeId)){
+			// 	 NotificationUtil("设备分类不能为空", "error");
+		 //  return false;
+		 // }
 		 if(isEmpty(machineName)){
 		  NotificationUtil("设备名称不能为空", "error");
 		  return false;
@@ -413,31 +411,31 @@ $(function() {
 		   NotificationUtil("安装地点不能为空", "error");
 		   return false;
 		 }
-		 if(isEmpty(thisCheckDate)){
-				 NotificationUtil("本年检验日不能为空", "error");
-		  return false;
-		 }
-		 if(isEmpty(thisFinishDate)){
-				 NotificationUtil("本年完工日不能为空", "error");
-		  return false;
-		 }
-		 if(isEmpty(nextCheckDate)){
-		  NotificationUtil("下年检验日不能为空", "error");
-		  return false;
-		 }
-		 if(isEmpty(thisExpiredDate)){
-		  NotificationUtil("本次定检日期不能为空", "error");
-		  return false;
-		 }
-		 if(isEmpty(thisChexpiredDate)){
-		  NotificationUtil("本次定检完工日不能为空", "error");
-		  return false;
-		 }
-		 if(isEmpty(nextExpiredDate)){
-
-		  NotificationUtil("下年定检日不能为空", "error");
-		  return false;
-		 }
+		 // if(isEmpty(thisCheckDate)){
+			// 	 NotificationUtil("本年检验日不能为空", "error");
+		 //  return false;
+		 // }
+		 // if(isEmpty(thisFinishDate)){
+			// 	 NotificationUtil("本年完工日不能为空", "error");
+		 //  return false;
+		 // }
+		 // if(isEmpty(nextCheckDate)){
+		 //  NotificationUtil("下年检验日不能为空", "error");
+		 //  return false;
+		 // }
+		 // if(isEmpty(thisExpiredDate)){
+		 //  NotificationUtil("本次定检日期不能为空", "error");
+		 //  return false;
+		 // }
+		 // if(isEmpty(thisChexpiredDate)){
+		 //  NotificationUtil("本次定检完工日不能为空", "error");
+		 //  return false;
+		 // }
+		 // if(isEmpty(nextExpiredDate)){
+		 //
+		 //  NotificationUtil("下年定检日不能为空", "error");
+		 //  return false;
+		 // }
 		 return true;
 		}
 

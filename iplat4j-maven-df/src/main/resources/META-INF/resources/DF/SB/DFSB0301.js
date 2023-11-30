@@ -48,10 +48,13 @@ $(function() {
 			success: function(e) {
 				var file = e.files[0];
 				var model = createModel(1);
+				// console.log(e.response);
+				// alert("111");
 				model["id"] = "";
 				model["relateId"] = "";
 				model["docId"] = e.response.docId;
 				model["filePath"] = e.response.docUrl;
+
 				model["fileName"] = file.name;
 				resultGrid.addRows(model);
 				fileChooseWindow.close();

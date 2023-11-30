@@ -13,9 +13,9 @@ import java.util.*;
 
 
 /**
- * 
+ *
  *移动端订单中转Service
- * 
+ *
  * @Title: AppWorkBaseInfoService.java
  * @ClassName: AppWorkBaseInfoService
  * @Package：com.baosight.wilp.ss.sc.service
@@ -33,27 +33,27 @@ import java.util.*;
 
 
     /**
-     * 
+     *
      * 查询用户信息
      *
-     * @Title: queryUser 
+     * @Title: queryUser
      * @param request
      * @param response
-     * @return 
-     * @return: ResultData 
+     * @return
+     * @return: ResultData
      * @author: liutao
      * @date: 2021年9月9日 下午3:18:25
      */
 	public ResultData queryUser(HttpServletRequest request, HttpServletResponse response){
 		ResultData resultData = new ResultData();
-		
+
 		// 工号
 		String userCode = request.getParameter("userCode");
 		String userId = request.getParameter("userId");
 		// 食堂编码
 		String canteenNum = request.getParameter("canteenNum");
 		String dataGroupCode = request.getParameter("dataGroupCode");
-		
+
 		HashMap<String,Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userCode",userCode);
 		paramMap.put("userId",userId);
@@ -237,27 +237,27 @@ import java.util.*;
 	}
 
 	/**
-	 * 
+	 *
 	 * 获取订单列表
 	 *
-	 * @Title: queryPaginationWorkBillInfo 
+	 * @Title: queryPaginationWorkBillInfo
 	 * @param request
 	 * @param response
-	 * @return 
-	 * @return: ResultData 
+	 * @return
+	 * @return: ResultData
 	 * @author: liutao
 	 * @date: 2021年9月9日 下午3:18:37
 	 */
 	public ResultData queryPaginationWorkBillInfo(HttpServletRequest request, HttpServletResponse response){
 		ResultData resultData = new ResultData();
-		
+
 		String userCode = request.getParameter("userCode");
 		String userId = request.getParameter("userId");
 		String deptNum = request.getParameter("deptNum");
 		String mealNum = request.getParameter("mealNum");
 		String needDate = request.getParameter("needDate");
 		String page = request.getParameter("page");
-		
+
 		HashMap<String,Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userCode",userCode);
 		paramMap.put("deptNum",deptNum);
@@ -341,22 +341,22 @@ import java.util.*;
 	}
 
 	/**
-	 * 
+	 *
 	 * 获取指定订单信息
 	 *
-	 * @Title: queryWorkBill 
+	 * @Title: queryWorkBill
 	 * @param request
 	 * @param response
-	 * @return 
-	 * @return: ResultData 
+	 * @return
+	 * @return: ResultData
 	 * @author: liutao
 	 * @date: 2021年9月9日 下午3:18:52
 	 */
 	public ResultData queryWorkBill(HttpServletRequest request, HttpServletResponse response){
 		ResultData resultData = new ResultData();
-		
+
 		String billNo = request.getParameter("billNo");
-		
+
 		HashMap<String,Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("billNo",billNo);
 		try {
@@ -425,22 +425,22 @@ import java.util.*;
 	}
 
 	/**
-	 * 
+	 *
 	 * 病患订餐根据单据创建人查询科室列表
 	 *
-	 * @Title: getMealBillDeptList 
+	 * @Title: getMealBillDeptList
 	 * @param request
 	 * @param response
-	 * @return 
-	 * @return: ResultData 
+	 * @return
+	 * @return: ResultData
 	 * @author: liutao
 	 * @date: 2021年9月9日 下午3:19:05
 	 */
 	public ResultData getMealBillDeptList(HttpServletRequest request, HttpServletResponse response){
 		ResultData resultData = new ResultData();
-		
+
 		String userCode = request.getParameter("userCode");
-		
+
 		HashMap<String,Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userCode",userCode);
 		try {
@@ -456,7 +456,7 @@ import java.util.*;
 				resultData.setRespCode("200");
 				resultData.setRespMsg("操作成功");
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultData.setRespCode("201");
@@ -465,23 +465,23 @@ import java.util.*;
 		}
 		return resultData;
 	}
-	
+
 
 	/**
-	 * 
+	 *
 	 * 查询层号
 	 *
-	 * @Title: queryFloor 
+	 * @Title: queryFloor
 	 * @param request
 	 * @param response
-	 * @return 
-	 * @return: ResultData 
+	 * @return
+	 * @return: ResultData
 	 * @author: liutao
 	 * @date: 2021年9月9日 下午3:19:22
 	 */
 	public ResultData queryFloor(HttpServletRequest request, HttpServletResponse response){
 		ResultData resultData = new ResultData();
-		
+
 		String building = request.getParameter("building");
 		String dataGroupCode = request.getParameter("dataGroupCode");
 		String canteenNum = request.getParameter("canteenNum");
@@ -544,27 +544,27 @@ import java.util.*;
 		}
 		return resultData;
 	}
-	
+
 
 	/**
-	 * 
+	 *
 	 * 查询房间
 	 *
-	 * @Title: queryRoom 
+	 * @Title: queryRoom
 	 * @param request
 	 * @param response
-	 * @return 
-	 * @return: ResultData 
+	 * @return
+	 * @return: ResultData
 	 * @author: liutao
 	 * @date: 2021年9月9日 下午3:19:41
 	 */
 	public ResultData queryRoom(HttpServletRequest request, HttpServletResponse response){
 		ResultData resultData = new ResultData();
-		
+
 //		String deptNum = request.getParameter("deptNum");
 		String building = request.getParameter("building");
 		String floor = request.getParameter("floor");
-		
+
 		HashMap<String,Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("building",building);
 		paramMap.put("floor",floor);
@@ -637,14 +637,14 @@ import java.util.*;
 
 
 	/**
-	 * 
+	 *
 	 * 查询科室
 	 *
-	 * @Title: queryDept 
+	 * @Title: queryDept
 	 * @param request
 	 * @param response
-	 * @return 
-	 * @return: ResultData 
+	 * @return
+	 * @return: ResultData
 	 * @author: liutao
 	 * @date: 2021年9月9日 下午3:19:59
 	 */
@@ -683,17 +683,17 @@ import java.util.*;
 		}
 		return resultData;
 	}
-	
+
 
 	/**
-	 * 
+	 *
 	 *  查询食堂支付类型
 	 *
-	 * @Title: queryMealPayType 
+	 * @Title: queryMealPayType
 	 * @param request
 	 * @param response
-	 * @return 
-	 * @return: ResultData 
+	 * @return
+	 * @return: ResultData
 	 * @author: liutao
 	 * @date: 2021年9月9日 下午3:20:12
 	 */
@@ -727,17 +727,17 @@ import java.util.*;
 		}
 		return resultData;
 	}
-	
+
 
 	/**
-	 * 
+	 *
 	 * 查询菜品详情
 	 *
-	 * @Title: getMenuDetail 
+	 * @Title: getMenuDetail
 	 * @param request
 	 * @param response
-	 * @return 
-	 * @return: ResultData 
+	 * @return
+	 * @return: ResultData
 	 * @author: liutao
 	 * @date: 2021年9月9日 下午3:20:27
 	 */
@@ -767,17 +767,17 @@ import java.util.*;
 		}
 		return resultData;
 	}
-	
+
 
 	/**
-	 * 
+	 *
 	 * 查询食堂菜品信息 , 无分页, 图片格式为地址
 	 *
-	 * @Title: queryMenuInfo 
+	 * @Title: queryMenuInfo
 	 * @param request
 	 * @param response
-	 * @return 
-	 * @return: ResultData 
+	 * @return
+	 * @return: ResultData
 	 * @author: liutao
 	 * @date: 2021年9月9日 下午3:24:40
 	 */
@@ -793,7 +793,7 @@ import java.util.*;
 		String canteenNum = request.getParameter("canteenNum");
 		//入口类型
 		String orally = request.getParameter("orally");
-		
+
 		HashMap<String,Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("mealType",mealType);
 		paramMap.put("dayFlag",dayFlag);
@@ -809,7 +809,7 @@ import java.util.*;
 				resultData.setRespCode("201");
 				resultData.setSuccess(false);
 			}else {
-				
+
 				resultData.setRespCode("200");
 				resultData.setRespMsg("操作成功");
 			}
@@ -822,17 +822,17 @@ import java.util.*;
 		System.out.println(resultData);
 		return resultData;
 	}
-	
+
 
 	/**
-	 * 
+	 *
 	 * 加载菜品数据
 	 *
-	 * @Title: queryPaginationMenu 
+	 * @Title: queryPaginationMenu
 	 * @param request
 	 * @param response
-	 * @return 
-	 * @return: ResultData 
+	 * @return
+	 * @return: ResultData
 	 * @author: liutao
 	 * @date: 2021年9月9日 下午3:24:54
 	 */
@@ -844,7 +844,7 @@ import java.util.*;
 		String mealType=request.getParameter("mealType");
 		String page=request.getParameter("page");
 		String deviceType=request.getParameter("deviceType");
-		
+
 		HashMap<String,Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("dayFlag",dayFlag);
 		paramMap.put("mealNum",mealNum);
@@ -875,17 +875,17 @@ import java.util.*;
 		System.out.println(resultData);
 		return resultData;
 	}
-	
+
 
 	/**
-	 * 
+	 *
 	 * 查询菜品评价
 	 *
-	 * @Title: getEvalInfo 
+	 * @Title: getEvalInfo
 	 * @param request
 	 * @param response
-	 * @return 
-	 * @return: ResultData 
+	 * @return
+	 * @return: ResultData
 	 * @author: liutao
 	 * @date: 2021年9月9日 下午3:25:06
 	 */
@@ -919,17 +919,17 @@ import java.util.*;
 		}
 		return resultData;
 	}
-	
-	
+
+
 	/**
-	 * 
+	 *
 	 * 获取可订餐日期
 	 *
-	 * @Title: getDateList 
+	 * @Title: getDateList
 	 * @param request
 	 * @param response
-	 * @return 
-	 * @return: ResultData 
+	 * @return
+	 * @return: ResultData
 	 * @author: liutao
 	 * @date: 2021年9月9日 下午3:25:19
 	 */
@@ -962,23 +962,23 @@ import java.util.*;
 		}
 		return resultData;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * 获取餐次
 	 *
-	 * @Title: getMealType 
+	 * @Title: getMealType
 	 * @param request
 	 * @param response
-	 * @return 
-	 * @return: ResultData 
+	 * @return
+	 * @return: ResultData
 	 * @author: liutao
 	 * @date: 2021年9月9日 下午3:25:40
 	 */
 	public ResultData getMealType(HttpServletRequest request, HttpServletResponse response){
 		ResultData resultData = new ResultData();
 		String canteenNum=request.getParameter("canteenNum");
-		
+
 		HashMap<String,Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("canteenNum",canteenNum);
 		try {
@@ -1002,17 +1002,17 @@ import java.util.*;
 		}
 		return resultData;
 	}
-	
+
 
 	/**
-	 * 
+	 *
 	 * 获取食堂列表
 	 *
-	 * @Title: getCanteen 
+	 * @Title: getCanteen
 	 * @param request
 	 * @param response
-	 * @return 
-	 * @return: ResultData 
+	 * @return
+	 * @return: ResultData
 	 * @author: liutao
 	 * @date: 2021年9月9日 下午3:26:02
 	 */
@@ -1045,17 +1045,17 @@ import java.util.*;
 		}
         return resultData;
     }
-    
+
 
     /**
-     * 
+     *
      * 获取食堂列表
      *
-     * @Title: getCanteenList 
+     * @Title: getCanteenList
      * @param request
      * @param response
-     * @return 
-     * @return: ResultData 
+     * @return
+     * @return: ResultData
      * @author: liutao
      * @date: 2021年9月9日 下午3:26:55
      */

@@ -3,38 +3,37 @@
 
 <sqlMap namespace="RMTY01">
 
-    <select id="selectBusinessDept" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
-        SELECT
-        d1.dept_num as "deptNum",  <!-- 业务科室编码 -->
-        d1.dept_name as "deptName",  <!-- 业务科室名称 -->
-        d2.dept_num as "parentDeptNum",  <!-- 业务科室对应的管理科室编码 -->
-        d2.dept_name as "parentDeptName"  <!-- 业务科室对应的管理科室 -->
-        FROM $frameSchema$.ac_department d1
-        left join $frameSchema$.ac_department d2 on d1.parent_id = d2.id
-        WHERE d1.dict_type = '业务区划'
-        <isNotEmpty prepend=" and " property="deptName">
-            d1.dept_name like concat ('%', #deptName#, '%')
-        </isNotEmpty>
-        <dynamic prepend="ORDER BY">
-            <isEmpty property="orderBy">
-                d1.dept_num asc
-            </isEmpty>
-            <isNotEmpty property="orderBy">
-                $orderBy$
-            </isNotEmpty>
-        </dynamic>
-    </select>
+	<select id="selectBusinessDept" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		d1.dept_num	as "deptNum",  <!-- 业务科室编码 -->
+		d1.dept_name	as "deptName",  <!-- 业务科室名称 -->
+		d2.dept_num  as "parentDeptNum",  <!-- 业务科室对应的管理科室编码 -->
+		d2.dept_name as  "parentDeptName"  <!-- 业务科室对应的管理科室 -->
+		FROM $frameSchema$.ac_department d1
+		left join $frameSchema$.ac_department d2 on d1.parent_id = d2.id
+		WHERE d1.dict_type = '业务区划' and d1.status = '1'
+		<isNotEmpty prepend=" and " property="deptName">
+			d1.dept_name like concat ('%', #deptName#, '%')
+		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isEmpty property="orderBy">
+				d1.dept_num asc
+			</isEmpty>
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+		</dynamic>
+	</select>
 
-    <select id="selectUserBusinessDept" parameterClass="java.util.Map" resultClass="java.util.HashMap">
-        select dept_num  deptNum,
-               dept_name deptName
-        from $frameSchema$.ac_department ad
-        where ad.parent_id = (select ap.dept_id from $frameSchema$.ac_personnel ap where ap.work_no = #workNo#)
-          and ad.dict_type = '业务区划'
-        union
-        select distinct dept_code deptNum, dept_name deptName
-        from $frameSchema$.wz_user
-        where work_no = #workNo#
-    </select>
+	<select id="selectUserBusinessDept" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		select
+			dept_num deptNum,
+			dept_name deptName
+		from $frameSchema$.ac_department ad
+		where ad.parent_id = (select ap.dept_id from $frameSchema$.ac_personnel ap where ap.work_no = #workNo#)
+		  and ad.dict_type = '业务区划' and ad.status = '1'
+		union
+		select distinct dept_code deptNum, dept_name deptName from $frameSchema$.wz_user where work_no = #workNo#
+	</select>
 
 </sqlMap>

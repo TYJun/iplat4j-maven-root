@@ -12,7 +12,7 @@ import java.util.List;
  * @ClassName: RmRequirePlanService
  * @Package com.baosight.wilp.rm.lj.service
  * @date: 2022年08月31日 18:15
- * <p>
+ *
  * 1.获取需求计划集合
  * 2.根据需求计划ID获取需求计划明细集合
  * 3.根据需求计划ID获取指定需求计划
@@ -29,111 +29,136 @@ public interface RmRequirePlanService {
 
     /**
      * 获取需求计划集合
-     *
+     * @Title: queryRequirePlanList
      * @param require require : 需求计划对象
      * @return java.util.List<com.baosight.wilp.rm.lj.domain.RmRequirePlan>
      * @throws
-     * @Title: queryRequirePlanList
      **/
-    List<RmRequirePlan> queryRequirePlanList(RmRequirePlan require);
+    List<RmRequirePlan>  queryRequirePlanList(RmRequirePlan require);
 
     /**
      * 根据需求计划ID获取需求计划明细集合
-     *
+     * @Title: queryRequirePlanDetailList
      * @param requirePlanId requirePlanId : 需求计划ID
      * @return java.util.List<com.baosight.wilp.rm.lj.domain.RmRequirePlan>
      * @throws
-     * @Title: queryRequirePlanDetailList
      **/
-    List<RmRequirePlanDetail> queryRequirePlanDetailList(String requirePlanId);
+    List<RmRequirePlanDetail>  queryRequirePlanDetailList(String requirePlanId);
 
     /**
      * 获取指定需求计划
-     *
+     * @Title: queryRequirePlan
      * @param id id : 需求计划ID
      * @return com.baosight.wilp.rm.lj.domain.RmRequirePlan
      * @throws
-     * @Title: queryRequirePlan
      **/
     RmRequirePlan queryRequirePlan(String id);
 
     /**
      * 根据需求计划单号获取指定需求计划
-     *
+     * @Title: queryRequirePlanByPlanNo
      * @param planNo planNo
      * @return com.baosight.wilp.rm.lj.domain.RmRequirePlan
      * @throws
-     * @Title: queryRequirePlanByPlanNo
      **/
     RmRequirePlan queryRequirePlanByPlanNo(String planNo);
 
     /**
      * 新增需求计划
-     *
+     * @Title: insertRequirePlan
      * @param require require : 需求计划对象
      * @return void
      * @throws
-     * @Title: insertRequirePlan
      **/
     void insertRequirePlan(RmRequirePlan require);
 
     /**
      * 编辑需求计划
-     *
+     * @Title: updateRequirePlan
      * @param require require : 需求计划对象
      * @return void
      * @throws
-     * @Title: updateRequirePlan
      **/
     void updateRequirePlan(RmRequirePlan require);
 
     /**
      * 批量新增需求计划明细
-     *
+     * @Title: insertRequirePlanDetail
      * @param detailList detailList : 需求计划明细集合
      * @return void
      * @throws
-     * @Title: insertRequirePlanDetail
      **/
     void insertRequirePlanDetail(List<RmRequirePlanDetail> detailList);
 
     /**
      * 根据ID删除需求计划
-     *
+     * @Title: deleteRequirePlan
      * @param id id : 需求计划ID
      * @return void
      * @throws
-     * @Title: deleteRequirePlan
      **/
     void deleteRequirePlan(String id);
 
     /**
      * 根据需求计划ID删除需求计划明细
-     *
+     * @Title: deleteRequirePlanDetail
      * @param requirePlanId requirePlanId : 需求计划ID
      * @return void
      * @throws
-     * @Title: deleteRequirePlanDetail
      **/
     void deleteRequirePlanDetail(String requirePlanId);
 
     /**
      * 更新需求计划明细
-     *
+     * @Title: updateRequirePlanDetailStatus
      * @param detail detail
      * @return int
      * @throws
-     * @Title: updateRequirePlanDetail
      **/
-    int updateRequirePlanDetail(RmRequirePlanDetail detail);
+    int updateRequirePlanDetailStatus(RmRequirePlanDetail detail);
 
     /**
      * 判断指定需求计划的明细是否都已汇总
-     *
+     * @Title: hasAllCollect
      * @param planId planId
      * @return boolean
      * @throws
-     * @Title: hasAllCollect
      **/
     boolean hasAllCollect(String planId);
+
+    /**
+     * 更新需求计划状态(部分汇总或未汇总)
+     * @Title: updateRequirePlanUnFinish
+     * @param join join
+     * @return void
+     * @throws
+     **/
+    int updateRequirePlanUnFinish(String join);
+
+    /**
+     * 更新需求计划状态(部分汇总或已汇总)
+     * @Title: updateRequirePlanFinish
+     * @param join join
+     * @return int
+     * @throws
+     **/
+    int updateRequirePlanFinish(String join);
+
+    /**
+     * 需求计划明细分配
+     * @Title: insertRequirePlanAllot
+     * @param detailList detailList 需求计划明细集合
+     * @return void
+     * @throws
+     **/
+    void insertRequirePlanAllot(List<RmRequirePlanDetail> detailList);
+
+    /**
+     * 需求计划明细退回
+     * @Title: updateRequirePlanAllot
+     * @param backDetail backDetail 需求计划明细
+     * @return void
+     * @throws
+     **/
+    void updateRequirePlanAllot(RmRequirePlanDetail backDetail);
 }

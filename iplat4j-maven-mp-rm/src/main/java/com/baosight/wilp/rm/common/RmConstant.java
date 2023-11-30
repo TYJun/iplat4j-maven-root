@@ -116,6 +116,11 @@ public class RmConstant {
     public static final String CLAIM_STATUS_PART_OUT = "60";
 
     /**
+     * 领用单状态: 待仓库出库确认
+     **/
+    public static final String CLAIM_STATUS_STOCK_CONFRIM = "65";
+
+    /**
      * 领用单状态: 待签收
      **/
     public static final String CLAIM_STATUS_UN_SIGN = "70";

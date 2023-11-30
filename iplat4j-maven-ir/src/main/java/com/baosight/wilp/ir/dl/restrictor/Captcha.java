@@ -26,20 +26,20 @@ public class Captcha implements LoginRestrictor {
 
     public void canLogin(String userName, Object credential,PlatformWebAuthenticationDetails details)throws AuthenticationException {
         //
-        if (FrameworkInfo.isCaptchaEnabled() && !StringUtils.isNotEmpty(details.getAuthenticationType())) {
-            //sessionKAPTCHA_SESSION_KEY
-            String captchaExpected = details.getCaptchaExpected();
-            //p_captcha
-            String captchaOffered = details.getCaptcha();
-            if (captchaExpected != null && captchaOffered != null
-                    && captchaExpected.equals(captchaOffered)) {
-                return;
-            }
-            if(StringUtils.isEmpty(captchaOffered)){ // 添加验证码非空提示
-                throw new IllegalArgumentException("验证码不能为空!!!");
-            }
-            throw new IllegalArgumentException("验证码错误!!!");
-        }
+//        if (FrameworkInfo.isCaptchaEnabled() && !StringUtils.isNotEmpty(details.getAuthenticationType())) {
+//            //sessionKAPTCHA_SESSION_KEY
+//            String captchaExpected = details.getCaptchaExpected();
+//            //p_captcha
+//            String captchaOffered = details.getCaptcha();
+//            if (captchaExpected != null && captchaOffered != null
+//                    && captchaExpected.equals(captchaOffered)) {
+//                return;
+//            }
+//            if(StringUtils.isEmpty(captchaOffered)){ // 添加验证码非空提示
+//                throw new IllegalArgumentException("验证码不能为空!!!");
+//            }
+//            throw new IllegalArgumentException("验证码错误!!!");
+//        }
     }
 
     @Override

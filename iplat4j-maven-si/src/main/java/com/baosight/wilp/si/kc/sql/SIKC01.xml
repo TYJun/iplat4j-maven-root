@@ -362,52 +362,56 @@
 		<isNotEmpty prepend=" AND " property="dataGroupCode">
 			DATA_GROUP_CODE = #dataGroupCode#
 		</isNotEmpty>
-		ORDER BY MAT_NUM asc
+		ORDER BY mat_type_name,MAT_NUM asc
 	</select>
 
 	<!--查询库存总价和库存总量-->
 	<select id="countNumAndSum" parameterClass="java.util.HashMap" resultClass="com.baosight.wilp.si.kc.domain.SiStorge">
-		SELECT if(sum(TOTAL_NUM) is null,0,sum(TOTAL_NUM)) totalNum,
-		       if(sum(TOTAL_AMOUNT) is null,0,sum(TOTAL_AMOUNT)) totalAmount
-		FROM si_storge WHERE 1=1
+		SELECT if(sum(a.TOTAL_NUM) is null,0,sum(a.TOTAL_NUM)) totalNum,
+		       if(sum(a.TOTAL_AMOUNT) is null,0,sum(a.TOTAL_AMOUNT)) totalAmount
+		FROM si_storge a
+		WHERE 1=1
 		<isNotEmpty prepend=" AND " property="id">  <!-- 主键 -->
-			ID = #id#
+			a.ID = #id#
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="ids">  <!-- 主键 -->
-			ID in
+			a.ID in
 			<iterate property="ids" open="(" conjunction="," close=")">
 				#ids[]#
 			</iterate>
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="wareHouseNo"> <!-- 仓库号 -->
-			WARE_HOUSE_NO = #wareHouseNo#
+			a.WARE_HOUSE_NO = #wareHouseNo#
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matNum"> <!-- 物资编码 -->
-			MAT_NUM like concat('%', #matNum#, '%')
+			a.MAT_NUM like concat('%', #matNum#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matNumEQ"> <!-- 物资编码(精确) -->
-			MAT_NUM = #matNumEQ#
+			a.MAT_NUM = #matNumEQ#
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matName"> <!-- 物资名称 -->
-			MAT_NAME like concat('%', #matName#, '%')
+			a.MAT_NAME like concat('%', #matName#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matTypeNums"> <!-- 物资分类编码字符串 -->
-			find_in_set(MAT_TYPE_NUM, #matTypeNums#)
+			find_in_set(a.MAT_TYPE_NUM, #matTypeNums#)
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="matTypeNum"> <!-- 物资分类编码字符串 -->
+			find_in_set(a.mat_type_num,(SELECT mat_class_code FROM bona_frame_mzsrmyy.ac_material_class WHERE id = #matTypeNum#))
 		</isNotEmpty>
 		<isEqual prepend=" AND " property="isNot0" compareValue="N"> <!--  是否显示0库存 -->
-			TOTAL_NUM > 0
+			a.TOTAL_NUM > 0
 		</isEqual>
 		<isEqual prepend=" AND " property="earlyWarning" compareValue="Y"> <!--  显示设置了预警值的物资 -->
-			(MIN_NUM > 0 or MAX_NUM > 0)
+			(a.MIN_NUM > 0 or a.MAX_NUM > 0)
 		</isEqual>
 		<isEqual prepend=" AND " property="earlyWarning" compareValue="N"> <!--  显示没有设置预警值的物资 -->
-			(MIN_NUM = 0 and MAX_NUM = 0)
+			(a.MIN_NUM = 0 and a.MAX_NUM = 0)
 		</isEqual>
 		<isEqual prepend=" AND " property="warningStock" compareValue="Y"> <!--  是否是报警数据 -->
-			(MIN_NUM > TOTAL_NUM or MAX_NUM <![CDATA[<]]> TOTAL_NUM)
+			(a.MIN_NUM > a.TOTAL_NUM or a.MAX_NUM <![CDATA[<]]> a.TOTAL_NUM)
 		</isEqual>
 		<isNotEmpty prepend=" AND " property="dataGroupCode">
-			DATA_GROUP_CODE = #dataGroupCode#
+			a.DATA_GROUP_CODE = #dataGroupCode#
 		</isNotEmpty>
 	</select>
 </sqlMap>

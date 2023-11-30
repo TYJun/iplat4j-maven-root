@@ -25,7 +25,7 @@ import java.util.Map;
  * @ClassName: ServiceRMLY01
  * @Package com.baosight.wilp.rm.ly.service
  * @date: 2022年09月15日 14:58
- * <p>
+ *
  * 1.页面加载
  * 2.页面数据查询
  * 3.删除
@@ -41,21 +41,19 @@ public class ServiceRMLY01 extends ServiceBase {
 
     /**
      * 页面加载
-     *
+     * @Title: initLoad
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: initLoad
      **/
     @Override
     public EiInfo initLoad(EiInfo inInfo) {
         //添加科室查询条件
         Map<String, Object> deptMap = BaseDockingUtils.getDeptByworkNo(UserSession.getLoginName());
-        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptNum", deptMap.get("deptNum"));
-        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptName", deptMap.get("deptName"));
+        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptNum",deptMap.get("deptNum"));
+        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "deptName",deptMap.get("deptName"));
         inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "recCreatorName", UserSession.getLoginCName());
-        inInfo.set("workNo", UserSession.getLoginName());
-        inInfo.set("name", UserSession.getLoginCName());
+        inInfo.set("workNo", UserSession.getLoginName());inInfo.set("name", UserSession.getLoginCName());
         RmUtils.initQueryTime(inInfo, "beginTime", "endTime");
         inInfo.addBlock(RmConstant.RESULT_BLOCK).set(EiConstant.limitStr, 20);
         return query(inInfo);
@@ -63,11 +61,10 @@ public class ServiceRMLY01 extends ServiceBase {
 
     /**
      * 页面数据查询
-     *
+     * @Title: query
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: query
      **/
     @Override
     public EiInfo query(EiInfo inInfo) {
@@ -76,21 +73,20 @@ public class ServiceRMLY01 extends ServiceBase {
 
     /**
      * 删除
-     *
+     * @Title: delete
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: delete
      **/
     @Override
     public EiInfo delete(EiInfo inInfo) {
         String id = inInfo.getString("id");
         //数据校验
-        if (StringUtils.isBlank(id)) {
+        if(StringUtils.isBlank(id)) {
             return ValidatorUtils.errorInfo(inInfo, "参数不能为空");
         }
         RmClaim claim = claimService.queryClaimById(id);
-        if (claim == null || !RmConstant.CLAIM_STATUS_NEW.equals(claim.getStatusCode())) {
+        if(claim == null || !RmConstant.CLAIM_STATUS_NEW.equals(claim.getStatusCode())) {
             return ValidatorUtils.errorInfo(inInfo, "领用申请不存在或无法删除");
         }
         claimService.delete(id);
@@ -100,11 +96,10 @@ public class ServiceRMLY01 extends ServiceBase {
 
     /**
      * 提交
-     *
+     * @Title: submit
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: submit
      **/
     public EiInfo submit(EiInfo inInfo) {
         String id = inInfo.getString("id");
@@ -113,14 +108,14 @@ public class ServiceRMLY01 extends ServiceBase {
             return ValidatorUtils.errorInfo("参数不能为空");
         }
         RmClaim claim = claimService.queryClaimById(id);
-        if (claim == null || !(RmConstant.CLAIM_STATUS_NEW.equals(claim.getStatusCode())
+        if(claim == null ||!(RmConstant.CLAIM_STATUS_NEW.equals(claim.getStatusCode())
                 || RmConstant.CLAIM_STATUS_DEPT_REJECT.equals(claim.getStatusCode()))) {
             return ValidatorUtils.errorInfo(inInfo, "领用申请不存在或已提交");
         }
         //提交
         claimService.update(RmClaim.getStatusInstance(id, RmConstant.CLAIM_STATUS_UN_DEPT_APPROVE));
         //判断是否需要科室审批，否,自动审批
-        if (RmConfigConstant.CLAIM_APPROVAL_NO.equals(RmConfigCache.getConfigRadioValue(claim.getDataGroupCode(),
+        if(RmConfigConstant.CLAIM_APPROVAL_NO.equals(RmConfigCache.getConfigRadioValue(claim.getDataGroupCode(),
                 RmConfigConstant.CLAIM_APPROVAL))) {
             RmUtils.invoke("RMLY0301", "pass", Arrays.asList("claimId"), id);
         }
@@ -129,11 +124,10 @@ public class ServiceRMLY01 extends ServiceBase {
 
     /**
      * 撤回
-     *
+     * @Title: withdraw
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: withdraw
      **/
     public EiInfo withdraw(EiInfo inInfo) {
         String id = inInfo.getString("id");
@@ -142,7 +136,7 @@ public class ServiceRMLY01 extends ServiceBase {
             return ValidatorUtils.errorInfo("参数不能为空");
         }
         RmClaim claim = claimService.queryClaimById(id);
-        if (claim == null || !validateWithdrawStatus(claim.getStatusCode(), claim.getDataGroupCode())) {
+        if(claim == null || !validateWithdrawStatus(claim.getStatusCode(), claim.getDataGroupCode())) {
             return ValidatorUtils.errorInfo(inInfo, "领用申请不存在或无法撤回");
         }
         claimService.update(RmClaim.getStatusInstance(id, RmConstant.CLAIM_STATUS_NEW));
@@ -151,23 +145,22 @@ public class ServiceRMLY01 extends ServiceBase {
 
     /**
      * 校验领用单是否可以撤回
-     *
-     * @param statusCode    statusCode
+     * @Title: validateWithdrawStatus
+     * @param statusCode statusCode
      * @param dataGroupCode dataGroupCode
      * @return boolean
      * @throws
-     * @Title: validateWithdrawStatus
      **/
     private boolean validateWithdrawStatus(String statusCode, String dataGroupCode) {
         //是否开启领用申请仓库审批
         String stockApproval = RmConfigCache.getConfigRadioValue(dataGroupCode, RmConfigCache.RM_CONFIG_CLAIM_STOCK_APPROVAL);
         //是否开启领用申请科室审批
         String deptApproval = RmConfigCache.getConfigRadioValue(dataGroupCode, RmConfigCache.RM_CONFIG_CLAIM_DEPT_APPROVAL);
-        if (RmUtils.toBoolean(deptApproval)) {
+        if(RmUtils.toBoolean(deptApproval)) {
             //是,只能撤回待科室审批的领用申请单
             return RmConstant.CLAIM_STATUS_UN_DEPT_APPROVE.equals(statusCode);
         } else {
-            if (RmUtils.toBoolean(stockApproval)) {
+            if(RmUtils.toBoolean(stockApproval)) {
                 return RmConstant.CLAIM_STATUS_UN_STOCK_APPROVE.equals(statusCode);
             } else {
                 return RmConstant.CLAIM_STATUS_UN_OUT.equals(statusCode);
@@ -176,12 +169,11 @@ public class ServiceRMLY01 extends ServiceBase {
     }
 
     /**
-     * 签收
-     *
+     * 签收(废弃)
+     * @Title: signAccept
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: signAccept
      **/
     public EiInfo signAccept(EiInfo inInfo) {
         String id = inInfo.getString("id");
@@ -190,7 +182,7 @@ public class ServiceRMLY01 extends ServiceBase {
             return ValidatorUtils.errorInfo("参数不能为空");
         }
         RmClaim claim = claimService.queryClaimById(id);
-        if (claim == null || !RmConstant.CLAIM_STATUS_UN_SIGN.equals(claim.getStatusCode())) {
+        if(claim == null || !RmConstant.CLAIM_STATUS_UN_SIGN.equals(claim.getStatusCode())) {
             return ValidatorUtils.errorInfo(inInfo, "领用申请不存在或无法签收");
         }
 
@@ -203,11 +195,10 @@ public class ServiceRMLY01 extends ServiceBase {
 
     /**
      * 结束领用单
-     *
+     * @Title: over
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: over
      **/
     public EiInfo over(EiInfo inInfo) {
         String id = inInfo.getString("id");

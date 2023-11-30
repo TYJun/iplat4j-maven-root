@@ -63,7 +63,8 @@ $(function() {
 					commonPopData('/web/SIBF0101?type=add', "物资报废");
 				});
 				$("#DC").on("click", function(e) {
-					let eiInfo = new EiInfo(); let url = IPLATUI.CONTEXT_PATH+"/si/exportStorage?foo=";
+					let eiInfo = new EiInfo();
+					let url = IPLATUI.CONTEXT_PATH+"/si/exportStorage?foo=";
 					eiInfo.setByNode("inqu");
 					let params = eiInfo.getBlock("inqu_status").getMappedRows()[0];
 					for (let field in params) {
@@ -81,7 +82,25 @@ $(function() {
 						$("#moneyAll").text(ei.extAttr.moneyAll);
 					}
 				});
-			}
+			},
+			onCheckRow: function (e) {
+				let model = e.model;
+				var rows = resultGrid.getCheckedRows();
+				let moneyAll  = 0;
+				let sumAll = $.isNumeric(rows.length) ? rows.length : 0;
+				if (e.checked) {
+					for (let i = 0; i < rows.length; i++) {
+						moneyAll = moneyAll +parseFloat(rows[i].totalAmount);
+					}
+				} else {
+					for (let i = 0; i < rows.length; i++) {
+						moneyAll += parseFloat(rows[i].totalAmount);
+					}
+				}
+				console.log(moneyAll);
+				$("#sumAll").text(parseInt(sumAll).toFixed(2));
+				$("#moneyAll").text(parseFloat(moneyAll).toFixed(2));
+			},
 		}
 	}
 

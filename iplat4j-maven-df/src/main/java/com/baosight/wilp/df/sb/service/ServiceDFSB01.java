@@ -10,7 +10,7 @@ import org.apache.commons.collections.CollectionUtils;
 import java.util.*;
 
 /**
- * 
+ *
  * 特种设备档案页面
  * <p>1.页面查询</p>
  * <p>2.分页</p>
@@ -210,7 +210,7 @@ import java.util.*;
 	   * recRevisor：			修改人
 	   * recReviseTime：	   	修改时间
 	   * dataGroupCode：        账套
-       * @see com.baosight.iplat4j.core.service.impl.ServiceBase#query(com.baosight.iplat4j.core.ei.EiInfo)
+       * @see ServiceBase#query(EiInfo)
        */
 	 public EiInfo query(EiInfo info) {
 	     //获取参数
@@ -262,7 +262,7 @@ import java.util.*;
 	        // 调用改造人员接口并返回
 	        return BaseDockingUtils.getStaffAllPage(map, "person");
 	    }
-	    
+
 	    /**
 	     * @Title: queryDept
 		 * <p>1.调用远程服务获取科室信息</p>
@@ -278,7 +278,7 @@ import java.util.*;
 	        // 调用远程服务获取改造科室接口
 	        return BaseDockingUtils.getDeptAllPage(map, "dept");
 	    }
-	    
+
 	    /**
 	     * @Title: querySpot
 		 * <p>1.调用远程服务获取科室地点信息</p>
@@ -347,9 +347,9 @@ import java.util.*;
 	        // 返回
 	        return outinfo;
 	    }
-	    
+
 	    /**
-	     * @Title: startPage 
+	     * @Title: startPage
 	     * @Description: 分页
 	     * @param list : 返回List数据
 	     * @param pageNum : 起始页
@@ -395,7 +395,7 @@ import java.util.*;
 	        // 返回集合
 	        return pageList;
 	    }
-	   
+
 	    /**
 	     * @Title: deleteItem
 		 * <p>1.通过id查询设备</p>
@@ -455,7 +455,7 @@ import java.util.*;
 	    		info.setStatus(-1);
 	    	}
 	    	//返回
-	    	return info; 
+	    	return info;
 	    }
 		 /**
 		  * 修改设备状态
@@ -479,8 +479,8 @@ import java.util.*;
 				 info.setStatus(-1);
 			 }
 			 //返回
-			 return info; 
+			 return info;
 		 }
-	 
+
 }
 

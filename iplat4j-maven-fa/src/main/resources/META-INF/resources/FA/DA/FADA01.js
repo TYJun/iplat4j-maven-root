@@ -5,6 +5,38 @@ $(function () {
         // resultAGrid.dataSource.page(1);
         resultBGrid.dataSource.page(1);
         resultCGrid.dataSource.page(1);
+        var eiInfo = new EiInfo();
+        eiInfo.set("inqu_status-0-buyDateS", kendo.toString($("#inqu_status-0-buyDateS").data("kendoDatePicker").value(), "yyyy-MM-dd"));
+        eiInfo.set("inqu_status-0-buyDateE", kendo.toString($("#inqu_status-0-buyDateE").data("kendoDatePicker").value(), "yyyy-MM-dd"));
+        eiInfo.set("inqu_status-0-useDateS", kendo.toString($("#inqu_status-0-useDateS").data("kendoDatePicker").value(), "yyyy-MM-dd"));
+        eiInfo.set("inqu_status-0-useDateE", kendo.toString($("#inqu_status-0-useDateE").data("kendoDatePicker").value(), "yyyy-MM-dd"));
+        eiInfo.set("inqu_status-0-goodsNum", IPLAT.EFInput.value($("#inqu_status-0-goodsNum")));
+        eiInfo.set("inqu_status-0-surpName", IPLAT.EFInput.value($("#inqu_status-0-surpName")));
+        eiInfo.set("inqu_status-0-remark", IPLAT.EFInput.value($("#inqu_status-0-remark")));
+        eiInfo.set("inqu_status-0-buyCostS", IPLAT.EFInput.value($("#inqu_status-0-buyCostS")));
+        eiInfo.set("inqu_status-0-buyCostE", IPLAT.EFInput.value($("#inqu_status-0-buyCostE")));
+        eiInfo.set("inqu_status-0-netAssetValueS", IPLAT.EFInput.value($("#inqu_status-0-netAssetValueS")));
+        eiInfo.set("inqu_status-0-netAssetValueE", IPLAT.EFInput.value($("#inqu_status-0-netAssetValueE")));
+        eiInfo.set("inqu_status-0-useYear", IPLAT.EFInput.value($("#inqu_status-0-useYear")));
+        eiInfo.set("inqu_status-0-goodsClassifyCode", IPLAT.EFInput.value($("#inqu_status-0-goodsClassifyCode")));
+        eiInfo.set("inqu_status-0-goodsTypeCode", IPLAT.EFInput.value($("#inqu_status-0-goodsTypeCode")));
+        eiInfo.set("inqu_status-0-rfidCode", IPLAT.EFInput.value($("#inqu_status-0-rfidCode")));
+        eiInfo.set("inqu_status-0-fundingSourceNum", IPLAT.EFSelect.value($("#inqu_status-0-fundingSourceNum")));
+        eiInfo.set("inqu_status-0-statusCode", IPLAT.EFSelect.value($("#inqu_status-0-statusCode")));
+        eiInfo.set("inqu_status-0-deptName", $("#inqu_status-0-deptName").data("kendoMultiSelect").value());
+        EiCommunicator.send("FADA01", "confirmedQuery", eiInfo, {
+            onSuccess: function (outInfo) {
+                //var outInfo = new EiInfo();
+                console.log(outInfo);
+                $("#inqu_status-0-buyCostCount").val(outInfo.extAttr.obj[0].buyCostCount);
+                $("#inqu_status-0-countAll").val(outInfo.extAttr.obj[0].countAll);
+                pageCount = $.isNumeric($("#inqu_status-0-buyCostCount").val()) ? $("#inqu_status-0-buyCostCount").val() : 0;
+                numberCount = $.isNumeric($("#inqu_status-0-countAll").val()) ? $("#inqu_status-0-countAll").val() : 0
+                $("#pageCount").text(parseInt(pageCount).toFixed(2));
+                $("#numberCount").text(parseInt(numberCount).toFixed(2));
+
+            }
+        });
     });
 
     $("#REQUERY").on("click", function (e) {

@@ -166,7 +166,7 @@ $(function() {
 						}		
 						var row = resultGrid.getCheckedRows()[0];
 						var id = row.id;
-						var fixedPlace = row.fixedPlace;
+						var fixedPlace = row.machineName;
 						popData1(id,fixedPlace);
 					});
 					function popData1(id,fixedPlace) {
@@ -182,6 +182,34 @@ $(function() {
 						// 打开生成弹窗
 						popData1Window.open().center();
 					}
+
+					// 生成二维码
+					$("#QRCODE").on("click", function(e) {
+						var checkRows = resultGrid.getCheckedRows();
+						if(checkRows.length < 1){
+							NotificationUtil("请选择要确认的行", "error");
+							return;
+						}
+						var row = resultGrid.getCheckedRows()[0];
+						var id = row.id;
+						var fixedPlace = row.machineName;
+						popData2(id,fixedPlace);
+					});
+					function popData2(id,fixedPlace) {
+						var url = IPLATUI.CONTEXT_PATH + "/web/DFSB0501?&id="+id+"&fixedPlace="+fixedPlace;
+						var popData = $("#popData2");
+
+						popData.data("kendoWindow").setOptions({
+							open : function() {
+								popData.data("kendoWindow").refresh({
+									url : url,
+								});
+							}
+						});
+						// 打开生成弹窗
+						popData2Window.open().center();
+					}
+
 
 				}
 			}

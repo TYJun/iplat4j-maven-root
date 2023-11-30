@@ -11,6 +11,7 @@
                 <%--<EF:EFInput ename="inqu_status-0-matNum" cname="物资编码" />--%>
             <EF:EFInput ename="inqu_status-0-matName" cname="物资名称"/>
             <EF:EFInput ename="inqu_status-0-matTypeName" cname="物资分类名称"/>
+            <EF:EFInput ename="inqu_status-0-matSpec" cname="物资规格"/>
         </div>
     </EF:EFRegion>
     <EF:EFRegion id="mat" title="物资列表">

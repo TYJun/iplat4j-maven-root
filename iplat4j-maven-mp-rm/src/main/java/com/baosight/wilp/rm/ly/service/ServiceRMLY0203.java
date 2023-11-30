@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  * @ClassName: ServiceRMLY0203
  * @Package com.baosight.wilp.rm.ly.service
  * @date: 2022年09月16日 16:39
- * <p>
+ *
  * 1.页面加载
  * 2.出库
  */
@@ -39,11 +39,10 @@ public class ServiceRMLY0203 extends ServiceBase {
 
     /**
      * 页面加载
-     *
+     * @Title: initLoad
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: initLoad
      **/
     @Override
     public EiInfo initLoad(EiInfo inInfo) {
@@ -52,23 +51,40 @@ public class ServiceRMLY0203 extends ServiceBase {
         claim.fromMap(inInfo.getBlock(RmConstant.QUERY_BLOCK).getRow(0));
         inInfo.setRows(RmConstant.QUERY_BLOCK, claimService.queryClaimList(claim, null, null));
         //获取领用明细
-        List<RmClaimDetail> detailList = claimService.queryClaimDetailList(claim.getId());
-        detailList = detailList.stream().filter(d -> RmUtils.doubleSub(d.getNum(), d.getOutNum()) > 0).collect(Collectors.toList());
-        List<Map<String, Object>> wareListTwo = new ArrayList<>();
+        List<RmClaimDetail> detailList = claimService.queryOutClaimDetailList(claim.getId());
+        //detailList = detailList.stream().filter(d -> RmUtils.doubleSub(d.getNum(), d.getOutNum()) > 0).collect(Collectors.toList());
+        List<Map<String,Object>> wareListTwo = new ArrayList<>();
         for (RmClaimDetail map : detailList) {
-            List<Map<String, Object>> wareList = dao.query("RMLJ02.queryWareHouseNo", map);
+            List<Map<String,Object>> wareList = dao.query("RMLJ02.queryWareHouseNo", map);
             wareListTwo.addAll(wareList);
         }
-        List<Map<String, Object>> wareListDeduplication = wareListTwo.stream().distinct().collect(Collectors.toList());
-        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "wareHouseNo", CollectionUtils.isEmpty(wareListDeduplication) ? "" : wareListDeduplication.get(0).get("wareHouseNo"));
-        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "wareHouseName", CollectionUtils.isEmpty(wareListDeduplication) ? "" : wareListDeduplication.get(0).get("wareHouseName"));
+        List<Map<String,Object>> wareListDeduplication = wareListTwo.stream().distinct().collect(Collectors.toList());
+        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "wareHouseNo", CollectionUtils.isEmpty(wareListDeduplication)? "":wareListDeduplication.get(0).get("wareHouseNo"));
+        inInfo.setCell(RmConstant.QUERY_BLOCK, 0, "wareHouseName", CollectionUtils.isEmpty(wareListDeduplication)? "":wareListDeduplication.get(0).get("wareHouseName"));
         //处理库存量
         List<Map> list = JSON.parseArray(JSON.toJSONString(detailList), Map.class);
         RmUtils.assignNum(list, null, new HashMap(4) {{
-            put("name", "outAmount");
-            put("field1", "num");
-            put("field2", "outNum");
-            put("field3", "stockNum");
+            put("name", "outAmount");put("field1", "num");put("field2", "outNum"); put("field3", "stockNum");
+        }});
+        inInfo.setRows(RmConstant.RESULT_BLOCK, list);
+        return inInfo;
+    }
+
+    /**
+     * 页面数据查询
+     * @Title: query
+     * @param inInfo inInfo
+     * @return com.baosight.iplat4j.core.ei.EiInfo
+     * @throws
+     **/
+    @Override
+    public EiInfo query(EiInfo inInfo) {
+        String id = inInfo.getCellStr(RmConstant.QUERY_BLOCK, 0, "id");
+        List<RmClaimDetail> detailList = claimService.queryOutClaimDetailList(id);
+        //处理库存量
+        List<Map> list = JSON.parseArray(JSON.toJSONString(detailList), Map.class);
+        RmUtils.assignNum(list, null, new HashMap(4) {{
+            put("name", "outAmount");put("field1", "num");put("field2", "outNum"); put("field3", "stockNum");
         }});
         inInfo.setRows(RmConstant.RESULT_BLOCK, list);
         return inInfo;
@@ -77,29 +93,27 @@ public class ServiceRMLY0203 extends ServiceBase {
     /**
      * 出库
      * <p>
-     * 1.获取参数
-     * 2.数据校验
-     * 3.处理出库明细数据
-     * 4.更新领用单和领用明细
-     * 5.出库
+     *     1.获取参数
+     *     2.数据校验
+     *     3.处理出库明细数据
+     *     4.更新领用单和领用明细
+     *     5.出库
      * </p>
-     *
+     * @Title: outStock
      * @param inInfo inInfo
-     *               claimId : 领用单ID
-     *               deptNum : 领用科室编码
-     *               deptName : 领用科室名称
-     *               wareHouseNo : 出库仓库编码
-     *               wareHouseName : 出库仓库名称
-     *               list : 出库明细集合
+     *     claimId : 领用单ID
+     *     deptNum : 领用科室编码
+     *     deptName : 领用科室名称
+     *     wareHouseNo : 出库仓库编码
+     *     wareHouseName : 出库仓库名称
+     *     list : 出库明细集合
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: outStock
      **/
     public EiInfo outStock(EiInfo inInfo) {
-        if (ValidateRepeatCache.validateAndPut(inInfo.getString("token"))) {
+        if(ValidateRepeatCache.validateAndPut(inInfo.getString("token"))){
             return ValidatorUtils.errorInfo(inInfo, "重复提交");
-        }
-        ;
+        };
 
         /**1.获取参数**/
         Map params = inInfo.getRow(RmConstant.QUERY_BLOCK, 0);
@@ -109,25 +123,25 @@ public class ServiceRMLY0203 extends ServiceBase {
                 .collect(Collectors.toList());
 
         /**2.数据校验**/
-        if (StringUtils.isBlank(RmUtils.toString(params.get("wareHouseNo")))) {
+        if(StringUtils.isBlank(RmUtils.toString(params.get("wareHouseNo")))) {
             return ValidatorUtils.errorInfo(inInfo, "出库仓库不能为空");
         }
-        if (CollectionUtils.isEmpty(list)) {
+        if(CollectionUtils.isEmpty(list)) {
             return ValidatorUtils.errorInfo(inInfo, "出库明细不能为空或出库数量不能全部为0或为负数");
         }
         String statusCode = claimService.queryClaimStatusCode(RmUtils.toString(params.get("id")));
-        if (!Arrays.asList(RmConstant.CLAIM_STATUS_UN_OUT, RmConstant.CLAIM_STATUS_PART_OUT).contains(statusCode)) {
+        if(!Arrays.asList(RmConstant.CLAIM_STATUS_UN_OUT,RmConstant.CLAIM_STATUS_PART_OUT).contains(statusCode)) {
             return ValidatorUtils.errorInfo(inInfo, "已出库领用单无需再出库");
         }
 
-        if (RmConstant.CLAIM_STATUS_PART_OUT.equals(statusCode) && !validateOutNum(RmUtils.toString(params.get("id")), list)) {
+        if(RmConstant.CLAIM_STATUS_PART_OUT.equals(statusCode) && !validateOutNum(RmUtils.toString(params.get("id")),list)) {
             return ValidatorUtils.errorInfo(inInfo, "出库数量不能大于领用数量");
         }
 
         /**3.处理出库明细数据**/
         Map<String, Object> outMap = new HashMap<>(32);
         RmClaim claim = calDetail(params, list, outMap);
-        if (claim == null) {
+        if(claim == null) {
             return ValidatorUtils.errorInfo(inInfo, "出库数量不能大于领用数量减去已出库数量");
         }
         /**4.更新领用单和领用明细**/
@@ -141,22 +155,19 @@ public class ServiceRMLY0203 extends ServiceBase {
 
     /**
      * 校验出库数量是否大于领用数量
-     *
-     * @param id   id 领用单ID
+     * @Title: validateOutNum
+     * @param id id 领用单ID
      * @param list list : 领用出库明细
      * @return boolean
      * @throws
-     * @Title: validateOutNum
      **/
     private boolean validateOutNum(String id, List<RmClaimDetail> list) {
         List<RmClaimDetail> detailList = claimService.queryClaimDetailList(id);
         for (RmClaimDetail d : list) {
             for (RmClaimDetail detail : detailList) {
-                if (!d.getMatNum().equals(detail.getMatNum()) || detail.getOutNum() == 0) {
-                    continue;
-                }
+                if(!d.getMatNum().equals(detail.getMatNum()) || detail.getOutNum() == 0) {continue;}
                 Double sub = RmUtils.doubleSub(detail.getNum(), detail.getOutNum());
-                if (RmUtils.doubleSub(d.getOutAmount(), sub) > 0) {
+                if(RmUtils.doubleSub(d.getOutAmount(), sub) > 0) {
                     return false;
                 }
             }
@@ -167,29 +178,27 @@ public class ServiceRMLY0203 extends ServiceBase {
     /**
      * 处理页面明细数据
      * <p>
-     * 1.遍历出库物资列表
-     * 2.构建出库数据
-     * 3.判断物资是否已经全部出库
-     * 4.构建领用单数据
+     *     1.遍历出库物资列表
+     *     2.构建出库数据
+     *     3.判断物资是否已经全部出库
+     *     4.构建领用单数据
      * </p>
-     *
+     * @Title: calDetail
      * @param params params : 参数Map
-     * @param list   list : 页面出库明细集合
+     * @param list list : 页面出库明细集合
      * @param outMap outMap : 对接出库数据
      * @return com.baosight.wilp.rm.lj.domain.RmClaim
      * @throws
-     * @Title: calDetail
      **/
     private RmClaim calDetail(Map params, List<RmClaimDetail> list, Map<String, Object> outMap) {
-        Double totalOutedNum = 0d;
-        boolean hasOutAll = true;
+        Double totalOutedNum = 0d; boolean hasOutAll = true;
 
         /**1.遍历出库物资列表**/
         List<Map<String, Object>> outDetailList = new ArrayList<>();
         for (RmClaimDetail claimDetail : list) {
             //出库数量 > 领用数量-已出库数量,返回null
             Double sub = RmUtils.doubleSub(claimDetail.getNum(), claimDetail.getOutNum());
-            if (RmUtils.doubleSub(claimDetail.getOutAmount(), sub) > 0) {
+            if(RmUtils.doubleSub(claimDetail.getOutAmount(), sub) > 0) {
                 return null;
             }
             //计算总出库数量
@@ -206,29 +215,29 @@ public class ServiceRMLY0203 extends ServiceBase {
         outMap.put("list", outDetailList);
 
         /**3.判断物资是否已经全部出库**/
-        if (hasOutAll) {
+        if(hasOutAll) {
             hasOutAll = hasOutAll && claimAll(RmUtils.toString(params.get("id")), list);
         }
 
         /**4.构建领用单数据**/
-        RmClaim claim = RmClaim.getStatusInstance(RmUtils.toString(params.get("id")), hasOutAll ? RmConstant.CLAIM_STATUS_UN_SIGN : RmConstant.CLAIM_STATUS_PART_OUT);
+        RmClaim claim = RmClaim.getStatusInstance(RmUtils.toString(params.get("id")),
+                hasOutAll ? RmConstant.CLAIM_STATUS_STOCK_CONFRIM : RmConstant.CLAIM_STATUS_PART_OUT);
         claim.setOutNum(totalOutedNum);
         return claim;
     }
 
     /**
      * 判断是否领用完成
-     *
-     * @param id   id : 领用ID
+     * @Title: claimAll
+     * @param id id : 领用ID
      * @param list list : 领用明细集合
      * @return boolean
      * @throws
-     * @Title: claimAll
      **/
     private boolean claimAll(String id, List<RmClaimDetail> list) {
         AtomicBoolean isAll = new AtomicBoolean(true);
-        List<RmClaimDetail> detailList = claimService.queryClaimDetailList(id);
-        if (list.size() == detailList.size()) {
+        List<RmClaimDetail> detailList = claimService.queryOutClaimDetailList(id);
+        if(list.size() == detailList.size()) {
             return true;
         }
         //获取差集
@@ -240,12 +249,11 @@ public class ServiceRMLY0203 extends ServiceBase {
 
     /**
      * 出库主体赋值
-     *
+     * @Title: buildOut
      * @param params params : 页面表单参数Map
      * @param outMap outMap : 出库map
      * @return void
      * @throws
-     * @Title: buildOut
      **/
     private void buildOut(Map params, Map<String, Object> outMap) {
         outMap.put("outType", "06");
@@ -270,11 +278,10 @@ public class ServiceRMLY0203 extends ServiceBase {
 
     /**
      * 构建出库明细
-     *
-     * @param claimDetail claimDetail : 领用明细对象
-     * @return java.util.Map<java.lang.String, java.lang.Object>
-     * @throws
      * @Title: buildOutDetail
+     * @param claimDetail claimDetail : 领用明细对象
+     * @return java.util.Map<java.lang.String,java.lang.Object>
+     * @throws
      **/
     private Map<String, Object> buildOutDetail(RmClaimDetail claimDetail) {
         Map<String, Object> map = new HashMap<>(16);

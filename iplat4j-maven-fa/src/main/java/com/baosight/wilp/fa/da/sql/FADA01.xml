@@ -970,5 +970,68 @@
 		count(id) AS "countAll"
 		FROM fa_info
 		WHERE lock_flag NOT IN ('4') AND status_code NOT IN ('000','060')
+		<isNotEmpty prepend=" AND " property="faInfoId">
+			id = #faInfoId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="goodsNum">
+			goods_num like concat ('%',trim(#goodsNum#),'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="goodsName">
+			goods_name like concat ('%',trim(#goodsName#),'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="surpName">
+			surp_name like concat ('%',trim(#surpName#),'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="remark">
+			remark like concat ('%',trim(#remark#),'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="useYear">
+			use_years = #useYear#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="buyCostS">
+			buy_cost >= #buyCostS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="buyCostE">
+			#buyCostE# >= buy_cost
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="netAssetValueS">
+			net_asset_value >= #netAssetValueS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="netAssetValueE">
+			#netAssetValueE# >= net_asset_value
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="buyDateS">
+			DATE_FORMAT( buy_date, '%Y-%m-%d' )  >= #buyDateS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="buyDateE">
+			#buyDateE# >= DATE_FORMAT( buy_date, '%Y-%m-%d' )
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="useDateS">
+			DATE_FORMAT( use_date, '%Y-%m-%d' )  >= #useDateS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="useDateE">
+			#useDateE# >= DATE_FORMAT( use_date, '%Y-%m-%d' )
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="goodsClassifyCode">
+			goods_classify_name like concat ('%',trim(#goodsClassifyCode#),'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="goodsTypeCode">
+			goods_type_name like concat ('%',trim(#goodsTypeCode#),'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="deptName">
+			$deptName$
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="fundingSourceNum">
+			fundingSource_num = #fundingSourceNum#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="statusCode">
+			status_code = #statusCode#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="cardStatus">
+			card_status = #cardStatus#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="rfidCode">
+			rfid_code like concat ('%',trim(#rfidCode#),'%')
+		</isNotEmpty>
 	</select>
 </sqlMap>

@@ -38,7 +38,7 @@ $(function (e) {
 	    }
 	}
 	//获取id转换城二维码
-	var id = obj.id;
+	var id = 'http://119.146.152.53:8081/mzsrmyy/dfspecial/satisfy.html'+ '?' + 'id=' + obj.id;
 	var fixedPlace = obj.fixedPlace;
 	//绑定二维码地点名称
 	var div = document.getElementById("spotNameDiv");  

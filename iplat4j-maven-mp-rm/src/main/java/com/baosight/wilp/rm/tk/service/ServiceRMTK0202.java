@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * @ClassName: ServiceRMTK0202
  * @Package com.baosight.wilp.rm.tk.service
  * @date: 2022年10月25日 9:58
- * <p>
+ *
  * 1.页面加载
  * 2.退库出库
  */
@@ -35,11 +35,10 @@ public class ServiceRMTK0202 extends ServiceBase {
 
     /**
      * 页面加载
-     *
+     * @Title: initLoad
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: initLoad
      **/
     @Override
     public EiInfo initLoad(EiInfo inInfo) {
@@ -55,11 +54,10 @@ public class ServiceRMTK0202 extends ServiceBase {
 
     /**
      * 退库出库
-     *
+     * @Title: outStock
      * @param inInfo inInfo
      * @return com.baosight.iplat4j.core.ei.EiInfo
      * @throws
-     * @Title: outStock
      **/
     public EiInfo outStock(EiInfo inInfo) throws Exception {
         //获取参数
@@ -68,7 +66,7 @@ public class ServiceRMTK0202 extends ServiceBase {
         List<RmBackOutDetail> details = RmUtils.toList(inInfo.get("list"), RmBackOutDetail.class);
         //参数校验
         details = details.stream().filter(detail -> !detail.getCurOutNum().isNaN() && detail.getCurOutNum() > 0).collect(Collectors.toList());
-        if (CollectionUtils.isEmpty(details)) {
+        if(CollectionUtils.isEmpty(details)) {
             return ValidatorUtils.errorInfo("出库数量不能为空或数量全部为0");
         }
         //更新退库单信息
@@ -83,18 +81,17 @@ public class ServiceRMTK0202 extends ServiceBase {
 
     /**
      * 更新退库单信息
-     *
-     * @param back    back : 退库单对象
+     * @Title: updateBack
+     * @param back back : 退库单对象
      * @param details details : 退库单明细
      * @return
      * @throws
-     * @Title: updateBack
      **/
     private void updateBack(RmBackOut back, List<RmBackOutDetail> details) throws Exception {
         //更新退库数量，更新失败,则本次退库数量不对。
         for (RmBackOutDetail detail : details) {
             int update = backOutService.updateDetail(detail);
-            if (update == 0) {
+            if(update == 0) {
                 throw new Exception("本次退库数量不能大于退库数量减去已退库数量");
             }
         }
@@ -108,12 +105,11 @@ public class ServiceRMTK0202 extends ServiceBase {
 
     /**
      * 构建出库信息
-     *
-     * @param back    back
-     * @param details details
-     * @return java.util.Map<java.lang.String, java.lang.Object>
-     * @throws
      * @Title: buildOut
+     * @param back back
+     * @param details details
+     * @return java.util.Map<java.lang.String,java.lang.Object>
+     * @throws
      **/
     private Map<String, Object> buildOut(RmBackOut back, List<RmBackOutDetail> details) {
         Map<String, Object> outMap = new HashMap<>(16);

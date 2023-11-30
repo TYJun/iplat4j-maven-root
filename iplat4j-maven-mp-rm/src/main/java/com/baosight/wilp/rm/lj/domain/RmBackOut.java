@@ -16,106 +16,67 @@ import java.util.Map;
 /**
  * 物资退库申请实体
  * RmBackOut
- *
  * @author fangjian
  */
 public class RmBackOut extends DaoEPBase {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 主键
-     */
+    /**主键*/
     private String id;
 
-    /**
-     * 退库申请单号
-     */
+    /**退库申请单号*/
     private String backOutNo;
 
-    /**
-     * 状态编码
-     */
+    /**状态编码*/
     private String statusCode;
 
-    /**
-     * 状态名称
-     */
+    /**状态名称*/
     private String statusName;
 
-    /**
-     * 退库数量
-     */
+    /**退库数量*/
     private Double backOutNum = new Double(0.00);
 
-    /**
-     * 已退库数量
-     */
+    /**已退库数量*/
     private Double outNum = new Double(0.00);
 
-    /**
-     * 申请科室编码
-     */
+    /**申请科室编码*/
     private String deptNum;
 
-    /**
-     * 申请科室编码
-     */
+    /**申请科室编码*/
     private String deptName;
 
-    /**
-     * 成本归集科室编码
-     */
+    /** 成本归集科室编码*/
     private String costDeptNum;
 
-    /**
-     * 成本归集科室名称
-     */
+    /** 成本归集科室名称*/
     private String costDeptName;
 
-    /**
-     * 退库原因
-     */
-    private String backReason = "";
+    /**退库原因*/
+    private String backReason="";
 
-    /**
-     * 创建（申请）人
-     */
+    /**创建（申请）人*/
     private String recCreator;
 
-    /**
-     * 创建（申请）人姓名
-     */
+    /**创建（申请）人姓名*/
     private String recCreatorName;
 
-    /**
-     * 创建时间
-     */
-    private Date recCreateTime;
+    /**创建时间*/
+    private Date recCreateTime ;
 
-    /**
-     * 创建时间
-     */
-    private String recCreateTimeStr;
+    /**创建时间*/
+    private String recCreateTimeStr ;
 
-    /**
-     * 修改人
-     */
+    /**修改人*/
     private String recRevisor;
 
-    /**
-     * 修改时间
-     */
-    private Date recReviseTime;
+    /**修改时间*/
+    private Date recReviseTime ;
 
-    /**
-     * 账套
-     */
+    /**账套*/
     private String dataGroupCode;
 
-    /**
-     * 归档标记
-     */
+    /**归档标记*/
     private String archiveFlag;
 
     /**
@@ -215,7 +176,6 @@ public class RmBackOut extends DaoEPBase {
 
     /**
      * get the id - 主键
-     *
      * @return the id
      */
     public String getId() {
@@ -231,7 +191,6 @@ public class RmBackOut extends DaoEPBase {
 
     /**
      * get the backOutNo - 领用单号
-     *
      * @return the backOutNo
      */
     public String getBackOutNo() {
@@ -247,7 +206,6 @@ public class RmBackOut extends DaoEPBase {
 
     /**
      * get the statusCode - 状态编码
-     *
      * @return the statusCode
      */
     public String getStatusCode() {
@@ -263,7 +221,6 @@ public class RmBackOut extends DaoEPBase {
 
     /**
      * get the statusName - 状态名称
-     *
      * @return the statusName
      */
     public String getStatusName() {
@@ -279,7 +236,6 @@ public class RmBackOut extends DaoEPBase {
 
     /**
      * get the backOutNum - 退库数量
-     *
      * @return the backOutNum
      */
     public Double getBackOutNum() {
@@ -295,7 +251,6 @@ public class RmBackOut extends DaoEPBase {
 
     /**
      * get the outNum - 已退库数量
-     *
      * @return the outNum
      */
     public Double getOutNum() {
@@ -311,7 +266,6 @@ public class RmBackOut extends DaoEPBase {
 
     /**
      * get the deptNum - 申请科室编码
-     *
      * @return the deptNum
      */
     public String getDeptNum() {
@@ -327,7 +281,6 @@ public class RmBackOut extends DaoEPBase {
 
     /**
      * get the deptName - 申请科室编码
-     *
      * @return the deptName
      */
     public String getDeptName() {
@@ -359,7 +312,6 @@ public class RmBackOut extends DaoEPBase {
 
     /**
      * get the backReason - 退库原因
-     *
      * @return the backReason
      */
     public String getBackReason() {
@@ -375,7 +327,6 @@ public class RmBackOut extends DaoEPBase {
 
     /**
      * get the recCreator - 创建（申请）人
-     *
      * @return the recCreator
      */
     public String getRecCreator() {
@@ -392,7 +343,6 @@ public class RmBackOut extends DaoEPBase {
 
     /**
      * get the recCreatorName - 创建（申请）人姓名
-     *
      * @return the recCreatorName
      */
     public String getRecCreatorName() {
@@ -408,7 +358,6 @@ public class RmBackOut extends DaoEPBase {
 
     /**
      * get the recCreateTime - 创建时间
-     *
      * @return the recCreateTime
      */
     public Date getRecCreateTime() {
@@ -420,14 +369,13 @@ public class RmBackOut extends DaoEPBase {
      */
     public void setRecCreateTime(Date recCreateTime) {
         this.recCreateTime = recCreateTime;
-        if (this.recCreateTime != null) {
+        if(this.recCreateTime != null) {
             setRecCreateTimeStr(DateUtils.toDateTimeStr19(this.recCreateTime));
         }
     }
 
     /**
      * get the recCreateTimeStr - 创建时间
-     *
      * @return the recCreateTimeStr
      */
     public String getRecCreateTimeStr() {
@@ -443,7 +391,6 @@ public class RmBackOut extends DaoEPBase {
 
     /**
      * get the recRevisor - 修改人
-     *
      * @return the recRevisor
      */
     public String getRecRevisor() {
@@ -460,7 +407,6 @@ public class RmBackOut extends DaoEPBase {
 
     /**
      * get the recReviseTime - 修改时间
-     *
      * @return the recReviseTime
      */
     public Date getRecReviseTime() {
@@ -476,7 +422,6 @@ public class RmBackOut extends DaoEPBase {
 
     /**
      * get the dataGroupCode - 账套
-     *
      * @return the dataGroupCode
      */
     public String getDataGroupCode() {
@@ -492,7 +437,6 @@ public class RmBackOut extends DaoEPBase {
 
     /**
      * get the archiveFlag - 归档标记
-     *
      * @return the archiveFlag
      */
     public String getArchiveFlag() {
@@ -539,36 +483,35 @@ public class RmBackOut extends DaoEPBase {
     @Override
     public Map toMap() {
         Map map = new HashMap(32);
-        map.put("id", StringUtils.toString(id, eiMetadata.getMeta("id")));
-        map.put("backOutNo", StringUtils.toString(backOutNo, eiMetadata.getMeta("backOutNo")));
-        map.put("statusCode", StringUtils.toString(statusCode, eiMetadata.getMeta("statusCode")));
-        map.put("statusName", StringUtils.toString(statusName, eiMetadata.getMeta("statusName")));
-        map.put("backOutNum", StringUtils.toString(backOutNum, eiMetadata.getMeta("backOutNum")));
-        map.put("outNum", StringUtils.toString(outNum, eiMetadata.getMeta("outNum")));
-        map.put("deptNum", StringUtils.toString(deptNum, eiMetadata.getMeta("deptNum")));
-        map.put("deptName", StringUtils.toString(deptName, eiMetadata.getMeta("deptName")));
-        map.put("costDeptNum", StringUtils.toString(costDeptNum, eiMetadata.getMeta("costDeptNum")));
-        map.put("costDeptName", StringUtils.toString(costDeptName, eiMetadata.getMeta("costDeptName")));
-        map.put("backReason", StringUtils.toString(backReason, eiMetadata.getMeta("backReason")));
-        map.put("recCreator", StringUtils.toString(recCreator, eiMetadata.getMeta("recCreator")));
-        map.put("recCreatorName", StringUtils.toString(recCreatorName, eiMetadata.getMeta("recCreatorName")));
-        map.put("recCreateTime", StringUtils.toString(recCreateTime, eiMetadata.getMeta("recCreateTime")));
-        map.put("recCreateTimeStr", StringUtils.toString(recCreateTimeStr, eiMetadata.getMeta("recCreateTimeStr")));
-        map.put("recRevisor", StringUtils.toString(recRevisor, eiMetadata.getMeta("recRevisor")));
-        map.put("recReviseTime", StringUtils.toString(recReviseTime, eiMetadata.getMeta("recReviseTime")));
-        map.put("dataGroupCode", StringUtils.toString(dataGroupCode, eiMetadata.getMeta("dataGroupCode")));
-        map.put("archiveFlag", StringUtils.toString(archiveFlag, eiMetadata.getMeta("archiveFlag")));
+        map.put("id",StringUtils.toString(id, eiMetadata.getMeta("id")));
+        map.put("backOutNo",StringUtils.toString(backOutNo, eiMetadata.getMeta("backOutNo")));
+        map.put("statusCode",StringUtils.toString(statusCode, eiMetadata.getMeta("statusCode")));
+        map.put("statusName",StringUtils.toString(statusName, eiMetadata.getMeta("statusName")));
+        map.put("backOutNum",StringUtils.toString(backOutNum, eiMetadata.getMeta("backOutNum")));
+        map.put("outNum",StringUtils.toString(outNum, eiMetadata.getMeta("outNum")));
+        map.put("deptNum",StringUtils.toString(deptNum, eiMetadata.getMeta("deptNum")));
+        map.put("deptName",StringUtils.toString(deptName, eiMetadata.getMeta("deptName")));
+        map.put("costDeptNum",StringUtils.toString(costDeptNum, eiMetadata.getMeta("costDeptNum")));
+        map.put("costDeptName",StringUtils.toString(costDeptName, eiMetadata.getMeta("costDeptName")));
+        map.put("backReason",StringUtils.toString(backReason, eiMetadata.getMeta("backReason")));
+        map.put("recCreator",StringUtils.toString(recCreator, eiMetadata.getMeta("recCreator")));
+        map.put("recCreatorName",StringUtils.toString(recCreatorName, eiMetadata.getMeta("recCreatorName")));
+        map.put("recCreateTime",StringUtils.toString(recCreateTime, eiMetadata.getMeta("recCreateTime")));
+        map.put("recCreateTimeStr",StringUtils.toString(recCreateTimeStr, eiMetadata.getMeta("recCreateTimeStr")));
+        map.put("recRevisor",StringUtils.toString(recRevisor, eiMetadata.getMeta("recRevisor")));
+        map.put("recReviseTime",StringUtils.toString(recReviseTime, eiMetadata.getMeta("recReviseTime")));
+        map.put("dataGroupCode",StringUtils.toString(dataGroupCode, eiMetadata.getMeta("dataGroupCode")));
+        map.put("archiveFlag",StringUtils.toString(archiveFlag, eiMetadata.getMeta("archiveFlag")));
         return map;
     }
 
     /**
      * 构建退库对象
-     *
-     * @param id         id : 主键
+     * @Title: getStatusInstance
+     * @param id id : 主键
      * @param statusCode statusCode : 状态编码
      * @return com.baosight.wilp.rm.lj.domain.RmBackOut
      * @throws
-     * @Title: getStatusInstance
      **/
     public static RmBackOut getStatusInstance(String id, String statusCode) {
         RmBackOut back = new RmBackOut();

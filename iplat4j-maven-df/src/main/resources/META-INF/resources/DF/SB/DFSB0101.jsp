@@ -8,8 +8,8 @@
 <EF:EFPage title="">
 	<EF:EFRegion id="dfsb" title="特种设备基本信息">
 		<div class="row">
-			<EF:EFInput ename="machineCode" cname="设备编码：" colWidth="4" ratio="3:8" required="true"/>
-			<EF:EFInput ename="machineName" cname="设备名称：" colWidth="4" ratio="3:8" required="true"/>
+			<EF:EFInput ename="machineCode" cname="机房编码：" colWidth="4" ratio="3:8" />
+			<EF:EFInput ename="machineName" cname="机房名称：" colWidth="4" ratio="3:8" required="true"/>
 			<EF:EFInput ename="models" cname="规格型号：" colWidth="4" ratio="3:8"/> 
 		</div>
 		<div class="row">
@@ -110,44 +110,45 @@
 	<EF:EFRegion title="检验日期信息">
 	<div class="row">
 	<EF:EFDatePicker ename="thisCheckDate" cname="本年检验日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"
-			parseFormats="['yyyy-mm-dd']" readonly="true" required="true"/>
+			parseFormats="['yyyy-mm-dd']" readonly="true" />
 			<EF:EFDatePicker ename="thisFinishDate" cname="本年完工日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"
-			parseFormats="['yyyy-mm-dd']" readonly="true" required="true"/>
+			parseFormats="['yyyy-mm-dd']" readonly="true" />
 			<EF:EFInput ename="annualinspcycle" cname="周期（月）：" colWidth="3" ratio="4:8"/>
 			<EF:EFDatePicker ename="nextCheckDate" cname="下年检验日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"
-			parseFormats="['yyyy-mm-dd']" readonly="true" required="true"/>
+			parseFormats="['yyyy-mm-dd']" readonly="true" />
 	</div>
 	<div class="row">
 	<EF:EFDatePicker ename="thisExpiredDate" cname="本次定检日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"
-			parseFormats="['yyyy-mm-dd']" readonly="true" required="true"/>
+			parseFormats="['yyyy-mm-dd']" readonly="true" />
 			<EF:EFDatePicker ename="thisChexpiredDate" cname="本次定检完工日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"
-			parseFormats="['yyyy-mm-dd']" readonly="true" required="true"/>
+			parseFormats="['yyyy-mm-dd']" readonly="true" />
 			<EF:EFInput ename="regularinspcycle" cname="周期（月）：" colWidth="3" ratio="4:8"/>
 			<EF:EFDatePicker ename="nextExpiredDate" cname="下年定检日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"
-			parseFormats="['yyyy-mm-dd']" readonly="true" required="true"/>
+			parseFormats="['yyyy-mm-dd']" readonly="true" />
 	</div>
 	<div class="row">
 	</EF:EFRegion>
 	<EF:EFTab id="tab-tab_grid">
-	  <div title="参数信息">
-	     	<EF:EFGrid blockId="result" fitHeight="true" autoDraw="no" serviceName="DFFL10" queryMethod="queryParameter">
-				<EF:EFColumn ename="id" cname="主键" hidden="true"/>
-				<EF:EFColumn ename="paramKey" cname="参数编码" enable="false"/>
-				<EF:EFColumn ename="paramName" cname="参数名称" enable="false"/>
-				<EF:EFColumn ename="paramValue" cname="参数值" enable="false"/>
-	 			<EF:EFColumn ename="paramUnit" cname="参数单位" enable="false"/>
-				<EF:EFColumn ename="memo" cname="备注" enable="false"/>
-		</EF:EFGrid>
-	  </div>
+<%--	  <div title="参数信息">--%>
+<%--	     	<EF:EFGrid blockId="result" fitHeight="true" autoDraw="no" serviceName="DFFL10" queryMethod="queryParameter" hidden="true">--%>
+<%--				<EF:EFColumn ename="id" cname="主键" hidden="true"/>--%>
+<%--				<EF:EFColumn ename="paramKey" cname="参数编码" enable="false"/>--%>
+<%--				<EF:EFColumn ename="paramName" cname="参数名称" enable="false"/>--%>
+<%--				<EF:EFColumn ename="paramValue" cname="参数值" enable="false"/>--%>
+<%--	 			<EF:EFColumn ename="paramUnit" cname="参数单位" enable="false"/>--%>
+<%--				<EF:EFColumn ename="memo" cname="备注" enable="false"/>--%>
+<%--		</EF:EFGrid>--%>
+<%--	  </div>--%>
 		<div title="设备零部件">
 		   	<EF:EFGrid blockId="resultB" fitHeight="true" autoDraw="no">
 				<EF:EFColumn ename="id" cname="主键" hidden="true"/>
+				<EF:EFColumn ename="machineNames" cname="设备零部件名称" />
 				<EF:EFColumn ename="certNo" cname="合格证编号" />
 				<EF:EFColumn ename="models" cname="规格型号" />
 	 			<EF:EFColumn ename="annualinspcycle" cname="周期" />
-	 			<EF:EFColumn ename="thisCheckDate" cname="本次检验日期" editType="datetime" dateFormat="yyyy-MM-dd HH:mm:ss"
+	 			<EF:EFColumn ename="thisCheckDate" cname="设备零部件本次检验日期" editType="datetime" dateFormat="yyyy-MM-dd HH:mm:ss"
 							 parseFormats="['yyyy-MM-dd HH:mm:ss']" width="150" readonly="true" required="true"/>
-	 			<EF:EFColumn ename="nextCheckDate" cname="下次检验日期" editType="datetime" dateFormat="yyyy-MM-dd HH:mm:ss"
+	 			<EF:EFColumn ename="nextCheckDate" cname="设备零部件下次检验日期" editType="datetime" dateFormat="yyyy-MM-dd HH:mm:ss"
 							 parseFormats="['yyyy-MM-dd HH:mm:ss']" readonly="true" required="true"/>
 		</EF:EFGrid>
 		</div>

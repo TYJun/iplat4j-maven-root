@@ -421,8 +421,8 @@ public class ServiceFADA01 extends ServiceBase {
     public EiInfo confirmedQuery(EiInfo info) {
         EiBlock eiBlock = info.getBlock("inqu_status");
         if (eiBlock != null) {
-            Map<String, String> row = eiBlock.getRow(0);
-            String deptName = row.get("deptName");
+            Map<String, Object> row = eiBlock.getRow(0);
+            String deptName = String.valueOf(row.get("deptName"));
             if (StringUtils.isNotEmpty(deptName)) {
                 String[] split = deptName.split(",");
                 for (int i = 0; i < split.length; i++) {
@@ -433,7 +433,13 @@ public class ServiceFADA01 extends ServiceBase {
             }
         }
         EiInfo outInfo = super.query(info, "FADA01.queryFaInfoDOInfo", new FaInfoDO(), false, null, null, "resultB", "resultB");
-        List<Map<String,Object>> query =(List<Map<String,Object>>)dao.query("FADA01.querySUMFaInfoDOInfo", null);
+        //页面显示资产原值总计、资产数量总计数据
+        EiBlock infoBlock = info.getBlock("inqu_status");
+        Map inquStatus = new HashMap<>();
+        if (infoBlock!=null){
+            inquStatus = infoBlock.getRow(0);
+        }
+        List<Map<String,Object>> query =(List<Map<String,Object>>)dao.query("FADA01.querySUMFaInfoDOInfo", inquStatus);
         if (info.getBlocks().size() > 0) {
             if (info.getBlock("resultB") != null) {
                 if ("100".equals(info.getBlock("resultB").get("limit"))) {
@@ -453,7 +459,7 @@ public class ServiceFADA01 extends ServiceBase {
         map.remove("limit");
         List<Map<String, String>> maps = dao.query("FADA01.queryDept", map);
         outInfo.setRows("dept", maps);
-        outInfo.setRows("inqu_status",query);
+        outInfo.set("obj",query);
         return outInfo;
     }
 
