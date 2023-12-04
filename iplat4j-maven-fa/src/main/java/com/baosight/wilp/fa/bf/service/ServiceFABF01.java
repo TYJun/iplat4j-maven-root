@@ -116,6 +116,28 @@ public class ServiceFABF01 extends ServiceBase {
 	}
 
 	/**
+	 * 科室负责人审批
+	 *
+	 * @param info
+	 * @return com.baosight.iplat4j.core.ei.EiInfo
+	 * @author zhaowei
+	 * @date 2023/11/25 17:13
+	 */
+	public EiInfo ApplyDeptQuery(EiInfo info) {
+		Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
+		List<String> deptName = OneSelfUtils.specifyDept((String) staffByUserId.get("workNo"));
+		info.setCell("inqu_status", 0, "scrapStatus", "applyDept");
+		if (CollectionUtils.isNotEmpty(deptName)) {
+			info.setCell("inqu_status", 0, "role", "user");
+			info.setCell("inqu_status", 0, "lookDeptName", deptName);
+		}
+		EiInfo outInfo = super.query(info, "FABF01.queryFaScrapInfo", new FaScrapVO(), false, null, null, "resultG", "resultG");
+		outInfo.set("workNo", staffByUserId.get("workNo"));
+		outInfo.set("name", staffByUserId.get("name"));
+		return outInfo;
+	}
+
+	/**
 	 * 科室申请
 	 *
 	 * @param info
@@ -239,6 +261,38 @@ public class ServiceFABF01 extends ServiceBase {
 	}
 
 	/**
+	 * 科室报废审批
+	 * @param info
+	 * @return
+	 */
+	public EiInfo batchDeptApproval(EiInfo info){
+		// 根据报废详情的id进行审批提交
+		if (info.get("detailIdList") != null) {
+			List<String> detailIdList = (List<String>) info.get("detailIdList");
+			Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
+			// 更新资产主表的状态
+			int count = dao.update("FABF01.approvalScarpStatusById", new HashMap<String, Object>() {{
+				put("deptPerson", staffByUserId.get("name"));
+				put("deptTime", DateUtils.toDateTimeStr19(new Date()));
+				put("deptFileCode", info.getString("deptFileCode"));
+				put("scrapDetailStatus", "05");
+				put("detailIdList", detailIdList);
+			}});
+			// 删除资产报废表信息
+			info.setMsg("成功提交" + count + "条");
+			info.set(EiConstant.serviceName, "XQMS03");
+			info.set(EiConstant.methodName, "verifySignData");
+			info.set("fileCode", info.getString("deptFileCode"));
+			info.set("isBackSignatureImg", 1);
+			EiInfo outInfo = XLocalManager.call(info);
+			for (int i = 0; i < detailIdList.size(); i++) {
+				OneSelfUtils.savePicInfo(info.getString("deptFileCode"), detailIdList.get(i), "scrap", (Map<String, Object>) outInfo.getAttr().get("data"), "dept");
+			}
+		}
+		return info;
+	}
+
+	/**
 	 * 科室报废申请批量取消
 	 *
 	 * @param info
@@ -275,7 +329,31 @@ public class ServiceFABF01 extends ServiceBase {
 			info.setMsg("成功撤销" + deleteFaScrapDetailsByNo + "条");
 			// 查询报废表和报废明细表如果不存在明细删除报废表
 			List<String> scrappedNosList = dao.query("FABF01.queryEmptyScrappedNos", new HashMap<>());
-			dao.delete("FABF01.deleteEmptyScrappedNos",scrappedNosList);
+			if (CollectionUtils.isNotEmpty(scrappedNosList)){
+				dao.delete("FABF01.deleteEmptyScrappedNos",scrappedNosList);
+			}
+		}
+		return info;
+	}
+
+	/**
+	 * 资产科分配批量驳回不合理需求
+	 */
+	public EiInfo batchAssignmentReason(EiInfo info){
+		// 根据报废详情的id进行撤销
+		if (info.get("detailIdList") != null) {
+			List<String> detailIdList = (List<String>) info.get("detailIdList");
+			String assignmentReason = info.getString("assignmentReason");
+			Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
+			// 更新资产主表的状态
+			int i = dao.update("FABF01.batchAssignmentReasonById", new HashMap<String, Object>() {{
+				put("assignmentPerson", staffByUserId.get("name"));
+				put("assignmentTime", DateUtils.toDateTimeStr19(new Date()));
+				put("scrapDetailStatus", "01");
+				put("assignmentReason", assignmentReason);
+				put("detailIdList", detailIdList);
+			}});
+			info.setMsg("成功驳回" + i + "条");
 		}
 		return info;
 	}
@@ -293,7 +371,7 @@ public class ServiceFABF01 extends ServiceBase {
 		if (info.get("detailIdList") != null) {
 			List<String> detailIdList = (List<String>) info.get("detailIdList");
 			if (CollectionUtils.isNotEmpty(detailIdList)) {
-				Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(com.baosight.xservices.xs.util.UserSession.getUser().getUsername());
+				Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
 				Map<String, Object> map = new HashMap<>(8);
 				map.put("identifyPerson", staffByUserId.get("name"));
 				map.put("identifyTime", DateUtils.toDateTimeStr19(new Date()));
@@ -342,7 +420,7 @@ public class ServiceFABF01 extends ServiceBase {
 		if (info.get("detailIdList") != null) {
 			List<String> detailIdList = (List<String>) info.get("detailIdList");
 			if (CollectionUtils.isNotEmpty(detailIdList)) {
-				Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(com.baosight.xservices.xs.util.UserSession.getUser().getUsername());
+				Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
 				Map<String, Object> map = new HashMap<>(8);
 				map.put("functionPerson", staffByUserId.get("name"));
 				map.put("functionTime", DateUtils.toDateTimeStr19(new Date()));
@@ -391,7 +469,7 @@ public class ServiceFABF01 extends ServiceBase {
 		if (info.get("scrappedNoList") != null) {
 			List<String> scrappedNoList = (List<String>) info.get("scrappedNoList");
 			if (CollectionUtils.isNotEmpty(scrappedNoList)) {
-				Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(com.baosight.xservices.xs.util.UserSession.getUser().getUsername());
+				Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
 				Map<String, Object> map = new HashMap<>(8);
 				map.put("assetDeptName", staffByUserId.get("deptName"));
 				map.put("assetPerson", staffByUserId.get("name"));
@@ -425,7 +503,7 @@ public class ServiceFABF01 extends ServiceBase {
 		if (info.get("detailIdList") != null) {
 			List<String> detailIdList = (List<String>) info.get("detailIdList");
 			if (CollectionUtils.isNotEmpty(detailIdList)) {
-				Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(com.baosight.xservices.xs.util.UserSession.getUser().getUsername());
+				Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
 				Map<String, Object> map = new HashMap<>(8);
 				map.put("assetDeptName", staffByUserId.get("deptName"));
 				map.put("assetPerson", staffByUserId.get("name"));

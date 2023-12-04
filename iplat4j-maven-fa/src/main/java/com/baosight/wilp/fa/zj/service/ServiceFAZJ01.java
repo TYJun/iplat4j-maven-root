@@ -797,7 +797,7 @@ public class ServiceFAZJ01 extends ServiceBase {
 		 * 通过stream流过滤出2组数据：是最后一批，非最后一批
 		 * 最后一批直接进行折旧
 		 */
-//		Date startDate = new Date(new Date().getTime() - (long)30 * 24 * 60 * 60 * 1000);
+//		Date startDate = new Date(new Date().getTime() + (long)30 * 24 * 60 * 60 * 1000);
 		Date startDate = new Date();
 		Map<String, String> initLoadMap = new HashMap(){{
 			put("depreciationMonth",yyyyMM.format(startDate));
@@ -821,7 +821,6 @@ public class ServiceFAZJ01 extends ServiceBase {
 		List<Map<String, Object>> collect3 = collect2.stream().filter(map -> collect.contains(map.get("faInfoId"))).collect(Collectors.toList());
 		List<Map<String, Object>> collect4 = collect2.stream().filter(map -> !collect.contains(map.get("faInfoId"))).collect(Collectors.toList());
 		List<Map<String, Object>> collect5 = new ArrayList<>();
-		final Map<String, FaDepreciation> gradeInfoMap = faDepreciationList.stream().collect( Collectors.toMap(FaDepreciation::getGoodId, Function.identity()));
 		for (Map map : collect3) {
 			for (int i = 0; i < faDepreciationList.size(); i++) {
 				BigDecimal netAssetValue = (BigDecimal) map.get("netAssetValue");
@@ -866,7 +865,7 @@ public class ServiceFAZJ01 extends ServiceBase {
 //		}
 
 		/*
-		 * collect1 - 净值 = 月折旧
+		 * collect1 - 净值 = 0.00
 		 * collect4 - 重新计算月折旧
 		 * collect5 - 复制折旧表中的月折旧
 		 */
@@ -893,6 +892,8 @@ public class ServiceFAZJ01 extends ServiceBase {
 			faDepreciationDTO.setGoodsTypeName((String) map.get("goodsTypeName"));
 			faDepreciationDTO.setGoodsNum((String) map.get("goodsNum"));
 			faDepreciationDTO.setGoodsName((String) map.get("goodsName"));
+			faDepreciationDTO.setGoodsCategoryCode((String) map.get("goodsCategoryCode"));
+			faDepreciationDTO.setGoodsCategoryName((String) map.get("goodsCategoryName"));
 			faDepreciationDTO.setGoodsClassifyCode((String) map.get("goodsClassifyCode"));
 			faDepreciationDTO.setGoodsClassifyName((String) map.get("goodsClassifyName"));
 			faDepreciationDTO.setVariationValue(netAssetValue);
@@ -928,6 +929,8 @@ public class ServiceFAZJ01 extends ServiceBase {
 				faDepreciationDTO.setBuyCost(buyCost);
 				faDepreciationDTO.setFundingSourceNum((String) map.get("fundingSourceNum"));
 				faDepreciationDTO.setFundingSourceName((String) map.get("fundingSourceName"));
+				faDepreciationDTO.setGoodsCategoryCode((String) map.get("goodsCategoryCode"));
+				faDepreciationDTO.setGoodsCategoryName((String) map.get("goodsCategoryName"));
 				faDepreciationDTO.setGoodsTypeCode((String) map.get("goodsTypeCode"));
 				faDepreciationDTO.setGoodsTypeName((String) map.get("goodsTypeName"));
 				faDepreciationDTO.setGoodsClassifyCode((String) map.get("goodsClassifyCode"));
@@ -957,6 +960,8 @@ public class ServiceFAZJ01 extends ServiceBase {
 				faDepreciationDTO.setBuyCost(buyCost);
 				faDepreciationDTO.setFundingSourceNum((String) map.get("fundingSourceNum"));
 				faDepreciationDTO.setFundingSourceName((String) map.get("fundingSourceName"));
+				faDepreciationDTO.setGoodsCategoryCode((String) map.get("goodsCategoryCode"));
+				faDepreciationDTO.setGoodsCategoryName((String) map.get("goodsCategoryName"));
 				faDepreciationDTO.setGoodsTypeCode((String) map.get("goodsTypeCode"));
 				faDepreciationDTO.setGoodsTypeName((String) map.get("goodsTypeName"));
 				faDepreciationDTO.setGoodsClassifyCode((String) map.get("goodsClassifyCode"));
@@ -996,19 +1001,29 @@ public class ServiceFAZJ01 extends ServiceBase {
 			faDepreciationDTO.setBuyCost(buyCost);
 			faDepreciationDTO.setFundingSourceNum((String) map.get("fundingSourceNum"));
 			faDepreciationDTO.setFundingSourceName((String) map.get("fundingSourceName"));
+			faDepreciationDTO.setGoodsCategoryCode((String) map.get("goodsCategoryCode"));
+			faDepreciationDTO.setGoodsCategoryName((String) map.get("goodsCategoryName"));
 			faDepreciationDTO.setGoodsTypeCode((String) map.get("goodsTypeCode"));
 			faDepreciationDTO.setGoodsTypeName((String) map.get("goodsTypeName"));
 			faDepreciationDTO.setGoodsClassifyCode((String) map.get("goodsClassifyCode"));
 			faDepreciationDTO.setGoodsClassifyName((String) map.get("goodsClassifyName"));
 			faDepreciationDTO.setGoodsNum((String) map.get("goodsNum"));
 			faDepreciationDTO.setGoodsName((String) map.get("goodsName"));
-			faDepreciationDTO.setVariationValue(monthDepreciation);
 			faDepreciationDTO.setAccountType("030");
 			faDepreciationDTO.setDepreciationMonth((String) map.get("nowDate"));
 			faDepreciationDTO.setUsedMonth(usedMonths);
-			faDepreciationDTO.setDepreciationValue(monthDepreciation);
-			faDepreciationDTO.setTotalDepreciation(totalDepreciation.add(monthDepreciation));
-			faDepreciationDTO.setNetAssetValue(netAssetValue.subtract(monthDepreciation));
+			// 判断净值是否小于月折旧,小于月折旧取净值
+			if((netAssetValue.subtract(monthDepreciation)).compareTo(new BigDecimal(0.00)) == -1){
+				faDepreciationDTO.setVariationValue(netAssetValue);
+				faDepreciationDTO.setDepreciationValue(netAssetValue);
+				faDepreciationDTO.setTotalDepreciation(totalDepreciation.add(netAssetValue));
+				faDepreciationDTO.setNetAssetValue(new BigDecimal(0.00));
+			} else {
+				faDepreciationDTO.setVariationValue(monthDepreciation);
+				faDepreciationDTO.setDepreciationValue(monthDepreciation);
+				faDepreciationDTO.setTotalDepreciation(totalDepreciation.add(monthDepreciation));
+				faDepreciationDTO.setNetAssetValue(netAssetValue.subtract(monthDepreciation));
+			}
 			return faDepreciationDTO;
 		}).collect(Collectors.toList());
 		faDepreciationDTOList.addAll(faDepreciationDTOList1);

@@ -34,7 +34,6 @@ $(function () {
                 numberCount = $.isNumeric($("#inqu_status-0-countAll").val()) ? $("#inqu_status-0-countAll").val() : 0
                 $("#pageCount").text(parseInt(pageCount).toFixed(2));
                 $("#numberCount").text(parseInt(numberCount).toFixed(2));
-
             }
         });
     });
@@ -351,45 +350,95 @@ $(function () {
                     //         }
                     //     }
                     // },
-                    // {
-                    //     name: "printLabel",
-                    //     text: "打印标签",
-                    //     layout: "3",
-                    //     click: function () {
-                    //         var checkRows = resultBGrid.getCheckedRows();
-                    //         if (checkRows.length > 0) {
-                    //             var eiInfo = new EiInfo();
-                    //             // 调用小代码
-                    //             EiCommunicator.send("FAAP01", "automaticallyURL", eiInfo, {
-                    //                 onSuccess: function (ei) {
-                    //                     var BaseUrl = "http://121.36.30.129:7225/fr/ReportServer?reportlet=v5stable/";
-                    //                     if (ei.extAttr.url != undefined) {
-                    //                         BaseUrl = ei.extAttr.url;
-                    //                     }
-                    //                     console.log(BaseUrl)
-                    //                     // 适用于直接点击超链接，浏览器会自动补全格式
-                    //                     var url = BaseUrl + "10.梅州市人民医院固定资产标签.cpt&faInfoId=" + checkRowsItemById();
-                    //                     console.log(url)
-                    //                     var popData = $("#popData");
-                    //                     popData.data("kendoWindow").setOptions({
-                    //                         open: function () {
-                    //                             popData.data("kendoWindow").refresh({
-                    //                                 url: url
-                    //                             });
-                    //                         }
-                    //                     });
-                    //                     popDataWindow.setOptions({"title": ""});
-                    //                     popDataWindow.open().center();
-                    //                 },
-                    //             });
-                    //         } else {
-                    //             NotificationUtil("请先选择一条记录", "warning");
-                    //         }
-                    //     }
-                    // },
+                    {
+                        name: "printCardFinancial",
+                        text: "资产卡片-入库财务",
+                        layout: "3",
+                        click: function () {
+                            var checkRows = resultBGrid.getCheckedRows();
+                            if (checkRows.length > 0) {
+                                var eiInfo = new EiInfo();
+                                // 调用小代码
+                                EiCommunicator.send("FAAP01", "automaticallyURL", eiInfo, {
+                                    onSuccess: function (ei) {
+                                        // 当前页面地址
+                                        var pageUrl = window.location.href;
+                                        // 获取报表地址前袋
+                                        var baseUrl = pageUrl.split('/')[0]+"//"+pageUrl.split('/')[2]+"/";
+                                        var BaseUrl = "fr/ReportServer?reportlet=v5stable/";
+                                        if (ei.extAttr.url != undefined) {
+                                            BaseUrl = ei.extAttr.url;
+                                        }
+                                        console.log(baseUrl)
+                                        // 适用于直接点击超链接，浏览器会自动补全格式
+                                        var url = baseUrl + BaseUrl + "梅州市人民医院固定资产卡片-入库财务.cpt&enterBillNo=" + checkRowsItemByEnterBillNo();
+                                        console.log(url)
+                                        if (checkRowsItemByOutBillNo()) {
+                                            var popData = $("#popData");
+                                            popData.data("kendoWindow").setOptions({
+                                                open: function () {
+                                                    popData.data("kendoWindow").refresh({
+                                                        url: url
+                                                    });
+                                                }
+                                            });
+                                            popDataWindow.setOptions({"title": ""});
+                                            popDataWindow.open().center();
+                                            // window.open(url)
+                                        }
+                                    },
+                                });
+                            } else {
+                                NotificationUtil("请先选择一条记录", "warning");
+                            }
+                        }
+                    },
+                    {
+                        name: "printCardOutFinancial",
+                        text: "资产卡片-出库财务",
+                        layout: "3",
+                        click: function () {
+                            var checkRows = resultBGrid.getCheckedRows();
+                            if (checkRows.length > 0) {
+                                var eiInfo = new EiInfo();
+                                // 调用小代码
+                                EiCommunicator.send("FAAP01", "automaticallyURL", eiInfo, {
+                                    onSuccess: function (ei) {
+                                        // 当前页面地址
+                                        var pageUrl = window.location.href;
+                                        // 获取报表地址前袋
+                                        var baseUrl = pageUrl.split('/')[0]+"//"+pageUrl.split('/')[2]+"/";
+                                        var BaseUrl = "fr/ReportServer?reportlet=v5stable/";
+                                        if (ei.extAttr.url != undefined) {
+                                            BaseUrl = ei.extAttr.url;
+                                        }
+                                        console.log(baseUrl)
+                                        // 适用于直接点击超链接，浏览器会自动补全格式
+                                        var url = baseUrl + BaseUrl + "梅州市人民医院固定资产卡片-财务.cpt&outBillNo=" + checkRowsItemByOutBillNo();
+                                        console.log(url)
+                                        if (checkRowsItemByOutBillNo()) {
+                                            var popData = $("#popData");
+                                            popData.data("kendoWindow").setOptions({
+                                                open: function () {
+                                                    popData.data("kendoWindow").refresh({
+                                                        url: url
+                                                    });
+                                                }
+                                            });
+                                            popDataWindow.setOptions({"title": ""});
+                                            popDataWindow.open().center();
+                                            // window.open(url)
+                                        }
+                                    },
+                                });
+                            } else {
+                                NotificationUtil("请先选择一条记录", "warning");
+                            }
+                        }
+                    },
                     {
                         name: "printCard",
-                        text: "资产卡片标识一览",
+                        text: "资产卡片-普通",
                         layout: "3",
                         click: function () {
                             var checkRows = resultBGrid.getCheckedRows();
@@ -543,8 +592,8 @@ $(function () {
             },
             loadComplete: function (grid) {
                 $("#ef_grid_toolbar_resultB").prepend("<div style='float:left;font-size:13px;'>" +
-                    "勾选资产原值总金额：<span id='pageCount' style='color: red'>0.00</span>元，" +
-                    "勾选资产数量：<span id='numberCount' style='color: red'>0.00</span>条</div>")
+                    "当页资产原值总金额：<span id='pageCount' style='color: red'>0.00</span>元，" +
+                    "当页资产数量：<span id='numberCount' style='color: red'>0.00</span>条</div>")
                 var checkRows = grid.getCheckedRows()
                 if (checkRows.length > 0) {
                     grid.addRows(checkRows);
@@ -592,8 +641,8 @@ $(function () {
         },
         "resultC":{
             pageable: {
-                pageSize: 15,
-                pageSizes: [15]
+                pageSize: 100,
+                pageSizes: [100,200,500,1000]
             },
             onCellClick: function (e) {
                 if (e.field === "goodsNum") {
@@ -605,6 +654,46 @@ $(function () {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
                 add: false, cancel: false, save: false, 'delete': false,
                 buttons:[
+                    {
+                        name: "printLabel",
+                        text: "资产标签",
+                        layout: "3",
+                        click: function () {
+                            var checkRows = resultCGrid.getCheckedRows();
+                            if (checkRows.length > 0) {
+                                var eiInfo = new EiInfo();
+                                // 调用小代码
+                                EiCommunicator.send("FAAP01", "automaticallyURL", eiInfo, {
+                                    onSuccess: function (ei) {
+                                        // 当前页面地址
+                                        var pageUrl = window.location.href;
+                                        // 获取报表地址前袋
+                                        var baseUrl = pageUrl.split('/')[0]+"//"+pageUrl.split('/')[2]+"/";
+                                        var BaseUrl = "fr/ReportServer?reportlet=v5stable/";
+                                        if (ei.extAttr.url != undefined) {
+                                            BaseUrl = ei.extAttr.url;
+                                        }
+                                        console.log(baseUrl)
+                                        // 适用于直接点击超链接，浏览器会自动补全格式
+                                        var url = baseUrl + BaseUrl + "10.梅州市人民医院固定资产标签.cpt&faInfoId=" + checkRowsCItemById();
+                                        console.log(url)
+                                        var popData = $("#popData");
+                                        popData.data("kendoWindow").setOptions({
+                                            open: function () {
+                                                popData.data("kendoWindow").refresh({
+                                                    url: url
+                                                });
+                                            }
+                                        });
+                                        popDataWindow.setOptions({"title": ""});
+                                        popDataWindow.open().center();
+                                    },
+                                });
+                            } else {
+                                NotificationUtil("请先选择一条记录", "warning");
+                            }
+                        }
+                    },
                     {
                         name: "RfidScanAndPrint",
                         text: "批量打印",
@@ -750,6 +839,65 @@ $(function () {
                 arr = arr.substr(0, arr.length - 7);
             }
             return arr;
+        }
+    }
+
+    function checkRowsCItemById() {
+        const checkRows = resultCGrid.getCheckedRows();
+        if (checkRows.length < 1) {
+            NotificationUtil("请先选择一条记录", "warning");
+            return false;
+        } else {
+            var arr = "";
+            for (var i = 0; i < checkRows.length; i++) {
+                arr += checkRows[i]["faInfoId"] + "%27,%27";
+                // 帆软转义 ' 为 %27
+                // arr += checkRows[i]["faInfoId"] +  "','" ;
+            }
+            if (arr.length > 0) {
+                arr = arr.substr(0, arr.length - 7);
+            }
+            return arr;
+        }
+    }
+
+    function checkRowsItemByOutBillNo() {
+        const checkRows = resultBGrid.getCheckedRows();
+        if (checkRows.length == 1) {
+            var arr = "";
+            for (var i = 0; i < checkRows.length; i++) {
+                if (checkRows[i]["outBillNo"] == null || checkRows[i]["outBillNo"] == undefined || checkRows[i]["outBillNo"] == "" || checkRows[i]["outBillNo"] == " "){
+                    NotificationUtil("只选择存在出库记录的资产卡片", "warning");
+                    return false;
+                } else {
+                    // 帆软转义 ' 为 %27
+                    arr += checkRows[i]["outBillNo"];
+                    return arr;
+                }
+            }
+        } else {
+            NotificationUtil("只能选择一条记录", "warning");
+            return false;
+        }
+    }
+
+    function checkRowsItemByEnterBillNo() {
+        const checkRows = resultBGrid.getCheckedRows();
+        if (checkRows.length == 1) {
+            var arr = "";
+            for (var i = 0; i < checkRows.length; i++) {
+                if (checkRows[i]["enterBillNo"] == null || checkRows[i]["enterBillNo"] == undefined || checkRows[i]["enterBillNo"] == "" || checkRows[i]["enterBillNo"] == " "){
+                    NotificationUtil("只选择存在入库记录的资产卡片", "warning");
+                    return false;
+                } else {
+                    // 帆软转义 ' 为 %27
+                    arr += checkRows[i]["enterBillNo"];
+                    return arr;
+                }
+            }
+        } else {
+            NotificationUtil("只能选择一条记录", "warning");
+            return false;
         }
     }
 });

@@ -67,18 +67,18 @@ $(function () {
                     },
                 ]
             },
-            // loadComplete: function (grid) {
-            //     var DataItems = window.parent.resultGrid.getDataItems();
-            //     var faInfoIdList = null;
-            //     for (let i = 0; i < DataItems.length; i++) {
-            //         if (i != 0) {
-            //             faInfoIdList = faInfoIdList + "," + DataItems[i].faInfoId;
-            //         } else {
-            //             faInfoIdList = DataItems[i].faInfoId;
-            //         }
-            //     }
-            //     IPLAT.EFInput.value($("#inqu_status-0-faInfoIdList"),faInfoIdList);
-            // },
+            loadComplete: function (grid) {
+                var DataItems = window.parent.resultGrid.getDataItems();
+                var faInfoIdList = null;
+                for (let i = 0; i < DataItems.length; i++) {
+                    if (i != 0) {
+                        faInfoIdList = faInfoIdList + "," + DataItems[i].faInfoId;
+                    } else {
+                        faInfoIdList = DataItems[i].faInfoId;
+                    }
+                }
+                IPLAT.EFInput.value($("#inqu_status-0-faInfoIdList"),faInfoIdList);
+            },
         },
     }
 });

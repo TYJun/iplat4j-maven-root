@@ -23,6 +23,9 @@ public class FaDepreciationDTO {
 	private String goodsNum;
 	// 资产名称
 	private String goodsName;
+	// 末级分类
+	private String goodsCategoryCode;
+	private String goodsCategoryName;
 	// 类组
 	private String goodsClassifyCode;
 	private String goodsClassifyName;
@@ -161,6 +164,22 @@ public class FaDepreciationDTO {
 
 	public void setGoodsName(String goodsName) {
 		this.goodsName = goodsName;
+	}
+
+	public String getGoodsCategoryCode() {
+		return goodsCategoryCode;
+	}
+
+	public void setGoodsCategoryCode(String goodsCategoryCode) {
+		this.goodsCategoryCode = goodsCategoryCode;
+	}
+
+	public String getGoodsCategoryName() {
+		return goodsCategoryName;
+	}
+
+	public void setGoodsCategoryName(String goodsCategoryName) {
+		this.goodsCategoryName = goodsCategoryName;
 	}
 
 	public String getGoodsClassifyCode() {

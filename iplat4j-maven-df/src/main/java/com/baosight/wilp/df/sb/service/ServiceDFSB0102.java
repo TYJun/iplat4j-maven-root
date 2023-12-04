@@ -157,6 +157,14 @@ public class ServiceDFSB0102 extends ServiceBase{
         return this.edit(info);
 
 	}
+
+	public EiInfo query(EiInfo info) {
+		// 获取设备id
+		String id = (String)info.getAttr().get("id");
+		info.set("id",id);
+		// 调用编辑方法
+		return this.edit(info);
+	}
 	/**
 	 *
 	 * (编辑方法)
@@ -293,10 +301,20 @@ public class ServiceDFSB0102 extends ServiceBase{
         info.addRows("resultA", list2);
 		//获取设备id
 		String machineId =(String)info.get("id");
+		int offset =0,limit = 10;
+		if (info.getBlock("resultB")!=null){
+			offset = (int)info.getBlock("resultB").getAttr().get("offset");
+			limit = (int)info.getBlock("resultB").getAttr().get("limit");
+		}
 		//数据查询
-		List<Map<String,String>> list4 = dao.query("DFSB03.queryDevicePart",machineId);
+		List<Map<String,String>> list4 = dao.query("DFSB03.queryDevicePart",machineId,offset,limit);
+		int count = dao.count("DFSB03.queryDevicePart", machineId);
 		//放入行中
 		info.addRows("resultB", list4);
+		if (info.getBlock("resultB").getAttr()!=null){
+			info.getBlock("resultB").getAttr().put("count",count);
+		}
+//		info.getBlock("resultB").setAttr(map2);
         //创建map集合
 		Map<String, String> map1 = new HashMap<>();
         //将设备id值赋给relateId

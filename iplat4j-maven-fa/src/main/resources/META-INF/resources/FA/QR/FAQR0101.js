@@ -1,4 +1,6 @@
 $(function () {
+    var parentId = $("#info-0-parentId").val();
+    var goodsClassifyName = $("#info-0-goodsClassifyName").val();
     $("#info-0-equityFund").val($("#info-0-buyCost").val());
     $("#info-0-otherFund").val(0.00);
     document.getElementById("info-0-equityFund").addEventListener("input", () => {
@@ -29,7 +31,10 @@ $(function () {
     })
 
     $("#REQUERY").on("click", function () {
-        $("#inqu_status-0-faTypeId").val("")
+        var faTypeId = $("#inqu_status-0-faTypeId").val();
+        if (faTypeId == "" || faTypeId == null){
+            $("#inqu_status-0-faTypeId").val(parentId)
+        }
         $("#inqu_status-0-typeName").val("")
         resultGrid.dataSource.page(1);
     })
@@ -45,8 +50,8 @@ $(function () {
     IPLATUI.EFTree = {
         "menu": {
             ROOT: {
-                id: "root",
-                typeName: "根节点",
+                id: parentId,
+                typeName: goodsClassifyName,
                 isLeaf: true
             },
             /**
@@ -247,6 +252,7 @@ $(function () {
             },
             loadComplete: function (e) {
                 $("#SAVE").on("click", function (e) {
+                    $("#SAVE").attr("disabled",true);
                     var eiInfo = new EiInfo();
                     eiInfo.setByNode("info");
                     var validator = IPLAT.Validator({
@@ -262,14 +268,17 @@ $(function () {
                     validator.validate();
                     if ($("#info-0-goodsName").val() == "") {
                         NotificationUtil("请填写资产名称", "warning")
+                        $("#SAVE").attr("disabled", false);
                         return
                     }
                     if ($("#info-0-goodsTypeCode").val() == "") {
                         NotificationUtil("请选择资产类别", "warning")
+                        $("#SAVE").attr("disabled", false);
                         return
                     }
                     if ($("#info-0-goodsCategoryCode").val() == ""){
                         NotificationUtil("请选择资产末级", "warning")
+                        $("#SAVE").attr("disabled", false);
                         return
                     }
                     // if ($("#info-0-deptName").val() == ""){
@@ -282,6 +291,7 @@ $(function () {
                     // }
                     if (isNaN($("#info-0-buyCost").val())) {
                         NotificationUtil("请检查资产原值类型", "warning")
+                        $("#SAVE").attr("disabled", false);
                         return
                     }
                     // if ($("#info-0-warranty").val() == "") {
@@ -290,14 +300,17 @@ $(function () {
                     // }
                     if (isNaN($("#info-0-warranty").val())) {
                         NotificationUtil("请检查保修期类型", "warning")
+                        $("#SAVE").attr("disabled", false);
                         return
                     }
                     if (isNaN($("#info-0-estimateCost").val())) {
                         NotificationUtil("请检查暂估价值", "warning")
+                        $("#SAVE").attr("disabled", false);
                         return
                     }
                     if (isNaN($("#info-0-useYears").val())) {
                         NotificationUtil("请检查使用年限类型", "warning")
+                        $("#SAVE").attr("disabled", false);
                         return
                     }
                     eiInfo.set("createType", "card");
@@ -332,9 +345,29 @@ $(function () {
                     } else {
                         eiInfo.set("manufacturerNatyName", "");
                     }
+                    // 资产末级校验
+                    var goodsCategoryCodeStr = $("#info-0-goodsCategoryCode").val();
+                    var goodsClassifyCodeStr = $("#info-0-goodsClassifyCode").val();
+                    var goodsCategoryCodeStr1 = goodsCategoryCodeStr.substring(0,1);
+                    var goodsClassifyCodeStr1 = goodsClassifyCodeStr.substring(0,1);
+                    if (goodsCategoryCodeStr1 == 'B' && goodsClassifyCodeStr1 == 'B') {
+                        goodsCategoryCodeStr = goodsCategoryCodeStr.substring(1,3);
+                        goodsClassifyCodeStr = goodsClassifyCodeStr.substring(1,3);
+                    } else {
+                        goodsCategoryCodeStr = goodsCategoryCodeStr.substring(1,5);
+                        goodsClassifyCodeStr = goodsClassifyCodeStr.substring(1,5);
+                    }
+                    if (goodsCategoryCodeStr != goodsClassifyCodeStr){
+                        NotificationUtil("请检查资产末级与资产类别是否属于同一类别", "warning")
+                        $("#SAVE").attr("disabled", false);
+                        return
+                    }
+                    loadingShow();
                     EiCommunicator.send("FADA0101", "saveFaInfo", eiInfo, {
                         onSuccess: function (ei) {
+                            loadingRemove();
                             closeParentWindow()
+                            $("#SAVE").attr("disabled", false);
                         }
                     })
                 });
@@ -365,3 +398,17 @@ function countOtherFund() {
     $("#info-0-equityFund").val(buyCost - otherFund);
 }
 
+//显示转圈中等待
+function loadingShow() {
+    qrCodeWindow.setOptions({"title": "提交中，请稍等..."});
+    qrCodeWindow.open().center();
+    var parent = $("#qrCode");
+    var loading = '<i id="loading"  class="fa fa-spinner fa-spin fa-3x fa-fw" style="margin: auto;text-align: center"></i>';
+    var div = $(loading);
+    div.appendTo(parent);
+}
+
+//移除转圈中等待
+function loadingRemove() {
+    qrCodeWindow.close();
+}

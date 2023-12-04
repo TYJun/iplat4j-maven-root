@@ -105,6 +105,8 @@
         SELECT
             id,
             id AS "faInfoId",
+            goods_category_code AS "goodsCategoryCode",
+            goods_category_name AS "goodsCategoryName",
             goods_classify_code AS "goodsClassifyCode",
             goods_classify_name AS "goodsClassifyName",
             goods_type_code AS "goodsTypeCode",
@@ -123,9 +125,9 @@
             fundingSource_name AS "fundingSourceName",
             date_format(buy_date,'%Y-%m-%d') AS "buyDate",
             date_format(use_date,'%Y-%m-%d') AS "useDate",
-            date_format(DATE_ADD(use_date, INTERVAL use_years YEAR), '%Y-%m' ) AS "lastDate",
+            date_format(DATE_SUB(DATE_ADD(use_date, INTERVAL use_years YEAR),INTERVAL 1 MONTH), '%Y-%m' ) AS "lastDate",
             date_format(use_date,'%Y-%m') AS "countDate",
-            date_format(NOW(),'%Y-%m') AS "nowDate",
+            date_format(DATE_ADD(NOW(),INTERVAL 0 MONTH ),'%Y-%m') AS "nowDate",
             use_years AS "useYears",
             use_years * 12 AS "useMonths",
             net_asset_value AS "netAssetValue",
@@ -151,6 +153,8 @@
             dept_name AS "deptName",
             goods_num AS "goodsNum",
             goods_name AS "goodsName",
+            goods_category_code AS "goodsCategoryCode",
+            goods_category_name AS "goodsCategoryName",
             goods_classify_code AS "goodsClassifyCode",
             goods_classify_name AS "goodsClassifyName",
             goods_type_code AS "goodsTypeCode",
@@ -179,8 +183,8 @@
     <insert id="completeDEPNEW" parameterClass="java.util.List">
         INSERT INTO fa_depreciation(id,good_id,dept_num,dept_name,goods_num,goods_name,model,spec,buy_cost,
             depreciation_month,used_month,depreciation_value,total_depreciation,net_asset_value,
-            fundingSource_num,fundingSource_name,goods_classify_code,goods_classify_name,goods_type_code,
-            goods_type_name)
+            fundingSource_num,fundingSource_name,goods_category_code,goods_category_name,
+            goods_classify_code,goods_classify_name,goods_type_code,goods_type_name)
         VALUES
         <iterate conjunction=",">
             (UUID(),#faDepreciationDTOList[].faInfoId#,#faDepreciationDTOList[].deptNum#,
@@ -191,6 +195,7 @@
              #faDepreciationDTOList[].usedMonth#,#faDepreciationDTOList[].depreciationValue#,
              #faDepreciationDTOList[].totalDepreciation#,#faDepreciationDTOList[].netAssetValue#,
              #faDepreciationDTOList[].fundingSourceNum#,#faDepreciationDTOList[].fundingSourceName#,
+             #faDepreciationDTOList[].goodsCategoryCode#,#faDepreciationDTOList[].goodsCategoryName#,
              #faDepreciationDTOList[].goodsClassifyCode#,#faDepreciationDTOList[].goodsClassifyName#,
              #faDepreciationDTOList[].goodsTypeCode#,#faDepreciationDTOList[].goodsTypeName#)
         </iterate>
@@ -198,14 +203,14 @@
 
     <insert id="throwDEPNEW" parameterClass="java.util.List">
         INSERT INTO fa_throw_account(id,faInfo_id,dept_num,dept_name,surp_num,surp_name,invoice_no,
-        goods_type_code,goods_num,goods_name,net_asset_value,
+        goods_type_code,goods_num,goods_name,net_asset_value,goods_category_code,goods_category_name,
         account_type,create_date,goods_classify_code,goods_classify_name,goods_type_name)
         VALUES
         <iterate conjunction=",">
             (UUID(),#faDepreciationDTOList[].faInfoId#,#faDepreciationDTOList[].deptNum#,#faDepreciationDTOList[].deptName#,
             #faDepreciationDTOList[].surpNum#,#faDepreciationDTOList[].surpName#,#faDepreciationDTOList[].invoiceNo#,#faDepreciationDTOList[].goodsTypeCode#,#faDepreciationDTOList[].goodsNum#,
-            #faDepreciationDTOList[].goodsName#,#faDepreciationDTOList[].depreciationValue#,#faDepreciationDTOList[].accountType#,NOW(),
-            #faDepreciationDTOList[].goodsClassifyCode#,#faDepreciationDTOList[].goodsClassifyName#,#faDepreciationDTOList[].goodsTypeName#)
+            #faDepreciationDTOList[].goodsName#,#faDepreciationDTOList[].depreciationValue#,#faDepreciationDTOList[].goodsCategoryCode#,#faDepreciationDTOList[].goodsCategoryName#,
+            #faDepreciationDTOList[].accountType#,NOW(),#faDepreciationDTOList[].goodsClassifyCode#,#faDepreciationDTOList[].goodsClassifyName#,#faDepreciationDTOList[].goodsTypeName#)
         </iterate>
     </insert>
 

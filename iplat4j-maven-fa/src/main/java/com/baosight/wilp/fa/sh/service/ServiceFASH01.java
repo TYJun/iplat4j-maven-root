@@ -1,6 +1,7 @@
 package com.baosight.wilp.fa.sh.service;
 
 import com.baosight.iplat4j.core.ei.EiBlock;
+import com.baosight.iplat4j.core.ei.EiBlockMeta;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
 import com.baosight.iplat4j.core.util.StringUtils;
@@ -13,12 +14,12 @@ import java.util.Map;
 public class ServiceFASH01 extends ServiceBase {
     @Override
     public EiInfo initLoad(EiInfo info) {
-        return info;
+        return confirmedQuery(info);
     }
 
     @Override
     public EiInfo query(EiInfo inInfo) {
-        return inInfo;
+        return confirmedQuery(inInfo);
     }
 
     // 报废提交资产
@@ -34,6 +35,7 @@ public class ServiceFASH01 extends ServiceBase {
         EiBlock eiBlock = info.getBlock("inqu_status");
         if (eiBlock != null) {
             map = eiBlock.getRow(0);
+            map.put("orderBy",attr.get("orderBy"));
             String deptNameSplit = (String) map.get("deptName");
             if (StringUtils.isNotEmpty(deptNameSplit)) {
                 String[] split = deptNameSplit.split(",");
@@ -50,7 +52,7 @@ public class ServiceFASH01 extends ServiceBase {
         }
         map.put("statusCode", "040");
         List<Map<String, String>> list = dao.query("FASH01.query", map, offset, limit);
-        int count = dao.count("FASH01.query", map);
+        int count = list.size();
         attr.put("count", count);
         EiBlock block = new EiBlock("resultA");
         block.setRows(list);
@@ -59,7 +61,7 @@ public class ServiceFASH01 extends ServiceBase {
         // 1.获取参数,处理参数
         Map<String, Object> map1 = CommonUtils.buildParamter(info, "inqu_status", "dept");
         // 2.调用微服务接口S_AC_FW_05，获取科室信息
-        map.remove("limit");
+        map1.remove("limit");
         List<Map<String, String>> maps = dao.query("FADA01.queryDept", map1);
         info.addBlock("dept").addRows(maps);
         return info;

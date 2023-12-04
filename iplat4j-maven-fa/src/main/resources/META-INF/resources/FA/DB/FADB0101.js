@@ -170,21 +170,23 @@ IPLATUI.EFGrid = {
             buttons: []
         },
         onCheckRow: function (e) {
-            if (IPLAT.EFInput.value($("#type")) == "confirm") {
-                return;
-            } else {
-                var grid = e.sender,
-                    model = e.model,
-                    $tr = e.tr,
-                    row = e.row;
-                $tr.css({
-                    background: "white",
-                    color: "#000000A6"
-                });
-                grid.unCheckAllRows();
-            }
+            // if (IPLAT.EFInput.value($("#type")) == "confirm") {
+            //     return;
+            // } else {
+            //     var grid = e.sender,
+            //         model = e.model,
+            //         $tr = e.tr,
+            //         row = e.row;
+            //     $tr.css({
+            //         background: "white",
+            //         color: "#000000A6"
+            //     });
+            //     grid.unCheckAllRows();
+            // }
         },
         loadComplete: function (grid) {
+            let element = document.getElementsByClassName("col-xs-4")[0];
+            element.setAttribute("id", "info-0-deptNum");
             var type = $("#type").val();
             // if (type == "enter" || type == "apply") {
             //     var applyFileCode = $("#info-0-applyFileCode").val();
@@ -269,6 +271,10 @@ IPLATUI.EFGrid = {
                     NotificationUtil("请填写资产调拨原因", "warning")
                     return
                 }
+                if ($("#info-0-turnDeptName").val() == __ei.deptName) {
+                    NotificationUtil("请勿自己科室调拨到自己科室", "warning")
+                    return
+                }
                 // if ($("#info-0-applyFileCode").val() == "") {
                 //     NotificationUtil("电子签名获取失败,请联系管理员", "warning")
                 //     return
@@ -314,7 +320,7 @@ IPLATUI.EFGrid = {
 
             // 接收科室通过
             $("#confirmPass").on("click", function (e) {
-                if ($("#info-0-confirmLocationNum").val() == "") {
+                if ($("#info-0-confirmLocationNum").val() == "" || $("#info-0-confirmLocationNum").val() == " ") {
                     NotificationUtil("请选择存放位置", "warning")
                     return
                 }

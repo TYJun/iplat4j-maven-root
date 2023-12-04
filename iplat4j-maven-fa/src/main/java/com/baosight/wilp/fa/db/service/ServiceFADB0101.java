@@ -123,6 +123,8 @@ public class ServiceFADB0101 extends ServiceBase {
 		} else {
 			info.set("role", "user");
 		}
+		info.set("deptNum",applyDeptNum);
+		info.set("deptName",applyDeptName);
 		return info;
 	}
 
@@ -323,6 +325,12 @@ public class ServiceFADB0101 extends ServiceBase {
 		info.set("isBackSignatureImg", 1);
 		EiInfo outInfo = XLocalManager.call(info);
 		OneSelfUtils.savePicInfo(faTransferVO.getApplyFileCode(), faTransferVO.getTransferNo(), "transfer", (Map<String, Object>) outInfo.getAttr().get("data"), "apply");
+		OneSelfUtils.pushWxMsgOfFa(new HashMap<String,String>(){{
+			put("type","调拨申请");
+			put("applyDeptNo",faTransferVO.getApplyDeptNum());
+			put("applyDeptName",faTransferVO.getApplyDeptName());
+			put("billNo",transferNo);
+		}});
 		return info;
 	}
 
@@ -353,6 +361,7 @@ public class ServiceFADB0101 extends ServiceBase {
 	 */
 	public EiInfo confirmFaTransferInfo(EiInfo info) {
 		String type = info.getString("type");
+		String pushMsgType = "";
 		Map<String, Object> confirmInfo = info.getBlock("info").getRow(0);
 		confirmInfo.put("applyTime", DateUtils.toDateTimeStr19(new Date()));
 		confirmInfo.put("confirmTime", DateUtils.toDateTimeStr19(new Date()));
@@ -367,6 +376,7 @@ public class ServiceFADB0101 extends ServiceBase {
 		switch (type) {
 			case "pass":
 				faTransferVO.setTransferStatus("20");
+				pushMsgType = "调拨审批";
 				break;
 			case "reject":
 				faTransferVO.setTransferStatus("50");
@@ -383,6 +393,15 @@ public class ServiceFADB0101 extends ServiceBase {
 		info.set("isBackSignatureImg", 1);
 		EiInfo outInfo = XLocalManager.call(info);
 		OneSelfUtils.savePicInfo(faTransferVO.getConfirmFileCode(), faTransferVO.getTransferNo(), "transfer", (Map<String, Object>) outInfo.getAttr().get("data"), "confirm");
+		String finalPushMsgType = pushMsgType;
+		OneSelfUtils.pushWxMsgOfFa(new HashMap<String,String>(){{
+			put("type", finalPushMsgType);
+			put("applyDeptNo",faTransferVO.getApplyDeptNum());
+			put("applyDeptName",faTransferVO.getApplyDeptName());
+			put("confirmDeptNo", faTransferVO.getConfirmDeptNum());
+			put("confirmDeptName", faTransferVO.getConfirmDeptName());
+			put("billNo", (String) confirmInfo.get("transferNo"));
+		}});
 		return info;
 	}
 
@@ -396,6 +415,7 @@ public class ServiceFADB0101 extends ServiceBase {
 	 */
 	public EiInfo confirmFaTransferInfoPart(EiInfo info) {
 		String type = info.getString("type");
+		String pushMsgType = "";
 		Map<String, Object> confirmInfo = info.getBlock("info").getRow(0);
 		confirmInfo.put("applyTime", DateUtils.toDateTimeStr19(new Date()));
 		confirmInfo.put("confirmTime", DateUtils.toDateTimeStr19(new Date()));
@@ -417,6 +437,7 @@ public class ServiceFADB0101 extends ServiceBase {
 //		List<Map<String, Object>> reject = faTransferInfoList.stream().filter(map -> !faInfoIdList.contains(map.get("faInfoId"))).collect(Collectors.toList());
 		switch (type) {
 			case "pass":
+				pushMsgType = "调拨审批";
 				faTransferVO.setTransferStatus("20");
 				dao.update("FADB01.updatePart",new HashMap<String,Object>(){{
 					put("transferNo", confirmInfo.get("transferNo"));
@@ -442,6 +463,15 @@ public class ServiceFADB0101 extends ServiceBase {
 		info.set("isBackSignatureImg", 1);
 		EiInfo outInfo = XLocalManager.call(info);
 		OneSelfUtils.savePicInfo(faTransferVO.getConfirmFileCode(), faTransferVO.getTransferNo(), "transfer", (Map<String, Object>) outInfo.getAttr().get("data"), "confirm");
+		String finalPushMsgType = pushMsgType;
+		OneSelfUtils.pushWxMsgOfFa(new HashMap<String,String>(){{
+			put("type", finalPushMsgType);
+			put("applyDeptNo",faTransferVO.getApplyDeptNum());
+			put("applyDeptName",faTransferVO.getApplyDeptName());
+			put("confirmDeptNo", faTransferVO.getConfirmDeptNum());
+			put("confirmDeptName", faTransferVO.getConfirmDeptName());
+			put("billNo", (String) confirmInfo.get("transferNo"));
+		}});
 		return info;
 	}
 

@@ -44,7 +44,7 @@ public class FaInfoDO extends DaoEPBase {
 	private String purchaseStaffName = " ";
 	private String acquitvYear = " ";
 	private String enterBillNo = " ";        /* 入库单号*/
-	private String outBillNo = " ";        /* 入库单号*/
+	private String outBillNo = " ";        /* 出库单号*/
 	private String contNo = " ";        /* 合同号*/
 	private String fundingSourceNum = " ";        /* 资金来源编码*/
 	private String fundingSourceName = " ";

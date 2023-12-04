@@ -81,11 +81,9 @@ $(function () {
                             eiInfo.set("goodsNumList",goodsNumList);
                             EiCommunicator.send("FASH00", "filterate", eiInfo, {
                                 onSuccess: function (ei) {
-                                    if(ei.getMsg()==200){
-                                        fixedAssetsWindow();
-                                    }
                                 }
                             });
+                            fixedAssetsWindow();
                         }
                     },
                 ]

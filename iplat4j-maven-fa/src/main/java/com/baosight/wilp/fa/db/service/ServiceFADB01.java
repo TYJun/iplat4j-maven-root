@@ -248,7 +248,7 @@ public class ServiceFADB01 extends ServiceBase {
         String type = info.getString("type");
         String auditReason = info.getString("auditReason");
         String auditFileCode = info.getString("auditFileCode");
-        Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(com.baosight.xservices.xs.util.UserSession.getUser().getUsername());
+        Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
         if (info.get("transferNoList") != null) {
             List<String> transferNoList = (List<String>) info.get("transferNoList");
             if (CollectionUtils.isNotEmpty(transferNoList)) {
@@ -307,8 +307,6 @@ public class ServiceFADB01 extends ServiceBase {
                 info.set("fileCode", auditFileCode);
                 info.set("isBackSignatureImg", 1);
                 EiInfo outInfo = XLocalManager.call(info);
-//				info.set(EiConstant.serviceName, "XQMS03");
-//				info.set(EiConstant.methodName, "verifySignData");
                 for (int i = 0; i < transferNoList.size(); i++) {
                     OneSelfUtils.savePicInfo(auditFileCode, transferNoList.get(i), "transfer", (Map<String, Object>) outInfo.getAttr().get("data"), "audit");
                 }
@@ -326,9 +324,10 @@ public class ServiceFADB01 extends ServiceBase {
                 put("transferNo", transferNo);
             }});
             info.setRows(block, list);
-            Map<String, Object> pageMap = new HashMap<>(8);
-            pageMap.put("count", list.size());
-            info.setAttr(pageMap);
+            info.getBlock(block).set(EiConstant.limitStr, 10000);
+//            Map<String, Object> pageMap = new HashMap<>(8);
+//            pageMap.put("count", list.size());
+//            info.setAttr(pageMap);
         }
         return info;
     }

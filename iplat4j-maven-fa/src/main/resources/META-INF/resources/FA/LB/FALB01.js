@@ -184,7 +184,13 @@ $(function () {
                         layout: "3",
                         click: function () {
                             popDataWindow.setOptions({"title": "资产类别录入"});
-                            fixedAssetsWindow("enter", "", $("#typeId").val(), $("#typeName").val())
+                            var typeName;
+                            if ($("#typeName").val().includes(']')){
+                                typeName = $("#typeName").val().split(']')[1];
+                            } else {
+                                typeName = $("#typeName").val();
+                            }
+                            fixedAssetsWindow("enter", "", $("#typeId").val(), typeName)
                         }
                     },
                     {

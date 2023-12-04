@@ -44,7 +44,7 @@
 <%--			</EF:EFGrid>--%>
 <%--		</div>--%>
 		<div title="待确认资产信息">
-			<EF:EFGrid blockId="resultB" autoDraw="no" rowNo="true" autoBind="false" readonly="true" checkMode="multiple,row" queryMethod="unconfirmedQuery" height="460px">
+			<EF:EFGrid blockId="resultB" autoDraw="no" rowNo="true" autoBind="false" readonly="true" checkMode="single,row" queryMethod="unconfirmedQuery" height="460px">
 				<EF:EFColumn ename="id" cname="id"  align="center" locked="true" hidden="true"/>
 				<EF:EFColumn ename="faConfirmId" cname="faConfirmId"  align="center" locked="true" hidden="true"/>
 				<EF:EFColumn ename="receiveType" cname="入库方式" align="center" enable="false" width="100" hidden="true"/>

@@ -62,6 +62,7 @@
             receive_type AS "receiveType",
             CASE receive_type
             WHEN "01" THEN "直入直出"
+            WHEN "06" THEN "采购入库"
             WHEN "08" THEN "手工入库"
             END AS "receiveTypeName",
             enter_bill_no	as "enterBillNo",  <!-- 入库单号 资产入库的唯一标识码,大于零的自然数 -->

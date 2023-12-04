@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import com.baosight.iplat4j.core.util.DateUtils;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import com.baosight.iplat4j.core.ei.EiColumn;
@@ -61,7 +62,7 @@ public class FaConfirmDO extends DaoEPBase {
     private Date checkDate;	/* 验收日期 设备到达医院后进行验收的日期,*/
     private Date acquitvDate;	/* 购置日期 购置资产的合同或协议日期,*/
     private String acquitvYear;		/* 购置年度 获得资产所有权的年度,*/
-    private Date recCreateTime;	/* 创建时间（入库时间）*/
+    private String recCreateTime;	/* 创建时间（入库时间）*/
     private String recCreateName;		/* 创建人*/
     private String dataGroupCode;		/* 账套*/
     private String transferType;		/* 对接类型(00-博纳确认,10-外部系统确认)*/
@@ -740,14 +741,14 @@ public class FaConfirmDO extends DaoEPBase {
      * get the recCreateTime - 创建时间（入库时间）
      * @return the recCreateTime
      */
-    public Date getRecCreateTime() {
+    public String getRecCreateTime() {
         return this.recCreateTime;
     }
 
     /**
      * set the recCreateTime - 创建时间（入库时间）
      */
-    public void setRecCreateTime(Date recCreateTime) {
+    public void setRecCreateTime(String recCreateTime) {
         this.recCreateTime = recCreateTime;
     }
 
@@ -919,7 +920,7 @@ public class FaConfirmDO extends DaoEPBase {
         setCheckDate(DateUtils.toDateTime19(StringUtils.toString(map.get("checkDate"))));
         setAcquitvDate(DateUtils.toDateTime19(StringUtils.toString(map.get("acquitvDate"))));
         setAcquitvYear(OneSelfUtils.defaultIfEmpty(StringUtils.toString(map.get("acquitvYear")), acquitvYear));
-        setRecCreateTime(DateUtils.toDateTime19(StringUtils.toString(map.get("recCreateTime"))));
+        setRecCreateTime(StringUtils.toString(map.get("recCreateTime")));
         setRecCreateName(OneSelfUtils.defaultIfEmpty(StringUtils.toString(map.get("recCreateName")), recCreateName));
         setDataGroupCode(OneSelfUtils.defaultIfEmpty(StringUtils.toString(map.get("dataGroupCode")), dataGroupCode));
         setTransferType(OneSelfUtils.defaultIfEmpty(StringUtils.toString(map.get("transferType")), transferType));
@@ -986,54 +987,4 @@ public class FaConfirmDO extends DaoEPBase {
         return map;
     }
 
-    @Override
-    public String toString() {
-        return "FaConfirmDO{" +
-                ", id='" + id + '\'' +
-                ", faConfirmId='" + faConfirmId + '\'' +
-                ", contNo='" + contNo + '\'' +
-                ", purchaseVouch='" + purchaseVouch + '\'' +
-                ", purchaseStaffName='" + purchaseStaffName + '\'' +
-                ", fundingSourceNum='" + fundingSourceNum + '\'' +
-                ", fundingSourceName='" + fundingSourceName + '\'' +
-                ", originBillNo='" + originBillNo + '\'' +
-                ", enterBillNo='" + enterBillNo + '\'' +
-                ", outBillNo='" + outBillNo + '\'' +
-                ", enterType='" + enterType + '\'' +
-                ", enterTypeName='" + enterTypeName + '\'' +
-                ", matNum='" + matNum + '\'' +
-                ", matName='" + matName + '\'' +
-                ", matTypeNum='" + matTypeNum + '\'' +
-                ", matTypeName='" + matTypeName + '\'' +
-                ", matSpec='" + matSpec + '\'' +
-                ", model='" + model + '\'' +
-                ", batchNo='" + batchNo + '\'' +
-                ", batchNum='" + batchNum + '\'' +
-                ", unitNum='" + unitNum + '\'' +
-                ", unitName='" + unitName + '\'' +
-                ", enterNum=" + enterNum +
-                ", enterPrice=" + enterPrice +
-                ", enterAmount=" + enterAmount +
-                ", invoiceNo='" + invoiceNo + '\'' +
-                ", manufacturer='" + manufacturer + '\'' +
-                ", manufacturerCode='" + manufacturerCode + '\'' +
-                ", surpNum='" + surpNum + '\'' +
-                ", surpName='" + surpName + '\'' +
-                ", checkDate=" + checkDate +
-                ", acquitvDate=" + acquitvDate +
-                ", acquitvYear='" + acquitvYear + '\'' +
-                ", recCreateTime=" + recCreateTime +
-                ", recCreateName='" + recCreateName + '\'' +
-                ", dataGroupCode='" + dataGroupCode + '\'' +
-                ", transferType='" + transferType + '\'' +
-                ", confirmName='" + confirmName + '\'' +
-                ", confirmDate=" + confirmDate +
-                ", confirmStatus='" + confirmStatus + '\'' +
-                ", receiveType='" + receiveType + '\'' +
-                ", receiveTypeName='" + receiveTypeName + '\'' +
-                ", warranty=" + warranty +
-                ", deptNum='" + deptNum + '\'' +
-                ", deptName='" + deptName + '\'' +
-                '}';
-    }
 }

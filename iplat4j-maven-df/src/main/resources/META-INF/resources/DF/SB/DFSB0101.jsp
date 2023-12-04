@@ -10,10 +10,10 @@
 		<div class="row">
 			<EF:EFInput ename="machineCode" cname="机房编码：" colWidth="4" ratio="3:8" />
 			<EF:EFInput ename="machineName" cname="机房名称：" colWidth="4" ratio="3:8" required="true"/>
-			<EF:EFInput ename="models" cname="规格型号：" colWidth="4" ratio="3:8"/> 
+			<EF:EFInput ename="models" cname="规格型号：" colWidth="4" ratio="3:8"/>
 		</div>
 		<div class="row">
-			<EF:EFTreeInput ename="machineTypeId" cname="设备分类：" 
+			<EF:EFTreeInput ename="machineTypeId" cname="设备分类："
 				serviceName="DFFL10" methodName="queryDFFLTree" textField="classifyName"
 				valueField="id" hasChildren="isLeaf" popupTitle="设备分类"
 				root="{id: 'root',classifyName: '目录结构'}" clear="true" readonly="true"
@@ -57,7 +57,7 @@
 				valueField="deptNum" textField="deptName"
 				columnEnames="deptNum,deptName" columnCnames="科室编码,科室名称" />
 			<EF:EFPopupInput ename="useDeaprtId" cname="使用科室"  colWidth="4" ratio="3:8"
-				popupTitle="科室选择" required="true" 
+				popupTitle="科室选择" required="true"
 				popupType="ServiceGrid" serviceName="DFSB01" methodName="queryDept" resultId="dept"
 				valueField="deptNum" textField="deptName" readonly="true"
 				columnEnames="deptNum,deptName" columnCnames="科室编码,科室名称" />
@@ -68,11 +68,11 @@
 				popupType="ServiceGrid" serviceName="DFSB01" methodName="queryPerson" resultId="person"
 				valueField="workNo" textField="name"
 				columnEnames="workNo,name,deptName" columnCnames="工号,姓名" />
-			<EF:EFPopupInput ename="fixedId" cname="安装地点：" colWidth="4" ratio="3:8" readonly="true" 
+			<EF:EFPopupInput ename="fixedId" cname="安装地点：" colWidth="4" ratio="3:8" readonly="true"
 				popupType="ServiceGrid" popupTitle="安装地点" required="true" serviceName="DFSB01" methodName="querySpot" resultId="spot" autofit="true"
 				valueField="id" textField="spotName" columnEnames="spotName" columnCnames="地点"/>
-			<EF:EFInput ename="relatedDevice" cname="关联设备：" colWidth="4" ratio="3:8"/>	
-			
+			<EF:EFInput ename="relatedDevice" cname="关联设备：" colWidth="4" ratio="3:8"/>
+
 		</div>
 		<div class="row">
 		 <EF:EFSelect ename="statusCode" cname="设备状态：" colWidth="4"
@@ -108,15 +108,15 @@
 	</div>
 	</EF:EFRegion>
 	<EF:EFRegion title="检验日期信息">
-	<div class="row">
-	<EF:EFDatePicker ename="thisCheckDate" cname="本年检验日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"
-			parseFormats="['yyyy-mm-dd']" readonly="true" />
-			<EF:EFDatePicker ename="thisFinishDate" cname="本年完工日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"
-			parseFormats="['yyyy-mm-dd']" readonly="true" />
-			<EF:EFInput ename="annualinspcycle" cname="周期（月）：" colWidth="3" ratio="4:8"/>
-			<EF:EFDatePicker ename="nextCheckDate" cname="下年检验日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"
-			parseFormats="['yyyy-mm-dd']" readonly="true" />
-	</div>
+<%--	<div class="row">--%>
+<%--	<EF:EFDatePicker ename="thisCheckDate" cname="本年检验日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"--%>
+<%--			parseFormats="['yyyy-mm-dd']" readonly="true" />--%>
+<%--			<EF:EFDatePicker ename="thisFinishDate" cname="本年完工日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"--%>
+<%--			parseFormats="['yyyy-mm-dd']" readonly="true" />--%>
+<%--			<EF:EFInput ename="annualinspcycle" cname="周期（月）：" colWidth="3" ratio="4:8"/>--%>
+<%--			<EF:EFDatePicker ename="nextCheckDate" cname="下年检验日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"--%>
+<%--			parseFormats="['yyyy-mm-dd']" readonly="true" />--%>
+<%--	</div>--%>
 	<div class="row">
 	<EF:EFDatePicker ename="thisExpiredDate" cname="本次定检日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"
 			parseFormats="['yyyy-mm-dd']" readonly="true" />
@@ -181,7 +181,7 @@
 			  </div>
 		  </div>
 	  </div>--%>
-	  
+
 	</EF:EFTab>
 		<!-- 附件上传窗口 -->
 	<EF:EFWindow id="fileChoose" url="" lazyload="true" refresh="true" width="40%" height="30%">

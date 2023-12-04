@@ -213,6 +213,8 @@
           <element id="library" level="project" name="Maven: org.apache.cxf:cxf-core:3.1.6" />
           <element id="library" level="project" name="Maven: org.codehaus.woodstox:woodstox-core-asl:4.4.1" />
           <element id="library" level="project" name="Maven: org.apache.ws.xmlschema:xmlschema-core:2.2.1" />
+          <element id="library" level="project" name="Maven: xalan:xalan:2.7.2" />
+          <element id="library" level="project" name="Maven: xalan:serializer:2.7.2" />
           <element id="library" level="project" name="Maven: org.apache.cxf:cxf-rt-frontend-jaxws:3.1.6" />
           <element id="library" level="project" name="Maven: xml-resolver:xml-resolver:1.2" />
           <element id="library" level="project" name="Maven: org.ow2.asm:asm:5.0.4" />

@@ -1,6 +1,5 @@
 package com.baosight.wilp.fa.da.service;
 
-import com.baosight.iplat4j.core.data.ibatis.dao.SqlMapDao;
 import com.baosight.iplat4j.core.ei.EiBlock;
 import com.baosight.iplat4j.core.ei.EiConstant;
 import com.baosight.iplat4j.core.ei.EiInfo;
@@ -12,7 +11,6 @@ import com.baosight.wilp.common.util.CommonUtils;
 import com.baosight.wilp.fa.da.domain.FaInfoDO;
 import com.baosight.wilp.fa.utils.OneSelfUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.springframework.security.core.parameters.P;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -421,8 +419,8 @@ public class ServiceFADA01 extends ServiceBase {
     public EiInfo confirmedQuery(EiInfo info) {
         EiBlock eiBlock = info.getBlock("inqu_status");
         if (eiBlock != null) {
-            Map<String, Object> row = eiBlock.getRow(0);
-            String deptName = String.valueOf(row.get("deptName"));
+            Map<String, String> row = eiBlock.getRow(0);
+            String deptName = row.get("deptName");
             if (StringUtils.isNotEmpty(deptName)) {
                 String[] split = deptName.split(",");
                 for (int i = 0; i < split.length; i++) {
@@ -459,7 +457,7 @@ public class ServiceFADA01 extends ServiceBase {
         map.remove("limit");
         List<Map<String, String>> maps = dao.query("FADA01.queryDept", map);
         outInfo.setRows("dept", maps);
-        outInfo.set("obj",query);
+        outInfo.setRows("inqu_status",query);
         return outInfo;
     }
 

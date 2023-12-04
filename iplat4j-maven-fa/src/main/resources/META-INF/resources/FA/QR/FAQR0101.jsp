@@ -51,6 +51,7 @@
 <%--							 containerId="ef_popup_grid" popupWidth="1200" popupHeight="600" popupTitle="资产类别选择"--%>
 <%--							 resizable="true" center="true">--%>
 <%--			</EF:EFPopupInput>--%>
+			<EF:EFInput ename="info-0-parentId" cname="父节点" readonly="true" type="hidden"/>
 			<EF:EFInput ename="info-0-goodsClassifyName" cname="资产类别" readonly="true"/>
 			<EF:EFInput ename="info-0-goodsClassifyCode" cname="资产类别编码"  required="true" type="hidden"/>
 			<EF:EFInput ename="info-0-goodsTypeName" cname="类组" readonly="true"/>
@@ -147,7 +148,7 @@
 				<EF:EFCodeOption codeName="wilp.fa.deprectCode"/>
 			</EF:EFSelect>
 			<EF:EFInput ename="info-0-equityFund" cname="自有资金(元)"/>
-			<EF:EFSelect ename="info-0-fundingSourceNum" cname="资金来源" optionLabel="--请选择--">
+			<EF:EFSelect ename="info-0-fundingSourceNum" cname="资金来源">
 				<EF:EFCodeOption codeName="wilp.mp.source"/>
 			</EF:EFSelect>
 			<EF:EFInput ename="info-0-otherFund" cname="其它资金(元)"/>
@@ -163,4 +164,5 @@
 			<EF:EFButton cname="关闭" ename="CLOSE" layout="3"></EF:EFButton>
 		</div>
 	</EF:EFRegion>
+	<EF:EFWindow id="qrCode" url="" lazyload="true" width="15%" height="8%" title="加载中" modal="true" />
 </EF:EFPage>

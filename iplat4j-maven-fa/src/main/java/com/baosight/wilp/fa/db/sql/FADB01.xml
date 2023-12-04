@@ -536,6 +536,7 @@
         net_asset_value AS "netAssetValue",
         estimate_cost AS "estimateCost",
         remark AS "remark",
+        out_remark	AS "outRemark",
         depreciation_way AS "depreciationWay",
         total_depreciation AS "totalDepreciation",
         month_depreciation AS "monthDepreciation",
@@ -552,6 +553,7 @@
         archive_flag AS "archiveFlag",
         CASE operation_type
         WHEN "01" THEN "直入直出"
+        WHEN "06" THEN "采购入库"
         WHEN "08" THEN "手工入库"
         END AS "operationType",
         split_reason AS "splitReason"
@@ -621,7 +623,14 @@
         <isNotEmpty prepend=" AND " property="statusCode">
             status_code = #statusCode#
         </isNotEmpty>
-        order by status_code,dept_name,goods_num
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                enter_bill_no DESC,goods_num
+            </isEmpty>
+        </dynamic>
     </select>
     <!--    -->
 
@@ -735,7 +744,14 @@
         <isNotEmpty prepend="and" property="confirmDeptName">
             confirm_dept_name LIKE concat('%',trim(#confirmDeptName#),'%')
         </isNotEmpty>
-        ORDER BY apply_time DESC
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                transfer_no DESC
+            </isEmpty>
+        </dynamic>
     </select>
 
     <select id="transferRecordCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
@@ -982,6 +998,15 @@
         <isNotEmpty property="transferNo" prepend="and">
             transfer_no = #transferNo#
         </isNotEmpty>
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                goods_num
+            </isEmpty>
+        </dynamic>
+
     </select>
 
     <delete id="deleteFaThrowAccountOut" parameterClass="java.util.HashMap">
@@ -992,4 +1017,131 @@
             </iterate>
         )
     </delete>
+
+    <!-- 调拨退库做红冲 -->
+    <insert id="insertFaThrowAccount" parameterClass="java.util.ArrayList">
+        INSERT INTO fa_throw_account(id,faInfo_id,dept_num,dept_name,surp_num,surp_name,invoice_no,
+        goods_classify_code,goods_classify_name,goods_type_code,goods_type_name,goods_num,goods_name,
+        net_asset_value,account_type,create_date)
+        SELECT
+            UUID(),
+            `id`,
+            `dept_num`,
+            `dept_name`,
+            `surp_num`,
+            `surp_name`,
+            `invoice_no`,
+            `goods_classify_code`,
+            `goods_classify_name`,
+            `goods_type_code`,
+            `goods_type_name`,
+            `goods_num`,
+            `goods_name`,
+            -`net_asset_value`,
+            '016',
+            NOW()
+        FROM
+            fa_info
+        WHERE id IN
+        <iterate open="(" close=")" conjunction=",">
+            #faTransferDetailVOList[].faInfoId#
+        </iterate>
+    </insert>
+
+    <select id="queryFaInfo" parameterClass="java.util.ArrayList" resultClass="com.baosight.wilp.fa.da.domain.FaInfoDO">
+        select
+            id,
+            id AS "faInfoId",
+            enter_bill_no AS "enterBillNo",
+            out_bill_no AS "outBillNo",
+            mat_num AS "matNum",
+            mat_name AS "matName",
+            mat_type_num AS "matTypeNum",
+            mat_type_name AS "matTypeName",
+            model AS "model",
+            spec AS "spec",
+            unit_num AS "unitNum",
+            unit_name AS "unitName",
+            price AS "price",
+            goods_num AS "goodsNum",
+            goods_name AS "goodsName",
+            goods_classify_code AS "goodsClassifyCode",
+            goods_classify_name AS "goodsClassifyName",
+            goods_type_code AS "goodsTypeCode",
+            goods_type_name AS "goodsTypeName",
+            model AS "model",
+            amount AS "amount",
+            price AS "price",
+            buy_cost AS "buyCost",
+            manufacturer AS "manufacturer",
+            surp_name AS "surpName",
+            DATE_FORMAT( buy_date, '%Y-%m-%d' ) AS "buyDate",
+            DATE_FORMAT( use_date, '%Y-%m-%d' ) AS "useDate",
+            build AS "build",
+            floor AS "floor",
+            room AS "room",
+            install_location AS "installLocation",
+            install_location_num AS "installLocationNum",
+            dept_num AS "deptNum",
+            dept_name AS "deptName",
+            CASE status_code
+            WHEN '010' THEN '待用'
+            WHEN '020' THEN '在用'
+            WHEN '030' THEN '现场停用'
+            WHEN '031' THEN '调拨中'
+            WHEN '035' THEN '报废中'
+            WHEN '039' THEN '退货中'
+            WHEN '040' THEN '报废提交'
+            WHEN '050' THEN '预报废'
+            WHEN '060' THEN '报废'
+            END AS "statusCode",
+            unit_num AS "unitNum",
+            unit_name AS "unitName",
+            residual_rate AS "residualRate",
+            estimated_residual_value AS "estimatedResidualValue",
+            use_years AS "useYears",
+            fundingSource_num AS "fundingSourceNum",
+            finace_class_num AS "finaceClassNum",
+            DATE_FORMAT( in_account_date, '%Y-%m-%d' ) AS "inAccountDate",
+            invoice_no AS "invoiceNo",
+            DATE_FORMAT( invoice_date, '%Y-%m-%d' ) AS "invoiceDate",
+            device_id AS "deviceId",
+            device_name AS "deviceName",
+            device_type_name AS "deviceTypeName",
+            rfid_code AS "rfidCode",
+            net_asset_value AS "netAssetValue",
+            estimate_cost AS "estimateCost",
+            remark AS "remark",
+            depreciation_way AS "depreciationWay",
+            total_depreciation AS "totalDepreciation",
+            month_depreciation AS "monthDepreciation",
+            in_account_status AS "inAccountStatus",
+            card_status AS "cardStatus",
+            rec_creator AS "recCreator",
+            rec_create_name AS "recCreateName",
+            DATE_FORMAT( rec_create_time, '%Y-%m-%d %H:%i:%S' ) AS "recCreateTime",
+            rec_revisor AS "recRevisor",
+            rec_revise_name AS "recReviseName",
+            DATE_FORMAT( rec_revise_time, '%Y-%m-%d %H:%i:%S' ) AS "recReviseTime",
+            data_group_code AS "dataGroupCode",
+            lock_flag AS "lockFlag",
+            archive_flag AS "archiveFlag",
+            CASE operation_type
+            WHEN "01" THEN "直入直出"
+            WHEN "06" THEN "采购入库"
+            WHEN "08" THEN "手工入库"
+            END AS "operationType",
+            split_reason AS "splitReason"
+        FROM fa_info
+        WHERE lock_flag NOT IN ("4") AND status_code IN ('010','020')
+        AND goods_num IN
+        <iterate open="(" close=")" conjunction=",">
+            #list[]#
+        </iterate>
+    </select>
+
+    <update id="updateRoomAndOutremark" parameterClass="java.util.HashMap">
+        update fa_info set room = #room#,out_remark = #outRemark#
+        where id = #faInfoId#
+    </update>
 </sqlMap>

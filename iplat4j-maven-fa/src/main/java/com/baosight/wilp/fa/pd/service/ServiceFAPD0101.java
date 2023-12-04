@@ -124,7 +124,7 @@ public class ServiceFAPD0101 extends ServiceBase {
 			return info;
 		}
 		// 获取用户信息
-		Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(com.baosight.xservices.xs.util.UserSession.getUser().getUsername());
+		Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
 		// 3.根据操作类型进行判断
 		switch (type) {
 			// 3.1.录入分支

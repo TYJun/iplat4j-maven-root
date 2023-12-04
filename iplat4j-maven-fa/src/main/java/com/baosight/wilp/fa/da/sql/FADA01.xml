@@ -701,8 +701,11 @@
 			id AS "faInfoId",
 			CASE operation_type
 			WHEN "01" THEN "直入直出"
+			WHEN "06" THEN "采购入库"
 			WHEN "08" THEN "手工入库"
 			END AS "operationType",
+			enter_bill_no AS "enterBillNo",
+			out_bill_no AS "outBillNo",
 			goods_num	AS "goodsNum",
 			goods_name	AS "goodsName",
 			goods_classify_code	AS "goodsClassifyCode",
@@ -756,6 +759,7 @@
 			net_asset_value	AS "netAssetValue",
 			estimate_cost	AS "estimateCost",
 			remark	AS "remark",
+			out_remark	AS "outRemark",
 			depreciation_way	AS "depreciationWay",
 			total_depreciation	AS "totalDepreciation",
 			month_depreciation	AS "monthDepreciation",
@@ -851,7 +855,15 @@
 		<isNotEmpty prepend=" AND " property="rfidCode">
 			rfid_code like concat ('%',trim(#rfidCode#),'%')
 		</isNotEmpty>
-		order by rec_create_time DESC,dept_name,LENGTH(goods_num),goods_num
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				enter_bill_no DESC,goods_num
+			</isEmpty>
+		</dynamic>
+
 	</select>
 
 	<select id="queryTakingStockMsg" parameterClass="java.util.List" resultClass="java.util.HashMap">

@@ -79,7 +79,7 @@
     </EF:EFRegion>
 	<EF:EFTab id="FaDaTab">
 		<div title="调拨申请">
-			<EF:EFGrid blockId="resultA" autoDraw="no" autoBind="true" rowNo="true" readonly="true" checkMode="multiple,row" queryMethod="confirmedQuery" height="440px">
+			<EF:EFGrid blockId="resultA" autoDraw="no" autoBind="true" rowNo="true" readonly="true" checkMode="multiple,row" height="440px" sort="setted">
 				<EF:EFColumn ename="faInfoId" cname="faInfoId" align="center" width="200" hidden="true"/>
 				<EF:EFColumn ename="enterBillNo" cname="入库单号" align="center" width="200" hidden="true"/>
 				<EF:EFColumn ename="outBillNo" cname="出库单号" align="center" width="200" hidden="true"/>
@@ -90,102 +90,81 @@
 				<EF:EFColumn ename="unitNum" cname="计量单位" align="center" width="200" hidden="true"/>
 				<EF:EFColumn ename="unitName" cname="计量单位" align="center" width="200" hidden="true"/>
 				<EF:EFColumn ename="price" cname="出库单价" align="center" width="200" hidden="true"/>
-				<EF:EFColumn ename="operationType" cname="出库类型" align="center" width="200"/>
-				<EF:EFColumn ename="goodsNum" cname="资产编码" align="center" width="200" displayType="url" enable="false"/>
-				<EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="200"/>
-				<EF:EFColumn ename="spec" cname="型号规格"  align="center" width="200" />
-				<EF:EFColumn ename="deptName" cname="所属科室" align="center" width="200"/>
-<%--				<EF:EFColumn ename="build" cname="楼"   align="center" width="200"/>--%>
+				<EF:EFColumn ename="goodsNum" cname="资产编码" align="center" width="120" displayType="url" enable="false" sort="true"/>
+				<EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="180" sort="true"/>
+				<EF:EFColumn ename="spec" cname="型号规格"  align="center" width="150" sort="true"/>
+				<EF:EFColumn ename="deptName" cname="所属科室" align="center" width="150" sort="true"/>
+				<EF:EFColumn ename="buyCost" cname="资产原值"   align="center" width="130" sort="true"/>
+				<EF:EFColumn ename="netAssetValue" cname="资产净值"   align="center" width="130" sort="true"/>
+				<EF:EFColumn ename="useDate" cname="使用日期"   align="center" width="130" sort="true"/>
+				<EF:EFColumn ename="room" cname="具体位置"   align="center" width="150" sort="true"/>
+				<EF:EFColumn ename="remark" cname="备注"  align="center" width="150" sort="true"/>
+				<EF:EFColumn ename="outRemark" cname="出库备注"  align="center" width="150" sort="true"/>
+				<EF:EFColumn ename="statusCode" cname="资产状态" align="center" width="200" sort="true"/>
+				<%--				<EF:EFColumn ename="build" cname="楼"   align="center" width="200"/>--%>
 <%--				<EF:EFColumn ename="floor" cname="层"   align="center" width="200"/>--%>
 				<EF:EFColumn ename="installLocation" cname="地点"   align="center" width="200" hidden="true"/>
-				<EF:EFColumn ename="room" cname="具体位置"   align="center" width="200"/>
-				<EF:EFColumn ename="statusCode" cname="资产状态" align="center" width="200"/>
-				<EF:EFColumn ename="remark" cname="备注"  align="center" width="200"/>
 				<EF:EFColumn ename="goodsClassifyName" cname="资产类别"  align="center" width="200"/>
 				<EF:EFColumn ename="goodsTypeName" cname="类组"  align="center" width="200"/>
 				<EF:EFColumn ename="manufacturer" cname="制造厂商"  align="center" width="200" hidden="true"/>
 				<EF:EFColumn ename="surpName" cname="供应商"   align="center" width="200"/>
 				<EF:EFColumn ename="buyDate" cname="购入日期"   align="center" width="200"/>
-				<EF:EFColumn ename="useDate" cname="使用日期"   align="center" width="200"/>
-				<EF:EFColumn ename="buyCost" cname="资产原值"   align="center" width="200"/>
-				<EF:EFColumn ename="netAssetValue" cname="资产净值"   align="center" width="200"/>
 				<EF:EFColumn ename="useYears" cname="使用年限"   align="center" width="200"/>
 				<%--			<EF:EFColumn ename="deviceName" cname="设备名称"   align="center" />--%>
 				<EF:EFColumn ename="recCreateName" cname="创建人"   align="center" width="200"/>
+				<EF:EFColumn ename="operationType" cname="出库类型" align="center" width="200"/>
 				<EF:EFColumn ename="rfidCode" cname="RFID"  align="center" width="200" hidden="true"/>
 				<EF:EFColumn ename="cardStatus" cname="是否发卡"  align="center" width="200" hidden="true"/>
 				<EF:EFColumn ename="lockFlag" cname="变更状态"  align="center" hidden="true"/>
 			</EF:EFGrid>
 		</div>
-<%--		<div title="科室调拨申请">--%>
-<%--			<EF:EFGrid blockId="resultB" autoDraw="no" autoBind="true" readonly="true" checkMode="multiple,row" queryMethod="transferApplyQuery">--%>
-<%--				<EF:EFColumn ename="id" cname="固定资产调拨表主键"  align="center" locked="true" hidden="true"/>--%>
-<%--				<EF:EFColumn ename="transferNo" cname="调拨单号"  align="center" locked="true" enable="false" width="200"/>--%>
-<%--				<EF:EFColumn ename="applyDeptName" cname="调出科室"  align="center" enable="false" width="200"/>--%>
-<%--				<EF:EFColumn ename="applyPerson" cname="申请人"  align="center" enable="false" width="200"/>--%>
-<%--				<EF:EFColumn ename="applyTime" cname="申请时间"   align="center" enable="false" width="200"/>--%>
-<%--				<EF:EFColumn ename="applyReason" cname="调拨原因"   align="center" enable="false" width="200"/>--%>
-<%--				<EF:EFColumn ename="confirmDeptName" cname="调入科室" align="center" enable="false" width="200"/>--%>
-<%--				<EF:EFColumn ename="confirmBuild" cname="楼" align="center" enable="false" width="200"/>--%>
-<%--				<EF:EFColumn ename="confirmFloor" cname="层" align="center" enable="false" width="200"/>--%>
-<%--				<EF:EFColumn ename="confirmLocationName" cname="地点" align="center" enable="false" width="200"/>--%>
-<%--				<EF:EFColumn ename="confirmPerson" cname="确认人" align="center" enable="false" width="200"/>--%>
-<%--				<EF:EFColumn ename="confirmTime" cname="确认时间" align="center" enable="false" width="200"/>--%>
-<%--				<EF:EFColumn ename="confirmReason" cname="确认信息" align="center" enable="false" width="200"/>--%>
-<%--				<EF:EFColumn ename="auditDeptName" cname="审批科室" align="center" enable="false" width="200"/>--%>
-<%--				<EF:EFColumn ename="auditPerson" cname="审批人" align="center" enable="false" width="200"/>--%>
-<%--				<EF:EFColumn ename="auditTime" cname="审批时间" align="center" enable="false" width="200"/>--%>
-<%--				<EF:EFColumn ename="auditReason" cname="审批信息" align="center" enable="false" width="200"/>--%>
-<%--				<EF:EFColumn ename="transferStatus" cname="调拨单状态" align="center" enable="false" width="200"/>--%>
-<%--			</EF:EFGrid>--%>
-<%--		</div>--%>
 		<div title="接收科室确认">
 			<EF:EFRegion id="C1" title="资产调拨单">
-				<EF:EFGrid blockId="resultC" autoDraw="no" autoBind="true" rowNo="true" readonly="true" checkMode="single,row" queryMethod="transferConfirmQuery" height="300px">
+				<EF:EFGrid blockId="resultC" autoDraw="no" autoBind="true" rowNo="true" readonly="true" checkMode="single,row" queryMethod="transferConfirmQuery" height="300px" sort="setted">
 					<EF:EFColumn ename="id" cname="资产调拨表主键"  align="center" locked="true" hidden="true"/>
-					<EF:EFColumn ename="transferNo" cname="调拨单号"  align="center" width="200" displayType="url" enable="false"/>
-					<EF:EFColumn ename="applyDeptName" cname="供给科室"  align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="confirmDeptName" cname="接收科室" align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="applyPerson" cname="申请人"  align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="applyTime" cname="申请时间"   align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="applyReason" cname="调拨原因"   align="center" enable="false" width="200"/>
+					<EF:EFColumn ename="transferNo" cname="调拨单号"  align="center" width="200" displayType="url" enable="false" sort="true"/>
+					<EF:EFColumn ename="applyDeptName" cname="供给科室"  align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="confirmDeptName" cname="接收科室" align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="applyPerson" cname="申请人"  align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="applyTime" cname="申请时间"   align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="applyReason" cname="调拨原因"   align="center" enable="false" width="200" sort="true"/>
 				</EF:EFGrid>
 			</EF:EFRegion>
 			<EF:EFRegion id="C2" title="调拨单明细">
-				<EF:EFGrid blockId="resultDetailsC2" autoDraw="no" autoBind="true" rowNo="true" readonly="true" checkMode="single,row" queryMethod="transferDetailResult" height="300px">
-					<EF:EFColumn ename="goodsNum" cname="资产编码"  align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="goodsName" cname="资产名称" align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="spec" cname="规格"  align="center" enable="false" width="200"/>
+				<EF:EFGrid blockId="resultDetailsC2" autoDraw="no" autoBind="true" rowNo="true" readonly="true" checkMode="single,row" queryMethod="transferDetailResult" height="300px" sort="setted">
+					<EF:EFColumn ename="goodsNum" cname="资产编码"  align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="goodsName" cname="资产名称" align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="spec" cname="规格"  align="center" enable="false" width="200" sort="true"/>
 				</EF:EFGrid>
 			</EF:EFRegion>
 		</div>
 		<div title="资产科审批">
 			<EF:EFRegion id="D1" title="资产调拨单">
-				<EF:EFGrid blockId="resultD" autoDraw="no" autoBind="true" rowNo="true" readonly="true" checkMode="multiple,row" queryMethod="transferAuditQuery" height="300px">
+				<EF:EFGrid blockId="resultD" autoDraw="no" autoBind="true" rowNo="true" readonly="true" checkMode="multiple,row" queryMethod="transferAuditQuery" height="300px" sort="setted">
 					<EF:EFColumn ename="id" cname="资产调拨表主键"  align="center" locked="true" hidden="true"/>
-					<EF:EFColumn ename="transferNo" cname="调拨单号"  align="center" width="200" displayType="url" enable="false"/>
+					<EF:EFColumn ename="transferNo" cname="调拨单号"  align="center" width="200" displayType="url" enable="false" sort="true"/>
 					<EF:EFColumn ename="applyDeptNum" cname="供给科室编码"  align="center" enable="false" width="200" hidden="true"/>
-					<EF:EFColumn ename="applyDeptName" cname="供给科室"  align="center" enable="false" width="200"/>
+					<EF:EFColumn ename="applyDeptName" cname="供给科室"  align="center" enable="false" width="200" sort="true"/>
 					<EF:EFColumn ename="confirmDeptNum" cname="接收科室编码" align="center" enable="false" width="200" hidden="true"/>
-					<EF:EFColumn ename="confirmDeptName" cname="接收科室" align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="confirmLocationName" cname="存放地点" align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="applyPerson" cname="申请人"  align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="applyTime" cname="申请时间" align="center" enable="false" width="200" dateFormat="yyyy-MM-dd hh:mm:ss"/>
-					<EF:EFColumn ename="applyReason" cname="调拨原因"   align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="confirmPerson" cname="接收人" align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="confirmTime" cname="接收时间" align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="confirmReason" cname="接收意见" align="center" enable="false" width="200"/>
+					<EF:EFColumn ename="confirmDeptName" cname="接收科室" align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="confirmLocationName" cname="存放地点" align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="applyPerson" cname="申请人"  align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="applyTime" cname="申请时间" align="center" enable="false" width="200" dateFormat="yyyy-MM-dd hh:mm:ss" sort="true"/>
+					<EF:EFColumn ename="applyReason" cname="调拨原因"   align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="confirmPerson" cname="接收人" align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="confirmTime" cname="接收时间" align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="confirmReason" cname="接收意见" align="center" enable="false" width="200" sort="true"/>
 				</EF:EFGrid>
 			</EF:EFRegion>
 			<EF:EFRegion id="D2" title="调拨单明细">
-				<EF:EFGrid blockId="resultDetailsD2" autoDraw="no" autoBind="true" rowNo="true" readonly="true" checkMode="single,row" queryMethod="transferDetailResult" height="300px">
-					<EF:EFColumn ename="goodsNum" cname="资产编码"  align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="goodsName" cname="资产名称" align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="spec" cname="规格"  align="center" enable="false" width="200"/>
+				<EF:EFGrid blockId="resultDetailsD2" autoDraw="no" autoBind="true" rowNo="true" readonly="true" checkMode="single,row" queryMethod="transferDetailResult" height="300px" sort="setted">
+					<EF:EFColumn ename="goodsNum" cname="资产编码"  align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="goodsName" cname="资产名称" align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="spec" cname="规格"  align="center" enable="false" width="200" sort="true"/>
 				</EF:EFGrid>
 			</EF:EFRegion>
 			<!-- 批量审批 -->
-			<EF:EFWindow id="accept" title="资产科批量审批" url="" lazyload="true" width="60%" height="40%">
+			<EF:EFWindow id="accept" title="资产科批量审批" url="" lazyload="false" width="60%" height="40%">
 				<EF:EFRegion id="accept" head="hidden">
 					<div class="row">
 						<EF:EFInput ename="info-0-auditFileCode" cname="资产科电子签名fileCode" colWidth="12" readonly="true" type="hidden"/>
@@ -211,29 +190,29 @@
 		</div>
 		<div title="调拨记录">
 			<EF:EFRegion id="E1" title="资产调拨单">
-				<EF:EFGrid blockId="resultE" autoDraw="no" autoBind="true" rowNo="true" readonly="true" checkMode="single,row" queryMethod="transferRecordQuery" height="300px">
+				<EF:EFGrid blockId="resultE" autoDraw="no" autoBind="true" rowNo="true" readonly="true" checkMode="single,row" queryMethod="transferRecordQuery" height="300px" sort="setted">
 					<EF:EFColumn ename="id" cname="资产调拨表主键"  align="center" locked="true" hidden="true"/>
-					<EF:EFColumn ename="transferNo" cname="调拨单号"  align="center" width="200" displayType="url" enable="false"/>
-					<EF:EFColumn ename="transferStatus" cname="调拨单状态" align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="applyDeptName" cname="供给科室"  align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="confirmDeptName" cname="接收科室" align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="confirmLocationName" cname="存放地点" align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="applyPerson" cname="申请人"  align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="applyTime" cname="申请时间"   align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="applyReason" cname="调拨原因"   align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="confirmPerson" cname="接收人" align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="confirmTime" cname="接收时间" align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="confirmReason" cname="接收意见" align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="auditPerson" cname="审批人" align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="auditTime" cname="审批时间" align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="auditReason" cname="审批意见" align="center" enable="false" width="200"/>
+					<EF:EFColumn ename="transferNo" cname="调拨单号"  align="center" width="200" displayType="url" enable="false" sort="true"/>
+					<EF:EFColumn ename="transferStatus" cname="调拨单状态" align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="applyDeptName" cname="供给科室"  align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="confirmDeptName" cname="接收科室" align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="confirmLocationName" cname="存放地点" align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="applyPerson" cname="申请人"  align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="applyTime" cname="申请时间"   align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="applyReason" cname="调拨原因"   align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="confirmPerson" cname="接收人" align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="confirmTime" cname="接收时间" align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="confirmReason" cname="接收意见" align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="auditPerson" cname="审批人" align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="auditTime" cname="审批时间" align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="auditReason" cname="审批意见" align="center" enable="false" width="200" sort="true"/>
 				</EF:EFGrid>
 			</EF:EFRegion>
 			<EF:EFRegion id="E2" title="资产调拨单">
-				<EF:EFGrid blockId="resultDetailsE2" autoDraw="no" autoBind="true" rowNo="true" readonly="true" checkMode="single,row" queryMethod="transferDetailResult" height="300px">
-					<EF:EFColumn ename="goodsNum" cname="资产编码"  align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="goodsName" cname="资产名称" align="center" enable="false" width="200"/>
-					<EF:EFColumn ename="spec" cname="规格"  align="center" enable="false" width="200"/>
+				<EF:EFGrid blockId="resultDetailsE2" autoDraw="no" autoBind="true" rowNo="true" readonly="true" checkMode="single,row" queryMethod="transferDetailResult" height="300px" sort="setted">
+					<EF:EFColumn ename="goodsNum" cname="资产编码"  align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="goodsName" cname="资产名称" align="center" enable="false" width="200" sort="true"/>
+					<EF:EFColumn ename="spec" cname="规格"  align="center" enable="false" width="200" sort="true"/>
 				</EF:EFGrid>
 			</EF:EFRegion>
 		</div>

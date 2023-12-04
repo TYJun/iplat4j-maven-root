@@ -13,9 +13,7 @@
     <facet type="jpa" name="JPA">
       <configuration>
         <setting name="validation-enabled" value="true" />
-        <datasource-mapping>
-          <factory-entry name="iplat4j-maven-mp-rm" />
-        </datasource-mapping>
+        <datasource-mapping />
         <naming-strategy-map />
       </configuration>
     </facet>
@@ -34,7 +32,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: com.bonawise.iplat4j:iplat4j-core:6.2.1231" level="project" />
     <orderEntry type="module" module-name="iplat4j-maven-commons" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:2.1.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:2.1.3.RELEASE" level="project" />
@@ -64,6 +61,7 @@
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-websocket:2.1.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-logging:2.1.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.bonawise.iplat4j:iplat4j-admin:6.2.1231" level="project" />
+    <orderEntry type="library" name="Maven: com.bonawise.iplat4j:iplat4j-core:6.2.1231" level="project" />
     <orderEntry type="library" name="Maven: com.bonawise.iplat4j:iplat4j-ui:6.2.1231" level="project" />
     <orderEntry type="library" name="Maven: com.bonawise.iplat4j:xservices-bpm:6.2.1231" level="project" />
     <orderEntry type="library" name="Maven: com.bonawise.iplat4j:xservices-job:6.2.1231" level="project" />
@@ -224,5 +222,14 @@
     <orderEntry type="library" name="Maven: org.json:json:1.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven:maven-model:3.5.2" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-utils:3.5.1" level="project" />
+    <orderEntry type="library" name="Maven: net.sf.jasperreports:jasperreports:6.17.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-collections4:4.2" level="project" />
+    <orderEntry type="library" name="Maven: com.lowagie:itext:2.1.7.js8" level="project" />
+    <orderEntry type="library" name="Maven: org.jfree:jcommon:1.0.23" level="project" />
+    <orderEntry type="library" name="Maven: org.jfree:jfreechart:1.0.19" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.jdt:ecj:3.21.0" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.castor:castor-xml:1.4.1" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.castor:castor-core:1.4.1" level="project" />
+    <orderEntry type="library" name="Maven: javax.inject:javax.inject:1" level="project" />
   </component>
 </module>

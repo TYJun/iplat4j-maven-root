@@ -40,7 +40,7 @@ import java.util.stream.Stream;
  * @date 2022年05月19日 16:52
  */
 public class OneSelfUtils {
-
+	private static String defaultBlankValue = "";
 	// 注入bean
 	private static Dao dao = (Dao) PlatApplicationContext.getBean("dao");
 
@@ -454,7 +454,7 @@ public class OneSelfUtils {
 		if (StringUtils.isNotBlank(workNo)) {
 			// 获取当前登录人的用户信息
 			Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(workNo);
-			// 查询固定资产
+			// 查询固定资产人员权限
 			List<String> rolesList = dao.query("FAAP01.queryRoles", staffByUserId);
 			if (rolesList.contains(FixedAssetsEum.leader.getAcronym()) || rolesList.contains(FixedAssetsEum.member.getAcronym())) {
 				return null;
@@ -633,5 +633,151 @@ public class OneSelfUtils {
 			}
 		}
 		return deptList;
+	}
+
+	/**
+	 * 空处理
+	 *
+	 * @throws
+	 * @Title: isEmpty
+	 * @Description: TODO(这里用一句话描述这个方法的作用)
+	 * @param: @param object ： 参数
+	 * @param: @param defultValue ： 默认值
+	 * @param: @return
+	 * @return: String  ： 参数字符串
+	 */
+	public static String isEmpty(Object object, String defaultValue) {
+		if (StringUtils.isBlank(defaultValue)) {
+			defaultValue = defaultBlankValue;
+		}
+		if (object == null) {
+			return defaultValue;
+		}
+		if (StringUtils.isBlank(object.toString())) {
+			return defaultValue;
+		}
+		return object.toString();
+	}
+
+	/**
+	 * 判断当前成员是否是资产管理员或护长
+	 * 是返回true
+	 * 不是返回false
+	 */
+	public static Boolean isManagerOrNurses(String workNo){
+		if (StringUtils.isNotBlank(workNo)) {
+			// 获取当前登录人的用户信息
+			Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(workNo);
+			// 查询固定资产人员权限
+			List<String> rolesList = dao.query("FAAP01.queryRoles", staffByUserId);
+			// 是护长或者是管理员
+			if (rolesList.contains(FixedAssetsEum.guard.getAcronym()) || rolesList.contains(FixedAssetsEum.common.getAcronym())) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
+	}
+
+
+	/**
+	 * 判断当前成员是否是科室负责人
+	 * 存在返回true
+	 * 不存在返回false
+	 */
+	public static Boolean isDeptHead(String workNo){
+		if (StringUtils.isNotBlank(workNo)) {
+			// 获取当前登录人的用户信息
+			Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(workNo);
+			// 查询固定资产人员权限
+			List<String> rolesList = dao.query("FAAP01.queryRoles", staffByUserId);
+			// 是护长或者是管理员
+			if (rolesList.contains(FixedAssetsEum.user.getAcronym())) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 企业微信发送通知
+	 * 申请科室-applyDeptNo，接收科室-confirmDeptNo，鉴定科室-identifyDeptNo,归口科室-functionDeptNo
+	 */
+	public static Boolean pushWxMsgOfFa(Map<String,String> deptMap){
+		//获取app编码
+		String appCode = "AP00002";
+		List<String> workNoList = new ArrayList<>();
+		List<String> paramList = new ArrayList<>();
+		String smsTemp = "";
+		// 消息模板
+		switch (deptMap.get("type")){
+			case "调拨申请":
+				// 通过接收科室查找对应的科室管理员
+				smsTemp = "【资产调拨申请】您有一条来自于"+ deptMap.get("applyDeptName") + "，单号为" + deptMap.get("billNo") + "的资产调拨申请，请到后勤一站式系统中进行确认。";
+				break;
+			case "调拨申请驳回":
+				smsTemp = "";
+				break;
+			case "调拨审批":
+				// 发送给张老师、谢老师、廖老师
+				smsTemp = "【资产调拨审批】您有一条"+ deptMap.get("applyDeptName") + "调拨至" + deptMap.get("confirmDeptName") + "，单号为" + deptMap.get("billNo") + "的资产调拨需要审批，请到后勤一站式系统中进行审批。" ;
+				break;
+			case "调拨审批驳回":
+				smsTemp = "";
+				break;
+			case "报废申请":
+				// 发送给科室的负责人
+				smsTemp = "【资产报废申请】您的科室"+ deptMap.get("applyDeptName") + "有"+ deptMap.get("count") +"条资产需要进行报废，请到后勤一站式系统中进行审批。";
+				break;
+			case "报废申请驳回":
+				smsTemp = "";
+				break;
+			case "报废分配":
+				// 发送给对应科室的盘点员
+				smsTemp = "【分配鉴定科室】您负责的科室"+ deptMap.get("identifyDeptName") +"有"+ deptMap.get("count") + "条资产需要进行鉴定科室分配，请到后勤一站式系统中进行分配。";
+				break;
+			case "报废鉴定":
+				// 发送给对应鉴定科室的成员
+				smsTemp = "【报废资产技术鉴定】您有"+ deptMap.get("count") + "条" + deptMap.get("applyDeptName") + "的资产需要进行鉴定，鉴定结果请到后勤一站式系统中进行填报。";
+				break;
+			case "报废鉴定驳回":
+				smsTemp = "";
+				break;
+			case "报废归口":
+				// 发送给对应归口科室的成员
+				smsTemp = "【报废资产鉴定确认】您有"+ deptMap.get("count") + "条" + deptMap.get("applyDeptName") + "已经完成鉴定的资产需要确认，请到后勤一站式系统中进行确认。";
+				break;
+			case "报废归口驳回":
+				smsTemp = "";
+				break;
+			case "报废审批":
+				// 发送给郑科
+				smsTemp = "【报废资产资产科审批】您有"+ deptMap.get("count") + "条" + deptMap.get("applyDeptName") + "已经完成报废流程的资产需要审批，请到后勤一站式系统中进行审批。";
+				break;
+			case "报废审批驳回":
+				smsTemp = "";
+				break;
+			default:
+				smsTemp = "";
+		}
+		// 获取需要发送企业消息的对象
+		List<Map<String,String>> list = dao.query("CPDJ01.queryManByRole", new HashMap<String, String>() {{
+			put("deptNo", deptMap.get("deptNo"));
+			put("deptName", deptMap.get("deptName"));
+		}});
+		for (Map map : list) {
+			workNoList.add((String) map.get("workNo"));
+		}
+		paramList.add(smsTemp);
+		if (workNoList.isEmpty()){
+			return false;
+		} else {
+			//发送企业微信
+//			return BaseDockingUtils.pushWxMsg(workNoList, paramList,"TP00001", appCode);
+			return true;
+		}
 	}
 }

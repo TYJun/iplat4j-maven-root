@@ -13,19 +13,21 @@
     <description>物资采购-物资领用</description>
     <version>5.0.0</version>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.bonawise.iplat4j</groupId>
+            <artifactId>iplat4j-maven-commons</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+        </dependency>
+    </dependencies>
+
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.bonawise.iplat4j</groupId>
-            <artifactId>iplat4j-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.bonawise.iplat4j</groupId>
-            <artifactId>iplat4j-maven-commons</artifactId>
-        </dependency>
-    </dependencies>
 </project>

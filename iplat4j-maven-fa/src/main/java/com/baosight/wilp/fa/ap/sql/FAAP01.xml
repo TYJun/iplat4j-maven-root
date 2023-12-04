@@ -19,15 +19,16 @@
         WHEN "0" then "待盘点"
         WHEN "1" then "盘点中"
         WHEN "99" then "已盘点"
+        WHEN "00" then "已完结"
         END as statusCodeMean
         from
         fa_inventory left join fa_inventory_detail on fa_inventory.id = fa_inventory_detail.inventory_id
         <dynamic prepend="where">
             <isEqual prepend="and" property="statusCode" compareValue="0">
-                fa_inventory.status_code in (0,1)
+                fa_inventory.status_code in ('0')
             </isEqual>
             <isEqual prepend="and" property="statusCode" compareValue="99">
-                fa_inventory.status_code in (99)
+                fa_inventory.status_code in ('99')
             </isEqual>
             <isNotEmpty prepend="and" property="inventoryDeptName">
                 fa_inventory.inventory_dept_name like concat ('%',trim(#inventoryDeptName#),'%')
@@ -881,4 +882,101 @@
     <delete id="deleteConfirmByReturnZero" parameterClass="java.util.HashMap">
         delete from fa_confirm where enter_bill_no = #enterBillNo# AND mat_num = #matNum#
     </delete>
+
+    <!-- 固定资产调拨接收科室待确认待办 -->
+    <select id="queryTransferConfirmUndo" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+        select
+            id,
+            transfer_no AS "transferNo",
+            apply_dept_name AS "applyDeptName",
+            confirm_dept_name AS "confirmDeptName"
+        from
+            fa_transfer
+        where
+            transfer_status = '10'
+        AND
+            confirm_dept_num = #value#
+    </select>
+
+    <!-- 固定资产调拨资产科待审批待办 -->
+    <select id="queryTransferApproveUndo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            id,
+            transfer_no AS "transferNo",
+            apply_dept_name AS "applyDeptName",
+            confirm_dept_name AS "confirmDeptName"
+        from
+            fa_transfer
+        where
+            transfer_status = '20'
+    </select>
+
+    <!-- 固定资产报废资产科待分配待办 -->
+    <select id="queryScrapAllocationUndo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            fsd.id,
+            fsd.scrapped_no AS "scrappedNo"
+        from
+            fa_scrap fs
+        left join fa_scrap_detail fsd ON fs.scrapped_no = fsd.scrapped_no
+        where
+            scrap_detail_status = '00'
+    </select>
+
+    <!-- 查询资产鉴定科室 -->
+    <select id="queryIdentifyDept" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+        select
+            dept_num AS "deptNum",
+            dept_name AS "deptName"
+        from
+            fa_function_dept
+        where
+            parent_id != "root"
+        AND dept_num in (#value#)
+    </select>
+    
+    <!-- 查询资产归口科室 -->
+    <select id="queryFunctionDept" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+        select
+            dept_num AS "deptNum",
+            dept_name AS "deptName"
+        from
+            fa_function_dept
+        where
+            parent_id = "root"
+        AND dept_num in (#value#)
+    </select>
+
+
+    <!-- 固定资产报废鉴定科室待鉴定待办 -->
+    <select id="queryScrapIdentifyUndo" resultClass="java.lang.String" parameterClass="java.util.HashMap">
+        SELECT
+            fsd.faInfo_id
+        FROM
+            fa_scrap fs
+        left join fa_scrap_detail fsd ON fs.scrapped_no = fsd.scrapped_no
+        where scrap_detail_status = '10'
+        and fsd.identify_dept_name = #value#
+    </select>
+
+    <!-- 固定资产报废归口科室待确认待办 -->
+    <select id="queryScrapConfirmUndo" resultClass="java.lang.String" parameterClass="java.util.HashMap">
+        SELECT
+            fsd.faInfo_id
+        FROM
+            fa_scrap fs
+        left join fa_scrap_detail fsd ON fs.scrapped_no = fsd.scrapped_no
+        where scrap_detail_status = '20'
+        and fsd.function_dept_name = #value#
+    </select>
+
+    <!--  -->
+    <select id="queryScrapApproveUndo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+            fsd.faInfo_id
+        FROM
+            fa_scrap fs
+        left join fa_scrap_detail fsd ON fs.scrapped_no = fsd.scrapped_no
+        where scrap_detail_status = '30'
+    </select>
 </sqlMap>

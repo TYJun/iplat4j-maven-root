@@ -61,6 +61,8 @@
 			<EF:EFInput ename="info-0-contractNo" cname="合同号" type="hidden"/>
 			<EF:EFInput ename="info-0-goodsNum" cname="资产编码" required="true" type="hidden"/>
 			<EF:EFInput ename="info-0-goodsName" cname="资产名称" required="true"/>
+			<EF:EFInput ename="info-0-goodsTypeCode" cname="编码" readonly="true" type="hidden"/>
+			<EF:EFInput ename="info-0-goodsTypeName" cname="名称" readonly="true" type="hidden"/>
 			<EF:EFInput ename="info-0-goodsClassifyCode" cname="资产类别编码"  required="true" type="hidden"/>
 			<EF:EFInput ename="info-0-goodsClassifyName" cname="资产类别名称"  required="true" type="hidden"/>
 			<EF:EFInput ename="info-0-model" cname="型号"  />
@@ -82,9 +84,13 @@
 						 textField="label" valueField="value" required="true" filter="contains"
 						 serviceName="FAQR01" methodName="queryManufacturerNatyCode"
 			/>
+			<EF:EFInput ename="info-0-enterBillNo" cname="入库单号"  readonly="true" type="hidden"/>
+			<EF:EFInput ename="info-0-matNum" cname="物资编码"  readonly="true" type="hidden"/>
+			<EF:EFInput ename="info-0-matName" cname="物资名称"  readonly="true" type="hidden"/>
 			<EF:EFInput ename="info-0-deptNum" cname="所属科室"  readonly="true" type="hidden"/>
 			<EF:EFInput ename="info-0-deptName" cname="所属科室"  readonly="true"/>
 			<EF:EFInput ename="info-0-manufacturer" cname="制造厂商" type="hidden"/>
+			<EF:EFInput ename="info-0-surpName" cname="供应商"  readonly="true" type="hidden"/>
 			<EF:EFPopupInput ename="info-0-surpNum" cname="供应商" popupTitle="供应商选择" readonly="true"
 							 popupType="ServiceGrid" resultId="supplier" serviceName="FADA01" methodName="querySupplier"
 							 valueField="surpNum" textField="surpName"  columnEnames="surpNum,supplierName"
@@ -217,6 +223,9 @@
 			</div>
 			<EF:EFInput ename="info-0-amount" cname="数量" maxLength="4" type="hidden" readonly="true"/>
 			<EF:EFInput ename="info-0-price" cname="单价(元)" placeholder="单价(元)" type="hidden"/>
+			<EF:EFInput ename="info-0-netAssetValue" cname="净值(元)" placeholder="净值(元)" type="hidden"/>
+			<EF:EFInput ename="info-0-totalDepreciation" cname="累计折旧(元)" placeholder="累计折旧(元)" type="hidden"/>
+			<EF:EFInput ename="info-0-monthDepreciation" cname="月折旧(元)" placeholder="月折旧(元)" type="hidden"/>
 			<EF:EFInput ename="info-0-useYears" cname="使用年限" placeholder="使用年限(年)"/>
 			<EF:EFInput ename="info-0-netAssetValue" cname="资产净值(元)"/>
 			<div id="modificationValue" style="display: none">

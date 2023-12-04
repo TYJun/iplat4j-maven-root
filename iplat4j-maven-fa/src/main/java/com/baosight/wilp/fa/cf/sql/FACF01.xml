@@ -325,7 +325,14 @@
         <isNotEmpty prepend=" AND " property="deptNameSplit">
             $deptNameSplit$
         </isNotEmpty>
-        order by dept_name,rec_revise_time DESC,rec_create_time DESC,LENGTH(goods_num),goods_num
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                enter_bill_no DESC,goods_num
+            </isEmpty>
+        </dynamic>
     </select>
 
     <select id="countqueryFaInfoDOInfo" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">

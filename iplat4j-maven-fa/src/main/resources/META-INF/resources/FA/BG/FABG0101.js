@@ -506,6 +506,9 @@ function modificationValue() {
         // 净值只能为0
         IPLAT.EFInput.value($("#info-0-netAssetValue"), 0)
         // IPLAT.EFInput.value($("#info-0-netAssetValue"), modificationNetAssetValue)
+    } else {
+        IPLAT.EFInput.value($("#info-0-modificationLabel"), "保持不变")
+        IPLAT.EFInput.value($("#info-0-modificationCost"), 0.00)
     }
 }
 
@@ -530,6 +533,9 @@ function modificationEstimateCostValue() {
         IPLAT.EFInput.value($("#info-0-modificationCost"), modificationEstimateCost)
         IPLAT.EFInput.value($("#info-0-modificationValue"), modificationEstimateCost)
         IPLAT.EFInput.value($("#info-0-netAssetValue"), modificationNetAssetValue)
+    } else {
+        IPLAT.EFInput.value($("#info-0-modificationLabel"), "保持不变")
+        IPLAT.EFInput.value($("#info-0-modificationCost"), 0.00)
     }
 }
 

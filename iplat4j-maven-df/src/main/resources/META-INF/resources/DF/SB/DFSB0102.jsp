@@ -16,10 +16,10 @@
 				popupType="ServiceGrid" serviceName="DFFL10" methodName="queryDevice" resultId="device"
 				valueField="paramKey" textField="paramName"
 				columnEnames="classifyName,paramKey,paramName" columnCnames="设备系统分类,设备参数编号,设备参数名称" /> --%>
-			<EF:EFInput ename="models" cname="规格型号：" colWidth="4" ratio="3:8"/> 
+			<EF:EFInput ename="models" cname="规格型号：" colWidth="4" ratio="3:8"/>
 		</div>
 		<div class="row">
-			<EF:EFTreeInput ename="machineTypeId" cname="设备分类：" 
+			<EF:EFTreeInput ename="machineTypeId" cname="设备分类："
 				serviceName="DFFL10" methodName="queryDFFLTree" textField="classifyName"
 				valueField="id" hasChildren="isLeaf" popupTitle="设备分类"
 				root="{id: 'root',classifyName: '目录结构'}" clear="true" readonly="true"
@@ -83,7 +83,7 @@
 		<div class="row">
 		 <EF:EFSelect ename="statusCode" cname="设备状态：" colWidth="4"
 			ratio="3:8" textField="label" valueField="value" >
-				<EF:EFOption label="请选择" value=""/> 
+				<EF:EFOption label="请选择" value=""/>
 				<EF:EFOption label="新建" value="0"/>
 				<EF:EFOption label="停用" value="-1"/>
 				<EF:EFOption label="启用" value="1"/>
@@ -91,7 +91,7 @@
 			<EF:EFInput ename="useFor" cname="用途：" colWidth="4" ratio="3:8"/>
 			<EF:EFSelect ename="needScan" cname="是否扫二维码：" colWidth="4"
 			 ratio="3:8" textField="label" valueField="value" >
-				<EF:EFOption label="请选择" value=""/> 
+				<EF:EFOption label="请选择" value=""/>
 				<EF:EFOption label="否" value="N"/>
 				<EF:EFOption label="是" value="Y"/>
 			</EF:EFSelect>
@@ -116,15 +116,15 @@
 	</div>
 	</EF:EFRegion>
 	<EF:EFRegion title="检验日期信息">
-	<div class="row">
-	<EF:EFDatePicker ename="thisCheckDate" cname="本年检验日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"
-			parseFormats="['yyyy-mm-dd']" readonly="true" />
-			<EF:EFDatePicker ename="thisFinishDate" cname="本年完工日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"
-			parseFormats="['yyyy-mm-dd']" readonly="true"/>
-			<EF:EFInput ename="annualinspcycle" cname="周期（月）：" colWidth="3" ratio="4:8"/>
-			<EF:EFDatePicker ename="nextCheckDate" cname="下年检验日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"
-			parseFormats="['yyyy-mm-dd']" readonly="true" />
-	</div>
+<%--	<div class="row">--%>
+<%--	<EF:EFDatePicker ename="thisCheckDate" cname="本年检验日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"--%>
+<%--			parseFormats="['yyyy-mm-dd']" readonly="true" />--%>
+<%--			<EF:EFDatePicker ename="thisFinishDate" cname="本年完工日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"--%>
+<%--			parseFormats="['yyyy-mm-dd']" readonly="true" />--%>
+<%--			<EF:EFInput ename="annualinspcycle" cname="周期（月）：" colWidth="3" ratio="4:8"/>--%>
+<%--			<EF:EFDatePicker ename="nextCheckDate" cname="下年检验日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"--%>
+<%--			parseFormats="['yyyy-mm-dd']" readonly="true"/>--%>
+<%--	</div>--%>
 	<div class="row">
 	<EF:EFDatePicker ename="thisExpiredDate" cname="本次定检日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"
 			parseFormats="['yyyy-mm-dd']" readonly="true" />
@@ -148,7 +148,7 @@
 <%--		</EF:EFGrid>--%>
 <%--	  </div>--%>
 		<div title="设备零部件">
-		   	<EF:EFGrid blockId="resultB" fitHeight="true" autoDraw="no" serviceName="DFFL10" queryMethod="queryParameter">
+		   	<EF:EFGrid blockId="resultB" fitHeight="true" autoDraw="no" serviceName="DFSB0102" queryMethod="query">
 				<EF:EFColumn ename="id" cname="主键" hidden="true"/>
 				<EF:EFColumn ename="machineNames" cname="设备零部件名称" />
 				<EF:EFColumn ename="certNo" cname="合格证编号" />

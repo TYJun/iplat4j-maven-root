@@ -56,6 +56,7 @@
             net_asset_value	AS "netAssetValue",
             estimate_cost	AS "estimateCost",
             remark	AS "remark",
+            out_remark	AS "outRemark",
             depreciation_way	AS "depreciationWay",
             total_depreciation	AS "totalDepreciation",
             month_depreciation	AS "monthDepreciation",
@@ -135,7 +136,14 @@
         <isNotEmpty prepend=" AND " property="deptName">
             $deptName$
         </isNotEmpty>
-        order by dept_name,rec_revise_time DESC,rec_create_time DESC,LENGTH(goods_num),goods_num
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                enter_bill_no DESC,goods_num
+            </isEmpty>
+        </dynamic>
     </select>
 
     <select id="countFaInfoDOInfo" parameterClass="java.util.HashMap" resultClass="int">
@@ -220,6 +228,9 @@
             fs.apply_person AS "applyPerson",
             fs.apply_time AS "applyTime",
             fs.apply_reason AS "applyReason",
+            fsd.assignment_person AS "assignmentPerson",
+            fsd.assignment_reason AS "assignmentReason",
+            fsd.assignment_time AS "assignmentTime",
             fsd.identify_dept_name AS "identifyDeptName",
             fsd.identify_person AS "identifyPerson",
             fsd.identify_time AS "identifyTime",
@@ -234,6 +245,8 @@
             fsd.asset_reason AS "assetReason",
             CASE fsd.scrap_detail_status
             WHEN '00' THEN '申请中'
+            WHEN '01' THEN '报废申请不合理'
+            WHEN '05' THEN '提交中'
             WHEN '10' THEN '鉴定中'
             WHEN '20' THEN '归口中'
             WHEN '30' THEN '审批中'
@@ -248,8 +261,18 @@
         LEFT JOIN fa_info fi ON fi.id = fsd.faInfo_id
         WHERE
             1 = 1
+            <isEqual prepend="and" property="scrapStatus" compareValue="applyDept">
+                fsd.scrap_detail_status IN ('00','01')
+                <isEqual prepend="and" property="role" compareValue="user">
+                    fs.apply_dept_name in (
+                    <iterate property="lookDeptName" conjunction=",">
+                        #lookDeptName[]#
+                    </iterate>
+                    )
+                </isEqual>
+            </isEqual>
             <isEqual prepend="and" property="scrapStatus" compareValue="apply">
-                fsd.scrap_detail_status IN ('00')
+                fsd.scrap_detail_status IN ('05')
                 <isEqual prepend="and" property="role" compareValue="user">
                     fs.apply_dept_name in (
                     <iterate property="lookDeptName" conjunction=",">
@@ -373,7 +396,14 @@
             <isNotEmpty prepend="and" property="goodsName">
                 fsd.goods_name like concat ('%',trim(#goodsName#),'%')
             </isNotEmpty>
-        ORDER BY fs.apply_dept_name,fs.scrapped_no,fsd.goods_num,fsd.asset_time DESC
+            <dynamic prepend="ORDER BY">
+                <isNotEmpty property="orderBy">
+                    $orderBy$
+                </isNotEmpty>
+                <isEmpty property="orderBy">
+                    fsd.goods_num
+                </isEmpty>
+            </dynamic>
     </select>
 
     <select id="countFaScrapInfo" parameterClass="java.util.HashMap" resultClass="int">
@@ -842,6 +872,16 @@
     </delete>
     <!--  -->
 
+    <!-- 分配科室批量驳回不合理需求 -->
+    <update id="batchAssignmentReasonById" parameterClass="java.util.HashMap">
+        UPDATE fa_scrap_detail SET scrap_detail_status = #scrapDetailStatus#,
+        assignment_person = #assignmentPerson#,assignment_time = #assignmentTime#,assignment_reason = #assignmentReason#
+        WHERE scrap_detail_status = '05' AND id IN
+        <iterate open="(" close=")" conjunction="," property="detailIdList">
+            #detailIdList[]#
+        </iterate>
+    </update>
+
     <!-- 批量撤销通过资产报废明细表的id -->
     <update id="revocationFaInfoStatusById" parameterClass="java.util.HashMap">
         UPDATE fa_info SET status_code = #statusCode#
@@ -871,7 +911,7 @@
         identify_dept_name = #identifyDeptName#,
         function_dept_name = #functionDeptName#,
         scrap_detail_status = '10'
-        WHERE scrap_detail_status = '00'
+        WHERE scrap_detail_status = '05'
         AND id IN
         <iterate open="(" close=")" conjunction="," property="detailIdList">
             #detailIdList[]#
@@ -902,6 +942,16 @@
         WHERE scrap_status = '30' AND scrapped_no = #scrappedNo#
     </update>
     <!--    -->
+
+    <!-- 科室批量审批 -->
+    <update id="approvalScarpStatusById" parameterClass="java.util.HashMap">
+        UPDATE fa_scrap_detail SET scrap_detail_status = #scrapDetailStatus#,
+        dept_person = #deptPerson#,dept_time = #deptTime#,dept_fileCode = #deptFileCode#
+        WHERE scrap_detail_status = '00' AND id IN
+        <iterate open="(" close=")" conjunction="," property="detailIdList">
+            #detailIdList[]#
+        </iterate>
+    </update>
 
     <!-- 资产科批量审批/驳回 -->
     <update id="batchApproval" parameterClass="java.util.HashMap">

@@ -39,6 +39,9 @@ public class FaScrapVO extends DaoEPBase {
 	private Timestamp applyTime;    /* 申请时间*/
 	private String applyReason;        /* 申请理由*/
 	private String applyFileCode;
+	private String assignmentPerson;
+	private String assignmentReason;
+	private Timestamp assignmentTime;
 	private String identifyDeptName;        /* 鉴定科*/
 	private String identifyPerson;        /* 鉴定人*/
 	private Timestamp identifyTime;    /* 鉴定时间*/
@@ -96,6 +99,18 @@ public class FaScrapVO extends DaoEPBase {
 
 		eiColumn = new EiColumn("scrappedNo");
 		eiColumn.setDescName("报废单号");
+		eiMetadata.addMeta(eiColumn);
+
+		eiColumn = new EiColumn("assignmentPerson");
+		eiColumn.setDescName("分配人");
+		eiMetadata.addMeta(eiColumn);
+
+		eiColumn = new EiColumn("assignmentReason");
+		eiColumn.setDescName("分配原因");
+		eiMetadata.addMeta(eiColumn);
+
+		eiColumn = new EiColumn("assignmentTime");
+		eiColumn.setDescName("分配时间");
 		eiMetadata.addMeta(eiColumn);
 
 		eiColumn = new EiColumn("applyDeptName");
@@ -270,6 +285,29 @@ public class FaScrapVO extends DaoEPBase {
 		this.scrappedNo = scrappedNo;
 	}
 
+	public String getAssignmentPerson() {
+		return assignmentPerson;
+	}
+
+	public void setAssignmentPerson(String assignmentPerson) {
+		this.assignmentPerson = assignmentPerson;
+	}
+
+	public String getAssignmentReason() {
+		return assignmentReason;
+	}
+
+	public void setAssignmentReason(String assignmentReason) {
+		this.assignmentReason = assignmentReason;
+	}
+
+	public Timestamp getAssignmentTime() {
+		return assignmentTime;
+	}
+
+	public void setAssignmentTime(Timestamp assignmentTime) {
+		this.assignmentTime = assignmentTime;
+	}
 
 	/**
 	 * get the applyDeptName - 申请科室
@@ -573,6 +611,9 @@ public class FaScrapVO extends DaoEPBase {
 		setGoodsClassifyCode(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsClassifyCode")), goodsClassifyCode));
 		setGoodsClassifyName(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsClassifyName")), goodsClassifyName));
 		setScrappedNo(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("scrappedNo")), scrappedNo));
+		setAssignmentPerson(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("assetPerson")), assetPerson));
+		setAssignmentReason(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("assetReason")), assetReason));
+		setAssetTime(OneSelfUtils.defaultTimestamp(map.get("assignmentTime")));
 		setApplyDeptName(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("applyDeptName")), applyDeptName));
 		setApplyPerson(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("applyPerson")), applyPerson));
 		setApplyTime(OneSelfUtils.defaultTimestamp(map.get("applyTime")));
@@ -608,6 +649,9 @@ public class FaScrapVO extends DaoEPBase {
 		map.put("goodsClassifyCode", StringUtils.toString(goodsClassifyCode, eiMetadata.getMeta("goodsClassifyCode")));
 		map.put("goodsClassifyName", StringUtils.toString(goodsClassifyName, eiMetadata.getMeta("goodsClassifyName")));
 		map.put("scrappedNo", StringUtils.toString(scrappedNo, eiMetadata.getMeta("scrappedNo")));
+		map.put("assignmentPerson", StringUtils.toString(assignmentPerson, eiMetadata.getMeta("assignmentPerson")));
+		map.put("assignmentReason", StringUtils.toString(assignmentReason, eiMetadata.getMeta("assignmentReason")));
+		map.put("assignmentTime", StringUtils.toString(assignmentTime, eiMetadata.getMeta("assignmentTime")));
 		map.put("applyDeptName", StringUtils.toString(applyDeptName, eiMetadata.getMeta("applyDeptName")));
 		map.put("applyPerson", StringUtils.toString(applyPerson, eiMetadata.getMeta("applyPerson")));
 		map.put("applyTime", StringUtils.toString(applyTime, eiMetadata.getMeta("applyTime")));

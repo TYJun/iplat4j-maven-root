@@ -94,3 +94,6 @@
     <!-- 固资资产选择弹出窗 -->
     <EF:EFWindow id="popData" url="" lazyload="true" width="100%" height="100%" title="资产上会管理" modal="true"/>
 </EF:EFPage>
+<script>
+
+</script>

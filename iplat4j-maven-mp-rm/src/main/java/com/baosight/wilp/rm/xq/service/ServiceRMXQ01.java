@@ -130,7 +130,7 @@ public class ServiceRMXQ01 extends ServiceBase {
                 RmConfigConstant.REQUIRE_APPROVAL))) {
             RmUtils.invoke("RMXQ0401", "pass", Arrays.asList("planId"), id);
         }
-        String magerdeptNum = plan.getManageDeptNum();
+        String magerdeptNum = plan.getDeptNum();
         String nid = plan.getId();
         String name = plan.getRecCreatorName();
         String node = plan.getStatusName();

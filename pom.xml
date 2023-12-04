@@ -245,7 +245,7 @@
                 <artifactId>iplat4j-maven-df</artifactId>
                 <version>${iplat4j-module-df-version}</version>
             </dependency>
-			
+
 			<!-- 物业人员管理 -->
             <dependency>
                 <groupId>com.bonawise.iplat4j</groupId>
@@ -380,7 +380,7 @@
 <!--                <version>${iplat4j-module-mw-version}</version>-->
 <!--            </dependency>-->
 
-         
+
 
             <!-- 20危化品 -->
 <!--            <dependency>-->

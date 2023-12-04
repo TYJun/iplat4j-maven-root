@@ -1,16 +1,20 @@
 package com.baosight.wilp.fa.db.service;
 
-import com.baosight.iplat4j.core.ei.EiConstant;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.baosight.iplat4j.core.data.ibatis.dao.SqlMapDao;
+import com.baosight.iplat4j.core.ei.EiBlock;
+import com.baosight.iplat4j.core.ei.EiBlockMeta;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.ioc.spring.PlatApplicationContext;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
-import com.baosight.iplat4j.core.service.soa.XServiceManager;
 import com.baosight.iplat4j.core.util.DateUtils;
 import com.baosight.iplat4j.core.util.StringUtils;
 import com.baosight.iplat4j.eu.dm.PlatFileUploadManager;
 import com.baosight.wilp.common.util.BaseDockingUtils;
 import com.baosight.wilp.common.util.CommonUtils;
 import com.baosight.wilp.common.util.DatagroupUtil;
+import com.baosight.wilp.fa.da.domain.FaInfoDO;
 import com.baosight.wilp.fa.db.domain.FaTransferDetailVO;
 import com.baosight.wilp.fa.db.domain.FaTransferVO;
 import com.baosight.wilp.fa.db.domain.FaTransfterDTO;
@@ -20,7 +24,6 @@ import com.baosight.xservices.xs.util.UserSession;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.io.File;
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -86,7 +89,7 @@ public class ServiceFADB0102 extends ServiceBase {
         Object picObject = info.get("picList");
         Object allotList = info.get("allotList");
         // 获取用户信息
-        Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(com.baosight.xservices.xs.util.UserSession.getUser().getUsername());
+        Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
         Map<String, Object> params = info.getBlock("info").getRow(0);
         params.put("faInfoId", params.get("goodsId"));
         params.put("goodsName", params.get("goodsNum_textField"));
@@ -273,7 +276,7 @@ public class ServiceFADB0102 extends ServiceBase {
     }
 
     /**
-     * 资产科调拨
+     * 资产科调拨科室
      *
      * @param info
      * @return com.baosight.iplat4j.core.ei.EiInfo
@@ -396,6 +399,7 @@ public class ServiceFADB0102 extends ServiceBase {
                         put("deptNum", applyInfo.get("turnDeptNum"));
                         put("deptName", applyInfo.get("turnDeptName"));
                     }});
+                    info.set("outBillNo", claimOutBillNo);
                 } else {
                     info.setStatus(-1);
                     info.setMsg("库存不足，出库单号为空，调拨流程终止，请联系系统工程师。");
@@ -426,7 +430,7 @@ public class ServiceFADB0102 extends ServiceBase {
                     }
                 }
                 List<String> faInfoIdList = useFaInfo.stream().map(map -> (String) map.get("faInfoId")).collect(Collectors.toList());
-                // 修改资产状态：在用->调拨中
+                // 修改资产状态：在用->在用
                 dao.update("FADB01.updateFaInfoStatusUsing", new HashMap<String, Object>() {{
                     put("faInfoIdList", faInfoIdList);
                     put("deptNum", applyInfo.get("turnDeptNum"));
@@ -436,8 +440,12 @@ public class ServiceFADB0102 extends ServiceBase {
                     put("room", applyInfo.get("confirmRoom"));
                     put("installLocationNum", applyInfo.get("confirmLocationNum"));
                     put("installLocation", applyInfo.get("confirmLocationNum_textField"));
-                    put("statusCode", "031");
+                    put("statusCode", "020");
                 }});
+                // 更新具体位置和出库备注
+                for (int i = 0; i < useFaInfo.size(); i++) {
+                    dao.update("FADB01.updateRoomAndOutremark",useFaInfo.get(i));
+                }
                 FaTransferVO faTransferVO = new FaTransferVO();
                 String transferNo = OneSelfUtils.publicCreateCode(FixedAssetsEum.DB.getAcronym());
                 applyInfo.put("applyTime", DateUtils.toDateTimeStr19(new Date()));
@@ -469,6 +477,7 @@ public class ServiceFADB0102 extends ServiceBase {
                     return faTransferDetailVO;
                 }).collect(Collectors.toList());
                 dao.insert("FADB01.saveFaTransferDetailInfo", faTransferDetailVOList);
+                info.set("transferNo",transferNo);
             }
         }
         return info;
@@ -688,6 +697,8 @@ public class ServiceFADB0102 extends ServiceBase {
                                 return faTransferDetailVO;
                             }).collect(Collectors.toList());
                             dao.insert("FADB01.saveFaTransferDetailInfo", faTransferDetailVOList);
+                            // 调拨退库做红冲
+                            dao.insert("FADB01.insertFaThrowAccount",faTransferDetailVOList);
                         } else {
                             info.setStatus(-1);
                             info.setMsg("退库操作失败，原因：退库接口返回数据为空");
@@ -703,6 +714,18 @@ public class ServiceFADB0102 extends ServiceBase {
             info.setStatus(-1);
             info.setMsg("调拨失败：调拨物资为空");
         }
+        return info;
+    }
+
+    // 资产调拨查询
+    public EiInfo queryFaInfo(EiInfo info){
+        String myArray = info.getString("myArray");
+        JSONArray jsonArray = (JSONArray) JSONObject.parse(myArray);
+        List<String> list = jsonArray.toJavaList(String.class);
+        SqlMapDao sqlDao = (SqlMapDao) dao;
+        sqlDao.setMaxQueryCount(5000);
+        List<FaInfoDO> query = sqlDao.query("FADB01.queryFaInfo", list);
+        info.setRows("resultFixedAssests",query);
         return info;
     }
 }

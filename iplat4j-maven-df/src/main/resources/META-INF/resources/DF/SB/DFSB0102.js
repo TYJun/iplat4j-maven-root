@@ -91,10 +91,10 @@ $(function(){
 		 machineTypeId = IPLAT.EFInput.value($("#machineTypeId"));
 		 statusCode = IPLAT.EFSelect.value($("#statusCode"));
 		 fixedId = IPLAT.EFPopupInput.value($("#fixedId"));
-		 fixedPlace = IPLAT.EFPopupInput.text($("#fixedId"));				
+		 fixedPlace = IPLAT.EFPopupInput.text($("#fixedId"));
 		 innerMachineCode = IPLAT.EFInput.value($("#innerMachineCode"));
 		 documentNo = IPLAT.EFInput.value($("#documentNo"));
-		 workMedia = IPLAT.EFInput.value($("#workMedia"));			
+		 workMedia = IPLAT.EFInput.value($("#workMedia"));
 		 useCertNo = IPLAT.EFInput.value($("#useCertNo"));
 		 useArea = IPLAT.EFInput.value($("#useArea"));
 		 registerCode = IPLAT.EFInput.value($("#registerCode"));
@@ -137,25 +137,25 @@ $(function(){
 		}
 
 		//参数校验
-		 var start= new Date(thisCheckDate); 
+		 var start= new Date(thisCheckDate);
 		 var end= new Date(thisFinishDate);
 		 var next= new Date(nextCheckDate);
-		 
-		 var start1= new Date(thisExpiredDate); 
+
+		 var start1= new Date(thisExpiredDate);
 		 var end1= new Date(thisChexpiredDate);
 		 var next1= new Date(nextExpiredDate);
 				if(start>=end){
 					NotificationUtil("本次年度检验日不能大于本次年度检验完工日期", "error");
 					return ;
-				} 
+				}
 				if(end>=next){
 					NotificationUtil("本次年度检验完工日不能大于下次年度检验日", "error");
 					return ;
-				} 			
+				}
 				if(start1>=end1){
 					NotificationUtil("本次到期检验时间不能大于本次到期检验完工日期", "error");
 					return ;
-				} 
+				}
 				if(end1>=next1){
 					NotificationUtil("本次到期检验完工日期不能大于下次检查时间", "error");
 					return ;
@@ -176,7 +176,7 @@ $(function(){
 		eiInfo.set("fixedPlace",fixedPlace);
 		eiInfo.set("innerMachineCode",innerMachineCode);
 		eiInfo.set("documentNo",documentNo);
-		eiInfo.set("workMedia",workMedia);			
+		eiInfo.set("workMedia",workMedia);
 		eiInfo.set("useCertNo",useCertNo);
 		eiInfo.set("useArea",useCertNo);
 		eiInfo.set("registerCode",registerCode);
@@ -220,7 +220,6 @@ $(function(){
 			}
 		});
 	}
-	
 });
 
 	//参数校验
@@ -295,6 +294,20 @@ $(function() {
 	var validator = IPLAT.Validator({id: "result"});//开启校验
 	//表格按钮处理
 	IPLATUI.EFGrid = {
+		"resultB":{
+			page: function (grid) {
+				eiInfo = new EiInfo();
+				var machineTypeId = IPLAT.EFInput.value($("#machineTypeId"));
+				var id = IPLAT.EFInput.value($("#id"));
+				eiInfo.set("machineTypeId",machineTypeId);
+				eiInfo.set("id",id);
+				// EiCommunicator.send("DFSB0102", "query", eiInfo, {
+				// 	onSuccess : function(ei) {
+				//
+				// 	}
+				// });
+			}
+		},
 		"resultC":{
 			pageable : false,
 			exportGrid : false,

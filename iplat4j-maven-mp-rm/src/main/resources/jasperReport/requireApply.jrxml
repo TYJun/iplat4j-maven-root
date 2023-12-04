@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 6.10.0-unknown  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="requireApply" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9f963cd1-0689-4f3d-ba31-399b8a336c73">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<parameter name="deptName" class="java.lang.String">
+		<parameterDescription><![CDATA[需求科室名称]]></parameterDescription>
+	</parameter>
+	<parameter name="applyDate" class="java.lang.String">
+		<parameterDescription><![CDATA[申请日期]]></parameterDescription>
+	</parameter>
+	<parameter name="planDesc" class="java.lang.String">
+		<parameterDescription><![CDATA[需求计划描述]]></parameterDescription>
+	</parameter>
+	<parameter name="applySign" class="java.lang.String">
+		<parameterDescription><![CDATA[申请人签名]]></parameterDescription>
+	</parameter>
+	<parameter name="approvalAdvice" class="java.lang.String">
+		<parameterDescription><![CDATA[科室审批意见]]></parameterDescription>
+	</parameter>
+	<parameter name="approvalSign" class="java.lang.String">
+		<parameterDescription><![CDATA[科室领导签名]]></parameterDescription>
+	</parameter>
+	<parameter name="zcSign" class="java.lang.String">
+		<parameterDescription><![CDATA[资产管理科签名]]></parameterDescription>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="70" uuid="201ba1a4-bafd-4c91-9fe4-dd3610985b36">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="22"/>
+				</textElement>
+				<text><![CDATA[采购需求申请表]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="650" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement x="0" y="0" width="110" height="30" uuid="6b094f5d-1b89-49f6-9db6-9a5e6f379680">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14"/>
+				</textElement>
+				<text><![CDATA[需求申请科室：]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="110" y="0" width="170" height="30" uuid="0b068db0-f28f-4cde-b1e2-8c9c9ecf5898"/>
+				<box padding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{deptName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="280" y="0" width="110" height="30" uuid="49c4f8ba-2f32-492a-92f5-39f3d4818249">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14"/>
+				</textElement>
+				<text><![CDATA[ 申请日期：]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="390" y="0" width="165" height="30" uuid="6c49e55a-a049-4cd9-b1bb-ed35ca4b86fc"/>
+				<box padding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{applyDate}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="0" y="30" width="555" height="220" uuid="1edac7da-2b86-412c-b508-e01d94db572c"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="250" width="555" height="30" uuid="7f29db6e-d1fb-4b6a-95a7-811aa8070b81"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="280" width="555" height="170" uuid="4a69c358-7652-4bee-98c6-e349c90d27f3"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="450" width="555" height="200" uuid="648965e1-4e13-43ab-96d1-a72086795c29"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="310" y="250" width="100" height="30" uuid="a1c933fb-c225-4ec0-8450-1d3e7544e17d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14"/>
+				</textElement>
+				<text><![CDATA[申请人签字：]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="10" y="70" width="530" height="30" uuid="60afcd18-544a-4dd9-af22-0c36cf67c865"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{planDesc}]]></textFieldExpression>
+			</textField>
+			<image onErrorType="Blank">
+				<reportElement x="410" y="250" width="100" height="30" uuid="eb59183d-2966-49c8-928a-4fc0d1301517">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{applySign}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="10" y="40" width="100" height="30" uuid="14d45d10-89ab-4c14-96f0-8ac3f1b3d663"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14"/>
+				</textElement>
+				<text><![CDATA[需求计划描述：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="290" width="100" height="30" uuid="83612b1d-48ef-474b-858e-20bf116d6778"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14"/>
+				</textElement>
+				<text><![CDATA[科主任意见：]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="10" y="320" width="530" height="30" uuid="32beae30-858c-4004-abab-d1ed9ee2950f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{approvalAdvice}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="350" y="410" width="60" height="30" uuid="54672924-e420-487e-9479-e6c6145f5f09"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14"/>
+				</textElement>
+				<text><![CDATA[签字：]]></text>
+			</staticText>
+			<image onErrorType="Blank">
+				<reportElement x="410" y="410" width="100" height="30" uuid="2dfa44f7-1556-4082-b569-ca0bbe707e1e">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{approvalSign}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="10" y="460" width="120" height="30" uuid="312b88c8-35a1-4339-8814-f146a31222d3">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14"/>
+				</textElement>
+				<text><![CDATA[资产管理科意见：]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="10" y="490" width="530" height="30" uuid="2f89d652-ef98-420a-98c5-5fb3ce3ad2e5"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA["同意"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="350" y="610" width="60" height="30" uuid="9b0124c0-360c-4b50-82b2-dd2b73212385">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="14"/>
+				</textElement>
+				<text><![CDATA[签字：]]></text>
+			</staticText>
+			<image onErrorType="Blank">
+				<reportElement x="410" y="610" width="100" height="30" uuid="f98a61d7-577c-47b0-b3ee-7c406641bcba">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{zcSign}]]></imageExpression>
+			</image>
+		</band>
+	</detail>
+</jasperReport>

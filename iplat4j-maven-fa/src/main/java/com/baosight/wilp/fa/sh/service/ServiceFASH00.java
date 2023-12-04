@@ -55,7 +55,7 @@ public class ServiceFASH00 extends ServiceBase {
         int setCount = dao.count("FASH01.queryFaInfoBackups", null);
         SqlMapDao sqlMapDao = (SqlMapDao) this.dao;
         sqlMapDao.setMaxQueryCount(setCount);
-        List<Map<String,Object>> queryFaInfoBackups = dao.query("FASH01.queryFaInfoBackups", null);
+        List<Map<String,Object>> queryFaInfoBackups = sqlMapDao.query("FASH01.queryFaInfoBackups", null);
 //        if (faInfoIdList != null) {
 //            String[] split = faInfoIdList.split(",");
 //            ArrayList<String> rowsList = new ArrayList<>(Arrays.asList(split));
@@ -66,7 +66,7 @@ public class ServiceFASH00 extends ServiceBase {
         }
         map.put("statusCode", "040");
 
-        List<Map<String, Object>> list = dao.query("FASH01.query", map,offset, limit);
+        List<Map<String, Object>> list = dao.query("FASH01.query", map, offset, limit);
         int count = dao.count("FASH01.query", map);
         attrSize.put("count", count);
         EiBlock resultA = new EiBlock("resultA");
@@ -111,6 +111,7 @@ public class ServiceFASH00 extends ServiceBase {
         }
         return info;
     }
+
     /**
      * 已添加物资插入表fa_infoBackups，用于后续过滤
      */
@@ -122,7 +123,6 @@ public class ServiceFASH00 extends ServiceBase {
             map.put("goodsNum",goodsNumList.get(i));
             dao.insert("FASH01.insertFaInfoBackups",map);
         }
-        info.setMsg("200");
         return info;
     }
 }

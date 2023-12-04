@@ -7,7 +7,7 @@
 	<EF:EFRegion id="info" head="hidden">
 		<EF:EFInput ename="type" cname="操作类型" colWidth="5" readonly="true" type="hidden"/>
 		<EF:EFInput ename="info-0-transferNo" cname="调拨单号" colWidth="5" readonly="true" type="hidden"/>
-		<EF:EFInput ename="inventoryStatus" cname="供给/接收科室状态" rows="3" colWidth="10" type="textarea" ratio="2:10" maxLength="200" readonly="true"/>
+		<EF:EFInput ename="inventoryStatus" cname="供给/接收科室状态" rows="1" colWidth="10" type="textarea" ratio="2:10" maxLength="200" readonly="true"/>
 		<div id="apply" style="display: none">
 			<div id="confirmDeptNum" style="display: none">
 				<EF:EFInput ename="info-0-applyFileCode" cname="申请科室电子签名fileCode" colWidth="5" readonly="true" type="hidden"/>
@@ -23,7 +23,7 @@
 <%--								 valueField="deptNum" textField="deptName"--%>
 <%--								 columnEnames="deptNum,deptName" columnCnames="科室编码,科室名称" />--%>
 			</div>
-			<EF:EFInput ename="info-0-applyReason" cname="调拨原因" rows="3" placeholder="不能超过200字"
+			<EF:EFInput ename="info-0-applyReason" cname="调拨原因" rows="2" placeholder="不能超过200字"
 						colWidth="10" type="textarea" required="true" ratio="2:10" maxLength="200"/>
 			<div class="row">
 				<div class="col-md-1">
@@ -51,7 +51,7 @@
 				<EF:EFInput ename="info-0-confirmBuild" cname="楼" colWidth="5" readonly="true"/>
 				<EF:EFInput ename="info-0-confirmFloor" cname="层" colWidth="5" readonly="true"/>
 				<EF:EFInput ename="info-0-confirmRoom" cname="具体位置" colWidth="5"/>
-				<EF:EFInput ename="info-0-confirmReason" cname="接收意见" rows="3" placeholder="不能超过200字"
+				<EF:EFInput ename="info-0-confirmReason" cname="接收意见" rows="2" placeholder="不能超过200字"
 							colWidth="10" type="textarea" required="true" ratio="2:10" maxLength="200"/>
 			</div>
 			<div class="row">
@@ -67,7 +67,7 @@
 		</div>
 		<div id="audit" style="display: none">
 			<EF:EFInput ename="info-0-auditFileCode" cname="资产科电子签名fileCode" colWidth="5" readonly="true" type="hidden"/>
-			<EF:EFInput ename="info-0-auditReason" cname="审批意见" rows="3" placeholder="不能超过200字"
+			<EF:EFInput ename="info-0-auditReason" cname="审批意见" rows="2" placeholder="不能超过200字"
 						colWidth="10" type="textarea" required="true" ratio="2:10" maxLength="200"/>
 			<div class="row">
 				<div class="col-md-1">
@@ -92,12 +92,12 @@
 			</div>
 			<div id="confirmButton" style="display: none">
 				<EF:EFButton cname="通过" ename="confirmPass" layout="3"></EF:EFButton>
-				<EF:EFButton cname="驳回" ename="confirmReject" layout="3"></EF:EFButton>
+				<EF:EFButton cname="整单驳回" ename="confirmReject" layout="3"></EF:EFButton>
 				<EF:EFButton cname="关闭" ename="close3" layout="3"></EF:EFButton>
 			</div>
 			<div id="auditButton" style="display: none">
 				<EF:EFButton cname="通过" ename="auditPass" layout="3"></EF:EFButton>
-				<EF:EFButton cname="驳回" ename="auditReject" layout="3"></EF:EFButton>
+				<EF:EFButton cname="整单驳回" ename="auditReject" layout="3"></EF:EFButton>
 				<EF:EFButton cname="关闭" ename="close4" layout="3"></EF:EFButton>
 			</div>
 			<div id="auditButton2" style="display: none">
@@ -110,7 +110,7 @@
 	</EF:EFRegion>
 	<EF:EFRegion id="result" head="hidden">
 		<EF:EFGrid blockId="resultFixedAssests" needAuth="false" autoDraw="no" autoBind="true" autoFit="true"
-				   checkMode="multiple,row" readonly="true" rowNo="true" isFloat="true">
+				   checkMode="multiple,row" readonly="true" rowNo="true" isFloat="true" height="380px">
 			<EF:EFColumn ename="id" cname="id"  align="center" locked="true" hidden="true"/>
 			<EF:EFColumn ename="faInfoId" cname="faInfoId"  align="center" hidden="true"/>
 			<EF:EFColumn ename="goodsNum" cname="资产编码"  align="center" width="200" enable="false"/>
@@ -139,7 +139,7 @@
 	<div id="confirmLocationNum" style="display: none; height:550px; width: 850px">
 		<EF:EFRegion id="result" title="楼层信息" head="hidden">
 			<EF:EFGrid blockId="spot" checkMode="single,row" serviceName="FADB0101" queryMethod="querySpot"
-					   readonly="true" rowNo="true" autoDraw="no" height="415px"> <!-- EFGrid 默认 autoDraw="yes" -->
+					   readonly="true" rowNo="true" autoDraw="no" height="350px"> <!-- EFGrid 默认 autoDraw="yes" -->
 				<EF:EFColumn ename="building" cname="楼" enable="false"/>
 				<EF:EFColumn ename="floor" cname="层" enable="false"/>
 				<EF:EFColumn ename="spotName" cname="地点" enable="false"/>
@@ -149,3 +149,9 @@
 	</div>
 	<EF:EFWindow id="popData" url="" lazyload="true" width="80%" height="80%" title="资产档案信息" modal="true" />
 </EF:EFPage>
+<style>
+	label#info-0-deptNum:before{
+		content: '*';
+		color: red;
+	}
+</style>

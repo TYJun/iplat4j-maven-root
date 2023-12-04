@@ -270,6 +270,7 @@
             net_asset_value	AS "netAssetValue",
             estimate_cost	AS "estimateCost",
             remark	AS "remark",
+            out_remark	AS "outRemark",
             depreciation_way	AS "depreciationWay",
             total_depreciation	AS "totalDepreciation",
             month_depreciation	AS "monthDepreciation",
@@ -356,23 +357,32 @@
         <isNotEmpty prepend=" AND " property="fundingSourceNum">
             fundingSource_num = #fundingSourceNum#
         </isNotEmpty>
-        order by dept_name,rec_revise_time DESC,rec_create_time DESC,LENGTH(goods_num),goods_num
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                enter_bill_no DESC,goods_num
+            </isEmpty>
+        </dynamic>
     </select>
 
     <insert id="batchModificationInfo" parameterClass="java.util.ArrayList">
         INSERT INTO fa_modification_batch_detail
         (
-            id,faInfo_id,goods_num,goods_name,contract_no,goods_classify_code,goods_classify_name,
-            goods_type_code,goods_type_name,goods_category_code,goods_category_name,model,amount,price,buy_cost,manufacturer,surp_name,buy_date,
+            id,faInfo_id,cont_no,mat_num,mat_name,goods_num,goods_name,contract_no,goods_classify_code,goods_classify_name,
+            goods_type_code,goods_type_name,goods_category_code,goods_category_name,model,amount,price,buy_cost,manufacturer,
+            manufacturer_naty_code,surp_num,surp_name,buy_date,
             use_date,build,floor,install_location_num,install_location,dept_num,dept_name,unit_num,
             unit_name,residual_rate,estimated_residual_value,use_years,fundingSource_num,finace_class_num,
             invoice_no,estimate_cost,remark,rec_creator,rec_create_name,rec_create_time,
-            change_reason,approval_result,modify_type
+            change_reason,approval_result,modify_type,net_asset_value,total_depreciation,month_depreciation
         )
         VALUES
         <iterate conjunction=",">
         (
-            #faModificationBatchDetailVOList[].id#, #faModificationBatchDetailVOList[].faInfoId#,
+            #faModificationBatchDetailVOList[].id#, #faModificationBatchDetailVOList[].faInfoId#,#faModificationBatchDetailVOList[].contractNo#,
+            #faModificationBatchDetailVOList[].matNum#, #faModificationBatchDetailVOList[].matName#,
             #faModificationBatchDetailVOList[].goodsNum#, #faModificationBatchDetailVOList[].goodsName#,
             #faModificationBatchDetailVOList[].contractNo#,#faModificationBatchDetailVOList[].goodsClassifyCode#,
             #faModificationBatchDetailVOList[].goodsClassifyName#, #faModificationBatchDetailVOList[].goodsTypeCode#,
@@ -380,6 +390,7 @@
             #faModificationBatchDetailVOList[].goodsCategoryName#, #faModificationBatchDetailVOList[].model#,
             #faModificationBatchDetailVOList[].amount#, #faModificationBatchDetailVOList[].price#,
             #faModificationBatchDetailVOList[].buyCost#, #faModificationBatchDetailVOList[].manufacturer#,
+            #faModificationBatchDetailVOList[].manufacturerNatyCode#, #faModificationBatchDetailVOList[].surpNum#,
             #faModificationBatchDetailVOList[].surpName#, #faModificationBatchDetailVOList[].buyDate#,
             #faModificationBatchDetailVOList[].useDate#, #faModificationBatchDetailVOList[].build#,
             #faModificationBatchDetailVOList[].floor#, #faModificationBatchDetailVOList[].installLocationNum#,
@@ -392,8 +403,9 @@
             #faModificationBatchDetailVOList[].estimateCost#, #faModificationBatchDetailVOList[].remark#,
             #faModificationBatchDetailVOList[].recCreator#, #faModificationBatchDetailVOList[].recCreateName#,
             #faModificationBatchDetailVOList[].recCreateTime#,#faModificationBatchDetailVOList[].changeReason#,
-            '00',#faModificationBatchDetailVOList[].modifyType#
-        )
+            '00',#faModificationBatchDetailVOList[].modifyType#,#faModificationBatchDetailVOList[].netAssetValue#,
+            #faModificationBatchDetailVOList[].totalDepreciation#,#faModificationBatchDetailVOList[].monthDepreciation#
+            )
         </iterate>
     </insert>
 
@@ -647,6 +659,13 @@
         <isNotEmpty prepend=" AND " property="deptNameSplit">
             $deptNameSplit$
         </isNotEmpty>
-        GROUP BY goods_num
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                goods_num
+            </isEmpty>
+        </dynamic>
     </select>
 </sqlMap>

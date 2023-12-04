@@ -19,7 +19,7 @@
             <div id="applyReason" style="display: none">
                 <EF:EFInput ename="info-0-applyFileCode" cname="applyFileCode" type="hidden"></EF:EFInput>
                 <EF:EFInput ename="info-0-applyReason" cname="申请报废原因" rows="3" colWidth="9"
-                            ratio="2:9" type="textarea" required="true" placeholder="不能超过200字" maxLength="200"/>
+                            ratio="2:9" type="textarea" required="true" placeholder="报废申请不得过于简洁或复杂，请填写10~200字，谢谢" minLength="10" maxLength="200"/>
             </div>
             <div class="row">
                 <div class="col-md-1">

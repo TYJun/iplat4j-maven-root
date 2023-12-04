@@ -94,6 +94,7 @@
         fi.device_name	as "deviceName",
         fi.device_type_name	as "deviceTypeName",
         fi.remark	as "remark",
+        fi.out_remark	as "outRemark",
         fi.lock_flag	as "lockFlag",
         fi.card_status	as "cardStatus",
             CASE fi.card_status
@@ -128,7 +129,6 @@
         fi.fund_project_code AS "fundProjectCode",
         fi.fund_project AS "fundProject",
         fi.asset_type AS "assetType",
-        fi.out_remark AS "outRemark",
         fi.archive_flag	as "archiveFlag",
         fi.warranty AS "warranty",
         fd.discuss_no AS "discussNo",
@@ -201,7 +201,14 @@
         <isNotEmpty prepend=" AND " property="deptNameSplit">
             $deptNameSplit$
         </isNotEmpty>
-        order by fd.discuss_no,fi.goods_num desc
+        <dynamic prepend="ORDER BY">
+            <isNotEmpty property="orderBy">
+                $orderBy$
+            </isNotEmpty>
+            <isEmpty property="orderBy">
+                fi.enter_bill_no DESC,fi.goods_num
+            </isEmpty>
+        </dynamic>
     </select>
 
     <select id="count" parameterClass="java.util.HashMap" resultClass="int">

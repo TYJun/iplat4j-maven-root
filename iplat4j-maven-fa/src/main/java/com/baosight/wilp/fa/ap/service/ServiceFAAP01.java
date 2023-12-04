@@ -1,11 +1,13 @@
 package com.baosight.wilp.fa.ap.service;
 
+import com.alibaba.fastjson.JSON;
 import com.baosight.iplat4j.core.ei.EiConstant;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
 import com.baosight.iplat4j.core.service.soa.XServiceManager;
 import com.baosight.iplat4j.core.util.DateUtils;
 import com.baosight.iplat4j.core.util.StringUtils;
+import com.baosight.iplat4j.core.web.threadlocal.UserSession;
 import com.baosight.wilp.common.util.BaseDockingUtils;
 import com.baosight.wilp.fa.ap.domain.FaInventoryDetailFinal;
 import com.baosight.wilp.fa.bf.domian.FaScrapDetailVO;
@@ -44,6 +46,8 @@ import java.util.stream.Collectors;
  * @date 2022年06月14日 10:07
  */
 public class ServiceFAAP01 extends ServiceBase {
+
+    public static final String MODULE_NAME = "固定资产";
 
     /**
      * App查询固定资产盘点信息(待盘点-0/已盘点-1).
@@ -1452,5 +1456,210 @@ public class ServiceFAAP01 extends ServiceBase {
                 break;
         }
         return info;
+    }
+
+    /**
+     * 固定资产调拨接收科室待确认待办
+     * @param inInfo
+     * @return
+     */
+    public EiInfo transferConfirmUndo(EiInfo inInfo) {
+        // 获取当前人科室
+        Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(com.baosight.xservices.xs.util.UserSession.getUser().getUsername());
+        String deptNum = (String) staffByUserId.get("deptNum");
+        // 数据查询
+        List<Map<String, String>> rows = dao.query("FAAP01.queryTransferConfirmUndo", deptNum);
+        int count = rows.size();
+        /**数据转换**/
+        rows.forEach(row -> {
+            row.put("jumpUrl", "FADB01?inqu_status-0-transferNo="+row.get("transferNo"));
+            row.put("itemMsg", "你有一条申请科室为"+row.get("applyDeptName")+"的资产调拨记录待确认,请及时处理。");
+        });
+        /**构建待办数据**/
+        inInfo.set("moduleName", "资产调拨【接收科室待确认】");
+        inInfo.set("todoDetailUrl","FADB01");
+        inInfo.set("todoCount", 0);
+        if (count > 0){
+            inInfo.set("todoCount", count);
+            inInfo.set("todoList", JSON.toJSONString(rows));
+        }
+        return inInfo;
+    }
+
+    /**
+     * 固定资产调拨资产科待审批待办
+     * @param inInfo
+     * @return
+     */
+    public EiInfo transferApproveUndo(EiInfo inInfo) {
+        // 获取当前人权限
+        String dept = OneSelfUtils.specifyDept();
+        if (dept == null){
+            // 数据查询
+            List<Map<String, String>> rows = dao.query("FAAP01.queryTransferApproveUndo", new HashMap<>());
+            int count = rows.size();
+            /**数据转换**/
+            rows.forEach(row -> {
+                row.put("jumpUrl", "FADB01");
+                row.put("itemMsg", "你有" + count + "条资产调拨记录待审批,请及时处理。");
+            });
+            /**构建待办数据**/
+            inInfo.set("moduleName", "资产调拨【资产科待审批】");
+            inInfo.set("todoDetailUrl","FADB01");
+            inInfo.set("todoCount", 0);
+            if(count > 0){
+                inInfo.set("todoCount", 1);
+                inInfo.set("todoList", JSON.toJSONString(new ArrayList<Map<String, String>>(){{
+                    add(rows.get(0));
+                }}));
+            }
+            return inInfo;
+        } else {
+            inInfo.set("todoCount", 0);
+            return inInfo;
+        }
+    }
+
+
+    /**
+     * 固定资产报废资产科待分配待办
+     * @param inInfo
+     * @return
+     */
+    public EiInfo scrapAllocationUndo(EiInfo inInfo) {
+        // 获取当前人权限
+        String dept = OneSelfUtils.specifyDept();
+        if (dept == null){
+            // 数据查询
+            List<Map<String, String>> rows = dao.query("FAAP01.queryScrapAllocationUndo", new HashMap<>());
+            int count = rows.size();
+            /**数据转换**/
+            rows.forEach(row -> {
+                row.put("jumpUrl", "FABF01");
+                row.put("itemMsg", "你有" + count + "条资产报废记录待分配,请及时处理。");
+            });
+            /**构建待办数据**/
+            inInfo.set("moduleName", "资产报废【资产科待分配】");
+            inInfo.set("todoDetailUrl","FABF01");
+            inInfo.set("todoCount", 0);
+            if (count > 0) {
+                inInfo.set("todoCount", 1);
+                inInfo.set("todoList", JSON.toJSONString(new ArrayList<Map<String, String>>(){{
+                    add(rows.get(0));
+                }}));
+            }
+            return inInfo;
+        } else {
+            inInfo.set("todoCount", 0);
+            return inInfo;
+        }
+    }
+
+    /**
+     * 固定资产报废鉴定科室待鉴定待办
+     * @param inInfo
+     * @return
+     */
+    public EiInfo scrapIdentifyUndo(EiInfo inInfo) {
+        // 获取当前人科室
+        Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(com.baosight.xservices.xs.util.UserSession.getUser().getUsername());
+        String deptNum = (String) staffByUserId.get("deptNum");
+        String deptName = (String) staffByUserId.get("deptName");
+        List list = dao.query("FAAP01.queryIdentifyDept", deptNum);
+        if (CollectionUtils.isNotEmpty(list)){
+            // 数据查询
+            List<Map<String, String>> rows = dao.query("FAAP01.queryScrapIdentifyUndo", deptName);
+            int count = rows.size();
+            /**数据转换**/
+            rows.forEach(row -> {
+                row.put("jumpUrl", "FABF01");
+                row.put("itemMsg", "你有" + count + "条资产报废记录待鉴定,请及时处理。");
+            });
+            /**构建待办数据**/
+            inInfo.set("moduleName", "资产报废【鉴定科室待鉴定】");
+            inInfo.set("todoDetailUrl","FABF01");
+            inInfo.set("todoCount", 0);
+            if (count > 0){
+                inInfo.set("todoCount", 1);
+                inInfo.set("todoList", JSON.toJSONString(new ArrayList<Map<String, String>>(){{
+                    add(rows.get(0));
+                }}));
+            }
+            return inInfo;
+        } else {
+            inInfo.set("todoCount", 0);
+            return inInfo;
+        }
+    }
+
+    /**
+     * 固定资产报废归口科室待确认待办
+     * @param inInfo
+     * @return
+     */
+    public EiInfo scrapConfirmUndo(EiInfo inInfo) {
+        // 获取当前人科室
+        Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(com.baosight.xservices.xs.util.UserSession.getUser().getUsername());
+        String deptNum = (String) staffByUserId.get("deptNum");
+        String deptName = (String) staffByUserId.get("deptName");
+        List list = dao.query("FAAP01.queryFunctionDept", deptNum);
+        if (CollectionUtils.isNotEmpty(list)){
+            // 数据查询
+            List<Map<String, String>> rows = dao.query("FAAP01.queryScrapConfirmUndo", deptName);
+            int count = rows.size();
+            /**数据转换**/
+            rows.forEach(row -> {
+                row.put("jumpUrl", "FABF01");
+                row.put("itemMsg", "你有" + count + "条资产报废记录待确认,请及时处理。");
+            });
+            /**构建待办数据**/
+            inInfo.set("moduleName", "资产报废【归口科室待确认】");
+            inInfo.set("todoDetailUrl","FABF01");
+            inInfo.set("todoCount", 0);
+            if (count > 0){
+                inInfo.set("todoCount", 1);
+                inInfo.set("todoList", JSON.toJSONString(new ArrayList<Map<String, String>>(){{
+                    add(rows.get(0));
+                }}));
+            }
+            return inInfo;
+        } else {
+            inInfo.set("todoCount", 0);
+            return inInfo;
+        }
+    }
+
+    /**
+     * 固定资产报废资产科待审批待办
+     * @param inInfo
+     * @return
+     */
+    public EiInfo scrapApproveUndo(EiInfo inInfo) {
+        // 获取当前人权限
+        String dept = OneSelfUtils.specifyDept();
+        if (dept == null){
+            // 数据查询
+            List<Map<String, String>> rows = dao.query("FAAP01.queryScrapApproveUndo", new HashMap<>());
+            int count = rows.size();
+            /**数据转换**/
+            rows.forEach(row -> {
+                row.put("jumpUrl", "FABF01");
+                row.put("itemMsg", "你有" + count + "条资产报废记录待审批,请及时处理。");
+            });
+            /**构建待办数据**/
+            inInfo.set("moduleName", "资产报废【资产科待审批】");
+            inInfo.set("todoDetailUrl","FABF01");
+            inInfo.set("todoCount", 0);
+            if (count > 0){
+                inInfo.set("todoCount", 1);
+                inInfo.set("todoList", JSON.toJSONString(new ArrayList<Map<String, String>>(){{
+                    add(rows.get(0));
+                }}));
+            }
+            return inInfo;
+        } else {
+            inInfo.set("todoCount", 0);
+            return inInfo;
+        }
     }
 }

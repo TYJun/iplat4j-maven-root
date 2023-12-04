@@ -156,6 +156,21 @@ public class ServiceFADA0101 extends ServiceBase {
             case "enter":
                 String goodsNum = OneSelfUtils.privateCreateCode((String) param.get("goodsClassifyCode"));
                 Integer amount = Integer.valueOf(String.valueOf(param.get("enterNum")));
+                String goodsCategoryCode = (String) param.get("goodsCategoryCode");
+                String goodsClassifyCode = (String) param.get("goodsClassifyCode");
+                String goodsTypeCode = (String) param.get("goodsTypeCode");
+                if ("B".equals(goodsCategoryCode.substring(0,1))){
+                    goodsCategoryCode = goodsCategoryCode.replace("B","A08");
+                    goodsClassifyCode = goodsClassifyCode.replace("B","A08");
+                    goodsTypeCode = goodsTypeCode.replace("B","A08");
+                } else {
+                    goodsCategoryCode = "A" + goodsCategoryCode.substring(1);
+                    goodsClassifyCode = "A" + goodsClassifyCode.substring(1);
+                    goodsTypeCode = "A" + goodsTypeCode.substring(1);
+                }
+                param.put("goodsCategoryCode", goodsCategoryCode);
+                param.put("goodsClassifyCode", goodsClassifyCode);
+                param.put("goodsTypeCode", goodsTypeCode);
                 param.put("spec", param.get("matSpec"));
                 param.put("price", param.get("enterPrice"));
                 param.put("deptNum", param.get("confirmDeptNum"));
@@ -209,10 +224,7 @@ public class ServiceFADA0101 extends ServiceBase {
                 Map<String, Object> map = info.getRow("info", 0);
                 int update = dao.update("FAQR01.updateConfirmStatus", map);
                 info.setMsg("成功" + update + "条记录");
-                new Thread(() -> {
-                    OneSelfUtils.batchInsert("FADA01.saveFaInfo", faInfoDOList);
-//					dao.insert("FADA01.saveFaInfo", faInfoDOList);
-                }).start();
+                OneSelfUtils.batchInsert("FADA01.saveFaInfo", faInfoDOList);
                 for (FaInfoDO faInfoDO : faInfoDOList) {
                     String nalGoodsClassifyCode = faInfoDO.getGoodsClassifyCode();
                     String nalGoodsTypeCode = faInfoDO.getGoodsTypeCode();

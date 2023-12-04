@@ -98,6 +98,10 @@ IPLATUI.EFGrid = {
                     NotificationUtil("请填写申请报废原因", "warning")
                     return
                 }
+                if ($("#info-0-applyReason").val().trim().length < 9) {
+                    NotificationUtil("报废申请不能过于简洁", "warning")
+                    return
+                }
                 // 资产报废
                 EiCommunicator.send("FABF0101", "saveFaScrapInfo", eiInfo, {
                     onSuccess: function (ei) {
