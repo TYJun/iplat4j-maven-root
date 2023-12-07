@@ -14,17 +14,11 @@
         <option value="$PROJECT_DIR$/iplat4j-maven-mp-rm/pom.xml" />
         <option value="$PROJECT_DIR$/iplat4j-maven-security/pom.xml" />
         <option value="$PROJECT_DIR$/iplat4j-maven-vi/pom.xml" />
-        <option value="$PROJECT_DIR$/iplat4j-maven-fa/pom.xml" />
       </list>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="ibm-1.8" project-jdk-type="JavaSDK" />
   <component name="ProjectType">
     <option name="id" value="jpab" />
-  </component>
-  <component name="SwUserDefinedSpecifications">
-    <option name="specTypeByUrl">
-      <map />
-    </option>
   </component>
 </project>

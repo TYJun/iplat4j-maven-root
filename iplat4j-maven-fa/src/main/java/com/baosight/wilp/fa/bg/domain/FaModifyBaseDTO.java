@@ -7,7 +7,7 @@ import com.baosight.iplat4j.core.util.NumberUtils;
 import com.baosight.iplat4j.core.util.StringUtils;
 import com.baosight.wilp.fa.common.AnjiDescription;
 import com.baosight.wilp.fa.common.ValidatorUtils;
-import javafx.scene.input.DataFormat;
+
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;

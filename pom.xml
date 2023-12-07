@@ -8,6 +8,9 @@
     <artifactId>iplat4j-maven-root</artifactId>
     <version>5.0.2</version>
     <modules>
+        <module>iplat4j-maven-cm</module>
+        <module>iplat4j-maven-it</module>
+        <module>iplat4j-maven-pm</module>
         <module>bonawise-maven-pay-hessian</module>
         <module>iplat4j-maven-web</module>
         <module>iplat4j-maven-commons</module>
@@ -52,6 +55,9 @@
     <description>iplat4j 聚合版 maven项目父pom</description>
 
     <properties>
+        <iplat4j-module-cm-version>5.0.0</iplat4j-module-cm-version>
+        <iplat4j-module-it-version>5.0.0</iplat4j-module-it-version>
+        <iplat4j-module-pm-version>5.0.0</iplat4j-module-pm-version>
         <bonawise-module-pay-hessian-version>0.0.1</bonawise-module-pay-hessian-version>
         <iplat4j-module-commons-version>5.0.2</iplat4j-module-commons-version>
         <iplat4j-maven-ir-version>5.0.2</iplat4j-maven-ir-version>

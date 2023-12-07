@@ -108,15 +108,15 @@
 	</div>
 	</EF:EFRegion>
 	<EF:EFRegion title="检验日期信息">
-<%--	<div class="row">--%>
-<%--	<EF:EFDatePicker ename="thisCheckDate" cname="本年检验日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"--%>
-<%--			parseFormats="['yyyy-mm-dd']" readonly="true" />--%>
-<%--			<EF:EFDatePicker ename="thisFinishDate" cname="本年完工日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"--%>
-<%--			parseFormats="['yyyy-mm-dd']" readonly="true" />--%>
-<%--			<EF:EFInput ename="annualinspcycle" cname="周期（月）：" colWidth="3" ratio="4:8"/>--%>
-<%--			<EF:EFDatePicker ename="nextCheckDate" cname="下年检验日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"--%>
-<%--			parseFormats="['yyyy-mm-dd']" readonly="true" />--%>
-<%--	</div>--%>
+	<div class="row" style="display:none;">
+	<EF:EFDatePicker ename="thisCheckDate" cname="本年检验日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"
+			parseFormats="['yyyy-mm-dd']" readonly="true" />
+			<EF:EFDatePicker ename="thisFinishDate" cname="本年完工日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"
+			parseFormats="['yyyy-mm-dd']" readonly="true" />
+			<EF:EFInput ename="annualinspcycle" cname="周期（月）：" colWidth="3" ratio="4:8"/>
+			<EF:EFDatePicker ename="nextCheckDate" cname="下年检验日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"
+			parseFormats="['yyyy-mm-dd']" readonly="true" />
+	</div>
 	<div class="row">
 	<EF:EFDatePicker ename="thisExpiredDate" cname="本次定检日：" role="date" colWidth="3" ratio="4:8" format="yyyy-MM-dd"
 			parseFormats="['yyyy-mm-dd']" readonly="true" />
