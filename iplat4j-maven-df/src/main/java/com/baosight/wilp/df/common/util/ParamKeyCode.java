@@ -1,9 +1,10 @@
 package com.baosight.wilp.df.common.util;
 
-import com.baosight.bpm.util.StringUtil;
+
 import com.baosight.iplat4j.core.data.ibatis.dao.Dao;
 import com.baosight.iplat4j.core.ioc.spring.PlatApplicationContext;
 import com.baosight.wilp.df.common.domain.ParamKey;
+import com.baosight.wilp.df.jk.util.StringUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,9 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 /**
- * 
+ *
  * 设备档案工具类
- * 
+ *
  * @Title: ParamKeyCode.java
  * @ClassName: ParamKeyCode
  * @Package：com.baosight.wilp.df.common.util
@@ -30,18 +31,18 @@ import java.util.Map;
 public class ParamKeyCode {
     // 获取Spring容器中已初始化的bean
 	private static Dao dao = (Dao) PlatApplicationContext.getBean("dao");
-	
+
 	// 维护最大编号
 	private static Map<String,Integer> maxCodeMap = new HashMap<>();
-	
+
 	// 校验生成的日期
 	private static String valiTime = "";
-	
+
 	/**
 	 * 生成最大的编码
 	 */
 	public static synchronized String geneCode(ParamKey paramKey) {
-		
+
 		// 当前日期
 		String nowTime = new SimpleDateFormat("yyMMdd").format(new Date());
 		// map的key
@@ -70,7 +71,7 @@ public class ParamKeyCode {
 		//返回单号
 		return prefix+addZero(maxCodeMap.get(key));
 	}
-	
+
 	/**
 	 *  查询最大的编码(数字)
 	 */
@@ -82,10 +83,10 @@ public class ParamKeyCode {
 		    // 通过前缀查询编码
 			List l1 = dao.query("DFFL10.getMaxItemClass", prefix);
 			// 如果list不为空
-			if (l1 != null && l1.size() > 0) 
+			if (l1 != null && l1.size() > 0)
 			    // 获取list下标为一的值
 				code = (String) l1.get(0);
-		} 
+		}
 		// 如果不存在编码
 		if (StringUtil.isEmpty(code)) {
 		    // 编码为前缀拼接00000
@@ -96,7 +97,7 @@ public class ParamKeyCode {
 		// 对后五位数字进行+1操作
 		return ++num;
 	}
-	
+
 	/**
 	 *  补0生成工单号
 	 */
@@ -118,7 +119,7 @@ public class ParamKeyCode {
 		// 返回工单号
 		return valString;
 	}
-	
+
 	// 创建编码头
 	public static String createTop() {
 	    // 设置时间转换格式

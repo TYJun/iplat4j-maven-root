@@ -18,6 +18,10 @@
             <groupId>com.bonawise.iplat4j</groupId>
             <artifactId>iplat4j-maven-commons</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.bonawise.iplat4j</groupId>
+            <artifactId>xservices-bpm</artifactId>
+        </dependency>
     </dependencies>
 
 

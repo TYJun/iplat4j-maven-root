@@ -27,7 +27,7 @@
 		SELECT
 				id	as "id",  <!-- 设备零部件ID -->
 				machine_code	as "machineCode",  <!-- 设备零部件编码 -->
-				machine_name	as "machineName",  <!-- 设备零部件名称 -->
+				machine_name	as "machineNames",  <!-- 设备零部件名称 -->
 				machine_id	as "machineId",  <!-- 设备ID -->
 				models	as "models",  <!-- 规格型号 -->
 				status_code	as "statusCode",  <!-- 状态代码（0=新建 1=启用，-1=停用） -->
@@ -135,7 +135,7 @@
 										rec_revise_time,  <!-- 修改时间 -->
 										data_group_code  <!-- 账套 -->
 										)		 
-	    VALUES (#id#, #machineCode#, #machineName#, #machineId#, #models#, #statusCode#, #certNo#, #thisCheckDate#, #nextCheckDate#, #annualinspcycle#, #remark#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#) 
+	    VALUES (#id#, #machineCode#, #machineNames#, #machineId#, #models#, #statusCode#, #certNo#, #thisCheckDate#, #nextCheckDate#, #annualinspcycle#, #remark#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#)
 	</insert>
   
 	<delete id="deleteDevicePart" parameterClass="java.lang.String">
@@ -147,7 +147,7 @@
 		UPDATE .df_special_device_part 
 		SET 
 					machine_code	= #machineCode#,   <!-- 设备零部件编码 -->  
-					machine_name	= #machineName#,   <!-- 设备零部件名称 -->  
+					machine_name	= #machineNames#,   <!-- 设备零部件名称 -->
 					machine_id	= #machineId#,   <!-- 设备ID -->  
 					models	= #models#,   <!-- 规格型号 -->  
 					status_code	= #statusCode#,   <!-- 状态代码（0=新建 1=启用，-1=停用） -->  

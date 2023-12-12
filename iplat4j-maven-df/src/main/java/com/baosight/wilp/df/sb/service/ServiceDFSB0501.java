@@ -5,7 +5,7 @@ import com.baosight.iplat4j.core.service.impl.ServiceBase;
 
 
 /**
- *
+ * 
  * 二维码弹窗页面
  * <p>1.页面查询方法</p>
  * @Title: ServiceDFSB0103.java
@@ -21,7 +21,7 @@ import com.baosight.iplat4j.core.service.impl.ServiceBase;
  * <version>// 版本
  * <desc>   // 描述修改内容
  */
-public class ServiceDFSB0103  extends ServiceBase {
+public class ServiceDFSB0501 extends ServiceBase {
     /**
      * 二维码页面
      * @param inInfo
@@ -31,5 +31,5 @@ public class ServiceDFSB0103  extends ServiceBase {
     public EiInfo initLoad(EiInfo inInfo) {
          return super.initLoad(inInfo);
     }
-
+    
 }

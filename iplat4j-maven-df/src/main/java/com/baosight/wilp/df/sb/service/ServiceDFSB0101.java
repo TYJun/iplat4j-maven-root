@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * 
+ *
  * 特种设备登记页面
  * <p>页面初始化</p>
  * <p>设备分类树查询</p>
@@ -156,19 +156,19 @@ public class ServiceDFSB0101 extends ServiceBase{
      * recRevisor：          修改人
      * recReviseTime：       修改时间
      * dataGroupCode：        账套
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @see ServiceBase#initLoad(EiInfo)
 	 */
 	public EiInfo initLoad(EiInfo info) {
 		//调用父类初始化
 		return super.initLoad(info);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @Title: query
 	 * @Description: (设备分类树查询)
-	 * @param:  machineTypeId：设备分类id	 
-	 * @return: outInfo  
+	 * @param:  machineTypeId：设备分类id
+	 * @return: outInfo
 	 */
 	public EiInfo query(EiInfo info) {
 		//获取参数
@@ -184,13 +184,13 @@ public class ServiceDFSB0101 extends ServiceBase{
 		//返回
 		return outInfo;
 	}
-	
+
 	/**
 	 * （废弃方法)
 	 * @Title: queryBuildingAndFloor
 	 * @Description: (楼层查询)
 	 * @param:  spotNum：地点
-	 * @return: EiInfo  
+	 * @return: EiInfo
 	 * building：楼
 	 * floor:层
 	 */
@@ -206,14 +206,14 @@ public class ServiceDFSB0101 extends ServiceBase{
 		//返回
 		return info;
 	}
-	
+
 	/**
 	 * 人员查询（废弃改用调用接口）
 	 * @Title: queryPerson
 	 * @Description: (人员查询)
 	 * @param:  @param inInfo
 	 * @param:  @return
-	 * @return: EiInfo  
+	 * @return: EiInfo
 	 * @throws
 	 */
 	@SuppressWarnings("unchecked")
@@ -226,7 +226,7 @@ public class ServiceDFSB0101 extends ServiceBase{
 		//返回
 		if(list != null && list.size() > 0){
 			return CommonUtils.BuildOutEiInfo(inInfo, "result", CommonUtils.createBlockMeta(list.get(0)), list, count);
-		} else { 
+		} else {
 			//返回inInfo
 			return inInfo;
 		}
@@ -361,11 +361,11 @@ public class ServiceDFSB0101 extends ServiceBase{
         String machineCode = (String) info.get("machineCode");
 		map.put("machineCode",machineCode);
 		int num = super.count("DFSB0101.queryMachineCode", map);
-		if(num>0) {
-			info.setStatus(-1);
-			info.setMsg("设备编码已存在，请重输");
-			return info;
-		}
+//		if(num>0) {
+//			info.setStatus(-1);
+//			info.setMsg("设备编码已存在，请重输");
+//			return info;
+//		}
         //特种设备名称
         String machineName = (String) info.get("machineName");
         //规格型号
@@ -417,45 +417,45 @@ public class ServiceDFSB0101 extends ServiceBase{
         //管理科室名称
         String managerDeptName = (String) info.get("managerDeptName");
         //负责人ID
-        String chargeUserId = (String) info.get("chargeUserId");  
+        String chargeUserId = (String) info.get("chargeUserId");
         //负责人名称
-        String chargeUserName = (String) info.get("chargeUserName"); 
+        String chargeUserName = (String) info.get("chargeUserName");
         //使用科室ID
-        String useDeaprtId = (String) info.get("useDeaprtId"); 
+        String useDeaprtId = (String) info.get("useDeaprtId");
         //使用科室名称
-        String useDeaprtName = (String) info.get("useDeaprtName"); 
+        String useDeaprtName = (String) info.get("useDeaprtName");
         //用途
-        String useFor = (String) info.get("useFor"); 
+        String useFor = (String) info.get("useFor");
         //关联设备
-        String relatedDevice = (String) info.get("relatedDevice"); 
+        String relatedDevice = (String) info.get("relatedDevice");
         //制造单位
-        String manufacturerName = (String) info.get("manufacturerName"); 
+        String manufacturerName = (String) info.get("manufacturerName");
         //制造单位资格证号
-        String manufacturerCertno = (String) info.get("manufacturerCertno"); 
+        String manufacturerCertno = (String) info.get("manufacturerCertno");
         //安装单位
-        String fixedUnit = (String) info.get("fixedUnit"); 
+        String fixedUnit = (String) info.get("fixedUnit");
         //安装单位资格证号
         String fixedCertno = (String) info.get("fixedCertno");
         //维保单位资格证号
-        String maintCertno = (String) info.get("maintCertno"); 
+        String maintCertno = (String) info.get("maintCertno");
         //检验单位
-        String checkUnit = (String) info.get("checkUnit"); 
+        String checkUnit = (String) info.get("checkUnit");
         //检验单位资格证号
-        String checkCertno = (String) info.get("checkCertno"); 
+        String checkCertno = (String) info.get("checkCertno");
         //本次年度检验日
-        String thisCheckDate = (String) info.get("thisCheckDate"); 
+        String thisCheckDate = (String) info.get("thisCheckDate");
         //本次年度检验完工日
-        String thisFinishDate = (String) info.get("thisFinishDate"); 
+        String thisFinishDate = (String) info.get("thisFinishDate");
         //下次年度检验日
         String nextCheckDate = info.getString("nextCheckDate");
         //周期
-        String annualinspcycle = StringUtils.isBlank(info.getString("annualinspcycle")) ? "0" : info.getString("annualinspcycle"); 
+        String annualinspcycle = StringUtils.isBlank(info.getString("annualinspcycle")) ? "0" : info.getString("annualinspcycle");
         //本次到期检验日
         String thisExpiredDate = (String) info.get("thisExpiredDate");
         //本次到期检验完工日
-        String thisChexpiredDate = (String) info.get("thisChexpiredDate"); 
+        String thisChexpiredDate = (String) info.get("thisChexpiredDate");
         //下次到期检验日
-        String nextExpiredDate = (String) info.get("nextExpiredDate"); 
+        String nextExpiredDate = (String) info.get("nextExpiredDate");
         //周期
         String regularinspcycle = StringUtils.isBlank(info.getString("regularinspcycle")) ? "0":info.getString("regularinspcycle");
 		//创建人
@@ -495,26 +495,26 @@ public class ServiceDFSB0101 extends ServiceBase{
 		map.put("chargeUserName", chargeUserName);
 		map.put("useDeaprtId", useDeaprtId);
 		map.put("useDeaprtName", useDeaprtName );
-		map.put("useFor", useFor);		
+		map.put("useFor", useFor);
 		map.put("relatedDevice", relatedDevice );
 		map.put("manufacturerName",manufacturerName);
 		map.put("manufacturerCertno", manufacturerCertno);
 		map.put("spotCode",info.getString("spotCode"));
 		map.put("fixedUnit",  fixedUnit );
-		map.put("fixedCertno", fixedCertno);		
+		map.put("fixedCertno", fixedCertno);
 		map.put("maintCertno",maintCertno );
 		map.put("checkUnit", checkUnit);
 		map.put("checkCertno",checkCertno);
-		
+
 		map.put("thisCheckDate", thisCheckDate );
-		map.put("thisFinishDate", thisFinishDate);		
+		map.put("thisFinishDate", thisFinishDate);
 		map.put("nextCheckDate",nextCheckDate);
-		
+
 		map.put("annualinspcycle", annualinspcycle);
-		
+
 		map.put("thisExpiredDate",thisExpiredDate );
 		map.put("thisChexpiredDate", thisChexpiredDate);
-		map.put("nextExpiredDate", nextExpiredDate);		
+		map.put("nextExpiredDate", nextExpiredDate);
 		map.put("regularinspcycle",regularinspcycle);
 		map.put("recCreateTime",recCreateTime);
 		map.put("recCreator",recCreator);
@@ -554,7 +554,7 @@ public class ServiceDFSB0101 extends ServiceBase{
 		 * 3.调用本地保存设备零部件方法
 		 */
 		//调用设备零部件方法
-		saveDevicePart(deviceObject,id,machineCode,machineName);
+		saveDevicePart(deviceObject,id,machineCode);
 		/**
 		 * 2.调用本地保存附件图片方法
 		 */
@@ -566,10 +566,10 @@ public class ServiceDFSB0101 extends ServiceBase{
 		return info;
 	}
 	   /**
-	    * 
+	    *
 	    * (简单日期方法)
 	    *
-	    * @Title: SimpleDateFormat 
+	    * @Title: SimpleDateFormat
 	    * @param string
 	    * @return: DateFormat
 	    */
@@ -637,13 +637,13 @@ public class ServiceDFSB0101 extends ServiceBase{
 			}
 		}
 	/**
-	 * 
+	 *
 	 * (保存图片)
 	 *<p>1.获取图片集合</p>
 	 *<p>2.将图片集合遍历保存到数据库</p>
-	 * @Title: savePicture 
+	 * @Title: savePicture
 	 * @param picObject
-	 * @param id 
+	 * @param id
 	 * @return: void
 	 */
     @SuppressWarnings("unchecked")
@@ -687,18 +687,18 @@ public class ServiceDFSB0101 extends ServiceBase{
     }
 
 	/**
-	 * 
+	 *
 	 * (保存设备零部件方法)
 	 *<p>1.获取零部件集合</p>
 	 *<p>2.循环遍历插入零部件表中</p>
-	 * @Title: saveDevicePart 
+	 * @Title: saveDevicePart
 	 * @param deviceObject
 	 * @param id
 	 * @param machineCode
-	 * @param machineName 
+	 * @param
 	 * @return: void
 	 */
-	public void saveDevicePart(Object deviceObject, String id,String machineCode,String machineName){
+	public void saveDevicePart(Object deviceObject, String id,String machineCode){
 		//创建List集合
 		List<Map<String,Object>> list = new ArrayList<>();
 		//非空判断
@@ -718,7 +718,7 @@ public class ServiceDFSB0101 extends ServiceBase{
 			//设备零部件编码
 			devicePart.setMachineCode(machineCode);
 			//设备零部件名称
-			devicePart.setMachineName(machineName);
+//			devicePart.setMachineName(machineName);
 			//获取账套
 			devicePart.setDataGroupCode(DatagroupUtil.getDatagroupCode());
 			//获取创建人
@@ -739,5 +739,5 @@ public class ServiceDFSB0101 extends ServiceBase{
         info.set("list", list);
         return info;
     }*/
-    
+
 }

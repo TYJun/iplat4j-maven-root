@@ -22,7 +22,7 @@ public class DFSB02 extends DaoEPBase {
 
     private String id = " ";		/* 设备零部件ID*/
     private String machineCode = " ";		/* 设备零部件编码*/
-    private String machineName = " ";		/* 设备零部件名称*/
+    private String machineNames = " ";		/* 设备零部件名称*/
     private String machineId = " ";		/* 设备ID*/
     private String models = " ";		/* 规格型号*/
     private String statusCode = " ";		/* 状态代码（0=新建 1=启用，-1=停用）*/
@@ -52,7 +52,7 @@ public class DFSB02 extends DaoEPBase {
         eiColumn.setDescName("设备零部件编码");
         eiMetadata.addMeta(eiColumn);
 
-        eiColumn = new EiColumn("machineName");
+        eiColumn = new EiColumn("machineNames");
         eiColumn.setDescName("设备零部件名称");
         eiMetadata.addMeta(eiColumn);
 
@@ -152,15 +152,15 @@ public class DFSB02 extends DaoEPBase {
      * get the machineName - 设备零部件名称
      * @return the machineName
      */
-    public String getMachineName() {
-        return this.machineName;
+    public String getMachineNames() {
+        return this.machineNames;
     }
 
     /**
      * set the machineName - 设备零部件名称
      */
-    public void setMachineName(String machineName) {
-        this.machineName = machineName;
+    public void setMachineNames(String machineNames) {
+        this.machineNames = machineNames;
     }
 
     /**
@@ -365,7 +365,7 @@ public class DFSB02 extends DaoEPBase {
 
         setId(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("id")), id));
         setMachineCode(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("machineCode")), machineCode));
-        setMachineName(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("machineName")), machineName));
+        setMachineNames(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("machineNames")), machineNames));
         setMachineId(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("machineId")), machineId));
         setModels(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("models")), models));
         setStatusCode(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("statusCode")), statusCode));
@@ -388,7 +388,7 @@ public class DFSB02 extends DaoEPBase {
         Map map = new HashMap();
         map.put("id",StringUtils.toString(id, eiMetadata.getMeta("id")));
         map.put("machineCode",StringUtils.toString(machineCode, eiMetadata.getMeta("machineCode")));
-        map.put("machineName",StringUtils.toString(machineName, eiMetadata.getMeta("machineName")));
+        map.put("machineNames",StringUtils.toString(machineNames, eiMetadata.getMeta("machineNames")));
         map.put("machineId",StringUtils.toString(machineId, eiMetadata.getMeta("machineId")));
         map.put("models",StringUtils.toString(models, eiMetadata.getMeta("models")));
         map.put("statusCode",StringUtils.toString(statusCode, eiMetadata.getMeta("statusCode")));

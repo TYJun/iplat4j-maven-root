@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="DFJK01">
+
+	<!-- 查询特种设备 -->
+	<select id="queryDf" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			df.id,
+			df.machine_code machineCode,
+			df.machine_name machineName,
+			df.machine_type_id machineTypeId,
+			df.status_code statusCode,
+			df.models,
+			df.fixed_id fixedId,
+			df.fixed_place fixedPlace,
+			df.inner_machine_code innerMachineCode,
+			df.document_no documentNo,
+			df.work_media workMedia,
+			df.use_cert_no useCertNo,
+			df.use_area useArea,
+			df.register_code registerCode,
+			df.register_date registerDate,
+		 	df.out_factory_date outFactoryDate,
+			df.fixed_time fixedTime,
+			df.use_time useTime,
+			<!-- df.thisExpiredDate -->
+			df.nonuse_date nonuseDate,
+			df.manager_dept_id managerDeptId,
+			df.manager_dept_name managerDeptName,
+			df.manager_man_id managerManId,
+			df.manager_man_name managerManName,
+			df.charge_user_id  chargeUserId,
+			df.charge_user_name chargeUserName,
+			df.use_deaprt_id useDeaprtId,
+			df.use_deaprt_name useDeaprtName,
+			df.related_device relatedDevice,
+			df.use_for useFor,
+			df.memo,
+			df.need_scan needScan,
+			df.manufacturer_name manufacturerName,
+			df.manufacturer_certno manufacturerCertno,
+			df.fixed_unit fixedUnit,
+			df.fixed_certno fixedCertno,
+			df.maint_unit maintUnit,
+			df.maint_certno maintCertno,
+			df.check_unit checkUnit,
+			df.check_certno checkCertno,
+			df.this_check_date thisCheckDate,
+			df.this_finish_date thisFinishDate,
+			df.next_check_date nextCheckDate,
+			<!-- df.out_factory_no outFactoryNo, -->
+			df.annualInspCycle,
+			df.this_expired_date thisExpiredDate,
+			df.this_chexpired_date thisChexpiredDate,
+			df.next_expired_date nextExpiredDate,
+			df.regularInspCycle,
+			df.rec_creator recCreator,
+			df.rec_create_time recCreateTime,
+			df.rec_revisor recRevisor,
+			df.rec_revise_time recReviseTime,
+			df.data_group_code dataGroupCode,
+		    dm.machine_name machineNamePart,
+		    dm.next_check_date nextCheckDatePart,
+		    dm.cert_no certNo
+		FROM
+			df_special_device df 
+		LEFT JOIN df_special_device_part dm ON df.id = dm.machine_id
+		WHERE 1 = 1
+        and df.id = #id#
+	</select>
+	
+	<!-- 计数 -->
+	<select id="count" parameterClass="java.util.HashMap" resultClass="int">
+		SELECT
+			df.id
+		FROM
+			df_special_device df 
+		LEFT JOIN df_modulebaseclassfy dm ON df.machine_type_id = dm.id
+		/*LEFT JOIN tbmbd06 t6 ON df.fixed_place = t6.spot_num*/
+		LEFT JOIN df_machine_spot dms ON df.fixed_id = dms.spot_id
+		WHERE 1 = 1 
+		<isNotEmpty prepend=" AND " property="machineCode">
+			df.machine_code like concat('%', #machineCode#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineName">
+			df.machine_name like concat('%', #machineName#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="machineTypeId">
+			df.machine_type_id = #machineTypeId#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="models">
+			df.models like concat('%', #models#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="needScan">
+			df.need_scan = #needScan#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="managerManId">
+			df.manager_man_id in (#managerManId#) 
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="warrantyDateS">
+			date_format(df.invalid_time,'%Y-%m-%d') >= #warrantyDateS# 	
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="warrantyDateE">
+			date_format(df.invalid_time,'%Y-%m-%d') <![CDATA[<=]]> #warrantyDateS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="buyMode">
+			df.buy_mode = #buyModes#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="useDeaprtId">
+			df.use_deaprt_id in (#useDeaprtId#) 
+		</isNotEmpty>
+	</select>
+
+	<!-- 查询特种设备 -->
+	<select id="queryDfPic" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+		df.id,
+		df.machine_code machineCode,
+		df.machine_name machineName,
+		df.machine_type_id machineTypeId,
+		df.status_code statusCode,
+		df.models,
+		df.fixed_id fixedId,
+		df.fixed_place fixedPlace,
+		df.inner_machine_code innerMachineCode,
+		df.document_no documentNo,
+		df.work_media workMedia,
+		df.use_cert_no useCertNo,
+		df.use_area useArea,
+		df.register_code registerCode,
+		df.register_date registerDate,
+		df.out_factory_date outFactoryDate,
+		df.fixed_time fixedTime,
+		df.use_time useTime,
+		<!-- df.thisExpiredDate -->
+		df.nonuse_date nonuseDate,
+		df.manager_dept_id managerDeptId,
+		df.manager_dept_name managerDeptName,
+		df.manager_man_id managerManId,
+		df.manager_man_name managerManName,
+		df.charge_user_id  chargeUserId,
+		df.charge_user_name chargeUserName,
+		df.use_deaprt_id useDeaprtId,
+		df.use_deaprt_name useDeaprtName,
+		df.related_device relatedDevice,
+		df.use_for useFor,
+		df.memo,
+		df.need_scan needScan,
+		df.manufacturer_name manufacturerName,
+		df.manufacturer_certno manufacturerCertno,
+		df.fixed_unit fixedUnit,
+		df.fixed_certno fixedCertno,
+		df.maint_unit maintUnit,
+		df.maint_certno maintCertno,
+		df.check_unit checkUnit,
+		df.check_certno checkCertno,
+		df.this_check_date thisCheckDate,
+		df.this_finish_date thisFinishDate,
+		df.next_check_date nextCheckDate,
+		<!-- df.out_factory_no outFactoryNo, -->
+		df.annualInspCycle,
+		df.this_expired_date thisExpiredDate,
+		df.this_chexpired_date thisChexpiredDate,
+		df.next_expired_date nextExpiredDate,
+		df.regularInspCycle,
+		df.rec_creator recCreator,
+		df.rec_create_time recCreateTime,
+		df.rec_revisor recRevisor,
+		df.rec_revise_time recReviseTime,
+		df.data_group_code dataGroupCode,
+		concat('upload',SUBSTRING_INDEX(dmf.file_path,'upload',-1)) filePath,
+		dmf.file_type fileType,
+		dmf.file_name fileName
+		FROM
+		df_special_device df
+		LEFT JOIN df_special_file dmf ON df.id = dmf.relate_id
+		WHERE 1 = 1
+		and df.id = #id#
+	</select>
+
+</sqlMap>
