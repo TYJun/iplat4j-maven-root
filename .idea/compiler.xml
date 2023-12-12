@@ -8,8 +8,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="iplat4j-maven-di" />
-        <module name="iplat4j-maven-pr" />
         <module name="iplat4j-maven-hi" />
+        <module name="iplat4j-maven-pr" />
         <module name="iplat4j-maven-df" />
         <module name="bonawise-maven-pay-hessian" />
         <module name="iplat4j-maven-dm" />
@@ -20,14 +20,14 @@
         <module name="iplat4j-maven-sq" />
         <module name="iplat4j-maven-frame" />
         <module name="iplat4j-maven-ci" />
-        <module name="iplat4j-maven-im" />
         <module name="iplat4j-maven-mp" />
+        <module name="iplat4j-maven-im" />
         <module name="iplat4j-maven-commons" />
         <module name="iplat4j-maven-security" />
         <module name="iplat4j-maven-cp" />
         <module name="iplat4j-maven-ms-mx" />
-        <module name="iplat4j-maven-it" />
         <module name="iplat4j-maven-web" />
+        <module name="iplat4j-maven-it" />
         <module name="iplat4j-maven-ir" />
         <module name="iplat4j-maven-cm" />
         <module name="iplat4j-maven-vi" />
