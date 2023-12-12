@@ -465,6 +465,9 @@
         <isNotEmpty prepend="and" property="matClassName">
             t.matClassName like concat('%',#matClassName#,'%')
         </isNotEmpty>
+        <isNotEmpty prepend="and" property="matSpec">
+            t.matSpec like concat('%',#matSpec#,'%')
+        </isNotEmpty>
         <isNotEmpty prepend="and" property="matClassId">
             t.matClassId = #matClassId#
         </isNotEmpty>
@@ -480,12 +483,16 @@
         <isNotEmpty prepend="and" property="matName">
             t.matName like concat('%',#matName#,'%')
         </isNotEmpty>
-		<isNotEmpty prepend="and" property="matTypeCodeArray">  
-            t.matTypeCode in  
-            <iterate  property="matTypeCodeArray" conjunction="," close=")" open="(" >  
-                #matTypeCodeArray[]#  
-            </iterate>  
-        </isNotEmpty>  
+        <isNotEmpty prepend="and" property="excludeGoods">
+            t.matCode not in
+            (SELECT mat_code FROM rm_excludegoods_config)
+        </isNotEmpty>
+		<isNotEmpty prepend="and" property="matTypeCodeArray">
+            t.matTypeCode in
+            <iterate  property="matTypeCodeArray" conjunction="," close=")" open="(" >
+                #matTypeCodeArray[]#
+            </iterate>
+        </isNotEmpty>
         <dynamic prepend="ORDER BY">
             <isNotEmpty property="orderBy">
                 $orderBy$
@@ -542,12 +549,12 @@
         <isNotEmpty prepend="and" property="matName">
             t.matName like concat('%',#matName#,'%')
         </isNotEmpty>
-        <isNotEmpty prepend="and"  property="matTypeCodeArray">  
-            t.matTypeCode in  
-            <iterate  property="matTypeCodeArray" conjunction="," close=")" open="(" >  
-                #matTypeCodeArray[]#  
-            </iterate>  
-        </isNotEmpty>  
+        <isNotEmpty prepend="and"  property="matTypeCodeArray">
+            t.matTypeCode in
+            <iterate  property="matTypeCodeArray" conjunction="," close=")" open="(" >
+                #matTypeCodeArray[]#
+            </iterate>
+        </isNotEmpty>
     </select>
 
     <!-- -->

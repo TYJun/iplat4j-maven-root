@@ -30,14 +30,17 @@
 				</EF:EFSelect>
 				<EF:EFInput ename="parentId" cname="" type="hidden" />
 				<EF:EFInput ename="parentName" cname="" type="hidden" />
+				<EF:EFInput ename="post" cname="职务" />
+				<EF:EFInput ename="ywDeptname" cname="关联业务科室" />
+				<EF:EFInput ename="xzDeptname" cname="关联行政科室" />
 			</div>
 		</EF:EFRegion>
 		<EF:EFRegion id="result" title="人员列表">
 			<EF:EFGrid blockId="result" autoDraw="no" >
 				<EF:EFColumn ename="id" cname="主键" width="100" hidden="true" />
-				<EF:EFColumn ename="workNo" cname="工号" width="70" />
+				<EF:EFColumn ename="workNo" cname="工号" width="60" />
 				<EF:EFColumn ename="name" cname="姓名" width="100" />
-				<EF:EFColumn ename="gender" cname="性别" width="50" />
+				<EF:EFColumn ename="gender" cname="性别" width="40" />
 				<EF:EFColumn ename="deptName" cname="所属科室" width="100" />
 				<EF:EFColumn ename="contactTel" cname="联系电话" width="100" />
 				<EF:EFComboColumn ename="staffType" cname="员工类型">
@@ -45,8 +48,11 @@
 				</EF:EFComboColumn>
 
 				<EF:EFColumn ename="isService" cname="服务人员" width="80" />
-				<EF:EFColumn ename="sourceName" cname="出处" width="80" />
-				<EF:EFColumn ename="status" cname="状态" width="80" />
+				<EF:EFColumn ename="sourceName" cname="出处" width="60" />
+				<EF:EFColumn ename="status" cname="状态" width="60" />
+				<EF:EFColumn ename="post" cname="职务" width="80" />
+				<EF:EFColumn ename="ywDeptname" cname="关联业务科室" width="100" />
+				<EF:EFColumn ename="xzDeptname" cname="关联行政科室" width="100" />
 				<EF:EFColumn ename="userId" cname="微信登录号" width="80" />
 				<%-- <EF:EFColumn ename="dataGroupName" cname="所属院区" width="100" /> --%>
 			</EF:EFGrid>

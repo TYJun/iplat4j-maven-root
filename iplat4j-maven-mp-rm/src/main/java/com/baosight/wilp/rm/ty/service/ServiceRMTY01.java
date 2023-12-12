@@ -178,7 +178,9 @@ public class ServiceRMTY01 extends ServiceBase {
      **/
     public EiInfo selectMat(EiInfo inInfo) {
         //获取参数
-        Map<String, Object> map = new HashMap<>(10);
+        Map<String, Object> map = new HashMap<>(12);
+        //隔离物资
+        map.put("excludeGoods","excludeGoods");
         map.put("datagroupCode", RmUtils.toString(inInfo.get("dataGroupCode"),BaseDockingUtils.getUserGroupByWorkNo(UserSession.getLoginName())));
         map.put("matClassName", inInfo.get("matTypeName"));
         map.put("matClassCode", inInfo.get("matTypeNum"));

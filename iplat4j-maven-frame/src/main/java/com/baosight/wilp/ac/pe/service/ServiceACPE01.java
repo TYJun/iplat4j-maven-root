@@ -1,20 +1,18 @@
 package com.baosight.wilp.ac.pe.service;
 
 import com.baosight.iplat4j.common.ed.domain.TEDCM01;
-import com.baosight.wilp.ac.jk.service.ServiceACJK01;
-import com.baosight.wilp.common.util.ArchivesLog;
-import com.baosight.wilp.common.util.DatagroupUtil;
-import com.baosight.wilp.common.util.MaintainUtil;
-import com.baosight.wilp.common.util.PrUtils;
-import com.baosight.wilp.mc.fw.util.SendingDingMsgUtil;
-import com.baosight.wilp.mc.fw.util.SendingWXMsgUtil;
 import com.baosight.iplat4j.core.ei.EiConstant;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
 import com.baosight.iplat4j.core.service.soa.XLocalManager;
 import com.baosight.iplat4j.core.service.soa.XServiceManager;
 import com.baosight.iplat4j.core.web.threadlocal.UserSession;
-//import lombok.SneakyThrows;
+import com.baosight.wilp.common.util.ArchivesLog;
+import com.baosight.wilp.common.util.DatagroupUtil;
+import com.baosight.wilp.common.util.MaintainUtil;
+import com.baosight.wilp.common.util.PrUtils;
+import com.baosight.wilp.mc.fw.util.SendingDingMsgUtil;
+import com.baosight.wilp.mc.fw.util.SendingWXMsgUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -90,7 +88,7 @@ public class ServiceACPE01 extends ServiceBase {
 		/**
 		 * 3.查询满足入参条件和所属科室的人员信息
 		 */
-		String[] param = { "workNo", "name", "deptName", "parentId", "status" };
+		String[] param = { "workNo", "name", "deptName", "parentId", "status" ,"post","ywDeptname","xzDeptname"};
 		List<String> plist = Arrays.asList(param);
 		Map<String, Object> map = MaintainUtil.changeToMap(inInfo, plist);
 

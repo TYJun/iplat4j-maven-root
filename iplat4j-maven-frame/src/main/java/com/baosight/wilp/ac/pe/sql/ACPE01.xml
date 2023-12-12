@@ -32,9 +32,14 @@
 						(CASE WHEN ap.status = '0'
 						THEN '停用'
 						else '启用'
-						END) AS "status"
+						END) AS "status",
+		                ap.post,
+		                CONCAT(aps.dept_name,',') as ywDeptname,
+		                CONCAT(xzs.dept_name,',') as xzDeptname
 				from $projectSchema$.ac_personnel ap
 				LEFT JOIN $projectSchema$.ac_department ad ON ad.id = ap.dept_id
+		        LEFT JOIN $projectSchema$.ac_departmentyws aps ON ap.work_no = aps.work_no
+		        LEFT JOIN $projectSchema$.ac_departmentxzs xzs ON ap.work_no = xzs.work_no
 		    ) t
 			WHERE 1=1
 			<isNotEmpty prepend="and" property="id">
@@ -61,6 +66,16 @@
 			<isNotEmpty prepend="and" property="parentId">
 				t.deptId =#parentId#
 			</isNotEmpty>
+
+		<isNotEmpty prepend="and" property="post">
+			t.post like concat('%', #post#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="ywDeptname">
+			t.ywDeptname like concat('%', #ywDeptname#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="xzDeptname">
+			t.xzDeptname like concat('%', #xzDeptname#, '%')
+		</isNotEmpty>
 			
 			<isNotEmpty prepend="and" property="list">
          	 	 t.deptId in  

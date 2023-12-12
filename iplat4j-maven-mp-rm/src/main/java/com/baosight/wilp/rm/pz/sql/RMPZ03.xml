@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
+		Generate time : 2022-05-24 0:10:30
+   		Version :  6.0.731.201809200158
+		tableName :.rm_excludegoods_config
+		 id  VARCHAR   NOT NULL   primarykey,
+		 TypeName  VARCHAR,
+		 TypeCode  VARCHAR,
+		 mealTimeName  VARCHAR,
+		 mealTimeCode  VARCHAR,
+		 discountAmount  VARCHAR
+	-->
+<sqlMap namespace="RMPZ03">
+
+	<select id="query" parameterClass="java.util.HashMap"
+			resultClass="java.util.HashMap">
+		SELECT
+		id	as "id",
+		mat_code	as "matCode",
+		mat_name	as "matName"
+		FROM rm_excludegoods_config
+		WHERE 1=1
+		<isNotEmpty prepend=" AND " property="matCode">
+			mat_code = #matCode#
+		</isNotEmpty>
+		order by mat_code
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT COUNT(*) FROM rm_excludegoods_config  WHERE 1=1
+		<isNotEmpty prepend=" AND " property="id">
+			id = #id#
+		</isNotEmpty>
+	</select>
+
+
+	<insert id="insert">
+		INSERT INTO rm_excludegoods_config  (id,
+		mat_code,
+		mat_name
+		)
+		VALUES (#id#, #matCode#, #matName#)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM rm_excludegoods_config  WHERE
+			id = #id#
+	</delete>
+
+	<update id="update">
+		UPDATE rm_excludegoods_config
+		SET
+		mat_name = #matName#,
+		mat_code = #matCode#
+		WHERE
+		id = #id#
+	</update>
+
+</sqlMap>

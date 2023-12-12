@@ -477,7 +477,7 @@ public class ServiceACFW01 extends ServiceBase {
 				inInfo = PrUtils.BuildOutEiInfo(inInfo, "result", PrUtils.createBlockMeta(list.get(0)), list, count);
 			}
 		}
-		
+
 
 		/**
 		 * 3.返回 EiInfo
@@ -784,12 +784,14 @@ public class ServiceACFW01 extends ServiceBase {
 		String id = inInfo.get("id") == null ? "" : inInfo.getString("id");
 		String matCode = inInfo.get("matCode") == null ? "" : inInfo.getString("matCode");
 		String matName = inInfo.get("matName") == null ? "" : inInfo.getString("matName");
+		String matSpec = inInfo.get("matSpec") == null ? "" : inInfo.getString("matSpec");
 		String matClassId = inInfo.get("matClassId") == null ? "" : inInfo.getString("matClassId");
 		String matClassCode = inInfo.get("matClassCode") == null ? "" : inInfo.getString("matClassCode");
 		String matClassName = inInfo.get("matClassName") == null ? "" : inInfo.getString("matClassName");
 		String matTypeCode = inInfo.get("matTypeCode") == null ? "" : inInfo.getString("matTypeCode");
 		String  orderBy = inInfo.get("orderBy") == null ? "" : inInfo.getString("orderBy");
-
+		//数据隔离
+		String excludeGoods = inInfo.get("excludeGoods") == null ? "" : inInfo.getString("excludeGoods");
 		String projectSchema = PrUtils.getConfigure();
 
 		Map<String, Object> map = new HashMap<>();
@@ -799,6 +801,8 @@ public class ServiceACFW01 extends ServiceBase {
 		map.put("matClassId", matClassId);
 		map.put("matClassCode", matClassCode);
 		map.put("matClassName", matClassName);
+		map.put("matSpec", matSpec);
+		map.put("excludeGoods",excludeGoods);
 		if(matTypeCode!=null&&matTypeCode.indexOf(",")>0)
 		{
 		    map.put("matTypeCodeArray", matTypeCode.split(","));
@@ -847,7 +851,7 @@ public class ServiceACFW01 extends ServiceBase {
 	 * 3.返回结果
 	 */
 	public EiInfo queryMaterialTree(EiInfo inInfo) {
-		
+
 		String projectSchema = PrUtils.getConfigure();
 
 		/**
@@ -857,7 +861,7 @@ public class ServiceACFW01 extends ServiceBase {
 		String parentId = inInfo.get("parentId") == null ? "" : inInfo.getString("parentId");
 		String matClassCode = inInfo.get("matClassCode") == null ? "" : inInfo.getString("matClassCode");
 		String matClassName = inInfo.get("matClassName") == null ? "" : inInfo.getString("matClassName");
-		
+
 		Map<String, String> map = new HashMap<>();
 		map.put("id", id);
 		map.put("parentId", parentId);
@@ -894,7 +898,7 @@ public class ServiceACFW01 extends ServiceBase {
 		 */
 		String offset = inInfo.get("offset") == null ? "" : inInfo.getString("offset");
 		String limit = inInfo.get("limit") == null ? "" : inInfo.getString("limit");
-		
+
 
 		String id = inInfo.get("id") == null ? "" : inInfo.getString("id");
 		String supplierCode = inInfo.get("supplierCode") == null ? "" : inInfo.getString("supplierCode");

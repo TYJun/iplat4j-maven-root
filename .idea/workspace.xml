@@ -14,14 +14,7 @@
       <change afterPath="$PROJECT_DIR$/iplat4j-maven-mp-rm/src/main/java/com/baosight/wilp/rm/pz/sql/RMPZ03.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/iplat4j-maven-mp-rm/src/main/resources/META-INF/resources/RM/PZ/RMPZ03.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/iplat4j-maven-mp-rm/src/main/resources/META-INF/resources/RM/PZ/RMPZ03.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-commons/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-commons/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-df/src/main/resources/META-INF/resources/DF/SB/DFSB0101.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/resources/META-INF/resources/DF/SB/DFSB0101.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-df/src/main/resources/META-INF/resources/DF/SB/DFSB0102.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/resources/META-INF/resources/DF/SB/DFSB0102.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/iplat4j-maven-fa.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/bg/domain/FaModifyBaseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/bg/domain/FaModifyBaseDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/iplat4j-maven-frame.iml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/iplat4j-maven-frame.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/fw/service/ServiceACFW01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/fw/service/ServiceACFW01.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/fw/sql/ACFW01.xml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/fw/sql/ACFW01.xml" afterDir="false" />
@@ -30,8 +23,6 @@
       <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/resources/META-INF/resources/AC/PE/ACPE01.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/resources/META-INF/resources/AC/PE/ACPE01.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iplat4j-maven-mp-rm/iplat4j-maven-mp-rm.iml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-mp-rm/iplat4j-maven-mp-rm.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iplat4j-maven-mp-rm/src/main/java/com/baosight/wilp/rm/ty/service/ServiceRMTY01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-mp-rm/src/main/java/com/baosight/wilp/rm/ty/service/ServiceRMTY01.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-web/iplat4j-maven-web.iml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-web/iplat4j-maven-web.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -436,7 +427,12 @@
       <workItem from="1701740585999" duration="16960000" />
       <workItem from="1701825958072" duration="8506000" />
       <workItem from="1701857250931" duration="1574000" />
-      <workItem from="1701913428004" duration="996000" />
+      <workItem from="1701913428004" duration="1307000" />
+      <workItem from="1701933725311" duration="122000" />
+      <workItem from="1701934169037" duration="1508000" />
+      <workItem from="1701945996573" duration="120000" />
+      <workItem from="1701966641439" duration="3083000" />
+      <workItem from="1702283361593" duration="1956000" />
     </task>
     <task id="LOCAL-00002" summary="1.0">
       <created>1692064121183</created>
@@ -627,7 +623,14 @@
       <option name="project" value="LOCAL" />
       <updated>1701679769639</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="V1.3.13">
+      <created>1701914450302</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1701914450302</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -780,14 +783,9 @@
           <option name="timeStamp" value="123" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/fw/service/ServiceACFW01.java</url>
-          <line>823</line>
-          <option name="timeStamp" value="137" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/fw/service/ServiceACFW01.java</url>
-          <line>829</line>
-          <option name="timeStamp" value="138" />
+          <url>file://$PROJECT_DIR$/iplat4j-maven-mp-rm/src/main/java/com/baosight/wilp/rm/pz/service/ServiceRMPZ03.java</url>
+          <line>22</line>
+          <option name="timeStamp" value="139" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
