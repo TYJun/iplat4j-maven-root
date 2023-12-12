@@ -237,9 +237,6 @@
           <element id="library" level="project" name="Maven: org.eclipse.jetty:jetty-security:9.2.15.v20160210" />
           <element id="library" level="project" name="Maven: org.eclipse.jetty:jetty-continuation:9.2.15.v20160210" />
           <element id="library" level="project" name="Maven: org.eclipse.jetty:jetty-http:9.2.15.v20160210" />
-          <element id="archive" name="iplat4j-maven-ir-5.0.2.jar">
-            <element id="module-output" name="iplat4j-maven-ir" />
-          </element>
           <element id="archive" name="iplat4j-maven-df-5.0.4.jar">
             <element id="module-output" name="iplat4j-maven-df" />
           </element>

@@ -26,8 +26,8 @@
         <module name="iplat4j-maven-security" />
         <module name="iplat4j-maven-cp" />
         <module name="iplat4j-maven-ms-mx" />
-        <module name="iplat4j-maven-web" />
         <module name="iplat4j-maven-it" />
+        <module name="iplat4j-maven-web" />
         <module name="iplat4j-maven-ir" />
         <module name="iplat4j-maven-cm" />
         <module name="iplat4j-maven-vi" />

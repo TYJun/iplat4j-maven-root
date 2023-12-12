@@ -10,29 +10,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4fb1e35a-1e81-4c26-8858-23093e5fa00e" name="变更" comment="V1.3.15">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_bonawise_iplat4j_iplat4j_maven_commons_5_0_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/jk/controller/SystemImControllerdf.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/jk/service/ServiceDFJK01.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/jk/service/ServiceDFJK02.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/jk/sql/DFJK01.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/jk/util/LocalServiceUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/jk/util/ResultData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/jk/util/StringUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/service/ServiceDFSB0501.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_bonawise_iplat4j_iplat4j_maven_ir_5_0_2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/iplat4j_maven_web_war_exploded.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/iplat4j_maven_web_war_exploded.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/common/util/ParamKeyCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/common/util/ParamKeyCode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/domain/DFSB02.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/domain/DFSB02.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/service/ServiceDFSB0101.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/service/ServiceDFSB0101.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/service/ServiceDFSB0103.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/service/ServiceDFSB0103.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/service/ServiceDFSB02.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/service/ServiceDFSB02.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/service/ServiceDFSB0201.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/service/ServiceDFSB0201.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/service/ServiceDFSB0202.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/service/ServiceDFSB0202.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/service/ServiceDFSB03.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/service/ServiceDFSB03.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/sql/DFSB03.xml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/sql/DFSB03.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-ir/iplat4j-maven-ir.iml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-ir/iplat4j-maven-ir.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-ir/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-ir/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-web/iplat4j-maven-web.iml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-web/iplat4j-maven-web.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-ir/iplat4j-maven-ir.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-web/iplat4j-maven-web.iml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,7 +112,7 @@
     "project.structure.last.edited": "项目",
     "project.structure.proportion": "0.16894531",
     "project.structure.side.proportion": "0.24470589",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.ignored.files",
     "spring.configuration.checksum": "58a708b5f46922476c7dee92ac2c8fea",
     "vue.rearranger.settings.migration": "true"
   }
@@ -443,7 +428,7 @@
       <workItem from="1701966641439" duration="3083000" />
       <workItem from="1702283361593" duration="1956000" />
       <workItem from="1702341348162" duration="6777000" />
-      <workItem from="1702348483779" duration="1089000" />
+      <workItem from="1702348483779" duration="1904000" />
     </task>
     <task id="LOCAL-00002" summary="1.0">
       <created>1692064121183</created>
@@ -648,7 +633,14 @@
       <option name="project" value="LOCAL" />
       <updated>1702341434602</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="V1.3.15">
+      <created>1702349916498</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1702349916498</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
