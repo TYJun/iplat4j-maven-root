@@ -10,7 +10,7 @@
 	<div class="row">
 	        <EF:EFInput ename="id" colWidth="4" ratio="3:8" type="hidden"/>
 			<EF:EFInput ename="machineCode" cname="机房编码：" colWidth="4" ratio="3:8"   />
-			<EF:EFInput ename="machineName" cname="机房名称：" colWidth="4" ratio="3:8" required="true"/>
+			<EF:EFInput ename="machineName" cname="设备名称：" colWidth="4" ratio="3:8" required="true"/>
 			<%-- <EF:EFPopupInput ename="machineName" cname="设备名称：" colWidth="4" ratio="3:8"
 				popupTitle="设备名称" required="true" placeholder="请选择设备"
 				popupType="ServiceGrid" serviceName="DFFL10" methodName="queryDevice" resultId="device"
@@ -153,7 +153,7 @@
 				<EF:EFColumn ename="machineNames" cname="设备零部件名称" />
 				<EF:EFColumn ename="certNo" cname="合格证编号" />
 				<EF:EFColumn ename="models" cname="规格型号" />
-				<EF:EFColumn ename="annualinspcycle" cname="周期" />
+				<EF:EFColumn ename="annualinspcycle" cname="周期(月)" />
 				<EF:EFColumn ename="thisCheckDate" cname="本次检验日期" editType="datetime" dateFormat="yyyy-MM-dd HH:mm:ss"
 							 parseFormats="['yyyy-MM-dd HH:mm:ss']" width="150" readOnly="true"/>
 				<EF:EFColumn ename="nextCheckDate" cname="下次检验日期" editType="datetime" dateFormat="yyyy-MM-dd HH:mm:ss"

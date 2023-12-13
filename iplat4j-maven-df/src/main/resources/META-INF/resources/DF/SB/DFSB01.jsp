@@ -8,30 +8,34 @@
 <EF:EFPage title="特种设备档案管理">
 	<EF:EFRegion id="inqu" title="查询条件" showClear="true">
 		<div class="row">
-			<EF:EFInput ename="machineCode" cname="机房编码：" colWidth="4" ratio="3:8"/>
+<%--			<EF:EFInput ename="machineCode" cname="机房编码：" colWidth="4" ratio="3:8"/>--%>
 			<EF:EFInput ename="machineName" cname="机房名称：" colWidth="4" ratio="3:8"/>
+			<EF:EFInput ename="regularInspCycle" cname="周期（月）：" colWidth="4" ratio="3:8"/>
 			<EF:EFInput ename="classifyName" cname="设备分类：" colWidth="4" ratio="3:8"/>
 			<EF:EFSelect ename="statusCode" cname="设备状态：" colWidth="4"	ratio="3:8" >
 			    <EF:EFOption label="请选择" value=""/>
 			     <EF:EFOption label="新建" value="0"/>
 				<EF:EFOption label="启用" value="1"/>
 				<EF:EFOption label="停用" value="-1"/>
-			</EF:EFSelect>			
+			</EF:EFSelect>
 			<EF:EFInput ename="models" cname="规格型号：" colWidth="4" ratio="3:8"/>
 			<EF:EFSelect ename="needScan" cname="是否扫二维码：" colWidth="4"	ratio="3:8" >
 			    <EF:EFOption label="请选择" value=""/>
 				<EF:EFOption label="否" value="N"/>
 				<EF:EFOption label="是" value="Y"/>
-			</EF:EFSelect>			
-			<EF:EFDatePicker ename="thisCheckDateS" cname="检查日期起：" role="date" colWidth="4" ratio="3:8" format="yyyy-MM-dd" parseFormats="['yyyy-mm-dd']"/>
-            <EF:EFDatePicker ename="thisCheckDateE" cname="检查日期止：" role="date" colWidth="4" ratio="3:8" format="yyyy-MM-dd" parseFormats="['yyyy-mm-dd']"/>
+			</EF:EFSelect>
+<%--			<EF:EFDatePicker ename="thisCheckDateS" cname="检查日期起：" role="date" colWidth="4" ratio="3:8" format="yyyy-MM-dd" parseFormats="['yyyy-mm-dd']"/>--%>
+<%--            <EF:EFDatePicker ename="thisCheckDateE" cname="检查日期止：" role="date" colWidth="4" ratio="3:8" format="yyyy-MM-dd" parseFormats="['yyyy-mm-dd']"/>--%>
+			<EF:EFDatePicker ename="registerDateS" cname="注册登记日期：" role="date" colWidth="4" ratio="3:8" format="yyyy-MM-dd" parseFormats="['yyyy-mm-dd']"/>
+			<EF:EFDatePicker ename="registerDateE" cname="注册登记日期：" role="date" colWidth="4" ratio="3:8" format="yyyy-MM-dd" parseFormats="['yyyy-mm-dd']"/>
 		</div>
 	</EF:EFRegion>
 	<EF:EFRegion id="result" title="特种设备信息管理" fitHeight="true" >
 		<EF:EFGrid blockId="result" needAuth="true" autoDraw="no" autoBind="true" autoFit="false"
 			checkMode="single,row" readonly="false" rowNo="true" isFloat="true">
 			<EF:EFColumn ename="id" cname="主键" hidden="true"/>
-			<EF:EFColumn ename="machineCode" cname="机房编码" enable="false" locked="true"/>
+			<EF:EFColumn ename="registerDate" cname="注册登记日期" enable="false" locked="true"/>
+			<EF:EFColumn ename="machineCode" cname="设备编码" enable="false" locked="true" hidden="true"/>
 			<EF:EFColumn ename="machineName" cname="机房名称"  enable="false" locked="true"/>
 			<EF:EFColumn ename="classifyName" cname="设备分类" enable="false" locked="true"/>
 			<EF:EFColumn ename="models" cname="规格型号" enable="false"/>
@@ -41,8 +45,10 @@
 				<EF:EFOption label="停用" value="-1"/>
 			</EF:EFComboColumn>
 			<EF:EFColumn ename="fixedId" cname="安装地点id" hidden="true" enable="false"/>
-			<EF:EFColumn ename="fixedTime" cname="安装日期" enable="false"/>
-			<EF:EFColumn ename="thisCheckDate" cname="本年检查日期" enable="false"/>
+			<EF:EFColumn ename="thisExpiredDate" cname="本次定检日" enable="false" />
+			<EF:EFColumn ename="fixedTime" cname="安装日期" enable="false" hidden="true"/>
+			<EF:EFColumn ename="regularInspCycle" cname="周期（月）" enable="false" />
+			<EF:EFColumn ename="thisCheckDate" cname="本年检查日期" enable="false" hidden="true"/>
 			<EF:EFColumn ename="fixedPlace" cname="安装地点" enable="false"/>
 			<EF:EFColumn ename="useDeaprtName" cname="使用科室" enable="false"/>
 			<EF:EFComboColumn ename="needScan" cname="是否扫描二维码"  width="100" >

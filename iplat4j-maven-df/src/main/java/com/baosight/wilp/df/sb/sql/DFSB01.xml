@@ -142,36 +142,44 @@
 			df.rec_revise_time recReviseTime,
 			df.data_group_code dataGroupCode
 		FROM
-			df_special_device df 
+			df_special_device df
 		LEFT JOIN df_modulebaseclassfy dm ON df.machine_type_id = dm.id
-		WHERE 1 = 1 
+		WHERE 1 = 1
 		<isNotEmpty prepend=" AND " property="machineCode">
-			df.machine_code like concat('%', #machineCode#, '%') 
+			df.machine_code like concat('%', #machineCode#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="machineName">
-			df.machine_name like concat('%', #machineName#, '%') 
+			df.machine_name like concat('%', #machineName#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="classifyName">
 			dm.classify_name like concat('%', #classifyName#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="models">
-			df.models like concat('%', #models#, '%') 
+			df.models like concat('%', #models#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="needScan">
 			df.need_scan = #needScan#
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="managerManId">
-			df.manager_man_id in (#managerManId#) 
+			df.manager_man_id in (#managerManId#)
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="thisCheckDateS">
-			date_format(df.this_check_date,'%Y-%m-%d') >= #thisCheckDateS# 	
+			date_format(df.this_check_date,'%Y-%m-%d') >= #thisCheckDateS#
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="thisCheckDateE">
 			date_format(df.this_check_date,'%Y-%m-%d') <![CDATA[<=]]> #thisCheckDateE#
 		</isNotEmpty>
-		
+		<isNotEmpty prepend=" AND " property="registerDateS">
+			date_format(df.register_date,'%Y-%m-%d') >= #registerDateS#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="registerDateE">
+			date_format(df.register_date,'%Y-%m-%d') <![CDATA[<=]]> #registerDateE#
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="regularInspCycle">
+			df.regularInspCycle = #regularInspCycle#
+		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="useDeaprtId">
-			df.use_deaprt_id in (#useDeaprtId#) 
+			df.use_deaprt_id in (#useDeaprtId#)
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="statusCode">
 			df.status_code = #statusCode#
@@ -181,37 +189,37 @@
 			limit #offset#,#limit#
 		</isNotEmpty>
 	</select>
-	
+
 	<!-- 计数 -->
 	<select id="count" parameterClass="java.util.HashMap" resultClass="int">
 		SELECT
 			df.id
 		FROM
-			df_special_device df 
+			df_special_device df
 		LEFT JOIN df_modulebaseclassfy dm ON df.machine_type_id = dm.id
 		/*LEFT JOIN tbmbd06 t6 ON df.fixed_place = t6.spot_num*/
 		LEFT JOIN df_machine_spot dms ON df.fixed_id = dms.spot_id
-		WHERE 1 = 1 
+		WHERE 1 = 1
 		<isNotEmpty prepend=" AND " property="machineCode">
-			df.machine_code like concat('%', #machineCode#, '%') 
+			df.machine_code like concat('%', #machineCode#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="machineName">
-			df.machine_name like concat('%', #machineName#, '%') 
+			df.machine_name like concat('%', #machineName#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="machineTypeId">
 			df.machine_type_id = #machineTypeId#
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="models">
-			df.models like concat('%', #models#, '%') 
+			df.models like concat('%', #models#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="needScan">
 			df.need_scan = #needScan#
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="managerManId">
-			df.manager_man_id in (#managerManId#) 
+			df.manager_man_id in (#managerManId#)
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="warrantyDateS">
-			date_format(df.invalid_time,'%Y-%m-%d') >= #warrantyDateS# 	
+			date_format(df.invalid_time,'%Y-%m-%d') >= #warrantyDateS#
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="warrantyDateE">
 			date_format(df.invalid_time,'%Y-%m-%d') <![CDATA[<=]]> #warrantyDateS#
@@ -220,7 +228,7 @@
 			df.buy_mode = #buyModes#
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="useDeaprtId">
-			df.use_deaprt_id in (#useDeaprtId#) 
+			df.use_deaprt_id in (#useDeaprtId#)
 		</isNotEmpty>
 	</select>
 	<!-- 查询设备分类 -->
@@ -285,15 +293,15 @@
 		WHERE
 			sb.id = #value#
 	</select>
-	
+
 	<!--删除按钮 -->
 	<delete id="deleteItem" parameterClass="java.util.List">
-		DELETE FROM df_special_device WHERE id IN 
+		DELETE FROM df_special_device WHERE id IN
 		<iterate conjunction="," open="(" close=")">
 			#[]#
 		</iterate>
 	</delete>
-	
+
 		<!-- 启动按钮 -->
 	  <update id="start"  parameterClass="java.util.List">
 	   update df_special_device set status_code="1" where id IN
@@ -301,7 +309,7 @@
 	    #[]#
 	  </iterate>
  	 </update>
-  
+
 	  <!-- 停用按钮 -->
 	  <update id="stop" parameterClass="java.util.List">
 	   update df_special_device set status_code="-1" where id IN
@@ -309,26 +317,26 @@
 	    #[]#
 	    </iterate>
 	  </update>
-	
+
 	<!-- 查询人员list -->
 	<select id="queryPersonList" parameterClass="java.util.Map" resultClass="java.util.HashMap">
-		select t2.work_no workNo,t2.name,t2.contact_tel phone,t1.DEPT_NUM deptNum,t1.DEPT_NAME deptName 
+		select t2.work_no workNo,t2.name,t2.contact_tel phone,t1.DEPT_NUM deptNum,t1.DEPT_NAME deptName
 		from tbmbd02 t2 left join tbmbd01 t1 on t2.dept_num = t1.DEPT_NUM
 		where 1=1
 		<isNotEmpty prepend=" AND " property="workNo">
-			t2.work_no like concat('%', #workNo#, '%') 
+			t2.work_no like concat('%', #workNo#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="name">
-			t2.name like concat('%', #name#, '%') 
+			t2.name like concat('%', #name#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="deptNum">
-			t1.DEPT_NUM like concat('%', #deptNum#, '%') 
+			t1.DEPT_NUM like concat('%', #deptNum#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="deptName">
-			t1.DEPT_NAME like concat('%', #deptName#, '%') 
+			t1.DEPT_NAME like concat('%', #deptName#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="dataGroupCode">
-			t2.DATAGROUP_CODE = #dataGroupCode# 
+			t2.DATAGROUP_CODE = #dataGroupCode#
 		</isNotEmpty>
 		<dynamic prepend="ORDER BY">
          	<isNotEmpty property="orderBy">
@@ -339,67 +347,67 @@
 			</isEmpty>
   		</dynamic>
 	</select>
-	
+
 	<!-- 查询人员count -->
 	<select id="queryPersonCount" parameterClass="java.util.Map" resultClass="int">
-		select t2.work_no workNo,t2.name,t2.contact_tel phone,t1.DEPT_NUM deptNum,t1.DEPT_NAME deptName 
+		select t2.work_no workNo,t2.name,t2.contact_tel phone,t1.DEPT_NUM deptNum,t1.DEPT_NAME deptName
 		from tbmbd02 t2 left join tbmbd01 t1 on t2.dept_num = t1.DEPT_NUM
 		where 1=1
 		<isNotEmpty prepend=" AND " property="workNo">
-			t2.work_no like concat('%', #workNo#, '%') 
+			t2.work_no like concat('%', #workNo#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="name">
-			t2.name like concat('%', #name#, '%') 
+			t2.name like concat('%', #name#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="deptNum">
-			t1.DEPT_NUM like concat('%', #deptNum#, '%') 
+			t1.DEPT_NUM like concat('%', #deptNum#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="deptName">
-			t1.DEPT_NAME like concat('%', #deptName#, '%') 
+			t1.DEPT_NAME like concat('%', #deptName#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="dataGroupCode">
-			t2.DATAGROUP_CODE = #dataGroupCode# 
+			t2.DATAGROUP_CODE = #dataGroupCode#
 		</isNotEmpty>
 	</select>
-	
+
 	<!-- 查询科室和人员 -->
 	<select id="queryDeptAndWork" parameterClass="java.util.Map" resultClass="java.util.HashMap">
 		select t1.DEPT_NUM deptNum,t1.DEPT_NAME deptName,t2.name workName,t2.work_no workNum
-		from tbmbd01 t1 left join tbmbd02 t2 on t1.DEPT_NUM = t2.dept_num 
+		from tbmbd01 t1 left join tbmbd02 t2 on t1.DEPT_NUM = t2.dept_num
 		where 1=1
 		<isNotEmpty prepend=" AND " property="deptNum">
-			t1.DEPT_NUM like concat('%', #deptNum#, '%') 
+			t1.DEPT_NUM like concat('%', #deptNum#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="deptName">
-			t1.DEPT_NAME like concat('%', #deptName#, '%') 
+			t1.DEPT_NAME like concat('%', #deptName#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="workName">
-			t2.name like concat('%', #workName#, '%') 
+			t2.name like concat('%', #workName#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="workNum">
-			t2.work_no  like concat('%', #workNum#, '%') 
+			t2.work_no  like concat('%', #workNum#, '%')
 		</isNotEmpty>
-		
+
 	</select>
-	
+
 	<!-- 查询人员count -->
 	<select id="queryDeptAndWorkCount" parameterClass="java.util.Map" resultClass="int">
 		select t1.DEPT_NUM deptNum,t1.DEPT_NAME deptName,t2.name workName,t2.work_no workNum
-		from tbmbd01 t1 left join tbmbd02 t2 on t1.DEPT_NUM = t2.dept_num 
+		from tbmbd01 t1 left join tbmbd02 t2 on t1.DEPT_NUM = t2.dept_num
 		where 1=1
 		<isNotEmpty prepend=" AND " property="deptNum">
-			t1.DEPT_NUM like concat('%', #deptNum#, '%') 
+			t1.DEPT_NUM like concat('%', #deptNum#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="deptName">
-			t1.DEPT_NAME like concat('%', #deptName#, '%') 
+			t1.DEPT_NAME like concat('%', #deptName#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="workName">
-			t2.name like concat('%', #workName#, '%') 
+			t2.name like concat('%', #workName#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="workNum">
-			t2.work_no  like concat('%', #workNum#, '%') 
+			t2.work_no  like concat('%', #workNum#, '%')
 		</isNotEmpty>
 	</select>
-	
+
 
 </sqlMap>

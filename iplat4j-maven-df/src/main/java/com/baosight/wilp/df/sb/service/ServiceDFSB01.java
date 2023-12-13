@@ -215,7 +215,7 @@ import java.util.*;
 	 public EiInfo query(EiInfo info) {
 	     //获取参数
 		 String[] fieldList = {"machineCode","machineName","classifyName","models","needScan",
-				 "thisCheckDateS","thisCheckDateE","statusCode",};
+				 "thisCheckDateS","thisCheckDateE","statusCode","registerDateS","registerDateE","regularInspCycle","thisCheckDate"};
 		 //数据查询
 		 Map<String, Object> map = CommonUtils.buildParamter(info,"result", Arrays.asList(fieldList));
 		 List<Map<String, Object>> list = dao.query("DFSB01.query", map);
