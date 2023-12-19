@@ -295,6 +295,34 @@ $(function() {
 	//表格按钮处理
 	IPLATUI.EFGrid = {
 		"resultB":{
+			toolbarConfig: {
+				buttons:[{
+					name: "delete", text: "删除", layout: "3",
+					click: function () {
+						var checkRows = resultBGrid.getCheckedRows();
+						if (checkRows.length < 1) {
+							NotificationUtil("请选择要删除的行", "error");
+							return;
+						}
+						var id = checkRows[0].id;
+						info = new EiInfo();
+						info.set("id", id);
+						EiCommunicator.send("DFSB0102", "delete", info, {
+							onSuccess: function (ei) {
+								var status = ei.getStatus();
+								if (status == -1) {
+									IPLAT.alert(ei.getMsg());
+								} else {
+									setTimeout(function () {
+										NotificationUtil(ei.getMsg(), "success");
+									}, 300);
+								}
+								resultBGrid.dataSource.page(1);
+							}
+						});
+					}
+				}]
+			},
 			page: function (grid) {
 				eiInfo = new EiInfo();
 				var machineTypeId = IPLAT.EFInput.value($("#machineTypeId"));

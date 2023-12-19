@@ -825,4 +825,22 @@ public class ServiceDFSB0102 extends ServiceBase{
 			dao.insert("DFSB03.insertDevicePart",devicePart);
 		}	}
 
+	/**
+	 * 删除按钮
+	 * @param info
+	 * @return
+	 */
+	public EiInfo delete(EiInfo info) {
+		EiInfo outInfo = new EiInfo();
+		String id =(String) info.getAttr().get("id");
+		int delete = dao.delete("DFSB03.deleteDevicePartId", id);
+		if (delete>0){
+			outInfo.setMsg("删除成功！");
+			outInfo.setStatus(1);
+		}else {
+			outInfo.setMsg("删除错误，请刷新后重新删除！");
+			outInfo.setStatus(-1);
+		}
+		return outInfo;
+	}
 }

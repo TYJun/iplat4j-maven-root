@@ -9,27 +9,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4fb1e35a-1e81-4c26-8858-23093e5fa00e" name="变更" comment="V1.3.15">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_bonawise_iplat4j_iplat4j_maven_ci_5_0_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_bonawise_iplat4j_iplat4j_maven_dk_5_0_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_bonawise_iplat4j_iplat4j_maven_dm_5_0_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_bonawise_iplat4j_iplat4j_maven_frame_5_0_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_bonawise_iplat4j_iplat4j_maven_hi_5_0_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_bonawise_iplat4j_iplat4j_maven_hr_5_0_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_bonawise_iplat4j_iplat4j_maven_im_5_0_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_bonawise_iplat4j_iplat4j_maven_ms_mx_5_0_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_bonawise_iplat4j_iplat4j_maven_pr_5_0_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_bonawise_iplat4j_iplat4j_maven_sc_5_0_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_bonawise_iplat4j_iplat4j_maven_si_5_0_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_bonawise_iplat4j_iplat4j_maven_sq_5_0_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_bonawise_iplat4j_iplat4j_maven_vi_5_0_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_bonawise_iplat4j_iplat4j_maven_xq_5_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/iplat4j_maven_web_war_exploded.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/iplat4j_maven_web_war_exploded.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_bonawise_iplat4j_iplat4j_maven_ir_5_0_2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_bonawise_iplat4j_iplat4j_maven_di_5_0_2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+    <list default="true" id="4fb1e35a-1e81-4c26-8858-23093e5fa00e" name="变更" comment="V1.3.16&#10;特种设备档案字段优化">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/service/ServiceDFSB0102.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/service/ServiceDFSB0102.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/sql/DFSB03.xml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/sql/DFSB03.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iplat4j-maven-df/src/main/resources/META-INF/resources/DF/SB/DFSB0102.js" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-df/src/main/resources/META-INF/resources/DF/SB/DFSB0102.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,24 +95,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "G:/桌面文件/代码相关文档/iplat_mzsrmyy/iplat4j-maven-vi/src",
-    "list.type.of.created.stylesheet": "CSS",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "项目",
-    "project.structure.proportion": "0.16894531",
-    "project.structure.side.proportion": "0.24470589",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.ignored.files",
-    "spring.configuration.checksum": "58a708b5f46922476c7dee92ac2c8fea",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;G:/桌面文件/代码相关文档/iplat_mzsrmyy/iplat4j-maven-vi/src&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;项目&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.16894531&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.24470589&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.ignored.files&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;445ab857dd8b4285ccbd8ae999c2ada8&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -440,7 +424,15 @@
       <workItem from="1701966641439" duration="3083000" />
       <workItem from="1702283361593" duration="1956000" />
       <workItem from="1702341348162" duration="6777000" />
-      <workItem from="1702348483779" duration="2584000" />
+      <workItem from="1702348483779" duration="3330000" />
+      <workItem from="1702352418619" duration="4287000" />
+      <workItem from="1702370717937" duration="37000" />
+      <workItem from="1702429691781" duration="4000" />
+      <workItem from="1702436316019" duration="568000" />
+      <workItem from="1702446856633" duration="1534000" />
+      <workItem from="1702541492381" duration="4297000" />
+      <workItem from="1702552740387" duration="9202000" />
+      <workItem from="1702603573720" duration="638000" />
     </task>
     <task id="LOCAL-00002" summary="1.0">
       <created>1692064121183</created>
@@ -659,7 +651,28 @@
       <option name="project" value="LOCAL" />
       <updated>1702350596063</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="V1.3.16">
+      <created>1702351328137</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1702351328137</updated>
+    </task>
+    <task id="LOCAL-00034" summary="V1.3.16">
+      <created>1702351814806</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1702351814807</updated>
+    </task>
+    <task id="LOCAL-00035" summary="V1.3.16&#10;特种设备档案字段优化">
+      <created>1702436961841</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1702436961841</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -783,7 +796,9 @@
     <MESSAGE value="V1.3.13" />
     <MESSAGE value="V1.3.14&#10;新增物资申领隔离物资页面" />
     <MESSAGE value="V1.3.15" />
-    <option name="LAST_COMMIT_MESSAGE" value="V1.3.15" />
+    <MESSAGE value="V1.3.16" />
+    <MESSAGE value="V1.3.16&#10;特种设备档案字段优化" />
+    <option name="LAST_COMMIT_MESSAGE" value="V1.3.16&#10;特种设备档案字段优化" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

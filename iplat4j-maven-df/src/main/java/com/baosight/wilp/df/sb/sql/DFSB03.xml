@@ -2,22 +2,22 @@
 <!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	<!--      table information
 		Generate time : 2021-07-15 17:26:50
    		Version :  6.0.731.201809200158
-		tableName :.df_special_device_part 
-		 id  VARCHAR   NOT NULL   primarykey, 
-		 machine_code  VARCHAR   NOT NULL, 
-		 machine_name  VARCHAR   NOT NULL, 
-		 machine_id  VARCHAR   NOT NULL, 
-		 models  VARCHAR, 
-		 status_code  VARCHAR, 
-		 cert_no  VARCHAR, 
-		 this_check_date  VARCHAR, 
-		 next_check_date  VARCHAR, 
-		 annualInspCycle  INTEGER, 
-		 remark  VARCHAR, 
-		 rec_creator  VARCHAR, 
-		 rec_create_time  VARCHAR, 
-		 rec_revisor  VARCHAR, 
-		 rec_revise_time  VARCHAR, 
+		tableName :.df_special_device_part
+		 id  VARCHAR   NOT NULL   primarykey,
+		 machine_code  VARCHAR   NOT NULL,
+		 machine_name  VARCHAR   NOT NULL,
+		 machine_id  VARCHAR   NOT NULL,
+		 models  VARCHAR,
+		 status_code  VARCHAR,
+		 cert_no  VARCHAR,
+		 this_check_date  VARCHAR,
+		 next_check_date  VARCHAR,
+		 annualInspCycle  INTEGER,
+		 remark  VARCHAR,
+		 rec_creator  VARCHAR,
+		 rec_create_time  VARCHAR,
+		 rec_revisor  VARCHAR,
+		 rec_revise_time  VARCHAR,
 		 data_group_code  VARCHAR
 	-->
 <sqlMap namespace="DFSB03">
@@ -47,7 +47,7 @@
 		<isNotEmpty prepend=" AND " property="checkType">
 			check_type = #checkType#
 		</isNotEmpty>
-		
+
 		<dynamic prepend="ORDER BY">
          <isNotEmpty property="orderBy">
     		  $orderBy$
@@ -56,7 +56,7 @@
     		  id asc
 		</isEmpty>
   		</dynamic>-->
-			
+
 	</select>
 
 	<select id="count" resultClass="int">
@@ -65,8 +65,8 @@
 			id = #id#
 		</isNotEmpty>
 	</select>
-	
-	<!--  
+
+	<!--
 		<isNotEmpty prepend=" AND " property="id">
 			id = #id#
 		</isNotEmpty>
@@ -134,35 +134,39 @@
 										rec_revisor,  <!-- 修改人 -->
 										rec_revise_time,  <!-- 修改时间 -->
 										data_group_code  <!-- 账套 -->
-										)		 
+										)
 	    VALUES (#id#, #machineCode#, #machineNames#, #machineId#, #models#, #statusCode#, #certNo#, #thisCheckDate#, #nextCheckDate#, #annualinspcycle#, #remark#, #recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#)
 	</insert>
-  
+
 	<delete id="deleteDevicePart" parameterClass="java.lang.String">
 		DELETE FROM df_special_device_part WHERE
 			machine_id = #id#
 	</delete>
 
 	<update id="update">
-		UPDATE .df_special_device_part 
-		SET 
-					machine_code	= #machineCode#,   <!-- 设备零部件编码 -->  
+		UPDATE .df_special_device_part
+		SET
+					machine_code	= #machineCode#,   <!-- 设备零部件编码 -->
 					machine_name	= #machineNames#,   <!-- 设备零部件名称 -->
-					machine_id	= #machineId#,   <!-- 设备ID -->  
-					models	= #models#,   <!-- 规格型号 -->  
-					status_code	= #statusCode#,   <!-- 状态代码（0=新建 1=启用，-1=停用） -->  
-					cert_no	= #certNo#,   <!-- 合格证编号 -->  
-					this_check_date	= #thisCheckDate#,   <!-- 本次检验日 -->  
-					next_check_date	= #nextCheckDate#,   <!-- 下次检验日 -->  
-					annualInspCycle	= #annualinspcycle#,   <!-- 周期(月) -->  
-					remark	= #remark#,   <!-- 备注 -->  
-					rec_creator	= #recCreator#,   <!-- 创建人 -->  
-					rec_create_time	= #recCreateTime#,   <!-- 创建时间 -->  
-					rec_revisor	= #recRevisor#,   <!-- 修改人 -->  
-					rec_revise_time	= #recReviseTime#,   <!-- 修改时间 -->  
-					data_group_code	= #dataGroupCode#  <!-- 账套 -->  
-			WHERE 	
+					machine_id	= #machineId#,   <!-- 设备ID -->
+					models	= #models#,   <!-- 规格型号 -->
+					status_code	= #statusCode#,   <!-- 状态代码（0=新建 1=启用，-1=停用） -->
+					cert_no	= #certNo#,   <!-- 合格证编号 -->
+					this_check_date	= #thisCheckDate#,   <!-- 本次检验日 -->
+					next_check_date	= #nextCheckDate#,   <!-- 下次检验日 -->
+					annualInspCycle	= #annualinspcycle#,   <!-- 周期(月) -->
+					remark	= #remark#,   <!-- 备注 -->
+					rec_creator	= #recCreator#,   <!-- 创建人 -->
+					rec_create_time	= #recCreateTime#,   <!-- 创建时间 -->
+					rec_revisor	= #recRevisor#,   <!-- 修改人 -->
+					rec_revise_time	= #recReviseTime#,   <!-- 修改时间 -->
+					data_group_code	= #dataGroupCode#  <!-- 账套 -->
+			WHERE
 			id = #id#
 	</update>
-  
+
+	<delete id="deleteDevicePartId" parameterClass="java.lang.String">
+		DELETE FROM df_special_device_part WHERE
+			id = #id#
+	</delete>
 </sqlMap>
