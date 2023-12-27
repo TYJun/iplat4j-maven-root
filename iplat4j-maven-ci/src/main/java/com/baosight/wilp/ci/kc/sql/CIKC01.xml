@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">	
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 <sqlMap namespace="CIKC01">
 
-	<select id="query" parameterClass="java.util.HashMap" 
+	<select id="query" parameterClass="java.util.HashMap"
 			resultClass="com.baosight.wilp.ci.kc.domain.CiStorge">
 		SELECT
 				REC_CREATOR	as "recCreator",  <!-- 记录创建责任者 -->
@@ -46,16 +46,16 @@
 			WARE_HOUSE_NO = #wareHouseNo#
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matNum"> <!-- 物资编码 -->
-			MAT_NUM like concat('%', #matNum#, '%') 
+			MAT_NUM like concat('%', #matNum#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matNumEQ"> <!-- 物资编码(精确) -->
 			MAT_NUM = #matNumEQ#
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matName"> <!-- 物资名称 -->
-			MAT_NAME like concat('%', #matName#, '%') 
+			MAT_NAME like concat('%', #matName#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matTypeNums"> <!-- 物资分类编码字符串 -->
-			find_in_set(MAT_TYPE_NUM, #matTypeNums#) 
+			find_in_set(MAT_TYPE_NUM, #matTypeNums#)
 		</isNotEmpty>
 		<isEqual prepend=" AND " property="isNot0" compareValue="N"> <!--  是否显示0库存 -->
 			TOTAL_NUM > 0
@@ -88,16 +88,16 @@
 			WARE_HOUSE_NO = #wareHouseNo#
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matNum"> <!-- 物资编码 -->
-			MAT_NUM like concat('%', #matNum#, '%') 
+			MAT_NUM like concat('%', #matNum#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matNumEQ"> <!-- 物资编码(精确) -->
 			MAT_NUM = #matNumEQ#
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matName"> <!-- 物资名称 -->
-			MAT_NAME like concat('%', #matName#, '%') 
+			MAT_NAME like concat('%', #matName#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matTypeNums"> <!-- 物资分类编码字符串 -->
-			find_in_set(MAT_TYPE_NUM, #matTypeNums#) 
+			find_in_set(MAT_TYPE_NUM, #matTypeNums#)
 		</isNotEmpty>
 		<isEqual prepend=" AND " property="isNot0" compareValue="N"> <!--  是否显示0库存 -->
 			TOTAL_NUM > 0
@@ -112,12 +112,12 @@
 			DATA_GROUP_CODE = #dataGroupCode#
 		</isNotEmpty>
 	</select>
-	
+
 	<!-- 判断库存中是否存在指定物资 -->
 	<select id="isExistMat" parameterClass="java.util.Map" resultClass="int">
 		select count(1) from ci_storge where MAT_NUM = #matNum# and WARE_HOUSE_NO = #wareHouseNo#
 	</select>
-	
+
 	<insert id="insert" parameterClass="com.baosight.wilp.ci.kc.domain.CiStorge">
 		INSERT INTO ci_storge (REC_CREATOR,  <!-- 记录创建责任者 -->
 										REC_CREATE_TIME,  <!-- 记录创建时间 -->
@@ -153,21 +153,21 @@
 										surp_name,  <!-- 供应商名称 -->
 										shelf_life, <!-- 保质期 -->
 										expiration_date <!-- 到期时间 -->
-										)		 
+										)
 	    VALUES (#recCreator#, #recCreateTime#, #recRevisor#, #recReviseTime#, #dataGroupCode#, #archiveFlag#, #id#, #wareHouseNo#, #wareHouseName#, #storageNo#, #stackNo#, #matTypeNum#, #matTypeName#, #matNum#, #matName#, #matModel#, #matSpec#, #unit#, #unitName#, #totalNum#, #totalAmount#, #batchNo#, #minNum#, #maxNum#, #price#, #remindFlag#, #billCheckerName#, #billMakerName#, #enterTypeName#, #originBillTypeName#, #surpNum#, #surpName#, #shelfLife#, #expirationDate#)
 	</insert>
-  
+
 	<update id="update" parameterClass="com.baosight.wilp.ci.kc.domain.CiStorge">
-		UPDATE ci_storge 
+		UPDATE ci_storge
 		<dynamic prepend="set">
 			<isNotNull prepend="," property="recRevisor">
-				REC_REVISOR	= #recRevisor#   <!-- 记录修改责任者 -->  
+				REC_REVISOR	= #recRevisor#   <!-- 记录修改责任者 -->
 			</isNotNull>
 			<isNotNull prepend="," property="recReviseTime">
-				REC_REVISE_TIME	= #recReviseTime#   <!-- 记录修改时间 --> 
+				REC_REVISE_TIME	= #recReviseTime#   <!-- 记录修改时间 -->
 			</isNotNull>
 			<isNotNull prepend="," property="totalNum">
-				TOTAL_NUM = TOTAL_NUM + #totalNum#   <!-- 库存总量 -->  
+				TOTAL_NUM = TOTAL_NUM + #totalNum#   <!-- 库存总量 -->
 			</isNotNull>
 			<isNotNull prepend="," property="totalAmount">
 				TOTAL_AMOUNT = TOTAL_AMOUNT + #totalAmount#   <!-- 库存总价 -->
@@ -175,30 +175,89 @@
 		</dynamic>
 		WHERE WARE_HOUSE_NO	= #wareHouseNo# and MAT_NUM = #matNum#
 	</update>
-	
+
 	<update id="updateStorgeByReduce" parameterClass="java.util.Map">
-		UPDATE ci_storge 
+		UPDATE ci_storge
 		<dynamic prepend="set">
 			<isNotNull prepend="," property="recRevisor">
-				REC_REVISOR	= #recRevisor#   <!-- 记录修改责任者 -->  
+				REC_REVISOR	= #recRevisor#   <!-- 记录修改责任者 -->
 			</isNotNull>
 			<isNotNull prepend="," property="recReviseTime">
-				REC_REVISE_TIME	= #recReviseTime#   <!-- 记录修改时间 --> 
+				REC_REVISE_TIME	= #recReviseTime#   <!-- 记录修改时间 -->
 			</isNotNull>
 			<isNotNull prepend="," property="totalNum">
-				TOTAL_NUM = TOTAL_NUM - #totalNum#   <!-- 库存总量 -->   
+				TOTAL_NUM = TOTAL_NUM - #totalNum#   <!-- 库存总量 -->
 			</isNotNull>
 			<isNotNull prepend="," property="totalAmount">
 				TOTAL_AMOUNT = TOTAL_AMOUNT - #totalAmount#   <!-- 库存总价 -->
 			</isNotNull>
 			<isNotNull prepend="," property="enterNum">
-				TOTAL_NUM = TOTAL_NUM - #enterNum#   <!-- 库存总量 -->  
+				TOTAL_NUM = TOTAL_NUM - #enterNum#   <!-- 库存总量 -->
 			</isNotNull>
 			<isNotNull prepend="," property="enterAmount">
-				TOTAL_AMOUNT = TOTAL_AMOUNT - #enterAmount#   <!-- 库存总价 -->  
+				TOTAL_AMOUNT = TOTAL_AMOUNT - #enterAmount#   <!-- 库存总价 -->
 			</isNotNull>
 		</dynamic>
 		WHERE WARE_HOUSE_NO	= #wareHouseNo# and MAT_NUM = #matNum#
 	</update>
-  
+
+	<insert id="ciStorgeTimedTaskMonth1">
+		INSERT INTO ci_storge_timed_task_month(id,rec_creator,rec_create_time,data_group_code,ware_house_no,
+		   ware_house_name,mat_type_num,mat_type_name,mat_num,mat_name,mat_model,mat_spec,unit,
+		   unit_name,price,total_num,total_amount,batch_no,min_num,max_num,shelf_life,
+		   expiration_date,remind_flag,bill_checker_name,bill_maker_name,enter_type_name,
+		   origin_bill_type_name )
+		SELECT
+			UUID() as id,
+			'admin' as rec_creator ,
+			NOW() as rec_create_time,
+			data_group_code,
+			ware_house_no,
+			ware_house_name,
+			mat_type_num,
+			mat_type_name,
+			mat_num,
+			mat_name,
+			mat_model,
+			mat_spec,
+			unit,
+			unit_name,
+			price,
+			total_num,
+			total_amount,
+			batch_no,
+			min_num,
+			max_num,
+			shelf_life,
+			expiration_date,
+			remind_flag,
+			bill_checker_name,
+			bill_maker_name,
+			enter_type_name,
+			origin_bill_type_name
+		FROM
+			ci_storge
+		where 1=1
+	</insert>
+
+	<insert id="ciStorgeTimedTaskMonth2">
+		INSERT INTO ci_storge_timed_task_month(id,rec_creator,rec_create_time,mat_num,mat_name,price,total_num)
+		SELECT
+			UUID() as id,
+			'admin' as rec_creator ,
+			NOW() as rec_create_time,
+			o.mat_num,
+			o.mat_name,
+			o.out_price as price,
+			'0' as total_num
+		FROM
+			ci_out_detail o
+				LEFT JOIN (SELECT mat_name FROM ci_storge_timed_task_month WHERE DATE_FORMAT(rec_create_time,'%Y-%m') = DATE_FORMAT(NOW(),'%Y-%m')) s ON O.mat_name= S.mat_name
+		WHERE
+			o.out_type = '01'
+		  AND	DATE_FORMAT(O.rec_create_time,'%Y-%m') = DATE_FORMAT(NOW(),'%Y-%m')
+		  AND s.mat_name is null
+		GROUP BY o.mat_name
+	</insert>
+
 </sqlMap>

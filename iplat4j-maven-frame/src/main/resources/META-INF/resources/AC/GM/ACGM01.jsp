@@ -69,7 +69,7 @@
         </div>
     </div>
 </EF:EFPage>
-
+<EF:EFWindow id="OutPopData" url="" lazyload="true" width="18%" height="8%" title="导出" modal="true" />
 <EF:EFWindow id="addPopData" url=" " lazyload="true" width="80%" height="30%"></EF:EFWindow>
 <EF:EFWindow id="deitPopData" url=" " lazyload="true" width="80%" height="30%"></EF:EFWindow>
 <EF:EFWindow id="addMatPopData" url=" " lazyload="true" width="80%" height="65%"></EF:EFWindow>
@@ -407,6 +407,31 @@
             excelChooseWindow.open().center()
         });
 
+        //EXCEL 下载
+        $("#OUTLOAD").click("click", function (e) {
+            var eiInfo = new EiInfo();
+            eiInfo.set("inqu_status-0-matClassCode",IPLAT.EFInput.value($("#matClassCode")));
+            eiInfo.set("inqu_status-0-matClassName",IPLAT.EFInput.value($("#matClassName")));
+            eiInfo.set("inqu_status-0-matCode",IPLAT.EFInput.value($("#matCode")));
+            eiInfo.set("inqu_status-0-matName",IPLAT.EFInput.value($("#matName")));
+            eiInfo.set("inqu_status-0-matTypeCode",IPLAT.EFSelect.value($("#matTypeCode")));
+            eiInfo.set("inqu_status-0-status",IPLAT.EFSelect.value($("#status")));
+            eiInfo.set("inqu_status-0-matClassId",IPLAT.EFInput.value($("#matClassId")));
+
+            let url = IPLATUI.CONTEXT_PATH+"/ACGM01/outMatFromExcel?eiInfo=";
+            eiInfo.setByNode("inqu");
+            let params = eiInfo.getBlock("inqu_status").getMappedRows()[0];
+            for (let field in params) {
+                if(params[field]) { url = url + "&"+field+"="+params[field]}
+            }
+            loadingShow();
+            window.location.href = url;
+
+            setTimeout(function () {
+                loadingRemove()
+            }, 6000);
+
+        });
     });
 
     // base64 文件下载
@@ -460,7 +485,23 @@
         var myUrl = URL.createObjectURL(myBlob)
         downloadFile(myUrl,name)
     }
+    //显示转圈中等待
+    function loadingShow() {
+        OutPopDataWindow.setOptions({"title": "正在加载中,下载文件后可手动关闭弹窗"});
+        OutPopDataWindow.open().center();
+        var parent = $("#OutPopData");
+        var loading = '<i id="loading"  class="fa fa-spinner fa-spin fa-3x fa-fw" style="margin: auto;text-align: center"></i>';
+        var div = $(loading);
+        div.appendTo(parent);
+    }
 
-
+    //移除转圈中等待
+    function loadingRemove() {
+        //设置多少毫秒，进行弹框关闭
+        setTimeout(function () {
+            window.parent['OutPopDataWindow'].close();
+            $('#loading').remove();
+        }, 6000);
+    }
 </script>
 

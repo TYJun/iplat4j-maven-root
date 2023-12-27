@@ -493,4 +493,80 @@
 		  AND xu.LOGIN_NAME = #workNo#
 	</select>
 
+	<!-- 查询物资列表 -->
+	<select id="queryOutMaterialList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT t.* FROM (
+		SELECT am.id AS "id",
+		am.mat_code AS "matCode",
+		am.mat_name AS "matName",
+		am.mat_class_id AS "matClassId",
+		amc.mat_class_name AS "matClassName",
+		amc.mat_class_code AS "matClassCode",
+		am.mat_spec AS "matSpec",
+		am.mat_model AS "matModel",
+		ted.ITEM_CNAME AS "unit",
+		format(am.price,2) AS "price",
+		am.supplier AS "supplier",
+		acs.supplier_name AS "supplierText",
+		am.manufacturer AS "manufacturer",
+		am.mat_type_code AS "matTypeCode",
+		am.remark AS "remark",
+		am.status AS "status",
+		CASE am.status
+		WHEN '1' THEN '启用'
+		WHEN '0' THEN '停用'
+		ELSE '未知' END AS "statusText",
+		am.rec_create_time AS "recCreateTime",
+		am.rec_revise_time AS "recReviseTime",
+		am.picture_uri AS pictureUri,
+		am.pack_factor AS packfactor
+		FROM $projectSchema$.ac_material am
+		LEFT JOIN $projectSchema$.ac_material_class amc ON amc.id = am.mat_class_id
+		LEFT JOIN $projectSchema$.ac_supplier acs ON am.supplier = acs.supplier_code
+		LEFT JOIN (
+			SELECT
+				ITEM_CODE,
+				ITEM_CNAME
+			FROM
+				$platSchema$.`tedcm01`
+			WHERE
+				`CODESET_CODE` = 'wilp.ac.gm.unit'
+				AND STATUS = '1') ted ON ted.ITEM_CODE = am.unit
+		) t
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="id">
+			t.id = #id#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matClassCode">
+			t.matClassCode = #matClassCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matClassName">
+			t.matClassName  LIKE  concat('%',#matClassName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matClassId">
+			t.matClassId = #matClassId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matCode">
+			t.matCode = #matCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matName">
+			t.matName LIKE  concat('%',#matName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="matTypeCode">
+			t.matTypeCode = #matTypeCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="status">
+			t.status = #status#
+		</isNotEmpty>
+
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+			<isEmpty property="orderBy">
+				t.recReviseTime desc, t.matCode desc
+			</isEmpty>
+		</dynamic>
+	</select>
+
 </sqlMap>
