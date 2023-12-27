@@ -9,6 +9,9 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/iplat4j-maven-security/pom.xml" />
         <option value="$PROJECT_DIR$/iplat4j-maven-vi/pom.xml" />
+        <option value="$PROJECT_DIR$/iplat4j-maven-si/pom.xml" />
+        <option value="$PROJECT_DIR$/iplat4j-maven-mp-rm/pom.xml" />
+        <option value="$PROJECT_DIR$/iplat4j-maven-ms-mx/pom.xml" />
       </list>
     </option>
   </component>

@@ -262,4 +262,9 @@
 		<iterate open="(" conjunction="," close=")">#enterBillNos[]#</iterate>
 	</delete>
 
+	<select id="checkHasEnter" parameterClass="java.util.List" resultClass="int">
+		select count(1) from si_enter where is_check > 0 and enter_bill_no in
+		<iterate open="(" conjunction="," close=")">#list[]#</iterate>
+	</select>
+
 </sqlMap>

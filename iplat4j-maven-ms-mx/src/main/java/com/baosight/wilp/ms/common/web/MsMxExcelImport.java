@@ -64,7 +64,7 @@ public class MsMxExcelImport extends HttpServlet {
      * @param resp
      * @throws ServletException
      * @throws IOException
-     * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     * @see HttpServlet#doGet(HttpServletRequest, HttpServletResponse)
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -83,7 +83,7 @@ public class MsMxExcelImport extends HttpServlet {
      * @param resp
      * @throws ServletException
      * @throws IOException
-     * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     * @see HttpServlet#doPost(HttpServletRequest, HttpServletResponse)
      */
     @Override
     @SuppressWarnings("all")

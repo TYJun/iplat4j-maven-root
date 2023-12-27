@@ -14,30 +14,30 @@ import com.baosight.xservices.xs.util.UserSession;
 
 /**
  *  仓库管理子页面Service
- * 
+ *
  * <p>页面加载</p>
  * <p>新增/编辑仓库</p>
- * 
+ *
  * All rights Reserved, Designed By www.bonawise.com
  * @Title:  ServiceSIWH01.java
  * @ClassName:  ServiceSIWH01
  * @Package com.baosight.wilp.si.wh.service
  * @Description: TODO
  * @author fangjian
- * @date:   2021年8月18日 上午9:08:37 
+ * @date:   2021年8月18日 上午9:08:37
  * @version V1.0
  * @Copyright: 2021 www.bonawise.com Inc. All rights reserved.
  *
  */
 public class ServiceSIWH0101 extends ServiceBase {
-	
+
 	/**
 	 * 页面加载
-	 * <p>Title: initLoad</p>   
-	 * <p>Description: </p>   
+	 * <p>Title: initLoad</p>
+	 * <p>Description: </p>
 	 * @param inInfo
-	 * @return   
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @return
+	 * @see ServiceBase#initLoad(EiInfo)
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
@@ -59,16 +59,16 @@ public class ServiceSIWH0101 extends ServiceBase {
 
 	/**
 	 * 新增/编辑仓库
-	 * 
+	 *
 	 * <p>1.获取参数,判断是新增还是编辑操作</br>
      * 	  2.新增操作，判断仓库号是否存在</br>
      * 	  3.仓库号存在，提示错误信息</br>
      * 	  4.仓库号不存在，保存仓库信息</br>
      *    5.编辑操作，更新仓库信息
      * </p>
-	 * 
-	 * <p>Title: insert</p>   
-	 * <p>Description: </p>   
+	 *
+	 * <p>Title: insert</p>
+	 * <p>Description: </p>
 	 * @param inInfo
 	 * 		id:主键
 	 * 		type:操作类型 add=新增，edit=编辑
@@ -76,8 +76,8 @@ public class ServiceSIWH0101 extends ServiceBase {
 	 * 		wareHouseName:仓库名称
 	 * 		wareHouseType:仓库类型
 	 * 		priceType:计价方式
-	 * @return   
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#insert(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @return
+	 * @see ServiceBase#insert(EiInfo)
 	 */
 	@Override
     public EiInfo insert(EiInfo inInfo) {

@@ -29,7 +29,7 @@ import java.util.*;
  * @Package com.baosight.wilp.si.ck.service
  * @Description: TODO
  * @author fangjian
- * @date:   2021年8月24日 下午2:08:39 
+ * @date:   2021年8月24日 下午2:08:39
  * @version V1.0
  * @Copyright: 2021 www.bonawise.com Inc. All rights reserved.
  *
@@ -38,11 +38,11 @@ public class ServiceSICK0101 extends ServiceBase {
 
 	/**
 	 * 页面加载
-	 * <p>Title: initLoad</p>   
-	 * <p>Description: </p>   
+	 * <p>Title: initLoad</p>
+	 * <p>Description: </p>
 	 * @param inInfo
 	 * @return
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @see ServiceBase#initLoad(EiInfo)
 	 */
 	@Override
 	public EiInfo initLoad(EiInfo inInfo) {
@@ -198,7 +198,7 @@ public class ServiceSICK0101 extends ServiceBase {
 				inInfo.setMsg("库存不足 无法出库");
 				return inInfo;
 			}
-			//足够出库,获取库存物资的批次 
+			//足够出库,获取库存物资的批次
 			outInfo = SiUtils.invoke(null, "SIKC0101", "queryStorgeDetail", new String[]{"wareHouseNo","matNum"},
 					out.getWareHouseNo(), outDetail.getMatNum());
 			List<SiStorgeDetail> storgeDetailList = (List<SiStorgeDetail>) outInfo.get("list");

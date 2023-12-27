@@ -17,7 +17,7 @@ import com.baosight.wilp.si.ck.domain.SiOutDetail;
  * @Package com.baosight.wilp.si.ck.service
  * @Description: TODO
  * @author fangjian
- * @date:   2021年8月24日 下午2:08:03 
+ * @date:   2021年8月24日 下午2:08:03
  * @version V1.0
  * @Copyright: 2021 www.bonawise.com Inc. All rights reserved.
  *
@@ -26,11 +26,11 @@ public class ServiceSICK0102 extends ServiceBase {
 
 	/**
 	 * 页面加载
-	 * <p>Title: initLoad</p>   
-	 * <p>Description: </p>   
+	 * <p>Title: initLoad</p>
+	 * <p>Description: </p>
 	 * @param inInfo
-	 * @return   
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @return
+	 * @see ServiceBase#initLoad(EiInfo)
 	 */
 	@Override
 	@SuppressWarnings("unchecked")

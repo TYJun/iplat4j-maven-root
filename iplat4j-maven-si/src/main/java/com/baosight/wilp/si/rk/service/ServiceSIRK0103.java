@@ -17,7 +17,7 @@ import com.baosight.wilp.si.rk.domain.SiEnterDetail;
  * @Package com.baosight.wilp.si.rk.service
  * @Description: TODO
  * @author fangjian
- * @date:   2021年8月23日 下午4:44:48 
+ * @date:   2021年8月23日 下午4:44:48
  * @version V1.0
  * @Copyright: 2021 www.bonawise.com Inc. All rights reserved.
  *
@@ -28,11 +28,11 @@ public class ServiceSIRK0103 extends ServiceBase {
 
 	/**
 	 * 页面加载
-	 * <p>Title: initLoad</p>   
-	 * <p>Description: </p>   
+	 * <p>Title: initLoad</p>
+	 * <p>Description: </p>
 	 * @param inInfo
-	 * @return   
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @return
+	 * @see ServiceBase#initLoad(EiInfo)
 	 */
 	@Override
 	@SuppressWarnings("unchecked")

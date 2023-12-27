@@ -16,7 +16,7 @@ import java.util.Map;
 
 /**
  *  仓库管理页面Service
- * 
+ *
  * <p>页面加载</p>
  * <p>页面查询</p>
  * <p>查询仓库（无分页）</p>
@@ -24,27 +24,27 @@ import java.util.Map;
  * <p>冻结/解冻仓库</p>
  * <p>校验仓库是否正常</p>
  * <p>获取仓库的计价方式</p>
- * 
+ *
  * All rights Reserved, Designed By www.bonawise.com
  * @Title:  ServiceSIWH01.java
  * @ClassName:  ServiceSIWH01
  * @Package com.baosight.wilp.si.wh.service
  * @Description: TODO
  * @author fangjian
- * @date:   2021年8月18日 上午9:08:37 
+ * @date:   2021年8月18日 上午9:08:37
  * @version V1.0
  * @Copyright: 2021 www.bonawise.com Inc. All rights reserved.
  *
  */
 public class ServiceSIWH01 extends ServiceBase {
-	
+
 	/**
 	 * 页面加载
-	 * <p>Title: initLoad</p>   
-	 * <p>Description: </p>   
+	 * <p>Title: initLoad</p>
+	 * <p>Description: </p>
 	 * @param inInfo
-	 * @return   
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @return
+	 * @see ServiceBase#initLoad(EiInfo)
 	 */
 	@Override
     public EiInfo initLoad(EiInfo inInfo) {
@@ -54,20 +54,20 @@ public class ServiceSIWH01 extends ServiceBase {
 
 	/**
 	 * 页面查询
-	 * <p>Title: query</p>   
-	 * <p>Description: </p>   
+	 * <p>Title: query</p>
+	 * <p>Description: </p>
 	 * @param inInfo
 	 * 		wareHouseName：仓库名称
 	 * 		freezeFlag： 冻结标记
-	 * @return 
+	 * @return
 	 * 		id ：主键
 	 *		wareHouseNo : 仓库号
 	 *		wareHouseName : 仓库名称
 	 *		wareHouseType : 仓库类型
 	 *		freezeFlag : 冻结
 	 *		recCreator : 创建人
-	 *		recCreateTime : 创建时间  
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#query(com.baosight.iplat4j.core.ei.EiInfo)
+	 *		recCreateTime : 创建时间
+	 * @see ServiceBase#query(EiInfo)
 	 */
     @Override
     public EiInfo query(EiInfo inInfo) {
@@ -77,7 +77,7 @@ public class ServiceSIWH01 extends ServiceBase {
         return outInfo;
 
     }
-    
+
     /**
      * 查询仓库（无分页）
      * @Title: queryWareHouse
@@ -86,14 +86,14 @@ public class ServiceSIWH01 extends ServiceBase {
      * 		wareHouseName：仓库名称
 	 * 		freezeFlag： 冻结标记
      * @param:  @return
-     * @return: EiInfo 
+     * @return: EiInfo
      * 		id ：主键
 	 *		wareHouseNo : 仓库号
 	 *		wareHouseName : 仓库名称
 	 *		wareHouseType : 仓库类型
 	 *		freezeFlag : 冻结
 	 *		recCreator : 创建人
-	 *		recCreateTime : 创建时间 
+	 *		recCreateTime : 创建时间
      * @throws
      */
     @SuppressWarnings("unchecked")
@@ -122,18 +122,18 @@ public class ServiceSIWH01 extends ServiceBase {
 
     /**
      * 删除仓库
-     * 
+     *
      * <p>1.获取参数,判断仓库中是否存在物资</br>
      * 	  2.存在，提示错误信息;不存在，删除
      * </p>
-     * 
-     * <p>Title: delete</p>   
-     * <p>Description: </p>   
+     *
+     * <p>Title: delete</p>
+     * <p>Description: </p>
      * @param inInfo
      * 		id:主键
      * 		wareHouseNo ： 仓库号
-     * @return   
-     * @see com.baosight.iplat4j.core.service.impl.ServiceBase#delete(com.baosight.iplat4j.core.ei.EiInfo)
+     * @return
+     * @see ServiceBase#delete(EiInfo)
      */
 	@Override
 	@SuppressWarnings("unchecked")
@@ -151,21 +151,21 @@ public class ServiceSIWH01 extends ServiceBase {
     	 //不存在，删除
         return super.delete(inInfo, "SIWH01.delete");
     }
-    
+
 	/**
 	 * 冻结/解冻仓库
-	 * 
+	 *
 	 * <p>1.获取参数,判断是冻结操作还是解冻操作</br>
      * 	  2.冻结操作，将冻结标记设为"Y";解冻操作,将冻结标记设为"N"
      * </p>
-	 * 
+	 *
 	 * @Title: djOrJd
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
 	 * @param:  @param inInfo
 	 * 		id:主键
 	 * 		type ： 操作类型，dj=冻结;jd=解冻
 	 * @param:  @return
-	 * @return: EiInfo : 无 
+	 * @return: EiInfo : 无
 	 * @throws
 	 */
     public EiInfo djOrJd(EiInfo inInfo) {
@@ -184,7 +184,7 @@ public class ServiceSIWH01 extends ServiceBase {
         dao.update("SIWH01.updateWarehouse", kcst01);
         return inInfo;
     }
-    
+
     /**
      * 校验仓库是否正常
      * @Title: isCheckWareHouse
@@ -192,7 +192,7 @@ public class ServiceSIWH01 extends ServiceBase {
      * @param:  @param inInfo
      * 		wareHouseNo:仓库号
      * @param:  @return
-     * @return: EiInfo 
+     * @return: EiInfo
      * 		isCheck : 是否正常标记，true=正常，false=不正常（不存在、冻结）
      * @throws
      */
@@ -206,7 +206,7 @@ public class ServiceSIWH01 extends ServiceBase {
     	}
     	return inInfo;
     }
-    
+
     /**
      * 获取仓库的计价方式
      * @Title: getPriceType
@@ -215,7 +215,7 @@ public class ServiceSIWH01 extends ServiceBase {
      * 		wareHouseNo:仓库号
      * @param:  @return
      * @return: EiInfo
-     * 		priceType : 计价方式  
+     * 		priceType : 计价方式
      * @throws
      */
     @SuppressWarnings("unchecked")
@@ -227,6 +227,6 @@ public class ServiceSIWH01 extends ServiceBase {
     	inInfo.set("priceType", warehouse.getPriceType());
     	return inInfo;
     }
-    
+
 
 }

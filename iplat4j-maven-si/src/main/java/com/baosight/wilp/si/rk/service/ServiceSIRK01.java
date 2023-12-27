@@ -18,31 +18,31 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * 仓库入库管理页面Service
- * 
+ *
  * <p>页面加载</p>
  * <p>页面查询</p>
  * <p>查询科室</p>
- * 
+ *
  * All rights Reserved, Designed By www.bonawise.com
  * @Title:  ServiceSIRK01.java
  * @ClassName:  ServiceSIRK01
  * @Package com.baosight.wilp.si.rk.service
  * @Description: TODO
  * @author fangjian
- * @date:   2021年8月23日 下午1:37:58 
+ * @date:   2021年8月23日 下午1:37:58
  * @version V1.0
  * @Copyright: 2021 www.bonawise.com Inc. All rights reserved.
  *
  */
 public class ServiceSIRK01 extends ServiceBase {
-	
+
 	/**
 	 * 页面加载
-	 * <p>Title: initLoad</p>   
-	 * <p>Description: </p>   
+	 * <p>Title: initLoad</p>
+	 * <p>Description: </p>
 	 * @param inInfo
-	 * @return   
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @return
+	 * @see ServiceBase#initLoad(EiInfo)
 	 */
 	@Override
     public EiInfo initLoad(EiInfo inInfo) {
@@ -50,17 +50,17 @@ public class ServiceSIRK01 extends ServiceBase {
 		inInfo.addBlock(EiConstant.resultBlock).set(EiConstant.limitStr, 50);
 		return query(inInfo);
     }
-	
+
 	/**
 	 * 页面查询
-	 * <p>Title: query</p>   
-	 * <p>Description: </p>   
+	 * <p>Title: query</p>
+	 * <p>Description: </p>
 	 * @param inInfo
 	 * 		enterBillNo:入库单号
 	 * 		enterType:入库类别
 	 * 		beginTime:制单日期起（>=）
 	 * 		endTime:制单日期止（<=）
-	 * @return   
+	 * @return
 	 * 		id ：主键
 	 *		enterBillNo : 入库单号
 	 *		enterType : 入库类别
@@ -68,7 +68,7 @@ public class ServiceSIRK01 extends ServiceBase {
 	 *		wareHouseName : 仓库
 	 *		billMakeTime : 制单日期
 	 *		billMakerName : 制单人员
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#query(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @see ServiceBase#query(EiInfo)
 	 */
 	@Override
     public EiInfo query(EiInfo inInfo) {
@@ -77,7 +77,7 @@ public class ServiceSIRK01 extends ServiceBase {
         EiInfo outInfo = super.query(inInfo, "SIRK01.query", new SiEnter());
         return outInfo;
     }
-	
+
 	/**
 	 * 查询科室
 	 * @Title: queryDept
@@ -88,7 +88,7 @@ public class ServiceSIRK01 extends ServiceBase {
 	 * @param:  @return
 	 * @return: EiInfo
 	 * 		deptNum：科室编码
-	 * 		deptName : 科室名称  
+	 * 		deptName : 科室名称
 	 * @throws
 	 */
 	public EiInfo queryDept(EiInfo inInfo) {

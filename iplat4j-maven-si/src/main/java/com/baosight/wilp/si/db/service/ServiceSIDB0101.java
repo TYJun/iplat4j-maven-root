@@ -22,30 +22,30 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * 库存调拨子页面Service
- * 
+ *
  * <p>页面加载</p>
  * <p>调拨录入保存</p>
- * 
+ *
  * All rights Reserved, Designed By www.bonawise.com
  * @Title:  ServiceSIDB0101.java
  * @ClassName:  ServiceSIDB0101
  * @Package com.baosight.wilp.si.db.service
  * @Description: TODO
  * @author fangjian
- * @date:   2021年8月20日 下午1:30:32 
+ * @date:   2021年8月20日 下午1:30:32
  * @version V1.0
  * @Copyright: 2021 www.bonawise.com Inc. All rights reserved.
  *
  */
 public class ServiceSIDB0101 extends ServiceBase {
-	
+
 	/**
 	 * 页面加载
-	 * <p>Title: initLoad</p>   
-	 * <p>Description: </p>   
+	 * <p>Title: initLoad</p>
+	 * <p>Description: </p>
 	 * @param inInfo
-	 * @return   
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @return
+	 * @see ServiceBase#initLoad(EiInfo)
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
@@ -63,15 +63,15 @@ public class ServiceSIDB0101 extends ServiceBase {
 		}
 		return inInfo;
     }
-	
+
 	/**
 	 * 调拨录入保存
-	 * 
+	 *
 	 * <p>1.根据页面参数构建调拨主表、调拨明细集合数据</br>
 	 * 	  2.保存调拨主表、调拨明细表数据</br>
 	 * 	  3.调用审核方法
 	 * </p>
-	 * 
+	 *
 	 * @Title: saveStockTrans
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
 	 * @param:  @param inInfo
@@ -85,9 +85,9 @@ public class ServiceSIDB0101 extends ServiceBase {
 	 *			matSpec : 物资规格
 	 *			unitName : 单位
 	 *			enterNum : 当前数量
-	 *			transNum : 调拨数量 
+	 *			transNum : 调拨数量
 	 * @param:  @return
-	 * @return: EiInfo  
+	 * @return: EiInfo
 	 * @throws
 	 */
 	@SuppressWarnings("unchecked")
@@ -110,10 +110,10 @@ public class ServiceSIDB0101 extends ServiceBase {
 		inInfo.setMsg("调拨成功");
 		return inInfo;
 	}
-	
+
 	/**
 	 * 审核（暂时不做为单独功能）
-	 * 
+	 *
 	 * <p>1.获取参数（调拨主表、调拨明细对象集合）</br>
 	 *    2.根据调拨主表构建入库主表、出库主表数据</br>
 	 *    3.根据调拨明细集合构建入库明细、出库明细集合</br>
@@ -121,12 +121,12 @@ public class ServiceSIDB0101 extends ServiceBase {
 	 *    5.调用本地服务入库</br>
 	 *    6.调用本地服务更新调拨主单据
 	 * </p>
-	 * 
+	 *
 	 * @Title: approveStockTrans
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
 	 * @param:  @param inInfo
 	 * @param:  @return
-	 * @return: EiInfo  
+	 * @return: EiInfo
 	 * @throws
 	 */
 	@SuppressWarnings("unchecked")
@@ -164,6 +164,6 @@ public class ServiceSIDB0101 extends ServiceBase {
 		}
 		return inInfo;
 	}
-	
+
 
 }

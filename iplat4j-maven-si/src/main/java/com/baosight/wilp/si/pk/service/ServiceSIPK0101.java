@@ -23,32 +23,32 @@ import com.baosight.xservices.xs.util.UserSession;
 
 /**
  * 盘库子页面Service
- * 
+ *
  * <p>页面加载</p>
  * <p>插入盘库明细数据</p>
  * <p>维护盘库信息</p>
  * <p>审核确认盘库信息</p>
- * 
+ *
  * All rights Reserved, Designed By www.bonawise.com
  * @Title:  ServiceSIPK0101.java
  * @ClassName:  ServiceSIPK0101
  * @Package com.baosight.wilp.si.pk.service
  * @Description: TODO
  * @author fangjian
- * @date:   2021年8月18日 下午6:38:50 
+ * @date:   2021年8月18日 下午6:38:50
  * @version V1.0
  * @Copyright: 2021 www.bonawise.com Inc. All rights reserved.
  *
  */
 public class ServiceSIPK0101 extends ServiceBase {
-	
+
 	/**
 	 * 页面加载
-	 * <p>Title: initLoad</p>   
-	 * <p>Description: </p>   
+	 * <p>Title: initLoad</p>
+	 * <p>Description: </p>
 	 * @param inInfo
-	 * @return   
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @return
+	 * @see ServiceBase#initLoad(EiInfo)
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
@@ -78,19 +78,19 @@ public class ServiceSIPK0101 extends ServiceBase {
 			return inInfo;
 		}
 	}
-	
+
 	/**
 	 * 插入盘库明细数据
-	 * 
+	 *
 	 * <p>插入盘库明细，invenDetail不为空时，插入单条盘库明细；invenDetailList不为空时，插入多条盘库明细</p>
-	 * 
+	 *
 	 * @Title: insertInvenDetail
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
 	 * @param:  @param inInfo
 	 * 		invenDetail: 盘库明细对象
 	 * 		invenDetailList: 盘库明细对象集合
 	 * @param:  @return
-	 * @return: EiInfo  
+	 * @return: EiInfo
 	 * @throws
 	 */
 	@SuppressWarnings("unchecked")
@@ -110,22 +110,22 @@ public class ServiceSIPK0101 extends ServiceBase {
 		}
         return inInfo;
     }
-	
+
 	/**
 	 * 维护盘库信息
-	 * 
+	 *
 	 * <p>1.获取参数</br>
 	 * 	  2.遍历参数中list,将参数转成盘库明细对象</br>
 	 *    3.计算盘库后总价</br>
 	 *    4.更新盘库明细</br>
 	 *    5.调用本地服务更新盘库主表信息
 	 * </p>
-	 * 
+	 *
 	 * @Title: updateStockInven
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
 	 * @param:  @param inInfo
 	 * 		invenBillNo ： 盘库单号
-	 * 		rows：物资集合 
+	 * 		rows：物资集合
 	 * 			id : 主键
 	 *			invenBillDetailNo : 盘点明细号
 	 *			matNum : 物资编码
@@ -136,7 +136,7 @@ public class ServiceSIPK0101 extends ServiceBase {
 	 *			afterInvenNum : 盘点后数量
 	 *			price : 盘点单价
 	 * @param:  @return
-	 * @return: EiInfo  
+	 * @return: EiInfo
 	 * @throws
 	 */
 	@SuppressWarnings("unchecked")
@@ -172,10 +172,10 @@ public class ServiceSIPK0101 extends ServiceBase {
         inInfo.setMsg("盘库信息维护成功");
         return inInfo;
 	}
-	
+
 	/**
 	 * 审核确认盘库信息
-	 * 
+	 *
 	 * <p>1.获取参数,通过参数获取盘库明细和获取盘库主单据</br>
 	 * 	  2.构建盘盈入库主表对象、入库明细对象集合与盘亏出库主表对象、出库明细对象集合</br>
 	 * 	  3.遍历盘库明细</br>
@@ -184,13 +184,13 @@ public class ServiceSIPK0101 extends ServiceBase {
 	 *    6.调用本地服务，保存出入库数据</br>
 	 *    7.调用本地服务更新盘库主表信息
 	 * </p>
-	 * 
+	 *
 	 * @Title: approveStockInven
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
 	 * @param:  @param inInfo
 	 * 		invenBillNo ： 盘库单号
 	 * @param:  @return
-	 * @return: EiInfo  
+	 * @return: EiInfo
 	 * @throws
 	 */
 	@SuppressWarnings("unchecked")

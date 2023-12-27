@@ -13,19 +13,19 @@ import com.baosight.wilp.si.kc.domain.SiStorgeDetail;
 
 /**
  * 库存存量详情子页面Service
- * 
+ *
  * <p>页面加载</p>
  * <p>页面查询</p>
  * <p>获取库存明细数据(无分页)</p>
  * <p>插入库存明细</p>
- * 
+ *
  * All rights Reserved, Designed By www.bonawise.com
  * @Title:  ServiceSIKC0101.java
  * @ClassName:  ServiceSIKC0101
  * @Package com.baosight.wilp.si.kc.service
  * @Description: TODO
  * @author fangjian
- * @date:   2021年8月18日 下午6:23:10 
+ * @date:   2021年8月18日 下午6:23:10
  * @version V1.0
  * @Copyright: 2021 www.bonawise.com Inc. All rights reserved.
  *
@@ -34,26 +34,26 @@ public class ServiceSIKC0101 extends ServiceBase {
 
 	/**
 	 * 页面加载
-	 * <p>Title: initLoad</p>   
-	 * <p>Description: </p>   
+	 * <p>Title: initLoad</p>
+	 * <p>Description: </p>
 	 * @param inInfo
-	 * @return   
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @return
+	 * @see ServiceBase#initLoad(EiInfo)
 	 */
 	@Override
     public EiInfo initLoad(EiInfo inInfo) {
         return inInfo;
     }
-	
+
 	/**
 	 * 页面查询
-	 * <p>Title: query</p>   
-	 * <p>Description: </p>   
+	 * <p>Title: query</p>
+	 * <p>Description: </p>
 	 * @param inInfo
 	 * 		wareHouseNo：仓库号
 	 * 		wareHouseName ： 仓库名称
 	 * 		matNum：物资编码
-	 * @return 
+	 * @return
 	 * 		batchNo : 批次号
 	 *		matNum : 物资编码
 	 *		matName : 物资名称
@@ -62,15 +62,15 @@ public class ServiceSIKC0101 extends ServiceBase {
 	 *		totalNum : 库存量
 	 *		price : 库存单价
 	 *		totalAmount : 库存总价
-	 *		recCreateTime : 入库时间  
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#query(com.baosight.iplat4j.core.ei.EiInfo)
+	 *		recCreateTime : 入库时间
+	 * @see ServiceBase#query(EiInfo)
 	 */
 	@Override
     public EiInfo query(EiInfo inInfo) {
         EiInfo outInfo = super.query(inInfo, "SIKC0101.query", new SiStorgeDetail());
         return outInfo;
     }
-	
+
 	/**
 	 * 获取库存明细数据
 	 * @Title: queryStorgeDetail
@@ -78,7 +78,7 @@ public class ServiceSIKC0101 extends ServiceBase {
 	 * @param:  @param inInfo
 	 * 		enterBillNo：入库单号
 	 * @param:  @return
-	 * @return: EiInfo  
+	 * @return: EiInfo
 	 * 		batchNo : 批次号
 	 *		matNum : 物资编码
 	 *		matName : 物资名称
@@ -87,7 +87,7 @@ public class ServiceSIKC0101 extends ServiceBase {
 	 *		totalNum : 库存量
 	 *		price : 库存单价
 	 *		totalAmount : 库存总价
-	 *		recCreateTime : 入库时间  
+	 *		recCreateTime : 入库时间
 	 * @throws
 	 */
 	@SuppressWarnings("unchecked")
@@ -104,7 +104,7 @@ public class ServiceSIKC0101 extends ServiceBase {
         inInfo.set("list", list == null ? new ArrayList<>() : list);
         return inInfo;
     }
-	
+
 	/**
 	 * 插入库存明细
 	 * @Title: insertStorgeDetail
@@ -112,7 +112,7 @@ public class ServiceSIKC0101 extends ServiceBase {
 	 * @param:  @param inInfo
 	 * 		storgeDetailList: 库存明细集合
 	 * @param:  @return
-	 * @return: EiInfo  
+	 * @return: EiInfo
 	 * @throws
 	 */
 	@SuppressWarnings("unchecked")
@@ -127,5 +127,5 @@ public class ServiceSIKC0101 extends ServiceBase {
 		}
 		return inInfo;
     }
-	
+
 }

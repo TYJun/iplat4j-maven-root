@@ -12,30 +12,30 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * 库存预警保存子页面Service
- * 
+ *
  * <p>页面加载</p>
  * <p>存库存预警</p>
- * 
+ *
  * All rights Reserved, Designed By www.bonawise.com
  * @Title:  ServiceSIYJ0101.java
  * @ClassName:  ServiceSIYJ0101
  * @Package com.baosight.wilp.si.yj.service
  * @Description: TODO
  * @author fangjian
- * @date:   2021年8月23日 上午10:11:08 
+ * @date:   2021年8月23日 上午10:11:08
  * @version V1.0
  * @Copyright: 2021 www.bonawise.com Inc. All rights reserved.
  *
  */
 public class ServiceSIYJ0101 extends ServiceBase {
-	
+
 	/**
 	 * 页面加载
-	 * <p>Title: initLoad</p>   
-	 * <p>Description: </p>   
+	 * <p>Title: initLoad</p>
+	 * <p>Description: </p>
 	 * @param inInfo
-	 * @return   
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @return
+	 * @see ServiceBase#initLoad(EiInfo)
 	 */
 	@Override
     public EiInfo initLoad(EiInfo inInfo) {
@@ -46,12 +46,12 @@ public class ServiceSIYJ0101 extends ServiceBase {
 		}
         return inInfo;
     }
-	
+
 	/**
 	 * 保存库存预警
-	 * 
+	 *
 	 * <p>更新库存主表的最低和最高库存量</p>
-	 * 
+	 *
 	 * @Title: saveStockEarlyWarning
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
 	 * @param:  @param inInfo
@@ -68,7 +68,7 @@ public class ServiceSIYJ0101 extends ServiceBase {
 	 *			minNum : 最低库存量
 	 *			maxNum : 最高库存量
 	 * @param:  @return
-	 * @return: EiInfo  
+	 * @return: EiInfo
 	 * @throws
 	 */
 	@SuppressWarnings("unchecked")
@@ -83,5 +83,5 @@ public class ServiceSIYJ0101 extends ServiceBase {
 		});
 		return inInfo;
 	}
-	
+
 }

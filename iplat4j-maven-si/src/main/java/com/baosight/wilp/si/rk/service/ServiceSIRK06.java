@@ -27,7 +27,7 @@ public class ServiceSIRK06  extends ServiceBase {
      * <p>Description: </p>
      * @param inInfo
      * @return
-     * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
+     * @see ServiceBase#initLoad(EiInfo)
      */
     @Override
     public EiInfo initLoad(EiInfo inInfo) {

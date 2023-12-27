@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * 库存存量管理页面Service
- * 
+ *
  * <p>页面加载</p>
  * <p>页面查询</p>
  * <p>获取物资分类</p>
@@ -29,27 +29,27 @@ import org.apache.commons.lang3.StringUtils;
  * <p>更新库存数据</p>
  * <p>扣除库存存量</p>
  * <p>添加库存存量</p>
- * 
+ *
  * All rights Reserved, Designed By www.bonawise.com
  * @Title:  ServiceSIKC01.java
  * @ClassName:  ServiceSIKC01
  * @Package com.baosight.wilp.si.kc.service
  * @Description: TODO
  * @author fangjian
- * @date:   2021年8月18日 下午6:23:45 
+ * @date:   2021年8月18日 下午6:23:45
  * @version V1.0
  * @Copyright: 2021 www.bonawise.com Inc. All rights reserved.
  *
  */
 public class ServiceSIKC01 extends ServiceBase {
-	
+
 	/**
 	 * 页面加载
-	 * <p>Title: initLoad</p>   
-	 * <p>Description: </p>   
+	 * <p>Title: initLoad</p>
+	 * <p>Description: </p>
 	 * @param inInfo
-	 * @return   
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @return
+	 * @see ServiceBase#initLoad(EiInfo)
 	 */
 	@Override
     public EiInfo initLoad(EiInfo inInfo) {
@@ -59,15 +59,15 @@ public class ServiceSIKC01 extends ServiceBase {
 
 	/**
 	 * 页面查询
-	 * <p>Title: query</p>   
-	 * <p>Description: </p>   
+	 * <p>Title: query</p>
+	 * <p>Description: </p>
 	 * @param inInfo
 	 * 		wareHouseNo：仓库号
 	 * 		matTypeNum： 物资分类
 	 * 		matNum：物资编码
 	 * 		matName：物资名称
 	 * 		isNot0 ： 是否显示0库存
-	 * @return 
+	 * @return
 	 * 		wareHouseName : 仓库
 	 *		wareHouseNo : 仓库号
 	 *		matTypeName : 物资分类名称
@@ -80,7 +80,7 @@ public class ServiceSIKC01 extends ServiceBase {
 	 *		totalAmount : 库存总价
 	 *		minNum : 最低存量
 	 *		maxNum : 最高存量
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#query(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @see ServiceBase#query(EiInfo)
 	 */
     @Override
     public EiInfo query(EiInfo inInfo) {
@@ -180,7 +180,7 @@ public class ServiceSIKC01 extends ServiceBase {
 	    outBlock.addRows(rows);
 		return outInfo;
     }
-    
+
     /**
      * 判断库存中是否存在指定物资
      * @Title: isExistMat
@@ -189,8 +189,8 @@ public class ServiceSIKC01 extends ServiceBase {
      * 		wareHouseNo:仓库号
      * 		matNum:物资编码
      * @param:  @return
-     * @return: EiInfo 
-     * 		isExistMat: 物资是否存在，"true"=存在，"false"=不存在 
+     * @return: EiInfo
+     * 		isExistMat: 物资是否存在，"true"=存在，"false"=不存在
      * @throws
      */
     public EiInfo isExistMat (EiInfo inInfo) {
@@ -203,14 +203,14 @@ public class ServiceSIKC01 extends ServiceBase {
     	}
     	return inInfo;
     }
-    
+
     /**
      * 插入库存数据
      * @Title: insertStorge
      * @Description: TODO(这里用一句话描述这个方法的作用)
      * @param:  @param inInfo
      * @param:  @return
-     * @return: EiInfo  
+     * @return: EiInfo
      * @throws
      */
     public EiInfo insertStorge (EiInfo inInfo) {
@@ -219,21 +219,21 @@ public class ServiceSIKC01 extends ServiceBase {
 		//判断参数是否为空
 		if(storge == null){
 			inInfo.setStatus(-1);
-			inInfo.setMsg("插入库存数据失败"); 
+			inInfo.setMsg("插入库存数据失败");
 			return inInfo;
 		} else {
 			dao.insert("SIKC01.insert", storge);
 		}
         return inInfo;
     }
-    
+
     /**
      * 更新库存数据
      * @Title: updateStorge
      * @Description: TODO(这里用一句话描述这个方法的作用)
      * @param:  @param inInfo
      * @param:  @return
-     * @return: EiInfo  
+     * @return: EiInfo
      * @throws
      */
     public EiInfo updateStorge (EiInfo inInfo) {
@@ -242,25 +242,25 @@ public class ServiceSIKC01 extends ServiceBase {
 		//判断参数是否为空
 		if(storge == null){
 			inInfo.setStatus(-1);
-			inInfo.setMsg("更新库存数据失败"); 
+			inInfo.setMsg("更新库存数据失败");
 			return inInfo;
 		} else {
 			dao.update("SIKC01.update", storge);
 		}
         return inInfo;
     }
-    
+
     /**
      * 扣除库存存量
-     * 
+     *
      * <p>出库、红冲入库时扣除库存<p>
-     * 
+     *
      * @Title: updateStorgeByReduce
      * @Description: TODO(这里用一句话描述这个方法的作用)
      * @param:  @param inInfo
      * 		storgeDetailList ： 库存明细
      * @param:  @return
-     * @return: EiInfo  
+     * @return: EiInfo
      * @throws
      */
     @SuppressWarnings("unchecked")
@@ -288,17 +288,17 @@ public class ServiceSIKC01 extends ServiceBase {
 		}
 		return inInfo;
     }
-    
+
     /**
      * 添加库存存量
-     * 
+     *
      * <p>红冲出库时回加库存<p>
-     * 
+     *
      * @Title: updateStorgeByReduce
      * @Description: TODO(这里用一句话描述这个方法的作用)
      * @param:  @param inInfo
      * @param:  @return
-     * @return: EiInfo  
+     * @return: EiInfo
      * @throws
      */
     @SuppressWarnings("unchecked")

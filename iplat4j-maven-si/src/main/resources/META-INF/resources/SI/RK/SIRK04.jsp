@@ -16,9 +16,9 @@
 				<EF:EFCodeOption codeName="wilp.si.enterType"/>
 			</EF:EFSelect>
 			<EF:EFInput ename="inqu_status-0-supplierName" cname="供应商" />
-			<EF:EFDatePicker ename="inqu_status-0-beginTime" cname="制单时间起" role="date" 
+			<EF:EFDatePicker ename="inqu_status-0-beginTime" cname="制单时间起" role="date"
 				format="yyyy-MM-dd" parseFormats="['yyyy-MM-dd']" bindId="beginTime" />
-			<EF:EFDatePicker ename="inqu_status-0-endTime" cname="制单时间止" role="date" 
+			<EF:EFDatePicker ename="inqu_status-0-endTime" cname="制单时间止" role="date"
 				format="yyyy-MM-dd" parseFormats="['yyyy-MM-dd']" bindId="endTime" />
 			<EF:EFInput ename="mainEnterBillNo" type="hidden" />
 		</div>
@@ -32,6 +32,8 @@
 			<EF:EFColumn ename="id" cname="id" width="100" hidden="true" />
 			<EF:EFColumn ename="enterBillNo" cname="入库单号" width="150" align="center"/>
 			<EF:EFColumn ename="enterTypeName" cname="入库类别" width="100" align="center"/>
+			<EF:EFColumn ename="userDeptName" cname="直入直出科室名称" width="120" align="center"/>
+			<EF:EFColumn ename="userDeptNum" cname="直入直出科室编码" width="100" align="center" hidden="true"/>
 			<EF:EFColumn ename="wareHouseName" cname="仓库" width="100" align="center"/>
 			<EF:EFColumn ename="supplierName" cname="供应商" width="100" align="center"/>
 			<EF:EFColumn ename="totalAmount" cname="入库总金额(元)" width="100" align="center"/>

@@ -18,53 +18,53 @@ import com.baosight.wilp.si.pk.domain.SiInvenDetail;
 
 /**
  * 库存存量管理-生成盘库单子子页面Service
- * 
+ *
  * <p>页面加载</p>
  * <p>生成盘库单</p>
- * 
+ *
  * All rights Reserved, Designed By www.bonawise.com
  * @Title:  ServiceSIKC0102.java
  * @ClassName:  ServiceSIKC0102
  * @Package com.baosight.wilp.si.kc.service
  * @Description: TODO
  * @author fangjian
- * @date:   2021年8月18日 下午6:22:21 
+ * @date:   2021年8月18日 下午6:22:21
  * @version V1.0
  * @Copyright: 2021 www.bonawise.com Inc. All rights reserved.
  *
  */
 public class ServiceSIKC0102 extends ServiceBase {
-	
+
 	/**
 	 * 页面加载
-	 * <p>Title: initLoad</p>   
-	 * <p>Description: </p>   
+	 * <p>Title: initLoad</p>
+	 * <p>Description: </p>
 	 * @param inInfo
-	 * @return   
-	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
+	 * @return
+	 * @see ServiceBase#initLoad(EiInfo)
 	 */
 	@Override
     public EiInfo initLoad(EiInfo inInfo) {
         return inInfo;
     }
-	
+
 	/**
 	 * 生成盘库单
-	 * 
+	 *
 	 * <p>1.获取指定仓库、指定分类的物资库存信息</br>
 	 * 	  2.判断是否存在物资信息。不存在，结束方法</br>
 	 *    3.构建盘库主表对象和构建盘库明细表对象集合</br>
 	 *    4.调用本地服务保存盘库主表信息和盘库明细表</br>
 	 *    5.冻结仓库
 	 * </p>
-	 * 
+	 *
 	 * @Title: generateStockInven
 	 * @Description: TODO(这里用一句话描述这个方法的作用)
 	 * @param:  @param inInfo
 	 * 		wareHouseNo：仓库号
 	 * 		matTypeNum：物资编码
 	 * @param:  @return
-	 * @return: EiInfo  
+	 * @return: EiInfo
 	 * @throws
 	 */
 	public EiInfo generateStockInven(EiInfo inInfo) {
@@ -105,7 +105,7 @@ public class ServiceSIKC0102 extends ServiceBase {
 	    info.set(EiConstant.serviceName, "SIWH01");
 		info.set(EiConstant.methodName, "djOrJd");
 	    XLocalManager.call(info);
-	    
+
 	    inInfo.setMsg("盘库单生成成功");
         return inInfo;
 	}
@@ -118,7 +118,7 @@ public class ServiceSIKC0102 extends ServiceBase {
 	 * 		wareHouseNo：仓库号
 	 * 		matTypeNum：物资编码
 	 * @param:  @return
-	 * @return: List<SiStorge> 
+	 * @return: List<SiStorge>
 	 * 		 wareHouseNo : 仓库号
 	 *		wareHouseName : 仓库名称
 	 *		storageNo : 库位号

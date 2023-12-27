@@ -63,8 +63,7 @@ $(function() {
 					commonPopData('/web/SIBF0101?type=add', "物资报废");
 				});
 				$("#DC").on("click", function(e) {
-					let eiInfo = new EiInfo();
-					let url = IPLATUI.CONTEXT_PATH+"/si/exportStorage?foo=";
+					let eiInfo = new EiInfo(); let url = IPLATUI.CONTEXT_PATH+"/si/exportStorage?foo=";
 					eiInfo.setByNode("inqu");
 					let params = eiInfo.getBlock("inqu_status").getMappedRows()[0];
 					for (let field in params) {

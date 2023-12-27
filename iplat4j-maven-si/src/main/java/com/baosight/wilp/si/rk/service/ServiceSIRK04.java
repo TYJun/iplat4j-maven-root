@@ -89,6 +89,9 @@ public class ServiceSIRK04 extends ServiceBase {
         if(CollectionUtils.isEmpty(list)) {
             return ValidatorUtils.errorInfo("请选择需要验收的入库单");
         }
+
+        /**判断入库单是否已验收**/
+        if(checkHasEnter(list)) { return inInfo; }
         /**是否开启验收入库：否: 修改状态**/
         String hasCheck = SiConfigCache.getConfigRadioValue(BaseDockingUtils.getUserGroupByWorkNo(UserSession.getLoginName()),
                 SiConfigCache.SI_CONFIG_ENTER_CHECK);
@@ -128,6 +131,12 @@ public class ServiceSIRK04 extends ServiceBase {
             }
         }
         return inInfo;
+    }
+
+    /**校验入库单是否已验收**/
+    private boolean checkHasEnter(List<String> list) {
+        int count = super.count("SIRK01.checkHasEnter", list);
+        return count > 0;
     }
 
 }
