@@ -23,6 +23,10 @@
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.bonawise.iplat4j</groupId>
+            <artifactId>iplat4j-core</artifactId>
+        </dependency>
     </dependencies>
 
     <properties>
