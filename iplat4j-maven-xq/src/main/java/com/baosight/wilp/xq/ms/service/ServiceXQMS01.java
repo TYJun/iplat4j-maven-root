@@ -171,6 +171,8 @@ public class ServiceXQMS01 extends ServiceEPBase {
 
         // 校验用户工号，必填
         String userId = eiInfo.getString("userId");
+        String oauthMethod = eiInfo.getString("oauthMethod");
+        String redirectURL = eiInfo.getString("redirectURL");
         if(StringUtils.isEmpty(userId)) {
             out.setStatus(ErrorTips.USER_ID_NOT_NULL_CODE);
             out.setMsg(ErrorTips.USER_ID_NOT_NULL_TIPS);
@@ -191,7 +193,7 @@ public class ServiceXQMS01 extends ServiceEPBase {
 
         JSONObject response = null;
         try {
-            response = ResTemplateUtils.postForJson(restTemplate, requestUrl, buildOAuthParams(userId));
+            response = ResTemplateUtils.postForJson(restTemplate, requestUrl,  buildOAuthParams(userId, oauthMethod, redirectURL));
         } catch (Exception e) {
             e.printStackTrace();
             out.setStatus(ErrorTips.SCAN_OAUTH_EXCEPTION_CODE);
@@ -396,12 +398,15 @@ public class ServiceXQMS01 extends ServiceEPBase {
 
 
 
-    private Map<String, Object> buildOAuthParams(String userId) {
-        Map<String, Object> params = new HashMap<>();
+    private Map<String, Object> buildOAuthParams(String userId, String oauthMethod, String redirectURL) {
+        Map<String, Object> params = new HashMap<>(8);
         params.put("userId", userId);
-        params.put("oauthMethod", "3");
+        params.put("oauthMethod",  StringUtils.isBlank(oauthMethod) ? "3" : oauthMethod);
         //params.put("callbackURL", "http://dgrytest.yyhq365.cn/app_receive.do?msg");
         //params.put("redirectURL", "http://v5-stable-test.yyhq365.cn/iplat_v5_stable_test/login.jsp?id=2");
+        if(StringUtils.isNotBlank(redirectURL)) {
+            params.put("redirectURL", redirectURL);
+        }
         params.put("imageType", "png");
         //params.put("isBackSignatureImg", "1");
         return params;

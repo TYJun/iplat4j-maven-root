@@ -32,6 +32,11 @@
 				 FROM $projectSchema$.ac_material am
 				 LEFT JOIN $projectSchema$.ac_material_class amc ON amc.id = am.mat_class_id
 			     LEFT JOIN $projectSchema$.ac_supplier acs ON am.supplier = acs.supplier_code
+				<dynamic prepend="ORDER BY">
+					<isNotEmpty property="orderBy">
+						$orderBy$
+					</isNotEmpty>
+				</dynamic>
 		    ) t
 			WHERE 1=1
 		<isNotEmpty prepend="and" property="id">
@@ -60,9 +65,6 @@
 		</isNotEmpty>
 
 		<dynamic prepend="ORDER BY">
-			<isNotEmpty property="orderBy">
-				$orderBy$
-			</isNotEmpty>
 			<isEmpty property="orderBy">
 				t.recReviseTime desc, t.matCode desc
 			</isEmpty>
@@ -106,6 +108,11 @@
 				#matClassCodeList[].matClassCode#
 			</iterate>
 		</isNotEmpty>
+		<dynamic prepend="ORDER BY">
+			<isNotEmpty property="orderBy">
+				$orderBy$
+			</isNotEmpty>
+		</dynamic>
 		) t
 		WHERE 1=1
 		<isNotEmpty prepend="and" property="id">
@@ -134,9 +141,6 @@
 		</isNotEmpty>
 
 		<dynamic prepend="ORDER BY">
-			<isNotEmpty property="orderBy">
-				$orderBy$
-			</isNotEmpty>
 			<isEmpty property="orderBy">
 				t.recReviseTime desc, t.matCode desc
 			</isEmpty>

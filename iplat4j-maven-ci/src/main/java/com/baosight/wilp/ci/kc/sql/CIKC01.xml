@@ -5,76 +5,79 @@
 	<select id="query" parameterClass="java.util.HashMap"
 			resultClass="com.baosight.wilp.ci.kc.domain.CiStorge">
 		SELECT
-				REC_CREATOR	as "recCreator",  <!-- 记录创建责任者 -->
-				REC_CREATE_TIME	as "recCreateTime",  <!-- 记录创建时间 -->
-				REC_REVISOR	as "recRevisor",  <!-- 记录修改责任者 -->
-				REC_REVISE_TIME	as "recReviseTime",  <!-- 记录修改时间 -->
-				ARCHIVE_FLAG	as "archiveFlag",  <!-- 归档标记 -->
-				ID	as "id",  <!-- 主键 -->
-				WARE_HOUSE_NO	as "wareHouseNo",  <!-- 仓库号 -->
-				ware_house_name	as "wareHouseName",  <!-- 仓库名称 -->
-				STORAGE_NO	as "storageNo",  <!-- 库位号 -->
-				STACK_NO	as "stackNo",  <!-- 货位号 -->
-				MAT_TYPE_NUM	as "matTypeNum",  <!-- 物资分类编码 -->
-				mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
-				MAT_NUM	as "matNum",  <!-- 物资编码 -->
-				MAT_NAME	as "matName",  <!-- 物资名称 -->
-				MAT_MODEL	as "matModel",  <!-- 物资型号 -->
-				MAT_SPEC	as "matSpec",  <!-- 物资规格 -->
-				UNIT	as "unit",  <!-- 计量单位编码 -->
-				UNIT_NAME	as "unitName",  <!-- 计量单位名称 -->
-				TOTAL_NUM	as "totalNum",  <!-- 库存总量 -->
-				TOTAL_AMOUNT	as "totalAmount",  <!-- 库存总价 -->
-				BATCH_NO	as "batchNo",  <!-- 批次编码 -->
-				MIN_NUM	as "minNum",  <!-- 最低库存量 -->
-				MAX_NUM	as "maxNum",  <!-- 最高库存量 -->
-				PRICE	as "price",  <!-- 单价 -->
-				remind_flag	as "remindFlag",  <!-- 是否预警标记，N=不预警，Y=预警 -->
-				bill_checker_name	as "billCheckerName",  <!-- 审核人员姓名 -->
-				bill_maker_name	as "billMakerName",  <!-- 制单人员姓名 -->
-				enter_type_name	as "enterTypeName",  <!-- 入库类型名称 -->
-				origin_bill_type_name	as "originBillTypeName",  <!-- 来源单据类型名称 -->
-				surp_num	as "surpNum",  <!-- 供应商编码 -->
-				surp_name	as "surpName", <!-- 供应商名称 -->
-				shelf_life as "shelfLife",
-				expiration_date as "expirationDate"
-		FROM ci_storge WHERE 1=1
+			c.REC_CREATOR	as "recCreator",  <!-- 记录创建责任者 -->
+			c.REC_CREATE_TIME	as "recCreateTime",  <!-- 记录创建时间 -->
+			c.REC_REVISOR	as "recRevisor",  <!-- 记录修改责任者 -->
+			c.REC_REVISE_TIME	as "recReviseTime",  <!-- 记录修改时间 -->
+			c.ARCHIVE_FLAG	as "archiveFlag",  <!-- 归档标记 -->
+			c.ID	as "id",  <!-- 主键 -->
+			c.WARE_HOUSE_NO	as "wareHouseNo",  <!-- 仓库号 -->
+			c.ware_house_name	as "wareHouseName",  <!-- 仓库名称 -->
+			c.STORAGE_NO	as "storageNo",  <!-- 库位号 -->
+			c.STACK_NO	as "stackNo",  <!-- 货位号 -->
+			c.MAT_TYPE_NUM	as "matTypeNum",  <!-- 物资分类编码 -->
+			c.mat_type_name	as "matTypeName",  <!-- 物资分类名称 -->
+			c.MAT_NUM	as "matNum",  <!-- 物资编码 -->
+			c.MAT_NAME	as "matName",  <!-- 物资名称 -->
+			c.MAT_MODEL	as "matModel",  <!-- 物资型号 -->
+			c.MAT_SPEC	as "matSpec",  <!-- 物资规格 -->
+			c.UNIT	as "unit",  <!-- 计量单位编码 -->
+			c.UNIT_NAME	as "unitName",  <!-- 计量单位名称 -->
+			c.TOTAL_NUM	as "totalNum",  <!-- 库存总量 -->
+			c.TOTAL_AMOUNT	as "totalAmount",  <!-- 库存总价 -->
+			c.BATCH_NO	as "batchNo",  <!-- 批次编码 -->
+			c.MIN_NUM	as "minNum",  <!-- 最低库存量 -->
+			c.MAX_NUM	as "maxNum",  <!-- 最高库存量 -->
+			a.PRICE	as "price",  <!-- 单价 -->
+			c.remind_flag	as "remindFlag",  <!-- 是否预警标记，N=不预警，Y=预警 -->
+			c.bill_checker_name	as "billCheckerName",  <!-- 审核人员姓名 -->
+			c.bill_maker_name	as "billMakerName",  <!-- 制单人员姓名 -->
+			c.enter_type_name	as "enterTypeName",  <!-- 入库类型名称 -->
+			c.origin_bill_type_name	as "originBillTypeName",  <!-- 来源单据类型名称 -->
+			c.surp_num	as "surpNum",  <!-- 供应商编码 -->
+			c.surp_name	as "surpName", <!-- 供应商名称 -->
+			c.shelf_life as "shelfLife",
+			c.expiration_date as "expirationDate"
+		FROM ci_storge c
+		LEFT JOIN bona_frame_mzsrmyy.ac_material a ON c.mat_num = a.mat_code
+		WHERE 1=1
+		AND a.status = '1'
 		<isNotEmpty prepend=" AND " property="id">  <!-- 主键 -->
-			ID = #id#
+			c.ID = #id#
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="wareHouseNo"> <!-- 仓库号 -->
-			WARE_HOUSE_NO = #wareHouseNo#
+			c.WARE_HOUSE_NO = #wareHouseNo#
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matNum"> <!-- 物资编码 -->
-			MAT_NUM like concat('%', #matNum#, '%')
+			c.MAT_NUM like concat('%', #matNum#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matNumEQ"> <!-- 物资编码(精确) -->
-			MAT_NUM = #matNumEQ#
+			c.MAT_NUM = #matNumEQ#
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matName"> <!-- 物资名称 -->
-			MAT_NAME like concat('%', #matName#, '%')
+			c.MAT_NAME like concat('%', #matName#, '%')
 		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="matTypeNums"> <!-- 物资分类编码字符串 -->
 			find_in_set(MAT_TYPE_NUM, #matTypeNums#)
 		</isNotEmpty>
 		<isEqual prepend=" AND " property="isNot0" compareValue="N"> <!--  是否显示0库存 -->
-			TOTAL_NUM > 0
+			c.TOTAL_NUM > 0
 		</isEqual>
 		<isEqual prepend=" AND " property="earlyWarning" compareValue="Y"> <!--  是否是库存预警页面 -->
-			(MIN_NUM > 0 or MAX_NUM > 0)
+			(c.MIN_NUM > 0 or c.MAX_NUM > 0)
 		</isEqual>
 		<isEqual prepend=" AND " property="warningStock" compareValue="Y"> <!--  是否是报警数据 -->
-			(MIN_NUM > TOTAL_NUM or MAX_NUM <![CDATA[<]]> TOTAL_NUM)
+			(c.MIN_NUM > c.TOTAL_NUM or c.MAX_NUM <![CDATA[<]]> c.TOTAL_NUM)
 		</isEqual>
 		<isNotEmpty prepend=" AND " property="dataGroupCode">
-			DATA_GROUP_CODE = #dataGroupCode#
+			c.DATA_GROUP_CODE = #dataGroupCode#
 		</isNotEmpty>
 		<dynamic prepend="ORDER BY">
 	         <isNotEmpty property="orderBy">
 	    		  $orderBy$
 	   		 </isNotEmpty>
 	   		<isEmpty property="orderBy">
-	    		  MAT_NUM asc
+				c.MAT_NUM asc
 			</isEmpty>
   		</dynamic>
 	</select>

@@ -184,7 +184,7 @@
 		<isNotEmpty prepend=" AND " property="statusCode">
 			df.status_code = #statusCode#
 		</isNotEmpty>
-		order by df.rec_create_time desc
+		order by df.order_num, df.rec_create_time desc
 		<isNotEmpty property="offset">
 			limit #offset#,#limit#
 		</isNotEmpty>
@@ -408,6 +408,13 @@
 			t2.work_no  like concat('%', #workNum#, '%')
 		</isNotEmpty>
 	</select>
+
+	<update id="updateOrderNum" parameterClass="java.util.Map">
+		update df_special_device
+			set order_num = order_num - (#orderNum#)
+		where
+		    id = #id#
+	</update>
 
 
 </sqlMap>

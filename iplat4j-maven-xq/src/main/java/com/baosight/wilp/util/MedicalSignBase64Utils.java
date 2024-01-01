@@ -3,6 +3,7 @@ package com.baosight.wilp.util;
 import org.apache.commons.codec.binary.Base64;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @PackageName com.baosight.wilp.util
@@ -71,11 +72,11 @@ public class MedicalSignBase64Utils {
             dir.mkdirs();
         }
         BufferedOutputStream bos = null;
-        java.io.FileOutputStream fos = null;
+        FileOutputStream fos = null;
         try {
             byte[] bytes = Base64.decodeBase64(base64);
             file=new File(filePath + File.separator + outFileName);
-            fos = new java.io.FileOutputStream(file);
+            fos = new FileOutputStream(file);
             bos = new BufferedOutputStream(fos);
             bos.write(bytes);
         } catch (Exception e) {
@@ -98,4 +99,7 @@ public class MedicalSignBase64Utils {
         }
     }
 
+    public static String StringToBase64(String str) {
+        return java.util.Base64.getEncoder().encodeToString(str.getBytes(StandardCharsets.UTF_8));
+    }
 }

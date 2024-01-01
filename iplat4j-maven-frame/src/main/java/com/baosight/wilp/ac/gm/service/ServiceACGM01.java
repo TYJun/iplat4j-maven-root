@@ -71,7 +71,14 @@ public class ServiceACGM01 extends ServiceBase {
         // 默认查询启用的物资
         // 如果status是 null 则为默认初始化查询 需要置status为 1（启用）
         map.putIfAbsent("status", "1");
-
+        if (inInfo.getBlock("result")!=null){
+            String o = (String) inInfo.getBlock("result").getAttr().get("orderBy");
+            if (o.startsWith("price")){
+                map.put("orderBy","am."+o);
+            }else {
+                map.put("orderBy",inInfo.getBlock("result").getAttr().get("orderBy"));
+            }
+        }
         /**
          * 2.调用query()方法查询出符合条件的物资信息
          */

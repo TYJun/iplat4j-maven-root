@@ -8,6 +8,7 @@ import com.baosight.iplat4j.core.service.impl.ServiceEPBase;
 import com.baosight.wilp.authentication.service.TokenService;
 import com.baosight.wilp.cache.AuthKeyCacheManage;
 import com.baosight.wilp.entity.*;
+import com.baosight.wilp.util.MedicalSignBase64Utils;
 import com.baosight.xservices.xs.util.UserSession;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +81,7 @@ public class ServiceXQMS02 extends ServiceEPBase {
 
         // 等待签名的数据原文不能为空
         String data = eiInfo.getString("data");
+        data = MedicalSignBase64Utils.StringToBase64(data);
         /** 测试构造data 数据 start
         Map<String, String> signMap = new HashMap<>();
         signMap.put("fileName", "梅州市人民医院固定资产报废申请表");

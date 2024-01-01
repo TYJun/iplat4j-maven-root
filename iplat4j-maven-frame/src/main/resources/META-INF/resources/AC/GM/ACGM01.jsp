@@ -43,27 +43,27 @@
                 </div>
             </EF:EFRegion>
             <EF:EFRegion id="result" title="物资列表">
-                <EF:EFGrid blockId="result" autoDraw="no">
-                    <EF:EFColumn ename="id" cname="主键" width="100" hidden="true"/>
-                    <EF:EFColumn ename="matCode" cname="物资编码" width="100"/>
-                    <EF:EFColumn ename="matName" cname="物资名称" width="100"/>
-                    <EF:EFComboColumn ename="unit" cname="计量单位">
+                <EF:EFGrid blockId="result" autoDraw="no" sort="single">
+                    <EF:EFColumn ename="id" cname="主键" width="100" hidden="true" sort="false"/>
+                    <EF:EFColumn ename="matCode" cname="物资编码" width="100" sort="true"/>
+                    <EF:EFColumn ename="matName" cname="物资名称" width="100" sort="true"/>
+                    <EF:EFComboColumn ename="unit" cname="计量单位" sort="false">
                         <EF:EFCodeOption codeName="wilp.ac.gm.unit" textField="label" valueField="value"/>
                     </EF:EFComboColumn>
-                    <EF:EFColumn ename="matClassId" cname="物资分类ID" width="100" hidden="true"/>
-                    <EF:EFColumn ename="matClassName" cname="物资分类名" width="100"/>
-                    <EF:EFColumn ename="matSpec" cname="物资规格" width="100"/>
-                    <EF:EFColumn ename="matModel" cname="物资型号" width="100"/>
-                    <EF:EFColumn ename="price" cname="最近订购单价(元)" width="120"/>
-                    <EF:EFColumn ename="supplier" cname="供应商" width="100" hidden="true"/>
+                    <EF:EFColumn ename="matClassId" cname="物资分类ID" width="100" hidden="true" sort="false"/>
+                    <EF:EFColumn ename="matClassName" cname="物资分类名" width="100" sort="false"/>
+                    <EF:EFColumn ename="matSpec" cname="物资规格" width="100" sort="true"/>
+                    <EF:EFColumn ename="matModel" cname="物资型号" width="100" sort="true"/>
+                    <EF:EFColumn ename="price" cname="最近订购单价(元)" width="120" sort="true"/>
+                    <EF:EFColumn ename="supplier" cname="供应商" width="100" hidden="true" sort="false"/>
 <%--                    <EF:EFColumn ename="supplierText" cname="供应商" width="100"/>--%>
-                    <EF:EFColumn ename="manufacturer" cname="制造商" width="100"/>
-                    <EF:EFComboColumn ename="matTypeCode" cname="物资大类">
+                    <EF:EFColumn ename="manufacturer" cname="制造商" width="100" sort="false"/>
+                    <EF:EFComboColumn ename="matTypeCode" cname="物资大类" sort="false">
                         <EF:EFCodeOption codeName="wilp.ac.gm.type" textField="label" valueField="value"/>
                     </EF:EFComboColumn>
-                    <EF:EFColumn ename="remark" cname="备注" width="100"/>
-                    <EF:EFColumn ename="statusText" cname="状态" width="100"/>
-                    <EF:EFColumn ename="pictureUri" cname="图片地址" width="100" hidden="true"/>
+                    <EF:EFColumn ename="remark" cname="备注" width="100" sort="false"/>
+                    <EF:EFColumn ename="statusText" cname="状态" width="100" sort="false"/>
+                    <EF:EFColumn ename="pictureUri" cname="图片地址" width="100" hidden="true" sort="false"/>
                 </EF:EFGrid>
             </EF:EFRegion>
         </div>
