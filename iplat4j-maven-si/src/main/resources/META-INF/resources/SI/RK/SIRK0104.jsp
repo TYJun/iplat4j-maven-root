@@ -12,13 +12,13 @@
 			<EF:EFInput ename="matName" cname="物资名称" />
 			<EF:EFTreeInput ename="matTypeNum" cname="物资分类" bindId="matTypeNum"
 				serviceName="SIKC01" methodName="getMateriaType" textField="text"
-				valueField="label" hasChildren="leaf" root="{label: 'root',text: '分类'}" 
+				valueField="label" hasChildren="leaf" root="{label: 'root',text: '分类'}"
 				popupTitile="上级分类" clear="true" placeholder="请选择">
 			</EF:EFTreeInput>
 		</div>
 	</EF:EFRegion>
 	<EF:EFRegion id="result" title="物质列表">
-		<EF:EFGrid blockId="result" autoDraw="no" checkMode="row" autoBind="true" 
+		<EF:EFGrid blockId="result" autoDraw="no" checkMode="row" autoBind="true"
 			readonly="true" height="350">
 			<EF:EFColumn ename="matNum" cname="物资编码" width="100" align="center"/>
 			<EF:EFColumn ename="matName" cname="物资名称" width="150" align="center"/>

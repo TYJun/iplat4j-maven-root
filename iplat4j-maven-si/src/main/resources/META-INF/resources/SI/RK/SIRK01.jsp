@@ -26,9 +26,9 @@
 				<EF:EFOption label="已审核" value="2"/>
 			</EF:EFSelect>
 			<EF:EFInput ename="inqu_status-0-supplierName" cname="供应商" />
-			<EF:EFDatePicker ename="inqu_status-0-beginTime" cname="制单时间起" role="date" 
+			<EF:EFDatePicker ename="inqu_status-0-beginTime" cname="制单时间起" role="date"
 				format="yyyy-MM-dd" parseFormats="['yyyy-MM-dd']" bindId="beginTime" />
-			<EF:EFDatePicker ename="inqu_status-0-endTime" cname="制单时间止" role="date" 
+			<EF:EFDatePicker ename="inqu_status-0-endTime" cname="制单时间止" role="date"
 				format="yyyy-MM-dd" parseFormats="['yyyy-MM-dd']" bindId="endTime" />
 			<EF:EFInput ename="mainEnterBillNo" type="hidden" value="no data"/>
 			<EF:EFInput ename="inqu_status-0-billMakerName" cname="制单人" />

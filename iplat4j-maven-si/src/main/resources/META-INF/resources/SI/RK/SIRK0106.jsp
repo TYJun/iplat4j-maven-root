@@ -77,7 +77,7 @@
 					<EF:EFColumn ename="unit" cname="单位" width="60" hidden="true" />
 					<EF:EFColumn ename="unitName" cname="单位" width="60" enable="false" align="center"/>
 					<EF:EFColumn ename="enterNum" cname="入库数量" width="80" align="center"/>
-					<EF:EFColumn ename="enterPrice" cname="入库单价(元)" width="100" align="center"/>
+					<EF:EFColumn ename="enterPrice" cname="入库单价(元)" width="100" enable="false" align="center"/>
 					<EF:EFColumn ename="enterAmount" cname="入库总价(元)" width="100" enable="false" align="center"/>
 					<EF:EFColumn ename="matTypeNum" cname="物资分类编码" hidden="true"/>
 					<EF:EFColumn ename="matTypeName" cname="物资分类名称" width="100" enable="false" align="center"/>
