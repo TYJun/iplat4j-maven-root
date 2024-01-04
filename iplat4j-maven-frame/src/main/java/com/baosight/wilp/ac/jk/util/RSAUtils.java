@@ -1,4 +1,4 @@
- package com.baosight.wilp.ac.jk.util;
+ package com.baosight.wilp.ac.we.utils;
 
  import org.apache.commons.codec.binary.Base64;
 
@@ -7,7 +7,7 @@
 
  /**
   * Todo(这里用一句话描述这个方法的作用)
-  *
+  * 
   * @Title: RSAUtils
   * @ClassName: RSAUtils.java
   * @Package：com.baosight.wilp.ss.bm.utils
@@ -24,11 +24,11 @@
  public class RSAUtils {
       private static final String KEY_ALGORITHM = "RSA";
       private static final int KEY_SIZE = 2048;// 设置长度
-
-
+ 
+      
       /**
-       * 生成公、私钥
-       *
+       * 生成公、私钥 
+       * 
        * @return
        */
       public static HashMap<String,String> createRSAKeys() {
@@ -37,26 +37,26 @@
               KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(KEY_ALGORITHM);
               keyPairGenerator.initialize(KEY_SIZE, new SecureRandom());
               KeyPair keyPair = keyPairGenerator.generateKeyPair();
-
+ 
               PublicKey publicKey = keyPair.getPublic();
               PrivateKey privateKey = keyPair.getPrivate();
-
+ 
               // 获取公、私钥值
               String publicKeyValue = Base64.encodeBase64String(publicKey.getEncoded());
               String privateKeyValue = Base64.encodeBase64String(privateKey.getEncoded());
-
+ 
               // 存入
               map.put("publicKey", publicKeyValue);
               map.put("privateKey", privateKeyValue);
-
+ 
               System.out.println(map);
           } catch (Exception e) {
               e.printStackTrace();
           }
           return map;
       }
-
-
+ 
+ 
       public static void main(String[] args) {
           createRSAKeys();
       }

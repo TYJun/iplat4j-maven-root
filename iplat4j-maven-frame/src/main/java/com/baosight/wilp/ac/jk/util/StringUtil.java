@@ -1,11 +1,11 @@
-package com.baosight.wilp.ac.jk.util;
+package com.baosight.wilp.ac.we.utils;
 
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * Todo(这里用一句话描述这个方法的作用)
- *
+ * 
  * @Title: StringUtil
  * @ClassName: StringUtil.java
  * @Package：com.baosight.wilp.ss.bm.utils
@@ -20,10 +20,10 @@ import java.util.List;
  * <desc>    // 描述修改内容
  */
 public class StringUtil extends com.baosight.iplat4j.core.util.StringUtils {
-
+	
 	/**分割线*/
 	public static String separator = "-----------------------------------------";
-
+	
 	/**
 	 * 将数字转换成指定进制的文本，并按指定的长度
 	 * @param iNumber   数字
@@ -91,7 +91,7 @@ public class StringUtil extends com.baosight.iplat4j.core.util.StringUtils {
 
 	public static void main(String[] args) {
 		System.out.println(isNotEmpty(" "));
-
+		
 		String s = "ST001";
 		List<String> tempList = Arrays.asList(s.split(","));
 		System.out.println(tempList.contains("admin"));

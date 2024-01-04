@@ -9,101 +9,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4fb1e35a-1e81-4c26-8858-23093e5fa00e" name="变更" comment="V1.4.3">
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/da/service/ServiceFADA01.java.mine" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/da/service/ServiceFADA01.java.r17529" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/da/service/ServiceFADA01.java.r17702" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/sq/service/ServiceFASQ00.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/sq/service/ServiceFASQ01.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/sq/service/ServiceFASQ0101.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/sq/sql/FASQ01.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/SQ/FASQ00.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/SQ/FASQ00.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/SQ/FASQ01.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/SQ/FASQ01.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/SQ/FASQ0101.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/SQ/FASQ0101.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/common/js/fa-keydown.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="4fb1e35a-1e81-4c26-8858-23093e5fa00e" name="变更" comment="V1.4.4">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/bf/domian/FaScrapDetailVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/bf/domian/FaScrapDetailVO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/bf/service/ServiceFABF01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/bf/service/ServiceFABF01.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/bf/sql/FABF01.xml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/bf/sql/FABF01.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/bg/domain/FaModificationBatchDetailVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/bg/domain/FaModificationBatchDetailVO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/bg/domain/FaModifyBaseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/bg/domain/FaModifyBaseDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/bg/service/ServiceFABG01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/bg/service/ServiceFABG01.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/bg/service/ServiceFABG0101.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/bg/service/ServiceFABG0101.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/bg/sql/FABG01.xml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/bg/sql/FABG01.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/common/CompareUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/common/CompareUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/common/ComparisonResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/common/ComparisonResult.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/da/domain/FaInfoDO.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/da/domain/FaInfoDO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/da/service/ServiceFADA01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/da/service/ServiceFADA01.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/da/service/ServiceFADA0101.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/da/service/ServiceFADA0101.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/da/sql/FADA01.xml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/da/sql/FADA01.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/db/service/ServiceFADB01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/db/service/ServiceFADB01.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/db/service/ServiceFADB0101.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/db/service/ServiceFADB0101.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/db/service/ServiceFADB0102.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/db/service/ServiceFADB0102.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/db/sql/FADB01.xml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/db/sql/FADB01.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/lb/service/ServiceFALB01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/lb/service/ServiceFALB01.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/lb/service/ServiceFALB0101.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/lb/service/ServiceFALB0101.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/lb/sql/FALB01.xml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/lb/sql/FALB01.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/qr/service/ServiceFAQR01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/qr/service/ServiceFAQR01.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/qr/service/ServiceFAQR0101.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/qr/service/ServiceFAQR0101.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/sh/service/ServiceFASH01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/sh/service/ServiceFASH01.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/utils/FixedAssetsEum.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/utils/FixedAssetsEum.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/utils/OneSelfUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/utils/OneSelfUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/zj/service/ServiceFAZJ01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/zj/service/ServiceFAZJ01.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/zj/sql/FAZJ01.xml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/zj/sql/FAZJ01.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/zn/service/ServiceFAZN01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/java/com/baosight/wilp/fa/zn/service/ServiceFAZN01.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/BF/FABF01.js" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/BF/FABF01.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/BF/FABF01.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/BF/FABF01.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/BF/FABF0101.js" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/BF/FABF0101.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/BF/FABF0101.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/BF/FABF0101.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/BG/FABG01.js" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/BG/FABG01.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/BG/FABG01.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/BG/FABG01.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/BG/FABG0101.js" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/BG/FABG0101.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/BG/FABG0101.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/BG/FABG0101.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/BG/FABG0103.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/BG/FABG0103.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/BS/FABS01.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/BS/FABS01.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/CF/FACF01.js" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/CF/FACF01.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/CF/FACF01.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/CF/FACF01.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DA/FADA01.js" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DA/FADA01.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DA/FADA01.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DA/FADA01.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DA/FADA0102.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DA/FADA0102.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DA/FADA0103.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DA/FADA0103.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DB/FADB01.js" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DB/FADB01.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DB/FADB01.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DB/FADB01.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DB/FADB0101.js" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DB/FADB0101.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DB/FADB0101.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DB/FADB0101.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DB/FADB0102.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/DB/FADB0102.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/LB/FALB01.js" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/LB/FALB01.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/LB/FALB01.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/LB/FALB01.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/PD/FAPD01.js" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/PD/FAPD01.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/PD/FAPD01.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/PD/FAPD01.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/QR/FAQR01.js" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/QR/FAQR01.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/QR/FAQR01.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/QR/FAQR01.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/QR/FAQR0101.js" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/QR/FAQR0101.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/QR/FAQR0101.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/QR/FAQR0101.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/SH/FASH01.js" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/SH/FASH01.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/SH/FASH01.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/SH/FASH01.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/ZN/FAZN01.js" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/ZN/FAZN01.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/ZN/FAZN01.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-fa/src/main/resources/META-INF/resources/FA/ZN/FAZN01.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/gm/controller/ACGMExportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/gm/controller/ACGMExportController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/gm/service/ServiceACGMPZ01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/gm/service/ServiceACGMPZ01.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/gm/service/ServiceACGMPZ0101.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/gm/service/ServiceACGMPZ0101.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/jk/util/RSAUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/jk/util/RSAUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/jk/util/RespResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/jk/util/RespResult.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/jk/util/SecurityUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/jk/util/SecurityUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/jk/util/SqlUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/jk/util/SqlUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/jk/util/StringUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/jk/util/StringUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/jk/util/UUIDUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/jk/util/UUIDUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/jk/util/XServiceUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/jk/util/XServiceUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/pe/service/ServiceACPE01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/pe/service/ServiceACPE01.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/pe/sql/ACPE01.xml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/pe/sql/ACPE01.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/sp/service/ServiceACSP01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/sp/service/ServiceACSP01.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/su/service/ServiceACSU01.java" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/su/service/ServiceACSU01.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/su/sql/ACSU01.xml" beforeDir="false" afterPath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/ac/su/sql/ACSU01.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iplat4j-maven-frame/src/main/java/com/baosight/wilp/au/fw/service/Client.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -192,7 +99,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "G:/桌面文件/代码相关文档/iplat_mzsrmyy",
+    "last_opened_file_path": "G:/桌面文件/代码相关文档/iplat_mzsrmyy/iplat4j-maven-frame/src",
     "list.type.of.created.stylesheet": "CSS",
     "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "模块",
@@ -208,11 +115,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="G:\桌面文件\代码相关文档\iplat_mzsrmyy\iplat4j-maven-frame\src" />
+      <recent name="G:\桌面文件\代码相关文档\iplat_mzsrmyy" />
       <recent name="G:\桌面文件\代码相关文档\iplat_mzsrmyy\iplat4j-maven-mp-rm\src" />
       <recent name="G:\桌面文件\代码相关文档\iplat_mzsrmyy\iplat4j-maven-si\src" />
-      <recent name="G:\桌面文件\代码相关文档\iplat_mzsrmyy" />
       <recent name="G:\桌面文件\代码相关文档\iplat_mzsrmyy\iplat4j-maven-ci\src\main\java\com\baosight\wilp\ci\kc\sql" />
-      <recent name="G:\桌面文件\代码相关文档\iplat_mzsrmyy\iplat4j-maven-si\src\main\java\com\baosight\wilp\si\rk\sql" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\休闲\桌面文件库\代码相关文档\iplat_mzsrmyy\iplat4j-maven-dm\src\main\java\com\baosight\wilp\dm\rz\sql" />
@@ -543,7 +450,7 @@
       <workItem from="1704161740113" duration="318000" />
       <workItem from="1704164083999" duration="563000" />
       <workItem from="1704166810051" duration="8577000" />
-      <workItem from="1704334309565" duration="253000" />
+      <workItem from="1704334309565" duration="1175000" />
     </task>
     <task id="LOCAL-00002" summary="1.0">
       <created>1692064121183</created>
@@ -825,7 +732,14 @@
       <option name="project" value="LOCAL" />
       <updated>1704187018046</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="V1.4.4">
+      <created>1704334892656</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1704334892656</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -959,7 +873,6 @@
       <path value="$PROJECT_DIR$" />
       <path value="$PROJECT_DIR$/mzsrmyy" />
     </ignored-roots>
-    <MESSAGE value="V1.1" />
     <MESSAGE value="V1.3.2" />
     <MESSAGE value="V1.3.4&#10;1.宿舍模块：修正退宿发送企业微信通知信息错发问题。&#10;2.物资档案：增加筛选仓库人员不可见进销存物资筛选。" />
     <MESSAGE value="V1.3.5&#10;订餐模块：&#10;1.患者作废和管理页面分别增加患者床位号字段。&#10;2.职工外送餐综合管理点击就查看订单详情&#10;物资档案：&#10;1.增加配置项页面进行物资数据隔离" />
@@ -984,18 +897,10 @@
     <MESSAGE value="V1.4.1&#10;物资档案增加排序功能" />
     <MESSAGE value="V1.4.2" />
     <MESSAGE value="V1.4.3" />
-    <option name="LAST_COMMIT_MESSAGE" value="V1.4.3" />
+    <MESSAGE value="V1.4.4" />
+    <option name="LAST_COMMIT_MESSAGE" value="V1.4.4" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/iplat4j-maven-df/src/main/java/com/baosight/wilp/df/sb/service/ServiceDFSB01.java</url>
-          <line>490</line>
-          <option name="timeStamp" value="125" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="com.baosight.iplat4j.core.ei.EiInfo" memberName="traceId" />

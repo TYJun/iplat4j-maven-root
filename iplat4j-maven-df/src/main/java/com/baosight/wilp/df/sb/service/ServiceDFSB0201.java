@@ -16,7 +16,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- *
+ * 
  * (特种设备检验编辑页面)
  * <p></p>
  * <p></p>
@@ -38,29 +38,29 @@ public class ServiceDFSB0201 extends ServiceBase {
 	//创建锁对象
 	private static final Lock lock = new ReentrantLock();
 	/**
-	 *
+	 * 
 	 * 页面初始化
 	 * @param info
 	 * @return
-	 * @see ServiceBase#initLoad(EiInfo)
+	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
 	 */
 	public EiInfo initLoad(EiInfo info) {
 		return super.initLoad(info);
 	}
-
+	
 	/**
-	 *
+	 * 
 	 * (根据类型生成我需要的工单号)
 	 * <p>1.通过调用生成头的方法生成工单头</p>
 	 * <p>2.通过拼接生成工单号</p>
 	 * <p>3.调用更新方法为下次生成做准备</p>
-	 * @Title: createTaskNo
+	 * @Title: createTaskNo 
 	 * @param ：type  taskNo
 	 * @return: String
 	 */
     @SuppressWarnings("unchecked")
-	public String createTaskNo() {
-
+	public String createTaskNo() {   
+        
 		lock.lock();
 	//	taskNo赋null值
 		String taskNo=null;
@@ -97,16 +97,16 @@ public class ServiceDFSB0201 extends ServiceBase {
         }
 
     }
-
+  
     /**
-     *
+     * 
      * (更新任务号，为下次生成新任务号做准备)
      *
-     * @Title: updateTaskNo
+     * @Title: updateTaskNo 
      * @param ：taskNo:工单号
      * type：类型
      * updateTime：更新时间
-     * @return
+     * @return 
      * @return: EiInfo
      */
    	public EiInfo updateTaskNo(EiInfo inInfo) {
@@ -126,13 +126,13 @@ public class ServiceDFSB0201 extends ServiceBase {
            outInfo.set("taskNo", taskNo);
            return outInfo;
    	}
-
+    
     /**
-     *
+     * 
      * (检验登记)
      * <p>1.获取前台传来的数据</p>
 	 * <p>2.修改的数据执行更新方法存数据库中</p>
-     * @Title: insert
+     * @Title: insert 
      * @param :info
 	 * id                   主键
 	 * machineId            设备id

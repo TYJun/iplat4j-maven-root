@@ -667,7 +667,7 @@ public class ServiceACSP01 extends ServiceBase {
 		 * 2.将正确的数据写入数据库
 		 */
 		// 如果 okList 不为空 则插入数据库
-		if (CollectionUtils.isNotEmpty(okList)) {
+		if (org.apache.commons.collections.CollectionUtils.isNotEmpty(okList)) {
 			// 批量导入okList
 			HashMap<String, Object> map1 = new HashMap<>();
 			map1.put("list", okList);
@@ -791,7 +791,7 @@ public class ServiceACSP01 extends ServiceBase {
 		 *  2.将正确的数据写入数据库
 		 */
 		// 如果 okList 不为空 则插入数据库
-		if (CollectionUtils.isNotEmpty(okList)) {
+		if (org.apache.commons.collections.CollectionUtils.isNotEmpty(okList)) {
 			// 批量导入okList
 			HashMap<String, Object> map1 = new HashMap<>();
 			map1.put("list", okList);

@@ -12,7 +12,7 @@ import java.util.Map;
  * <p>页面初始化</p>
  * <p>页面查询</p>
  * (特种设备检验预警页面)
- *
+ * 
  * @Title: ServiceDFSB03.java
  * @ClassName: ServiceDFSB03
  * @Package：com.baosight.wilp.df.sb.service
@@ -27,7 +27,7 @@ import java.util.Map;
  * <desc>   // 描述修改内容
  */
 public class ServiceDFSB03 extends ServiceBase{
-
+	
 	/**
 	 * 页面初始化
 	 * <p>1.调用本地查询方法</p>
@@ -57,7 +57,7 @@ public class ServiceDFSB03 extends ServiceBase{
 	 * thisCheckDate       本次检验时间
 	 * thisFinishDate      本次检验完工时间
 	 * nextCheckDate       下次检验时间
-	 * @see ServiceBase#initLoad(EiInfo)
+	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
 	 */
 	public EiInfo initLoad(EiInfo info) {
 		return query(info);
@@ -84,7 +84,7 @@ public class ServiceDFSB03 extends ServiceBase{
         	 * thisCheckDate       本次检验时间
         	 * thisFinishDate      本次检验完工时间
         	 * nextCheckDate       下次检验时间
-        	 * @see ServiceBase#query(EiInfo)
+        	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#query(com.baosight.iplat4j.core.ei.EiInfo)
         	 */
 	 @SuppressWarnings("deprecation")
 	public EiInfo query(EiInfo info) {
@@ -103,6 +103,6 @@ public class ServiceDFSB03 extends ServiceBase{
 				return info;
 			}
 			//返回
-			return CommonUtils.BuildOutEiInfo(list, count);
+			return CommonUtils.BuildOutEiInfo(list, count);		
 		}
 }

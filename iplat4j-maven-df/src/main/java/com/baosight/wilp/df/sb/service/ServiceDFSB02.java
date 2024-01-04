@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * 
  * 特种设备检验页面
  * <p>1.页面查询方法</p>
  * <p>2.查询设备信息</p>
@@ -48,7 +48,7 @@ public class ServiceDFSB02 extends ServiceBase {
 	 * recRevisor：	    修改人
 	 * recReviseTime:	修改时间
 	 * dataGroupCode:   账套
-	 * @see ServiceBase#initLoad(EiInfo)
+	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
 	 */
 	public EiInfo initLoad(EiInfo info) {
 		return query(info);
@@ -81,7 +81,7 @@ public class ServiceDFSB02 extends ServiceBase {
 	 * recRevisor：	    修改人
 	 * recReviseTime:	修改时间
 	 * dataGroupCode:   账套
-	 * @see ServiceBase#query(EiInfo)
+	 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#query(com.baosight.iplat4j.core.ei.EiInfo)
 	 */
 	public EiInfo query(EiInfo info) {
 	    //获取数据
@@ -101,18 +101,18 @@ public class ServiceDFSB02 extends ServiceBase {
 
 	}
 
-
+	
 	/**
-	 *
+	 * 
 	 * 查询设备信息
 	 * <p>1.查询设备信息</p>
-	 * @Title: queryMachineId
+	 * @Title: queryMachineId 
 	 * @param ：inInfo queryMachineId
 	 * machineId            设备id
 	 * innerMachineCode：	设备内部编码
 	 * machineCode:         设备编码
 	 * machineName:         设备名称
-	 * @return
+	 * @return 
 	 * @return: queryMachineId:设备分类id
 	 * machineId            设备id
 	 * innerMachineCode：	设备内部编码
@@ -133,15 +133,15 @@ public class ServiceDFSB02 extends ServiceBase {
 				return CommonUtils.BuildOutEiInfo(inInfo, "result", null, list, count);
 			} else {
 			    //返回
-				return inInfo;
+				return inInfo; 
 			}
 		}
-
+	    
 	    /**
-	     *
+	     * 
 	     * 查询通过设备分类id
 	     * <p>1.通过设备id查询分类</p>
-	     * @Title: queryByMachineId
+	     * @Title: queryByMachineId 
 	     * @param inInfo
 		 * machineId：设备id
 	     * machineName：设备名称
@@ -162,14 +162,14 @@ public class ServiceDFSB02 extends ServiceBase {
 			if(list != null && list.size() > 0){
 				return CommonUtils.BuildOutEiInfo(inInfo, "result", null, list, count);
 			} else {
-				return inInfo;
+				return inInfo; 
 			}
 		}
 	    /**
          * 删除工单
          * <p>1.通过id获取工单信息</p>
 		 * <p>2.删除工单信息</p>
-         * @Title: delete
+         * @Title: delete 
          * @param info list集合
          * id：id
          * @return: EiInfo
@@ -189,13 +189,13 @@ public class ServiceDFSB02 extends ServiceBase {
 			//返回
 			return info;
 		}
-
+		
 		/**
-		 *
+		 * 
 		 * 工单提交
 		 * <p>1.通过id获取工单信息</p>
 		 * <p>2.将新建工单状态改为待审核</p>
-		 * @Title: updateTiJiao
+		 * @Title: updateTiJiao 
 		 * @param： info
 		 * idList
 		 * id：id
@@ -205,7 +205,7 @@ public class ServiceDFSB02 extends ServiceBase {
 		    //获取集合
 			List<String> idList = (List<String>)info.get("idList");
 		/*	Map map = new HashMap<>();
-			map.put("taskNo", info.getAttr().get("idList").toString());*/
+			map.put("taskNo", info.getAttr().get("idList").toString());*/        
 			//查询数据
 			int rows = dao.update("DFSB02.tiJiao",idList);
 			if(rows == 0){
@@ -213,15 +213,15 @@ public class ServiceDFSB02 extends ServiceBase {
 					info.setStatus(-1);
 		  }
 			//返回
-		  return info;
+		  return info; 
 		 }
-
+		
 		/**
-		 *
+		 * 
 		 * 工单审核
 		 * <p>1.通过id获取工单信息</p>
 		 * <p>2.将待审核工单状态改为已经审核</p>
-		 * @Title: updateShenHe
+		 * @Title: updateShenHe 
 		 * @param: info
 		 * id：			主键
 		 * @return: EiInfo
@@ -236,6 +236,6 @@ public class ServiceDFSB02 extends ServiceBase {
 		   			info.setStatus(-1);
 		  }
 			 //返回
-		  return info;
+		  return info; 
 		 }
 }

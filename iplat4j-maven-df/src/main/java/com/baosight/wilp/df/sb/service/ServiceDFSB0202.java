@@ -27,7 +27,7 @@ import java.util.*;
  * <desc>   // 描述修改内容
  */
 public class ServiceDFSB0202 extends ServiceBase {
-
+        	
        /**
         * 页面初始化方法
         * @Title: initLoad
@@ -45,7 +45,7 @@ public class ServiceDFSB0202 extends ServiceBase {
         * thisCheckDate       本次检验时间
         * thisFinishDate      本次检验完工时间
         * nextCheckDate       下次检验时间
-        * @see ServiceBase#initLoad(EiInfo)
+        * @see com.baosight.iplat4j.core.service.impl.ServiceBase#initLoad(com.baosight.iplat4j.core.ei.EiInfo)
         */
 		public EiInfo initLoad(EiInfo info) {
 			//获取id
@@ -59,7 +59,7 @@ public class ServiceDFSB0202 extends ServiceBase {
         *
         * (设备检验页面编辑方法)
         * <p>1.获取设备信息，查询数据回显数据</p>
-        * @Title: edit
+        * @Title: edit 
         * @param info
 		* Id id
 		* workNo              工号
@@ -112,8 +112,8 @@ public class ServiceDFSB0202 extends ServiceBase {
 			return eiInfo;
 
 		}
-
-
+	
+	
 		/**
 		 * 更新设备检验工单方法
 		 * <p>1.通过id获取设备所有检验信息</p>
@@ -142,7 +142,7 @@ public class ServiceDFSB0202 extends ServiceBase {
 			 * thisCheckDate       本次检验时间
 			 * thisFinishDate      本次检验完工时间
 			 * nextCheckDate       下次检验时间
-		 * @see ServiceBase#update(EiInfo)
+		 * @see com.baosight.iplat4j.core.service.impl.ServiceBase#update(com.baosight.iplat4j.core.ei.EiInfo)
 		 */
 		public EiInfo update(EiInfo info) {
 			//创建map
