@@ -224,7 +224,7 @@
             fsd.goods_classify_code AS "goodsClassifyCode",
             fsd.goods_classify_name AS "goodsClassifyName",
             fs.scrapped_no AS "scrappedNo",
-            fs.apply_dept_name AS "applyDeptName",
+            fsd.dept_name AS "applyDeptName",
             fs.apply_person AS "applyPerson",
             fs.apply_time AS "applyTime",
             fs.apply_reason AS "applyReason",
@@ -264,7 +264,7 @@
             <isEqual prepend="and" property="scrapStatus" compareValue="applyDept">
                 fsd.scrap_detail_status IN ('00','01')
                 <isEqual prepend="and" property="role" compareValue="user">
-                    fs.apply_dept_name in (
+                    fsd.dept_name in (
                     <iterate property="lookDeptName" conjunction=",">
                         #lookDeptName[]#
                     </iterate>
@@ -274,7 +274,7 @@
             <isEqual prepend="and" property="scrapStatus" compareValue="apply">
                 fsd.scrap_detail_status IN ('05')
                 <isEqual prepend="and" property="role" compareValue="user">
-                    fs.apply_dept_name in (
+                    fsd.dept_name in (
                     <iterate property="lookDeptName" conjunction=",">
                         #lookDeptName[]#
                     </iterate>
@@ -290,7 +290,7 @@
                     </iterate>
                     )
                     OR
-                    fs.apply_dept_name in (
+                    fsd.dept_name in (
                     <iterate property="lookDeptName" conjunction=",">
                         #lookDeptName[]#
                     </iterate>
@@ -312,7 +312,7 @@
                     </iterate>
                     )
                     OR
-                    fs.apply_dept_name in (
+                    fsd.dept_name in (
                     <iterate property="lookDeptName" conjunction=",">
                         #lookDeptName[]#
                     </iterate>
@@ -334,7 +334,7 @@
                     </iterate>
                     )
                     OR
-                    fs.apply_dept_name in (
+                    fsd.dept_name in (
                     <iterate property="lookDeptName" conjunction=",">
                         #lookDeptName[]#
                     </iterate>
@@ -356,7 +356,7 @@
                     </iterate>
                     )
                     OR
-                    fs.apply_dept_name in (
+                    fsd.dept_name in (
                     <iterate property="lookDeptName" conjunction=",">
                         #lookDeptName[]#
                     </iterate>
@@ -367,7 +367,7 @@
                 fs.scrapped_no like concat ('%',trim(#scrappedNo#),'%')
             </isNotEmpty>
             <isNotEmpty prepend="and" property="applyDeptName">
-                fs.apply_dept_name like concat ('%',trim(#applyDeptName#),'%')
+                fsd.dept_name like concat ('%',trim(#applyDeptName#),'%')
             </isNotEmpty>
             <isNotEmpty prepend="and" property="applyReason">
                 fs.apply_reason like concat ('%',trim(#applyReason#),'%')
@@ -818,7 +818,7 @@
         INSERT INTO fa_scrap_detail(
             id,scrapped_no,faInfo_id,goods_num,goods_name,
             goods_classify_code,goods_classify_name,
-            dept_num,dept_name,model,use_date,
+            dept_num,dept_name,room,model,use_date,
             buy_cost,net_asset_value,used_years,scrap_detail_status
         ) VALUES
         <iterate conjunction=",">
@@ -826,7 +826,7 @@
             #faScrapDetailVOList[].id#,#faScrapDetailVOList[].scrappedNo#,#faScrapDetailVOList[].faInfoId#,
             #faScrapDetailVOList[].goodsNum#,#faScrapDetailVOList[].goodsName#,#faScrapDetailVOList[].goodsClassifyCode#,
             #faScrapDetailVOList[].goodsClassifyName#,#faScrapDetailVOList[].deptNum#,
-            #faScrapDetailVOList[].deptName#,#faScrapDetailVOList[].model#,#faScrapDetailVOList[].useDate#,
+            #faScrapDetailVOList[].deptName#,#faScrapDetailVOList[].room#,#faScrapDetailVOList[].model#,#faScrapDetailVOList[].useDate#,
             #faScrapDetailVOList[].buyCost#,#faScrapDetailVOList[].netAssetValue#,#faScrapDetailVOList[].usedYears#,
             #faScrapDetailVOList[].scrapDetailStatus#
         )

@@ -31,8 +31,18 @@
                 <EF:EFMultiSelect ename="inqu_status-0-deptName" cname="所属科室" colWidth="3" ratio="4:8" filter="contains">
                     <EF:EFOptions blockId="dept" textField="deptName" valueField="deptName"/>
                 </EF:EFMultiSelect>
-                <EF:EFInput ename="inqu_status-0-goodsClassifyCode" colWidth="3" ratio="4:8" cname="资产类别"/>
-                <EF:EFInput ename="inqu_status-0-goodsTypeCode" colWidth="3" ratio="4:8" cname="类组"/>
+                <EF:EFSelect ename="inqu_status-0-goodsClassifyCode" cname="资产类别"
+                             resultId="goodsClassifyCode" textField="goodsClassifyName" colWidth="3" ratio="4:8"
+                             valueField="goodsClassifyName" serviceName="FADA01" filter="contains"
+                             methodName="queryGoodsClassifyName" optionLabel="--请选择--" >
+                </EF:EFSelect>
+                <EF:EFSelect ename="inqu_status-0-goodsTypeCode" cname="类组"
+                             resultId="goodsTypeCode" textField="goodsTypeName" colWidth="3" ratio="4:8"
+                             valueField="goodsTypeName" serviceName="FADA01" filter="contains"
+                             methodName="queryGoodsGoodsTypeName" optionLabel="--请选择--" >
+                </EF:EFSelect>
+<%--                <EF:EFInput ename="inqu_status-0-goodsClassifyCode" colWidth="3" ratio="4:8" cname="资产类别"/>--%>
+<%--                <EF:EFInput ename="inqu_status-0-goodsTypeCode" colWidth="3" ratio="4:8" cname="类组"/>--%>
                 <EF:EFInput ename="inqu_status-0-spec" colWidth="3" ratio="4:8" cname="型号规格"/>
             </div>
         </div>
@@ -135,4 +145,5 @@
     </EF:EFTab>
     <!-- 固资资产选择弹出窗 -->
     <EF:EFWindow id="popData" url="" lazyload="true" width="100%" height="100%" title="资产上会管理" modal="true"/>
+    <script type="text/javascript" src="${ctx}/FA/common/js/fa-keydown.js"></script>
 </EF:EFPage>

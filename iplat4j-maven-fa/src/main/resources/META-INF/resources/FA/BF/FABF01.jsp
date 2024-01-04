@@ -35,8 +35,18 @@
 <%--                                valueField="id" textField="typeName" hasChildren="isLeaf" readonly="true"--%>
 <%--                                root="{id: 'root', typeName: '根节点'}" colWidth="3" ratio="4:8">--%>
 <%--                </EF:EFTreeInput>--%>
-                <EF:EFInput ename="inqu_status-0-goodsClassifyCode" colWidth="3" ratio="4:8" cname="资产类别"/>
-                <EF:EFInput ename="inqu_status-0-goodsTypeCode" colWidth="3" ratio="4:8" cname="类组"/>
+                <EF:EFSelect ename="inqu_status-0-goodsClassifyCode" cname="资产类别"
+                             resultId="goodsClassifyCode" textField="goodsClassifyName" colWidth="3" ratio="4:8"
+                             valueField="goodsClassifyName" serviceName="FADA01" filter="contains"
+                             methodName="queryGoodsClassifyName" optionLabel="--请选择--" >
+                </EF:EFSelect>
+                <EF:EFSelect ename="inqu_status-0-goodsTypeCode" cname="类组"
+                             resultId="goodsTypeCode" textField="goodsTypeName" colWidth="3" ratio="4:8"
+                             valueField="goodsTypeName" serviceName="FADA01" filter="contains"
+                             methodName="queryGoodsGoodsTypeName" optionLabel="--请选择--" >
+                </EF:EFSelect>
+<%--                <EF:EFInput ename="inqu_status-0-goodsClassifyCode" colWidth="3" ratio="4:8" cname="资产类别"/>--%>
+<%--                <EF:EFInput ename="inqu_status-0-goodsTypeCode" colWidth="3" ratio="4:8" cname="类组"/>--%>
                 <EF:EFSelect ename="inqu_status-0-fundingSourceNum" cname="资金来源" colWidth="3" ratio="4:8">
                     <EF:EFOption label="--请选择--" value=""/>
                     <EF:EFCodeOption codeName="wilp.mp.source"/>
@@ -306,4 +316,5 @@
     <EF:EFWindow id="popDataEdit" url="" lazyload="true" width="90%" height="90%" title="资产报废编辑" modal="true"/>
     <script type="text/javascript" src="${ctx}/FA/common/js/si-yxSign.js"></script>
     <script type="text/javascript" src="${ctx}/FA/BF/FABF0101.js"></script>
+    <script type="text/javascript" src="${ctx}/FA/common/js/fa-keydown.js"></script>
 </EF:EFPage>

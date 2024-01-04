@@ -442,7 +442,7 @@ public class ServiceFADB0102 extends ServiceBase {
                     put("installLocation", applyInfo.get("confirmLocationNum_textField"));
                     put("statusCode", "020");
                 }});
-                // 更新具体位置和出库备注
+                // 更新具体位置和备注
                 for (int i = 0; i < useFaInfo.size(); i++) {
                     dao.update("FADB01.updateRoomAndOutremark",useFaInfo.get(i));
                 }

@@ -24,8 +24,18 @@
 						   endName="inqu_status-0-useDateE" endCname="使用日期止"
 						   ratio="3:3" startRatio="4:8" endRatio="4:8" readonly="true"/>
 			<EF:EFInput ename="inqu_status-0-useYear" colWidth="3" ratio="4:8" cname="使用年限"/>
-			<EF:EFInput ename="inqu_status-0-goodsClassifyCode" colWidth="3" ratio="4:8" cname="资产类别"/>
-			<EF:EFInput ename="inqu_status-0-goodsTypeCode" colWidth="3" ratio="4:8" cname="类组"/>
+			<EF:EFSelect ename="inqu_status-0-goodsClassifyCode" cname="资产类别"
+						 resultId="goodsClassifyCode" textField="goodsClassifyName" colWidth="3" ratio="4:8"
+						 valueField="goodsClassifyName" serviceName="FADA01" filter="contains"
+						 methodName="queryGoodsClassifyName" optionLabel="--请选择--" >
+			</EF:EFSelect>
+			<EF:EFSelect ename="inqu_status-0-goodsTypeCode" cname="类组"
+						 resultId="goodsTypeCode" textField="goodsTypeName" colWidth="3" ratio="4:8"
+						 valueField="goodsTypeName" serviceName="FADA01" filter="contains"
+						 methodName="queryGoodsGoodsTypeName" optionLabel="--请选择--" >
+			</EF:EFSelect>
+<%--			<EF:EFInput ename="inqu_status-0-goodsClassifyCode" colWidth="3" ratio="4:8" cname="资产类别"/>--%>
+<%--			<EF:EFInput ename="inqu_status-0-goodsTypeCode" colWidth="3" ratio="4:8" cname="类组"/>--%>
 <%--			<EF:EFTreeInput ename="inqu_status-0-goodsClassifyCode" cname="资产类别" serviceName="FALB01" methodName="queryFaTypeTree"--%>
 <%--							valueField="id" textField="typeName" hasChildren="isLeaf" readonly="true"--%>
 <%--							root="{id: 'root', typeName: '根节点'}" colWidth="3" ratio="4:8">--%>
@@ -53,7 +63,9 @@
 <%--				<EF:EFOption label="是"  value="1"/>--%>
 <%--				<EF:EFOption label="否"  value="0"/>--%>
 <%--			</EF:EFSelect>--%>
-			<EF:EFInput ename="inqu_status-0-rfidCode" colWidth="3" ratio="4:8" cname="RFID"/>
+			<EF:EFInput ename="inqu_status-0-spec" colWidth="3" ratio="4:8" cname="规格"/>
+			<EF:EFInput ename="inqu_status-0-outRemark" colWidth="3" ratio="4:8" cname="出库备注"/>
+			<%--<EF:EFInput ename="inqu_status-0-rfidCode" colWidth="3" ratio="4:8" cname="RFID"/>--%>
 		</div>
 		<div class="button-region" id="buttonDiv">
 			<EF:EFButton cname="查询" ename="QUERY" layout="3"></EF:EFButton>
@@ -72,6 +84,7 @@
 				<EF:EFColumn ename="buyCost" cname="资产原值"   align="center" width="130" sort="true"/>
 				<EF:EFColumn ename="netAssetValue" cname="资产净值"  align="center" width="130" sort="true"/>
 				<EF:EFColumn ename="useDate" cname="使用日期"   align="center" width="130" sort="true"/>
+				<EF:EFColumn ename="installLocation" cname="存放位置"   align="center" width="150" sort="true"/>
 				<EF:EFColumn ename="room" cname="具体位置"   align="center" width="150" sort="true"/>
 				<EF:EFColumn ename="remark" cname="备注"  align="center" width="150" sort="true"/>
 				<EF:EFColumn ename="outRemark" cname="出库备注"  align="center" width="150" sort="true"/>
@@ -89,7 +102,7 @@
 				<EF:EFColumn ename="floor" cname="层"   align="center" width="200" hidden="true"/>
 				<EF:EFColumn ename="installLocation" cname="地点"   align="center" width="200" hidden="true"/>
 				<EF:EFColumn ename="operationType" cname="出库类型" align="center" width="200"/>
-				<EF:EFColumn ename="rfidCode" cname="RFID"  align="center" width="200"/>
+				<EF:EFColumn ename="rfidCode" cname="RFID"  align="center" width="200" hidden="true"/>
 			</EF:EFGrid>
 			<EF:EFWindow id="popData" url="" lazyload="true" width="100%" height="100%" title="资产卡片录入/编辑" modal="true" />
 			<EF:EFWindow id="qrCode" url="" lazyload="true" width="15%" height="8%" title="资产卡片录入/编辑" modal="true" />
@@ -127,10 +140,11 @@
 				<EF:EFColumn ename="statusCode" cname="资产状态"   align="center" sort="true"/>
 				<EF:EFColumn ename="installLocation" cname="地点"  align="center" hidden="true"/>
 				<EF:EFColumn ename="brandDesc" cname="序列号"  align="center" hidden="true"/>
-				<EF:EFColumn ename="rfidCode" cname="RFID"  align="center" sort="true"/>
+				<EF:EFColumn ename="rfidCode" cname="RFID"  align="center" sort="true" hidden="true"/>
 				<EF:EFColumn ename="useDate" cname="启用日期"   align="center" hidden="true"/>
 			</EF:EFGrid>
 		</div>
 	</EF:EFTab>
 	<script type="text/javascript" src="../FA/common/js/axios.min.js"></script>
+	<script type="text/javascript" src="${ctx}/FA/common/js/fa-keydown.js"></script>
 </EF:EFPage>

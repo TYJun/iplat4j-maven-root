@@ -1,4 +1,7 @@
 $(function () {
+    /**回车键查询**/
+    keydown("inqu", "QUERY");
+
     $("#QUERY").on("click", function (e) {
         resultAGrid.dataSource.page(1);
         // resultBGrid.dataSource.page(1);
@@ -26,7 +29,8 @@ $(function () {
     IPLATUI.EFGrid = {
         "resultA": {
             pageable: {
-                pageSize: 15
+                pageSize: 500,
+                pageSizes: [50, 100, 500, 1000]
             },
             onCellClick: function (e) {
                 console.log(e)

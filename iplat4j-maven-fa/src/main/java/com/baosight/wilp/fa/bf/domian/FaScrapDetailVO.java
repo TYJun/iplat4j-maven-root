@@ -38,6 +38,7 @@ public class FaScrapDetailVO extends DaoEPBase {
 	private String goodsClassifyName;
 	private String deptNum;        /* 科室编码*/
 	private String deptName;        /* 科室名称*/
+	private String room;
 	private String model;        /* 规格型号*/
 	private Date useDate;    /* 启用日期*/
 	private BigDecimal buyCost = new BigDecimal("0");        /* 资产原值*/
@@ -86,6 +87,10 @@ public class FaScrapDetailVO extends DaoEPBase {
 
 		eiColumn = new EiColumn("deptName");
 		eiColumn.setDescName("科室名称");
+		eiMetadata.addMeta(eiColumn);
+
+		eiColumn = new EiColumn("room");
+		eiColumn.setDescName("具体位置");
 		eiMetadata.addMeta(eiColumn);
 
 		eiColumn = new EiColumn("model");
@@ -233,6 +238,14 @@ public class FaScrapDetailVO extends DaoEPBase {
 		this.deptName = deptName;
 	}
 
+	public String getRoom() {
+		return room;
+	}
+
+	public void setRoom(String room) {
+		this.room = room;
+	}
+
 	/**
 	 * get the model - 规格型号
 	 * @return the model
@@ -330,6 +343,7 @@ public class FaScrapDetailVO extends DaoEPBase {
 		setGoodsClassifyName(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("goodsClassifyName")), goodsClassifyName));
 		setDeptNum(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("deptNum")), deptNum));
 		setDeptName(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("deptName")), deptName));
+		setRoom(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("room")), room));
 		setModel(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("model")), model));
 		setUseDate(OneSelfUtils.defaultDate(map.get("useDate"), null));
 		setBuyCost(NumberUtils.toBigDecimal(StringUtils.toString(map.get("buyCost")), buyCost));
@@ -352,6 +366,7 @@ public class FaScrapDetailVO extends DaoEPBase {
 		map.put("goodsClassifyName", StringUtils.toString(goodsClassifyName, eiMetadata.getMeta("goodsClassifyName")));
 		map.put("deptNum", StringUtils.toString(deptNum, eiMetadata.getMeta("deptNum")));
 		map.put("deptName", StringUtils.toString(deptName, eiMetadata.getMeta("deptName")));
+		map.put("room",StringUtils.toString(room, eiMetadata.getMeta("deptName")));
 		map.put("model", StringUtils.toString(model, eiMetadata.getMeta("model")));
 		map.put("useDate", StringUtils.toString(useDate, eiMetadata.getMeta("useDate")));
 		map.put("buyCost", StringUtils.toString(buyCost, eiMetadata.getMeta("buyCost")));

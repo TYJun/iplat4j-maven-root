@@ -15,7 +15,7 @@
 				<EF:EFInput ename="info-0-turnDeptName" cname="科室名称" colWidth="5" readonly="true" type="hidden"/>
 				<EF:EFInput ename="info-0-deptNum" cname="接收科室编码" colWidth="5" readonly="true" type="hidden"/>
 				<EF:EFAutoComplete ename="info-0-deptName" cname="接收科室" colWidth="5" ratio="4:8"
-				noDataTemplate="没有数据" filter="contains" serviceName="FADA01" queryMethod="queryDept"
+				noDataTemplate="没有数据" filter="contains" serviceName="FADA01" queryMethod="queryFaInfoDept"
 				resultId="dept" dataField="deptName" required="true"/>
 <%--				<EF:EFPopupInput ename="info-0-confirmDeptNum" cname="接收科室"  colWidth="5" required="true"--%>
 <%--								 popupTitle="科室选择" readOnly="true"--%>
@@ -133,7 +133,7 @@
 			<EF:EFColumn ename="useYears" cname="使用年限"   align="center" width="200" enable="false"/>
 			<%--			<EF:EFColumn ename="deviceName" cname="设备名称"   align="center" />--%>
 			<EF:EFColumn ename="recCreateName" cname="创建人"   align="center" width="200" enable="false"/>
-			<EF:EFColumn ename="rfidCode" cname="RFID"  align="center" width="200" enable="false"/>
+			<EF:EFColumn ename="rfidCode" cname="RFID"  align="center" width="200" enable="false" hidden="true"/>
 		</EF:EFGrid>
 	</EF:EFRegion>
 	<div id="confirmLocationNum" style="display: none; height:550px; width: 850px">
@@ -144,7 +144,6 @@
 				<EF:EFColumn ename="floor" cname="层" enable="false"/>
 				<EF:EFColumn ename="spotName" cname="地点" enable="false"/>
 			</EF:EFGrid>
-
 		</EF:EFRegion>
 	</div>
 	<EF:EFWindow id="popData" url="" lazyload="true" width="80%" height="80%" title="资产档案信息" modal="true" />

@@ -783,7 +783,7 @@ public class ServiceFAZJ01 extends ServiceBase {
 	}
 
 	/**
-	 * 资产月折旧
+	 * 固定资产月折旧定时任务
 	 *
 	 * @param info
 	 * @return com.baosight.iplat4j.core.ei.EiInfo
@@ -797,7 +797,7 @@ public class ServiceFAZJ01 extends ServiceBase {
 		 * 通过stream流过滤出2组数据：是最后一批，非最后一批
 		 * 最后一批直接进行折旧
 		 */
-//		Date startDate = new Date(new Date().getTime() + (long)30 * 24 * 60 * 60 * 1000);
+//		Date startDate = new Date(new Date().getTime() - (long)30 * 24 * 60 * 60 * 1000);
 		Date startDate = new Date();
 		Map<String, String> initLoadMap = new HashMap(){{
 			put("depreciationMonth",yyyyMM.format(startDate));
@@ -1033,6 +1033,9 @@ public class ServiceFAZJ01 extends ServiceBase {
 		if (CollectionUtils.isNotEmpty(faDepreciationDTOList)) {
 			OneSelfUtils.batchInsert("FAZJ01.completeDEPNEW", faDepreciationDTOList);
 			OneSelfUtils.batchInsert("FAZJ01.throwDEPNEW", faDepreciationDTOList);
+			dao.insert("FAZJ01.insertMonthlyFaInfoNew",new HashMap<>());
+			// 保存折旧记录和月度记录有差距弃用
+//			OneSelfUtils.batchInsert("FAZJ01.insertMonthlyFaInfo",faInfoList);
 			for (FaDepreciationDTO faDepreciationDTO : faDepreciationDTOList) {
 				dao.update("FAZJ01.updateDEPNEW", faDepreciationDTO);
 			}

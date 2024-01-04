@@ -1,5 +1,5 @@
 /**
- *
+ * 
  */
 $(function() {
 	$("#QUERY").on("click", function (e) {
@@ -14,44 +14,6 @@ $(function() {
 	IPLATUI.EFGrid = {
 			"result": {
 				loadComplete: function (grid) {
-					//上移
-					$("#ODERUP").on("click", function (e) {
-						var id ;
-						eiInfo = new EiInfo();
-						var rows = resultGrid.getCheckedRows();
-						if(rows.length > 0){
-							id = rows[0].id;
-						}else {
-							NotificationUtil("请选择要上移的设备", "error");
-							return;
-						}
-						eiInfo.set("sort","UP");
-						eiInfo.set("id",id);
-						EiCommunicator.send("DFSB01", "sortByOrderNum", eiInfo, {
-							onSuccess : function(ei) {
-
-							}
-						})
-					});
-					//下移
-					$("#ODERDOWN").on("click", function (e) {
-						var id ;
-						eiInfo = new EiInfo();
-						var rows = resultGrid.getCheckedRows();
-						if(rows.length > 0){
-							id = rows[0].id;
-						}else {
-							NotificationUtil("请选择要下移的设备", "error");
-							return;
-						}
-						eiInfo.set("id",id);
-						eiInfo.set("sort","DOWN");
-						EiCommunicator.send("DFSB01", "sortByOrderNum", eiInfo, {
-							onSuccess : function(ei) {
-
-							}
-						})
-					});
 					// 新增
 					$("#READD").on("click", function (e) {
 						var url = IPLATUI.CONTEXT_PATH + "/web/DFSB0101";
@@ -68,9 +30,9 @@ $(function() {
 					// 编辑
 					$("#EDIT").on("click", function (e) {
 						var id;
-						var rows = resultGrid.getCheckedRows();
+						var rows = resultGrid.getCheckedRows();	
 						for (var i = 0; i < rows.length; i++) {
-							if(rows[i].statusCode == "1"){
+							if(rows[i].statusCode == "1"){            	  
 								NotificationUtil("不能编辑已启用的设备", "error");
 								return;
 							}
@@ -98,7 +60,7 @@ $(function() {
 						if(checkRows.length < 1){
 							NotificationUtil("请选择要删除的行", "error");
 							return;
-						}
+						}				
 						var arr=[];
 						for (var i = 0; i < checkRows.length; i++) {
 							if(checkRows[i].statusCode == "1"){
@@ -150,7 +112,7 @@ $(function() {
 						}
 						var idList = [];
 						for (var i = 0; i < checkRows.length; i++) {
-							if(checkRows[i].statusCode == "1"){
+							if(checkRows[i].statusCode == "1"){            	  
 								NotificationUtil("设备已经启用", "error");
 								return;
 							}
@@ -161,8 +123,8 @@ $(function() {
 						inInfo.set("idList",idList);//将id放到EiInfo后台
 						EiCommunicator.send("DFSB01", "updateStart", inInfo, {
 
-							onSuccess : function(ei) {
-								NotificationUtil("启用成功", "success");
+							onSuccess : function(ei) {	                  
+								NotificationUtil("启用成功", "success");	                   
 								resultGrid.dataSource.page(1);//刷新页面
 							}
 						});
@@ -175,7 +137,7 @@ $(function() {
 						if(checkRows.length<1){
 							NotificationUtil("请选择要确认的行", "error");
 							return;
-						}
+						}                 
 
 						var idList = [];
 						for (var i = 0; i < checkRows.length; i++) {
@@ -201,7 +163,7 @@ $(function() {
 						if(checkRows.length < 1){
 							NotificationUtil("请选择要确认的行", "error");
 							return;
-						}
+						}		
 						var row = resultGrid.getCheckedRows()[0];
 						var id = row.id;
 						var fixedPlace = row.machineName;
@@ -247,6 +209,7 @@ $(function() {
 						// 打开生成弹窗
 						popData2Window.open().center();
 					}
+
 
 				}
 			}

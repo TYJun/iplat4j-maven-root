@@ -1,4 +1,4 @@
-package com.baosight.wilp.ac.we.utils;
+package com.baosight.wilp.ac.jk.util;
 
 import com.baosight.iplat4j.core.ei.EiConstant;
 import com.baosight.iplat4j.core.ei.EiInfo;
@@ -26,7 +26,7 @@ import java.util.Set;
  */
 public class XServiceUtil {
 
-	
+
 	/**
 	 * call:调用方法
 	 * @param  serviceId:服务名
@@ -39,7 +39,7 @@ public class XServiceUtil {
 		Set<String> keySet = paramMap.keySet();
 		//处理参数
 		for (String key : keySet) {
-			ei.set(key, paramMap.get(key)); 
+			ei.set(key, paramMap.get(key));
 		}
 		//调用服务接口
 		return XServiceManager.call(ei);

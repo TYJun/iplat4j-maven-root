@@ -21,7 +21,7 @@
 			</isNotEmpty>
 		</dynamic>
 		GROUP BY ft.id
-		HAVING COUNT(ft1.id) > 0
+		/*HAVING COUNT(ft1.id) > 0*/
 		ORDER BY ft.type_code
 	</select>
 
@@ -100,6 +100,13 @@
 			</isNotEmpty>
 			<isNotEmpty prepend="and" property="remark">
 				t1.`remark` like concat ('%',#remark#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="treeMenuList">
+				t1.parent_id IN (
+					<iterate conjunction="," property="treeMenuList">
+						#treeMenuList[]#
+					</iterate>
+				)
 			</isNotEmpty>
 		</dynamic>
 		order by t1.`sort_no`
@@ -230,5 +237,14 @@
 			type_code like concat('%', #value#, '%')
 		order by
 			type_code desc
+	</select>
+
+	<select id="treeMenu" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+		select
+			id
+		from
+			fa_type
+		where
+			parent_id = #parentId#
 	</select>
 </sqlMap>

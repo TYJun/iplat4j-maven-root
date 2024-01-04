@@ -162,7 +162,7 @@ public class ServiceFADA0101 extends ServiceBase {
                 if ("B".equals(goodsCategoryCode.substring(0,1))){
                     goodsCategoryCode = goodsCategoryCode.replace("B","A08");
                     goodsClassifyCode = goodsClassifyCode.replace("B","A08");
-                    goodsTypeCode = goodsTypeCode.replace("B","A08");
+                    goodsTypeCode = goodsTypeCode.replace("B","A08000000");
                 } else {
                     goodsCategoryCode = "A" + goodsCategoryCode.substring(1);
                     goodsClassifyCode = "A" + goodsClassifyCode.substring(1);

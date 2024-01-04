@@ -4,8 +4,9 @@ import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 物资档案配置页面

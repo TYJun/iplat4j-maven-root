@@ -81,7 +81,7 @@ public class ServiceFABG01 extends ServiceBase {
 		// 2.构建分页参数
 		Map<String, Object> pageMap = new HashMap<>(8);
 		pageMap.put("offset", 0);
-		pageMap.put("limit", 15);
+		pageMap.put("limit", 500);
 		if (info.getBlocks().size() > 0) {
 			EiBlock eiBlock = (EiBlock) info.getBlocks().get("result");
 			pageMap = eiBlock.getAttr();
@@ -173,6 +173,11 @@ public class ServiceFABG01 extends ServiceBase {
 		return outInfo;
 	}
 
+	/**
+	 * 变更记录
+	 * @param info
+	 * @return
+	 */
 	public EiInfo changeRecord(EiInfo info){
 		// 1.权限判断
 //		String deptName = OneSelfUtils.specifyDept();

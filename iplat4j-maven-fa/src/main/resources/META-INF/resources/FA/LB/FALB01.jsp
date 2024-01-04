@@ -66,4 +66,5 @@
             </EF:EFWindow>
         </div>
     </div>
+    <script type="text/javascript" src="${ctx}/FA/common/js/fa-keydown.js"></script>
 </EF:EFPage>

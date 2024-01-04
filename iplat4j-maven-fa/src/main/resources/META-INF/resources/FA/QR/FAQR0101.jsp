@@ -17,14 +17,9 @@
 			<EF:EFInput ename="info-0-purchaseVouch" cname="采购凭证"/>
 			<EF:EFInput ename="info-0-purchaseDeptNum" cname="科室编码" type="hidden"/>
 			<EF:EFInput ename="info-0-purchaseDeptName" cname="科室名称" type="hidden"/>
-			<EF:EFAutoComplete ename="info-0-purchaseDept" cname="采购科室" noDataTemplate="没有数据"
+			<EF:EFAutoComplete ename="info-0-purchaseDept" cname="<span class='i-input-required'>*</span>采购科室" noDataTemplate="没有数据"
 			   filter="contains" serviceName="FADA01" queryMethod="queryDept"
 			   resultId="dept" dataField="deptName" required="true"/>
-<%--			<EF:EFPopupInput ename="info-0-purchaseDept" cname="采购科室"--%>
-<%--							 popupTitle="科室选择" readOnly="true"--%>
-<%--							 popupType="ServiceGrid" serviceName="FADA01" methodName="queryDept" resultId="dept"--%>
-<%--							 valueField="deptNum" textField="deptName"--%>
-<%--							 columnEnames="deptNum,deptName" columnCnames="科室编码,科室名称" />--%>
 			<EF:EFInput ename="info-0-purchaseStaffName" cname="采购人"/>
 			<EF:EFInput ename="info-0-matNum" cname="物资编码"/>
 			<EF:EFInput ename="info-0-matName" cname="物资名称"/>
@@ -32,7 +27,8 @@
 			<EF:EFInput ename="info-0-matTypeName" cname="物资分类"/>
 			<EF:EFInput ename="info-0-matSpec" cname="物资规格"/>
 			<EF:EFInput ename="info-0-model" cname="物资型号"/>
-			<EF:EFSelect ename="info-0-unitNum"  cname="计量单位" optionLabel="--请选择--">
+			<EF:EFSelect ename="info-0-unitNum"  cname="计量单位">
+				<EF:EFOption label="--请选择--" value=""/>
 				<EF:EFCodeOption codeName="wilp.ac.gm.unit" textField="label" valueField="value"/>
 			</EF:EFSelect>
 			<EF:EFPopupInput ename="info-0-surpNum" cname="供应商" popupTitle="供应商选择" readonly="true"
@@ -47,10 +43,6 @@
 		<EF:EFRegion title="资产信息">
 			<EF:EFInput ename="info-0-goodsNum" cname="资产编号" readOnly="true" type="hidden"/>
 			<EF:EFInput ename="info-0-goodsName" cname="资产名称" required="true"/>
-<%--			<EF:EFPopupInput ename="info-0-goodsTypeCode" cname="资产类别" required="true" readOnly="true"--%>
-<%--							 containerId="ef_popup_grid" popupWidth="1200" popupHeight="600" popupTitle="资产类别选择"--%>
-<%--							 resizable="true" center="true">--%>
-<%--			</EF:EFPopupInput>--%>
 			<EF:EFInput ename="info-0-parentId" cname="父节点" readonly="true" type="hidden"/>
 			<EF:EFInput ename="info-0-goodsClassifyName" cname="资产类别" readonly="true"/>
 			<EF:EFInput ename="info-0-goodsClassifyCode" cname="资产类别编码"  required="true" type="hidden"/>
@@ -79,7 +71,7 @@
 							</div>
 						</EF:EFRegion>
 						<EF:EFRegion id="result" title="资产类别信息">
-							<EF:EFGrid blockId="result" autoDraw="no" readonly="true" checkMode="single,row" rowNo="true" serviceName="FALB01" queryMethod="query">
+							<EF:EFGrid blockId="result" autoDraw="no" readonly="true" checkMode="single,row" rowNo="true" serviceName="FAQR0101" queryMethod="query" height="460px">
 								<EF:EFColumn ename="faTypeId" cname="资产类别Id" width="100" enable="false" align="center" hidden="true"/>
 								<EF:EFColumn ename="typeCode" cname="类别编码" width="100" enable="false" align="center"/>
 								<EF:EFColumn ename="typeName" cname="类别名称" width="100" enable="false" align="center"/>
@@ -95,14 +87,16 @@
 					</div>
 				</EF:EFPage>
 			</div>
-			<EF:EFSelect ename="info-0-assetGetWayCode" cname="获取方式" optionLabel="--请选择--">
+			<EF:EFSelect ename="info-0-assetGetWayCode" cname="获取方式">
+				<EF:EFOption label="--请选择--" value=""/>
 				<EF:EFCodeOption codeName="wilp.fa.assetGetWayCode"/>
 			</EF:EFSelect>
-			<EF:EFSelect ename="info-0-assetUseCode" cname="资产用途" optionLabel="--请选择--">
+			<EF:EFSelect ename="info-0-assetUseCode" cname="资产用途">
+				<EF:EFOption label="--请选择--" value=""/>
 				<EF:EFCodeOption codeName="wilp.fa.assetUseCode"/>
 			</EF:EFSelect>
 			<EF:EFPopupInput ename="info-0-goodsCategoryCode" cname="资产末级" required="true" readOnly="true"
-							 containerId="ef_popup_grid" popupWidth="1200" popupHeight="600" popupTitle="资产末级选择"
+							 containerId="ef_popup_grid" popupWidth="1400" popupHeight="600" popupTitle="资产末级选择"
 							 resizable="true" center="true">
 			</EF:EFPopupInput>
 			<EF:EFInput ename="info-0-manufacturer" cname="制造厂商" type="hidden"/>
@@ -115,9 +109,6 @@
 			<EF:EFInput ename="info-0-confirmDeptName" cname="所属科室" readonly="true" type="hidden"/>
 			<EF:EFInput ename="info-0-confirmDeptNum" cname="所属科室" readonly="true" type="hidden"/>
 			<EF:EFInput ename="info-0-deptName" cname="所属科室" readonly="true"/>
-<%--			<EF:EFAutoComplete ename="info-0-deptName" cname="所属科室" ratio="4:8"  required="true"--%>
-<%--							   noDataTemplate="没有数据" filter="contains" serviceName="FADA01" queryMethod="queryDept"--%>
-<%--							   resultId="dept" dataField="deptName"/>--%>
 			<EF:EFPopupInput ename="info-0-confirmLocationNum" cname="存放位置" readonly="true" popupWidth = "550"
 							 popupType="ServiceGrid" popupTitle="存放位置选择" serviceName="FADB0101" methodName="querySpot" resultId="spot" autofit="true"
 							 valueField="spotNum" textField="spotName" backFillFieldIds="spotName" backFillColumnIds="spotName" columnEnames="building,floor,spotName" columnCnames="楼,层,地点"/>
@@ -165,4 +156,11 @@
 		</div>
 	</EF:EFRegion>
 	<EF:EFWindow id="qrCode" url="" lazyload="true" width="15%" height="8%" title="加载中" modal="true" />
+	<script type="text/javascript" src="${ctx}/FA/common/js/fa-keydown.js"></script>
 </EF:EFPage>
+<style>
+	label#info-0-purchaseDept.col-xs-4 control-label{
+		color: red;
+		content: "*";
+	}
+</style>

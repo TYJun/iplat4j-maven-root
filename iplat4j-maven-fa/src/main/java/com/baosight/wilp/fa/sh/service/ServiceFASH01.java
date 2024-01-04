@@ -1,7 +1,6 @@
 package com.baosight.wilp.fa.sh.service;
 
 import com.baosight.iplat4j.core.ei.EiBlock;
-import com.baosight.iplat4j.core.ei.EiBlockMeta;
 import com.baosight.iplat4j.core.ei.EiInfo;
 import com.baosight.iplat4j.core.service.impl.ServiceBase;
 import com.baosight.iplat4j.core.util.StringUtils;
@@ -25,7 +24,7 @@ public class ServiceFASH01 extends ServiceBase {
     // 报废提交资产
     public EiInfo confirmedQuery(EiInfo info) {
         Integer offset = 0;
-        Integer limit = 100;
+        Integer limit = 500;
         EiBlock resultA = info.getBlock("resultA");
         Map<String, Object> attr = new HashMap<>();
         if (resultA != null) {
@@ -35,7 +34,7 @@ public class ServiceFASH01 extends ServiceBase {
         EiBlock eiBlock = info.getBlock("inqu_status");
         if (eiBlock != null) {
             map = eiBlock.getRow(0);
-            map.put("orderBy",attr.get("orderBy"));
+            map.put("orderBy", attr.get("orderBy"));
             String deptNameSplit = (String) map.get("deptName");
             if (StringUtils.isNotEmpty(deptNameSplit)) {
                 String[] split = deptNameSplit.split(",");
@@ -52,7 +51,7 @@ public class ServiceFASH01 extends ServiceBase {
         }
         map.put("statusCode", "040");
         List<Map<String, String>> list = dao.query("FASH01.query", map, offset, limit);
-        int count = list.size();
+        int count = dao.count("FASH01.query", map);
         attr.put("count", count);
         EiBlock block = new EiBlock("resultA");
         block.setRows(list);
@@ -70,7 +69,7 @@ public class ServiceFASH01 extends ServiceBase {
     // 上会讨论资产
     public EiInfo discussQuery(EiInfo info) {
         Integer offset = 0;
-        Integer limit = 100;
+        Integer limit = 500;
         Map attr = info.getBlock("resultB").getAttr();
         Map<String, Object> map = new HashMap<>();
         EiBlock eiBlock = info.getBlock("inqu_status");
@@ -95,7 +94,7 @@ public class ServiceFASH01 extends ServiceBase {
     // 预报废资产
     public EiInfo wastingQuery(EiInfo info) {
         Integer offset = 0;
-        Integer limit = 100;
+        Integer limit = 500;
         Map attr = info.getBlock("resultC").getAttr();
         Map<String, Object> map = new HashMap<>();
         EiBlock eiBlock = info.getBlock("inqu_status");
@@ -120,7 +119,7 @@ public class ServiceFASH01 extends ServiceBase {
     // 已报废资产
     public EiInfo wastedQuery(EiInfo info) {
         Integer offset = 0;
-        Integer limit = 100;
+        Integer limit = 500;
         Map attr = info.getBlock("resultD").getAttr();
         Map<String, Object> map = new HashMap<>();
         EiBlock eiBlock = info.getBlock("inqu_status");
@@ -154,7 +153,7 @@ public class ServiceFASH01 extends ServiceBase {
     // 完结上会单
     public EiInfo FinsihQuery(EiInfo info) {
         Integer offset = 0;
-        Integer limit = 100;
+        Integer limit = 500;
         Map attr = info.getBlock("resultE").getAttr();
         Map<String, Object> map = new HashMap<>();
         EiBlock eiBlock = info.getBlock("inqu_status");

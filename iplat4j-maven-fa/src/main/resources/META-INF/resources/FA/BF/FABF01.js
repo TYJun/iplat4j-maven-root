@@ -1,4 +1,7 @@
 $(function () {
+    /**回车键查询**/
+    keydown("inqu", "QUERY");
+
     $("#QUERY").on("click", function (e) {
         resultAGrid.dataSource.page(1);
         resultGGrid.dataSource.page(1);
@@ -44,7 +47,8 @@ $(function () {
     IPLATUI.EFGrid = {
         "resultA": {
             pageable: {
-                pageSize: 15
+                pageSize: 500,
+                pageSizes: [50, 100, 500, 1000]
             },
             onCellClick: function (e) {
                 if (e.field === "goodsNum") {
@@ -105,7 +109,8 @@ $(function () {
         // 科室报废审批
         "resultG": {
             pageable: {
-                pageSize: 15
+                pageSize: 500,
+                pageSizes: [50, 100, 500, 1000]
             },
             onCellClick: function (e) {
                 if (e.field === "scrappedNo") {
@@ -197,7 +202,8 @@ $(function () {
         },
         "resultB": {
             pageable: {
-                pageSize: 15
+                pageSize: 500,
+                pageSizes: [50, 100, 500, 1000]
             },
             onCellClick: function (e) {
                 if (e.field === "scrappedNo") {
@@ -293,7 +299,8 @@ $(function () {
         },
         "resultC": {
             pageable: {
-                pageSize: 15
+                pageSize: 500,
+                pageSizes: [50, 100, 500, 1000]
             },
             onCellClick: function (e) {
                 if (e.field === "scrappedNo") {
@@ -417,7 +424,8 @@ $(function () {
         },
         "resultD": {
             pageable: {
-                pageSize: 15
+                pageSize: 500,
+                pageSizes: [50, 100, 500, 1000]
             },
             onCellClick: function (e) {
                 if (e.field === "scrappedNo") {
@@ -539,7 +547,8 @@ $(function () {
         },
         "resultE": {
             pageable: {
-                pageSize: 15
+                pageSize: 500,
+                pageSizes: [50, 100, 500, 1000]
             },
             // toolbarConfig: {
             //     hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
@@ -700,7 +709,8 @@ $(function () {
         },
         "resultF": {
             pageable: {
-                pageSize: 15
+                pageSize: 500,
+                pageSizes: [50, 100, 500, 1000]
             },
             onCellClick: function (e) {
                 if (e.field === "scrappedNo") {

@@ -1,4 +1,7 @@
 $(function () {
+    /**回车键查询**/
+    keydown("inqu", "QUERY");
+
     $("#QUERY").on("click", function (e) {
         resultAGrid.dataSource.page(1);
         resultCGrid.dataSource.page(1);
@@ -32,7 +35,8 @@ $(function () {
                 }
             },
             pageable: {
-                pageSize: 15,
+                pageSize: 500,
+                pageSizes: [50, 100, 500, 1000]
             },
             toolbarConfig: {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
@@ -123,6 +127,10 @@ $(function () {
             }
         },
         "resultB": {
+            pageable: {
+                pageSize: 500,
+                pageSizes: [50, 100, 500, 1000]
+            },
             toolbarConfig: {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
                 add: false, cancel: false, save: false, 'delete': false,
@@ -205,12 +213,53 @@ $(function () {
         },
         "resultC": {
             pageable: {
-                pageSize: 15,
+                pageSize: 500,
+                pageSizes: [50, 100, 500, 1000]
             },
             toolbarConfig: {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
                 add: false, cancel: false, save: false, 'delete': false,
-                buttons: []
+                buttons: [
+                    {
+                        name: "changeVoucher",
+                        text: "打印变更凭证",
+                        layout: "3",
+                        click: function () {
+                            var checkRows = resultCGrid.getCheckedRows();
+                            if (checkRows.length > 0) {
+                                var eiInfo = new EiInfo();
+                                // 调用小代码
+                                EiCommunicator.send("FAAP01", "automaticallyURL", eiInfo, {
+                                    onSuccess: function (ei) {
+                                        // 当前页面地址
+                                        var pageUrl = window.location.href;
+                                        // 获取报表地址前袋
+                                        var baseUrl = pageUrl.split('/')[0] + "//" + pageUrl.split('/')[2] + "/";
+                                        var BaseUrl = "fr/ReportServer?reportlet=v5stable/";
+                                        if (ei.extAttr.url != undefined) {
+                                            BaseUrl = ei.extAttr.url;
+                                        }
+                                        // 适用于直接点击超链接，浏览器会自动补全格式
+                                        var url = baseUrl + BaseUrl + "资产价值变更单（财务）.cpt&faInfoId=" + checkRows[0].faInfoId;
+                                        console.log(url)
+                                        var popData = $("#popData");
+                                        popData.data("kendoWindow").setOptions({
+                                            open: function () {
+                                                popData.data("kendoWindow").refresh({
+                                                    url: url
+                                                });
+                                            }
+                                        });
+                                        popDataWindow.setOptions({"title": ""});
+                                        popDataWindow.open().center();
+                                    },
+                                });
+                            } else {
+                                NotificationUtil("请先选择一条记录", "warning");
+                            }
+                        }
+                    }
+                ]
             },
             onCellClick: function (e) {
                 if (e.field === "goodsNum") {

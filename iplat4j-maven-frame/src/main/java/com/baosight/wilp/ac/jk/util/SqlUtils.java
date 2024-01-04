@@ -1,4 +1,4 @@
-package com.baosight.wilp.ac.we.utils;
+package com.baosight.wilp.ac.jk.util;
 
 import com.baosight.iplat4j.core.data.DaoEPBase;
 import com.baosight.iplat4j.core.data.ibatis.dao.Dao;
@@ -60,7 +60,7 @@ public class SqlUtils extends ServiceBase{
 		//数据查询
 		return dao.query(sqlName, paramMap);
 	}
-	
+
 	/**
 	 * 查询数据
 	 * @param sqlName
@@ -72,8 +72,8 @@ public class SqlUtils extends ServiceBase{
 		Object obj = ((SqlMapClientDaoSupport) dao).getSqlMapClient().queryForObject(sqlName, str);
 		return obj;
 	}
-	
-	
+
+
 	/**
 	 * 查询数据
 	 * @param sqlName
@@ -84,7 +84,7 @@ public class SqlUtils extends ServiceBase{
 	public static List queryForListByString(String sqlName,String str) throws Exception{
 		return ((SqlMapClientDaoSupport) dao).getSqlMapClient().queryForList(sqlName, str);
 	}
-	
+
 	/**
 	 * 查询数据
 	 * @param sqlName
@@ -95,7 +95,7 @@ public class SqlUtils extends ServiceBase{
 	public static Object queryForObjectByMap(String sqlName,Map<String, Object> map) throws Exception{
 		return ((SqlMapClientDaoSupport) dao).getSqlMapClient().queryForObject(sqlName, map);
 	}
-	
+
 	/**
 	 * 统计数据数据
 	 * @param sqlName
@@ -106,7 +106,7 @@ public class SqlUtils extends ServiceBase{
 	public static int countByMap(String sqlName,Map<String, Object> map) throws Exception{
 	    return dao.count(sqlName, map);
 	}
-	
+
 	/**
 	 * 查询数据
 	 * @param sqlName
@@ -117,7 +117,7 @@ public class SqlUtils extends ServiceBase{
 	public static List querySqlByMap(String sqlName,Map<String, Object> map) throws Exception{
 		return dao.query(sqlName, map);
 	}
-	
+
 	/**
 	 * 查询数据
 	 * @param sqlName
@@ -169,7 +169,7 @@ public class SqlUtils extends ServiceBase{
 		update.set("success", flag);
 		return update;
 	}
-	
+
 	/**
 	 * update数据
 	 * @param sqlName
@@ -248,7 +248,7 @@ public class SqlUtils extends ServiceBase{
 		insert.set("success", flag);
 		return insert;
 	}
-	
+
 	/**
 	 * insert数据List
 	 * @param sqlName

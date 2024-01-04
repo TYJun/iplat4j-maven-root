@@ -33,7 +33,7 @@ public class ServiceFAQR01 extends ServiceBase {
 	public EiInfo initLoad(EiInfo info) {
 //		OneSelfUtils.initQueryTime(info,"buyDateS","buyDateE");
 //		OneSelfUtils.initQueryTime(info,"receptionDateS","receptionDateE");
-		return this.unconfirmedQuery(info);
+		return info;
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class ServiceFAQR01 extends ServiceBase {
 			Integer limit = (Integer) attr.get("limit");
 			outInfo.addBlock("resultB").set(EiConstant.limitStr, limit);
 		} else {
-			outInfo.addBlock("resultB").set(EiConstant.limitStr, 15);
+			outInfo.addBlock("resultB").set(EiConstant.limitStr, 50);
 		}
 		return outInfo;
 	}

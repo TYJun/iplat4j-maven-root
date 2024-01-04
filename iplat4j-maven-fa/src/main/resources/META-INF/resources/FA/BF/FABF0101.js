@@ -58,15 +58,7 @@ IPLATUI.EFGrid = {
             buttons: []
         },
         onCheckRow: function (e) {
-            var grid = e.sender,
-                model = e.model,
-                $tr = e.tr,
-                row = e.row;
-            $tr.css({
-                background: "white",
-                color: "#000000A6"
-            });
-            grid.unCheckAllRows();
+
         },
         loadComplete: function (grid) {
             var type = $("#type").val()
@@ -88,6 +80,7 @@ IPLATUI.EFGrid = {
 
             $("#SAVE").on("click", function (e) {
                 var eiInfo = new EiInfo();
+                var checkRows = resultGrid.getDataItems();
                 eiInfo.setByNode("info");
                 eiInfo.set("scrap", checkRows)
                 if (checkRows.length < 1) {

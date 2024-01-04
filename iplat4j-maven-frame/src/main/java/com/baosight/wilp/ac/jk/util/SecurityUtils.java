@@ -1,4 +1,4 @@
-package com.baosight.wilp.ac.we.utils;
+package com.baosight.wilp.ac.jk.util;
 
 
 import org.apache.commons.codec.binary.Base64;
@@ -14,7 +14,7 @@ import java.util.Properties;
 
 /**
  * Todo(这里用一句话描述这个方法的作用)
- * 
+ *
  * @Title: SecurityUtils
  * @ClassName: SecurityUtils.java
  * @Package：com.baosight.wilp.ss.bm.utils
@@ -44,7 +44,7 @@ public final class SecurityUtils {
      * PRIVATE_KEY私钥
      */
     private static String PRIVATE_KEY = "";
-    
+
     static {
         try {
             //读取配置文件
@@ -76,14 +76,14 @@ public final class SecurityUtils {
     public static void setPrivateKey(String privateKey) {
         PRIVATE_KEY = privateKey;
     }
-    
+
     /**
      * TODO(获取RSA公钥 根据钥匙字段)
      *
-     * @Title: getPublicKey 
+     * @Title: getPublicKey
      * @param key
-     * @return 
-     * @return: PublicKey 
+     * @return
+     * @return: PublicKey
      */
     public static PublicKey getPublicKey(String key) {
         try {
@@ -168,14 +168,14 @@ public final class SecurityUtils {
 
         return verifySignSuccess;
     }
-    
+
     /**
      * TODO(加密)
      *
-     * @Title: encrypt 
+     * @Title: encrypt
      * @param clearText需要加密的字符串
-     * @return 
-     * @return: String 
+     * @return
+     * @return: String
      */
     public static String encrypt(String clearText) {
         String encryptedBase64 = "";
@@ -183,7 +183,7 @@ public final class SecurityUtils {
         try {
             Key key = getPrivateKey(PRIVATE_KEY);
             Cipher cipher = Cipher.getInstance(RSA_TYPE);
-            
+
             cipher.init(Cipher.ENCRYPT_MODE, key);
 //            byte[] encryptedBytes = cipher.doFinal(clearText.getBytes("UTF-8"));
 //            encryptedBase64 = Base64.encodeBase64String(encryptedBytes);
@@ -222,10 +222,10 @@ public final class SecurityUtils {
     /**
      * TODO(公钥解密)
      *
-     * @Title: decrypt 
+     * @Title: decrypt
      * @param encryptedBase64加密后的字符串
-     * @return 
-     * @return: String 
+     * @return
+     * @return: String
      */
     public static String decrypt(String key,String encryptedBase64) {
         String decryptedString = "";
@@ -241,33 +241,33 @@ public final class SecurityUtils {
         }
         return decryptedString;
     }
-    
+
     public static void main(String[] args) {
         SecurityUtils.test();
     }
-    
+
     public static void test() {
         String publicKey = SecurityUtils.getPublicKey();
         String privateKey = SecurityUtils.getPrivateKey();
         System.err.println("公钥：" + publicKey);
         System.err.println("私钥：" + privateKey);
-        
+
         long startTime = System.currentTimeMillis();
         //String encrypt = SecurityUtils.encrypt("45278.61");
         String encrypt = SecurityUtils.encrypt("这是一段RAS非对称加密解密代码");
         long endTime = System.currentTimeMillis();
         System.out.println("加密后：" + encrypt);
         System.out.println("加密need " + (endTime - startTime) + "ms");
-        
+
         String sign = SecurityUtils.sign(encrypt);
         System.out.println("签名：" + sign);
-        
+
         long startTime1 = System.currentTimeMillis();
         String decrypt = SecurityUtils.decrypt(publicKey , encrypt);
         long endTime1 = System.currentTimeMillis();
         System.out.println("解密后：" + decrypt);
         System.out.println("解密need " + (endTime1 - startTime1) + "ms");
-        
+
         long startTime2 = System.currentTimeMillis();
         boolean verify = SecurityUtils.verify(publicKey , encrypt ,sign);
         long endTime2 = System.currentTimeMillis();

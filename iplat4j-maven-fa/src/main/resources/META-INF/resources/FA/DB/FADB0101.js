@@ -411,6 +411,7 @@ IPLATUI.EFGrid = {
                 })
             });
 
+            // 资产科单条审批
             $("#auditPass").on("click", function (e) {
                 if ($("#info-0-auditReason").val() == "") {
                     NotificationUtil("请填写资产审批意见", "warning")
@@ -438,6 +439,7 @@ IPLATUI.EFGrid = {
                 })
             });
 
+            // 资产科单条驳回
             $("#auditReject").on("click", function (e) {
                 if ($("#info-0-auditReason").val() == "") {
                     NotificationUtil("请填写资产审批意见", "warning")

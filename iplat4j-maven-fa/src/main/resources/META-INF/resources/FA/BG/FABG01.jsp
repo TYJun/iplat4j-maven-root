@@ -27,8 +27,18 @@
 							  serviceName="FADA01" queryMethod="queryDept" filter="contains">
 				<EF:EFOptions blockId="dept" textField="deptName" valueField="deptName"/>
 			</EF:EFMultiSelect>
-			<EF:EFInput ename="inqu_status-0-goodsClassifyCode" colWidth="3" ratio="4:8" cname="资产类别"/>
-			<EF:EFInput ename="inqu_status-0-goodsTypeCode" colWidth="3" ratio="4:8" cname="类组"/>
+			<EF:EFSelect ename="inqu_status-0-goodsClassifyCode" cname="资产类别"
+						 resultId="goodsClassifyCode" textField="goodsClassifyName" colWidth="3" ratio="4:8"
+						 valueField="goodsClassifyName" serviceName="FADA01" filter="contains"
+						 methodName="queryGoodsClassifyName" optionLabel="--请选择--" >
+			</EF:EFSelect>
+			<EF:EFSelect ename="inqu_status-0-goodsTypeCode" cname="类组"
+						 resultId="goodsTypeCode" textField="goodsTypeName" colWidth="3" ratio="4:8"
+						 valueField="goodsTypeName" serviceName="FADA01" filter="contains"
+						 methodName="queryGoodsGoodsTypeName" optionLabel="--请选择--" >
+			</EF:EFSelect>
+<%--			<EF:EFInput ename="inqu_status-0-goodsClassifyCode" colWidth="3" ratio="4:8" cname="资产类别"/>--%>
+<%--			<EF:EFInput ename="inqu_status-0-goodsTypeCode" colWidth="3" ratio="4:8" cname="类组"/>--%>
 <%--			<EF:EFTreeInput ename="inqu_status-0-goodsClassifyCode" cname="资产类别" serviceName="FALB01" methodName="queryFaTypeTree"--%>
 <%--							valueField="id" textField="typeName" hasChildren="isLeaf" readonly="true"--%>
 <%--							root="{id: 'root', typeName: '根节点'}" colWidth="3" ratio="4:8">--%>
@@ -47,7 +57,7 @@
 	</EF:EFRegion>
 	<EF:EFTab id="FaDaTab">
 		<div title="资产信息">
-			<EF:EFGrid blockId="resultA" autoDraw="no" autoBind="true" rowNo="true" readonly="true" checkMode="single,row" queryMethod="confirmedQuery" height="460px" sort="setted">
+			<EF:EFGrid blockId="resultA" autoDraw="no" autoBind="true" rowNo="true" readonly="true" checkMode="single,row" queryMethod="confirmedQuery" height="420px" sort="setted">
 				<EF:EFColumn ename="id" cname="id"  align="center" locked="true" hidden="true"/>
 				<EF:EFColumn ename="faInfoId" cname="faInfoId"  align="center" hidden="true"/>
 				<EF:EFColumn ename="goodsNum" cname="资产编码"  align="center" width="120" displayType="url" enable="false" sort="true"/>
@@ -77,7 +87,7 @@
 			</EF:EFGrid>
 		</div>
 		<div title="变更记录">
-			<EF:EFGrid blockId="resultC" autoDraw="no" autoBind="true" readonly="true" rowNo="true" checkMode="single,row" queryMethod="changeRecord" height="460px" sort="setted">
+			<EF:EFGrid blockId="resultC" autoDraw="no" autoBind="true" readonly="true" rowNo="true" checkMode="single,row" queryMethod="changeRecord" height="420px" sort="setted">
 				<EF:EFColumn ename="faInfoId" cname="faInfoId"  align="center" hidden="true"/>
 				<EF:EFColumn ename="goodsNum" cname="资产编码"  align="center" width="200" displayType="url" enable="false" sort="true"/>
 				<EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="200" sort="true"/>
@@ -88,4 +98,5 @@
 		</div>
 	</EF:EFTab>
 	<EF:EFWindow id="popData" url="" lazyload="true" width="100%" height="100%" title="资产档案变更" modal="true" />
+	<script type="text/javascript" src="${ctx}/FA/common/js/fa-keydown.js"></script>
 </EF:EFPage>

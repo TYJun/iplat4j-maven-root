@@ -482,24 +482,5 @@ import java.util.*;
 			 return info;
 		 }
 
-		/**
-		 * 上移下移排序
-		 */
-		public EiInfo sortByOrderNum(EiInfo info) {
-			HashMap<String, Object> map = new HashMap<>();
-
-			String sort = (String) info.get("sort");
-			String id = (String) info.get("id");
-
-			if (sort.equals("UP")){
-				map.put("orderNum",-1);
-			}else if (sort.equals("DOWN")){
-				map.put("orderNum",1);
-			}
-			map.put("id",id);
-			dao.update("DFSB01.updateOrderNum",map);
-			return info;
-		}
-
 }
 

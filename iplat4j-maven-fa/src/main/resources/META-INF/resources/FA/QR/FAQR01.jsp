@@ -80,4 +80,5 @@
 		</div>
 	</EF:EFTab>
 	<EF:EFWindow id="popData" url="" lazyload="true" width="100%" height="100%" title="资产卡片生成" modal="true" />
+	<script type="text/javascript" src="${ctx}/FA/common/js/fa-keydown.js"></script>
 </EF:EFPage>

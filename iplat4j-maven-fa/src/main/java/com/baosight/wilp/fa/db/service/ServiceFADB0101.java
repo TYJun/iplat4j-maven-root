@@ -270,6 +270,9 @@ public class ServiceFADB0101 extends ServiceBase {
 		Map<String, Object> map = CommonUtils.buildParamter(info, "inqu_status", "spot");
 		// 调用远程接口返回集合
 		List<Map<String, Object>> spotList = BaseDockingUtils.getSpotByDeptNum(info.getString("confirmDeptNum"));
+		for (Map spotMap:spotList) {
+			spotMap.put("installLocation",spotMap.get("spotName"));
+		}
 		//将数据进行逻辑分页
 		EiInfo spot = CommonUtils.BuildOutEiInfoWithLogicalPage(spotList, map, "spot");
 		spot.setBlockInfoValue("dept", "showCount", "true");

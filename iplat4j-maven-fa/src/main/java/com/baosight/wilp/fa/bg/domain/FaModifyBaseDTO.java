@@ -7,7 +7,7 @@ import com.baosight.iplat4j.core.util.NumberUtils;
 import com.baosight.iplat4j.core.util.StringUtils;
 import com.baosight.wilp.fa.common.AnjiDescription;
 import com.baosight.wilp.fa.common.ValidatorUtils;
-
+import javafx.scene.input.DataFormat;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -25,14 +25,14 @@ import java.util.logging.SimpleFormatter;
  */
 public class FaModifyBaseDTO extends DaoEPBase {
 
-	private String id = " ";		/* 固定资产信息表主键*/
-	private String faInfoId = " ";
-	private String recCreator = " ";		/* 创建人*/
-	private String recCreateName = " ";		/* 创建人姓名*/
-	private String dataGroupCode = " ";		/* 账套*/
+	private String id = "";		/* 固定资产信息表主键*/
+	private String faInfoId = "";
+	private String recCreator = "";		/* 创建人*/
+	private String recCreateName = "";		/* 创建人姓名*/
+	private String dataGroupCode = "";		/* 账套*/
 //	@AnjiDescription("入库单号")
-	private String enterBillNo = " ";		/* 入库单号*/
-	private String contNo = " ";		/* 合同号*/
+	private String enterBillNo = "";		/* 入库单号*/
+	private String contNo = "";		/* 合同号*/
 	@AnjiDescription("资金来源")
 	private String fundingSourceName;
 	private String fundingSourceNum;		/* 资金来源编码*/
@@ -43,49 +43,48 @@ public class FaModifyBaseDTO extends DaoEPBase {
 	private String assetGetWayName;
 	private String assetGetWayCode;		/* 获取方式 资产增加的方式，如自购、盘盈,值域参照【WS.599.4.003获取方式代码】*/
 //	@AnjiDescription("折旧方式")
-	private String deprectCode = " ";		/* 折旧方式*/
-	private String matNum = " ";		/* 物资编码*/
+	private String deprectCode = "";		/* 折旧方式*/
+	private String matNum = "";		/* 物资编码*/
 //	@AnjiDescription("物资名称")
-	private String matName = " ";		/* 物资名称*/
+	private String matName = "";		/* 物资名称*/
 	@AnjiDescription("资产编码")
-	private String goodsNum = " ";		/* 固定资产编码*/
+	private String goodsNum = "";		/* 固定资产编码*/
 	@AnjiDescription("资产名称")
-	private String goodsName = " ";		/* 固定资产名称*/
-	private String goodsClassifyCode = " ";		/* 类别编码（一级）*/
+	private String goodsName = "";		/* 固定资产名称*/
+	private String goodsClassifyCode = "";		/* 类别编码（一级）*/
+	@AnjiDescription("资产类别")
+	private String goodsClassifyName = "";		/* 类别名称编码（二级）*/
+	private String goodsTypeCode = "";		/* 类别名称（一级）*/
 	@AnjiDescription("类组")
-	private String goodsClassifyName = " ";		/* 类别名称（一级）*/
-	private String goodsTypeCode = " ";		/* 类别名称编码（二级）*/
-	@AnjiDescription("类别名称")
-	private String goodsTypeName = " ";		/* 类别名称（二级）*/
+	private String goodsTypeName = "";		/* 类别名称（二级）*/
 	@AnjiDescription("末级类别")
 	private String goodsCategoryName = "";
-	@AnjiDescription("型号")
-	private String model = " ";		/* 型号*/
+	private String model = "";		/* 型号*/
 	@AnjiDescription("规格")
-	private String spec = " ";		/* 规格*/
-	private String unitNum = " ";		/* 计量单位*/
+	private String spec = "";		/* 规格*/
+	private String unitNum = "";		/* 计量单位*/
 	@AnjiDescription("计量单位")
-	private String unitName = " ";		/* 计量单位*/
-	private String deptNum = " ";		/* 资产所属科室编码*/
-	@AnjiDescription("资产所属科室名称")
-	private String deptName = " ";		/* 资产所属科室名称*/
+	private String unitName = "";		/* 计量单位*/
+	private String deptNum = "";		/* 资产所属科室编码*/
+	@AnjiDescription("所属科室")
+	private String deptName = "";		/* 资产所属科室名称*/
 	@AnjiDescription("制造厂商")
-	private String manufacturer = " ";		/* 制造厂商*/
-	private String manufacturerNatyCode = " ";		/* 制造商国别*/
+	private String manufacturer = "";		/* 制造厂商*/
+	private String manufacturerNatyCode = "";		/* 制造商国别*/
 	@AnjiDescription("国别")
-	private String manufacturerNatyName = " ";		/* 制造商国别*/
-	private String surpNum = " ";		/* 供应商编码*/
+	private String manufacturerNatyName = "";		/* 制造商国别*/
+	private String surpNum = "";		/* 供应商编码*/
 	@AnjiDescription("供应商")
-	private String surpName = " ";		/* 供应商编码*/
+	private String surpName = "";		/* 供应商编码*/
 	@AnjiDescription("楼")
-	private String build = " ";		/* 楼*/
+	private String build = "";		/* 楼*/
 	@AnjiDescription("层")
-	private String floor = " ";		/* 层*/
+	private String floor = "";		/* 层*/
 	@AnjiDescription("具体位置")
-	private String room = " ";		/* 层*/
-	private String installLocationNum = " ";		/* 安装位置编码*/
+	private String room = "";		/* 层*/
+	private String installLocationNum = "";		/* 安装位置编码*/
 	@AnjiDescription("地点")
-	private String installLocation = " ";		/* 安装位置*/
+	private String installLocation = "";		/* 安装位置*/
 	@AnjiDescription("使用年限")
 	private Integer useYears = new Integer(0);		/* 使用年限*/
 	private Integer amount = new Integer(0);		/* 数量*/
@@ -95,22 +94,28 @@ public class FaModifyBaseDTO extends DaoEPBase {
 	private BigDecimal residualRate = new BigDecimal("0");		/* 残值率*/
 	@AnjiDescription("资产净值")
 	private BigDecimal netAssetValue = new BigDecimal("0");		/* 资产净值*/
-	@AnjiDescription("暂估值")
 	private BigDecimal estimateCost = new BigDecimal("0");		/* 暂估值*/
 	private BigDecimal estimatedResidualValue = new BigDecimal("0");		/* 预计净残值*/
-	private String depreciationWay = " ";		/* 折旧方式*/
+	private String depreciationWay = "";		/* 折旧方式*/
+	@AnjiDescription("累计折旧")
 	private BigDecimal totalDepreciation = new BigDecimal("0");		/* 资产累计折旧*/
 	private BigDecimal monthDepreciation = new BigDecimal("0");		/* 平均月折旧*/
-	private String finaceClassNum = " ";		/* 财务类别编码*/
-	private String invoiceNo = " ";		/* 发票号*/
-	private String deviceId = " ";		/* 设备ID*/
-	private String deviceName = " ";		/* 设备名称*/
-	private String deviceTypeName = " ";		/* 设备分类名称*/
-	private String remark = " ";		/* 备注*/
-	private String contractNo = " ";		/* 合同号*/
-	private String changeReason = " ";		/* 变更原因*/
-	private String approvalResult = " ";		/* 审批结果(10-通过,20-驳回)*/
-	private String modifyType = " ";		/* 价值变更类型(00-不变,10-升值,20-贬值)*/
+	private String finaceClassNum = "";		/* 财务类别编码*/
+	private String invoiceNo = "";		/* 发票号*/
+	private String deviceId = "";		/* 设备ID*/
+	private String deviceName = "";		/* 设备名称*/
+	private String deviceTypeName = "";		/* 设备分类名称*/
+	private String remark = "";		/* 备注*/
+	private String contractNo = "";		/* 合同号*/
+	private String changeReason = "";		/* 变更原因*/
+	private String approvalResult = "";		/* 审批结果(10-通过,20-驳回)*/
+	private String modifyType = "";		/* 价值变更类型(00-不变,10-升值,20-贬值)*/
+	@AnjiDescription("自有资金")
+	private BigDecimal equityFund = new BigDecimal("0");
+	@AnjiDescription("其他资金")
+	private BigDecimal otherFund = new BigDecimal("0");
+	@AnjiDescription("采购科室")
+	private String purchaseDept = "";
 
 	/**
 	 * initialize the metadata
@@ -385,7 +390,23 @@ public class FaModifyBaseDTO extends DaoEPBase {
 		eiColumn.setDescName("价值变更类型(00-不变,10-升值,20-贬值)");
 		eiMetadata.addMeta(eiColumn);
 
+		eiColumn = new EiColumn("equityFund");
+		eiColumn.setType("N");
+		eiColumn.setScaleLength(2);
+		eiColumn.setFieldLength(15);
+		eiColumn.setDescName("自有资金");
+		eiMetadata.addMeta(eiColumn);
 
+		eiColumn = new EiColumn("otherFund");
+		eiColumn.setType("N");
+		eiColumn.setScaleLength(2);
+		eiColumn.setFieldLength(15);
+		eiColumn.setDescName("其他资金");
+		eiMetadata.addMeta(eiColumn);
+
+		eiColumn = new EiColumn("purchaseDept");
+		eiColumn.setDescName("采购科室");
+		eiMetadata.addMeta(eiColumn);
 	}
 
 	/**
@@ -1227,6 +1248,30 @@ public class FaModifyBaseDTO extends DaoEPBase {
 		this.manufacturerNatyName = manufacturerNatyName;
 	}
 
+	public BigDecimal getEquityFund() {
+		return equityFund;
+	}
+
+	public void setEquityFund(BigDecimal equityFund) {
+		this.equityFund = equityFund;
+	}
+
+	public BigDecimal getOtherFund() {
+		return otherFund;
+	}
+
+	public void setOtherFund(BigDecimal otherFund) {
+		this.otherFund = otherFund;
+	}
+
+	public String getPurchaseDept() {
+		return purchaseDept;
+	}
+
+	public void setPurchaseDept(String purchaseDept) {
+		this.purchaseDept = purchaseDept;
+	}
+
 	/**
 	 * get the value from Map
 	 */
@@ -1292,6 +1337,9 @@ public class FaModifyBaseDTO extends DaoEPBase {
 		setChangeReason(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("changeReason")), changeReason));
 		setApprovalResult(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("approvalResult")), approvalResult));
 		setModifyType(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("modifyType")), modifyType));
+		setEquityFund(NumberUtils.toBigDecimal(StringUtils.toString(map.get("equityFund")), equityFund));
+		setOtherFund(NumberUtils.toBigDecimal(StringUtils.toString(map.get("otherFund")), otherFund));
+		setPurchaseDept(StringUtils.defaultIfEmpty(StringUtils.toString(map.get("purchaseDept")), purchaseDept));
 	}
 
 	/**
@@ -1358,6 +1406,9 @@ public class FaModifyBaseDTO extends DaoEPBase {
 		map.put("changeReason",StringUtils.toString(changeReason, eiMetadata.getMeta("changeReason")));
 		map.put("approvalResult",StringUtils.toString(approvalResult, eiMetadata.getMeta("approvalResult")));
 		map.put("modifyType",StringUtils.toString(modifyType, eiMetadata.getMeta("modifyType")));
+		map.put("equityFund",StringUtils.toString(equityFund, eiMetadata.getMeta("equityFund")));
+		map.put("otherFund",StringUtils.toString(otherFund, eiMetadata.getMeta("otherFund")));
+		map.put("purchaseDept",StringUtils.toString(purchaseDept, eiMetadata.getMeta("purchaseDept")));
 		return map;
 	}
 }

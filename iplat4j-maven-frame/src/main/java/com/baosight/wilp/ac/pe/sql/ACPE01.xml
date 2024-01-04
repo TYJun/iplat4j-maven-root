@@ -34,12 +34,13 @@
 						else '启用'
 						END) AS "status",
 		                ap.post,
-		                CONCAT(aps.dept_name,',') as ywDeptname,
-		                CONCAT(xzs.dept_name,',') as xzDeptname
+		                GROUP_CONCAT(aps.dept_name,',') as ywDeptname,
+		                GROUP_CONCAT(xzs.dept_name,',') as xzDeptname
 				from $projectSchema$.ac_personnel ap
 				LEFT JOIN $projectSchema$.ac_department ad ON ad.id = ap.dept_id
-		        LEFT JOIN $projectSchema$.ac_departmentyws aps ON ap.work_no = aps.work_no
-		        LEFT JOIN $projectSchema$.ac_departmentxzs xzs ON ap.work_no = xzs.work_no
+		        LEFT JOIN $projectSchema$.ac_personnelyws aps ON ap.work_no = aps.work_no
+		        LEFT JOIN $projectSchema$.ac_personnelxzs xzs ON ap.work_no = xzs.work_no
+			    group by ap.work_no
 		    ) t
 			WHERE 1=1
 			<isNotEmpty prepend="and" property="id">

@@ -17,6 +17,7 @@ public class ComparisonResult {
 	private String label;
 	private String previous;
 	private String later;
+	private String changeValue;
 	private String time;
 
 	public String getKey() {
@@ -81,5 +82,13 @@ public class ComparisonResult {
 
 	public void setTime(String time) {
 		this.time = time;
+	}
+
+	public String getChangeValue() {
+		return changeValue;
+	}
+
+	public void setChangeValue(String changeValue) {
+		this.changeValue = changeValue;
 	}
 }

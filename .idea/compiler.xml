@@ -10,7 +10,6 @@
         <module name="iplat4j-maven-di" />
         <module name="iplat4j-maven-hi" />
         <module name="iplat4j-maven-pr" />
-        <module name="iplat4j-maven-df" />
         <module name="bonawise-maven-pay-hessian" />
         <module name="iplat4j-maven-dm" />
         <module name="iplat4j-maven-hr" />

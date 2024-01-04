@@ -167,6 +167,26 @@ public class ServiceFADA01 extends ServiceBase {
     }
 
     /**
+     * 查询资产表中存在的科室
+     *
+     * @param info
+     * @return
+     */
+    public EiInfo queryFaInfoDept(EiInfo info) {
+        EiBlock block = info.getBlock("inqu_status");
+        Map<String, String> map = new HashMap<>();
+        if (block != null) {
+            List<Map<String, String>> list = block.getRows();
+            if (CollectionUtils.isNotEmpty(list)) {
+                map = list.get(0);
+            }
+        }
+        List<Map<String, String>> maps = dao.query("FADA01.queryFaInfoDept", map);
+        info.setRows("dept", maps);
+        return info;
+    }
+
+    /**
      * 科室查询.
      * 1.获取参数,处理参数.
      * 2.调用微服务接口S_AC_FW_05，获取科室信息.
@@ -431,6 +451,7 @@ public class ServiceFADA01 extends ServiceBase {
             }
         }
         EiInfo outInfo = super.query(info, "FADA01.queryFaInfoDOInfo", new FaInfoDO(), false, null, null, "resultB", "resultB");
+<<<<<<< .mine
         //页面显示资产原值总计、资产数量总计数据
         EiBlock infoBlock = info.getBlock("inqu_status");
         Map inquStatus = new HashMap<>();
@@ -438,15 +459,20 @@ public class ServiceFADA01 extends ServiceBase {
             inquStatus = infoBlock.getRow(0);
         }
         List<Map<String,Object>> query =(List<Map<String,Object>>)dao.query("FADA01.querySUMFaInfoDOInfo", inquStatus);
+||||||| .r17529
+        List<Map<String,Object>> query =(List<Map<String,Object>>)dao.query("FADA01.querySUMFaInfoDOInfo", null);
+=======
+        List<Map<String, Object>> query = (List<Map<String, Object>>) dao.query("FADA01.querySUMFaInfoDOInfo", null);
+>>>>>>> .r17702
         if (info.getBlocks().size() > 0) {
             if (info.getBlock("resultB") != null) {
-                if ("100".equals(info.getBlock("resultB").get("limit"))) {
+                if ("50".equals(info.getBlock("resultB").get("limit"))) {
+                    outInfo.addBlock("resultB").set(EiConstant.limitStr, 50);
+                } else if ("100".equals(info.getBlock("resultB").get("limit"))) {
                     outInfo.addBlock("resultB").set(EiConstant.limitStr, 100);
-                }else if ("200".equals(info.getBlock("resultB").get("limit"))) {
-                    outInfo.addBlock("resultB").set(EiConstant.limitStr, 200);
-                }else if ("500".equals(info.getBlock("resultB").get("limit"))) {
+                } else if ("500".equals(info.getBlock("resultB").get("limit"))) {
                     outInfo.addBlock("resultB").set(EiConstant.limitStr, 500);
-                }else if ("1000".equals(info.getBlock("resultB").get("limit"))) {
+                } else if ("1000".equals(info.getBlock("resultB").get("limit"))) {
                     outInfo.addBlock("resultB").set(EiConstant.limitStr, 1000);
                 }
             }
@@ -457,7 +483,7 @@ public class ServiceFADA01 extends ServiceBase {
         map.remove("limit");
         List<Map<String, String>> maps = dao.query("FADA01.queryDept", map);
         outInfo.setRows("dept", maps);
-        outInfo.setRows("inqu_status",query);
+        outInfo.setRows("inqu_status", query);
         return outInfo;
     }
 
@@ -493,8 +519,14 @@ public class ServiceFADA01 extends ServiceBase {
         outInfo.addBlock("dept").addRows(maps);
         if (info.getBlocks().size() > 0) {
             if (info.getBlock("resultC") != null) {
-                if ("15".equals(info.getBlock("resultC").get("limit"))) {
-                    outInfo.addBlock("resultC").set(EiConstant.limitStr, 15);
+                if ("50".equals(info.getBlock("resultC").get("limit"))) {
+                    outInfo.addBlock("resultC").set(EiConstant.limitStr, 50);
+                } else if ("100".equals(info.getBlock("resultC").get("limit"))) {
+                    outInfo.addBlock("resultC").set(EiConstant.limitStr, 100);
+                } else if ("500".equals(info.getBlock("resultC").get("limit"))) {
+                    outInfo.addBlock("resultC").set(EiConstant.limitStr, 500);
+                } else if ("1000".equals(info.getBlock("resultC").get("limit"))) {
+                    outInfo.addBlock("resultC").set(EiConstant.limitStr, 1000);
                 }
             }
         }
@@ -725,5 +757,27 @@ public class ServiceFADA01 extends ServiceBase {
         return info;
     }
 
+    /**
+     * 查询资产类别
+     *
+     * @param info
+     * @return
+     */
+    public EiInfo queryGoodsClassifyName(EiInfo info) {
+        List list = dao.query("FADA01.queryGoodsClassifyName", new HashMap<>());
+        info.setRows("goodsClassifyCode", list);
+        return info;
+    }
 
+    /**
+     * 查询类组
+     *
+     * @param info
+     * @return
+     */
+    public EiInfo queryGoodsGoodsTypeName(EiInfo info) {
+        List list = dao.query("FADA01.queryGoodsGoodsTypeName", new HashMap<>());
+        info.setRows("goodsTypeCode", list);
+        return info;
+    }
 }

@@ -111,26 +111,28 @@
     </EF:EFRegion>
     <EF:EFGrid blockId="result" autoDraw="no" autoBind="true" readonly="true" rowNo="true" checkMode="multiple,row">
         <EF:EFColumn ename="faInfoId" cname="faInfoId"  align="center" width="200" hidden="true"/>
-        <EF:EFColumn ename="goodsNum" cname="资产编码"  align="center" width="200" enable="false"/>
-        <EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="200" enable="false"/>
+        <EF:EFColumn ename="goodsNum" cname="资产编码"  align="center" width="120" enable="false"/>
+        <EF:EFColumn ename="goodsName" cname="资产名称" align="center" width="180" enable="false"/>
+        <EF:EFColumn ename="model" cname="型号规格"  align="center" width="150" enable="false"/>
+        <EF:EFColumn ename="deptName" cname="所属科室"   align="center" width="150" enable="false"/>
+        <EF:EFColumn ename="buyCost" cname="资产原值"   align="center" width="130" enable="false"/>
+        <EF:EFColumn ename="netAssetValue" cname="资产净值"   align="center" width="130" enable="false"/>
+        <EF:EFColumn ename="useDate" cname="使用日期"   align="center" width="200" enable="false"/>
+        <EF:EFColumn ename="room" cname="具体位置" align="center" width="150" enable="false"/>
+        <EF:EFColumn ename="remark" cname="备注"  align="center" width="200" enable="false"/>
+        <EF:EFColumn ename="outRemark" cname="出库备注"  align="center" width="150" enable="false"/>
+        <EF:EFColumn ename="statusCode" cname="资产状态"   align="center" width="200" enable="false"/>
+<%--        <EF:EFColumn ename="build" cname="楼"   align="center" width="200" enable="false"/>--%>
+<%--        <EF:EFColumn ename="floor" cname="层"   align="center" width="200" enable="false"/>--%>
+        <EF:EFColumn ename="installLocation" cname="地点"   align="center" width="200" enable="false"/>
         <EF:EFColumn ename="goodsClassifyName" cname="资产类别"  align="center" width="200" enable="false"/>
         <EF:EFColumn ename="goodsTypeName" cname="类组"  align="center" width="200" enable="false"/>
-        <EF:EFColumn ename="model" cname="型号规格"  align="center" width="200" enable="false"/>
-        <EF:EFColumn ename="statusCode" cname="资产状态"   align="center" width="200" enable="false"/>
-        <EF:EFColumn ename="rfidCode" cname="RFID"  align="center" width="200" enable="false"/>
         <EF:EFColumn ename="manufacturer" cname="制造厂商"  align="center" width="200" enable="false"/>
         <EF:EFColumn ename="surpName" cname="供应商"   align="center" width="200" enable="false"/>
         <EF:EFColumn ename="buyDate" cname="购入日期"   align="center" width="200" enable="false"/>
-        <EF:EFColumn ename="useDate" cname="使用日期"   align="center" width="200" enable="false"/>
-        <EF:EFColumn ename="deptName" cname="所属科室"   align="center" width="200" enable="false"/>
-        <EF:EFColumn ename="build" cname="楼"   align="center" width="200" enable="false"/>
-        <EF:EFColumn ename="floor" cname="层"   align="center" width="200" enable="false"/>
-        <EF:EFColumn ename="installLocation" cname="地点"   align="center" width="200" enable="false"/>
-        <EF:EFColumn ename="buyCost" cname="资产原值"   align="center" width="200" enable="false"/>
         <EF:EFColumn ename="useYears" cname="使用年限"   align="center" width="200" enable="false"/>
         <%--			<EF:EFColumn ename="deviceName" cname="设备名称"   align="center" />--%>
         <EF:EFColumn ename="recCreateName" cname="创建人"   align="center" width="200" enable="false"/>
-        <EF:EFColumn ename="remark" cname="备注"  align="center" width="200" enable="false"/>
         <EF:EFColumn ename="inAccountStatus" cname="是否审批启用"  align="center" width="200" enable="false" hidden="true"/>
         <EF:EFColumn ename="operationType" cname="出库类型"  align="center" width="200" enable="false" hidden="true"/>
         <EF:EFColumn ename="lockFlag" cname="变更状态"  align="center" hidden="true"/>

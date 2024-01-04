@@ -1,4 +1,7 @@
 $(function () {
+    /**回车键查询**/
+    keydown("inqu", "QUERY");
+
     $("#QUERY").on("click", function (e) {
         resultGrid.dataSource.page(1)
     });
@@ -163,8 +166,8 @@ $(function () {
     IPLATUI.EFGrid = {
         "result": {
             pageable: {
-                pageSize: 20,
-                pageSizes: [10, 20, 50, 100]
+                pageSize: 50,
+                pageSizes: [50, 100, 500, 1000]
             },
             toolbarConfig: {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮

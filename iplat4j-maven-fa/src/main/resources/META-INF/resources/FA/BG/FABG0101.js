@@ -1,9 +1,12 @@
 $(function () {
+    /**回车键查询**/
+    keydown("inqu", "QUERY");
+
     IPLAT.EFInput.readonly($("#info-0-netAssetValue"), true)
     IPLAT.EFInput.readonly($("#info-0-buyCost"), true)
     IPLAT.EFInput.readonly($("#info-0-estimateCost"), true)
     IPLAT.EFPopupInput.setAllFields($("#info-0-surpNum"), __ei.surpNum, __ei.surpName)
-
+    IPLAT.EFInput.value($("#info-0-purchaseDept"), __ei.purchaseDept);
     document.getElementById("info-0-buyCost").addEventListener("input", () => {
         // 计算资产原值变更
         modificationValue();
@@ -54,10 +57,12 @@ IPLATUI.EFSelect = {
             if ("00" == e.dataItem.valueField) {
                 IPLAT.EFInput.readonly($("#info-0-buyCost"), true)
                 IPLAT.EFInput.readonly($("#info-0-estimateCost"), true)
+                IPLAT.EFInput.readonly($("#info-0-netAssetValue"), true)
                 $("#modificationValue").hide();
             } else {
                 IPLAT.EFInput.readonly($("#info-0-buyCost"), false)
                 IPLAT.EFInput.readonly($("#info-0-estimateCost"), false)
+                IPLAT.EFInput.readonly($("#info-0-netAssetValue"), false)
                 $("#modificationValue").show();
             }
         },
@@ -66,6 +71,10 @@ IPLATUI.EFSelect = {
 
 IPLATUI.EFGrid = {
     "result": {
+        pageable: {
+            pageSize: 50,
+            pageSizes: [50, 100, 500, 1000]
+        },
         toolbarConfig: {
             hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
             add: false, cancel: false, save: false, 'delete': false,
@@ -75,19 +84,36 @@ IPLATUI.EFGrid = {
                     var checkRows = resultGrid.getCheckedRows();
                     var model = checkRows[0];
                     if (model) {
-                        $("#info-0-goodsCategoryCode").val(model['typeCode']);
-                        $("#info-0-goodsCategoryCode_textField").val(model['typeName']);
-                        // $("#info-0-goodsClassifyCode").val(model['parentCode']);
-                        // $("#info-0-goodsClassifyName").val(model['parentName']);
+                        var goodsCategoryCode = model['typeCode'];
+                        var goodsCategoryName = model['typeName'];
+                        if (goodsCategoryCode.substring(0, 1) == "C") {
+                            goodsCategoryCode = "A" + goodsCategoryCode.substring(1);
+                        } else if (goodsCategoryCode.substring(0, 1) == "B") {
+                            goodsCategoryCode = "A08" + goodsCategoryCode.substring(1);
+                        }
+                        $("#info-0-goodsCategoryCode").val(goodsCategoryCode);
+                        $("#info-0-goodsCategoryCode_textField").val(goodsCategoryName);
                         $("#info-0-useYears").val(model['useYears']);
                         var eiInfo = new EiInfo();
                         eiInfo.set("goodsCategoryCode", model['typeCode']);
                         EiCommunicator.send("FADA0101", "backGoodsCategoryCode", eiInfo, {
                             onSuccess: function (ei) {
                                 var list = ei.extAttr.list
-                                $("#info-0-goodsTypeCode").val(list.parentCode);
+                                var goodsTypeCode = list.parentCode;
+                                var goodsClassifyCode = list.typeCode;
+                                if (goodsTypeCode.substring(0, 1) == "C") {
+                                    goodsTypeCode = "A" + goodsTypeCode.substring(1);
+                                } else if (goodsTypeCode.substring(0, 1) == "B") {
+                                    goodsTypeCode = "A08000000" + goodsTypeCode.substring(1);
+                                }
+                                if (goodsClassifyCode.substring(0, 1) == "C") {
+                                    goodsClassifyCode = "A" + goodsClassifyCode.substring(1);
+                                } else if (goodsClassifyCode.substring(0, 1) == "B") {
+                                    goodsClassifyCode = "A08" + goodsClassifyCode.substring(1);
+                                }
+                                $("#info-0-goodsTypeCode").val(goodsTypeCode);
                                 $("#info-0-goodsTypeName").val(list.parentName);
-                                $("#info-0-goodsClassifyCode").val(list.typeCode);
+                                $("#info-0-goodsClassifyCode").val(goodsClassifyCode);
                                 $("#info-0-goodsClassifyName").val(list.typeName);
                             }
                         })
@@ -111,6 +137,7 @@ IPLATUI.EFGrid = {
 
             // 资产变更提交
             $("#SAVE").on("click", function (e) {
+                var changeRows = resultValueGrid.getDataItems();
                 var costType = IPLAT.EFSelect.value($("#info-0-costType"));
                 if (costType == "00") {
                     $("#info-0-estimateCost").val(0);
@@ -120,6 +147,10 @@ IPLATUI.EFGrid = {
                 // 前端校验
                 if ($("#info-0-goodsClassifyCode").val() == "") {
                     NotificationUtil("请选择末级类别", "warning")
+                    return
+                }
+                if ($("#info-0-purchaseDept").val() == "") {
+                    NotificationUtil("请填写采购科室", "warning")
                     return
                 }
                 if ($("#info-0-goodsCategoryCode").val() == "") {
@@ -180,22 +211,43 @@ IPLATUI.EFGrid = {
                 //     return
                 // }
                 var unitName = IPLAT.EFSelect.text($("#info-0-unitNum"));
-                IPLAT.EFInput.value($("#info-0-unitName"), unitName);
+                if (unitName == "--请选择--") {
+                    IPLAT.EFInput.value($("#info-0-unitName"), "");
+                } else {
+                    IPLAT.EFInput.value($("#info-0-unitName"), unitName);
+                }
                 var assetGetWayName = IPLAT.EFSelect.text($("#info-0-assetGetWayCode"));
-                IPLAT.EFInput.value($("#info-0-assetGetWayName"), assetGetWayName);
+                if (assetGetWayName == "--请选择--") {
+                    IPLAT.EFInput.value($("#info-0-assetGetWayName"), "");
+                } else {
+                    IPLAT.EFInput.value($("#info-0-assetGetWayName"), assetGetWayName);
+                }
                 var assetUseName = IPLAT.EFSelect.text($("#info-0-assetUseCode"));
-                IPLAT.EFInput.value($("#info-0-assetUseName"), assetUseName);
+                if (assetUseName == "--请选择--") {
+                    IPLAT.EFInput.value($("#info-0-assetUseName"), "");
+                } else {
+                    IPLAT.EFInput.value($("#info-0-assetUseName"), assetUseName);
+                }
                 var manufacturerNatyName = IPLAT.EFSelect.text($("#info-0-manufacturerNatyCode"));
-                IPLAT.EFInput.value($("#info-0-manufacturerNatyName"), manufacturerNatyName);
+                if (manufacturerNatyName == "--请选择--") {
+                    IPLAT.EFInput.value($("#info-0-manufacturerNatyName"), "");
+                } else {
+                    IPLAT.EFInput.value($("#info-0-manufacturerNatyName"), manufacturerNatyName);
+                }
                 var fundingSourceName = IPLAT.EFSelect.text($("#info-0-fundingSourceNum"));
-                IPLAT.EFInput.value($("#info-0-fundingSourceName"), fundingSourceName);
+                if (fundingSourceName == "--请选择--") {
+                    IPLAT.EFInput.value($("#info-0-fundingSourceName"), "");
+                } else {
+                    IPLAT.EFInput.value($("#info-0-fundingSourceName"), fundingSourceName);
+                }
                 var eiInfo = new EiInfo();
+                eiInfo.set("changeRows",changeRows)
                 eiInfo.setByNode("info");
                 // 资产变更提交
                 EiCommunicator.send("FABG0101", "batchModificationInfo", eiInfo, {
                     onSuccess: function (ei) {
-                        if (ei.status == "-1"){
-                            NotificationUtil("资产没有发生变化，变更失败", "warning");
+                        if (ei.status == "-1") {
+                            NotificationUtil(ei.msg, "warning");
                             return
                         } else {
                             NotificationUtil("变更成功", "warning");
@@ -206,6 +258,177 @@ IPLATUI.EFGrid = {
             });
         }
     },
+    "resultValue": {
+        pageable: false,
+        exportGrid: false,
+        columns: [{
+                field: "goodsNum",
+                title: "卡片编号",
+                readonly: true,
+                width: 20,
+            },
+            {
+                field: "goodsName",
+                title: "资产名称",
+                readonly: true,
+                width: 20,
+            }, {
+                field: "buyDate",
+                title: "入账日期",
+                readonly: true,
+                width: 20,
+            }, {
+                field: "buyCost",
+                title: "原值<br/>（元）",
+                readonly: true,
+                width: 20,
+            }, {
+                field: "equityFund",
+                title: "自有资金<br/>（元）",
+                readonly: true,
+                width: 20,
+            }, {
+                field: "otherFund",
+                title: "其他资金<br/>（元）",
+                readonly: true,
+                width: 20,
+            }, {
+                field: "netAssetValue",
+                title: "净值<br/>（元）",
+                readonly: true,
+                width: 20,
+            }, {
+                field: "totalDepreciation",
+                title: "累计折旧<br/>（元）",
+                readonly: true,
+                width: 20,
+            },{
+            field: "change",
+            title: "变化量",
+            columns: [
+                {
+                    field: "changeBuyCost",
+                    title: "原值<br/>（元）",
+                    width: 20,
+                },
+                {
+                    field: "changeEquityFund",
+                    title: "自有资金<br/>（元）",
+                    width: 20,
+                },
+                {
+                    field: "changeOtherFund",
+                    title: "其他资金<br/>（元）",
+                    width: 20,
+                }, {
+                    field: "changeNetAssetValue",
+                    title: "净值<br/>（元）",
+                    width: 20,
+                }, {
+                    field: "changeTotalDepreciation",
+                    title: "累计折旧<br/>（元）",
+                    width: 20,
+                }]
+            },
+            {
+                field: "after",
+                title: "变化后",
+                columns: [
+                    {
+                        field: "afterBuyCost",
+                        title: "原值<br/>（元）",
+                        width: 20,
+                        template: "<span id='afterBuyCost'>#=afterBuyCost#</span>",
+                    },
+                    {
+                        field: "afterEquityFund",
+                        title: "自有资金<br/>（元）",
+                        width: 20,
+                        template: "<span id='afterEquityFund'>#=afterEquityFund#</span>",
+                    },
+                    {
+                        field: "afterOtherFund",
+                        title: "其他资金<br/>（元）",
+                        width: 20,
+                        template: "<span id='afterOtherFund'>#=afterOtherFund#</span>",
+                    }, {
+                        field: "afterNetAssetValue",
+                        title: "净值<br/>（元）",
+                        width: 20,
+                        template: "<span id='afterNetAssetValue'>#=afterNetAssetValue#</span>",
+                    }, {
+                        field: "afterTotalDepreciation",
+                        title: "累计折旧<br/>（元）",
+                        width: 20,
+                        template: "<span id='afterTotalDepreciation'>#=afterTotalDepreciation#</span>",
+                    }
+                ]
+            }
+        ],
+        loadComplete: function (e) {
+
+        },
+        afterEdit: function (e) {
+            let grid = e.sender;
+            let rowIndex = e.row
+            if (e.field == "changeBuyCost") {
+                // 获取变化前的资产原值
+                var beforeBuyCost = e.model.buyCost;
+                // 获取当前变化值
+                var changeBuyCost = e.model.changeBuyCost;
+                // 计算变化后的资产原值
+                var afterBuyCost = Addtr(beforeBuyCost, changeBuyCost);
+                var element = document.getElementById("afterBuyCost"); // 通过id获取元素
+                element.innerText = afterBuyCost;
+                resultValueGrid.setCellValue(0, "afterBuyCost", afterBuyCost)
+            } else if (e.field == "changeEquityFund") {
+                // 获取变化前的自有资金
+                var beforeEquityFund = e.model.equityFund;
+                // 获取当前变化值
+                var changeEquityFund = e.model.changeEquityFund;
+                // 计算变化后的自有资金
+                var afterEquityFund = Addtr(beforeEquityFund, changeEquityFund);
+                var element = document.getElementById("afterEquityFund"); // 通过id获取元素
+                element.innerText = afterEquityFund;
+                resultValueGrid.setCellValue(0, "afterEquityFund", afterEquityFund)
+            } else if (e.field == "changeOtherFund") {
+                // 获取变化前的其他资金
+                var beforeOtherFund = e.model.otherFund;
+                // 获取当前变化值
+                var changeOtherFund = e.model.changeOtherFund;
+                // 计算变化后的其他资金
+                var afterOtherFund = Addtr(beforeOtherFund, changeOtherFund);
+                var element = document.getElementById("afterOtherFund"); // 通过id获取元素
+                element.innerText = afterOtherFund;
+                resultValueGrid.setCellValue(0, "afterOtherFund", afterOtherFund)
+            } else if (e.field == "changeNetAssetValue") {
+                // 获取变化前的净值
+                var beforeNetAssetValue = e.model.netAssetValue;
+                // 获取当前变化值
+                var changeNetAssetValue = e.model.changeNetAssetValue;
+                // 计算变化后的净值
+                var afterNetAssetValue = Addtr(beforeNetAssetValue, changeNetAssetValue);
+                var element = document.getElementById("afterNetAssetValue"); // 通过id获取元素
+                element.innerText = afterNetAssetValue;
+                resultValueGrid.setCellValue(0, "afterNetAssetValue", afterNetAssetValue)
+            } else if (e.field == "changeTotalDepreciation") {
+                // 获取变化前的累计折旧
+                var beforeTotalDepreciation = e.model.totalDepreciation;
+                // 获取当前变化值
+                var changeTotalDepreciation = e.model.changeTotalDepreciation;
+                // 计算变化后的累计折旧
+                var afterTotalDepreciation = Addtr(beforeTotalDepreciation, changeTotalDepreciation);
+                var element = document.getElementById("afterTotalDepreciation"); // 通过id获取元素
+                element.innerText = afterTotalDepreciation;
+                resultValueGrid.setCellValue(0, "afterTotalDepreciation", afterTotalDepreciation)
+            }
+        }
+    },
+    "resultAfter": {
+        pageable: false,
+        exportGrid: false,
+
+    }
 }
 
 // 定义结点的各属性名
@@ -486,29 +709,42 @@ function saveExpanded() {
 
 // 计算资产原值变更
 function modificationValue() {
-    // 数据库中的资产原值
+    // 数据库中的净值与原值
     var netAssetValue = __ei.netAssetValue;
     var oldBuyCost = __ei.buyCost;
-    var nowNetBuyCost = $("#info-0-buyCost").val();
-    var modificationBuyCost =  Subtr(nowNetBuyCost,oldBuyCost)
-    var modificationNetAssetValue =  Subtr(netAssetValue,-modificationBuyCost)
+    // 获取当前的原值
+    var nowBuyCost = $("#info-0-buyCost").val();
+    // 计算变化后的原值
+    var modificationBuyCost = Subtr(nowBuyCost, oldBuyCost)
+    // 计算变化后的净值
+    var modificationNetAssetValue = Addtr(netAssetValue, modificationBuyCost)
+    var modifyType = IPLAT.EFSelect.value($("#info-0-modifyType"));
     if (modificationBuyCost > 0) {
         IPLAT.EFInput.value($("#info-0-modificationLabel"), "资产升值")
         IPLAT.EFInput.value($("#info-0-modificationStatus"), "021")
-        IPLAT.EFInput.value($("#info-0-modificationCost"), "+"+modificationBuyCost)
+        IPLAT.EFInput.value($("#info-0-modificationCost"), "+" + modificationBuyCost)
         IPLAT.EFInput.value($("#info-0-modificationValue"), modificationBuyCost)
-        IPLAT.EFInput.value($("#info-0-netAssetValue"), modificationNetAssetValue)
+        if (modifyType == '20') {
+            IPLAT.EFInput.value($("#info-0-netAssetValue"), modificationNetAssetValue)
+        }
     } else if (modificationBuyCost < 0) {
         IPLAT.EFInput.value($("#info-0-modificationLabel"), "资产贬值")
         IPLAT.EFInput.value($("#info-0-modificationStatus"), "026")
         IPLAT.EFInput.value($("#info-0-modificationCost"), modificationBuyCost)
         IPLAT.EFInput.value($("#info-0-modificationValue"), modificationBuyCost)
-        // 净值只能为0
-        IPLAT.EFInput.value($("#info-0-netAssetValue"), 0)
-        // IPLAT.EFInput.value($("#info-0-netAssetValue"), modificationNetAssetValue)
+        if (modifyType == '20') {
+            IPLAT.EFInput.value($("#info-0-netAssetValue"), modificationNetAssetValue)
+            // 净值最少为0
+            if (modificationNetAssetValue < 0) {
+                IPLAT.EFInput.value($("#info-0-netAssetValue"), 0)
+            }
+        }
     } else {
         IPLAT.EFInput.value($("#info-0-modificationLabel"), "保持不变")
         IPLAT.EFInput.value($("#info-0-modificationCost"), 0.00)
+        if (modifyType == '20') {
+            IPLAT.EFInput.value($("#info-0-netAssetValue"), modificationNetAssetValue)
+        }
     }
 }
 
@@ -518,13 +754,13 @@ function modificationEstimateCostValue() {
     var netAssetValue = __ei.netAssetValue;
     var oldEstimateCost = __ei.estimateCost;
     var nowEstimateCost = $("#info-0-estimateCost").val();
-    var modificationEstimateCost =  Subtr(nowEstimateCost,oldEstimateCost)
-    var modificationNetAssetValue =  Subtr(netAssetValue,-modificationEstimateCost)
+    var modificationEstimateCost = Subtr(nowEstimateCost, oldEstimateCost)
+    var modificationNetAssetValue = Subtr(netAssetValue, -modificationEstimateCost)
     console.log(modificationEstimateCost)
     if (modificationEstimateCost > 0) {
         IPLAT.EFInput.value($("#info-0-modificationLabel"), "资产升值")
         IPLAT.EFInput.value($("#info-0-modificationStatus"), "021")
-        IPLAT.EFInput.value($("#info-0-modificationCost"), "+"+modificationEstimateCost)
+        IPLAT.EFInput.value($("#info-0-modificationCost"), "+" + modificationEstimateCost)
         IPLAT.EFInput.value($("#info-0-modificationValue"), modificationEstimateCost)
         IPLAT.EFInput.value($("#info-0-netAssetValue"), modificationNetAssetValue)
     } else if (modificationEstimateCost < 0) {
@@ -539,7 +775,7 @@ function modificationEstimateCostValue() {
     }
 }
 
-//减法函数，用来得到精确的减法结果
+// 减法函数，用来得到精确的减法结果
 function Subtr(arg1, arg2) {
     var r1, r2, m, n;
     try {
@@ -557,4 +793,18 @@ function Subtr(arg1, arg2) {
     //动态控制精度长度
     n = (r1 >= r2) ? r1 : r2;
     return ((arg1 * m - arg2 * m) / m).toFixed(n);
+}
+
+// 加法函数，用来得到精确的减法结果
+function Addtr(arg1, arg2) {
+    arg1 = arg1.toString(), arg2 = arg2.toString(); // 将传入的数据转化为字符串
+    var arg1Arr = arg1.split("."), // 将小数的数据从小数点的位置拆开
+        arg2Arr = arg2.split("."),
+        d1 = arg1Arr.length == 2 ? arg1Arr[1] : "", // 获取第一个数的小数点的长度
+        d2 = arg2Arr.length == 2 ? arg2Arr[1] : ""; // 获取第二个数的小数点的长度
+    var maxLen = Math.max(d1.length, d2.length); // 获取小数点长度较大的值
+    var m = Math.pow(10, maxLen); // 这里表示10的小数点长度次方 也就是说如果小数点长度为2 m的值就是100 如果小数点长度是3 m的值就是1000如果不懂请自行查找api
+    var result = Number(((arg1 * m + arg2 * m) / m).toFixed(maxLen)); // 将小数转化为整数后相加在除掉两个数乘过的倍数然后去小数点较长的长度的小数位数
+    var d = arguments[2]; // 第三个参数用户可以自行决定是否要传递 用来定义要保留的小数长度
+    return typeof d === "number" ? Number((result).toFixed(d)) : result;
 }

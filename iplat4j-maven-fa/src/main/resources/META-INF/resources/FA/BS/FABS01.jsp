@@ -37,7 +37,7 @@
     		<EF:EFColumn ename="goodsTypeName" cname="类别名称"  align="center" locked="true" enable="false"/>
     		<EF:EFColumn ename="cardStatusMean" cname="是否发卡"  align="center" locked="true" enable="false"/>
 			<EF:EFColumn ename="statusCodeMean" cname="固资状态"   align="center" enable="false" locked="true"/>
-			<EF:EFColumn ename="rfidCode" cname="RFID"  align="center" locked="true" enable="false"/>
+			<EF:EFColumn ename="rfidCode" cname="RFID"  align="center" locked="true" enable="false" hidden="true"/>
 			<EF:EFColumn ename="manufacturer" cname="制造厂商"  align="center" enable="false"/>
 			<EF:EFColumn ename="surpName" cname="供应商"   align="center" enable="false"/>
 			<EF:EFColumn ename="buyDate" cname="购入日期"   align="center" enable="false"/>

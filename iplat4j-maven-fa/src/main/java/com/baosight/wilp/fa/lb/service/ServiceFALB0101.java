@@ -68,6 +68,11 @@ public class ServiceFALB0101 extends ServiceBase {
 		return info;
 	}
 
+	@Override
+	public EiInfo query(EiInfo inInfo) {
+		return inInfo;
+	}
+
 	/**
 	 * 固资类别录入保存方法
 	 * 1.获取前端操作类型并处理前端传参数据.

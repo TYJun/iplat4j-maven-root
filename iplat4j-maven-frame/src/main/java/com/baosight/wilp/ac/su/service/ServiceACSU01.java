@@ -463,6 +463,8 @@ public class ServiceACSU01 extends ServiceBase {
                 .append(" from DBO_PROJECT");
     });
 
+
+
     // 同步工程项目数据
     public EiInfo synPm(EiInfo eiInfo) {
         StringBuilder sqlBuilder = threadLocal.get();
@@ -501,4 +503,54 @@ public class ServiceACSU01 extends ServiceBase {
         }
         return eiInfo;
     }
+
+    //同步合同数据
+    public EiInfo synCm(EiInfo eiInfo) {
+        try {
+            String sql = "select CRE_DATETIME CRE_DATETIME,CRE_USR_REF CRE_USR_REF,UPD_DATETIME UPD_DATETIME," +
+                    "UPD_USR_REF UPD_USR_REF,DEL_SIGN DEL_SIGN,DEL_DATETIME DEL_DATETIME,DEL_USR_REF DEL_USR_REF,"+
+                    "ETL_SIGN ETL_SIGN,ETL_RESULT ETL_RESULT,ETL_DATETIME ETL_DATETIME,ETL_TIMES ETL_TIMES,SOURCE_REF SOURCE_REF,"+
+                    "GUID GUID,MEDICAL_INSTITUT_CODE MEDICAL_INSTITUT_CODE,UNIQUE_ID UNIQUE_ID,K_CODE K_CODE,K_NAME K_NAME,"+
+                    "K_TYPE_CODE K_TYPE_CODE,K_TYPE_NAME K_TYPE_NAME,PART_A_CODE PART_A_CODE,PART_A_NAME PART_A_NAME,PART_B_CODE PART_B_CODE," +
+                    "PART_B_NAME PART_B_NAME,PART_C_CODE PART_C_CODE,PART_C_NAME PART_C_NAME,TO_CHAR(SIGN_ON_DATE, 'yyyy-MM-dd')  SIGN_ON_DATE,"+
+                    "TO_CHAR(EFFECTIVE_DATE,'yyyy-MM-dd') EFFECTIVE_DATE,TO_CHAR(EXPIRY_DATE,'yyyy-MM-dd') EXPIRY_DATE,K_PERIOD K_PERIOD,K_PERIOD_UNIT K_PERIOD_UNIT,"+
+                    "K_AMOUNT K_AMOUNT,CURRENCY_CODE CURRENCY_CODE,CURRENCY_NAME CURRENCY_NAME,PROCUREMENT_ROUTE_CODE PROCUREMENT_ROUTE_CODE,"+
+                    "PROCUREMENT_ROUTE_NAME PROCUREMENT_ROUTE_NAME,SETTLEMENT_METHOD_CODE SETTLEMENT_METHOD_CODE,"+
+                    "SETTLEMENT_METHOD_NAME SETTLEMENT_METHOD_NAME,MANAGEMENT_DEP_CODE MANAGEMENT_DEP_CODE,"+
+                    "MANAGEMENT_DEP_NAME MANAGEMENT_DEP_NAME,CONTACT_STAFF_CODE CONTACT_STAFF_CODE,CONTACT_STAFF_NAME CONTACT_STAFF_NAME,"+
+                    "SIGN_MODE_CODE SIGN_MODE_CODE,SIGN_MODE_NAME SIGN_MODE_NAME,COMMENTS COMMENTS,K_STATUS K_STATUS,"+
+                    "DEP_CODE DEP_CODE,DEP_NAME DEP_NAME,WARRANTY_PERIOD WARRANTY_PERIOD,BUDGET_AMOUNT BUDGET_AMOUNT from CDR.DBO_CONTRACT_INFO";
+            List<Map> oracleList = MpDbUtils.executeQuery(Map.class, sql);
+            List<Map<String, String>> resultList = new ArrayList<>();
+//            List<Map> oracleList = new ArrayList<Map>(){{
+//                add(new HashMap() {{
+//                    put("PROJECT_ID","1");
+//                    put("PROJECT_CODE","2");
+//                    put("PROJECT_NAME","3");
+//                    put("PROJECT_SOURCE","4");
+//                    put("CRE_DATETIME","5");
+//                }});
+//            }};
+            if (CollectionUtils.isNotEmpty(oracleList)) {
+                for (Map map : oracleList) {
+                    Map<String, String> m = new HashMap<>();
+                    map.keySet().forEach(key -> {
+                        m.put((String) key, Optional.ofNullable(map.get(key)).orElse("").toString());
+                    });
+                    resultList.add(m);
+                }
+                dao.delete("ACSU01.deleteCm", resultList);
+                dao.insert("ACSU01.insertCm", resultList);
+                eiInfo.setMsg("同步成功");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            eiInfo.setMsg(e.toString());
+        } finally {
+            threadLocal.remove();
+        }
+        return eiInfo;
+    }
+
+
 }

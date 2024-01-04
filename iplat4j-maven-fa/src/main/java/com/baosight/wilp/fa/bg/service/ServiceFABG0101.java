@@ -59,11 +59,15 @@ public class ServiceFABG0101 extends ServiceBase {
 				info.set("floor", faInfoInfoList.get(0).get("floor"));
 				info.set("installLocation", faInfoInfoList.get(0).get("installLocation"));
 				info.set("installLocationNum", faInfoInfoList.get(0).get("installLocationNum"));
+				info.set("purchaseDept", faInfoInfoList.get(0).get("purchaseDept"));
 				info.set("buyCost", faInfoInfoList.get(0).get("buyCost"));
 				info.set("estimateCost", faInfoInfoList.get(0).get("estimateCost"));
 				info.set("netAssetValue", faInfoInfoList.get(0).get("netAssetValue"));
 //				info.set("info-0-goodsTypeCode_textField", faInfoInfoList.get(0).get("goodsTypeName"));
 				info.set("info-0-goodsCategoryCode_textField", faInfoInfoList.get(0).get("goodsCategoryName"));
+				info.setRows("resultValue",faInfoInfoList);
+				info.setRows("resultChange",faInfoInfoList);
+				info.setRows("resultAfter",faInfoInfoList);
 				break;
 		}
 		return info;
@@ -132,6 +136,15 @@ public class ServiceFABG0101 extends ServiceBase {
 		map.put("surpName",map.get("surpNum_textField"));
 		map.put("goodsCategoryName",map.get("goodsCategoryCode_textField"));
 		String id = map.get("faInfoId");
+		// 价值信息
+		List<Map<String,String>> changeRows = (List<Map<String, String>>) info.get("changeRows");
+		if (CollectionUtils.isNotEmpty(changeRows)){
+			map.put("buyCost",changeRows.get(0).get("afterBuyCost"));
+			map.put("netAssetValue",changeRows.get(0).get("afterNetAssetValue"));
+			map.put("totalDepreciation",changeRows.get(0).get("afterTotalDepreciation"));
+			map.put("equityFund",changeRows.get(0).get("afterEquityFund"));
+			map.put("otherFund",changeRows.get(0).get("afterOtherFund"));
+		}
 		// 查询变更前信息
 		List<Map<String,Object>> faInfoDOS = dao.query("FADA01.query", new HashMap<String, String>() {{
 			put("faInfoId", id);
@@ -148,7 +161,20 @@ public class ServiceFABG0101 extends ServiceBase {
 		faModificationBatchDetailVO.setFaInfoId(id);
 		if (CollectionUtils.isNotEmpty(faInfoDOS)) {
 			if (!faInfoDOS.get(0).get("goodsClassifyCode").equals(map.get("goodsClassifyCode"))) {
-				faModificationBatchDetailVO.setGoodsNum(OneSelfUtils.privateCreateCode(map.get("goodsClassifyCode")));
+				String goodsClassifyCode = map.get("goodsClassifyCode");
+				if (goodsClassifyCode.contains("A08")){
+					goodsClassifyCode = goodsClassifyCode.replace("A08","B");
+				} else if (!goodsClassifyCode.contains("A0232")){
+					goodsClassifyCode = goodsClassifyCode.replace("A","C");
+				}
+				String goodsNum = OneSelfUtils.privateCreateCode(goodsClassifyCode);
+				if (StringUtils.isNotEmpty(goodsNum)){
+					faModificationBatchDetailVO.setGoodsNum(goodsNum);
+				} else {
+					info.setStatus(-1);
+					info.setMsg("资产变更失败，请联系管理员");
+					return info;
+				}
 			}
 		}
 		String batchId = UUID.randomUUID().toString();
@@ -171,6 +197,7 @@ public class ServiceFABG0101 extends ServiceBase {
 			dao.insert("FABG01.saveComparisonResult", results);
 		} else {
 			info.setStatus(-1);
+			info.setMsg("资产没有发生变化，变更失败");
 			return info;
 		}
 		// 变更抛帐
@@ -181,5 +208,4 @@ public class ServiceFABG0101 extends ServiceBase {
 		}
 		return info;
 	}
-
 }

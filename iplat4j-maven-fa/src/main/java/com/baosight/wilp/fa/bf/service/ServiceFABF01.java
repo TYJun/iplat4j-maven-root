@@ -8,12 +8,10 @@ import com.baosight.iplat4j.core.service.soa.XLocalManager;
 import com.baosight.iplat4j.core.util.DateUtils;
 import com.baosight.iplat4j.core.util.StringUtils;
 import com.baosight.wilp.common.util.BaseDockingUtils;
-import com.baosight.wilp.common.util.CommonUtils;
 import com.baosight.wilp.fa.bf.domian.FaScrapVO;
 import com.baosight.wilp.fa.da.domain.FaInfoDO;
 import com.baosight.wilp.fa.utils.OneSelfUtils;
 import com.baosight.xservices.xs.util.UserSession;
-import com.ibatis.sqlmap.engine.mapping.sql.dynamic.elements.IsEmptyTagHandler;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.Date;
@@ -90,7 +88,11 @@ public class ServiceFABF01 extends ServiceBase {
 			}
 		}
 		Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
-		List<String> deptName = OneSelfUtils.specifyDept((String) staffByUserId.get("workNo"));
+		Map<String, Object> rolesMap = OneSelfUtils.queryRolesByWorkNo((String) staffByUserId.get("workNo"));
+		List<String> deptName = null;
+		if (rolesMap.containsKey("role") && rolesMap.containsKey("lookDeptName")) {
+			deptName = (List<String>) rolesMap.get("lookDeptName");
+		}
 		if (CollectionUtils.isNotEmpty(deptName)) {
 			info.setCell("inqu_status", 0, "role", "user");
 			info.setCell("inqu_status", 0, "lookDeptName", deptName);
@@ -98,20 +100,22 @@ public class ServiceFABF01 extends ServiceBase {
 		EiInfo outInfo = super.query(info, "FABF01.queryFaInfoDOInfo", new FaInfoDO(), false, null, null, "resultA", "resultA");
 		if (info.getBlocks().size() > 0) {
 			if (info.getBlock("resultA") != null) {
-				if ("15".equals(info.getBlock("resultA").get("limit"))) {
-					outInfo.addBlock("resultA").set(EiConstant.limitStr, 15);
+				if ("50".equals(info.getBlock("resultA").get("limit"))) {
+					outInfo.addBlock("resultA").set(EiConstant.limitStr, 50);
+				}  else if ("100".equals(info.getBlock("resultA").get("limit"))) {
+					outInfo.addBlock("resultA").set(EiConstant.limitStr, 100);
+				} else if ("500".equals(info.getBlock("resultA").get("limit"))) {
+					outInfo.addBlock("resultA").set(EiConstant.limitStr, 500);
+				} else if ("1000".equals(info.getBlock("resultA").get("limit"))) {
+					outInfo.addBlock("resultA").set(EiConstant.limitStr, 1000);
 				}
 			}
 		}
 		outInfo.set("workNo", staffByUserId.get("workNo"));
 		outInfo.set("name", staffByUserId.get("name"));
 		outInfo.set("deptName", staffByUserId.get("deptName"));
-		// 1.获取参数,处理参数
-		Map<String, Object> map = CommonUtils.buildParamter(info, "inqu_status", "dept");
-		// 2.调用微服务接口S_AC_FW_05，获取科室信息
-		map.remove("limit");
-		List<Map<String, String>> maps = dao.query("FADA01.queryDept", map);
-		outInfo.setRows("dept", maps);
+		List<Map<String, String>> list = OneSelfUtils.queryDeptsByWorkNo((String) staffByUserId.get("workNo"));
+		outInfo.setRows("dept", list);
 		return outInfo;
 	}
 
@@ -125,7 +129,11 @@ public class ServiceFABF01 extends ServiceBase {
 	 */
 	public EiInfo ApplyDeptQuery(EiInfo info) {
 		Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
-		List<String> deptName = OneSelfUtils.specifyDept((String) staffByUserId.get("workNo"));
+		Map<String, Object> rolesMap = OneSelfUtils.queryRolesByWorkNo((String) staffByUserId.get("workNo"));
+		List<String> deptName = null;
+		if (rolesMap.containsKey("role") && rolesMap.containsKey("lookDeptName")) {
+			deptName = (List<String>) rolesMap.get("lookDeptName");
+		}
 		info.setCell("inqu_status", 0, "scrapStatus", "applyDept");
 		if (CollectionUtils.isNotEmpty(deptName)) {
 			info.setCell("inqu_status", 0, "role", "user");
@@ -147,7 +155,11 @@ public class ServiceFABF01 extends ServiceBase {
 	 */
 	public EiInfo ApplyQuery(EiInfo info) {
 		Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
-		List<String> deptName = OneSelfUtils.specifyDept((String) staffByUserId.get("workNo"));
+		Map<String, Object> rolesMap = OneSelfUtils.queryRolesByWorkNo((String) staffByUserId.get("workNo"));
+		List<String> deptName = null;
+		if (rolesMap.containsKey("role") && rolesMap.containsKey("lookDeptName")) {
+			deptName = (List<String>) rolesMap.get("lookDeptName");
+		}
 		info.setCell("inqu_status", 0, "scrapStatus", "apply");
 		if (CollectionUtils.isNotEmpty(deptName)) {
 			info.setCell("inqu_status", 0, "role", "user");
@@ -169,7 +181,11 @@ public class ServiceFABF01 extends ServiceBase {
 	 */
 	public EiInfo identifyQuery(EiInfo info) {
 		Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
-		List<String> deptName = OneSelfUtils.specifyDept((String) staffByUserId.get("workNo"));
+		Map<String, Object> rolesMap = OneSelfUtils.queryRolesByWorkNo((String) staffByUserId.get("workNo"));
+		List<String> deptName = null;
+		if (rolesMap.containsKey("role") && rolesMap.containsKey("lookDeptName")) {
+			deptName = (List<String>) rolesMap.get("lookDeptName");
+		}
 		info.setCell("inqu_status", 0, "scrapStatus", "identify");
 		if (CollectionUtils.isNotEmpty(deptName)) {
 			info.setCell("inqu_status", 0, "role", "user");
@@ -191,7 +207,11 @@ public class ServiceFABF01 extends ServiceBase {
 	 */
 	public EiInfo functionQuery(EiInfo info) {
 		Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
-		List<String> deptName = OneSelfUtils.specifyDept((String) staffByUserId.get("workNo"));
+		Map<String, Object> rolesMap = OneSelfUtils.queryRolesByWorkNo((String) staffByUserId.get("workNo"));
+		List<String> deptName = null;
+		if (rolesMap.containsKey("role") && rolesMap.containsKey("lookDeptName")) {
+			deptName = (List<String>) rolesMap.get("lookDeptName");
+		}
 		info.setCell("inqu_status", 0, "scrapStatus", "function");
 		if (CollectionUtils.isNotEmpty(deptName)) {
 			info.setCell("inqu_status", 0, "role", "user");
@@ -213,7 +233,11 @@ public class ServiceFABF01 extends ServiceBase {
 	 */
 	public EiInfo assetQuery(EiInfo info) {
 		Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
-		List<String> deptName = OneSelfUtils.specifyDept((String) staffByUserId.get("workNo"));
+		Map<String, Object> rolesMap = OneSelfUtils.queryRolesByWorkNo((String) staffByUserId.get("workNo"));
+		List<String> deptName = null;
+		if (rolesMap.containsKey("role") && rolesMap.containsKey("lookDeptName")) {
+			deptName = (List<String>) rolesMap.get("lookDeptName");
+		}
 		info.setCell("inqu_status", 0, "scrapStatus", "asset");
 		if (CollectionUtils.isNotEmpty(deptName)) {
 			info.setCell("inqu_status", 0, "role", "user");
@@ -235,7 +259,11 @@ public class ServiceFABF01 extends ServiceBase {
 	 */
 	public EiInfo allQuery(EiInfo info) {
 		Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
-		List<String> deptName = OneSelfUtils.specifyDept((String) staffByUserId.get("workNo"));
+		Map<String, Object> rolesMap = OneSelfUtils.queryRolesByWorkNo((String) staffByUserId.get("workNo"));
+		List<String> deptName = null;
+		if (rolesMap.containsKey("role") && rolesMap.containsKey("lookDeptName")) {
+			deptName = (List<String>) rolesMap.get("lookDeptName");
+		}
 		info.setCell("inqu_status", 0, "scrapStatus", "all");
 		if (CollectionUtils.isNotEmpty(deptName)) {
 			info.setCell("inqu_status", 0, "role", "user");

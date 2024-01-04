@@ -1,5 +1,8 @@
 var ws = null, pageCount = 0.00, numberCount = 0.00;
 $(function () {
+    /**回车键查询**/
+    keydown("inqu", "QUERY");
+
     // webSocketInit(0);
     $("#QUERY").on("click", function (e) {
         // resultAGrid.dataSource.page(1);
@@ -267,8 +270,8 @@ $(function () {
         },
         "resultB": {
             pageable: {
-                pageSize: 100,
-                pageSizes: [100,200,500,1000]
+                pageSize: 500,
+                pageSizes: [50,100,500,1000]
             },
             onCellClick: function (e) {
                 if (e.field === "goodsNum") {
@@ -641,8 +644,8 @@ $(function () {
         },
         "resultC":{
             pageable: {
-                pageSize: 100,
-                pageSizes: [100,200,500,1000]
+                pageSize: 500,
+                pageSizes: [50,100,500,1000]
             },
             onCellClick: function (e) {
                 if (e.field === "goodsNum") {

@@ -1,6 +1,10 @@
 $(function () {
+    /**回车键查询**/
+    keydown("inqu", "QUERY");
+
     var parentId = $("#info-0-parentId").val();
     var goodsClassifyName = $("#info-0-goodsClassifyName").val();
+    IPLAT.EFInput.value($("#info-0-purchaseDept"), __ei.deptName);
     $("#info-0-equityFund").val($("#info-0-buyCost").val());
     $("#info-0-otherFund").val(0.00);
     document.getElementById("info-0-equityFund").addEventListener("input", () => {
@@ -31,10 +35,7 @@ $(function () {
     })
 
     $("#REQUERY").on("click", function () {
-        var faTypeId = $("#inqu_status-0-faTypeId").val();
-        if (faTypeId == "" || faTypeId == null){
-            $("#inqu_status-0-faTypeId").val(parentId)
-        }
+        $("#inqu_status-0-faTypeId").val("")
         $("#inqu_status-0-typeName").val("")
         resultGrid.dataSource.page(1);
     })
@@ -129,17 +130,6 @@ $(function () {
                 }
             },
         },
-        // "info-0-fundingSourceNum": {
-        //     select: function (e) {
-        //         if ("100" == e.dataItem.valueField || "" == e.dataItem.valueField) {
-        //             $("#fundProject").hide();
-        //             IPLAT.EFInput.value($("#info-0-fundProjectCode"), "");
-        //             IPLAT.EFInput.value($("#info-0-fundProject"), "");
-        //         } else {
-        //             $("#fundProject").show();
-        //         }
-        //     },
-        // }
     };
 
     IPLATUI.EFPopupInput = {
@@ -189,29 +179,6 @@ $(function () {
                 // console.log("编码：" + confirmDeptNum + "--" + "名称：" + confirmDeptName)
             }
         },
-        // "info-0-deptName": {
-        //     change: function (e) {
-        //         var context = $("#info-0-deptName").data("kendoAutoComplete");
-        //         if (context.listView._dataItems.length > 0) {
-        //             var purchaseDeptNum = context.listView._dataItems[0].deptNum;
-        //             console.log(purchaseDeptNum)
-        //             var purchaseDeptName = context.listView._dataItems[0].deptName;
-        //             if (purchaseDeptNum == "") {
-        //                 NotificationUtil("该科室不存在编码请重新选择", "warning")
-        //                 IPLAT.EFInput.value($("#info-0-confirmDeptNum"), "");
-        //                 IPLAT.EFInput.value($("#info-0-confirmDeptName"), "");
-        //             } else {
-        //                 IPLAT.EFInput.value($("#info-0-confirmDeptNum"), purchaseDeptNum);
-        //                 IPLAT.EFInput.value($("#info-0-confirmDeptName"), purchaseDeptName);
-        //             }
-        //         } else {
-        //             NotificationUtil("该科室不存在请重新选择", "warning")
-        //             IPLAT.EFInput.value($("#info-0-confirmDeptNum"), "");
-        //             IPLAT.EFInput.value($("#info-0-confirmDeptName"), "");
-        //         }
-        //         // console.log("编码：" + confirmDeptNum + "--" + "名称：" + confirmDeptName)
-        //     }
-        // }
     }
 
     // Cookies 保存结点展开状态 Fn
@@ -229,6 +196,10 @@ $(function () {
 
     IPLATUI.EFGrid = {
         "result": {
+            pageable: {
+                pageSize: 50,
+                pageSizes: [50, 100, 500, 1000]
+            },
             toolbarConfig: {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
                 add: false, cancel: false, save: false, 'delete': false,
@@ -266,6 +237,11 @@ $(function () {
                         $("#info-0-buyCost").val(0);
                     }
                     validator.validate();
+                    if ($("#info-0-purchaseDept").val() == "") {
+                        NotificationUtil("请填写采购科室", "warning")
+                        $("#SAVE").attr("disabled", false);
+                        return
+                    }
                     if ($("#info-0-goodsName").val() == "") {
                         NotificationUtil("请填写资产名称", "warning")
                         $("#SAVE").attr("disabled", false);
@@ -281,23 +257,11 @@ $(function () {
                         $("#SAVE").attr("disabled", false);
                         return
                     }
-                    // if ($("#info-0-deptName").val() == ""){
-                    //     NotificationUtil("请选择所属科室", "warning")
-                    //     return
-                    // }
-                    // if ($("#info-0-confirmDeptNum").val() == ""){
-                    //     NotificationUtil("请勿手填所属科室", "warning")
-                    //     return
-                    // }
                     if (isNaN($("#info-0-buyCost").val())) {
                         NotificationUtil("请检查资产原值类型", "warning")
                         $("#SAVE").attr("disabled", false);
                         return
                     }
-                    // if ($("#info-0-warranty").val() == "") {
-                    //     NotificationUtil("请检查保质期", "warning")
-                    //     return
-                    // }
                     if (isNaN($("#info-0-warranty").val())) {
                         NotificationUtil("请检查保修期类型", "warning")
                         $("#SAVE").attr("disabled", false);

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="FASQ01">
+    <select id="queryFaPermissionsTree" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+            xug.id,
+            xug.GROUP_ENAME AS "roleCode",
+            xug.GROUP_CNAME AS "roleName",
+            '1' AS "isLeaf"
+        FROM
+            ${platSchema}.`xs_user_group` xug
+        WHERE xug.GROUP_ENAME LIKE 'FA_%'
+        ORDER BY xug.GROUP_CNAME
+    </select>
+
+    <select id="queryFaPermissionsTreeDetail" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+            xug.id,
+            xu.LOGIN_NAME AS "roleCode",
+            xu.USER_NAME AS "roleName",
+            '1' AS "isLeaf"
+        FROM
+            ${platSchema}.`xs_user_group` xug
+        LEFT JOIN ${platSchema}.`xs_user_group_member` xugm ON xug.ID = xugm.PARENT_ID
+        LEFT JOIN ${platSchema}.xs_user xu ON xugm.MEMBER_ID = xu.USER_ID
+        WHERE xug.GROUP_ENAME LIKE 'FA_%'
+        AND xug.GROUP_ENAME = #parentEname#
+    </select>
+
+    <select id="queryDeptTree" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        SELECT
+            id,
+            dept_num AS "deptCode",
+            dept_name AS "deptName",
+            '1' AS "isLeaf"
+        FROM
+            ${projectSchema}.`ac_department`
+        WHERE
+            dict_type = '业务区划'
+        AND
+            `status` = '1'
+        <isNotEmpty property="deptName" prepend="and">
+            dept_name like concat('%',#deptName#,'%')
+        </isNotEmpty>
+        order by CONVERT( dept_name USING gbk ) COLLATE gbk_chinese_ci ASC
+    </select>
+
+    <!-- 查询固定资产授权表 -->
+    <select id="queryFaPermissions" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+        SELECT
+            id,
+            permissions_code AS "roleCode",
+            permissions_name AS "roleName",
+            dept_num AS "deptNum",
+            dept_name AS "deptName",
+            work_no AS "workNo",
+            `name` AS "name",
+            MEMBER_ID
+        FROM
+            fa_permissions
+        WHERE 1 = 1
+        <isNotEmpty prepend="and" property="roleCode">
+            permissions_code = #roleCode#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="roleName">
+            permissions_name LIKE CONCAT ('%',#roleName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="deptNum">
+            dept_num = #deptNum#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="deptName">
+            dept_name LIKE CONCAT ('%',#deptName#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="workNo">
+            work_no LIKE CONCAT ('%',#workNo#,'%')
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="name">
+            `name` LIKE CONCAT ('%',#name#,'%')
+        </isNotEmpty>
+        order by CONVERT( dept_name USING gbk ) COLLATE gbk_chinese_ci ASC,work_no
+    </select>
+
+    <!-- 查询人员信息 -->
+    <select id="queryAcPersonnel" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+        select
+            ap.work_no AS "workNo",
+            ap.`name`,
+            ad.dept_name AS "deptName"
+        from
+            ${projectSchema}.ac_personnel ap
+        left join ${projectSchema}.ac_department ad on ap.dept_id = ad.id
+        where ap.status = '1'
+        <isNotEmpty property="workNo" prepend="and">
+            ap.work_no like concat ('%',#workNo#,'%')
+        </isNotEmpty>
+        <isNotEmpty property="name" prepend="and">
+            ap.`name` like concat ('%',#name#,'%')
+        </isNotEmpty>
+        <isNotEmpty property="deptName" prepend="and">
+            ad.dept_name like concat ('%',#deptName#,'%')
+        </isNotEmpty>
+        order by CONVERT( ad.dept_name USING gbk ) COLLATE gbk_chinese_ci ASC,ap.work_no
+    </select>
+
+    <!-- 添加人员权限 -->
+    <insert id="insertFaPermissions" parameterClass="java.util.HashMap">
+        insert into fa_permissions(permissions_code,permissions_name,dept_num,dept_name,work_no,`name`) values
+        (#roleCode#,#roleName#,#deptNum#,#deptName#,#workNo#,#name#)
+    </insert>
+
+    <!-- 查询MemberId -->
+    <select id="queryMemberId" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+        select
+            USER_ID AS "memberId"
+        from
+            ${platSchema}.xs_user
+        where LOGIN_NAME = #workNo#
+    </select>
+
+    <!-- 查询ParentId -->
+    <select id="queryParentId" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+        select
+            ID AS "parentId"
+        from
+            ${platSchema}.xs_user_group
+        where GROUP_ENAME = #roleCode#
+    </select>
+
+    <!-- 人员权限插入框架表 -->
+    <insert id="insertGroupMember" parameterClass="java.util.HashMap">
+        insert into ${platSchema}.xs_user_group_member(MEMBER_ID,PARENT_ID,MEMBER_TYPE,SORT_INDEX,REC_CREATOR,REC_CREATE_TIME,ARCHIVE_FLAG)
+        values (#memberId#,#parentId#,'USER','0','FA',#recCreateTime#,'0')
+    </insert>
+
+    <!-- 删除框架权限 -->
+    <delete id="deleteGroupMember" parameterClass="java.util.HashMap">
+        delete from ${platSchema}.xs_user_group_member where MEMBER_ID = #memberId# AND PARENT_ID = #parentId#
+    </delete>
+
+    <!-- 删除固定资产权限 -->
+    <delete id="deleteRoles" parameterClass="java.util.HashMap">
+        delete from fa_permissions where permissions_code = #roleCode# AND dept_num = #deptNum# AND work_no = #workNo#
+    </delete>
+
+    <!-- 自定义接口查询 -->
+    <!-- 通过工号查询权限 -->
+    <select id="queryRolesByWorkNo" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+        SELECT
+            GROUP_CONCAT( DISTINCT permissions_code ) AS "permissionsCode",
+            GROUP_CONCAT( DISTINCT dept_name ) AS "lookDeptName"
+        FROM
+            `fa_permissions`
+        WHERE
+            work_no = #value#
+    </select>
+
+
+</sqlMap>

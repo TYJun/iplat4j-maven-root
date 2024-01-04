@@ -25,7 +25,8 @@ public enum FixedAssetsEum {
 	valuer("鉴定科","","FA_VALUER"),
 	function("职能科","","FA_FUNCTION"),
 	member("资产管理科下属","","FA_MEMBER"),
-	leader("资产管理科","","FA_LEADER");
+	leader("资产管理科","","FA_LEADER"),
+	inventory("资产盘点员","","FA_INVENTORY");
 
 	// 成员变量
 	private String description;

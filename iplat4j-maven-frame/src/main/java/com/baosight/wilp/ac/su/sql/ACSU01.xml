@@ -438,19 +438,21 @@
 		</isNotEmpty>
 	</update>
 
-	<delete id="deletePm" parameterClass="java.util.List">
-		delete from pm01 where ID IN
+	<delete id="deleteCm" parameterClass="java.util.List">
+		delete from cm_contract_bill where ID IN
 		<iterate open="(" close=")" conjunction=",">
-			#resultList[].PROJECT_ID#
+			#resultList[].UNIQUE_ID#
 		</iterate>
 	</delete>
 
-	<insert id="insertPm" parameterClass="java.util.List">
-		INSERT INTO pm01(ID, PROJECT_NO, PROJECT_NAME, PROJECT_TYPE_NAME, START_DATE)
+	<insert id="insertCm" parameterClass="java.util.List">
+		INSERT INTO cm_contract_bill(ID,CONT_NO,CONT_NAME,CONT_TYPE_NUM,CONT_SIGN_TIME,PLAN_TAKEEF_TIME,PLAN_FINISH_TIME,SURP_NAME,SURP_NUM,CURR_TYPE,
+		CONT_FEE_AMOUNT,QUAR_PERIOD,BUDGET)
 		values
 		    <iterate conjunction=",">
-				(#resultList[].PROJECT_ID#,#resultList[].PROJECT_CODE#,#resultList[].PROJECT_NAME#,
-		        #resultList[].PROJECT_SOURCE#,#resultList[].CRE_DATETIME#)
+				(#resultList[].UNIQUE_ID#,#resultList[].K_CODE#,#resultList[].K_NAME#,#resultList[].K_TYPE_NAME#,#resultList[].SIGN_ON_DATE#,
+				#resultList[].EFFECTIVE_DATE#,#resultList[].EXPIRY_DATE#,#resultList[].PART_B_NAME#,#resultList[].PART_B_CODE#,
+				#resultList[].CURRENCY_NAME#,#resultList[].K_AMOUNT#,#resultList[].TWARRANTY_PERIOD#,#resultList[].BUDGET_AMOUNT#)
 			</iterate>
 	</insert>
 </sqlMap>

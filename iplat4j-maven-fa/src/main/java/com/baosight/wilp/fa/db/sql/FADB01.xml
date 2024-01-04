@@ -503,7 +503,7 @@
         DATE_FORMAT( use_date, '%Y-%m-%d' ) AS "useDate",
         build AS "build",
         floor AS "floor",
-        room AS "room",
+        trim(room) AS "room",
         install_location AS "installLocation",
         install_location_num AS "installLocationNum",
         dept_num AS "deptNum",
@@ -535,8 +535,8 @@
         rfid_code AS "rfidCode",
         net_asset_value AS "netAssetValue",
         estimate_cost AS "estimateCost",
-        remark AS "remark",
-        out_remark	AS "outRemark",
+        trim(remark) AS "remark",
+        trim(out_remark)	AS "outRemark",
         depreciation_way AS "depreciationWay",
         total_depreciation AS "totalDepreciation",
         month_depreciation AS "monthDepreciation",
@@ -951,7 +951,7 @@
 
     <!-- 资产调拨修改资产状态 -->
     <update id="updateFaInfoStatusByList" parameterClass="java.util.HashMap">
-        UPDATE fa_info SET status_code = '020' WHERE status_code = '030' AND id IN
+        UPDATE fa_info SET status_code = '020' WHERE status_code = '031' AND id IN
         (
         SELECT
         faInfo_id
@@ -1079,7 +1079,7 @@
             DATE_FORMAT( use_date, '%Y-%m-%d' ) AS "useDate",
             build AS "build",
             floor AS "floor",
-            room AS "room",
+            trim(room) AS "room",
             install_location AS "installLocation",
             install_location_num AS "installLocationNum",
             dept_num AS "deptNum",
@@ -1111,7 +1111,8 @@
             rfid_code AS "rfidCode",
             net_asset_value AS "netAssetValue",
             estimate_cost AS "estimateCost",
-            remark AS "remark",
+            trim(remark) AS "remark",
+            trim(out_remark)	AS "outRemark",
             depreciation_way AS "depreciationWay",
             total_depreciation AS "totalDepreciation",
             month_depreciation AS "monthDepreciation",
@@ -1141,7 +1142,20 @@
     </select>
 
     <update id="updateRoomAndOutremark" parameterClass="java.util.HashMap">
-        update fa_info set room = #room#,out_remark = #outRemark#
+        update fa_info set room = #room#,remark = #remark#
         where id = #faInfoId#
+    </update>
+
+    <select id="checkInstallLocation" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+        select
+            `id`
+        FROM ${projectSchema}.ac_spot
+        where spot_num = #installLocationNum#
+        AND spot_name = #installLocation#
+    </select>
+
+    <update id="updateInstallLocation" parameterClass="java.util.HashMap">
+        update fa_info set build = #building#,floor = #floor#,install_location_num = #installLocationNum#,
+        install_location = #installLocation#,room = #room#,remark = #remark# where id = #faInfoId#
     </update>
 </sqlMap>

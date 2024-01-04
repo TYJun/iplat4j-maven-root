@@ -37,4 +37,5 @@
 			<EF:EFWindow id="popData" url="" lazyload="true" width="90%" height="60%" title="科室绑定" modal="true" />
 		</div>
 	</div>
+	<script type="text/javascript" src="${ctx}/FA/common/js/fa-keydown.js"></script>
 </EF:EFPage>

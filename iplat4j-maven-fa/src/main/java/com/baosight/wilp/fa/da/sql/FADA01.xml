@@ -3,13 +3,14 @@
 
 <sqlMap namespace="FADA01">
 	<!--  查询资产最大值  -->
-	<select id="queryMaxGoodNum" parameterClass="java.lang.String" resultClass="java.lang.String">
+	<select id="queryMaxGoodNum" parameterClass="java.util.HashMap" resultClass="java.lang.String">
 		SELECT
 			goods_num
 		FROM
 			fa_info
 		WHERE
-			goods_num LIKE concat(#value#, '%')
+			goods_num LIKE concat(#name#, '%')
+		AND length(goods_num) = #length#
 		ORDER BY goods_num DESC
 		LIMIT 1
 	</select>
@@ -142,12 +143,12 @@
 			enter_bill_no as "enterBillNo",
 			out_bill_no as "outBillNo",
 			cont_no AS "contNo",
-			fundingSource_num AS "fundingSourceNum",
-			fundingSource_name AS "fundingSourceName",
-			asset_use_code AS "assetUseCode",
-			asset_use_name AS "assetUseName",
-			asset_get_way_code AS "assetGetWayCode",
-			asset_get_way_name AS "assetGetWayName",
+			trim(fundingSource_num) AS "fundingSourceNum",
+			trim(fundingSource_name) AS "fundingSourceName",
+			trim(asset_use_code) AS "assetUseCode",
+			trim(asset_use_name) AS "assetUseName",
+			trim(asset_get_way_code) AS "assetGetWayCode",
+			trim(asset_get_way_name) AS "assetGetWayName",
 			deprect_code AS "deprectCode",
 			deprect_name AS "deprectName",
 			mat_num as "matNum",
@@ -166,27 +167,27 @@
 			model	as "model",
 			spec	as "matSpec",
 			spec	as "spec",
-			unit_num	as "unitNum",
-			unit_name	as "unitName",
+			trim(unit_num)	as "unitNum",
+			trim(unit_name)	as "unitName",
 			dept_num	as "confirmDeptNum",
 			dept_name	as "confirmDeptName",
 			dept_name	AS "deptName",
 			brand_desc AS "brandDesc",
 			manufacturer	as "manufacturer",
-			manufacturer_naty_code as "manufacturerNatyCode",
-			manufacturer_naty_name AS "manufacturerNatyName",
-			surp_num	as "surpNum",
-			surp_name	as "surpName",
+			trim(manufacturer_naty_code) as "manufacturerNatyCode",
+			trim(manufacturer_naty_name) AS "manufacturerNatyName",
+			trim(surp_num)	as "surpNum",
+			trim(surp_name)	as "surpName",
 			DATE_FORMAT( buy_date, '%Y-%m-%d' ) AS "buyDate",
 			DATE_FORMAT( use_date, '%Y-%m-%d' ) AS "useDate",
-			build	as "confirmBuild",
-			build	as "build",
-			floor	as "confirmFloor",
-			floor	as "floor",
-			room	as "confirmRoom",
-			room	as "room",
-			install_location	as "installLocation",
-			install_location_num as "installLocationNum",
+			trim(build)	as "confirmBuild",
+			trim(build)	as "build",
+			trim(floor)	as "confirmFloor",
+			trim(floor)	as "floor",
+			trim(room)	as "confirmRoom",
+			trim(room)	as "room",
+			trim(install_location)	as "installLocation",
+			trim(install_location_num) as "installLocationNum",
 			use_years	as "useYears",
 			amount	as "enterAmount",
 			amount	as "amount",
@@ -249,7 +250,17 @@
 			asset_type AS "assetType",
 			out_remark AS "outRemark",
 			archive_flag	as "archiveFlag",
-			warranty AS "warranty"
+			warranty AS "warranty",
+		    0.00 AS "changeBuyCost",
+			0.00 AS "changeEquityFund",
+			0.00 AS "changeOtherFund",
+			0.00 AS "changeNetAssetValue",
+			0.00 AS "changeTotalDepreciation",
+			buy_cost AS "afterBuyCost",
+			equity_fund AS "afterEquityFund",
+			other_fund AS "afterOtherFund",
+			net_asset_value AS "afterNetAssetValue",
+			total_depreciation AS "afterTotalDepreciation"
 		FROM fa_info
 		WHERE lock_flag not in ("4")
 		<isEqual prepend="and" property="isCall" compareValue="true">
@@ -852,6 +863,12 @@
 		<isNotEmpty prepend=" AND " property="cardStatus">
 			card_status = #cardStatus#
 		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="spec">
+			spec like concat ('%',trim(#spec#),'%')
+		</isNotEmpty>
+		<isNotEmpty prepend=" AND " property="outRemark">
+			out_remark like concat ('%',trim(#outRemark#),'%')
+		</isNotEmpty>
 		<isNotEmpty prepend=" AND " property="rfidCode">
 			rfid_code like concat ('%',trim(#rfidCode#),'%')
 		</isNotEmpty>
@@ -961,7 +978,7 @@
 	<!---->
 
 	<select id="queryDept" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
-		SELECT
+		SELECT DISTINCT
 			dept_num AS "deptNum",
 			dept_name AS "deptName"
 		FROM
@@ -974,6 +991,13 @@
 		<isNotEmpty prepend="and" property="deptName">
 			dept_name like concat ('%',#deptName#,'%')
 		</isNotEmpty>
+	</select>
+
+	<select id="queryFaInfoDept" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select DISTINCT
+			dept_num AS "deptNum",
+			dept_name AS "deptName"
+		from fa_info
 	</select>
 
 	<select id="querySUMFaInfoDOInfo" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
@@ -1045,5 +1069,25 @@
 		<isNotEmpty prepend=" AND " property="rfidCode">
 			rfid_code like concat ('%',trim(#rfidCode#),'%')
 		</isNotEmpty>
+	</select>
+
+	<select id="queryGoodsClassifyName" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+		SELECT DISTINCT
+			goods_classify_code AS "goodsClassifyCode",
+			goods_classify_name AS "goodsClassifyName"
+		FROM
+			fa_info
+		ORDER BY
+			goods_classify_code
+	</select>
+
+	<select id="queryGoodsGoodsTypeName" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+		SELECT DISTINCT
+			goods_type_code AS "goodsTypeCode",
+			goods_type_name AS "goodsTypeName"
+		FROM
+			fa_info
+		ORDER BY
+			goods_type_code
 	</select>
 </sqlMap>

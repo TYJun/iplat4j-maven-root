@@ -8,33 +8,38 @@
         <EF:EFInput ename="matNum" cname="物资编码" readOnly="true"/>
         <EF:EFInput ename="enterBillNo" cname="入库单号" readOnly="true"/>
         <EF:EFInput ename="outBillNo" cname="出库单号" readOnly="true"/>
-        <EF:EFInput ename="goodsClassifyName" cname="类组" readOnly="true"/>
-        <EF:EFInput ename="goodsTypeName" cname="资产类别" readOnly="true"/>
-        <EF:EFInput ename="goodsCategoryName" cname="末级类别" readOnly="true"/>
+        <EF:EFInput ename="goodsTypeName" cname="类组" readOnly="true"/>
         <EF:EFInput ename="goodsClassifyCode" cname="资产类别编码" type="hidden"/>
+        <EF:EFInput ename="goodsClassifyName" cname="资产类别" readOnly="true"/>
+        <EF:EFInput ename="goodsCategoryName" cname="资产末级" readOnly="true"/>
     </EF:EFRegion>
     <EF:EFRegion title="基础信息">
         <EF:EFInput ename="faInfoId" cname="faInfoId" type="hidden"/>
         <EF:EFInput ename="archiveFlag" cname="归档标记" type="hidden"/>
-        <EF:EFInput ename="contNo" cname="合同号" readOnly="true"/>
+        <EF:EFInput ename="contNo" cname="合同号" readOnly="true" type="hidden"/>
         <EF:EFInput ename="goodsNum" cname="资产编码" readOnly="true"/>
-        <EF:EFInput ename="rfidCode" cname="RFID码" readOnly="true"/>
+        <EF:EFInput ename="rfidCode" cname="RFID码" readOnly="true" type="hidden"/>
+        <EF:EFInput ename="purchaseDept" cname="采购科室" readOnly="true"/>
         <EF:EFInput ename="goodsName" cname="资产名称" readOnly="true"/>
         <EF:EFInput ename="model" cname="型号" readOnly="true"/>
         <EF:EFInput ename="spec" cname="规格" readOnly="true"/>
         <EF:EFSelect ename="unitNum"  cname="计量单位" >
+            <EF:EFOption label="--请选择--" value=""/>
             <EF:EFCodeOption codeName="wilp.ac.gm.unit" textField="label" valueField="value"/>
         </EF:EFSelect>
-        <EF:EFSelect ename="assetGetWayCode" cname="获取方式" optionLabel="请选择">
+        <EF:EFSelect ename="assetGetWayCode" cname="获取方式">
+            <EF:EFOption label="--请选择--" value=""/>
             <EF:EFCodeOption codeName="wilp.fa.assetGetWayCode"/>
         </EF:EFSelect>
-        <EF:EFSelect ename="assetUseCode" cname="资产用途" optionLabel="请选择">
+        <EF:EFSelect ename="assetUseCode" cname="资产用途">
+            <EF:EFOption label="--请选择--" value=""/>
             <EF:EFCodeOption codeName="wilp.fa.assetUseCode"/>
         </EF:EFSelect>
         <EF:EFSelect ename="manufacturerNatyCode" resultId="result" cname="国别"
                      textField="label" valueField="value" required="true" filter="contains"
-                     serviceName="FAQR01" methodName="queryManufacturerNatyCode"
-        />
+                     serviceName="FAQR01" methodName="queryManufacturerNatyCode">
+
+        </EF:EFSelect>
         <EF:EFInput ename="deptName" cname="所属科室" readOnly="true"/>
         <EF:EFInput ename="manufacturer" cname="制造厂商" readOnly="true"/>
         <EF:EFInput ename="surpName" cname="供应商" readOnly="true"/>

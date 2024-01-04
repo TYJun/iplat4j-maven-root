@@ -1,4 +1,7 @@
 $(function () {
+    /**回车键查询**/
+    keydown("inqu", "QUERY");
+
     $("#QUERY").on("click", function (e) {
         resultAGrid.dataSource.page(1);
         // resultBGrid.dataSource.page(1);
@@ -22,23 +25,23 @@ $(function () {
                 var grid = $(e.contentElement).find("div.k-grid").data("kendoGrid")
                 if (grid != undefined) {
                     if (grid.options.blockId === "resultA") {
-                        if (__ei.role == "admin") {
-                            $("#role").show();
-                        }
+                        // if (__ei.role == "admin") {
+                        //     $("#role").show();
+                        // }
                         $("#one").show();
                         $("#other").hide();
                     } else {
                         $("#one").hide();
-                        $("#role").hide();
+                        // $("#role").hide();
                         $("#other").show();
                     }
                     setTimeout(function () {
                         grid.dataSource.page(1);
-                        if (grid.options.blockId === "resultC"){
+                        if (grid.options.blockId === "resultC") {
                             resultDetailsC2Grid.dataSource.page(1);
-                        } else if (grid.options.blockId === "resultD"){
+                        } else if (grid.options.blockId === "resultD") {
                             resultDetailsD2Grid.dataSource.page(1);
-                        } else if (grid.options.blockId === "resultE"){
+                        } else if (grid.options.blockId === "resultE") {
                             resultDetailsE2Grid.dataSource.page(1);
                         }
                     }, 500)
@@ -49,28 +52,75 @@ $(function () {
 
     IPLATUI.EFGrid = {
         "resultA": {
+            columns: [{
+                field: "installLocation",
+                title: "存放位置",
+                width: 200,
+                query: function (e) {
+                    var queryInfo = new EiInfo();
+                    queryInfo.set("confirmDeptNum", $("#inqu_status-0-deptNum").val());
+                    return queryInfo;
+                }
+            }],
             pageable: {
                 pageSize: 500,
-                pageSizes: [15, 50, 100, 500]
+                pageSizes: [50, 100, 500, 1000]
             },
             toolbarConfig: {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
                 add: false, cancel: false, save: false, 'delete': false,
-                buttons: []
+                buttons: [
+                    {
+                        name: "updateInstallLocation",
+                        text: "修改存放位置",
+                        layout: "3",
+                        click: function () {
+                            var checkRows = resultAGrid.getCheckedRows();
+                            if (checkRows.length > 0) {
+                                if (checkRows.length > 1) {
+                                    NotificationUtil("请勿选择多条记录", "warning");
+                                } else {
+                                    var eiInfo = new EiInfo();
+                                    eiInfo.set("faInfoId",checkRows[0].faInfoId);
+                                    eiInfo.set("building",checkRows[0].building);
+                                    eiInfo.set("floor",checkRows[0].floor);
+                                    eiInfo.set("installLocationNum",checkRows[0].spotNum);
+                                    eiInfo.set("installLocation",checkRows[0].installLocation);
+                                    eiInfo.set("room",checkRows[0].room);
+                                    eiInfo.set("remark",checkRows[0].remark);
+                                    EiCommunicator.send("FADB01", "updateInstallLocation", eiInfo, {
+                                        onSuccess : function(ei) {
+                                            if(ei.getStatus() == -1){
+                                                NotificationUtil(ei.getMsg(), "error");
+                                                return;
+                                            } else {
+                                                NotificationUtil("修改成功", "success");
+                                            }
+                                            resultAGrid.dataSource.page(1);
+                                        }
+                                    });
+                                }
+                            } else {
+                                NotificationUtil("请选择一条记录", "warning");
+                            }
+                        }
+                    },
+                ]
             },
             onCellClick: function (e) {
                 if (e.field === "goodsNum") {
                     popDataWindow.setOptions({"title": "资产卡片详情"});
                     fixedAssetsWindowDetail(e.model.faInfoId)
                 }
+                $("#inqu_status-0-deptNum").val(e.model.deptNum);
             },
             loadComplete: function (grid) {
                 var myArraySize = 0,
                     myArrayMoney = 0;
-                if (localStorage.getItem("myArray") != null){
+                if (localStorage.getItem("myArray") != null) {
                     myArraySize = [...new Set(JSON.parse(localStorage.getItem("myArray")))].length.toFixed(2);
                 }
-                if (localStorage.getItem("myArrayMoney") != null){
+                if (localStorage.getItem("myArrayMoney") != null) {
                     myArrayMoney = Number(localStorage.getItem("myArrayMoney")).toFixed(2);
                 }
                 $("#ef_grid_toolbar_resultA").prepend("<div id='storageCount' style='float:left;font-size:13px;'>" +
@@ -87,7 +137,7 @@ $(function () {
                             return
                         }
                     }
-                    if (checkRows.length > 0 || Number(myArraySize) > 0){
+                    if (checkRows.length > 0 || Number(myArraySize) > 0) {
                         popDataWindow.setOptions({"title": "仓库调拨申请"});
                         fixedAssetsDetailWindow("admin", "")
                     } else {
@@ -103,7 +153,9 @@ $(function () {
                     // 是否存在电签--后续补充一下
                     if (checkRows.length > 0) {
                         localStorage.removeItem("myArray")
+                        localStorage.removeItem("myArrayMoney")
                         $("#numberCount").text(0.00);
+                        $("#numberMoney").text(0.00);
                         var flag = true;
                         for (let i = 0; i < checkRows.length; i++) {
                             if (checkRows[i].statusCode == "待用" || checkRows[i].statusCode == "调拨中") {
@@ -147,34 +199,38 @@ $(function () {
                 if (myArrayMoney != null) {
                     newMyArrayMoney = Number(myArrayMoney);
                 }
-                if (e.checked){
+                if (e.checked) {
                     var checkRows = resultAGrid.getCheckedRows()
                     for (let i = 0; i < checkRows.length; i++) {
                         newArray.push(checkRows[i].goodsNum)
                     }
-                    if ([...new Set(newArray)].length.toFixed(2) != [...new Set(JSON.parse(myArray))].length.toFixed(2)){
+                    if ([...new Set(newArray)].length.toFixed(2) != [...new Set(JSON.parse(myArray))].length.toFixed(2)) {
                         newMyArrayMoney = Number(newMyArrayMoney) + Number(e.model.buyCost)
                     }
-                    localStorage.setItem("myArray",JSON.stringify([...new Set(newArray)]))
-                    localStorage.setItem("myArrayMoney",Number(newMyArrayMoney))
+                    localStorage.setItem("myArray", JSON.stringify([...new Set(newArray)]))
+                    localStorage.setItem("myArrayMoney", Number(newMyArrayMoney))
                 } else {
                     for (let i = 0; i < newArray.length; i++) {
-                        if (newArray[i] == e.model.goodsNum){
-                            newArray.splice(i,1)
+                        if (newArray[i] == e.model.goodsNum) {
+                            newArray.splice(i, 1)
                         }
                     }
                     newArray = newArray.filter(item => item !== e.model.goodsNum);
-                    if ([...new Set(newArray)].length.toFixed(2) != [...new Set(JSON.parse(myArray))].length.toFixed(2)){
+                    if ([...new Set(newArray)].length.toFixed(2) != [...new Set(JSON.parse(myArray))].length.toFixed(2)) {
                         newMyArrayMoney = Number(newMyArrayMoney) - Number(e.model.buyCost)
                     }
-                    localStorage.setItem("myArray",JSON.stringify([...new Set(newArray)]))
-                    localStorage.setItem("myArrayMoney",Number(newMyArrayMoney))
+                    localStorage.setItem("myArray", JSON.stringify([...new Set(newArray)]))
+                    localStorage.setItem("myArrayMoney", Number(newMyArrayMoney))
                 }
                 $("#numberCount").text([...new Set(newArray)].length.toFixed(2));
                 $("#numberMoney").text(Number(newMyArrayMoney).toFixed(2));
             }
         },
         "resultB": {
+            pageable: {
+                pageSize: 500,
+                pageSizes: [50, 100, 500, 1000]
+            },
             toolbarConfig: {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
                 add: false, cancel: false, save: false, 'delete': false,
@@ -246,6 +302,10 @@ $(function () {
             },
         },
         "resultC": {
+            pageable: {
+                pageSize: 500,
+                pageSizes: [50, 100, 500, 1000]
+            },
             toolbarConfig: {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
                 add: false, cancel: false, save: false, 'delete': false,
@@ -337,6 +397,10 @@ $(function () {
             exportGrid: false,
         },
         "resultD": {
+            pageable: {
+                pageSize: 500,
+                pageSizes: [50, 100, 500, 1000]
+            },
             toolbarConfig: {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
                 add: false, cancel: false, save: false, 'delete': false,
@@ -622,6 +686,10 @@ $(function () {
             exportGrid: false,
         },
         "resultE": {
+            pageable: {
+                pageSize: 500,
+                pageSizes: [50, 100, 500, 1000]
+            },
             toolbarConfig: {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
                 add: false, cancel: false, save: false, 'delete': false,
@@ -640,7 +708,7 @@ $(function () {
                                         // 当前页面地址
                                         var pageUrl = window.location.href;
                                         // 获取报表地址前袋
-                                        var baseUrl = pageUrl.split('/')[0]+"//"+pageUrl.split('/')[2]+"/";
+                                        var baseUrl = pageUrl.split('/')[0] + "//" + pageUrl.split('/')[2] + "/";
                                         var BaseUrl = "fr/ReportServer?reportlet=v5stable/";
                                         if (ei.extAttr.url != undefined) {
                                             BaseUrl = ei.extAttr.url;
@@ -783,7 +851,7 @@ $(function () {
         "resultDetailsE2": {
             pageable: false,
             exportGrid: false,
-        }
+        },
     }
 });
 
@@ -836,13 +904,13 @@ function fixedAssetsTransferWindow(type, fileCode) {
     fixedAssetsWindow(type, "", "", fileCode);
 }
 
-function relaodStorage(){
+function relaodStorage() {
     var reloadSize = 0,
         reloadMoney = 0;
-    if (localStorage.getItem("myArray") != null){
+    if (localStorage.getItem("myArray") != null) {
         reloadSize = [...new Set(JSON.parse(localStorage.getItem("myArray")))].length.toFixed(2);
     }
-    if (localStorage.getItem("myArrayMoney") != null){
+    if (localStorage.getItem("myArrayMoney") != null) {
         reloadMoney = Number(localStorage.getItem("myArrayMoney")).toFixed(2);
     }
     $("#numberCount").text(reloadSize);

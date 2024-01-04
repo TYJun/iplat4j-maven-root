@@ -1,4 +1,4 @@
-package com.baosight.wilp.ac.we.utils;
+package com.baosight.wilp.ac.jk.util;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -6,7 +6,7 @@ import java.util.Map;
 
 /**
  * Todo(这里用一句话描述这个方法的作用)
- * 
+ *
  * @Title: RespResult
  * @ClassName: RespResult.java
  * @Package：com.baosight.wilp.ss.bm.utils

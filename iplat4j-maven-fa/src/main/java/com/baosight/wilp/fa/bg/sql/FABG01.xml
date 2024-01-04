@@ -421,7 +421,10 @@
             id AS "faInfoId",
             goods_num AS "goodsNum",
             goods_name AS "goodsName",
+            purchase_dept AS "purchaseDept",
             contract_no AS "contractNo",
+            goods_category_code AS "goodsCategoryCode",
+            goods_category_name AS "goodsCategoryName",
             goods_classify_code AS "goodsClassifyCode",
             goods_classify_name AS "goodsClassifyName",
             goods_type_code AS "goodsTypeCode",
@@ -434,23 +437,28 @@
             surp_name AS "surpName",
             buy_date AS "buyDate",
             use_date AS "useDate",
-            build,
-            floor,
-            install_location_num AS "installLocationNum",
-            install_location AS "installLocation",
+            trim(build) AS "build",
+            trim(floor) AS "floor",
+            trim(install_location_num) AS "installLocationNum",
+            trim(install_location) AS "installLocation",
+            trim(room) AS "room",
             dept_num AS "deptNum",
             dept_name AS "deptName",
+            unit_num AS "unitNum",
             unit_name AS "unitName",
             residual_rate AS "residualRate",
             net_asset_value AS "netAssetValue",
+            total_depreciation	AS "totalDepreciation",
+            equity_fund AS "equityFund",
+            other_fund AS "otherFund",
             estimated_residual_value AS "estimatedResidualValue",
             use_years AS "useYears",
             fundingSource_num AS "fundingSourceNum",
             fundingSource_name AS "fundingSourceName",
-            asset_use_code as "assetUseCode",
-            asset_use_name as "assetUseName",
-            asset_get_way_code as "assetGetWayCode",
-            asset_get_way_name as "assetGetWayName",
+            trim(asset_use_code) as "assetUseCode",
+            trim(asset_use_name) as "assetUseName",
+            trim(asset_get_way_code) as "assetGetWayCode",
+            trim(asset_get_way_name) as "assetGetWayName",
             finace_class_num AS "finaceClassNum",
             invoice_no AS "invoiceNo",
             estimate_cost AS "estimateCost",
@@ -514,10 +522,10 @@
     </select>
 
     <insert id="saveComparisonResult" parameterClass="java.util.ArrayList">
-        INSERT INTO fa_modification_record(id,batch_id,faInfo_id,`key`,label,previous,later,`time`)
+        INSERT INTO fa_modification_record(id,batch_id,faInfo_id,`key`,label,previous,later,changeValue,`time`)
         VALUES
         <iterate conjunction=",">
-            (#results[].id#,#results[].batchId#,#results[].faInfoId#,#results[].key#,#results[].label#,#results[].previous#,#results[].later#,#results[].time#)
+            (#results[].id#,#results[].batchId#,#results[].faInfoId#,#results[].key#,#results[].label#,#results[].previous#,#results[].later#,#results[].changeValue#,#results[].time#)
         </iterate>
     </insert>
 
@@ -525,6 +533,7 @@
         UPDATE fa_info SET
            goods_num	= #goodsNum#,
            goods_name	= #goodsName#,
+           purchase_dept = #purchaseDept#,
            goods_classify_code	= #goodsClassifyCode#,
            goods_classify_name	= #goodsClassifyName#,
            goods_type_code	= #goodsTypeCode#,
@@ -560,6 +569,8 @@
            net_asset_value = #netAssetValue#,
            fundingSource_num	= #fundingSourceNum#,
            fundingSource_name	= #fundingSourceName#,
+           equity_fund = #equityFund#,
+           other_fund = #otherFund#,
            remark	= #remark#,
            lock_flag = '0',
            modify_type = #modifyType#
@@ -614,6 +625,7 @@
           t1.`key`,
           t1.`label`,
           t1.`previous`,
+          t1.`changeValue`,
           t1.`later`,
           date_format(t1.`time`,'%Y-%m-%d %H:%i:%S') AS "time",
           t2.rec_create_name AS "recCreateName",
@@ -623,7 +635,29 @@
         LEFT JOIN fa_modification_batch_detail t2 ON t1.batch_id = t2.id
         WHERE
             t1.faInfo_id = #VALUE#
-        ORDER BY `time` DESC,LENGTH(label)
+        ORDER BY `time` DESC,
+        CASE `key` when 'goodsNum' then 1
+        WHEN 'goodsName' then 2
+        WHEN 'goodsTypeName' then 3
+        WHEN 'goodsClassifyName' then 4
+        WHEN 'goodsCategoryName' then 5
+        WHEN 'spec' then 6
+        WHEN 'unitName' then 7
+        WHEN 'deptName' then 8
+        WHEN 'surpName' then 9
+        WHEN 'buyDate' then 10
+        WHEN 'useDate' then 11
+        WHEN 'build' then 12
+        WHEN 'floor' then 13
+        WHEN 'build' then 14
+        WHEN 'installLocation' then 15
+        WHEN 'room' then 16
+        WHEN 'useYears' then 17
+        WHEN 'buyCost' then 18
+        WHEN 'netAssetValue' then 19
+        WHEN 'totalDepreciation' then 20
+        WHEN 'equityFund' then 21
+        WHEN 'otherFund' then 22 END
     </select>
     <!--  -->
 
@@ -659,6 +693,7 @@
         <isNotEmpty prepend=" AND " property="deptNameSplit">
             $deptNameSplit$
         </isNotEmpty>
+        GROUP BY goods_num
         <dynamic prepend="ORDER BY">
             <isNotEmpty property="orderBy">
                 $orderBy$

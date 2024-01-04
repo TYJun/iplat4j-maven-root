@@ -1,4 +1,7 @@
 $(function () {
+    /**回车键查询**/
+    keydown("inqu", "QUERY");
+
     $("#QUERY").on("click", function (e) {
         resultAGrid.dataSource.page(1);
         resultBGrid.dataSource.page(1);
@@ -39,8 +42,8 @@ $(function () {
     IPLATUI.EFGrid = {
         "resultA": {
             pageable: {
-                pageSize: 100,
-                pageSizes: [100, 200, 500, 1000]
+                pageSize: 500,
+                pageSizes: [50, 100, 500, 1000]
             },
             toolbarConfig: {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮
@@ -82,7 +85,8 @@ $(function () {
         },
         "resultB": {
             pageable: {
-                pageSize: 100
+                pageSize: 500,
+                pageSizes: [50, 100, 500, 1000]
             },
             onCellClick: function (e) {
                 if (e.field === "discussNo") {
@@ -120,7 +124,8 @@ $(function () {
         },
         "resultC": {
             pageable: {
-                pageSize: 100
+                pageSize: 500,
+                pageSizes: [50, 100, 500, 1000]
             },
             onCellClick: function (e) {
                 if (e.field === "discussNo") {
@@ -157,8 +162,8 @@ $(function () {
         },
         "resultD": {
             pageable: {
-                pageSize: 100,
-                pageSizes: [100, 200, 500, 1000]
+                pageSize: 500,
+                pageSizes: [50, 100, 500, 1000]
             },
             toolbarConfig: {
                 hidden: false,//true 时，不显示功能按钮，但保留 setting 导出按钮

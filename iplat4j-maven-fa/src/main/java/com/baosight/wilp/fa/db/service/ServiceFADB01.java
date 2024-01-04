@@ -69,6 +69,7 @@ public class ServiceFADB01 extends ServiceBase {
      */
     public EiInfo confirmedQuery(EiInfo info) {
         EiBlock eiBlock = info.getBlock("inqu_status");
+        // 查询条件
         if (eiBlock != null) {
             Map<String, String> row = eiBlock.getRow(0);
             String deptNameSplit = row.get("deptName");
@@ -82,12 +83,16 @@ public class ServiceFADB01 extends ServiceBase {
             }
         }
         Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
-        List<String> deptName = OneSelfUtils.specifyDept((String) staffByUserId.get("workNo"));
+        Map<String, Object> rolesMap = OneSelfUtils.queryRolesByWorkNo((String) staffByUserId.get("workNo"));
         String role = "admin";
-        if (CollectionUtils.isNotEmpty(deptName)) {
-            role = "user";
-            info.setCell("inqu_status", 0, "role", role);
-            info.setCell("inqu_status", 0, "lookDeptName", deptName);
+        if (rolesMap.containsKey("role") && rolesMap.containsKey("lookDeptName")) {
+            String roleStr = (String) rolesMap.get("role");
+            List<String> deptName = (List<String>) rolesMap.get("lookDeptName");
+            if (CollectionUtils.isNotEmpty(deptName)) {
+                role = "user";
+                info.setCell("inqu_status", 0, "role", role);
+                info.setCell("inqu_status", 0, "lookDeptName", deptName);
+            }
         }
         info.setCell("inqu_status", 0, "inAccountStatus", "confirmed");
         EiInfo outInfo = super.query(info, "FADB01.queryFaInfoDOInfo", new FaInfoDO(), false, null, null, "resultA", "resultA");
@@ -102,12 +107,8 @@ public class ServiceFADB01 extends ServiceBase {
         outInfo.set("name", staffByUserId.get("name"));
         outInfo.set("deptName", staffByUserId.get("deptName"));
         outInfo.set("role", role);
-        // 1.获取参数,处理参数
-        Map<String, Object> map = CommonUtils.buildParamter(info, "inqu_status", "dept");
-        // 2.调用微服务接口S_AC_FW_05，获取科室信息
-        map.remove("limit");
-        List<Map<String, String>> maps = dao.query("FADA01.queryDept", map);
-        outInfo.setRows("dept", maps);
+        List<Map<String, String>> list = OneSelfUtils.queryDeptsByWorkNo((String) staffByUserId.get("workNo"));
+        outInfo.setRows("dept", list);
         return outInfo;
     }
 
@@ -135,7 +136,11 @@ public class ServiceFADB01 extends ServiceBase {
      */
     public EiInfo transferConfirmQuery(EiInfo info) {
         Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
-        List<String> deptName = OneSelfUtils.specifyDept((String) staffByUserId.get("workNo"));
+        Map<String, Object> rolesMap = OneSelfUtils.queryRolesByWorkNo((String) staffByUserId.get("workNo"));
+        List<String> deptName = null;
+        if (rolesMap.containsKey("role") && rolesMap.containsKey("lookDeptName")) {
+            deptName = (List<String>) rolesMap.get("lookDeptName");
+        }
         info.setCell("inqu_status", 0, "tabStatus", "confirm");
         if (CollectionUtils.isNotEmpty(deptName)) {
             info.setCell("inqu_status", 0, "role", "user");
@@ -143,13 +148,19 @@ public class ServiceFADB01 extends ServiceBase {
         }
         EiInfo outInfo = super.query(info, "FADB01.transferRecordQuery", new FaTransferVO(), false, null, null, "resultC", "resultC");
         // 默认回显20条
-//        if (info.getBlocks().size() > 0) {
-//            if (info.getBlock("resultC") != null) {
-//                if ("20".equals(info.getBlock("resultC").get("limit"))) {
-//                    outInfo.addBlock("resultC").set(EiConstant.limitStr, 20);
-//                }
-//            }
-//        }
+        if (info.getBlocks().size() > 0) {
+            if (info.getBlock("resultC") != null) {
+                if ("50".equals(info.getBlock("resultC").get("limit"))) {
+                    outInfo.addBlock("resultC").set(EiConstant.limitStr, 50);
+                } else if ("100".equals(info.getBlock("resultC").get("limit"))) {
+                    outInfo.addBlock("resultC").set(EiConstant.limitStr, 100);
+                } else if ("500".equals(info.getBlock("resultC").get("limit"))) {
+                    outInfo.addBlock("resultC").set(EiConstant.limitStr, 500);
+                } else if ("1000".equals(info.getBlock("resultC").get("limit"))) {
+                    outInfo.addBlock("resultC").set(EiConstant.limitStr, 1000);
+                }
+            }
+        }
         outInfo.set("workNo", staffByUserId.get("workNo"));
         outInfo.set("name", staffByUserId.get("name"));
         return outInfo;
@@ -165,7 +176,11 @@ public class ServiceFADB01 extends ServiceBase {
      */
     public EiInfo transferAuditQuery(EiInfo info) {
         Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
-        List<String> deptName = OneSelfUtils.specifyDept((String) staffByUserId.get("workNo"));
+        Map<String, Object> rolesMap = OneSelfUtils.queryRolesByWorkNo((String) staffByUserId.get("workNo"));
+        List<String> deptName = null;
+        if (rolesMap.containsKey("role") && rolesMap.containsKey("lookDeptName")) {
+            deptName = (List<String>) rolesMap.get("lookDeptName");
+        }
         info.setCell("inqu_status", 0, "tabStatus", "audit");
         if (CollectionUtils.isNotEmpty(deptName)) {
             info.setCell("inqu_status", 0, "role", "user");
@@ -173,13 +188,19 @@ public class ServiceFADB01 extends ServiceBase {
         }
         EiInfo outInfo = super.query(info, "FADB01.transferRecordQuery", new FaTransferVO(), false, null, null, "resultD", "resultD");
         // 默认回显20条
-//        if (info.getBlocks().size() > 0) {
-//            if (info.getBlock("resultD") != null) {
-//                if ("20".equals(info.getBlock("resultD").get("limit"))) {
-//                    outInfo.addBlock("resultD").set(EiConstant.limitStr, 20);
-//                }
-//            }
-//        }
+        if (info.getBlocks().size() > 0) {
+            if (info.getBlock("resultD") != null) {
+                if ("50".equals(info.getBlock("resultD").get("limit"))) {
+                    outInfo.addBlock("resultD").set(EiConstant.limitStr, 50);
+                } else if ("100".equals(info.getBlock("resultD").get("limit"))) {
+                    outInfo.addBlock("resultD").set(EiConstant.limitStr, 100);
+                } else if ("500".equals(info.getBlock("resultD").get("limit"))) {
+                    outInfo.addBlock("resultD").set(EiConstant.limitStr, 500);
+                } else if ("1000".equals(info.getBlock("resultD").get("limit"))) {
+                    outInfo.addBlock("resultD").set(EiConstant.limitStr, 1000);
+                }
+            }
+        }
         outInfo.set("workNo", staffByUserId.get("workNo"));
         outInfo.set("name", staffByUserId.get("name"));
         return outInfo;
@@ -195,7 +216,11 @@ public class ServiceFADB01 extends ServiceBase {
      */
     public EiInfo transferRecordQuery(EiInfo info) {
         Map<String, Object> staffByUserId = BaseDockingUtils.getStaffByWorkNo(UserSession.getUser().getUsername());
-        List<String> deptName = OneSelfUtils.specifyDept((String) staffByUserId.get("workNo"));
+        Map<String, Object> rolesMap = OneSelfUtils.queryRolesByWorkNo((String) staffByUserId.get("workNo"));
+        List<String> deptName = null;
+        if (rolesMap.containsKey("role") && rolesMap.containsKey("lookDeptName")) {
+            deptName = (List<String>) rolesMap.get("lookDeptName");
+        }
         info.setCell("inqu_status", 0, "tabStatus", "all");
         if (CollectionUtils.isNotEmpty(deptName)) {
             info.setCell("inqu_status", 0, "role", "user");
@@ -203,13 +228,19 @@ public class ServiceFADB01 extends ServiceBase {
         }
         EiInfo outInfo = super.query(info, "FADB01.transferRecordQuery", new FaTransferVO(), false, null, null, "resultE", "resultE");
         // 默认回显20条
-//        if (info.getBlocks().size() > 0) {
-//            if (info.getBlock("resultE") != null) {
-//                if ("20".equals(info.getBlock("resultE").get("limit"))) {
-//                    outInfo.addBlock("resultE").set(EiConstant.limitStr, 20);
-//                }
-//            }
-//        }
+        if (info.getBlocks().size() > 0) {
+            if (info.getBlock("resultE") != null) {
+                if ("50".equals(info.getBlock("resultE").get("limit"))) {
+                    outInfo.addBlock("resultE").set(EiConstant.limitStr, 50);
+                } else if ("100".equals(info.getBlock("resultE").get("limit"))) {
+                    outInfo.addBlock("resultE").set(EiConstant.limitStr, 100);
+                } else if ("500".equals(info.getBlock("resultE").get("limit"))) {
+                    outInfo.addBlock("resultE").set(EiConstant.limitStr, 500);
+                } else if ("1000".equals(info.getBlock("resultE").get("limit"))) {
+                    outInfo.addBlock("resultE").set(EiConstant.limitStr, 1000);
+                }
+            }
+        }
         outInfo.set("workNo", staffByUserId.get("workNo"));
         outInfo.set("name", staffByUserId.get("name"));
         return outInfo;
@@ -328,6 +359,38 @@ public class ServiceFADB01 extends ServiceBase {
 //            Map<String, Object> pageMap = new HashMap<>(8);
 //            pageMap.put("count", list.size());
 //            info.setAttr(pageMap);
+        }
+        return info;
+    }
+
+    // 修改调拨资产的存放位置
+    public EiInfo updateInstallLocation(EiInfo info) {
+        String faInfoId = info.getString("faInfoId");
+        String building = info.getString("building");
+        String floor = info.getString("floor");
+        String installLocationNum = info.getString("installLocationNum");
+        String installLocation = info.getString("installLocation");
+        String room = info.getString("room");
+        String remark = info.getString("remark");
+        Map<String, String> map = new HashMap<>();
+        map.put("faInfoId", faInfoId);
+        map.put("building", building);
+        map.put("floor", floor);
+        map.put("installLocationNum", installLocationNum);
+        map.put("installLocation", installLocation);
+        map.put("room", room);
+        map.put("remark", remark);
+        if (StringUtils.isNotEmpty(installLocationNum)) {
+            List list = dao.query("FADB01.checkInstallLocation", map);
+            if (CollectionUtils.isNotEmpty(list)){
+                dao.update("FADB01.updateInstallLocation", map);
+            } else {
+                info.setStatus(-1);
+                info.setMsg("存放位置只能双击选择不能手动填写");
+            }
+        } else {
+            info.setStatus(-1);
+            info.setMsg("请选择存放位置，如果不存在存放位置请联系管理员");
         }
         return info;
     }

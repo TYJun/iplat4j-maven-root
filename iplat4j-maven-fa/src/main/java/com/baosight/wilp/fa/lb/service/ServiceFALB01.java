@@ -89,7 +89,7 @@ public class ServiceFALB01 extends ServiceBase {
 		// 1.设置分页条件
 		Map<String, Object> pageMap = new HashMap<>(8);
 		pageMap.put("offset", 0);
-		pageMap.put("limit", 20);
+		pageMap.put("limit", 50);
 		EiBlock eiBlock = (EiBlock) info.getBlocks().get("result");
 		if (eiBlock != null){
 			pageMap = eiBlock.getAttr();

@@ -61,12 +61,12 @@
 			<EF:EFColumn ename="spec" cname="型号规格"  align="center" width="150" enable="false"/>
 			<EF:EFColumn ename="deptName" cname="所属科室" align="center" width="150" enable="false"/>
 			<EF:EFColumn ename="room" cname="具体位置"   align="center" width="150"/>
-			<EF:EFColumn ename="outRemark" cname="出库备注"   align="center" width="150"/>
+			<EF:EFColumn ename="remark" cname="备注"  align="center" width="200"/>
 			<EF:EFColumn ename="statusCode" cname="资产状态" align="center" width="200" enable="false"/>
-			<EF:EFColumn ename="remark" cname="备注"  align="center" width="200" enable="false"/>
+			<EF:EFColumn ename="outRemark" cname="出库备注"   align="center" width="150" enable="false"/>
 			<EF:EFColumn ename="goodsClassifyName" cname="资产类别"  align="center" width="200" enable="false"/>
 			<EF:EFColumn ename="goodsTypeName" cname="资产类别名称"  align="center" width="200" enable="false"/>
-			<EF:EFColumn ename="rfidCode" cname="RFID"  align="center" width="200" enable="false"/>
+			<EF:EFColumn ename="rfidCode" cname="RFID"  align="center" width="200" enable="false" hidden="true"/>
 			<EF:EFColumn ename="manufacturer" cname="制造厂商"  align="center" width="200" enable="false"/>
 			<EF:EFColumn ename="surpName" cname="供应商"   align="center" width="200" enable="false"/>
 			<EF:EFColumn ename="buyDate" cname="购入日期"   align="center" width="200" enable="false"/>
